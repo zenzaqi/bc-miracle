@@ -679,6 +679,7 @@ Ext.onReady(function(){
         typeAhead: false,
         hideTrigger:false,
 		triggerAction: 'all',
+		forceSelection: true,
 		allowBlank: false,
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
@@ -702,6 +703,7 @@ Ext.onReady(function(){
 	koreksi_statusField= new Ext.form.ComboBox({
 		id: 'koreksi_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['koreksi_status_value', 'koreksi_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]

@@ -663,7 +663,7 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank: false,
 		allowDecimals: false,
-				hidden: true,
+		hidden: true,
 		readOnly: true,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -684,6 +684,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Gudang Asal',
 		store: cbo_mutasi_gudang_DataSore,
 		mode : 'remote',
+		forceSelection: true,
 		displayField:'mutasi_gudang_nama',
 		valueField: 'mutasi_gudang_value',
         typeAhead: false,
@@ -700,6 +701,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Gudang Tujuan',
 		store: cbo_mutasi_gudang_DataSore,
 		mode : 'remote',
+		forceSelection: true,
 		displayField:'mutasi_gudang_nama',
 		valueField: 'mutasi_gudang_value',
         typeAhead: false,
@@ -748,6 +750,7 @@ Ext.onReady(function(){
 	mutasi_statusField= new Ext.form.ComboBox({
 		id: 'mutasi_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['mutasi_status_value', 'mutasi_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]

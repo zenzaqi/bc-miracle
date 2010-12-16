@@ -530,8 +530,8 @@ class M_master_terima_beli extends Model{
 		}
 
 		//function for update record
-		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-										   $terima_tanggal ,$terima_keterangan, $terima_status ){
+		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
+										   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status ){
 			$data = array(
 				"terima_id"=>$terima_id,
 				"terima_no"=>$terima_no,
@@ -566,8 +566,8 @@ class M_master_terima_beli extends Model{
 		}
 
 		//function for create new record
-		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
-										   $terima_keterangan, $terima_status ){
+		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
+										   $terima_tanggal , $terima_keterangan, $terima_status ){
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
 			$pattern="PB/".date("ym")."-";

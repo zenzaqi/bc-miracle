@@ -230,7 +230,8 @@ class C_master_terima_beli extends Controller {
 		$array_dtbonus_satuan = json_decode(stripslashes($dtbonus_satuan));
 		$array_dtbonus_jumlah = json_decode(stripslashes($dtbonus_jumlah));
 
-		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,$array_dtbonus_produk ,
+		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,
+																			   $array_dtbonus_produk ,
 																			   $array_dtbonus_satuan ,$array_dtbonus_jumlah );
 		echo $result;
 	}
