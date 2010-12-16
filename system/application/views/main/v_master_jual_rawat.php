@@ -4868,7 +4868,7 @@ Ext.onReady(function(){
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
 			ref : '../djrawat_delete',
-			disabled: false,
+			disabled: true,
 			handler: detail_jual_rawat_confirm_delete
 		}
 		]
