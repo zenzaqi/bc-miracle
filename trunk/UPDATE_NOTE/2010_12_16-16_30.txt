@@ -1,0 +1,4 @@
+perubahan perhitungan jumlah tindakan terapis
+
+sebelumnya: perhitungan dari appointment
+saat ini: perhitungan dari tindakan
