@@ -2343,6 +2343,7 @@ Ext.onReady(function(){
 		},{
             xtype: 'booleancolumn',
             header: 'Hitung',
+			hidden : true,
             dataIndex: 'dapp_nonmedis_counter',
             align: 'center',
             width: 50,
