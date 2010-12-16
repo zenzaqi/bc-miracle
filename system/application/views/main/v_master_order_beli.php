@@ -100,7 +100,17 @@ Ext.onReady(function(){
   	/* Function for add data, open window create form */
 	function master_order_beli_create(opsi){
 		
-		if(detail_order_beli_DataStore.getCount()<1){
+		if(order_supplierField.getValue()==0){
+		
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Supplier tidak ada',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+			
+		}else if(detail_order_beli_DataStore.getCount()<1){
 			Ext.MessageBox.show({
 				title: 'Warning',
 				msg: 'Data detail harus ada minimal 1 (satu)',
@@ -160,7 +170,6 @@ Ext.onReady(function(){
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						
 						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
 						detail_order_beli_insert(result, opsi)
 						master_order_beli_createWindow.hide();
@@ -844,6 +853,7 @@ Ext.onReady(function(){
         hideTrigger:false,
 		allowBlank: false,
         tpl: order_supplier_tpl,
+		forceSelection: true,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
@@ -864,6 +874,7 @@ Ext.onReady(function(){
 	order_carabayarField= new Ext.form.ComboBox({
 		id: 'order_carabayarField',
 		fieldLabel: 'Cara Bayar',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['order_carabayar_value', 'order_carabayar_display'],
 			data:[['Tunai','Tunai'],['Kredit','Kredit'],['Konsinyasi','Konsinyasi']]
@@ -878,6 +889,7 @@ Ext.onReady(function(){
 	order_statusField= new Ext.form.ComboBox({
 		id: 'order_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_value', 'order_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
@@ -893,6 +905,7 @@ Ext.onReady(function(){
 	order_status_accField= new Ext.form.ComboBox({
 		id: 'order_status_accField',
 		fieldLabel: 'Status Acc',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_acc_value', 'order_status_acc_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup']]

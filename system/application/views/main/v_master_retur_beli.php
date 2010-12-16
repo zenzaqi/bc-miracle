@@ -709,6 +709,7 @@ Ext.onReady(function(){
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
+		forceSelection: true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
@@ -748,6 +749,7 @@ Ext.onReady(function(){
 	rbeli_statusField= new Ext.form.ComboBox({
 		id: 'rbeli_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['rbeli_status_value', 'rbeli_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]

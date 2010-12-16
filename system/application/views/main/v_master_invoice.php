@@ -859,6 +859,7 @@ Ext.onReady(function(){
         pageSize:10,
         hideTrigger:false,
         tpl: invoice_tbeli_tpl,
+		forceSelection: true,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
 		triggerAction: 'all',
@@ -984,6 +985,7 @@ Ext.onReady(function(){
 	invoice_statusField= new Ext.form.ComboBox({
 		id: 'invoice_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['invoice_status_value', 'invoice_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]

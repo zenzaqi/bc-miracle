@@ -815,6 +815,7 @@ Ext.onReady(function(){
 		mode : 'remote',
 		valueField: 'tbeli_orderbeli_value',
         typeAhead: false,
+		forceSelection: true,
         hideTrigger:false,
 		allowBlank: false,
 		tpl: tbeli_orderbeli_tpl,
@@ -918,6 +919,7 @@ Ext.onReady(function(){
 	terima_statusField= new Ext.form.ComboBox({
 		id: 'terima_statusField',
 		fieldLabel: 'Status Dok',
+		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['terima_status_value', 'terima_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
