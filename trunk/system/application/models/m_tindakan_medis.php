@@ -1934,7 +1934,7 @@ class M_tindakan_medis extends Model{
 			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
 			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
 			//$query = "SELECT vu_tindakan_test.*, IF((vu_cust_punya_paket_test.sapaket_id AND vu_cust_punya_paket_test.sapaket_sisa_item<>0),'ada','tidak_ada') AS cust_punya_paket, vu_cust_punya_paket_test.* FROM vu_tindakan_test LEFT JOIN vu_cust_punya_paket_test ON(vu_cust_punya_paket_test.ppaket_cust=vu_tindakan_test.trawat_cust AND vu_cust_punya_paket_test.sapaket_item=vu_tindakan_test.dtrawat_perawatan AND vu_cust_punya_paket_test.sapaket_jenis_item='perawatan' AND vu_cust_punya_paket_test.sapaket_sisa_item>0) WHERE (vu_tindakan_test.kategori_nama='Medis' OR vu_tindakan_test.dtrawat_petugas2='0')";
-			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery')";
+			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
 			
 			/*if($trawat_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
