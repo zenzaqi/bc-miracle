@@ -1,0 +1,1 @@
+m_tindakan_medis --> tindakan non medis di medis akan menyimpan "suster" sbg referalnya

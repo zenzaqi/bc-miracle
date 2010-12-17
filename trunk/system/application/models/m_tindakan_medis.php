@@ -1333,6 +1333,7 @@ class M_tindakan_medis extends Model{
 					"dtrawat_master"=>$dtrawat_master, 
 					"dtrawat_perawatan"=>$dtrawat_perawatan, 
 					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					"dtrawat_petugas1"=>5,
 					"dtrawat_tglapp"=>$date_now,
 					"dtrawat_status"=>"selesai",
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
