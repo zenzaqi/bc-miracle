@@ -435,16 +435,16 @@ Ext.onReady(function(){
 			task: 'SEARCH',
 			//variable here
 			lap_jum_tindakan_terapis_id	:	lap_jum_tindakan_terapis_id_search, 
-			trawat_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
-			trawat_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
+			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
+			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
 		};
 		sum_lap_jum_DataStore.baseParams = {
 			task: 'SEARCH2',
 			//variable here
 			lap_jum_tindakan_terapis_id	:	lap_jum_tindakan_terapis_id_search, 
-			trawat_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
-			trawat_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
+			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
+			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
 		};
 		// Cause the datastore to do another query : 

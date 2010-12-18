@@ -18,6 +18,27 @@ class M_voucher extends Model{
 			parent::Model();
 		}
 		
+		function get_member_no($query,$start,$end){
+		$sql="SELECT * FROM vu_customer WHERE cust_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (cust_id = '".$query."' or cust_no like '%".$query."%' or cust_alamat like '%".$query."%' or cust_nama like '%".$query."%' or cust_telprumah like '%".$query."%' or cust_telprumah2 like '%".$query."%' or cust_telpkantor like '%".$query."%' or cust_hp like '%".$query."%' or cust_hp2 like '%".$query."%' or cust_hp3 like '%".$query."%') ";
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
 		//function for get list record
 		function voucher_list($filter,$start,$end){
 			$query =   "select c.cust_no as cust_no, c.cust_nama as cust_nama, v.*
@@ -82,12 +103,18 @@ class M_voucher extends Model{
 		}
 		
 		//function for advanced search record
-		function voucher_search($voucher_no ,$voucher_nama ,$voucher_cust, $voucher_point ,$voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,$voucher_cashback ,$start,$end){
+		function voucher_search($voucher_no ,$voucher_nama ,$voucher_member_no, $voucher_cust, $voucher_point ,$voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,$voucher_cashback ,$start,$end){
 			//full query
 			$query=    "select c.cust_no as cust_no, c.cust_nama as cust_nama, v.*
 						from voucher v
 						left join vu_customer c on c.member_no = v.voucher_cust
 						";
+			
+			
+			if($voucher_member_no!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " voucher_cust LIKE '%".$voucher_member_no."%'";
+			};
 			
 			if($voucher_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -141,13 +168,14 @@ class M_voucher extends Model{
 		}
 		
 		//function for print record
-		function voucher_print($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,$option,$filter){
+		function voucher_print($voucher_no ,$voucher_nama , $voucher_member_no, $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,$option,$filter){
 			//full query
 			$query="select * from voucher";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (voucher_no LIKE '%".addslashes($filter)."%' OR 
 							 voucher_nama LIKE '%".addslashes($filter)."%' OR
+							 voucher_member_no LIKE '%".addslashes($filter)."%' OR
 							 voucher_cust LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($voucher_no!=''){
@@ -159,7 +187,10 @@ class M_voucher extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " voucher_cust LIKE '%".$voucher_cust."%'";
 				};
-				
+				if($voucher_member_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " voucher_nama LIKE '%".$voucher_member_no."%'";
+				};
 				if($voucher_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " voucher_nama LIKE '%".$voucher_nama."%'";
@@ -183,7 +214,7 @@ class M_voucher extends Model{
 		}
 		
 		//function  for export to excel
-		function voucher_export_excel($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,
+		function voucher_export_excel($voucher_no ,$voucher_nama , $voucher_member_no, $voucher_cust, $voucher_point ,$voucher_kadaluarsa ,$voucher_cashback ,
 									  $option,$filter){
 			//full query
 			$query="SELECT ifnull(voucher_no,'-') as 'No Voucher', voucher_point as Poin, voucher_cashback as 'Nilai (Rp)',
@@ -192,6 +223,7 @@ class M_voucher extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (voucher_no LIKE '%".addslashes($filter)."%' OR 
 							 voucher_nama LIKE '%".addslashes($filter)."%' OR
+							 voucher_member_no LIKE '%".addslashes($filter)."%' OR
 							 voucher_cust LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($voucher_no!=''){
@@ -203,7 +235,10 @@ class M_voucher extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " voucher_cust LIKE '%".$voucher_cust."%'";
 				};
-				
+				if($voucher_member_no!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " voucher_nama LIKE '%".$voucher_member_no."%'";
+				};
 				if($voucher_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " voucher_nama LIKE '%".$voucher_nama."%'";
