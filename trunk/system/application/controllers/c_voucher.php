@@ -26,7 +26,13 @@ class C_voucher extends Controller {
 		$this->load->view('main/v_voucher');
 	}
 	
-
+function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_voucher->get_member_no($query,$start,$end);
+		echo $result;
+	}
 	
 	//event handler action
 	function get_action(){
@@ -77,6 +83,8 @@ class C_voucher extends Controller {
 		//POST varibale here
 		$voucher_nama=trim(@$_POST["voucher_nama"]);
 		$voucher_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_nama);
+		$voucher_member_no=trim(@$_POST["voucher_member_no"]);
+		//$voucher_member_no=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_member_no);
 		$voucher_no=trim(@$_POST["voucher_no"]);
 		$voucher_no=str_replace("/(<\/?)(p)([^>]*>)", "",$voucher_no);
 		$voucher_cust=trim(@$_POST["voucher_cust"]);
@@ -89,7 +97,7 @@ class C_voucher extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result = $this->m_voucher->voucher_search($voucher_no ,$voucher_nama , $voucher_cust, $voucher_point , $voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,
+		$result = $this->m_voucher->voucher_search($voucher_no ,$voucher_nama , $voucher_member_no, $voucher_cust, $voucher_point , $voucher_tanggal_start, $voucher_tanggal_end, $voucher_kadaluarsa ,
 												   $voucher_cashback ,$start,$end);
 		echo $result;
 	}

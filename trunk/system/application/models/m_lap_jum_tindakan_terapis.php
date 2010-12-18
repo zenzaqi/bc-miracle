@@ -146,7 +146,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 				$query.= " dtrawat_tglapp='".$lapjum_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" k.karyawan_id != 67 and p.rawat_id is not null"; //60 = Available . Dr
+			$query.=" k.karyawan_id != 67 and p.rawat_id is not null and (d.dtrawat_status = 'selesai' or d.dtrawat_status = 'datang')"; //60 = Available . Dr
 			$query.=" group by k.karyawan_username, p.rawat_nama";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -189,7 +189,7 @@ select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p
 				$query.= " dtrawat_tglapp='".$lapjum_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" k.karyawan_id != 67 and p.rawat_id is not null"; //60 = Available . Dr
+			$query.=" k.karyawan_id != 67 and p.rawat_id is not null and (d.dtrawat_status = 'selesai' or d.dtrawat_status = 'datang')"; //60 = Available . Dr
 			$query.=" group by k.karyawan_username, p.rawat_nama)as vu_kredit";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

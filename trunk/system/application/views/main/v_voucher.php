@@ -91,6 +91,7 @@ var voucher_allprodukField;
 var voucher_allrawatField;
 var voucher_idSearchField;
 var voucher_namaSearchField;
+var voucher_member_noSearchField;
 var voucher_jenisSearchField;
 var voucher_pointSearchField;
 var voucher_jumlahSearchField;
@@ -101,6 +102,7 @@ var voucher_diskonSearchField;
 var voucher_promoSearchField;
 var voucher_allprodukSearchField;
 var voucher_allrawatSearchField;
+var voucher_transaksi_custField
 
 function voucher_cetak(master_id){
 	Ext.Ajax.request({   
@@ -248,8 +250,42 @@ Ext.onReady(function(){
 		sortInfo:{field: 'voucher_id', direction: "DESC"}
 	});
 	/* End of Function */
-   	
-  	/* Function for Identify of Window Column Model */
+	
+   		//ComboBox ambil data Customer
+	cbo_voucher_transaksi_customerDataStore = new Ext.data.Store({
+		id: 'cbo_history_transaksi_customerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_voucher&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit:pageS }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'member_no', type: 'string', mapping: 'member_no'},
+			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+
+  	//Template yang akan tampil di ComboBox
+	var customer_voucher_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b> | Tgl-Lahir:{cust_tgllahir:date("M j, Y")}<br /></span>',
+            'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
+        '</div></tpl>'
+    );
+	
+	/* Function for Identify of Window Column Model */
 	voucher_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
@@ -456,6 +492,7 @@ Ext.onReady(function(){
 	function voucher_list_search(){
 		// render according to a SQL date format.
 		var voucher_nama_search=null;
+		var voucher_transaksi_search=null;
 		var voucher_no_search=null;
 		var voucher_point_search=null;
 		var voucher_tanggal_start_search_date="";
@@ -465,8 +502,7 @@ Ext.onReady(function(){
 		var voucher_cust_search=null;
 
 		if(voucher_namaSearchField.getValue()!==null){voucher_nama_search=voucher_namaSearchField.getValue();}
-		if(voucher_custSearchField.getValue()!==null){voucher_cust_search=voucher_custSearchField.getValue();}
-		if(voucher_noSearchField.getValue()!==null){voucher_no_search=voucher_noSearchField.getValue();}
+		if(voucher_transaksi_custField.getValue()!==null){voucher_transaksi_search=voucher_transaksi_custField.getValue();}
 		if(voucher_pointSearchField.getValue()!==null){voucher_point_search=voucher_pointSearchField.getValue();}
 		if(voucher_tanggal_startSearchField.getValue()!==""){voucher_tanggal_start_search_date=voucher_tanggal_startSearchField.getValue().format('Y-m-d');}
 		if(voucher_tanggal_endSearchField.getValue()!==""){voucher_tanggal_end_search_date=voucher_tanggal_endSearchField.getValue().format('Y-m-d');}
@@ -474,7 +510,8 @@ Ext.onReady(function(){
 		if(voucher_cashbackSearchField.getValue()!==null){voucher_cashback_search=voucher_cashbackSearchField.getValue();}
 		voucher_DataStore.baseParams = {
 			task: 'SEARCH',
-			voucher_nama	:	voucher_nama_search, 
+			voucher_nama	:	voucher_nama_search,
+			voucher_member_no:	voucher_transaksi_search,
 			voucher_cust	:	voucher_cust_search, 
 			voucher_no		:	voucher_no_search, 
 			voucher_point	:	voucher_point_search, 
@@ -497,7 +534,8 @@ Ext.onReady(function(){
 
 	function voucher_reset_SearchForm(){
 		voucher_namaSearchField.reset();
-		voucher_custSearchField.reset();
+		voucher_transaksi_custField.reset();
+		voucher_transaksi_custField.setValue(null);
 		voucher_noSearchField.reset();
 		voucher_pointSearchField.reset();
 		voucher_kadaluarsaSearchField.reset();
@@ -512,24 +550,63 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	
-	voucher_custSearchField= new Ext.form.TextField({
+		
+	/*voucher_custSearchField= new Ext.form.TextField({
 		id: 'voucher_custSearchField',
 		fieldLabel: 'No Member',
 		maxLength: 50,
 		anchor: '95%'
 	
-	});
+	});*/
 	
 	/* Identify  voucher_nama Search Field */
-	voucher_namaSearchField= new Ext.form.TextField({
+	/*voucher_namaSearchField= new Ext.form.TextField({
 		id: 'voucher_namaSearchField',
 		fieldLabel: 'Jenis Transaksi',
 		maxLength: 50,
 		anchor: '95%'
 	
+	});*/
+		
+	voucher_namaSearchField= new Ext.form.ComboBox({
+		id: 'voucher_namaSearchField',
+		fieldLabel: 'Jenis Transaksi',
+		maxLength: 50,
+		anchor: '95%',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_trans_value_display'],
+			data: [['Pengisian Poin'],['Penukaran Poin']]
+		}),
+		mode: 'local',
+		editable: false,
+		displayField: 'cust_trans_value_display',
+		valueField: 'cust_trans_value_display',
+		allowBlank: false,
+		triggerAction: 'all'	
 	});
-
+	
+	voucher_transaksi_custField= new Ext.form.ComboBox({
+		fieldLabel: 'Customer',
+		store: cbo_voucher_transaksi_customerDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'member_no',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_voucher_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: false,
+		disabled:false,
+		anchor: '90%'
+	});
+	
+	
+	
 	/* Identify  voucher_point Search Field */
 	voucher_pointSearchField= new Ext.form.NumberField({
 		id: 'voucher_pointSearchField',
@@ -560,9 +637,7 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	
-	
-	
+		
 	voucher_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'voucher_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
@@ -596,7 +671,7 @@ Ext.onReady(function(){
 		autoHeight:true,
 		width: 400,        
 		items: [voucher_noSearchField, voucher_pointSearchField, voucher_tanggal_opsiSearchField, voucher_kadaluarsaSearchField, voucher_cashbackSearchField, 
-				voucher_namaSearchField, voucher_custSearchField],
+				voucher_namaSearchField, voucher_transaksi_custField],
 		buttons: [{
 				text: 'Search',
 				handler: voucher_list_search
