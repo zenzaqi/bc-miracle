@@ -1547,8 +1547,8 @@ var editor_cust_note;
 							});
 						break;
 					};
-					cbo_cust_profesi_DataStore.reload();
-					cbo_cust_hobi_DataStore.reload();
+					//cbo_cust_profesi_DataStore.reload();
+					//cbo_cust_hobi_DataStore.reload();
 					//cbo_reflain_DataStore.reload();
 				},
 				failure: function(response){
@@ -3037,8 +3037,12 @@ Ext.onReady(function(){
 		id: 'cust_profesiField',
 		fieldLabel: 'Profesi',
 		maxLength: 100,
-		store: cbo_cust_profesi_DataStore,
-		mode: 'remote',
+		//store: cbo_cust_profesi_DataStore,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_profesi_display'],
+			data: [['Pelajar / Mahasiswa'],['Ibu Rumah Tangga'],['Karyawan / Swasta'],['Wiraswasta'],['Profesional'],['Selebritis'],['Lain-lain']]
+		}),
+		mode: 'local',
 		displayField: 'cust_profesi_display',
 		valueField: 'cust_profesi_display',
 		anchor: '95%',
@@ -3125,8 +3129,12 @@ Ext.onReady(function(){
 		id: 'cust_hobiField',
 		fieldLabel: 'Hobi',
 		maxLength: 500,
-		store: cbo_cust_hobi_DataStore,
-		mode: 'remote',
+		//store: cbo_cust_hobi_DataStore,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_hobi_display'],
+			data: [['Membaca'],['Olahraga'],['Memasak'],['Travelling'],['Fotografi'],['Melukis'],['Menari'],['Lain-lain']]
+		}),	
+		mode: 'local',
 		displayField: 'cust_hobi_display',
 		valueField: 'cust_hobi_display',
 		anchor: '95%',
@@ -3861,7 +3869,8 @@ Ext.onReady(function(){
 		id: 'cust_profesiSearchField',
 		fieldLabel: 'Profesi',
 		maxLength: 100,
-		store: cbo_cust_profesi_DataStore,
+		//store: cbo_cust_profesi_DataStore,
+		
 		mode: 'remote',
 		displayField: 'cust_profesi_display',
 		valueField: 'cust_profesi_display',
