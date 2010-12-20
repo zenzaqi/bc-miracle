@@ -33,6 +33,8 @@
             <th width="320" scope='col'>Perawatan</th>
             <th width="30" scope='col'>Jumlah</th>
 			<th width="100" scope='col'>Harga Satuan</th>
+			<th width="100" scope='col'>Keterangan</th>
+			
         </tr>
     </thead>
 	<tbody>
@@ -47,7 +49,7 @@
 		?>
          <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="8"><b><?php echo $printlist->referal;?></b></td>
+                <td colspan="9"><b><?php echo $printlist->referal;?></b></td>
          </tr>
         <?
 				$i=0;
@@ -64,12 +66,13 @@
             <td><?php echo $print->rawat_nama; ?></td>
             <td><?php echo $print->dapaket_jumlah; ?></td>
 			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",",","); ?></td>
+			<td ><?php echo $print->dapaket_keterangan; ?></td>
        </tr>
 		<?php }
 		}
 		?>
          <tr>
-                <td colspan="9">&nbsp;</td>
+                <td colspan="10">&nbsp;</td>
          </tr>
         <?
 		}
@@ -81,7 +84,7 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Total</th>
-            <td colspan='7'><?php echo count($data_print); ?> data</td>
+            <td colspan='8'><?php echo count($data_print); ?> data</td>
         </tr>
     </tfoot>
 </table>
