@@ -1765,6 +1765,7 @@ Ext.onReady(function(){
     
 	
 	//datastore of profesi
+	/*
 	cbo_cust_profesi_DataStore = new Ext.data.Store({
 		id: 'cbo_cust_profesi_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -1780,9 +1781,11 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'cust_profesi_display', direction: "ASC"}
 	});
+	*/
 	/* eof */
 	
 	//datastore of hobi
+	/*
 	cbo_cust_hobi_DataStore = new Ext.data.Store({
 		id: 'cbo_cust_hobi_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -1794,11 +1797,11 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'cust_hobi'
 		},[
-		/* dataIndex => insert intocustomer_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'cust_hobi_display', type: 'string', mapping: 'cust_hobi'}
 		]),
 		sortInfo:{field: 'cust_hobi_display', direction: "ASC"}
 	});
+	*/
 	/* eof */
 	
 	//datastore of hobi
@@ -3504,7 +3507,7 @@ Ext.onReady(function(){
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
 						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
-						cust_profesiField, cust_profesitxtField, cust_hobiField, cust_hobitxtField, cust_referensiField, cust_referensilainField,
+						cust_profesiField, cust_hobiField, cust_referensiField, cust_referensilainField,
 						cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
 						cust_keteranganField, cust_aktifField
 						<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
@@ -3870,8 +3873,11 @@ Ext.onReady(function(){
 		fieldLabel: 'Profesi',
 		maxLength: 100,
 		//store: cbo_cust_profesi_DataStore,
-		
-		mode: 'remote',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_profesi_display'],
+			data: [['Pelajar / Mahasiswa'],['Ibu Rumah Tangga'],['Karyawan / Swasta'],['Wiraswasta'],['Profesional'],['Selebritis'],['Lain-lain']]
+		}),
+		mode: 'local',
 		displayField: 'cust_profesi_display',
 		valueField: 'cust_profesi_display',
 		anchor: '95%',
@@ -3898,8 +3904,12 @@ Ext.onReady(function(){
 		id: 'cust_hobiSearchField',
 		fieldLabel: 'Hobi',
 		maxLength: 500,
-		store: cbo_cust_hobi_DataStore,
-		mode: 'remote',
+		//store: cbo_cust_hobi_DataStore,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_hobi_display'],
+			data: [['Membaca'],['Olahraga'],['Memasak'],['Travelling'],['Fotografi'],['Melukis'],['Menari'],['Lain-lain']]
+		}),	
+		mode: 'local',
 		displayField: 'cust_hobi_display',
 		valueField: 'cust_hobi_display',
 		anchor: '95%',
@@ -4151,7 +4161,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_profesitxtSearchField, cust_hobiSearchField, cust_hobitxtSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]

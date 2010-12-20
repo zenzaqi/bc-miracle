@@ -1,0 +1,1 @@
+-- add keterangan di lap pengambilan paket: 2010_12_20-11-50.sql
