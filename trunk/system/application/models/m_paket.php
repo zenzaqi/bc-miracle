@@ -686,7 +686,7 @@ class M_paket extends Model{
 			};
 			if($paket_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_aktif LIKE '%".$paket_aktif."%'";
+				$query.= " paket_aktif = '".$paket_aktif."'";
 			};
 
 		}
