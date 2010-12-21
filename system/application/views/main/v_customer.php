@@ -1447,11 +1447,11 @@ var editor_cust_note;
 		if(cust_agamaField.getValue()!== null){cust_agama_create = cust_agamaField.getValue();}
 		if(cust_pendidikanField.getValue()!== null){cust_pendidikan_create = cust_pendidikanField.getValue();}
 		if(cust_profesiField.getValue()!== null){cust_profesi_create = cust_profesiField.getValue();}
-		if(cust_profesitxtField.getValue()!== null){cust_profesitxt_create = cust_profesitxtField.getValue();}
+		//if(cust_profesitxtField.getValue()!== null){cust_profesitxt_create = cust_profesitxtField.getValue();}
 		if(cust_tmptlahirField.getValue()!== null){cust_tmptlahir_create = cust_tmptlahirField.getValue();}
 		if(cust_tgllahirField.getValue()!== ""){cust_tgllahir_create_date = cust_tgllahirField.getValue().format('Y-m-d');}
 		if(cust_hobiField.getValue()!== null){cust_hobi_create = cust_hobiField.getValue();}
-		if(cust_hobitxtField.getValue()!== null){cust_hobitxt_create = cust_hobitxtField.getValue();}
+		//if(cust_hobitxtField.getValue()!== null){cust_hobitxt_create = cust_hobitxtField.getValue();}
 		if(cust_referensiField.getValue()!== null){cust_referensi_create = cust_referensiField.getValue();}
 		if(cust_referensilainField.getValue()!== null){cust_referensilain_create = cust_referensilainField.getValue();}
 		if(cust_referensilaintxtField.getValue()!== null){cust_referensilaintxt_create = cust_referensilaintxtField.getValue();}
@@ -1504,11 +1504,11 @@ var editor_cust_note;
 					cust_agama		:cust_agama_create,		
 					cust_pendidikan	: cust_pendidikan_create,	
 					cust_profesi	: cust_profesi_create,	
-					cust_profesitxt	: cust_profesitxt_create,	
+					//cust_profesitxt	: cust_profesitxt_create,	
 					cust_tmptlahir	: cust_tmptlahir_create,
 					cust_tgllahir	: cust_tgllahir_create_date,
 					cust_hobi		: cust_hobi_create,	
-					cust_hobitxt	: cust_hobitxt_create,	
+					//cust_hobitxt	: cust_hobitxt_create,	
 					cust_referensi	: cust_referensi_create,
 					cust_referensilain	: cust_referensilain_create,
 					cust_referensilaintxt	: cust_referensilaintxt_create,
