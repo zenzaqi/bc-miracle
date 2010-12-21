@@ -625,7 +625,7 @@ class M_tindakan_medis extends Model{
 			$sql_dtrawat = "SELECT *
 				FROM tindakan_detail
 				WHERE dtrawat_master='".$dtrawat_master."'
-					AND dtrawat_petugas1=0
+					AND (dtrawat_petugas1=0 or dtrawat_petugas1=5)
 					AND dtrawat_petugas2=0
 					AND dtrawat_status='selesai'";
 			$rs_dtrawat = $this->db->query($sql_dtrawat);
@@ -815,7 +815,7 @@ class M_tindakan_medis extends Model{
 							FROM tindakan_detail AS dnonmedis
 							LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
 							WHERE dnonmedis.dtrawat_master='$dtrawat_master'
-								AND dnonmedis.dtrawat_petugas1=0
+								AND (dnonmedis.dtrawat_petugas1=0 or dnonmedis.dtrawat_petugas1=0)
 								AND dnonmedis.dtrawat_petugas2=0
 								AND dnonmedis.dtrawat_status='selesai'
 								AND dnonmedis.dtrawat_id NOT IN (
@@ -843,7 +843,7 @@ class M_tindakan_medis extends Model{
 							FROM tindakan_detail AS dnonmedis
 							LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
 							WHERE dnonmedis.dtrawat_master='$dtrawat_master'
-								AND dnonmedis.dtrawat_petugas1=0
+								AND (dnonmedis.dtrawat_petugas1=0 or dnonmedis.dtrawat_petugas1=5)
 								AND dnonmedis.dtrawat_petugas2=0
 								AND dnonmedis.dtrawat_status='selesai'
 								AND dnonmedis.dtrawat_id NOT IN (
