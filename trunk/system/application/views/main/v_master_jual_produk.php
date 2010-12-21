@@ -413,13 +413,13 @@ Ext.onReady(function(){
 				var jproduk_cek_bank_create="";
 				var jproduk_cek_nilai_create=null;
 				//cek-2
-				var jproduk_cek_nama2_create=null;
+				var jproduk_cek_nama2_create="";
 				var jproduk_cek_nomor2_create="";
 				var jproduk_cek_valid2_create="";
 				var jproduk_cek_bank2_create="";
 				var jproduk_cek_nilai2_create=null;
 				//cek-3
-				var jproduk_cek_nama3_create=null;
+				var jproduk_cek_nama3_create="";
 				var jproduk_cek_nomor3_create="";
 				var jproduk_cek_valid3_create="";
 				var jproduk_cek_bank3_create="";
@@ -430,11 +430,11 @@ Ext.onReady(function(){
 				var jproduk_transfer_nilai_create=null;
 				//transfer-2
 				var jproduk_transfer_bank2_create="";
-				var jproduk_transfer_nama2_create=null;
+				var jproduk_transfer_nama2_create="";
 				var jproduk_transfer_nilai2_create=null;
 				//transfer-3
 				var jproduk_transfer_bank3_create="";
-				var jproduk_transfer_nama3_create=null;
+				var jproduk_transfer_nama3_create="";
 				var jproduk_transfer_nilai3_create=null;
 				
 				if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_jproduk_pk();} 
@@ -516,13 +516,13 @@ Ext.onReady(function(){
 				if(jproduk_cek_bankField.getValue()!== ""){jproduk_cek_bank_create = jproduk_cek_bankField.getValue();} 
 				if(jproduk_cek_nilaiField.getValue()!== null){jproduk_cek_nilai_create = jproduk_cek_nilaiField.getValue();} 
 				//cek-2 value
-				if(jproduk_cek_nama2Field.getValue()!== null){jproduk_cek_nama2_create = jproduk_cek_nama2Field.getValue();} 
+				if(jproduk_cek_nama2Field.getValue()!== ""){jproduk_cek_nama2_create = jproduk_cek_nama2Field.getValue();} 
 				if(jproduk_cek_no2Field.getValue()!== ""){jproduk_cek_nomor2_create = jproduk_cek_no2Field.getValue();} 
 				if(jproduk_cek_valid2Field.getValue()!== ""){jproduk_cek_valid2_create = jproduk_cek_valid2Field.getValue().format('Y-m-d');} 
 				if(jproduk_cek_bank2Field.getValue()!== ""){jproduk_cek_bank2_create = jproduk_cek_bank2Field.getValue();} 
 				if(jproduk_cek_nilai2Field.getValue()!== null){jproduk_cek_nilai2_create = jproduk_cek_nilai2Field.getValue();} 
 				//cek-3 value
-				if(jproduk_cek_nama3Field.getValue()!== null){jproduk_cek_nama3_create = jproduk_cek_nama3Field.getValue();} 
+				if(jproduk_cek_nama3Field.getValue()!== ""){jproduk_cek_nama3_create = jproduk_cek_nama3Field.getValue();} 
 				if(jproduk_cek_no3Field.getValue()!== ""){jproduk_cek_nomor3_create = jproduk_cek_no3Field.getValue();} 
 				if(jproduk_cek_valid3Field.getValue()!== ""){jproduk_cek_valid3_create = jproduk_cek_valid3Field.getValue().format('Y-m-d');} 
 				if(jproduk_cek_bank3Field.getValue()!== ""){jproduk_cek_bank3_create = jproduk_cek_bank3Field.getValue();} 
@@ -533,11 +533,11 @@ Ext.onReady(function(){
 				if(jproduk_transfer_nilaiField.getValue()!== null){jproduk_transfer_nilai_create = jproduk_transfer_nilaiField.getValue();} 
 				//transfer-2 value
 				if(jproduk_transfer_bank2Field.getValue()!== ""){jproduk_transfer_bank2_create = jproduk_transfer_bank2Field.getValue();} 
-				if(jproduk_transfer_nama2Field.getValue()!== null){jproduk_transfer_nama2_create = jproduk_transfer_nama2Field.getValue();}
+				if(jproduk_transfer_nama2Field.getValue()!== ""){jproduk_transfer_nama2_create = jproduk_transfer_nama2Field.getValue();}
 				if(jproduk_transfer_nilai2Field.getValue()!== null){jproduk_transfer_nilai2_create = jproduk_transfer_nilai2Field.getValue();} 
 				//transfer-3 value
 				if(jproduk_transfer_bank3Field.getValue()!== ""){jproduk_transfer_bank3_create = jproduk_transfer_bank3Field.getValue();} 
-				if(jproduk_transfer_nama3Field.getValue()!== null){jproduk_transfer_nama3_create = jproduk_transfer_nama3Field.getValue();}
+				if(jproduk_transfer_nama3Field.getValue()!== ""){jproduk_transfer_nama3_create = jproduk_transfer_nama3Field.getValue();}
 				if(jproduk_transfer_nilai3Field.getValue()!== null){jproduk_transfer_nilai3_create = jproduk_transfer_nilai3Field.getValue();}
 				
 				var jproduk_cetak_value = this.cetak_jproduk;
