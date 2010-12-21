@@ -920,7 +920,7 @@ class M_perawatan extends Model{
 				};
 				if($rawat_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
+					$query.= " rawat_aktif = '".$rawat_aktif."'";
 				};
 				
 			}
