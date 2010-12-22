@@ -140,6 +140,7 @@ var cust_pendidikanSearchField;
 var cust_profesiSearchField;
 var cust_tmptlahirSearchField;
 var cust_tgllahirSearchField;
+var cust_tgllahirSearchFieldEnd;
 var cust_hobiSearchField;
 var cust_referensiSearchField;
 var cust_keteranganSearchField;
@@ -572,6 +573,7 @@ var editor_cust_note;
 		var cust_pendidikan_search=null;
 		var cust_profesi_search=null;
 		var cust_tgllahir_search_date="";
+		var cust_tgllahir_search_dateEnd="";
 		var cust_hobi_search=null;
 		var cust_referensi_search=null;
 		var cust_keterangan_search=null;
@@ -610,6 +612,7 @@ var editor_cust_note;
 		if(cust_pendidikanSearchField.getValue()!==null){cust_pendidikan_search=cust_pendidikanSearchField.getValue();}
 		if(cust_profesiSearchField.getValue()!==null){cust_profesi_search=cust_profesiSearchField.getValue();}
 		if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_hobiSearchField.getValue()!==null){cust_hobi_search=cust_hobiSearchField.getValue();}
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
@@ -653,6 +656,7 @@ var editor_cust_note;
 			cust_pendidikan	:	cust_pendidikan_search, 
 			cust_profesi	:	cust_profesi_search, 
 			cust_tgllahir	:	cust_tgllahir_search_date, 
+			cust_tgllahirend	:	cust_tgllahir_search_dateEnd, 
 			cust_hobi		:	cust_hobi_search, 
 			cust_referensi	:	cust_referensi_search, 
 			cust_keterangan	:	cust_keterangan_search, 
@@ -668,7 +672,8 @@ var editor_cust_note;
 			cust_fretfulness : fretfulness_search
 		};
 		// Cause the datastore to do another query : 
-		customer_DataStore.load({params: {start: 0, limit: pageS}});
+		//customer_DataStore.load({params: {start: 0, limit: pageS}});
+		customer_DataStore.reload({params: {start: 0, limit: pageS}});;
 		//cbo_cust_profesi_DataStore.reload();
 		//cbo_cust_hobi_DataStore.reload();
 		//cbo_cust_cabang_DataStore.reload();
@@ -711,6 +716,7 @@ var editor_cust_note;
 		cust_pendidikanSearchField.reset();
 		cust_profesiSearchField.reset();
 		cust_tgllahirSearchField.reset();
+		cust_tgllahirSearchFieldEnd.reset();
 		cust_hobiSearchField.reset();
 		cust_referensiSearchField.reset();
 		cust_keteranganSearchField.reset();
@@ -3892,13 +3898,46 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	/* Identify  cust_tgllahir Field */
+	/* Identify  cust_tgllahir Field 
 	cust_tgllahirSearchField= new Ext.form.DateField({
 		id: 'cust_tgllahirSearchField',
 		fieldLabel: 'Tanggal Lahir',
 		format : 'Y-m-d',
 		anchor: '50%'
+	});*/
+	
+	cust_tgllahirSearchField= new Ext.form.DateField({
+		fieldLabel: 'Tanggal Lahir',
+		//name: 'cust_tgllahirSearchField',
+		id: 'cust_tgllahirSearchField',
+		//vtype: 'daterange',
+		//allowBlank: false,
+		format: 'Y-m-d'
+		//endDateField: 'cust_tgllahirSearchFieldEnd' 
 	});
+	
+	cust_tgllahirSearchFieldEnd= new Ext.form.DateField({
+		fieldLabel: 's/d',
+		//name: 'cust_tgllahirSearchFieldEnd',
+		id: 'cust_tgllahirSearchFieldEnd',
+		//vtype: 'daterange',
+		//allowBlank: false,
+		format: 'Y-m-d'
+		//startDateField: 'cust_tgllahirSearchField' // id of the end date field
+	});
+	
+	cust_label_tgllahirSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	cust_tanggal_opsiSearchField=new Ext.form.FieldSet({
+		id:'cust_tanggal_opsiSearchField',
+		title: 'Tanggal Lahir',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		//border : false,
+		//frame: false,
+		items:[cust_tgllahirSearchField, cust_label_tgllahirSearchField, cust_tgllahirSearchFieldEnd]
+	});
+	
 	/* Identify  cust_hobi Field */
 	cust_hobiSearchField= new Ext.form.ComboBox({
 		id: 'cust_hobiSearchField',
@@ -4161,7 +4200,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tgllahirSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]
