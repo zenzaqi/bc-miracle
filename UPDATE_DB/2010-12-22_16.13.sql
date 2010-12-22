@@ -1,0 +1,1 @@
+ALTER TABLE `member_setup` ADD COLUMN `setmember_mintransx` SMALLINT NULL DEFAULT NULL, ADD COLUMN `setmember_mintransrp` DOUBLE NULL DEFAULT NULL,  ADD COLUMN `setmember_waktu` INT(11) NULL DEFAULT NULL;

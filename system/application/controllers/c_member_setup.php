@@ -67,7 +67,11 @@ class C_member_setup extends Controller {
 		$setmember_transtenggang=trim(@$_POST["setmember_transtenggang"]);
 		$setmember_pointtenggang=trim(@$_POST["setmember_pointtenggang"]);
 		$setmember_rp_perpoint=trim(@$_POST["setmember_rp_perpoint"]);
-		$setmember_point_perrp=trim(@$_POST["setmember_point_perrp"]);
+		$setmember_point_perrp=trim(@$_POST["setmember_point_perrp"]);		
+		$setmember_mintransx=trim(@$_POST["setmember_mintransx"]);
+		$setmember_mintransrp=trim(@$_POST["setmember_mintransrp"]);
+		$setmember_waktu=trim(@$_POST["setmember_waktu"]);
+		
 		//$setmember_author="setmember_author";
 		//$setmember_date_create="setmember_date_create";
 		$setmember_update=@$_SESSION[SESSION_USERID];
@@ -76,7 +80,8 @@ class C_member_setup extends Controller {
 		$result = $this->m_member_setup->member_setup_update($setmember_id, $setmember_transhari, $setmember_pointhari ,$setmember_transbulan, 
 															 $setmember_pointbulan ,$setmember_periodeaktif ,$setmember_periodetenggang ,
 															 $setmember_transtenggang, $setmember_pointtenggang, $setmember_rp_perpoint, 
-															 $setmember_point_perrp, $setmember_update, $setmember_date_update);
+															 $setmember_point_perrp, $setmember_update, $setmember_date_update, $setmember_mintransx,
+															 $setmember_mintransrp, $setmember_waktu);
 		echo $result;
 	}
 	

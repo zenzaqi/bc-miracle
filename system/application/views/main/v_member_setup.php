@@ -72,6 +72,9 @@ var setmember_transbulanSearchField;
 var setmember_periodeaktifSearchField;
 var setmember_periodetenggangSearchField;
 var setmember_transtenggangSearchField;
+var setmember_mintransxField;
+var setmember_mintransrpField;
+var setmember_waktuField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -89,6 +92,9 @@ Ext.onReady(function(){
 			var	setmember_pointtenggang_field=null;
 			var	setmember_rp_perpoint_field=null;
 			var	setmember_point_perrp_field=null;
+			var setmember_mintransx_field=null;
+			var setmember_mintransrp_field=null;
+			var setmember_waktu_field=null;
 
 			if(setmember_transhariField.getValue()!== null){setmember_transhari_field = convertToNumber(setmember_transhariField.getValue());}
 			if(setmember_pointhariField.getValue()!== null){setmember_pointhari_field = convertToNumber(setmember_pointhariField.getValue());} 
@@ -98,7 +104,10 @@ Ext.onReady(function(){
 			if(setmember_pointtenggangField.getValue()!== null){setmember_pointtenggang_field = convertToNumber(setmember_pointtenggangField.getValue());} 
 			if(setmember_rp_perpointField.getValue()!== null){setmember_rp_perpoint_field = convertToNumber(setmember_rp_perpointField.getValue());}
 			if(setmember_point_perrpField.getValue()!== null){setmember_point_perrp_field = convertToNumber(setmember_point_perrpField.getValue());}
-						
+			if(setmember_mintransxField.getValue()!== null){setmember_mintransx_field = convertToNumber(setmember_mintransxField.getValue());}
+			if(setmember_mintransrpField.getValue()!== null){setmember_mintransrp_field = convertToNumber(setmember_mintransrpField.getValue());}
+			if(setmember_waktuField.getValue()!== null){setmember_waktu_field = convertToNumber(setmember_waktuField.getValue());}
+
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_member_setup&m=get_action',
@@ -112,7 +121,11 @@ Ext.onReady(function(){
 					setmember_pointtenggang		: setmember_pointtenggang_field,
 					setmember_rp_perpoint		: setmember_rp_perpoint_field,
 					setmember_point_perrp		: setmember_point_perrp_field,
+					setmember_mintransx			: setmember_mintransx_field,
+					setmember_mintransrp		: setmember_mintransrp_field,
+					setmember_waktu				: setmember_waktu_field,
 					task						: post2db
+
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -298,6 +311,49 @@ Ext.onReady(function(){
 		items:[setmember_point_perrpField]
 	});
 	
+	/* Identify  setmember_pointhangus Field */
+	setmember_mintransxField= new Ext.form.TextField({
+		id: 'setmember_mintransxField',
+		name: 'setmember_mintransx',
+		fieldLabel: 'Min Transaksi (x)',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		allowBlank: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setmember_mintransrpField= new Ext.form.TextField({
+		id: 'setmember_mintransrpField',
+		name: 'setmember_mintransrp',
+		fieldLabel: 'Min Transaksi (Rp)',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		allowBlank: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setmember_waktuField= new Ext.form.TextField({
+		id: 'setmember_waktuField',
+		name: 'setmember_waktu',
+		fieldLabel: 'Jangka Waktu (hari)',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		allowBlank: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	setmember_pointhangusField=new Ext.form.FieldSet({
+		id:'setmember_pointhangus',
+		name: 'setmember_pointhangus',
+		title: 'Point Hangus',
+		layout: 'form',
+		bodyStyle: 'padding: 5px;',
+		items:[setmember_mintransxField, setmember_mintransrpField, setmember_waktuField]
+	});
+	
 	
 	/* Function for retrieve create Window Panel*/ 
 	member_setup_saveForm = new Ext.FormPanel({
@@ -318,7 +374,10 @@ Ext.onReady(function(){
 			{name: 'setmember_transtenggang', type: 'string', mapping: 'setmember_transtenggang'},
 			{name: 'setmember_pointtenggang', type: 'string', mapping: 'setmember_pointtenggang'},
 			{name: 'setmember_rp_perpoint', type: 'string', mapping: 'setmember_rp_perpoint'},
-			{name: 'setmember_point_perrp', type: 'string', mapping: 'setmember_point_perrp'}
+			{name: 'setmember_point_perrp', type: 'string', mapping: 'setmember_point_perrp'},
+			{name: 'setmember_mintransx', type: 'string', mapping: 'setmember_mintransx'},
+			{name: 'setmember_mintransrp', type: 'string', mapping: 'setmember_mintransrp'},
+			{name: 'setmember_waktu', type: 'string', mapping: 'setmember_waktu'}
 		]),
 		labelAlign: 'left',
 		labelWidth: 200,
@@ -330,7 +389,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [setmember_registerField,setmember_reloadField,setmember_periodeField,setmember_rupiah_perpointField,setmember_point_perrupiahField] 
+				items: [setmember_registerField,setmember_reloadField,setmember_periodeField,setmember_rupiah_perpointField,setmember_point_perrupiahField, setmember_pointhangusField] 
 			}
 			],
 		buttons: [
@@ -402,10 +461,18 @@ Ext.onReady(function(){
 	setmember_rp_perpointField.on('focus',function(){ setmember_rp_perpointField.setValue(convertToNumber(setmember_rp_perpointField.getValue())); });
 	setmember_rp_perpointField.on('blur',function(){ setmember_rp_perpointField.setValue(CurrencyFormatted(setmember_rp_perpointField.getValue())); });
 	
+	setmember_mintransxField.on('focus',function(){ setmember_mintransxField.setValue(convertToNumber(setmember_mintransxField.getValue())); });
+	setmember_mintransxField.on('blur',function(){ setmember_mintransxField.setValue(CurrencyFormatted(setmember_mintransxField.getValue())); });
+	
+	setmember_mintransrpField.on('focus',function(){ setmember_mintransrpField.setValue(convertToNumber(setmember_mintransrpField.getValue())); });
+	setmember_mintransrpField.on('blur',function(){ setmember_mintransrpField.setValue(CurrencyFormatted(setmember_mintransrpField.getValue())); });
+
+	setmember_waktuField.on('focus',function(){ setmember_waktuField.setValue(convertToNumber(setmember_waktuField.getValue())); });
+	setmember_waktuField.on('blur',function(){ setmember_waktuField.setValue(CurrencyFormatted(setmember_waktuField.getValue())); });
+
 	setmember_point_perrpField.on('focus',function(){ setmember_point_perrpField.setValue(convertToNumber(setmember_point_perrpField.getValue())); });
 	setmember_point_perrpField.on('blur',function(){ setmember_point_perrpField.setValue(CurrencyFormatted(setmember_point_perrpField.getValue())); });
-	
-	
+
 	
 	member_setup_saveForm.getForm().load();
 	member_setup_saveWindow.show();
