@@ -1,0 +1,1 @@
+--> mengaktifkan auto load di master customer + order by cust_id desc
