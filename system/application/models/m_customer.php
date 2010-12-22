@@ -185,7 +185,7 @@ class M_customer extends Model{
 			$query =   "SELECT 
 							v.*, crm.crmvalue_date as crmvalue_date, crm.crmvalue_total as crmvalue_total , crm.crmvalue_priority as crmvalue_priority
 						FROM vu_customer v
-						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value";
+						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value ";
 			
 			// For simple search
 			if ($filter<>""){
@@ -193,6 +193,8 @@ class M_customer extends Model{
 				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' )";
 				$query .= " AND cust_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 			}
+			
+			$query .= " order by cust_id desc ";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -690,6 +692,9 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_revised LIKE '%".$cust_revised."%'";
 			};
+			
+			$query.= " order by cust_id desc ";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

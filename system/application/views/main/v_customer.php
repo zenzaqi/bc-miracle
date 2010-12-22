@@ -2589,7 +2589,7 @@ Ext.onReady(function(){
 		}),'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
-			handler: '',//customer_reset_search,
+			handler: customer_reset_search,
 			iconCls:'icon-refresh'
 		},'-',{
 			text: 'Export Excel',
@@ -2697,7 +2697,7 @@ Ext.onReady(function(){
 	
   	
 	customerListEditorGrid.addListener('rowcontextmenu', oncustomer_ListEditGridContextMenu);
-	//customer_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	customer_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	customerListEditorGrid.on('afteredit', customer_update); // inLine Editing Record
 	
 	var cbo_propinsi_DataStore = new Ext.data.Store({
