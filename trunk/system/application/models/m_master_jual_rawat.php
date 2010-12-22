@@ -24,7 +24,12 @@ class M_master_jual_rawat extends Model{
 			case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
 			case "Customer": $order_by=" ORDER BY cust_id ASC";break;
 			case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
-			case "Perawatan": $order_by=" ORDER BY produk_id ASC";break;
+			case "Perawatan Semua": $order_by=" ORDER BY produk_id ASC";break;
+			case "Perawatan Medis": $order_by="AND kategori_nama = 'Medis' ORDER BY produk_id ASC";break;
+			case "Perawatan Non Medis": $order_by="AND kategori_nama = 'Non Medis' ORDER BY produk_id ASC";break;
+			case "Perawatan Surgery": $order_by="AND kategori_nama = 'Surgery' ORDER BY produk_id ASC";break;
+			case "Perawatan Anti Aging": $order_by="AND kategori_nama = 'Anti Aging' ORDER BY produk_id ASC";break;
+			case "Perawatan Lain-Lain": $order_by="AND kategori_nama <> 'Medis' AND kategori_nama <> 'Non Medis' AND kategori_nama <> 'Surgery' AND kategori_nama <> 'Anti Aging' ORDER BY produk_id ASC";break;
 			case "Referal": $order_by=" ORDER BY sales ASC";break;
 			case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis ASC";break;
 			default: $order_by=" ORDER BY no_bukti ASC";break;

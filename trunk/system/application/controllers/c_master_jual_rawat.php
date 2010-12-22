@@ -62,7 +62,12 @@ class C_master_jual_rawat extends Controller {
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
-				case "Perawatan": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Semua": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Medis": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Non Medis": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Surgery": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Anti Aging": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+				case "Perawatan Lain-Lain": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
 				case "Referal": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
 				case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
