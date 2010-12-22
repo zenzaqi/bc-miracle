@@ -36,8 +36,10 @@ class M_member_setup extends Model{
 				$arr[0]['setmember_periodetenggang']=number_format($row->setmember_periodetenggang);
 				$arr[0]['setmember_pointtenggang']=number_format($row->setmember_pointtenggang);
 				$arr[0]['setmember_rp_perpoint']=number_format($row->setmember_rp_perpoint);
-				$arr[0]['setmember_point_perrp']=number_format($row->setmember_point_perrp);
-				
+				$arr[0]['setmember_point_perrp']=number_format($row->setmember_point_perrp);				
+				$arr[0]['setmember_mintransx']=number_format($row->setmember_mintransx);
+				$arr[0]['setmember_mintransrp']=number_format($row->setmember_mintransrp);
+				$arr[0]['setmember_waktu']=number_format($row->setmember_waktu);				
 				
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
@@ -49,7 +51,7 @@ class M_member_setup extends Model{
 		//function for create new record
 		function member_setup_create($setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,
 									 $setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang ,
-									 $setmember_author ,$setmember_date_create ){
+									 $setmember_author ,$setmember_date_create,  $setmember_mintransx, $setmember_mintransrp, $setmember_waktu ){
 			$data = array(
 				"setmember_transhari"=>$setmember_transhari, 
 				"setmember_transbulan"=>$setmember_transbulan, 
@@ -57,7 +59,10 @@ class M_member_setup extends Model{
 				"setmember_periodetenggang"=>$setmember_periodetenggang, 
 				"setmember_transtenggang"=>$setmember_transtenggang, 
 				"setmember_author"=>$setmember_author, 
-				"setmember_date_create"=>$setmember_date_create 
+				"setmember_date_create"=>$setmember_date_create,
+				"setmember_mintransx"=>$setmember_mintransx, 
+				"setmember_mintransrp"=>$setmember_mintransrp, 
+				"setmember_waktu"=>$setmember_waktu				
 			);
 			$this->db->insert('member_setup', $data); 
 			if($this->db->affected_rows())
@@ -69,7 +74,7 @@ class M_member_setup extends Model{
 		//function for update record
 		function member_setup_update($setmember_id,$setmember_transhari, $setmember_pointhari ,$setmember_transbulan, $setmember_pointbulan ,
 									 $setmember_periodeaktif ,$setmember_periodetenggang ,$setmember_transtenggang, $setmember_pointtenggang, 
-									 $setmember_rp_perpoint, $setmember_point_perrp, $setmember_update,$setmember_date_update){
+									 $setmember_rp_perpoint, $setmember_point_perrp, $setmember_update,$setmember_date_update,  $setmember_mintransx, $setmember_mintransrp, $setmember_waktu){
 			$data = array(
 				"setmember_transhari"=>$setmember_transhari,
 				"setmember_pointhari"=>$setmember_pointhari,
@@ -82,6 +87,9 @@ class M_member_setup extends Model{
 				"setmember_rp_perpoint"=>$setmember_rp_perpoint,
 				"setmember_point_perrp"=>$setmember_point_perrp,
 				"setmember_update"=>$setmember_update, 
+				"setmember_mintransx"=>$setmember_mintransx, 
+				"setmember_mintransrp"=>$setmember_mintransrp, 
+				"setmember_waktu"=>$setmember_waktu,	
 				"setmember_date_update"=>$setmember_date_update 
 			);
 			
