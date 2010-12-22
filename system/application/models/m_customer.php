@@ -213,7 +213,7 @@ class M_customer extends Model{
 		}
 		
 		//function for update record
-		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_tgllahirend ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
+		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir  ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
 			if($cust_no=='' && $cust_aktif !='Tidak Aktif'){
 				//Generate Nomor Customer
 				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
@@ -286,8 +286,7 @@ class M_customer extends Model{
 				"cust_pendidikan"=>$cust_pendidikan,			
 				"cust_profesi"=>$cust_profesi,			
 				"cust_tmptlahir"=>$cust_tmptlahir,
-				"cust_tgllahir"=>$cust_tgllahir,	
-				"cust_tgllahirend"=>$cust_tgllahirend,				
+				"cust_tgllahir"=>$cust_tgllahir,				
 				"cust_hobi"=>$cust_hobi,			
 				"cust_referensilain"=>$cust_referensilain,			
 				"cust_keterangan"=>$cust_keterangan,			
@@ -714,7 +713,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir , $cust_tgllahirend ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query

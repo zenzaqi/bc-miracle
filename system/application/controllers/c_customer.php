@@ -238,7 +238,7 @@ class C_customer extends Controller {
 		$cust_tmptlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_tmptlahir);
 		$cust_tmptlahir=str_replace("'", '"',$cust_tmptlahir);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
-		$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
+		//$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
 		$cust_hobitxt=trim(@$_POST["cust_hobitxt"]);
 		$cust_hobitxt=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobitxt);
 		$cust_hobitxt=str_replace("'", '"',$cust_hobitxt);
@@ -396,7 +396,7 @@ class C_customer extends Controller {
 		$cust_tmptlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_tmptlahir);
 		$cust_tmptlahir=str_replace("'", '"',$cust_tmptlahir);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
-		$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
+		//$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
 		$cust_hobitxt=trim(@$_POST["cust_hobitxt"]);
 		$cust_hobitxt=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobitxt);
 		$cust_hobitxt=str_replace("'", '"',$cust_hobitxt);
@@ -655,7 +655,7 @@ class C_customer extends Controller {
 		$cust_profesi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_profesi);
 		$cust_profesi=str_replace("'", '"',$cust_profesi);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
-		$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
+		//$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
 		$cust_hobi=trim(@$_POST["cust_hobi"]);
 		$cust_hobi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobi);
 		$cust_hobi=str_replace("'", '"',$cust_hobi);
@@ -916,7 +916,7 @@ class C_customer extends Controller {
 		$cust_profesi=trim(@$_POST["cust_profesi"]);
 		$cust_profesi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_profesi);
 		$cust_profesi=str_replace("'", '"',$cust_profesi);
-		$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
+		//$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
 		$cust_hobi=trim(@$_POST["cust_hobi"]);
 		$cust_hobi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobi);
@@ -959,7 +959,7 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_customer->customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
+		$result = $this->m_customer->customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir  ,$cust_hobi ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
 		
 		$rs=$result->row();
 		$jumlah_result=$result->result();
@@ -1048,7 +1048,7 @@ class C_customer extends Controller {
 		$cust_profesi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_profesi);
 		$cust_profesi=str_replace("'", '"',$cust_profesi);
 		$cust_tgllahir=trim(@$_POST["cust_tgllahir"]);
-		$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
+		//$cust_tgllahirend=trim(@$_POST["cust_tgllahirend"]);
 		$cust_hobi=trim(@$_POST["cust_hobi"]);
 		$cust_hobi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hobi);
 		$cust_hobi=str_replace("'", '"',$cust_hobi);
