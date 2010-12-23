@@ -110,7 +110,8 @@ Ext.onReady(function(){
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Perawatan'],['Pemakai'],['Referal']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Perawatan Semua'],['Perawatan Medis'],['Perawatan Non Medis'],['Perawatan Anti Aging']
+			,['Perawatan Surgery'],['Perawatan Lain-Lain'],['Pemakai'],['Referal']]
 	});
 	
 	var rpt_apaket_groupField=new Ext.form.ComboBox({
@@ -121,7 +122,7 @@ Ext.onReady(function(){
 		displayField: 'group',
 		valueField: 'group',
 		value: 'No Faktur',
-		width: 100,
+		width: 200,
 		triggerAction: 'all',
 		typeAhead: true,
 		lazyRender: true

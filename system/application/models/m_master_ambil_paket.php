@@ -27,6 +27,11 @@ class M_master_ambil_paket extends Model{
 				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
 				case "Paket": $order_by=" ORDER BY paket_kode";break;
 				case "Perawatan": $order_by=" ORDER BY rawat_id";break;
+				case "Perawatan Medis": $order_by="AND kategori_nama = 'Medis' ORDER BY rawat_id";break;
+				case "Perawatan Non Medis": $order_by="AND kategori_nama = 'Non Medis' ORDER BY rawat_id";break;
+				case "Perawatan Anti Aging": $order_by="AND kategori_nama = 'Anti Aging' ORDER BY rawat_id";break;
+				case "Perawatan Surgery": $order_by="AND kategori_nama = 'Surgery' ORDER BY rawat_id";break;
+				case "Perawatan Lain-Lain": $order_by="AND kategori_nama <> 'Medis' AND kategori_nama <> 'Non Medis' AND kategori_nama <> 'Surgery' AND kategori_nama <> 'Anti Aging' ORDER BY rawat_id";break;
 				case "Pemakai": $order_by=" ORDER BY pemakai_nama";break;
 				case "Referal": $order_by=" ORDER BY referal";break;
 				default: $order_by=" ORDER BY no_bukti";break;

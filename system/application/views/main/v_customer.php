@@ -147,6 +147,7 @@ var cust_keteranganSearchField;
 var cust_memberSearchField;
 var cust_memberSearch2Field;
 var cust_terdaftarSearchField;
+var cust_tgldaftarSearchFieldEnd;
 var cust_statusnikahSearchField;
 var cust_prioritySearchField;
 var cust_jmlanakSearchField;
@@ -579,6 +580,7 @@ var editor_cust_note;
 		var cust_keterangan_search=null;
 		var cust_member_search=null;
 		var cust_terdaftar_search_date="";
+		var cust_tgldaftar_search_dateEnd="";
 		var cust_statusnikah_search=null;
 		var cust_priority_search=null;
 		var cust_jmlanak_search=null;
@@ -619,6 +621,7 @@ var editor_cust_note;
 		if(cust_memberSearchField.getValue()!==null){cust_member_search=cust_memberSearchField.getValue();}
 		if(cust_memberSearch2Field.getValue()!==null){cust_member2_search=cust_memberSearch2Field.getValue();}
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_search_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_search_dateEnd=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_statusnikahSearchField.getValue()!==null){cust_statusnikah_search=cust_statusnikahSearchField.getValue();}
 		if(cust_prioritySearchField.getValue()!==null){cust_priority_search=cust_prioritySearchField.getValue();}
 		if(cust_jmlanakSearchField.getValue()!==null){cust_jmlanak_search=cust_jmlanakSearchField.getValue();}
@@ -663,6 +666,7 @@ var editor_cust_note;
 			cust_member		:	cust_member_search, 
 			cust_member2	:	cust_member2_search, 
 			cust_terdaftar	:	cust_terdaftar_search_date, 
+			cust_tgldaftarend	:	cust_tgldaftar_search_dateEnd, 
 			cust_statusnikah	:	cust_statusnikah_search,
 			cust_priority	:	cust_priority_search,
 			cust_jmlanak	:	cust_jmlanak_search, 
@@ -723,6 +727,7 @@ var editor_cust_note;
 		cust_memberSearchField.reset();
 		cust_memberSearch2Field.reset();
 		cust_terdaftarSearchField.reset();
+		cust_tgldaftarSearchFieldEnd.reset();
 		cust_statusnikahSearchField.reset();
 		cust_prioritySearchField.reset();
 		cust_jmlanakSearchField.reset();
@@ -2185,12 +2190,12 @@ Ext.onReady(function(){
 			width: 60,	//67,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			,
 			editor: new Ext.form.DateField({
 //				format: 'Y-m-d'
-				format: 'd-m-Y'
+				format: 'Y-m-d'
 			})
 			<?php } ?>
 		},
@@ -3076,7 +3081,7 @@ Ext.onReady(function(){
 	cust_tgllahirField= new Ext.form.DateField({
 		id: 'cust_tgllahirField',
 		fieldLabel: 'Tgl Lahir',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		anchor: '50%',
 		//allowBlank: false,
 		enableKeyEvents: 'true',
@@ -3638,6 +3643,20 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '50%'
 	});
+	
+	cust_label_nocustSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	cust_nocust_opsiSearchField=new Ext.form.FieldSet({
+		id:'cust_nocust_opsiSearchField',
+		title: 'Nomor Customer (6 digit akhir)',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		//border : false,
+		//frame: false,
+		anchor: '95%',
+		align:'right',
+		items:[cust_no_awalSearchField, cust_label_nocustSearchField, cust_no_akhirSearchField]
+	});
 	/*
 	cust_nolamaSearchField= new Ext.form.TextField({
 		id: 'cust_nolamaSearchField',
@@ -3912,7 +3931,7 @@ Ext.onReady(function(){
 		id: 'cust_tgllahirSearchField',
 		//vtype: 'daterange',
 		//allowBlank: false,
-		format: 'Y-m-d'
+		format: 'd-m-Y'
 		//endDateField: 'cust_tgllahirSearchFieldEnd' 
 	});
 	
@@ -3922,7 +3941,7 @@ Ext.onReady(function(){
 		id: 'cust_tgllahirSearchFieldEnd',
 		//vtype: 'daterange',
 		//allowBlank: false,
-		format: 'Y-m-d'
+		format: 'd-m-Y'
 		//startDateField: 'cust_tgllahirSearchField' // id of the end date field
 	});
 	
@@ -3933,6 +3952,7 @@ Ext.onReady(function(){
 		title: 'Tanggal Lahir',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
+		anchor: '95%',
 		//border : false,
 		//frame: false,
 		items:[cust_tgllahirSearchField, cust_label_tgllahirSearchField, cust_tgllahirSearchFieldEnd]
@@ -4027,13 +4047,33 @@ Ext.onReady(function(){
 		anchor: '95%',
 		readOnly: true
 	});
+	
 	/* Identify  cust_terdaftar Field */
 	cust_terdaftarSearchField= new Ext.form.DateField({
-		id: 'cust_terdaftarSearchField',
 		fieldLabel: 'Tanggal Terdaftar',
-		format : 'Y-m-d',
-		anchor: '50%'
+		id: 'cust_terdaftarSearchField',
+		format: 'd-m-Y'
 	});
+	
+	cust_tgldaftarSearchFieldEnd= new Ext.form.DateField({
+		fieldLabel: 's/d',
+		id: 'cust_tgldaftarSearchFieldEnd',
+		format: 'd-m-Y'
+	});
+	
+	cust_label_tgldaftarSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	cust_tanggaldaftar_opsiSearchField=new Ext.form.FieldSet({
+		id:'cust_tanggaldaftar_opsiSearchField',
+		title: 'Tanggal Daftar',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		anchor: '95%',
+		//border : false,
+		//frame: false,
+		items:[cust_terdaftarSearchField, cust_label_tgldaftarSearchField, cust_tgldaftarSearchFieldEnd]
+	});
+		
 	/* Identify  cust_statusnikah Field */
 	cust_statusnikahSearchField= new Ext.form.ComboBox({
 		id: 'cust_statusnikahSearchField',
@@ -4134,9 +4174,7 @@ Ext.onReady(function(){
 		anchor: '50%',
 		triggerAction: 'all'	
 	});
-	
-	
-	
+		
 	cust_alamat_groupSearch = new Ext.form.FieldSet({
 		title: 'Alamat',
 		autoHeight: true,
@@ -4194,13 +4232,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_noSearchField, cust_no_awalSearchField, cust_no_akhirSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_terdaftarSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]
