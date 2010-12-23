@@ -88,7 +88,12 @@ class C_master_ambil_paket extends Controller {
 				case "Tanggal": $print_view=$this->load->view("main/p_detail_ambil_paket_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_detail_ambil_paket_customer.php",$data,TRUE);break;
 				case "Paket": $print_view=$this->load->view("main/p_detail_ambil_paket_paket.php",$data,TRUE);break;
-				case "Perawatan": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Semua": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Medis": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Non Medis": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Anti Aging": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Surgery": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
+				case "Perawatan Lain-Lain": $print_view=$this->load->view("main/p_detail_ambil_paket_rawat.php",$data,TRUE);break;
 				case "Pemakai": $print_view=$this->load->view("main/p_detail_ambil_paket_pemakai.php",$data,TRUE);break;
 				case "Referal": $print_view=$this->load->view("main/p_detail_ambil_paket_referal.php",$data,TRUE);break;
 				case "No Faktur": $print_view=$this->load->view("main/p_detail_ambil_paket.php",$data,TRUE);break;
