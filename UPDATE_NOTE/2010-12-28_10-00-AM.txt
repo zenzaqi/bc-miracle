@@ -1,0 +1,5 @@
+[Update by zaqi.samrt@gmail.com]
+- Update Menu Penerimaan
+  o Penambahan data harga satuan, diskon dan subtotal
+    dari order
+  o Cetak menyertakan harga, subtotal
