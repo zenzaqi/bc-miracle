@@ -417,6 +417,7 @@ Ext.onReady(function(){
 			{name: 'terima_supplier', type: 'string', mapping: 'supplier_nama'},
 			{name: 'jumlah_barang', type: 'float', mapping: 'jumlah_barang'},
 			{name: 'jumlah_barang_bonus', type: 'float', mapping: 'jumlah_barang_bonus'},
+			{name: 'total_nilai', type: 'float', mapping: 'total_nilai'},
 			{name: 'terima_supplier_id', type: 'int', mapping: 'supplier_id'},
 			{name: 'terima_surat_jalan', type: 'string', mapping: 'terima_surat_jalan'},
 			{name: 'terima_pengirim', type: 'string', mapping: 'terima_pengirim'},
@@ -497,8 +498,9 @@ Ext.onReady(function(){
 			{name: 'dterima_order', type: 'float', mapping: 'jumlah_order'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_produk_satuan', type: 'string', mapping: 'satuan_nama'},
-			{name: 'dorder_produk_harga', type: 'int', mapping: 'dorder_harga'},
-			{name: 'dorder_produk_subtotal', type: 'int', mapping: 'subtotal'}
+			{name: 'dterima_harga', type: 'float', mapping: 'dorder_harga'},
+			{name: 'dterima_diskon', type: 'float', mapping: 'dorder_diskon'},
+			{name: 'dorder_produk_subtotal', type: 'float', mapping: 'subtotal'}
 		]),
 		sortInfo:{field: 'dterima_produk', direction: "ASC"}
 	});
@@ -573,6 +575,18 @@ Ext.onReady(function(){
 			readOnly: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
+		<?php if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
+		{
+			//header: 'Jumlah Item Bonus',
+			header: '<div align="center">' + 'Total Nilai',
+			align: 'right',
+			dataIndex: 'total_nilai',
+			width: 80,	//150,
+			sortable: true,
+			readOnly: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		<?php } ?>
 		{
 //			header: 'No.Surat Jalan',
 			header: '<div align="center">' + 'No Surat Jalan' + '</div>',
@@ -1030,7 +1044,9 @@ Ext.onReady(function(){
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dterima_satuan'},
 			{name: 'dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'},
-			{name: 'dterima_order', type: 'int', mapping: 'jumlah_order'}
+			{name: 'dterima_order', type: 'int', mapping: 'jumlah_order'},
+			{name: 'dterima_harga', type: 'int', mapping: 'harga_satuan'},
+			{name: 'dterima_diskon', type: 'int', mapping: 'diskon'}
 	]);
 	//eof
 
@@ -1188,7 +1204,38 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
-		}]
+		}
+		<? if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
+		,{
+			header: '<div align="center">Harga</div>',
+			align: 'right',
+			dataIndex: 'dterima_harga',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true
+		},{
+			header: '<div align="center">Diskon (%)</div>',
+			align: 'right',
+			dataIndex: 'dterima_diskon',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true
+		},{
+			header: '<div align="center">Sub Total</div>',
+			align: 'right',
+			dataIndex: 'dterima_order',
+			width: 100,
+			sortable: true,
+			renderer: function(v, params, record){
+					subtotal=Ext.util.Format.number((record.data.dterima_harga * record.data.dterima_jumlah*(100-record.data.dterima_diskon)/100),"0,000");
+                    return '<span>' + subtotal+ '</span>';
+            },
+			readOnly: true
+		}
+		<?php } ?>
+		]
 	);
 	//eof
 
@@ -1237,7 +1284,9 @@ Ext.onReady(function(){
 			dterima_produk	: 0,
 			dterima_satuan	: 0,
 			dterima_jumlah	: 0,
-			dterima_order	: 0
+			dterima_order	: 0,
+			dterima_harga	: 0,
+			dterima_diskon	: 0
 		});
 		editor_detail_terima_beli.stopEditing();
 		detail_terima_beli_DataStore.insert(0, edit_detail_terima_beli);
@@ -1279,6 +1328,9 @@ Ext.onReady(function(){
 					dterima_produk.push(detail_terima_beli_DataStore.getAt(i).data.dterima_produk);
                    	dterima_satuan.push(detail_terima_beli_DataStore.getAt(i).data.dterima_satuan);
 					dterima_jumlah.push(detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah);
+					//dterima_harga.push(detail_terima_beli_DataStore.getAt(i).data.dterima_harga);
+					//dterima_diskon.push(detail_terima_beli_DataStore.getAt(i).data.dterima_diskon);
+
                 }
             }
 
@@ -1286,6 +1338,9 @@ Ext.onReady(function(){
 			var encoded_array_dterima_produk = Ext.encode(dterima_produk);
 			var encoded_array_dterima_satuan = Ext.encode(dterima_satuan);
 			var encoded_array_dterima_jumlah = Ext.encode(dterima_jumlah);
+			//var encoded_array_dterima_harga = Ext.encode(dterima_harga);
+			//var encoded_array_dterima_diskon = Ext.encode(dterima_diskon);
+
 
 			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
@@ -1295,7 +1350,9 @@ Ext.onReady(function(){
 					dterima_master	: pkid,
 					dterima_produk	: encoded_array_dterima_produk,
 					dterima_satuan	: encoded_array_dterima_satuan,
-					dterima_jumlah	: encoded_array_dterima_jumlah
+					dterima_jumlah	: encoded_array_dterima_jumlah//,
+					//dterima_harga	: encoded_array_dterima_harga,
+					//dterima_diskon	: encoded_array_dterima_diskon
 				},
 				success:function(response){
 					var result=eval(response.responseText);

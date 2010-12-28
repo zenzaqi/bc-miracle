@@ -375,7 +375,8 @@ class M_master_terima_beli extends Model{
 		//get record list
 
 		function detail_detail_terima_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT  distinct dterima_id,dterima_master,dterima_produk,produk_nama,dterima_satuan,dterima_jumlah
+			$query = "SELECT  distinct dterima_id,dterima_master,dterima_produk,produk_nama,dterima_satuan,
+								dterima_jumlah,harga_satuan,diskon
 						 FROM vu_detail_terima_produk where dterima_master='".$master_id."'";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -576,7 +577,7 @@ class M_master_terima_beli extends Model{
 			$sql="SELECT order_id FROM master_order_beli WHERE order_id='".$terima_order."'";
 			$result=$this->db->query($sql);
 			if($result->num_rows()){
-				
+
 				$data = array(
 					"terima_no"=>$terima_no,
 					"terima_order"=>$terima_order,
