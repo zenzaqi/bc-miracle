@@ -1,0 +1,1 @@
+UPDATE `miracledb`.`menus` SET `menu_link` = '?c=c_lap_jum_tindakan_dokter' WHERE `menus`.`menu_id` =381 LIMIT 1 ;

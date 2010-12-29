@@ -1,20 +1,20 @@
 <?php
 /* 	
-	+ Module  		: Report Tindakan Dokter Controller
+	+ Module  		: Laporan Tindakan Dokter Controller
 	+ Description	: For record controller process back-end
-	+ Filename 		: c_report_tindakan.php
+	+ Filename 		: c_lap_jum_tindakan_Dokter.php
  	+ Author  		: Fred
 
 	
 */
 
 //class of tindakan
-class C_report_tindakan extends Controller {
+class C_lap_jum_tindakan_dokter extends Controller {
 
 	//constructor
-	function C_report_tindakan(){
+	function C_lap_jum_tindakan_dokter(){
 		parent::Controller();
-		$this->load->model('m_report_tindakan', '', TRUE);
+		$this->load->model('m_lap_jum_tindakan_dokter', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
 	
@@ -22,7 +22,7 @@ class C_report_tindakan extends Controller {
 	//set index
 	function index(){
 		$this->load->helper('asset');
-		$this->load->view('main/v_report_tindakan');
+		$this->load->view('main/v_lap_jum_tindakan_dokter');
 	}
 	
 	function get_dokter_list(){
@@ -77,7 +77,7 @@ class C_report_tindakan extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_report_tindakan->report_tindakan_list($query,$start,$end);
+		$result=$this->m_lap_jum_tindakan_dokter->report_tindakan_list($query,$start,$end);
 		echo $result;
 	}
 	
@@ -87,7 +87,7 @@ class C_report_tindakan extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_report_tindakan->report_tindakan_list2($query,$start,$end);
+		$result=$this->m_lap_jum_tindakan_dokter->report_tindakan_list2($query,$start,$end);
 		echo $result;
 	}
 
@@ -105,10 +105,11 @@ class C_report_tindakan extends Controller {
 			$trawat_tglapp_end="";
 
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$report_groupby=trim(@$_POST["report_groupby"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_report_tindakan->report_tindakan_search($report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_search($report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
 		echo $result;
 	}
 
@@ -125,10 +126,11 @@ class C_report_tindakan extends Controller {
 			$trawat_tglapp_end="";
 
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$report_groupby=trim(@$_POST["report_groupby"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_report_tindakan->report_tindakan_search2($report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_search2($report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
 		echo $result;
 	}
 	
@@ -192,7 +194,7 @@ class C_report_tindakan extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_report_tindakan->report_tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
+		$query = $this->m_lap_jum_tindakan_dokter->report_tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
 		
 		to_excel($query,"tindakan"); 
 		echo '1';
