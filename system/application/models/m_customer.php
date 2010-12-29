@@ -185,7 +185,8 @@ class M_customer extends Model{
 			$query =   "SELECT 
 							v.*, crm.crmvalue_date as crmvalue_date, crm.crmvalue_total as crmvalue_total , crm.crmvalue_priority as crmvalue_priority
 						FROM vu_customer v
-						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value ";
+						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value
+						WHERE cust_aktif = 'Aktif' ";
 			
 			// For simple search
 			if ($filter<>""){
