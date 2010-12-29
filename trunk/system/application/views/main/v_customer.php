@@ -3221,14 +3221,14 @@ Ext.onReady(function(){
 		//store: cbo_reflain_DataStore,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_referensilain'],
-			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio']]
+			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio'],['Lain-lain']]
 		}),	
 		mode: 'local',
 		displayField:'cust_referensilain',
 		valueField: 'cust_referensilain',
         typeAhead: false,
         loadingText: 'Searching...',
-        pageSize:10,
+       // pageSize:10,
         hideTrigger:false,
 		triggerAction: 'all',
 		lazyRender:true,
@@ -4041,14 +4041,14 @@ Ext.onReady(function(){
 		//store: cbo_reflain_DataStore,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_referensilain'],
-			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio']]
+			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio'],['Lain-lain']]
 		}),	
 		mode: 'local',
 		displayField:'cust_referensilain',
 		valueField: 'cust_referensilain',
         typeAhead: false,
         loadingText: 'Searching...',
-        pageSize:10,
+       //pageSize:10,
         hideTrigger:false,
 		triggerAction: 'all',
 		lazyRender:true,
