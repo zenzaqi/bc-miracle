@@ -1,8 +1,8 @@
 <?
 /* 
-	+ Module  		: report Tindakan View
+	+ Module  		: Laporan Tindakan Dokter View
 	+ Description	: For record view
-	+ Filename 		: v_report_tindakan.php
+	+ Filename 		: v_lap_jum_tindakan_dokter.php
  	+ Author  		: Fred
 	
 */
@@ -115,6 +115,7 @@ var pageS=15;
 /* declare variable here for Field*/
 //var report_tindakan_idField;
 var report_tindakan_idSearchField;
+var report_tindakan_groupbyField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -135,7 +136,7 @@ Ext.onReady(function(){
 	report_tindakanDataStore = new Ext.data.Store({
 		id: 'report_tindakanDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=get_action', 
+			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST",start:0,limit:pageS, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
@@ -148,6 +149,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'tindakan_dokter', type: 'string', mapping: 'karyawan_username'}, 
 			{name: 'tindakan_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
@@ -161,7 +163,7 @@ Ext.onReady(function(){
 	sum_kreditDataStore = new Ext.data.Store({
 		id: 'sum_kreditDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=get_action', 
+			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST2",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
@@ -174,6 +176,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'tindakan_dokter', type: 'string', mapping: 'karyawan_username'}, 
 			{name: 'tindakan_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
@@ -187,7 +190,7 @@ Ext.onReady(function(){
 	cbo_dtindakan_dokterDataStore = new Ext.data.Store({
 		id: 'cbo_dtindakan_dokterDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=get_dokter_list', 
+			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_dokter_list', 
 			method: 'POST'
 		}),baseParams: {task : "LIST", start: 0, limit: 15 },
 		reader: new Ext.data.JsonReader({
@@ -212,12 +215,12 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	report_tindakanColumnModel = new Ext.grid.ColumnModel(
 		[
-		/*{
-			header: '<div align="center">' + 'Dokter' + '</div>',
-			dataIndex: 'tindakan_dokter',
-			width: 80,
-			sortable: true
-		}, */
+		{
+			header: '<div align="center">' + 'Kode' + '</div>',
+			dataIndex: 'rawat_kode',
+			width: 100,//185,	//210,
+			sortable: true,
+		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'tindakan_perawatan',
@@ -260,8 +263,6 @@ Ext.onReady(function(){
 		readOnly: true
 	});
 	
-	 
-
 	sum_kreditColumnModel = new Ext.grid.ColumnModel(
 		[
 		{	
@@ -303,7 +304,7 @@ Ext.onReady(function(){
 		},
 		report_tindakan_dokterField,
 		{
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -383,7 +384,7 @@ Ext.onReady(function(){
 	report_tindakan_detail_DataStore = new Ext.data.Store({
 		id: 'report_tindakan_detail_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_report_tindakan&m=detail_tindakan_detail_list', 
+			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=detail_tindakan_detail_list', 
 			method: 'POST'
 		}),
 		//reader: report_tindakan_detail_reader,
@@ -403,16 +404,14 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function report_tindakan_search(){
 		// render according to a SQL date format.
-		
-		
 		if(is_report_tindakan_searchform_valid())
 		{
 		var report_tindakan_id_search=null;
 		var report_tindakan_tgl_start_search=null;
 		var report_tindakan_tgl_end_search=null;
 		var report_tindakan_dokter_search=null;
+		var report_tindakan_groupby_search=null;
 		
-	
 		cbo_dtindakan_dokterDataStore.load({
 		 	callback: function(r,opt,success){
 				if(success==true){
@@ -429,8 +428,8 @@ Ext.onReady(function(){
 		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('report_tindakan_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_search=Ext.getCmp('report_tindakan_tglEndSearchField').getValue();}
 		if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
+		if(report_tindakan_groupbyField.getValue()!==null){report_tindakan_groupby_search=report_tindakan_groupbyField.getValue();}
 		// change the store parameters
-		
 		
 		report_tindakanDataStore.baseParams = {
 			task: 'SEARCH',
@@ -439,6 +438,7 @@ Ext.onReady(function(){
 			trawat_tglapp_start	: 	report_tindakan_tgl_start_search,
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			trawat_dokter	:	report_tindakan_dokter_search,
+			report_groupby	:	report_tindakan_groupby_search,
 		};
 		sum_kreditDataStore.baseParams = {
 			task: 'SEARCH2',
@@ -447,6 +447,7 @@ Ext.onReady(function(){
 			trawat_tglapp_start	: 	report_tindakan_tgl_start_search,
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			trawat_dokter	:	report_tindakan_dokter_search,
+			report_groupby	:	report_tindakan_groupby_search,
 		};
 		// Cause the datastore to do another query : 
 		report_tindakanDataStore.reload({params: {start: 0, limit: pageS}});
@@ -476,6 +477,23 @@ Ext.onReady(function(){
 	
 	});
 
+	/* Identify  Group_byField*/
+	report_tindakan_groupbyField= new Ext.form.ComboBox({
+		id: 'report_tindakan_groupbyField',
+		fieldLabel: 'Group By',
+		store:new Ext.data.SimpleStore({
+			fields:['group_value', 'group_display'],
+			data:[['Perawatan','Penjualan Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Semua','Semua']]
+		}),
+		mode: 'local',
+		editable:false,
+		//emptyText: 'Semua',
+		displayField: 'group_display',
+		valueField: 'group_value',
+		width: 200,
+		triggerAction: 'all'	
+	});
+	
 	report_tindakan_dokterSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Dokter',
 		store: cbo_dtindakan_dokterDataStore,
@@ -550,13 +568,13 @@ Ext.onReady(function(){
 							        startDateField: 'report_tindakan_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
-						report_tindakan_dokterSearchField] 
+						report_tindakan_dokterSearchField, report_tindakan_groupbyField] 
 			}
 			]
 		}]
 		,
 		buttons: [{
-				text: 'Search',
+				text: 'Adv Search',
 				handler: report_tindakan_search
 			},{
 				text: 'Close',
@@ -573,6 +591,8 @@ Ext.onReady(function(){
 		report_tindakan_idSearchField.setValue(null);
 		report_tindakan_dokterSearchField.reset();
 		report_tindakan_dokterSearchField.setValue(null);
+		report_tindakan_groupbyField.reset();
+		report_tindakan_groupbyField.setValue(null);
 		Ext.getCmp('report_tindakan_tglStartSearchField').reset();
 		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(null);
 		Ext.getCmp('report_tindakan_tglEndSearchField').reset();
@@ -621,7 +641,7 @@ Ext.onReady(function(){
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_report_tindakan&m=get_action',
+		url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action',
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
@@ -673,7 +693,7 @@ Ext.onReady(function(){
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_report_tindakan&m=get_action',
+		url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action',
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
@@ -724,4 +744,4 @@ Ext.onReady(function(){
         <div id="elwindow_report_tindakan_search"></div>
     </div>
 </div>
-</body>
+</body>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        

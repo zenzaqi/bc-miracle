@@ -1,0 +1,1 @@
+ALTER TABLE `log_poin_reset`  ADD COLUMN `log_creator` VARCHAR(50) NULL DEFAULT NULL AFTER `log_date_create`;
