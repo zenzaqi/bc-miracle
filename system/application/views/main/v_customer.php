@@ -143,6 +143,7 @@ var cust_tgllahirSearchField;
 var cust_tgllahirSearchFieldEnd;
 var cust_hobiSearchField;
 var cust_referensiSearchField;
+var cust_referensilainSearchField;
 var cust_keteranganSearchField;
 var cust_memberSearchField;
 var cust_memberSearch2Field;
@@ -207,7 +208,7 @@ var editor_cust_note;
 		cust_hobitxtField.reset();
 		cust_referensiField.reset();
 		cust_referensilainField.reset();
-		cust_referensilaintxtField.reset();
+		//cust_referensilaintxtField.reset();
 		cust_keteranganField.reset();
 		cust_terdaftarField.reset();
 		cust_statusnikahField.reset();
@@ -220,6 +221,7 @@ var editor_cust_note;
 		cust_fretfulnessField.reset();
 		cust_cpField.reset();
 		cust_cptelpField.reset();
+		cust_umurField.reset();
 		
 		cust_noField.setValue('(Auto)');
 		//cust_nolamaField.setValue(null);
@@ -260,7 +262,7 @@ var editor_cust_note;
 		cust_hobitxtField.setValue(null);
 		cust_referensiField.setValue(null);
 		cust_referensilainField.setValue(null);
-		cust_referensilaintxtField.setValue(null);
+		//cust_referensilaintxtField.setValue(null);
 		cust_keteranganField.setValue(null);
 		cust_terdaftarField.setValue(null);
 		cust_statusnikahField.setValue(null);
@@ -274,7 +276,7 @@ var editor_cust_note;
 		cust_aktifField.setValue('Medium');
 		cust_cpField.setValue(null);
 		cust_cptelpField.setValue(null);
-		
+		cust_umurField.setValue(null);	
 	}
  	/* End of Function */
 	
@@ -382,6 +384,24 @@ var editor_cust_note;
 	}
   	/* End of Function */
   
+  function get_umur(){
+				var datDate1=cust_tgllahirField.getValue();
+				var getBlnLahir=datDate1.getMonth()+1;
+				var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
+				var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
+				
+				var tempBln=0;
+				if(getSelisihBln<0){
+					tempBln=12-getBlnLahir;
+					getSelisihBln=tempBln+(-(getSelisihBln));
+				}
+				var umur=getUmur+" Th, "+getSelisihBln+" Bln";
+				
+				cust_umurField.setValue(umur);
+			}
+  
+  
+  
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
@@ -436,6 +456,7 @@ var editor_cust_note;
 			post2db='UPDATE';
 			msg='updated';
 			customer_set_form();
+			get_umur();
 			
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			cust_update_confirmField.setVisible(true);
@@ -577,6 +598,7 @@ var editor_cust_note;
 		var cust_tgllahir_search_dateEnd="";
 		var cust_hobi_search=null;
 		var cust_referensi_search=null;
+		var cust_referensilain_search=null;
 		var cust_keterangan_search=null;
 		var cust_member_search=null;
 		var cust_terdaftar_search_date="";
@@ -617,6 +639,7 @@ var editor_cust_note;
 		if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_hobiSearchField.getValue()!==null){cust_hobi_search=cust_hobiSearchField.getValue();}
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
+		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_search=cust_referensilainSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
 		if(cust_memberSearchField.getValue()!==null){cust_member_search=cust_memberSearchField.getValue();}
 		if(cust_memberSearch2Field.getValue()!==null){cust_member2_search=cust_memberSearch2Field.getValue();}
@@ -662,6 +685,7 @@ var editor_cust_note;
 			cust_tgllahirend	:	cust_tgllahir_search_dateEnd, 
 			cust_hobi		:	cust_hobi_search, 
 			cust_referensi	:	cust_referensi_search, 
+			cust_referensilain	:	cust_referensilain_search, 
 			cust_keterangan	:	cust_keterangan_search, 
 			cust_member		:	cust_member_search, 
 			cust_member2	:	cust_member2_search, 
@@ -723,6 +747,7 @@ var editor_cust_note;
 		cust_tgllahirSearchFieldEnd.reset();
 		cust_hobiSearchField.reset();
 		cust_referensiSearchField.reset();
+		cust_referensilainSearchField.reset();
 		cust_keteranganSearchField.reset();
 		cust_memberSearchField.reset();
 		cust_memberSearch2Field.reset();
@@ -1465,7 +1490,7 @@ var editor_cust_note;
 		//if(cust_hobitxtField.getValue()!== null){cust_hobitxt_create = cust_hobitxtField.getValue();}
 		if(cust_referensiField.getValue()!== null){cust_referensi_create = cust_referensiField.getValue();}
 		if(cust_referensilainField.getValue()!== null){cust_referensilain_create = cust_referensilainField.getValue();}
-		if(cust_referensilaintxtField.getValue()!== null){cust_referensilaintxt_create = cust_referensilaintxtField.getValue();}
+		//if(cust_referensilaintxtField.getValue()!== null){cust_referensilaintxt_create = cust_referensilaintxtField.getValue();}
 		if(cust_keteranganField.getValue()!== null){cust_keterangan_create = cust_keteranganField.getValue();}
 		if(cust_terdaftarField.getValue()!== ""){cust_terdaftar_create_date = cust_terdaftarField.getValue().format('Y-m-d');}
 		if(cust_statusnikahField.getValue()!== null){cust_statusnikah_create = cust_statusnikahField.getValue();}
@@ -1522,7 +1547,7 @@ var editor_cust_note;
 					//cust_hobitxt	: cust_hobitxt_create,	
 					cust_referensi	: cust_referensi_create,
 					cust_referensilain	: cust_referensilain_create,
-					cust_referensilaintxt	: cust_referensilaintxt_create,
+					//cust_referensilaintxt	: cust_referensilaintxt_create,
 					cust_keterangan	: cust_keterangan_create,	
 					cust_terdaftar	: cust_terdaftar_create_date,					
 					cust_statusnikah	: cust_statusnikah_create,
@@ -3187,14 +3212,18 @@ Ext.onReady(function(){
 		editable: true
 	});
 	
-	/* Identify  cust_referensi Field */
+		/* Identify  cust_referensi Field */
 	cust_referensilainField= new Ext.form.ComboBox({
 		id: 'cust_referensilainField',
 		fieldLabel: 'Referal Lain',
 		maxLength: 250,
 		anchor: '50%',
-		store: cbo_reflain_DataStore,
-		mode: 'remote',
+		//store: cbo_reflain_DataStore,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_referensilain'],
+			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio']]
+		}),	
+		mode: 'local',
 		displayField:'cust_referensilain',
 		valueField: 'cust_referensilain',
         typeAhead: false,
@@ -3205,7 +3234,7 @@ Ext.onReady(function(){
 		lazyRender:true,
 		anchor: '95%'
 	});
-	
+		
 	/* Identify  cust_referensi Field */
 	cust_referensilaintxtField= new Ext.form.TextField({
 		id: 'cust_referensilaintxtField',
@@ -3214,8 +3243,7 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '50%'
 	});
-	
-	
+		
 	/* Identify  cust_keterangan Field */
 	cust_keteranganField= new Ext.form.TextArea({
 		id: 'cust_keteranganField',
@@ -3519,7 +3547,7 @@ Ext.onReady(function(){
 							items:[cust_fb2Field,cust_tweeter2Field]
 						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
 						cust_profesiField, cust_hobiField, cust_referensiField, cust_referensilainField,
-						cust_referensilaintxtField, cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
+						cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
 						cust_keteranganField, cust_aktifField
 						<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 						, cust_update_confirmField
@@ -3648,7 +3676,7 @@ Ext.onReady(function(){
 	
 	cust_nocust_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_nocust_opsiSearchField',
-		title: 'Nomor Customer (6 digit akhir)',
+		title: 'Nomor Customer',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		//border : false,
@@ -3986,7 +4014,7 @@ Ext.onReady(function(){
 	/* Identify  cust_referensi Field */
 	cust_referensiSearchField= new Ext.form.ComboBox({
 		id: 'cust_referensiSearchField',
-		fieldLabel: 'Referensi',
+		fieldLabel: 'Referal',
 		store: cbo_cust_ref_DataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
@@ -4007,11 +4035,15 @@ Ext.onReady(function(){
 	/* Identify  cust_referensi Field */
 	cust_referensilainSearchField= new Ext.form.ComboBox({
 		id: 'cust_referensilainSearchField',
-		fieldLabel: 'Referensi Lain',
+		fieldLabel: 'Referal Lain',
 		maxLength: 250,
 		anchor: '50%',
-		store: cbo_reflain_DataStore,
-		mode: 'remote',
+		//store: cbo_reflain_DataStore,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_referensilain'],
+			data: [['Lewat'],['Billboard'],['Keluarga'],['Teman'],['Dokter klinik'],['Miracle cabang lain'],['Staff'],['Koran'],['Majalah'],['Senam'],['Radio']]
+		}),	
+		mode: 'local',
 		displayField:'cust_referensilain',
 		valueField: 'cust_referensilain',
         typeAhead: false,
@@ -4022,12 +4054,12 @@ Ext.onReady(function(){
 		lazyRender:true,
 		anchor: '95%'
 	});
-	
+		
 	/* Identify  cust_referensi Field */
 	cust_referensilaintxtSearchField= new Ext.form.TextField({
 		id: 'cust_referensilaintxtSearchField',
 		fieldLabel: '&nbsp;&nbsp;&nbsp;Tambah (Optional)',
-		emptyText: 'Referensi lainnya...',
+		emptyText: 'Referal lainnya...',
 		maxLength: 250,
 		anchor: '50%'
 	});
@@ -4238,7 +4270,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField,cust_referensilaintxtSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]
