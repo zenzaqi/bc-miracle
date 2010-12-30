@@ -127,27 +127,68 @@ class M_lap_jum_tindakan_terapis extends Model{
 		}	
 		
 	//function for advanced search record
-	function lap_jum_tindakan_terapis_search($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id,$start,$end){
+	function lap_jum_tindakan_terapis_search($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
-			//$query="SELECT * FROM vu_tindakan WHERE kategori_nama='Medis'";
-			//$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
-			$query ="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas2 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
+	
+			if ($lapjum_groupby == '')
+				$lapjum_groupby = 'Semua';
+
+			if ($lapjum_groupby == 'Perawatan')
+			{
+			$query ="select karyawan.karyawan_username,
+					perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+					count(perawatan.rawat_nama) as Jumlah_rawat,
+					perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit
+						from detail_jual_rawat
+						left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
+						left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
+						left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
+						left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)";
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " k.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
+				$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
 			}else if($lapjum_tglapp_start!='' && $lapjum_tglapp_end==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp='".$lapjum_tglapp_start."'";
+				$query.= " master_jual_rawat.jrawat_tanggal='".$lapjum_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" k.karyawan_id != 67 and p.rawat_id is not null and (d.dtrawat_status = 'selesai' or d.dtrawat_status = 'datang')"; //60 = Available . Dr
-			$query.=" group by k.karyawan_username, p.rawat_nama";
+			$query.=" karyawan.karyawan_id != 67 and perawatan.rawat_id is not null and master_jual_rawat.jrawat_stat_dok='Tertutup'"; //67= Available . Tr
+			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama";
+			}
+			
+			else if ($lapjum_groupby == 'Pengambilan_Paket')
+			{
+			$query ="select karyawan.karyawan_username,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							count(perawatan.rawat_nama) as Jumlah_rawat,
+							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit
+								from detail_ambil_paket
+								left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
+								left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)";
+			
+			if($terapis_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+			};
+		
+			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
+			}else if($lapjum_tglapp_start!='' && $lapjum_tglapp_end==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_ambil_paket.dapaket_tgl_ambil='".$lapjum_tglapp_start."'";
+			}
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.=" karyawan.karyawan_id != 67 and perawatan.rawat_id is not null and (detail_ambil_paket.dapaket_stat_dok='Terbuka' or detail_ambil_paket.dapaket_stat_dok='Tertutup')"; //67= Available . Tr
+			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama";
+			}
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
@@ -166,31 +207,73 @@ class M_lap_jum_tindakan_terapis extends Model{
 		}
 		
 	//function for advanced search record
-	function lap_jum_tindakan_terapis_search2($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id,$start,$end){
+	function lap_jum_tindakan_terapis_search2($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
-			$query ="select sum(vu_kredit.total_kredit) as grand_total from(
-select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas2 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
-		
-			if($lap_jum_tindakan_terapis_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_id LIKE '%".$lap_jum_tindakan_terapis_id."%'";
-			};
+			if ($lapjum_groupby == '')
+				$lapjum_groupby = 'Semua';
+
+			if ($lapjum_groupby == 'Perawatan')
+			{
+			$query ="select sum(vu_kredit.Total_kredit) as grand_total 
+						from(
+							select karyawan.karyawan_username,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							count(perawatan.rawat_nama) as Jumlah_rawat,
+							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit
+								from detail_jual_rawat
+								left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
+								left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
+								left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
+								left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)";
 		
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " k.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
+				$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
 			}else if($lapjum_tglapp_start!='' && $lapjum_tglapp_end==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp='".$lapjum_tglapp_start."'";
+				$query.= " master_jual_rawat.jrawat_tanggal='".$lapjum_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" k.karyawan_id != 67 and p.rawat_id is not null and (d.dtrawat_status = 'selesai' or d.dtrawat_status = 'datang')"; //60 = Available . Dr
-			$query.=" group by k.karyawan_username, p.rawat_nama)as vu_kredit";
+			$query.=" karyawan.karyawan_id != 67 and perawatan.rawat_id is not null and master_jual_rawat.jrawat_stat_dok='Tertutup'"; //67 = Available . Tr
+			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama)as vu_kredit";
+			}
+			
+			else if ($lapjum_groupby == 'Pengambilan_Paket')
+			{
+			$query ="select sum(vu_kredit.Total_kredit) as grand_total 
+						from(
+							select karyawan.karyawan_username,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							count(perawatan.rawat_nama) as Jumlah_rawat,
+							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit
+								from detail_ambil_paket
+								left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
+								left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)";
+			
+			if($terapis_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+			};
+		
+			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."'";
+			}else if($lapjum_tglapp_start!='' && $lapjum_tglapp_end==''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_ambil_paket.dapaket_tgl_ambil='".$lapjum_tglapp_start."'";
+			}
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.=" karyawan.karyawan_id != 67 and perawatan.rawat_id is not null and (detail_ambil_paket.dapaket_stat_dok='Terbuka' or detail_ambil_paket.dapaket_stat_dok='Tertutup')"; //67= Available . Tr
+			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama)as vu_kredit";
+			}
+	
+	
+	
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
