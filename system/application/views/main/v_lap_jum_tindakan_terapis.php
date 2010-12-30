@@ -115,6 +115,7 @@ var pageS=15;
 /* declare variable here for Field*/
 //var lap_jum_tindakan_terapis_idField;
 var lap_jum_tindakan_terapis_idSearchField;
+var lap_jum_tindakan_terapis_groupbyField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -148,6 +149,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'tindakan_dokter', type: 'string', mapping: 'karyawan_username'}, 
 			{name: 'tindakan_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
@@ -174,6 +176,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'tindakan_dokter', type: 'string', mapping: 'karyawan_username'}, 
 			{name: 'tindakan_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
@@ -212,12 +215,12 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	lap_jum_tindakan_terapisColumnModel = new Ext.grid.ColumnModel(
 		[
-		/*{
-			header: '<div align="center">' + 'Dokter' + '</div>',
-			dataIndex: 'tindakan_dokter',
-			width: 80,
-			sortable: true
-		}, */
+		{
+			header: '<div align="center">' + 'Kode' + '</div>',
+			dataIndex: 'rawat_kode',
+			width: 100,//185,	//210,
+			sortable: true,
+		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'tindakan_perawatan',
@@ -302,7 +305,7 @@ Ext.onReady(function(){
 		},
 		lap_jum_tindakan_terapis_dokterField,
 		{
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -410,6 +413,7 @@ Ext.onReady(function(){
 		var lap_jum_tindakan_terapis_tgl_start_search=null;
 		var lap_jum_tindakan_terapis_tgl_end_search=null;
 		var lap_jum_tindakan_terapis_dokter_search=null;
+		var lap_jum_tindakan_terapis_groupby_search=null;
 		
 	
 		cbo_dtindakan_dokterDataStore.load({
@@ -428,8 +432,9 @@ Ext.onReady(function(){
 		if(Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue();}
 		if(Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue();}
 		if(lap_jum_tindakan_terapis_dokterSearchField.getValue()!==null){lap_jum_tindakan_terapis_dokter_search=lap_jum_tindakan_terapis_dokterSearchField.getValue();}
+		if(lap_jum_tindakan_terapis_groupbyField.getValue()!==null){lap_jum_tindakan_terapis_groupby_search=lap_jum_tindakan_terapis_groupbyField.getValue();}
+
 		// change the store parameters
-		
 		
 		lap_jum_tindakan_terapisDataStore.baseParams = {
 			task: 'SEARCH',
@@ -438,6 +443,7 @@ Ext.onReady(function(){
 			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
 			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
+			lapjum_groupby	: lap_jum_tindakan_terapis_groupby_search,
 		};
 		sum_lap_jum_DataStore.baseParams = {
 			task: 'SEARCH2',
@@ -446,6 +452,7 @@ Ext.onReady(function(){
 			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
 			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
+			lapjum_groupby	:	lap_jum_tindakan_terapis_groupby_search,
 		};
 		// Cause the datastore to do another query : 
 		lap_jum_tindakan_terapisDataStore.reload({params: {start: 0, limit: pageS}});
@@ -475,6 +482,23 @@ Ext.onReady(function(){
 	
 	});
 
+	/* Identify  Group_byField*/
+	lap_jum_tindakan_terapis_groupbyField= new Ext.form.ComboBox({
+		id: 'lap_jum_tindakan_terapis_groupbyField',
+		fieldLabel: 'Group By',
+		store:new Ext.data.SimpleStore({
+			fields:['group_value', 'group_display'],
+			data:[['Perawatan','Penjualan Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Semua','Semua']]
+		}),
+		mode: 'local',
+		editable:false,
+		//emptyText: 'Semua',
+		displayField: 'group_display',
+		valueField: 'group_value',
+		width: 200,
+		triggerAction: 'all'	
+	});
+	
 	lap_jum_tindakan_terapis_dokterSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Terapis',
 		store: cbo_dtindakan_dokterDataStore,
@@ -549,13 +573,13 @@ Ext.onReady(function(){
 							        startDateField: 'lap_jum_tindakan_terapis_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
-						lap_jum_tindakan_terapis_dokterSearchField] 
+						lap_jum_tindakan_terapis_dokterSearchField,lap_jum_tindakan_terapis_groupbyField] 
 			}
 			]
 		}]
 		,
 		buttons: [{
-				text: 'Search',
+				text: 'Adv Search',
 				handler: lap_jum_tindakan_terapis_search
 			},{
 				text: 'Close',
@@ -572,6 +596,8 @@ Ext.onReady(function(){
 		lap_jum_tindakan_terapis_idSearchField.setValue(null);
 		lap_jum_tindakan_terapis_dokterSearchField.reset();
 		lap_jum_tindakan_terapis_dokterSearchField.setValue(null);
+		lap_jum_tindakan_terapis_groupbyField.reset();
+		lap_jum_tindakan_terapis_groupbyField.setValue(null);
 		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').reset();
 		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').setValue(null);
 		Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').reset();

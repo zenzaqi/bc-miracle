@@ -399,6 +399,7 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		/*
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_POIN'))){ ?>
 		{
 			text: 'Delete',
@@ -407,6 +408,7 @@ Ext.onReady(function(){
 			handler: voucher_confirm_delete   // Confirm before deleting
 		}, '-', 
 		<?php } ?>
+		*/
 		{
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',

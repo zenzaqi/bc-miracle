@@ -1585,6 +1585,8 @@ class M_appointment extends Model{
 	
 	//function for create new record
 	function appointment_create($app_customer ,$app_tanggal ,$app_cara ,$app_keterangan ,$app_cust_nama_baru ,$app_cust_telp_baru ,$app_cust_hp_baru ,$app_cust_keterangan_baru ,$app_user){
+		$date_now = date('Y-m-d H:i:s');
+		
 		if($app_cust_nama_baru!=""){
 			if($app_cust_telp_baru=="")
 				$app_cust_telp_baru='0';
@@ -1608,6 +1610,8 @@ class M_appointment extends Model{
 				"cust_hp"=>$app_cust_hp_baru,
 				"cust_keterangan"=>$app_cust_keterangan_baru,
 				"cust_tgllahir"=>'0000-00-00',
+				"cust_creator"=>$_SESSION[SESSION_USERID],
+				"cust_date_create"=>$date_now,
 				"cust_aktif"=>'Aktif'
 				);
 				$this->db->insert('customer', $data_cust_baru);
