@@ -627,6 +627,21 @@ class M_master_ambil_paket extends Model{
 		
 		}
 		
+		function ambil_paket_status_adj($dapaket_id){
+		
+			$date_now = date('Y-m-d');
+				//Mengubah status pengambilan paket menjadi Adj/
+			
+					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Adj'
+						WHERE dapaket_id = ".$dapaket_id[0];
+					$this->db->query($query);
+					if($this->db->affected_rows()>0){
+						return '1';
+					}else
+						return '0';
+		}
+
+		
 		
 		
 		

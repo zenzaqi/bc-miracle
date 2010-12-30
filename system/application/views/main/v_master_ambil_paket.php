@@ -98,38 +98,19 @@ Ext.onReady(function(){
 	/*Function for pengecekan _dokumen */
 	function pengecekan_dokumen(){
 
-	
-		//var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
-		//dapaket_tgl_ambilField.setValue(recordMaster.get("tgl_ambil"));
-		//detail_ambil_paketStore.load({params : {tgl_ambil : recordMaster.get("tgl_ambil")}});
-		
-		
 		var selections = history_ambil_paketPanel.selModel.getSelections();
 		var tgl_ambil = [];
 		for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
 		tgl_ambil.push(selections[i].json.tgl_ambil);
 		}
 		var encoded_array_tgl_ambil = Ext.encode(tgl_ambil);
-		
-		
-		//var selections = history_ambil_paketPanel.selModel.getSelections();
-		//var tgl_ambil_create_date = "";
-		//var tgl_ambil = [];
-		//if(oGrid_event.record.data.tgl_ambil!== ""){tgl_ambil_create_date =oGrid_event.record.data.tgl_ambil.format('Y-m-d');}
-		//detail_ambil_paketStore.load({params:{tgl_ambil:ambil_paketListEditorGrid.getSelectionModel().getSelected().get('tgl_ambil')}});
-		//var tgl_ambil_create_date = ambil_paketListEditorGrid.getSelectionModel().getSelected().get('tgl_ambil');
-		//tgl_ambil.push(selections[0].json.tgl_ambil);
-		//var encoded_tgl_ambil_create_date = Ext.encode(tgl_ambil);
-		//tgl_ambil_create_date = oGrid_event.record.data.tgl_ambil;
-		//if(detail_ambil_paketStore.baseParams.tgl_ambil!==""){tgl_ambil_create_date = detail_ambil_paketStore.baseParams.tgl_ambil;}
+
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_ambil_paket&m=get_action',
 			params: {
 				task: "CEK",
-				tgl_ambil	: encoded_array_tgl_ambil
-				//currentlisting: detail_ambil_paketStore.baseParams.task
-		
+				tgl_ambil	: encoded_array_tgl_ambil	
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -162,6 +143,64 @@ Ext.onReady(function(){
 		});   
 	}
   
+  
+	/*Function for pengecekan _dokumen */
+	function adj_status_update(){
+
+		var selections = history_ambil_paketPanel.selModel.getSelections();
+		var dapaket_id = [];
+		var dapaket_stat_dok = [];
+		for(i = 0; i< history_ambil_paketPanel.selModel.getCount(); i++){
+		dapaket_id.push(selections[i].json.dapaket_id);
+		
+		}
+		var encoded_array_dapaket_id = Ext.encode(dapaket_id);
+
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_ambil_paket&m=get_action',
+			params: {
+				task: "ADJ",
+				dapaket_id	: encoded_array_dapaket_id	
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						Ext.MessageBox.show
+						({
+							title: 'OK',
+							msg: 'Status Pengambilan Paket telah diubah menjadi "Adj"',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.OK
+						});
+						ambil_paket_DataStore.reload();
+						detail_ambil_paketStore.load({params: {dapaket_dpaket: dapaket_dpaket_idField.getValue()}});
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Status tidak bisa dirubah, hubungi admin',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Tidak bisa terhubung dengan database server',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
   
   
   	/* Function for Saving inLine Editing */
@@ -1028,17 +1067,20 @@ Ext.onReady(function(){
 	
 	detail_ambil_paketColumnModel = new Ext.grid.ColumnModel(
 		[
-/*		{										//simplified, by hendri
+		/*
+		{										//simplified, by hendri
 			header: 'No. Faktur',
 			dataIndex: 'apaket_faktur',
 			width: 80	//90
 		},
+		*/
 		{
-			header: '<div align="center">' + 'Nama Paket' + '</div>',
-			dataIndex: 'paket_nama',
-			width: 210
+			header: '<div align="center">' + 'dapaket_id' + '</div>',
+			dataIndex: 'dapaket_id',
+			hidden : true,
+			width: 10
 		},
-*/		{
+		{
 			header: '<div align="center">' + 'Tgl Ambil' + '</div>',
 			dataIndex: 'tgl_ambil',
 			width: 90,
@@ -1097,7 +1139,14 @@ Ext.onReady(function(){
 				tooltip: 'Membatalkan pengambilan paket',
 				iconCls:'icon-delete',    				// this is defined in our styles.css
 				handler: pengecekan_dokumen
-			}]
+			},'-',
+			{
+				text: 'Adj',
+				tooltip: 'Mengubah status menjadi Adj',
+				iconCls:'icon-update',    				// this is defined in our styles.css
+				handler: adj_status_update
+			}
+			]
 		<?php } ?>
     });
     history_ambil_paketPanel.render('history_ambil_paket');
