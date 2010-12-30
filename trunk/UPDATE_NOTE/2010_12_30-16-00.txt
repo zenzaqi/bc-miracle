@@ -1,0 +1,3 @@
+2010_12_30-16-00.sql
+--> menambahkan value 'Adj' pada field dapaket_stat_dok di tabel detail_ambil_paket
+--> dimana status ini menandakan bahwa pengambilan paket itu dilakukan utk adjustment (perbandingan dari buku paket dengan program)

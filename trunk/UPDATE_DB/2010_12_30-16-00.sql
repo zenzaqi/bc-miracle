@@ -1,0 +1,1 @@
+ALTER TABLE `detail_ambil_paket` CHANGE `dapaket_stat_dok` `dapaket_stat_dok` ENUM( 'Terbuka', 'Tertutup', 'Batal', 'Adj' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT 'Terbuka';
