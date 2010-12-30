@@ -5883,10 +5883,6 @@ Ext.onReady(function(){
 			{
 				text: 'Print Only',
 				handler: print_only
-			},
-			{
-				xtype:'spacer',
-				width: 650
 			}
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			,
@@ -5896,6 +5892,11 @@ Ext.onReady(function(){
 				handler: detail_pengguna_paket_insert
 			}
 			<?php } ?>
+			,
+			{
+				xtype:'spacer',
+				width: 650
+			}
 			,
 			{
 				xtype:'spacer',

@@ -1,0 +1,1 @@
+UPDATE customer set cust_tgllahir = '0000-00-00' where cust_tgllahir is null;

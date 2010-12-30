@@ -1225,7 +1225,7 @@ Ext.onReady(function(){
 		
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 		detail_jual_rawatListEditorGrid.djrawat_add.enable();
-        detail_jual_rawatListEditorGrid.djrawat_delete.enable();
+        //detail_jual_rawatListEditorGrid.djrawat_delete.enable();
 		master_jual_rawat_createForm.savePrintButton.enable();
 		master_jual_rawat_createForm.save_btn.enable();
 		<?php } ?>
@@ -1728,7 +1728,7 @@ Ext.onReady(function(){
 				
 				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.enable();
-				detail_jual_rawatListEditorGrid.djrawat_delete.enable();
+				//detail_jual_rawatListEditorGrid.djrawat_delete.enable();
 				<?php } ?>
 				combo_jual_rawat.setDisabled(false);
 				drawat_jumlahField.setDisabled(false);
@@ -1777,7 +1777,7 @@ Ext.onReady(function(){
 				
 				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
-				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				//detail_jual_rawatListEditorGrid.djrawat_delete.disable();
 				<?php } ?>
 				combo_jual_rawat.setDisabled(true);
 				drawat_jumlahField.setDisabled(true);
@@ -1828,7 +1828,7 @@ Ext.onReady(function(){
 				
 				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 				detail_jual_rawatListEditorGrid.djrawat_add.disable();
-				detail_jual_rawatListEditorGrid.djrawat_delete.disable();
+				//detail_jual_rawatListEditorGrid.djrawat_delete.disable();
 				<?php } ?>
 				combo_jual_rawat.setDisabled(true);
 				drawat_jumlahField.setDisabled(true);

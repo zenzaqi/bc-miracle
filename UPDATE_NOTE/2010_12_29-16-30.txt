@@ -1,0 +1,1 @@
+2010_12_29-16-30 ===> Update field cust_tgllahir di tabel customer yang nilainya null menjadi 0000-00-00 (utk mendapatkan function get_umur pada v_customer)

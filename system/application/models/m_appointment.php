@@ -1607,6 +1607,7 @@ class M_appointment extends Model{
 				"cust_telprumah"=>$app_cust_telp_baru,
 				"cust_hp"=>$app_cust_hp_baru,
 				"cust_keterangan"=>$app_cust_keterangan_baru,
+				"cust_tgllahir"=>'0000-00-00',
 				"cust_aktif"=>'Aktif'
 				);
 				$this->db->insert('customer', $data_cust_baru);
