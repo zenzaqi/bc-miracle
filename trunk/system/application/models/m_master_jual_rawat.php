@@ -1244,7 +1244,7 @@ class M_master_jual_rawat extends Model{
 		
 		if((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows<>$drawat_count)){
 			return '-7';
-		}elseif((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows==$drawat_count)){
+		}elseif((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows==$drawat_count) && ($drawat_count<>0)){
 			/*
 			 * $jrawat_id ==> milik dari db.master_jual_rawat
 			 * 1. Checking db.detail_jual_rawat apakah == $drawat_count
@@ -1267,7 +1267,9 @@ class M_master_jual_rawat extends Model{
 						,jrawat_date_update='".$jrawat_date_update."'
 						,jrawat_revised=jrawat_revised+1
 					WHERE jrawat_id='$jrawat_id'";
+				$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 				$this->db->query($sqlu);
+				$this->db->query('UNLOCK TABLES');
 			}
 			
 			$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
@@ -1527,8 +1529,20 @@ class M_master_jual_rawat extends Model{
 			 * maka kirim Warning: Klik tombol 'Cancel' terlebih dahulu karena mendadak ada penambahan detail dari Tindakan
 			*/
 			return '-7';
-		}elseif($rs_rows<1 && $jrawat_nobukti=='' && $drawat_count==0){
+		}elseif((($rs_rows==$drawat_count) && $drawat_count==0) || $jrawat_nobukti==''){
 			if($cetak==1){
+				if($jrawat_nobukti<>''){
+					$sqlu = "UPDATE master_jual_rawat
+						SET jrawat_stat_dok='Tertutup'
+							,jrawat_update='".@$_SESSION[SESSION_USERID]."'
+							,jrawat_date_update='".$datetime_now."'
+							,jrawat_revised=jrawat_revised+1
+						WHERE jrawat_nobukti='$jrawat_nobukti'";
+					$this->db->query('LOCK TABLE master_jual_rawat WRITE');
+					$this->db->query($sqlu);
+					$affected_rows = $this->db->affected_rows();
+					$this->db->query('UNLOCK TABLES');
+				}
 				return '-3';
 			}else{
 				return '-5';
@@ -2562,8 +2576,11 @@ class M_master_jual_rawat extends Model{
 					,jrawat_date_update='".$jrawat_date_update."'
 					,jrawat_revised=jrawat_revised+1
 				WHERE jrawat_id='$jrawat_id'";
+			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 			$this->db->query($sql);
-			if($this->db->affected_rows()>-1){
+			$affected_rows = $this->db->affected_rows();
+			$this->db->query('UNLOCK TABLES');
+			if($affected_rows>(-1)){
 				return 1;
 			}else{
 				return 1;
