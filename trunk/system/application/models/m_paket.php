@@ -302,7 +302,7 @@ class M_paket extends Model{
 	}
 
 	//function for update record
-	function paket_update($paket_id ,$paket_kode, $paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
+	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -310,7 +310,78 @@ class M_paket extends Model{
 		if ($paket_expired=="")
 			$paket_expired = 365;
 
+		if($paket_aktif_th=='true')
+			$th="1";
+		if($paket_aktif_th=='false')
+			$th="0";	
+			
+		if($paket_aktif_ki=='true')
+			$ki="1";
+		if($paket_aktif_ki=='false')
+			$ki="0";			
 
+		if($paket_aktif_hr=='true')
+			$hr="1";
+		if($paket_aktif_hr=='false')
+			$hr="0";	
+			
+		if($paket_aktif_tp=='true')
+			$tp="1";
+		if($paket_aktif_tp=='false')
+			$tp="0";	
+			
+		if($paket_aktif_dps=='true')
+			$dps="1";
+		if($paket_aktif_dps=='false')
+			$dps="0";	
+			
+		if($paket_aktif_jkt=='true')
+			$jkt="1";
+		if($paket_aktif_jkt=='false')
+			$jkt="0";	
+			
+		if($paket_aktif_blpn=='true')
+			$blpn="1";
+		if($paket_aktif_blpn=='false')
+			$blpn="0";	
+			
+		if($paket_aktif_kuta=='true')
+			$kuta="1";
+		if($paket_aktif_kuta=='false')
+			$kuta="0";	
+			
+		if($paket_aktif_btm=='true')
+			$btm="1";
+		if($paket_aktif_btm=='false')
+			$btm="0";	
+			
+		if($paket_aktif_mks=='true')
+			$mks="1";
+		if($paket_aktif_mks=='false')
+			$mks="0";	
+			
+		if($paket_aktif_mdn=='true')
+			$mdn="1";
+		if($paket_aktif_mdn=='false')
+			$mdn="0";	
+			
+		if($paket_aktif_lbk=='true')
+			$lbk="1";
+		if($paket_aktif_lbk=='false')
+			$lbk="0";	
+			
+		if($paket_aktif_mnd=='true')
+			$mnd="1";
+		if($paket_aktif_mnd=='false')
+			$mnd="0";	
+			
+		if($paket_aktif_ygk=='true')
+			$ygk="1";
+		if($paket_aktif_ygk=='false')
+			$ygk="0";	
+			
+		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk;
+		
 		$data = array(
 			"paket_id"=>$paket_id,
 			"paket_nama"=>$paket_nama,
@@ -323,6 +394,7 @@ class M_paket extends Model{
 			"paket_harga"=>$paket_harga,
 			"paket_expired"=>$paket_expired,
 			"paket_aktif"=>$paket_aktif,
+			"paket_aktif_cabang"=>$temp_aktif,
 			"paket_update"=>$_SESSION[SESSION_USERID],
 			"paket_date_update"=>date('Y-m-d H:i:s')
 		);
@@ -331,9 +403,7 @@ class M_paket extends Model{
 			$data["paket_standart_tetap"]=1;
 		if($paket_standart_tetap=='false')
 			$data["paket_standart_tetap"]=0;
-
-
-
+			
 		$sql="SELECT group_id,group_dupaket,group_dmpaket FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -399,13 +469,90 @@ class M_paket extends Model{
 	}
 
 	//function for create new record
-	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ){
+	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
 			$paket_point = 1;
 		if ($paket_expired=="")
 			$paket_expired = 365;
+			
+		if($paket_standart_tetap=='true')
+			$data["paket_standart_tetap"]=1;
+		if($paket_standart_tetap=='false')
+			$data["paket_standart_tetap"]=0;
+
+		if($paket_aktif_th=='true')
+			$th="1";
+		if($paket_aktif_th=='false')
+			$th="0";	
+			
+		if($paket_aktif_ki=='true')
+			$ki="1";
+		if($paket_aktif_ki=='false')
+			$ki="0";			
+
+		if($paket_aktif_hr=='true')
+			$hr="1";
+		if($paket_aktif_hr=='false')
+			$hr="0";	
+			
+		if($paket_aktif_tp=='true')
+			$tp="1";
+		if($paket_aktif_tp=='false')
+			$tp="0";	
+			
+		if($paket_aktif_dps=='true')
+			$dps="1";
+		if($paket_aktif_dps=='false')
+			$dps="0";	
+			
+		if($paket_aktif_jkt=='true')
+			$jkt="1";
+		if($paket_aktif_jkt=='false')
+			$jkt="0";	
+			
+		if($paket_aktif_blpn=='true')
+			$blpn="1";
+		if($paket_aktif_blpn=='false')
+			$blpn="0";	
+			
+		if($paket_aktif_kuta=='true')
+			$kuta="1";
+		if($paket_aktif_kuta=='false')
+			$kuta="0";	
+			
+		if($paket_aktif_btm=='true')
+			$btm="1";
+		if($paket_aktif_btm=='false')
+			$btm="0";	
+			
+		if($paket_aktif_mks=='true')
+			$mks="1";
+		if($paket_aktif_mks=='false')
+			$mks="0";	
+			
+		if($paket_aktif_mdn=='true')
+			$mdn="1";
+		if($paket_aktif_mdn=='false')
+			$mdn="0";	
+			
+		if($paket_aktif_lbk=='true')
+			$lbk="1";
+		if($paket_aktif_lbk=='false')
+			$lbk="0";	
+			
+		if($paket_aktif_mnd=='true')
+			$mnd="1";
+		if($paket_aktif_mnd=='false')
+			$mnd="0";	
+			
+		if($paket_aktif_ygk=='true')
+			$ygk="1";
+		if($paket_aktif_ygk=='false')
+			$ygk="0";	
+			
+		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk;			
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama,
 			"paket_nama"=>$paket_nama,
@@ -417,16 +564,12 @@ class M_paket extends Model{
 			"paket_harga"=>$paket_harga,
 			"paket_expired"=>$paket_expired,
 			"paket_aktif"=>$paket_aktif,
+			"paket_aktif_cabang"=>$temp_aktif,
 			"paket_creator"=>$_SESSION[SESSION_USERID],
 			"paket_date_create"=>date('Y-m-d H:i:s'),
 			"paket_revised"=>'0'
-		);
-
-		if($paket_standart_tetap=='true')
-			$data["paket_standart_tetap"]=1;
-		if($paket_standart_tetap=='false')
-			$data["paket_standart_tetap"]=0;
-
+		);			
+		
 		$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
