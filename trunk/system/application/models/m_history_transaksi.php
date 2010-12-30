@@ -2,7 +2,6 @@
 	+ Description	: For record model process back-end
 	+ Filename 		: c_history_transaksi.php
  	+ creator 		:  Freddy
-
 */
 
 class M_history_transaksi extends Model{
@@ -38,17 +37,17 @@ class M_history_transaksi extends Model{
 				if($cust_id!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				};
 			
 				if($tanggal_start!='' && $tanggal_end!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				}else if($tanggal_start!='' && $tanggal_end=='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_tanggal='".$tanggal_start."''";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_tanggal='".$tanggal_start."''";
 				}
 				//$query.=" GROUP BY master_jual_rawat.jrawat_cust ORDER BY SUM(master_jual_rawat.jrawat_bayar) DESC";
 			}
@@ -70,15 +69,15 @@ class M_history_transaksi extends Model{
 			
 				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok = 'Tertutup' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				};
 			
 				if($tanggal_start!='' && $tanggal_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok = 'Tertutup' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				}else if($tanggal_start!='' && $tanggal_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal='".$tanggal_start."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok = 'Tertutup' and master_jual_produk.jproduk_tanggal='".$tanggal_start."'";
 				}
 				//$query.=" GROUP BY master_jual_produk.jproduk_cust";
 			}
@@ -98,15 +97,15 @@ class M_history_transaksi extends Model{
 			
 				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok <> 'Batal' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok = 'Tertutup' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				};
 			
 				if($tanggal_start!='' && $tanggal_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok <> 'Batal' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok = 'Tertutup' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				}else if($tanggal_start!='' && $tanggal_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok <> 'Batal' and master_jual_paket.jpaket_tanggal='".$tanggal_start."'";
+					$query.= " customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok = 'Tertutup' and master_jual_paket.jpaket_tanggal='".$tanggal_start."'";
 				}
 				//$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
 			}
@@ -116,7 +115,7 @@ class M_history_transaksi extends Model{
 				$query = "SELECT
 								customer.cust_nama,
 								master_jual_paket.jpaket_nobukti as no_bukti,
-								detail_ambil_paket.dapaket_jumlah as jumlah_transaksi, date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') AS tanggal_transaksi,
+								detail_ambil_paket.dapaket_jumlah as jumlah_transaksi, detail_ambil_paket.dapaket_tgl_ambil AS tanggal_transaksi,
 								perawatan.rawat_kode as kode_transaksi,
 								karyawan.karyawan_username as referal,
 								concat('Pengambilan Paket ', perawatan.rawat_nama) as keterangan
@@ -128,15 +127,15 @@ class M_history_transaksi extends Model{
 			
 				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and (detail_ambil_paket.dapaket_stat_dok = 'Tertutup' or detail_ambil_paket.dapaket_stat_dok = 'Terbuka') and detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				};
 			
 				if($tanggal_start!='' && $tanggal_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+					$query.= " customer.cust_id = '".$cust_id."' and (detail_ambil_paket.dapaket_stat_dok = 'Tertutup' or detail_ambil_paket.dapaket_stat_dok = 'Terbuka') and detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
 				}else if($tanggal_start!='' && $tanggal_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " customer.cust_id = '".$cust_id."' and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d')='".$tanggal_start."'";
+					$query.= " customer.cust_id = '".$cust_id."' and (detail_ambil_paket.dapaket_stat_dok = 'Tertutup' or detail_ambil_paket.dapaket_stat_dok = 'Terbuka') and detail_ambil_paket.dapaket_tgl_ambil ='".$tanggal_start."'";
 				}
 				//$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
 			}
@@ -158,7 +157,7 @@ SELECT 							master_jual_rawat.jrawat_nobukti AS no_bukti,
 						LEFT OUTER JOIN tindakan_detail ON detail_jual_rawat.drawat_dtrawat = tindakan_detail.dtrawat_id
 						LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
                			LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
-						where customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
+						where customer.cust_id = '".$cust_id."' and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
 )
 UNION
 (
@@ -173,7 +172,7 @@ SELECT 							master_jual_produk.jproduk_nobukti AS no_bukti,
 						LEFT OUTER JOIN customer ON master_jual_produk.jproduk_cust = customer.cust_id
 						LEFT OUTER JOIN produk ON detail_jual_produk.dproduk_produk = produk.produk_id
 						LEFT OUTER JOIN karyawan ON detail_jual_produk.dproduk_karyawan = karyawan_id
-						where customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
+						where customer.cust_id = '".$cust_id."' and master_jual_produk.jproduk_stat_dok = 'Tertutup' and master_jual_produk.jproduk_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
 )
 UNION
 (
@@ -188,12 +187,12 @@ SELECT 							master_jual_paket.jpaket_nobukti AS no_bukti,
 						LEFT OUTER JOIN customer ON master_jual_paket.jpaket_cust = customer.cust_id
 						LEFT OUTER JOIN paket ON detail_jual_paket.dpaket_paket = paket.paket_id
 						LEFT OUTER JOIN karyawan ON detail_jual_paket.dpaket_karyawan = karyawan_id
-						where customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok <> 'Batal' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
+						where customer.cust_id = '".$cust_id."' and master_jual_paket.jpaket_stat_dok = 'Tertutup' and master_jual_paket.jpaket_tanggal BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
 )
 UNION
 (
 SELECT 							master_jual_paket.jpaket_nobukti as no_bukti,
-								date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') AS tanggal_transaksi,
+								detail_ambil_paket.dapaket_tgl_ambil AS tanggal_transaksi,
 								detail_ambil_paket.dapaket_jumlah as jumlah_transaksi, 
 								karyawan.karyawan_username as referal,
 								perawatan.rawat_kode as kode_transaksi,
@@ -203,7 +202,7 @@ SELECT 							master_jual_paket.jpaket_nobukti as no_bukti,
 						LEFT OUTER JOIN perawatan ON detail_ambil_paket.dapaket_item = perawatan.rawat_id
 						LEFT OUTER JOIN karyawan ON detail_ambil_paket.dapaket_referal = karyawan.karyawan_id
 						LEFT OUTER JOIN customer ON detail_ambil_paket.dapaket_cust = customer.cust_id
-						where customer.cust_id = '".$cust_id."' and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
+						where customer.cust_id = '".$cust_id."' and (detail_ambil_paket.dapaket_stat_dok = 'Tertutup' or detail_ambil_paket.dapaket_stat_dok = 'Terbuka') and detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'
 )
 order by tanggal_transaksi
 

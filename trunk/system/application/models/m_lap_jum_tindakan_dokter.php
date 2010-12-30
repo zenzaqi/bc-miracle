@@ -183,7 +183,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 				$query.= " detail_ambil_paket.dapaket_tgl_ambil='".$trawat_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" karyawan.karyawan_id != 60 and perawatan.rawat_id is not null and detail_ambil_paket.dapaket_stat_dok<>'Batal'"; //60 = Available . Dr
+			$query.=" karyawan.karyawan_id != 60 and perawatan.rawat_id is not null and (detail_ambil_paket.dapaket_stat_dok='Terbuka' or detail_ambil_paket.dapaket_stat_dok='Tertutup')"; //60 = Available . Dr
 			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama";
 			}
 		
@@ -266,7 +266,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 				$query.= " detail_ambil_paket.dapaket_tgl_ambil='".$trawat_tglapp_start."'";
 			}
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.=" karyawan.karyawan_id != 60 and perawatan.rawat_id is not null and detail_ambil_paket.dapaket_stat_dok<>'Batal'"; //60 = Available . Dr
+			$query.=" karyawan.karyawan_id != 60 and perawatan.rawat_id is not null and (detail_ambil_paket.dapaket_stat_dok='Terbuka' or detail_ambil_paket.dapaket_stat_dok='Tertutup')"; //60 = Available . Dr
 			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama)as vu_kredit";
 			}
 			
