@@ -96,6 +96,7 @@ var paket_pointSearchField;
 var paket_hargaSearchField;
 var paket_expiredSearchField;
 var paket_aktifSearchField;
+var temp_cabang;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -148,7 +149,7 @@ Ext.onReady(function(){
 				paket_harga	:paket_harga_update,
 				paket_expired	:paket_expired_update,
 				paket_perpanjangan : paket_perpanjangan_update,
-				paket_aktif	:paket_aktif_update,
+				paket_aktif	:paket_aktif_update
 			},
 			success: function(response){
 				var result=eval(response.responseText);
@@ -213,6 +214,7 @@ Ext.onReady(function(){
 		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
 		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
+		//if(paket_Field.getValue()!== null){paket_create = paket_Field.getValue();}
 
 		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
@@ -233,6 +235,21 @@ Ext.onReady(function(){
 				paket_expired	: paket_expired_create,
 				paket_perpanjangan : paket_perpanjangan_create,
 				paket_aktif	: paket_aktif_create,
+				//paket : paket_create,
+				paket_aktif_th : paket_aktif_thField.getValue(),
+				paket_aktif_ki : paket_aktif_kiField.getValue(),
+				paket_aktif_hr : paket_aktif_hrField.getValue(),
+				paket_aktif_tp : paket_aktif_tpField.getValue(),
+				paket_aktif_dps : paket_aktif_dpsField.getValue(),
+				paket_aktif_jkt : paket_aktif_jktField.getValue(),
+				paket_aktif_blpn : paket_aktif_blpnField.getValue(),
+				paket_aktif_kuta : paket_aktif_kutaField.getValue(),
+				paket_aktif_btm : paket_aktif_btmField.getValue(),
+				paket_aktif_mks : paket_aktif_mksField.getValue(),
+				paket_aktif_mdn : paket_aktif_mdnField.getValue(),
+				paket_aktif_lbk : paket_aktif_lbkField.getValue(),
+				paket_aktif_mnd : paket_aktif_mndField.getValue(),
+				paket_aktif_ygk : paket_aktif_ygkField.getValue()
 			},
 			success: function(response){
 				var result=eval(response.responseText);
@@ -322,6 +339,36 @@ Ext.onReady(function(){
 		paket_kategoritxtField.reset();
 		paket_kategoritxtField.setValue(null);
 		paket_hargaField.setValue(0);
+		//paket_Field.reset();
+		//paket_Field.setValue(null);
+		paket_aktif_thField.reset();
+		paket_aktif_thField.setValue(true);
+		paket_aktif_kiField.reset();
+		paket_aktif_kiField.setValue(true);
+		paket_aktif_hrField.reset();
+		paket_aktif_hrField.setValue(true);
+		paket_aktif_tpField.reset();
+		paket_aktif_tpField.setValue(true);
+		paket_aktif_dpsField.reset();
+		paket_aktif_dpsField.setValue(true);
+		paket_aktif_jktField.reset();
+		paket_aktif_jktField.setValue(true);
+		paket_aktif_blpnField.reset();
+		paket_aktif_blpnField.setValue(true);
+		paket_aktif_kutaField.reset();
+		paket_aktif_kutaField.setValue(true);
+		paket_aktif_btmField.reset();
+		paket_aktif_btmField.setValue(true);
+		paket_aktif_mksField.reset();
+		paket_aktif_mksField.setValue(true);
+		paket_aktif_mdnField.reset();
+		paket_aktif_mdnField.setValue(true);
+		paket_aktif_lbkField.reset();
+		paket_aktif_lbkField.setValue(true);
+		paket_aktif_mndField.reset();
+		paket_aktif_mndField.setValue(true);
+		paket_aktif_ygkField.reset();
+		paket_aktif_ygkField.setValue(true);		
 		
 		paket_isi_perawatan_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
 		paket_isi_produk_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
@@ -347,13 +394,98 @@ Ext.onReady(function(){
 		paket_aktifField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif'));
 		paket_kategoriField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_id'));
 		paket_kategoritxtField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_nama'));
-
+		//paket_Field.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket'));
+		//temp_cabang.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));	
+			
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(0)=="1")	
+			paket_aktif_thField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(0)=="0")
+			paket_aktif_thField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(1)=="1")	
+			paket_aktif_kiField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(1)=="0")
+			paket_aktif_kiField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(2)=="1")	
+			paket_aktif_hrField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(2)=="0")
+			paket_aktif_hrField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(3)=="1")
+			paket_aktif_tpField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(3)=="0")
+			paket_aktif_tpField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(4)=="1")	
+			paket_aktif_dpsField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(4)=="0")
+			paket_aktif_dpsField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(5)=="1")	
+			paket_aktif_jktField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(5)=="0")
+			paket_aktif_jktField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(6)=="1")	
+			paket_aktif_blpnField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(6)=="0")
+			paket_aktif_blpnField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="1")	
+			paket_aktif_kutaField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="0")
+			paket_aktif_kutaField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="1")	
+			paket_aktif_btmField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="0")
+			paket_aktif_btmField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="1")	
+			paket_aktif_mksField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="0")
+			paket_aktif_mksField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="1")	
+			paket_aktif_mdnField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="0")
+			paket_aktif_mdnField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="1")	
+			paket_aktif_lbkField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="0")
+			paket_aktif_lbkField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="1")
+			paket_aktif_mndField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="0")
+			paket_aktif_mndField.setValue(false);
+		
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="1")	
+			paket_aktif_ygkField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="0")
+			paket_aktif_ygkField.setValue(false);
+			
+		
+		
+		/*paket_aktif_kiField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_hrField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_tpField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_dpsField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_jktField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_blpnField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_kutaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_btmField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_mksField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_mdnField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_lbkField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_mndField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
+		paket_aktif_ygkField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));*/
 		cbo_rawat_listDataStore.load({params: {query: get_pk_id()}});
 		cbo_produk_listDataStore.load({params: {query: get_pk_id()}});
 		paket_isi_produk_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
 		paket_isi_perawatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
-
-
 	}
 	/* End setValue to EDIT*/
 
@@ -401,12 +533,15 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function paket_confirm_update(){
 		/* only one record is selected here */
+		//temp_cabang.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));	
+		paket_reset_form();
+	
+	
 		if(paketListEditorGrid.selModel.getCount() == 1) {
-
-
 			post2db='UPDATE';
 			msg='updated';
 			paket_set_form();
+						
 			paket_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -498,7 +633,22 @@ Ext.onReady(function(){
 			{name: 'paket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_create'},
 			{name: 'paket_update', type: 'string', mapping: 'paket_update'},
 			{name: 'paket_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'paket_date_update'},
-			{name: 'paket_revised', type: 'int', mapping: 'paket_revised'}
+			{name: 'paket_revised', type: 'int', mapping: 'paket_revised'},
+			{name: 'paket_aktif_cabang', type: 'string', mapping: 'paket_aktif_cabang'}
+			/*{name: 'paket_aktif_th', type: 'string', mapping: 'paket_aktif_th'},
+			{name: 'paket_aktif_ki', type: 'string', mapping: 'paket_aktif_ki'},
+			{name: 'paket_aktif_hr', type: 'string', mapping: 'paket_aktif_hr'},
+			{name: 'paket_aktif_tp', type: 'string', mapping: 'paket_aktif_tp'},
+			{name: 'paket_aktif_dps', type: 'string', mapping: 'paket_aktif_dps'},
+			{name: 'paket_aktif_jkt', type: 'string', mapping: 'paket_aktif_jkt'},
+			{name: 'paket_aktif_blpn', type: 'string', mapping: 'paket_aktif_blpn'},
+			{name: 'paket_aktif_kuta', type: 'string', mapping: 'paket_aktif_kuta'},
+			{name: 'paket_aktif_btm', type: 'string', mapping: 'paket_aktif_btm'},
+			{name: 'paket_aktif_mks', type: 'string', mapping: 'paket_aktif_mks'},
+			{name: 'paket_aktif_mdn', type: 'string', mapping: 'paket_aktif_mdn'},
+			{name: 'paket_aktif_lbk', type: 'string', mapping: 'paket_aktif_lbk'},
+			{name: 'paket_aktif_mnd', type: 'string', mapping: 'paket_aktif_mnd'},
+			{name: 'paket_aktif_ygk', type: 'string', mapping: 'paket_aktif_ygk'}*/
 		]),
 		sortInfo:{field: 'paket_id', direction: "DESC"}
 	});
@@ -993,6 +1143,133 @@ Ext.onReady(function(){
 		boxLabel: 'Paket Standart Tetap?',
 		name: 'paket_standart_tetap'
 	});
+	
+	/* Identify Paket Aktif*/
+	paket_aktif_thField=new Ext.form.Checkbox({
+		id : 'paket_aktif_thField',
+		boxLabel: 'TH',
+		maxLength: 250,
+		name: 'paket_aktif_th'
+	});
+	
+	paket_aktif_kiField=new Ext.form.Checkbox({
+		id : 'paket_aktif_kiField',
+		boxLabel: 'KI',
+		maxLength: 250,
+		name: 'paket_aktif_ki'
+	});
+	
+	paket_aktif_hrField=new Ext.form.Checkbox({
+		id : 'paket_aktif_hrField',
+		boxLabel: 'HR',
+		maxLength: 250,
+		name: 'paket_aktif_hr'
+	});
+	
+	paket_aktif_tpField=new Ext.form.Checkbox({
+		id : 'paket_aktif_tpField',
+		boxLabel: 'TP',
+		maxLength: 250,
+		name: 'paket_aktif_tp'
+	});
+	
+	paket_aktif_dpsField=new Ext.form.Checkbox({
+		id : 'paket_aktif_dpsField',
+		boxLabel: 'DPS',
+		maxLength: 250,
+		name: 'paket_aktif_dps'
+	});
+	
+	paket_aktif_jktField=new Ext.form.Checkbox({
+		id : 'paket_aktif_jktField',
+		boxLabel: 'JKT',
+		maxLength: 250,
+		name: 'paket_aktif_jkt'
+	});
+	
+	paket_aktif_blpnField=new Ext.form.Checkbox({
+		id : 'paket_aktif_blpnField',
+		boxLabel: 'BLPN',
+		maxLength: 250,
+		name: 'paket_aktif_blpn'
+	});
+	
+	paket_aktif_kutaField=new Ext.form.Checkbox({
+		id : 'paket_aktif_kutaField',
+		boxLabel: 'KUTA',
+		maxLength: 250,
+		name: 'paket_aktif_kuta'
+	});
+	
+	paket_aktif_btmField=new Ext.form.Checkbox({
+		id : 'paket_aktif_btmField',
+		boxLabel: 'BTM',
+		maxLength: 250,
+		name: 'paket_aktif_btm'
+	});
+	
+	paket_aktif_mksField=new Ext.form.Checkbox({
+		id : 'paket_aktif_mksField',
+		boxLabel: 'MKS',
+		maxLength: 250,
+		name: 'paket_aktif_mks'
+	});
+	
+	paket_aktif_mdnField=new Ext.form.Checkbox({
+		id : 'paket_aktif_mdnField',
+		boxLabel: 'MDN',
+		maxLength: 250,
+		name: 'paket_aktif_mdn'
+	});
+	
+	paket_aktif_lbkField=new Ext.form.Checkbox({
+		id : 'paket_aktif_lbkField',
+		boxLabel: 'LBK',
+		maxLength: 250,
+		name: 'paket_aktif_lbk'
+	});
+	
+	paket_aktif_mndField=new Ext.form.Checkbox({
+		id : 'paket_aktif_mndField',
+		boxLabel: 'MND',
+		maxLength: 250,
+		name: 'paket_aktif_mnd'
+	});
+	
+	paket_aktif_ygkField=new Ext.form.Checkbox({
+		id : 'paket_aktif_ygkField',
+		boxLabel: 'YGK',
+		maxLength: 250,
+		name: 'paket_aktif_ygk'
+	});
+	
+	paket_aktifGroup = new Ext.form.FieldSet({
+		title: 'Paket Aktif',
+		layout:'column',
+		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ paket_aktif_thField, paket_aktif_kiField, paket_aktif_hrField, paket_aktif_tpField, paket_aktif_dpsField, paket_aktif_jktField, paket_aktif_blpnField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[paket_aktif_kutaField, paket_aktif_btmField, paket_aktif_mksField, paket_aktif_mdnField, paket_aktif_lbkField, paket_aktif_mndField, paket_aktif_ygkField]
+			   }
+		]
+	});
+	
+	
+	
 
 	/* Identify  paket_group Field */
 	paket_groupField= new Ext.form.ComboBox({
@@ -1018,6 +1295,11 @@ Ext.onReady(function(){
 		disabled: true,
 		width: 120
 	});
+	
+	//temp
+	temp_cabang= new Ext.form.TextField({
+	});
+	
 	/* Identify  paket_keterangan Field */
 	paket_keteranganField= new Ext.form.TextArea({
 		id: 'paket_keteranganField',
@@ -1148,7 +1430,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField]
+				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField, paket_aktifGroup]
 			}
 			]
 
@@ -1241,6 +1523,7 @@ Ext.onReady(function(){
 			{name: 'dproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
 			{name: 'dproduk_produk_group', type: 'string', mapping: 'group_nama'},
 			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'paket_aktif_cabang', type: 'string', mapping: 'paket_aktif_cabang'},
 			{name: 'dproduk_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'dproduk_produk_dm', type: 'float', mapping: 'produk_dm'},
 			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
@@ -1804,7 +2087,7 @@ Ext.onReady(function(){
 			paket_point	:	paket_point_search,
 			paket_harga	:	paket_harga_search,
 			paket_expired	:	paket_expired_search,
-			paket_aktif	:	paket_aktif_search,
+			paket_aktif	:	paket_aktif_search
 		};
 		// Cause the datastore to do another query :
 		paket_DataStore.reload({params: {start: 0, limit: pageS}});
