@@ -1533,7 +1533,7 @@ class M_master_jual_rawat extends Model{
 			if($cetak==1){
 				if($jrawat_nobukti<>''){
 					$sqlu = "UPDATE master_jual_rawat
-						SET jrawat_stat_dok='Tertutup'
+						SET jrawat_stat_dok='Batal'
 							,jrawat_update='".@$_SESSION[SESSION_USERID]."'
 							,jrawat_date_update='".$datetime_now."'
 							,jrawat_revised=jrawat_revised+1
