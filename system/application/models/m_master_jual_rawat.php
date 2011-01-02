@@ -1222,7 +1222,7 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	//function for update record
-	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak, $jrawat_ket_disk, $drawat_count){
+	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2, $jrawat_kwitansi_nama2, $jrawat_kwitansi_nilai2, $jrawat_kwitansi_no3, $jrawat_kwitansi_nama3, $jrawat_kwitansi_nilai3, $jrawat_card_nama, $jrawat_card_edc, $jrawat_card_no, $jrawat_card_nilai, $jrawat_card_nama2, $jrawat_card_edc2, $jrawat_card_no2, $jrawat_card_nilai2, $jrawat_card_nama3, $jrawat_card_edc3, $jrawat_card_no3, $jrawat_card_nilai3, $jrawat_cek_nama, $jrawat_cek_no, $jrawat_cek_valid, $jrawat_cek_bank, $jrawat_cek_nilai, $jrawat_cek_nama2, $jrawat_cek_no2, $jrawat_cek_valid2, $jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,$cetak, $jrawat_ket_disk, $drawat_count, $dcount_drawat_id){
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		
@@ -1242,9 +1242,9 @@ class M_master_jual_rawat extends Model{
 		$rs = $this->db->query($sql);
 		$rs_rows = $rs->num_rows();
 		
-		if((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows<>$drawat_count)){
+		if((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows<>$drawat_count) && ($dcount_drawat_id<1)){
 			return '-7';
-		}elseif((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows==$drawat_count) && ($drawat_count<>0)){
+		}elseif(((substr($jrawat_nobukti,0,2)=='PR') && ($rs_rows==$drawat_count) && ($drawat_count<>0)) || ($dcount_drawat_id>0)){
 			/*
 			 * $jrawat_id ==> milik dari db.master_jual_rawat
 			 * 1. Checking db.detail_jual_rawat apakah == $drawat_count
@@ -1523,13 +1523,13 @@ class M_master_jual_rawat extends Model{
 				
 			}
 			
-		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count==0){
+		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count==0 && ($dcount_drawat_id<1)){
 			/*
 			 * Ada penambahan detail perawatan lepas dari Tindakan ketika Kasir akan memproses Pengambilan Paket saja.
 			 * maka kirim Warning: Klik tombol 'Cancel' terlebih dahulu karena mendadak ada penambahan detail dari Tindakan
 			*/
 			return '-7';
-		}elseif((($rs_rows==$drawat_count) && $drawat_count==0) || $jrawat_nobukti==''){
+		}elseif((($rs_rows==$drawat_count) && $drawat_count==0 && ($dcount_drawat_id<1)) || (($jrawat_nobukti=='') && ($dcount_drawat_id<1))){
 			if($cetak==1){
 				if($jrawat_nobukti<>''){
 					$sqlu = "UPDATE master_jual_rawat
@@ -1547,10 +1547,10 @@ class M_master_jual_rawat extends Model{
 			}else{
 				return '-5';
 			}
-		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count>0){
+		}elseif($rs_rows>0 && $jrawat_nobukti=='' && $drawat_count>0 && ($dcount_drawat_id<1)){
 			/* Klik tombol 'Cancel' terlebih dahulu karena mendadak ada penambahan detail dari Tindakan */
 			return '-7';
-		}elseif($rs_rows<1 && $jrawat_nobukti=='' && $drawat_count>0){
+		}elseif($rs_rows<1 && $jrawat_nobukti=='' && $drawat_count>0 && ($dcount_drawat_id<1)){
 			/*
 			 * Tidak ada detail perawatan lepas di database, tetapi ada penambahan detail perawatan lepas di Form Pengambilan Paket saja.
 			 * maka create master_jual_rawat_create() untuk meng-create No.Faktur

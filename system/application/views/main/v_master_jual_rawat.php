@@ -591,6 +591,14 @@ Ext.onReady(function(){
 				if(jrawat_transfer_bank3Field.getValue()!== null){jrawat_transfer_bank3_create = jrawat_transfer_bank3Field.getValue();} 
 				if(jrawat_transfer_nama3Field.getValue()!== null){jrawat_transfer_nama3_create = jrawat_transfer_nama3Field.getValue();}
 				if((jrawat_transfer_nilai3Field.getValue()!==null) && (jrawat_transfer_nilai3Field.getValue()!=='') && (jrawat_transfer_nilai3Field.getValue()!==0)){jrawat_transfer_nilai3_create = jrawat_transfer_nilai3Field.getValue();}
+				
+				var dcount_drawat = 0;
+				for(i=0; i<detail_jual_rawat_DataStore.getCount();i++){
+					if(detail_jual_rawat_DataStore.getAt(i).data.drawat_id==0){
+						dcount_drawat_id_create = dcount_drawat+1;
+					}
+				}
+				
 				Ext.Ajax.request({  
 					waitMsg: 'Please wait...',
 					waitMsg: 'Mohon tunggu...',
@@ -599,6 +607,7 @@ Ext.onReady(function(){
 						task: jrawat_post2db,
 						cetak_jrawat:cetak_jrawat,
 						drawat_count: drawat_count_create,
+						dcount_drawat_id: dcount_drawat_id_create,
 						jrawat_id			: 	jrawat_id_create_pk, 
 						jrawat_nobukti		: 	jrawat_nobukti_create, 
 						jrawat_cust		: 	jrawat_cust_create, 
@@ -4891,6 +4900,7 @@ Ext.onReady(function(){
 	function detail_jual_rawat_add(){
 		combo_jual_rawat.setDisabled(false);
 		drawat_jumlahField.setDisabled(false);
+		master_jual_rawat_createForm.savePrintButton.disable();
 		var edit_detail_jual_rawat= new detail_jual_rawatListEditorGrid.store.recordType({
 			drawat_id	:0,
 			drawat_rawat	:'',
