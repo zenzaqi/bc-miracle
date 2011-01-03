@@ -204,8 +204,16 @@ var editor_cust_note;
 		cust_profesitxtField.reset();
 		cust_tmptlahirField.reset();
 		cust_tgllahirField.reset();
-		cust_hobiField.reset();
-		cust_hobitxtField.reset();
+		//cust_hobiField.reset();
+		//cust_hobitxtField.reset();
+		cust_hobi_bacaField.reset(),
+		cust_hobi_olahField.reset(),
+		cust_hobi_masakField.reset(),
+		cust_hobi_travelField.reset(),
+		cust_hobi_fotoField.reset(),
+		cust_hobi_lukisField.reset(),
+		cust_hobi_nariField.reset(),
+		cust_hobi_lainField.reset(),
 		cust_referensiField.reset();
 		cust_referensilainField.reset();
 		//cust_referensilaintxtField.reset();
@@ -223,8 +231,22 @@ var editor_cust_note;
 		cust_cptelpField.reset();
 		cust_umurField.reset();
 		
+		
 		cust_noField.setValue('(Auto)');
 		//cust_nolamaField.setValue(null);
+		cust_keteranganField.setValue(true);
+		cust_terdaftarField.setValue(true);
+		cust_statusnikahField.setValue(true);
+		cust_priorityField.setValue(true);
+		cust_crm_dateField.setValue(true);
+		cust_crm_valueField.setValue(true);
+		cust_jmlanakField.setValue(true);
+		cust_unitField.setValue(true);
+		cust_aktifField.setValue(true);
+		cust_fretfulnessField.setValue(true);
+		cust_cpField.setValue(true);
+		cust_cptelpField.setValue(true);
+		cust_umurField.setValue(true);
 		cust_memberField.setValue(null);
 		cust_namaField.setValue(null);
 		cust_panggilanField.setValue(null);
@@ -258,8 +280,8 @@ var editor_cust_note;
 		cust_profesitxtField.setValue(null);
 		cust_tmptlahirField.setValue(null);
 		cust_tgllahirField.setValue(null);
-		cust_hobiField.setValue(null);
-		cust_hobitxtField.setValue(null);
+		//cust_hobiField.setValue(null);
+		//cust_hobitxtField.setValue(null);
 		cust_referensiField.setValue(null);
 		cust_referensilainField.setValue(null);
 		//cust_referensilaintxtField.setValue(null);
@@ -339,7 +361,7 @@ var editor_cust_note;
 		cust_profesiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_profesi'));
 		cust_tmptlahirField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tmptlahir'));
 		cust_tgllahirField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tgllahir'));
-		cust_hobiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi'));
+		//cust_hobiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi'));
 		cust_referensiField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama_ref'));
 		cust_referensilainField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_referensilain'));
 		cust_keteranganField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_keterangan'));
@@ -361,6 +383,46 @@ var editor_cust_note;
 		cust_crm_valueField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('crmvalue_total'));
 		cust_crm_dateField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('crmvalue_date'));
 		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(0)=="1")	
+			cust_hobi_bacaField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(0)=="0")
+			cust_hobi_bacaField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(1)=="1")	
+			cust_hobi_olahField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(1)=="0")
+			cust_hobi_olahField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(2)=="1")	
+			cust_hobi_masakField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(2)=="0")
+			cust_hobi_masakField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(3)=="1")
+			cust_hobi_travelField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(3)=="0")
+			cust_hobi_travelField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(4)=="1")	
+			cust_hobi_fotoField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(4)=="0")
+			cust_hobi_fotoField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(5)=="1")	
+			cust_hobi_lukisField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(5)=="0")
+			cust_hobi_lukisField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(6)=="1")	
+			cust_hobi_nariField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(6)=="0")
+			cust_hobi_nariField.setValue(false);
+		
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(7)=="1")	
+			cust_hobi_lainField.setValue(true);	
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hobi').charAt(7)=="0")
+			cust_hobi_lainField.setValue(false);
+			
 /*		cust_member_DataStore.load({
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS },
 			callback: function(opts, success, response)  {
@@ -745,7 +807,7 @@ var editor_cust_note;
 		cust_profesiSearchField.reset();
 		cust_tgllahirSearchField.reset();
 		cust_tgllahirSearchFieldEnd.reset();
-		cust_hobiSearchField.reset();
+		//cust_hobiSearchField.reset();
 		cust_referensiSearchField.reset();
 		cust_referensilainSearchField.reset();
 		cust_keteranganSearchField.reset();
@@ -1486,7 +1548,7 @@ var editor_cust_note;
 		//if(cust_profesitxtField.getValue()!== null){cust_profesitxt_create = cust_profesitxtField.getValue();}
 		if(cust_tmptlahirField.getValue()!== null){cust_tmptlahir_create = cust_tmptlahirField.getValue();}
 		if(cust_tgllahirField.getValue()!== ""){cust_tgllahir_create_date = cust_tgllahirField.getValue().format('Y-m-d');}
-		if(cust_hobiField.getValue()!== null){cust_hobi_create = cust_hobiField.getValue();}
+		//if(cust_hobiField.getValue()!== null){cust_hobi_create = cust_hobiField.getValue();}
 		//if(cust_hobitxtField.getValue()!== null){cust_hobitxt_create = cust_hobitxtField.getValue();}
 		if(cust_referensiField.getValue()!== null){cust_referensi_create = cust_referensiField.getValue();}
 		if(cust_referensilainField.getValue()!== null){cust_referensilain_create = cust_referensilainField.getValue();}
@@ -1547,6 +1609,14 @@ var editor_cust_note;
 					//cust_hobitxt	: cust_hobitxt_create,	
 					cust_referensi	: cust_referensi_create,
 					cust_referensilain	: cust_referensilain_create,
+					cust_hobi_baca : cust_hobi_bacaField.getValue(),
+					cust_hobi_olah : cust_hobi_olahField.getValue(),
+					cust_hobi_masak : cust_hobi_masakField.getValue(),
+					cust_hobi_travel : cust_hobi_travelField.getValue(),
+					cust_hobi_foto : cust_hobi_fotoField.getValue(),
+					cust_hobi_lukis : cust_hobi_lukisField.getValue(),
+					cust_hobi_nari : cust_hobi_nariField.getValue(),
+					cust_hobi_lain : cust_hobi_lainField.getValue(),
 					//cust_referensilaintxt	: cust_referensilaintxt_create,
 					cust_keterangan	: cust_keterangan_create,	
 					cust_terdaftar	: cust_terdaftar_create_date,					
@@ -2215,7 +2285,7 @@ Ext.onReady(function(){
 			width: 60,	//67,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			,
 			editor: new Ext.form.DateField({
@@ -2414,7 +2484,7 @@ Ext.onReady(function(){
 			dataIndex: 'cust_date_create',
 			width: 150,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			hidden: true
 		},
 		{
@@ -3163,7 +3233,7 @@ Ext.onReady(function(){
 			}
 		]
 	});
-	/* Identify  cust_hobi Field */
+	/* Identify  cust_hobi Field 
 	cust_hobiField= new Ext.form.ComboBox({
 		id: 'cust_hobiField',
 		fieldLabel: 'Hobi',
@@ -3178,16 +3248,90 @@ Ext.onReady(function(){
 		valueField: 'cust_hobi_display',
 		anchor: '95%',
 		triggerAction: 'all'
+	});*/
+		
+		/* Identify hobi*/
+	cust_hobi_bacaField=new Ext.form.Checkbox({
+		id : 'cust_hobi_bacaField',
+		boxLabel: 'Membaca',
+		maxLength: 250,
+		name: 'cust_hobi_baca'
 	});
 	
-	cust_hobitxtField= new Ext.form.TextField({
-		id: 'cust_hobitxtField',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;Tambah (Optional)',
-		style: 'padding-left:10px',
-		emptyText: 'Hobi lainnya...',
-		maxLength: 500,
-		anchor: '95%'
+	cust_hobi_olahField=new Ext.form.Checkbox({
+		id : 'cust_hobi_olahField',
+		boxLabel: 'Olahraga',
+		maxLength: 250,
+		name: 'cust_hobi_olah'
 	});
+	
+	cust_hobi_masakField=new Ext.form.Checkbox({
+		id : 'cust_hobi_masakField',
+		boxLabel: 'Memasak',
+		maxLength: 250,
+		name: 'cust_hobi_masak'
+	});
+	
+	cust_hobi_travelField=new Ext.form.Checkbox({
+		id : 'cust_hobi_travelField',
+		boxLabel: 'Travelling',
+		maxLength: 250,
+		name: 'cust_hobi_travel'
+	});
+	
+	cust_hobi_fotoField=new Ext.form.Checkbox({
+		id : 'cust_hobi_fotoField',
+		boxLabel: 'Fotografi',
+		maxLength: 250,
+		name: 'cust_hobi_foto'
+	});
+	
+	cust_hobi_lukisField=new Ext.form.Checkbox({
+		id : 'cust_hobi_lukisField',
+		boxLabel: 'Melukis',
+		maxLength: 250,
+		name: 'cust_hobi_lukis'
+	});
+	
+	cust_hobi_nariField=new Ext.form.Checkbox({
+		id : 'cust_hobi_nariField',
+		boxLabel: 'Menari',
+		maxLength: 250,
+		name: 'cust_hobi_nari'
+	});
+	
+	cust_hobi_lainField=new Ext.form.Checkbox({
+		id : 'cust_hobi_lainField',
+		boxLabel: 'Lain-lain',
+		maxLength: 250,
+		name: 'cust_hobi_lain'
+	});
+	
+	cust_hobiField = new Ext.form.FieldSet({
+		title: 'Hobi',
+		anchor: '95%',
+		layout:'column',
+		autoHeight: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ cust_hobi_bacaField, cust_hobi_olahField, cust_hobi_masakField, cust_hobi_travelField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[cust_hobi_fotoField, cust_hobi_lukisField, cust_hobi_nariField, cust_hobi_lainField]
+			   }
+		]
+	});
+	
+	
 	
 	/* Identify  cust_referensi Field */
 	cust_referensiField= new Ext.form.ComboBox({
@@ -3262,8 +3406,8 @@ Ext.onReady(function(){
 	cust_terdaftarField= new Ext.form.DateField({
 		id: 'cust_terdaftarField',
 		fieldLabel: 'Tanggal Terdaftar',
-		format : 'Y-m-d',
-		emptyText: '<?=date('Y/m/d'); ?>',
+		format : 'd-m-Y',
+		emptyText: '<?=date('d/m/Y'); ?>',
 		//allowBlank: false,
 		anchor: '50%'
 	});
@@ -3545,7 +3689,7 @@ Ext.onReady(function(){
 							xtype: 'checkboxgroup',
 							fieldLabel:'',
 							items:[cust_fb2Field,cust_tweeter2Field]
-						},cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
+						}, cust_kelaminField, cust_tmptlahirField, cust_tgllahirField, cust_umurField, cust_agamaField, cust_pendidikanField, 
 						cust_profesiField, cust_hobiField, cust_referensiField, cust_referensilainField,
 						cust_statusnikahField, cust_jmlanakField, cust_terdaftarField, cust_unitField, 
 						cust_keteranganField, cust_aktifField
@@ -3987,7 +4131,7 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  cust_hobi Field */
-	cust_hobiSearchField= new Ext.form.ComboBox({
+	/*cust_hobiSearchField= new Ext.form.ComboBox({
 		id: 'cust_hobiSearchField',
 		fieldLabel: 'Hobi',
 		maxLength: 500,
@@ -4009,6 +4153,86 @@ Ext.onReady(function(){
 		emptyText: 'Hobi lainnya...',
 		maxLength: 500,
 		anchor: '95%'
+	});*/
+	
+	cust_hobi_bacaSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_bacaSearchField',
+		boxLabel: 'Membaca',
+		maxLength: 250,
+		name: 'cust_hobi_baca'
+	});
+	
+	cust_hobi_olahSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_olahSearchField',
+		boxLabel: 'Olahraga',
+		maxLength: 250,
+		name: 'cust_hobi_olah'
+	});
+	
+	cust_hobi_masakSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_masakSearchField',
+		boxLabel: 'Memasak',
+		maxLength: 250,
+		name: 'cust_hobi_masak'
+	});
+	
+	cust_hobi_travelSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_travelSearchField',
+		boxLabel: 'Travelling',
+		maxLength: 250,
+		name: 'cust_hobi_travel'
+	});
+	
+	cust_hobi_fotoSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_fotoSearchField',
+		boxLabel: 'Fotografi',
+		maxLength: 250,
+		name: 'cust_hobi_foto'
+	});
+	
+	cust_hobi_lukisSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_lukisSearchField',
+		boxLabel: 'Melukis',
+		maxLength: 250,
+		name: 'cust_hobi_lukis'
+	});
+	
+	cust_hobi_nariSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_nariSearchField',
+		boxLabel: 'Menari',
+		maxLength: 250,
+		name: 'cust_hobi_nari'
+	});
+	
+	cust_hobi_lainSearchField=new Ext.form.Checkbox({
+		id : 'cust_hobi_lainSearchField',
+		boxLabel: 'Lain-lain',
+		maxLength: 250,
+		name: 'cust_hobi_lain'
+	});
+	
+	cust_hobiSearchField = new Ext.form.FieldSet({
+		title: 'Hobi',
+		anchor: '95%',
+		layout:'column',
+		autoHeight: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ cust_hobi_bacaSearchField, cust_hobi_olahSearchField, cust_hobi_masakSearchField, cust_hobi_travelSearchField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[cust_hobi_fotoSearchField, cust_hobi_lukisSearchField, cust_hobi_nariSearchField, cust_hobi_lainSearchField]
+			   }
+		]
 	});
 	
 	/* Identify  cust_referensi Field */

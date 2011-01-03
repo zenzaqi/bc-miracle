@@ -214,7 +214,7 @@ class M_customer extends Model{
 		}
 		
 		//function for update record
-		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir  ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
+		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain ){
 			if($cust_no=='' && $cust_aktif !='Tidak Aktif'){
 				//Generate Nomor Customer
 				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
@@ -251,12 +251,56 @@ class M_customer extends Model{
 			if ($cust_unit=="Miracle Medan")
 				$cust_unit = 18;
 			$date_now = date('Y-m-d H:i:s');
+			
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
 			if($cust_propinsi=="" || $cust_kota==NULL)
 				$cust_propinsi="Jawa Timur";
 			if($cust_negara=="" || $cust_kota==NULL)
 				$cust_negara="Indonesia";*/
+				
+			if($cust_hobi_baca=='true')
+			$baca="1";
+			if($cust_hobi_baca=='false')
+			$baca="0";	
+			
+			if($cust_hobi_olah=='true')
+			$olah="1";
+			if($cust_hobi_olah=='false')
+			$olah="0";	
+			
+			if($cust_hobi_masak=='true')
+			$masak="1";
+			if($cust_hobi_masak=='false')
+			$masak="0";	
+			
+			if($cust_hobi_foto=='true')
+			$foto="1";
+			if($cust_hobi_foto=='false')
+			$foto="0";	
+			
+			if($cust_hobi_travel=='true')
+			$travel="1";
+			if($cust_hobi_travel=='false')
+			$travel="0";	
+			
+			if($cust_hobi_nari=='true')
+			$nari="1";
+			if($cust_hobi_nari=='false')
+			$nari="0";	
+			
+			if($cust_hobi_lukis=='true')
+			$lukis="1";
+			if($cust_hobi_lukis=='false')
+			$lukis="0";	
+			
+			if($cust_hobi_lain=='true')
+			$lain="1";
+			if($cust_hobi_lain=='false')
+			$lain="0";	
+			
+			$temp_hobi=$baca.$olah.$masak.$travel.$foto.$lukis.$nari.$lain;		
+				
 			$data = array(
 				"cust_id"=>$cust_id,			
 				"cust_no"=>$cust_no,
@@ -288,7 +332,7 @@ class M_customer extends Model{
 				"cust_profesi"=>$cust_profesi,			
 				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,				
-				"cust_hobi"=>$cust_hobi,			
+				"cust_hobi"=>$temp_hobi,			
 				"cust_referensilain"=>$cust_referensilain,			
 				"cust_keterangan"=>$cust_keterangan,			
 				"cust_terdaftar"=>$cust_terdaftar,			
@@ -340,7 +384,7 @@ class M_customer extends Model{
 		}
 		
 		//function for create new record
-		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_hobi ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ){
+		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain ){
 			if($cust_no=='' && $cust_aktif != 'Tidak Aktif'){
 				//Generate Nomor Customer
 				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
@@ -380,6 +424,49 @@ class M_customer extends Model{
 				$cust_unit = 18;
 				
 			$date_now = date('Y-m-d H:i:s');
+			
+			if($cust_hobi_baca=='true')
+			$baca="1";
+			if($cust_hobi_baca=='false')
+			$baca="0";	
+			
+			if($cust_hobi_olah=='true')
+			$olah="1";
+			if($cust_hobi_olah=='false')
+			$olah="0";	
+			
+			if($cust_hobi_masak=='true')
+			$masak="1";
+			if($cust_hobi_masak=='false')
+			$masak="0";	
+			
+			if($cust_hobi_foto=='true')
+			$foto="1";
+			if($cust_hobi_foto=='false')
+			$foto="0";	
+			
+			if($cust_hobi_travel=='true')
+			$travel="1";
+			if($cust_hobi_travel=='false')
+			$travel="0";	
+			
+			if($cust_hobi_nari=='true')
+			$nari="1";
+			if($cust_hobi_nari=='false')
+			$nari="0";	
+			
+			if($cust_hobi_lukis=='true')
+			$lukis="1";
+			if($cust_hobi_lukis=='false')
+			$lukis="0";	
+			
+			if($cust_hobi_lain=='true')
+			$lain="1";
+			if($cust_hobi_lain=='false')
+			$lain="0";	
+			
+			$temp_hobi=$baca.$olah.$masak.$travel.$foto.$lukis.$nari.$lain;	
+			
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
 			if($cust_propinsi=="" || $cust_kota==NULL)
@@ -416,7 +503,7 @@ class M_customer extends Model{
 				"cust_profesi"=>$cust_profesi,
 				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,			
-				"cust_hobi"=>$cust_hobi,			
+				"cust_hobi"=>$temp_hobi,			
 				"cust_referensi"=>$cust_referensi,			
 				"cust_referensilain"=>$cust_referensilain,			
 				"cust_keterangan"=>$cust_keterangan,			
@@ -484,7 +571,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend, $cust_hobi ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//if ($cust_fretfulness=="")
@@ -585,10 +672,10 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
 			};
-			if($cust_hobi!=''){
+			/*if($cust_hobi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
-			};
+			};*/
 			if($cust_referensi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
@@ -717,7 +804,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_hobi ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -816,10 +903,10 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_tgllahir LIKE '%".$cust_tgllahir."%'";
 			};
-			if($cust_hobi!=''){
+			/*if($cust_hobi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
-			};
+			};*/
 			if($cust_referensi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
