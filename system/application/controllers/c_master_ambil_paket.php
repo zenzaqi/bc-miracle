@@ -117,7 +117,8 @@ class C_master_ambil_paket extends Controller {
 	}
 	
 	function get_referal_list(){
-		$result=$this->m_master_ambil_paket->get_referal_list();
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$result=$this->m_master_ambil_paket->get_referal_list($query);
 		echo $result;
 	}
 	
