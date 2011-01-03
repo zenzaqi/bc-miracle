@@ -592,10 +592,10 @@ Ext.onReady(function(){
 				if(jrawat_transfer_nama3Field.getValue()!== null){jrawat_transfer_nama3_create = jrawat_transfer_nama3Field.getValue();}
 				if((jrawat_transfer_nilai3Field.getValue()!==null) && (jrawat_transfer_nilai3Field.getValue()!=='') && (jrawat_transfer_nilai3Field.getValue()!==0)){jrawat_transfer_nilai3_create = jrawat_transfer_nilai3Field.getValue();}
 				
-				var dcount_drawat = 0;
+				var dcount_drawat_id_create = 0;
 				for(i=0; i<detail_jual_rawat_DataStore.getCount();i++){
 					if(detail_jual_rawat_DataStore.getAt(i).data.drawat_id==0){
-						dcount_drawat_id_create = dcount_drawat+1;
+						dcount_drawat_id_create = dcount_drawat_id_create+1;
 					}
 				}
 				
