@@ -79,12 +79,17 @@ class M_master_ambil_paket extends Model{
 		
 	}
 		
-		function get_referal_list(){
+		function get_referal_list($query){
 			$sql=  "SELECT 
 						karyawan_id,karyawan_nama,karyawan_username
 					FROM karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff')";
+			if($query<>"" && is_numeric($query)==false){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (karyawan_username LIKE '%".addslashes($query)."%')";
+			}
+		
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
