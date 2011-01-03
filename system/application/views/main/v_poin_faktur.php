@@ -58,6 +58,7 @@ var poin_faktur_ContextMenu;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
 var poin_faktur_noSearchField;
@@ -274,20 +275,25 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var poin_faktur_no_search=null;
 		var poin_faktur_jenis_search=null;
-		var poin_faktur_tanggal_search_date="";
+		var poin_tanggal_start_search_date="";
+		var poin_tanggal_end_search_date="";
 		var poin_faktur_cust_search=null;
 
 		if(poin_faktur_noSearchField.getValue()!==null){poin_faktur_no_search=poin_faktur_noSearchField.getValue();}
 		if(poin_faktur_custSearchField.getValue()!==null){poin_faktur_cust_search=poin_faktur_custSearchField.getValue();}
 		if(poin_faktur_jenisSearchField.getValue()!==null){poin_faktur_jenis_search=poin_faktur_jenisSearchField.getValue();}
-		if(poin_faktur_tanggalSearchField.getValue()!==""){poin_faktur_tanggal_search_date=poin_faktur_tanggalSearchField.getValue().format('Y-m-d');}
+		if(poin_tanggal_startSearchField.getValue()!==""){poin_tanggal_start_search_date=poin_tanggal_startSearchField.getValue().format('Y-m-d');}
+		if(poin_tanggal_endSearchField.getValue()!==""){poin_tanggal_end_search_date=poin_tanggal_endSearchField.getValue().format('Y-m-d');}
+		
 
 		poin_faktur_DataStore.baseParams = {
 			task: 'SEARCH',
 			poin_faktur_no	:	poin_faktur_no_search, 
 			poin_faktur_cust	:	poin_faktur_cust_search, 
 			poin_faktur_jenis	:	poin_faktur_jenis_search, 
-			poin_faktur_tanggal	:	poin_faktur_tanggal_search_date
+			poin_tanggal_start : poin_tanggal_start_search_date,
+			poin_tanggal_end   : poin_tanggal_end_search_date
+			//poin_faktur_tanggal	:	poin_faktur_tanggal_search_date
 		};
 		poin_faktur_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
@@ -305,7 +311,7 @@ Ext.onReady(function(){
 		poin_faktur_noSearchField.reset();
 		poin_faktur_custSearchField.reset();
 		poin_faktur_jenisSearchField.reset();
-		poin_faktur_tanggalSearchField.reset();
+		//poin_faktur_tanggalSearchField.reset();
 	}
 
 	
@@ -356,20 +362,40 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  poin_faktur_tanggal Search Field */
-	poin_faktur_tanggalSearchField= new Ext.form.DateField({
-		id: 'poin_faktur_tanggalSearchField',
+   
+	poin_tanggal_startSearchField=new Ext.form.DateField({
+		id: 'poin_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
-		format : 'Y-m-d'
-	
+		format: 'd-m-Y'		
+		//value: firstday
 	});
-	    
+    
+	poin_tanggal_endSearchField=new Ext.form.DateField({
+		id: 'poin_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format: 'd-m-Y',
+		value: today
+	});
+
+	poin_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	
+	poin_faktur_tanggal_opsiSearchField=new Ext.form.FieldSet({
+		id:'poin_faktur_tanggal_opsiSearchField',
+		title: 'Opsi Tanggal',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		frame: false,
+		items:[poin_tanggal_startSearchField, poin_label_tanggalField, poin_tanggal_endSearchField]
+	});	
+		
+		
 	/* Function for retrieve search Form Panel */
 	poin_faktur_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 400,        
-		items: [poin_faktur_noSearchField, poin_faktur_jenisSearchField, poin_faktur_tanggalSearchField, poin_faktur_custSearchField],
+		items: [poin_faktur_noSearchField, poin_faktur_jenisSearchField, poin_faktur_tanggal_opsiSearchField, poin_faktur_custSearchField],
 		buttons: [{
 				text: 'Search',
 				handler: poin_faktur_list_search
