@@ -1,0 +1,5 @@
+2010_12_31-12_11.sql
+-mengubah tipe data cust_hobi
+
+v_customer
+-mengubah format list tanggal lahir dan tanggal terdaftar menjadi (d-m-Y)
