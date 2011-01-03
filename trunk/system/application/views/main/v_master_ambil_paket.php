@@ -1141,7 +1141,7 @@ Ext.onReady(function(){
 				handler: pengecekan_dokumen
 			},'-',
 			{
-				text: 'Adj',
+				text: 'Adjustment',
 				tooltip: 'Mengubah status menjadi Adj',
 				iconCls:'icon-update',    				// this is defined in our styles.css
 				handler: adj_status_update

@@ -70,11 +70,12 @@ class C_poin_faktur extends Controller {
 		$poin_faktur_cust=trim(@$_POST["poin_faktur_cust"]);
 		$poin_faktur_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$poin_faktur_cust);
 		$poin_faktur_tanggal=trim(@$_POST["poin_faktur_tanggal"]);
+		$poin_tanggal_start =(isset($_POST['poin_tanggal_start']) ? @$_POST['poin_tanggal_start'] : @$_GET['poin_tanggal_start']);
+		$poin_tanggal_end =(isset($_POST['poin_tanggal_end']) ? @$_POST['poin_tanggal_end'] : @$_GET['poin_tanggal_end']);
 		
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
-		$result = $this->m_poin_faktur->poin_faktur_search($poin_faktur_no ,$poin_faktur_jenis , $poin_faktur_cust, $poin_faktur_tanggal ,
-												   $start,$end);
+		$result = $this->m_poin_faktur->poin_faktur_search($poin_faktur_no ,$poin_faktur_jenis , $poin_faktur_cust, $poin_faktur_tanggal , $poin_tanggal_start, $poin_tanggal_end, $start,$end);
 		echo $result;
 	}
 

@@ -51,7 +51,7 @@ class M_poin_faktur extends Model{
 		
 				
 		//function for advanced search record
-		function poin_faktur_search($poin_faktur_no ,$poin_faktur_jenis ,$poin_faktur_cust, $poin_faktur_tanggal ,$start,$end){
+		function poin_faktur_search($poin_faktur_no ,$poin_faktur_jenis ,$poin_faktur_cust, $poin_faktur_tanggal ,$poin_tanggal_start, $poin_tanggal_end, $start,$end){
 			//full query
 			$query="select * from vu_history_poin_faktur";
 			
@@ -70,11 +70,15 @@ class M_poin_faktur extends Model{
 				$query.= " jenis LIKE '%".$poin_faktur_jenis."%'";
 			};
 
+			if($poin_tanggal_start!='' && $poin_tanggal_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(tanggal, '%Y-%m-%d') BETWEEN '".$poin_tanggal_start."' AND '".$poin_tanggal_end."'";
+			}
 			
-			if($poin_faktur_tanggal!=''){
+			/*if($poin_faktur_tanggal!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " tanggal LIKE '%".$poin_faktur_tanggal."%'";
-			};
+			};*/
 			
 			$query.=" ORDER BY tanggal, no_bukti ASC";
 			
