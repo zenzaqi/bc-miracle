@@ -270,7 +270,7 @@ class M_master_jual_rawat extends Model{
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
 			LEFT JOIN customer ON(dapaket_cust=cust_id)
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
-			WHERE date_format(dapaket_date_create,'%Y-%m-%d')='$tanggal'
+			WHERE date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$tanggal'
 				AND dapaket_cust='$dapaket_cust'
 				AND dapaket_stat_dok='$dapaket_stat_dok'";
 		
@@ -1179,7 +1179,7 @@ class M_master_jual_rawat extends Model{
 				dpaket_id,
 				dapaket_stat_dok AS jrawat_stat_dok
 			FROM vu_jrawat_pk
-			WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d')='$date_now'
+			WHERE date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d')='$date_now'
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
@@ -2664,7 +2664,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_customer.cust_no AS dapaket_cust_no
 				,dapaket_customer.cust_nama AS dapaket_cust_nama
 				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
-				,dapaket_date_create
+				,dapaket_tgl_ambil
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
@@ -2672,7 +2672,7 @@ class M_master_jual_rawat extends Model{
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 			LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id)
 			WHERE dapaket_cust='$dapaket_cust'
-				AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'"; //mencetak semua pengambilan paket dari customer dalam tanggal yang dipilih
+				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'"; //mencetak semua pengambilan paket dari customer dalam tanggal yang dipilih
 		
 		$result = $this->db->query($sql);
 		foreach($result->result() as $row){
@@ -2690,7 +2690,7 @@ class M_master_jual_rawat extends Model{
 				,cust_no
 				,cust_nama
 				,cust_alamat
-				,dapaket_date_create
+				,dapaket_tgl_ambil
 				,dapaket_dtrawat
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
@@ -2698,7 +2698,7 @@ class M_master_jual_rawat extends Model{
 			LEFT JOIN customer ON(dapaket_cust=cust_id)
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 			WHERE dapaket_cust='$dapaket_cust'
-				AND date_format(dapaket_date_create,'%Y-%m-%d')='$dapaket_date_create'
+				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'
 				AND dapaket_stat_dok='Terbuka'";
 		
 		$result = $this->db->query($sql);
