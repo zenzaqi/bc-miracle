@@ -716,7 +716,7 @@ Ext.onReady(function(){
 	memberListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'memberListEditorGrid',
 		el: 'fp_member',
-		title: 'Daftar Aktivasi Member',
+		title: 'Daftar Cetak Member',
 		autoHeight: true,
 		store: member_DataStore, // DataStore
 		cm: member_ColumnModel, // Nama-nama Columns
