@@ -3312,6 +3312,8 @@ Ext.onReady(function(){
 		anchor: '95%',
 		layout:'column',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		items:[
 			{
 				columnWidth:0.5,
@@ -4216,6 +4218,8 @@ Ext.onReady(function(){
 		anchor: '95%',
 		layout:'column',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		items:[
 			{
 				columnWidth:0.5,
