@@ -699,7 +699,16 @@ var editor_cust_note;
 		if(cust_profesiSearchField.getValue()!==null){cust_profesi_search=cust_profesiSearchField.getValue();}
 		if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
 		if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
-		if(cust_hobiSearchField.getValue()!==null){cust_hobi_search=cust_hobiSearchField.getValue();}
+		//if(cust_hobiSearchField.getValue()!==null){cust_hobi_search=cust_hobiSearchField.getValue();}
+		/*if(cust_hobi_bacaSearchField.getValue()!==null){cust_hobi_bacaSearch=cust_hobi_bacaSearchField.getValue();}
+		if(cust_hobi_olahSearchField.getValue()!==null){cust_hobi_olahSearch=cust_hobi_olahSearchField.getValue();}
+		if(cust_hobi_masakSearchField.getValue()!==null){cust_hobi_masakSearch=cust_hobi_masakSearchField.getValue();}
+		if(cust_hobi_travelSearchField.getValue()!==null){cust_hobi_travelSearch=cust_hobi_travelSearchField.getValue();}
+		if(cust_hobi_fotoSearchField.getValue()!==null){cust_hobi_fotoSearch=cust_hobi_fotoSearchField.getValue();}
+		if(cust_hobi_lukisSearchField.getValue()!==null){cust_hobi_lukisSearch=cust_hobi_lukisSearchField.getValue();}
+		if(cust_hobi_nariSearchField.getValue()!==null){cust_hobi_nariSearch=cust_hobi_nariSearchField.getValue();}
+		if(cust_hobi_lainSearchField.getValue()!==null){cust_hobi_lainSearch=cust_hobi_lainSearchField.getValue();}
+*/		
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
 		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_search=cust_referensilainSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
@@ -745,7 +754,16 @@ var editor_cust_note;
 			cust_profesi	:	cust_profesi_search, 
 			cust_tgllahir	:	cust_tgllahir_search_date, 
 			cust_tgllahirend	:	cust_tgllahir_search_dateEnd, 
-			cust_hobi		:	cust_hobi_search, 
+			//cust_hobi		:	cust_hobi_search, 
+			cust_hobi_baca : cust_hobi_bacaSearchField.getValue(),
+			cust_hobi_olah : cust_hobi_olahSearchField.getValue(),
+			cust_hobi_masak : cust_hobi_masakSearchField.getValue(),
+			cust_hobi_travel : cust_hobi_travelSearchField.getValue(),
+			cust_hobi_foto : cust_hobi_fotoSearchField.getValue(),
+			cust_hobi_lukis : cust_hobi_lukisSearchField.getValue(),
+			cust_hobi_nari : cust_hobi_nariSearchField.getValue(),
+			cust_hobi_lain : cust_hobi_lainSearchField.getValue(),
+				
 			cust_referensi	:	cust_referensi_search, 
 			cust_referensilain	:	cust_referensilain_search, 
 			cust_keterangan	:	cust_keterangan_search, 
@@ -822,6 +840,14 @@ var editor_cust_note;
 		cust_aktifSearchField.reset();
 		sortby_SearchField.reset();
 		fretfulness_SearchField.reset();
+		cust_hobi_bacaSearchField.reset();
+		cust_hobi_olahSearchField.reset();
+		cust_hobi_masakSearchField.reset();
+		cust_hobi_travelSearchField.reset();
+		cust_hobi_fotoSearchField.reset();
+		cust_hobi_lukisSearchField.reset();
+		cust_hobi_nariSearchField.reset();
+		cust_hobi_lainSearchField.reset();
 	}
 
 	
@@ -4214,6 +4240,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_hobiSearchField = new Ext.form.FieldSet({
+		id : 'cust_hobiSearchField',
 		title: 'Hobi',
 		anchor: '95%',
 		layout:'column',

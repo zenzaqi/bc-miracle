@@ -571,7 +571,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//if ($cust_fretfulness=="")
@@ -671,11 +671,74 @@ class M_customer extends Model{
 			if($cust_tgllahir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
-			};
-			/*if($cust_hobi!=''){
+			};	
+			
+			if($cust_hobi_baca == 'true'){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
-			};*/
+				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
+			}		
+			else if($cust_hobi_baca == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '0'";
+			};
+			if($cust_hobi_olah == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
+			}		
+			else if($cust_hobi_olah == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '0'";
+			};
+			if($cust_hobi_masak == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
+			}		
+			else if($cust_hobi_masak == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '0'";
+			};
+			if($cust_hobi_travel == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
+			}		
+			else if($cust_hobi_travel == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '0'";
+			};
+			if($cust_hobi_foto == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
+			}		
+			else if($cust_hobi_foto == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '0'";
+			};
+			if($cust_hobi_lukis == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
+			}		
+			else if($cust_hobi_lukis == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '0'";
+			};
+			if($cust_hobi_nari == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
+			}		
+			else if($cust_hobi_nari== 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '0'";
+			};
+			if($cust_hobi_lain == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
+			}		
+			else if($cust_hobi_lain == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '0'";
+			};
+			
+			
 			if($cust_referensi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
@@ -804,14 +867,14 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter,  $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
 			$query="SELECT * FROM vu_customer";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_referensilain LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_referensilain LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%' OR cust_hobi_baca LIKE '%".addslashes($filter)."%' OR cust_hobi_olah LIKE '%".addslashes($filter)."%' OR cust_hobi_masak LIKE '%".addslashes($filter)."%' OR cust_hobi_foto LIKE '%".addslashes($filter)."%' OR cust_hobi_nari LIKE '%".addslashes($filter)."%' OR cust_hobi_travel LIKE '%".addslashes($filter)."%' OR cust_hobi_lukis LIKE '%".addslashes($filter)."%' OR cust_hobi_lain LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 			
@@ -907,6 +970,72 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_hobi LIKE '%".$cust_hobi."%'";
 			};*/
+
+			if($cust_hobi_baca == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
+			}		
+			else if($cust_hobi_baca == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '0'";
+			};
+			if($cust_hobi_olah == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
+			}		
+			else if($cust_hobi_olah == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '0'";
+			};
+			if($cust_hobi_masak == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
+			}		
+			else if($cust_hobi_masak == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '0'";
+			};
+			if($cust_hobi_travel == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
+			}		
+			else if($cust_hobi_travel == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '0'";
+			};
+			if($cust_hobi_foto == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
+			}		
+			else if($cust_hobi_foto == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '0'";
+			};
+			if($cust_hobi_lukis == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
+			}		
+			else if($cust_hobi_lukis == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '0'";
+			};
+			if($cust_hobi_nari == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
+			}		
+			else if($cust_hobi_nari== 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '0'";
+			};
+			if($cust_hobi_lain == 'true'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
+			}		
+			else if($cust_hobi_lain == 'false'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '0'";
+			};
+			
 			if($cust_referensi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
