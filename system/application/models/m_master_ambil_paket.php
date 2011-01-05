@@ -397,7 +397,7 @@ class M_master_ambil_paket extends Model{
 					$rs_paket_terpakai=$this->db->query($sql_paket_terpakai);
 					if($rs_paket_terpakai->num_rows()){
 						$record_paket_terpakai = $rs_paket_terpakai->row();
-						if(($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket > $dapaket_jumlah))){
+						if(($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dapaket_jumlah))){
 							//return $row_punya_paket;
 							//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 							$dti_dapaket=array(
