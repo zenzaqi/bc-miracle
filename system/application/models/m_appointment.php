@@ -1096,7 +1096,7 @@ class M_appointment extends Model{
 				$query="SELECT * FROM vu_appointment ";
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
 			}
 		}elseif($jenis_rawat=="Non Medis" && $filter==''){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -1112,7 +1112,7 @@ class M_appointment extends Model{
 				$query="SELECT * FROM vu_appointment ";
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
 			}
 		}
 		
@@ -1139,10 +1139,10 @@ class M_appointment extends Model{
 		 *  Simple Search ==> untuk mencari data di hari ini saja
 		*/
 		if($filter<>'' && is_numeric($filter)==false){
-			$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi='".$dt."'";
+			$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi >= '".$dt."'";
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			//search customer,perawatan,dokter,therapist
-			$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+			$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
 		}
 		
 		$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";

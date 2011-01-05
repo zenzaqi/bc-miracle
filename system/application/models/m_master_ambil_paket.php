@@ -633,47 +633,56 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		function ambil_paket_status_adj($dapaket_id){
-		
-			$date_now = date('Y-m-d');
-				//Mengubah status pengambilan paket menjadi Adj/
+			$sql = "SELECT dapaket_dpaket ,dapaket_jpaket ,dapaket_paket FROM detail_ambil_paket WHERE dapaket_id='".$dapaket_id[0]."'";
+			$rs = $this->db->query($sql);
+			$datetime_now = date('Y-m-d H:i:s');
 			
-					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Adj'
+			if($rs->num_rows()){
+				$record = $rs->row_array();
+				$dapaket_dpaket = $record['dapaket_dpaket'];
+				$dapaket_jpaket = $record['dapaket_jpaket'];
+				$dapaket_paket = $record['dapaket_paket'];
+				
+				//Mengubah status pengambilan paket menjadi Adj/
+				if (sizeof($dapaket_id) == 1){
+					$query = "UPDATE detail_ambil_paket 
+								SET dapaket_stat_dok='Adj',
+									dapaket_date_update='".$datetime_now."',
+									dapaket_update='".@$_SESSION[SESSION_USERID]."',
+									dapaket_revised=(dapaket_revised+1)
 						WHERE dapaket_id = ".$dapaket_id[0];
 					$this->db->query($query);
 					if($this->db->affected_rows()>0){
-						return '1';
-					}else
+						$dpaket_sisa_update = $this->total_sisa_paket_update($dapaket_dpaket ,$dapaket_jpaket ,$dapaket_paket);
+						if($dpaket_sisa_update==1){
+							return '1';
+						}else{
+							return '0';
+						}
+					}
+					else
 						return '0';
+				
+				}
+			
+				else{
+					return '0';
+				}
+			}
+			else{
+				return '0';
+			}
+			
+				
+				
 		}
 
-		
-		
-		
-		
+	
 		function ambil_paket_batal($dapaket_id){
 			$sql = "SELECT dapaket_dpaket ,dapaket_jpaket ,dapaket_paket FROM detail_ambil_paket WHERE dapaket_id='".$dapaket_id[0]."'";
 			$rs = $this->db->query($sql);
-			$date_now = date('Y-m-d');
-			
-			
-			/*$date = date('Y-m-d');
-			$date_1 = '01';
-			$date_2 = '02';
-			$date_3 = '03';
-			$month = substr($jproduk_tanggal,5,2);
-			$year = substr($jproduk_tanggal,0,4);
-			$begin=mktime(0,0,0,$month,1,$year);
-			$nextmonth=strtotime("+1month",$begin);
-			
-			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
-			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
-			
-			$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
-			$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
-			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
-			*/
-			
-			
+			$datetime_now = date('Y-m-d H:i:s');
+
 			if($rs->num_rows()){
 				$record = $rs->row_array();
 				$dapaket_dpaket = $record['dapaket_dpaket'];
@@ -682,7 +691,11 @@ class M_master_ambil_paket extends Model{
 				
 				//Membatalkan satu pengambilan paket /
 				if (sizeof($dapaket_id) == 1){
-					$query = "UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal'
+					$query = "UPDATE detail_ambil_paket 
+								SET dapaket_stat_dok='Batal',
+									dapaket_date_update='".$datetime_now."',
+									dapaket_update='".@$_SESSION[SESSION_USERID]."',
+									dapaket_revised=(dapaket_revised+1)
 						WHERE dapaket_id = ".$dapaket_id[0];
 						//DATE_ADD(date_format(dapaket_date_create, '%Y-%m-%d'),INTERVAL 40 DAY)>date_format(now(), '%Y-%m-%d') 
 					$this->db->query($query);
