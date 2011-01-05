@@ -879,7 +879,7 @@ class C_master_jual_rawat extends Controller {
 		$rs=$result->row();
 		$detail_ambil_paket=$result->result();
 		
-		$data['dapaket_tanggal']=$rs->dapaket_date_create;
+		$data['dapaket_tanggal']=$rs->dapaket_tgl_ambil;
 		//$data['cust_no']=$rs->cust_no;
 		//$data['cust_nama']=$rs->cust_nama;
 		//$data['cust_alamat']=$rs->cust_alamat;
