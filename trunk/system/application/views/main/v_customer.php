@@ -4332,7 +4332,7 @@ Ext.onReady(function(){
 		id: 'cust_memberSearchField',
 		fieldLabel: 'No Member',
 		anchor: '95%',
-		readOnly: true
+		//readOnly: true
 	});
 	
 	/* Identify  cust_terdaftar Field */

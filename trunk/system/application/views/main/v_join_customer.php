@@ -530,7 +530,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 		
-	joincustomer_infoketeranganField=new Ext.form.Label({ html: '<br><br> *Customer asal yang telah digabungkan akan diubah menjadi "Tidak Aktif"'});
+	joincustomer_infoketeranganField=new Ext.form.Label({ html: '<br><br> *Customer asal yang telah digabungkan akan diubah menjadi "Tidak Aktif" <br><br>*Jika customer asal adalah member, maka customer tujuan perlu didaftarkan lagi sebagai member dan sesuaikan nomor member baru dengan nomor member customer asal'});
 
 	/* Function for retrieve create Window Panel*/ 
 	joincustomer_saveForm = new Ext.FormPanel({
