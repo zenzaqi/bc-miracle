@@ -3848,7 +3848,7 @@ Ext.onReady(function(){
 	
 	cust_nocust_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_nocust_opsiSearchField',
-		title: 'Nomor Customer',
+		title: 'Nomor Customer (6 digit)',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		//border : false,
