@@ -934,7 +934,8 @@ Ext.onReady(function(){
     );
 	dapp_dokterDataStore.on('beforeload', function(){
 		var_dokter_dstore = false;
-		appointment_createWindow.setDisabled(true);
+		//appointment_createWindow.setDisabled(true);
+		appointment_createWindow.setDisabled(false);
 	});
 	dapp_dokterDataStore.on('load', function(opts, success, response){
 		if(success){
@@ -969,7 +970,8 @@ Ext.onReady(function(){
     );
 	dapp_terapisDataStore.on('beforeload', function(){
 		var_terapis_dstore = false;
-		appointment_createWindow.setDisabled(true);
+		//appointment_createWindow.setDisabled(true);
+		appointment_createWindow.setDisabled(false);
 	});
 	dapp_terapisDataStore.on('load', function(opts, success, response){
 		if(success){
@@ -1755,7 +1757,8 @@ Ext.onReady(function(){
 	/* End of Function */
 	appointment_detail_medisDataStore.on('beforeload', function(){
 		var_detail_medis_dstore = false;
-		appointment_createWindow.setDisabled(true);
+		//appointment_createWindow.setDisabled(true);
+		appointment_createWindow.setDisabled(false);
 	});
 	appointment_detail_medisDataStore.on('load', function(opts, success, response){
 		if(success){
@@ -2206,7 +2209,8 @@ Ext.onReady(function(){
 	/* End of Function */
 	appointment_detail_nonmedisDataStore.on('beforeload', function(){
 		var_detail_nonmedis_dstore = false;
-		appointment_createWindow.setDisabled(true);
+		//appointment_createWindow.setDisabled(true);
+		appointment_createWindow.setDisabled(false);
 	});
 	appointment_detail_nonmedisDataStore.on('load', function(opts, success, response){
 		if(success){
@@ -2694,7 +2698,8 @@ Ext.onReady(function(){
 		   waitConfig: {interval:200},
            closable:false
        });*/
-		appointment_createWindow.setDisabled(true);
+		//appointment_createWindow.setDisabled(true);
+		appointment_createWindow.setDisabled(false);
 	});
 	<?php } ?>
 	
