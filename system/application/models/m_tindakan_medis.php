@@ -790,7 +790,7 @@ class M_tindakan_medis extends Model{
 							FROM tindakan_detail AS dnonmedis
 							LEFT JOIN perawatan AS rawat ON(dnonmedis.dtrawat_perawatan=rawat.rawat_id)
 							WHERE dnonmedis.dtrawat_master='$dtrawat_master'
-								AND (dnonmedis.dtrawat_petugas1=0 or dnonmedis.dtrawat_petugas1=0)
+								AND (dnonmedis.dtrawat_petugas1=0 or dnonmedis.dtrawat_petugas1=5)
 								AND dnonmedis.dtrawat_petugas2=0
 								AND dnonmedis.dtrawat_status='selesai'
 								AND dnonmedis.dtrawat_id NOT IN (

@@ -227,6 +227,8 @@ class M_join_customer extends Model{
 				WHERE avoucher_cust ='$cust_asal_id'";
 			$this->db->query($sql_joincust_16);
 			
+			//update member tidak perlu, karena pemindahan member harus dilakukan secara manual
+			/* 
 			$sql_joincust_17 = "UPDATE member
 				SET member_cust = '$cust_tujuan_id',
 					member_update = '".@$_SESSION[SESSION_USERID]."',
@@ -234,6 +236,7 @@ class M_join_customer extends Model{
 					member_revised = (member_revised+1)
 				WHERE member_cust ='$cust_asal_id'";
 			$this->db->query($sql_joincust_17);
+			*/
 			
 			$sql_joincust_18 = "UPDATE member_temp
 				SET membert_cust = '$cust_tujuan_id'
@@ -324,6 +327,11 @@ class M_join_customer extends Model{
 				SET cust_point = (cust_point + '$cust_point')
 				WHERE cust_id ='$cust_tujuan_id'";
 			$this->db->query($sql_joincust_29);
+			
+			$sql_joincust_30 = "UPDATE log_poin_reset 
+				SET log_cust = '$cust_tujuan_id'
+				WHERE log_cust ='$cust_asal_id'";
+			$this->db->query($sql_joincust_30);
 			
 			$sql_set_cust_tidak_aktif = "UPDATE customer
 				SET cust_aktif = 'Tidak Aktif',
