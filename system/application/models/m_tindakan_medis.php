@@ -61,7 +61,7 @@ class M_tindakan_medis extends Model{
 			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
-				AND jpaket_stat_dok<>'Batal'
+				AND jpaket_stat_dok='Tertutup'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
@@ -116,7 +116,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok<>'Batal'
+				AND jpaket_stat_dok='Tertutup'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 				AND rpaket_jumlah>0
 			ORDER BY detail_jual_paket.dpaket_id ASC";
@@ -174,7 +174,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok<>'Batal'
+				AND jpaket_stat_dok='Tertutup'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
@@ -231,7 +231,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok<>'Batal'
+				AND jpaket_stat_dok='Tertutup'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 				AND rpaket_jumlah>0
 			ORDER BY detail_jual_paket.dpaket_id ASC";
