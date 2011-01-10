@@ -1237,8 +1237,8 @@ class M_master_jual_rawat extends Model{
 		$jenis_transaksi = 'jual_rawat';
 		
 		$datetime_now = date('Y-m-d H:i:s');
-		if ($jrawat_stat_dok=="")
-			$jrawat_stat_dok = "Terbuka";
+		/*if ($jrawat_stat_dok=="")
+			$jrawat_stat_dok = "Terbuka";*/
 		$jrawat_revised=0;
 		
 		if($jrawat_nobukti<>''){
@@ -1287,7 +1287,7 @@ class M_master_jual_rawat extends Model{
 					return $rs_drawat_cu;
 				}else{
 					//Customer TIDAK MEMILIKI Faktur Perawatan yang masih terbuka
-					$rs_jrawat = $this->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3
+					$rs_jrawat = $this->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,'Terbuka' , $jrawat_cara2 ,$jrawat_cara3
 													,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
 													,$jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2
 													,$jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal
@@ -1300,7 +1300,7 @@ class M_master_jual_rawat extends Model{
 													,$jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3
 													,$jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai
 													,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
-													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk
+													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
 													,$array_drawat_diskon ,$array_drawat_diskon_jenis);
 					if($rs_jrawat=='0'){
@@ -1367,7 +1367,6 @@ class M_master_jual_rawat extends Model{
 					"jrawat_cara"=>$jrawat_cara,
 					"jrawat_keterangan"=>$jrawat_keterangan,
 					"jrawat_ket_disk"=>$jrawat_ket_disk,
-					"jrawat_stat_dok"=>$jrawat_stat_dok,
 					"jrawat_update"=>$_SESSION[SESSION_USERID],
 					"jrawat_date_update"=>$datetime_now,
 					"jrawat_revised"=>$jrawat_revised+1
@@ -1407,10 +1406,13 @@ class M_master_jual_rawat extends Model{
 				$query=$this->db->query($sql);
 				if($query->num_rows())
 					$data["jrawat_cust"]=$jrawat_cust;
-					
+				
+				$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 				$this->db->where('jrawat_id', $jrawat_id);
 				$this->db->update('master_jual_rawat', $data);
-				if($this->db->affected_rows()>-1){
+				$affected_rows = $this->db->affected_rows();
+				$this->db->query('UNLOCK TABLES');
+				if($affected_rows>-1){
 					$time_now = date('H:i:s');
 					$bayar_date_create_temp = $jrawat_tanggal.' '.$time_now;
 					$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
