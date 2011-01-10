@@ -599,6 +599,71 @@ Ext.onReady(function(){
 					}
 				}
 				
+				/*
+				 * Penambahan Detail Penjualan Perawatan
+				*/
+				var drawat_id = [];
+				var drawat_dtrawat = [];
+				var drawat_rawat = [];
+				var drawat_jumlah = [];
+				var drawat_harga = [];
+				var drawat_diskon = [];
+				var drawat_diskon_jenis = [];
+				
+				var dcount = detail_jual_rawat_DataStore.getCount() - 1;
+				
+				if(detail_jual_rawat_DataStore.getCount()>0){
+					for(i=0; i<detail_jual_rawat_DataStore.getCount();i++){
+						if((/^\d+$/.test(detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat))
+						   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==undefined
+						   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==''
+						   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==0){
+							
+							drawat_id.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_id);
+							
+							if((detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat==undefined) || (detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat=='')){
+								drawat_dtrawat.push(0);
+							}else{
+								drawat_dtrawat.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat);
+							}
+							
+							drawat_rawat.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat);
+							
+							if((detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah==undefined) || (detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah=='') || (detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah==0)){
+								drawat_jumlah.push(1);
+							}else{
+								drawat_jumlah.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah);
+							}
+							
+							if(detail_jual_rawat_DataStore.getAt(i).data.drawat_harga==undefined){
+								drawat_harga.push(0);
+							}else{
+								drawat_harga.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_harga);
+							}
+							
+							if(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon==undefined){
+								drawat_diskon.push(0);
+							}else{
+								drawat_diskon.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon);
+							}
+							
+							if(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon_jenis==undefined){
+								drawat_diskon_jenis.push('');
+							}else{
+								drawat_diskon_jenis.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon_jenis);
+							}
+						}
+					}
+				}
+				
+				var encoded_array_drawat_id = Ext.encode(drawat_id);
+				var encoded_array_drawat_dtrawat = Ext.encode(drawat_dtrawat);
+				var encoded_array_drawat_rawat = Ext.encode(drawat_rawat);
+				var encoded_array_drawat_jumlah = Ext.encode(drawat_jumlah);
+				var encoded_array_drawat_harga = Ext.encode(drawat_harga);
+				var encoded_array_drawat_diskon = Ext.encode(drawat_diskon);
+				var encoded_array_drawat_diskon_jenis = Ext.encode(drawat_diskon_jenis);
+				
 				Ext.Ajax.request({  
 					waitMsg: 'Please wait...',
 					waitMsg: 'Mohon tunggu...',
@@ -698,7 +763,15 @@ Ext.onReady(function(){
 						//transfer-3 posting
 						jrawat_transfer_bank3	:	jrawat_transfer_bank3_create,
 						jrawat_transfer_nama3	:	jrawat_transfer_nama3_create,
-						jrawat_transfer_nilai3	:	jrawat_transfer_nilai3_create
+						jrawat_transfer_nilai3	:	jrawat_transfer_nilai3_create,
+						//Penambahan Detail Penjualan Perawatan
+						drawat_id: encoded_array_drawat_id,
+						drawat_dtrawat: encoded_array_drawat_dtrawat,
+						drawat_rawat: encoded_array_drawat_rawat,
+						drawat_jumlah: encoded_array_drawat_jumlah,
+						drawat_harga: encoded_array_drawat_harga,
+						drawat_diskon: encoded_array_drawat_diskon,
+						drawat_diskon_jenis: encoded_array_drawat_diskon_jenis
 					},
 					callback: function(opts, success, response){
 						if(success){
@@ -706,14 +779,13 @@ Ext.onReady(function(){
 							if(result==0){
 								//mode 'Save'
 								Ext.MessageBox.alert(jrawat_post2db+' OK','Data penjualan perawatan berhasil disimpan');
-								detail_jual_rawat_cu(0,jrawat_id_create_pk,jrawat_cust_create,jrawat_tanggal_create_date);
+								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
 							}else if(result>0){
 								//mode 'Save and Print' untuk perawatan non-paket, sekaligus pengambilan paket
-								detail_jual_rawat_cu(1,jrawat_id_create_pk,jrawat_cust_create,jrawat_tanggal_create_date);
-								master_jual_rawat_createWindow.hide();
-							}else if(result==-2){
-								detail_jual_rawat_cu(cetak_jrawat,0,jrawat_cust_create,jrawat_tanggal_create_date);
+								jrawat_cetak(result,jrawat_cust_create,jrawat_tanggal_create_date);
+								master_jual_rawat_DataStore.reload();
+								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								master_jual_rawat_createWindow.hide();
 							}else if(result==-3){
 								//mode 'Save and Print' untuk perawatan paket saja
@@ -721,11 +793,7 @@ Ext.onReady(function(){
 								master_jual_rawat_DataStore.reload();
 								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								master_jual_rawat_createWindow.hide();
-							}/*else if(result==-4){
-								detail_ambil_paket_update();
-								master_jual_rawat_DataStore.reload();
-								master_jual_rawat_createWindow.hide();
-							}*/else if(result==-5){
+							}else if(result==-5){
 								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
 								master_jual_rawat_DataStore.reload();
 								master_jual_rawat_createWindow.hide();
@@ -751,8 +819,6 @@ Ext.onReady(function(){
 								});
 								master_jual_rawat_createWindow.hide();
 							}
-							//master_jual_rawat_reset_allForm();
-							//master_cara_bayarTabPanel.setActiveTab(0);
 						}else{
 							master_jual_rawat_DataStore.reload();
 							master_jual_rawat_createWindow.hide();
@@ -5078,119 +5144,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	function detail_jual_rawat_cu(opsi_cetak,cetak_jrawat_id,customer_id,tanggal){
-		var drawat_id = [];
-		var drawat_dtrawat = [];
-		var drawat_rawat = [];
-		var drawat_jumlah = [];
-		var drawat_harga = [];
-		var drawat_diskon = [];
-		var drawat_diskon_jenis = [];
-		
-		var dcount = detail_jual_rawat_DataStore.getCount() - 1;
-		
-		if(detail_jual_rawat_DataStore.getCount()>0){
-			for(i=0; i<detail_jual_rawat_DataStore.getCount();i++){
-				if((/^\d+$/.test(detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat))
-				   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==undefined
-				   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==''
-				   && detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat!==0){
-					
-					drawat_id.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_id);
-					
-					if((detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat==undefined) || (detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat=='')){
-						drawat_dtrawat.push(0);
-					}else{
-						drawat_dtrawat.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_dtrawat);
-					}
-					
-					drawat_rawat.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_rawat);
-					
-					if((detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah==undefined) || (detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah=='') || (detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah==0)){
-						drawat_jumlah.push(1);
-					}else{
-						drawat_jumlah.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_jumlah);
-					}
-					
-					if(detail_jual_rawat_DataStore.getAt(i).data.drawat_harga==undefined){
-						drawat_harga.push(0);
-					}else{
-						drawat_harga.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_harga);
-					}
-					
-					if(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon==undefined){
-						drawat_diskon.push(0);
-					}else{
-						drawat_diskon.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon);
-					}
-					
-					if(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon_jenis==undefined){
-						drawat_diskon_jenis.push('');
-					}else{
-						drawat_diskon_jenis.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon_jenis);
-					}
-				}
-				
-				if(i==dcount){
-					var encoded_array_drawat_id = Ext.encode(drawat_id);
-					var encoded_array_drawat_dtrawat = Ext.encode(drawat_dtrawat);
-					var encoded_array_drawat_rawat = Ext.encode(drawat_rawat);
-					var encoded_array_drawat_jumlah = Ext.encode(drawat_jumlah);
-					var encoded_array_drawat_harga = Ext.encode(drawat_harga);
-					var encoded_array_drawat_diskon = Ext.encode(drawat_diskon);
-					var encoded_array_drawat_diskon_jenis = Ext.encode(drawat_diskon_jenis);
-					
-					Ext.Ajax.request({
-						waitMsg: 'Mohon tunggu...',
-						url: 'index.php?c=c_master_jual_rawat&m=detail_jual_rawat_cu',
-						params:{
-							cetak: opsi_cetak,
-							drawat_id: encoded_array_drawat_id,
-							drawat_master: cetak_jrawat_id,
-							drawat_dtrawat: encoded_array_drawat_dtrawat,
-							drawat_rawat: encoded_array_drawat_rawat,
-							drawat_jumlah: encoded_array_drawat_jumlah,
-							drawat_harga: encoded_array_drawat_harga,
-							drawat_diskon: encoded_array_drawat_diskon,
-							drawat_diskon_jenis: encoded_array_drawat_diskon_jenis,
-							cust_id: customer_id,
-							tanggal_transaksi: tanggal
-						},
-						callback: function(opts, success, response){
-							if(success){
-								var result=eval(response.responseText);
-								if(result>0){
-									jrawat_cetak(result,customer_id,tanggal);
-									master_jual_rawat_DataStore.reload();
-									detail_jual_rawat_DataStore.load({params: {master_id:-1}});
-								}else{
-									master_jual_rawat_DataStore.reload();
-									detail_jual_rawat_DataStore.load({params: {master_id:-1}});
-								}
-								
-							}else{
-								master_jual_rawat_DataStore.reload();
-								detail_jual_rawat_DataStore.load({params: {master_id:-1}});
-							}
-						},
-						failure: function(response){
-							var result=response.responseText;
-							Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-							});	
-						}		
-					});
-					
-				}
-			}
-		}
-		
-	}
-    
     function detail_ambil_paket_update(){
 	var count_detail=detail_ambil_paketDataStore.getCount();
 	for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
