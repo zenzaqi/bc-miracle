@@ -4825,9 +4825,10 @@ Ext.onReady(function(){
         tpl: customer_jual_paket_tpl,
         //applyTo: 'search',
         itemSelector: 'div.search-item',
-		triggerAction: 'all',
+		triggerAction: 'query',
 		lazyRender:true,
-		listClass: 'x-combo-list-small'
+		listClass: 'x-combo-list-small',
+		maskRe: /([^0-9]+)$/
 	});
 
 	//declaration of detail coloumn model
