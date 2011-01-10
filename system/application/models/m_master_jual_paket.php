@@ -130,6 +130,7 @@ class M_master_jual_paket extends Model{
 					,cust_tgllahir
 					,cust_alamat
 					,cust_telprumah
+					,CONCAT(vu_customer.cust_nama, ' (', vu_customer.cust_no, ')') as cust_display
 				FROM vu_customer
 				WHERE cust_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
