@@ -134,7 +134,7 @@ class M_master_jual_paket extends Model{
 				WHERE cust_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (cust_nama like '%".$query."%' OR cust_no like '%".$query."%' OR member_no like '%".$query."%' ) ";
+				$sql.=" (cust_nama LIKE '%".$query."%' ) ";
 			}else{
 				if($rs_rows){
 					$filter="";
@@ -726,7 +726,9 @@ class M_master_jual_paket extends Model{
 		}
 		
 		//insert detail record
-		function detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan, $array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak){
+		function detail_detail_jual_paket_insert($array_dpaket_id ,$dpaket_master ,$array_dpaket_paket, $array_dpaket_karyawan
+												 ,$array_dpaket_kadaluarsa ,$array_dpaket_jumlah ,$array_dpaket_harga
+												 ,$array_dpaket_diskon ,$array_dpaket_diskon_jenis ,$array_dpaket_sales, $cetak){
 			$datetime_now = date('Y-m-d H:i:s');
 			//if master id not capture from view then capture it from max pk from master table
 			if($dpaket_master=="" || $dpaket_master==NULL || $dpaket_master==0){
@@ -802,16 +804,7 @@ class M_master_jual_paket extends Model{
 					$rs = $this->db->query($sql);
 					if($rs->num_rows()){
 						//* artinya: isi paket sudah pernah diambil, sehingga tidak boleh di-edit ==> tidak ada action /
-						/*if($cetak==1 && $i==$size_array){
-							//* proses cetak /
-							$this->master_jual_paket_status_update($dpaket_master);
-							$this->member_point_update($dpaket_master);
-							$this->membership_insert($dpaket_master);
-							$this->catatan_piutang_update($dpaket_master);
-							return $dpaket_master;
-						}else if($cetak<>1 && $i==$size_array){
-							return '0';
-						}*/
+						
 					}else{
 						//* artinya: isi paket belum pernah diambil, sehingga masih boleh di-edit /
 						$dtu_dpaket = array(
@@ -832,30 +825,7 @@ class M_master_jual_paket extends Model{
 						);
 						$this->db->where('dpaket_id', $dpaket_id);
 						$this->db->update('detail_jual_paket', $dtu_dpaket); 
-						/*if($this->db->affected_rows()){
-							if($cetak==1 && $i==$size_array){
-								//* proses cetak /
-								$this->master_jual_paket_status_update($dpaket_master);
-								$this->member_point_update($dpaket_master);
-								$this->membership_insert($dpaket_master);
-								$this->catatan_piutang_update($dpaket_master);
-								return $dpaket_master;
-							}else if($cetak<>1 && $i==$size_array){
-								return '0';
-							}
-						}else{
-							//return '-1';
-							if($cetak==1 && $i==$size_array){
-								//* proses cetak /
-								$this->master_jual_paket_status_update($dpaket_master);
-								$this->member_point_update($dpaket_master);
-								$this->membership_insert($dpaket_master);
-								$this->catatan_piutang_update($dpaket_master);
-								return $dpaket_master;
-							}else if($cetak<>1 && $i==$size_array){
-								return '0';
-							}
-						}*/
+						
 					}
 				}else{
 					$sql_paket = "SELECT paket_point FROM paket WHERE paket_id='".$dpaket_paket."'";
@@ -878,30 +848,7 @@ class M_master_jual_paket extends Model{
 						"dpaket_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('detail_jual_paket', $data); 
-					/*if($this->db->affected_rows()){
-						if($cetak==1 && $i==$size_array){
-							//* proses cetak /
-							$this->master_jual_paket_status_update($dpaket_master);
-							$this->member_point_update($dpaket_master);
-							$this->membership_insert($dpaket_master);
-							$this->catatan_piutang_update($dpaket_master);
-							return $dpaket_master;
-						}else if($cetak<>1 && $i==$size_array){
-							return '0';
-						}
-					}else{
-						//return '-1';
-						if($cetak==1 && $i==$size_array){
-							//* proses cetak /
-							$this->master_jual_paket_status_update($dpaket_master);
-							$this->member_point_update($dpaket_master);
-							$this->membership_insert($dpaket_master);
-							$this->catatan_piutang_update($dpaket_master);
-							return $dpaket_master;
-						}else if($cetak<>1 && $i==$size_array){
-							return '0';
-						}
-					}*/
+					
 				}
 				if($cetak==1 && $i==$size_array){
 					//* proses cetak /
