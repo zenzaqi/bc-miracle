@@ -42,8 +42,6 @@ class M_tindakan_medis extends Model{
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		
-		//$this->firephp->log($sql);
-		
 		$query=$this->db->query($sql);
 		return $query->result();
 	}
@@ -509,8 +507,12 @@ class M_tindakan_medis extends Model{
 			"jrawat_tanggal"=>$date_now,
 			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
+			
+			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 			$this->db->insert('master_jual_rawat', $data_jrawat);
-			if($this->db->affected_rows()){
+			$affected_rows = $this->db->affected_rows();
+			$this->db->query('UNLOCK TABLES');
+			if($affected_rows>0){
 				/* INSERT to db.detail_jual_rawat */
 				$sql="SELECT jrawat_id
 					FROM master_jual_rawat
@@ -757,8 +759,12 @@ class M_tindakan_medis extends Model{
 			"jrawat_tanggal"=>$date_now,
 			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
+			
+			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 			$this->db->insert('master_jual_rawat', $dti_jrawat);
-			if($this->db->affected_rows()){
+			$affected_rows = $this->db->affected_rows();
+			$this->db->query('UNLOCK TABLES');
+			if($affected_rows>0){
 				//Cari jrawat_id dulu.....
 				$sql_jrawat="SELECT jrawat_id, jrawat_nobukti
 					FROM master_jual_rawat
