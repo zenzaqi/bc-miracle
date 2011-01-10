@@ -2164,7 +2164,8 @@ Ext.onReady(function(){
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'},
+			{name: 'cust_display', type: 'string', mapping: 'cust_display'},
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
@@ -4816,7 +4817,7 @@ Ext.onReady(function(){
 	var combo_pengguna_paket=new Ext.form.ComboBox({
 		store: cbo_cust_pengguna_paket_DataStore,
 		mode: 'remote',
-		displayField:'cust_nama',
+		displayField:'cust_display',
 		valueField: 'cust_id',
         typeAhead: false,
         loadingText: 'Searching...',
