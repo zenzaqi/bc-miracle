@@ -1129,7 +1129,7 @@ class M_master_jual_rawat extends Model{
 				dpaket_id
 			FROM vu_jrawat_pr
 			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
-			WHERE vu_jrawat_pr.jrawat_stat_dok='Terbuka' AND date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d')='$date_now'";
+			WHERE vu_jrawat_pr.jrawat_stat_dok='Terbuka' AND date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d')='$date_now'";
 		
 		// For simple search
 		if ($filter<>""){
