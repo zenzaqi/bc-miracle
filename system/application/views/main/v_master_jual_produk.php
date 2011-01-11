@@ -407,7 +407,7 @@ Ext.onReady(function(){
 				var jproduk_card_no3_create="";
 				var jproduk_card_nilai3_create=null;
 				//cek
-				var jproduk_cek_nama_create=null;
+				var jproduk_cek_nama_create="";
 				var jproduk_cek_nomor_create="";
 				var jproduk_cek_valid_create="";
 				var jproduk_cek_bank_create="";
@@ -426,7 +426,7 @@ Ext.onReady(function(){
 				var jproduk_cek_nilai3_create=null;
 				//transfer
 				var jproduk_transfer_bank_create="";
-				var jproduk_transfer_nama_create=null;
+				var jproduk_transfer_nama_create="";
 				var jproduk_transfer_nilai_create=null;
 				//transfer-2
 				var jproduk_transfer_bank2_create="";
@@ -510,7 +510,7 @@ Ext.onReady(function(){
 				if(jproduk_card_no3Field.getValue()!==""){jproduk_card_no3_create = jproduk_card_no3Field.getValue();}
 				if(jproduk_card_nilai3Field.getValue()!==null){jproduk_card_nilai3_create = jproduk_card_nilai3Field.getValue();} 
 				//cek value
-				if(jproduk_cek_namaField.getValue()!== null){jproduk_cek_nama_create = jproduk_cek_namaField.getValue();} 
+				if(jproduk_cek_namaField.getValue()!== ""){jproduk_cek_nama_create = jproduk_cek_namaField.getValue();} 
 				if(jproduk_cek_noField.getValue()!== ""){jproduk_cek_nomor_create = jproduk_cek_noField.getValue();} 
 				if(jproduk_cek_validField.getValue()!== ""){jproduk_cek_valid_create = jproduk_cek_validField.getValue().format('Y-m-d');} 
 				if(jproduk_cek_bankField.getValue()!== ""){jproduk_cek_bank_create = jproduk_cek_bankField.getValue();} 
@@ -529,7 +529,7 @@ Ext.onReady(function(){
 				if(jproduk_cek_nilai3Field.getValue()!== null){jproduk_cek_nilai3_create = jproduk_cek_nilai3Field.getValue();} 
 				//transfer value
 				if(jproduk_transfer_bankField.getValue()!== ""){jproduk_transfer_bank_create = jproduk_transfer_bankField.getValue();} 
-				if(jproduk_transfer_namaField.getValue()!== null){jproduk_transfer_nama_create = jproduk_transfer_namaField.getValue();}
+				if(jproduk_transfer_namaField.getValue()!== ""){jproduk_transfer_nama_create = jproduk_transfer_namaField.getValue();}
 				if(jproduk_transfer_nilaiField.getValue()!== null){jproduk_transfer_nilai_create = jproduk_transfer_nilaiField.getValue();} 
 				//transfer-2 value
 				if(jproduk_transfer_bank2Field.getValue()!== ""){jproduk_transfer_bank2_create = jproduk_transfer_bank2Field.getValue();} 

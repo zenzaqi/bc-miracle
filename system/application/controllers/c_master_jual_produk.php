@@ -842,7 +842,7 @@ class C_master_jual_produk extends Controller {
 			$data['nilai_bayar1']=$cara_bayar->bayar_nilai;
 		}else{
 			$data['cara_bayar1']="";
-			$data['bayar_nilai1']="";
+			$data['nilai_bayar1']="";
 		}
 		
 		if($cara_bayar2!==NULL){
