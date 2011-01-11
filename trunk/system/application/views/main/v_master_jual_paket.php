@@ -1281,7 +1281,10 @@ Ext.onReady(function(){
 		switch(jpaket_caraField.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 1
+					},
 					callback: function(opts, success, response)  {
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
@@ -1298,7 +1301,10 @@ Ext.onReady(function(){
 				break;
 			case 'card' :
 				card_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 1
+					},
 					callback: function(opts, success, response)  {
 						 if (success) { 
 							if(card_jual_paket_DataStore.getCount()){
@@ -1315,7 +1321,10 @@ Ext.onReady(function(){
 				break;
 			case 'cek/giro':
 				cek_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 1
+					},
 					callback: function(opts, success, response)  {
 							if (success) {
 								if(cek_jual_paket_DataStore.getCount()){
@@ -1333,7 +1342,10 @@ Ext.onReady(function(){
 				break;								
 			case 'transfer' :
 				transfer_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 1
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(transfer_jual_paket_DataStore.getCount()){
@@ -1349,7 +1361,10 @@ Ext.onReady(function(){
 				break;
 			case 'tunai' :
 				tunai_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 1
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(tunai_jual_paket_DataStore.getCount()){
@@ -1363,7 +1378,10 @@ Ext.onReady(function(){
 				break;
 			case 'voucher' :
 				voucher_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 1
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(voucher_jual_paket_DataStore.getCount()){
@@ -1381,7 +1399,10 @@ Ext.onReady(function(){
 		switch(jpaket_cara2Field.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 2
+					},
 					callback: function(opts, success, response)  {
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
@@ -1398,7 +1419,10 @@ Ext.onReady(function(){
 				break;
 			case 'card' :
 				card_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 2
+					},
 					callback: function(opts, success, response)  {
 						 if (success) { 
 							 if(card_jual_paket_DataStore.getCount()){
@@ -1415,7 +1439,10 @@ Ext.onReady(function(){
 				break;
 			case 'cek/giro':
 				cek_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 2
+					},
 					callback: function(opts, success, response)  {
 							if (success) {
 								if(cek_jual_paket_DataStore.getCount()){
@@ -1433,7 +1460,10 @@ Ext.onReady(function(){
 				break;								
 			case 'transfer' :
 				transfer_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 2
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 								jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
@@ -1450,7 +1480,10 @@ Ext.onReady(function(){
 				break;
 			case 'tunai' :
 				tunai_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 2
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(tunai_jual_paket_DataStore.getCount()){
@@ -1464,7 +1497,10 @@ Ext.onReady(function(){
 				break;
 			case 'voucher' :
 				voucher_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 2
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(voucher_jual_paket_DataStore.getCount()){
@@ -1482,7 +1518,10 @@ Ext.onReady(function(){
 		switch(jpaket_cara3Field.getValue()){
 			case 'kwitansi':
 				kwitansi_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 3
+					},
 					callback: function(opts, success, response)  {
 						  if (success) {
 							if(kwitansi_jual_paket_DataStore.getCount()){
@@ -1499,7 +1538,10 @@ Ext.onReady(function(){
 				break;
 			case 'card' :
 				card_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 3
+					},
 					callback: function(opts, success, response)  {
 						 if (success) { 
 							 if(card_jual_paket_DataStore.getCount()){
@@ -1516,7 +1558,10 @@ Ext.onReady(function(){
 				break;
 			case 'cek/giro':
 				cek_jual_paket_DataStore.load({
-					params : { no_faktur: jpaket_nobuktiField.getValue() },
+					params : {
+						no_faktur: jpaket_nobuktiField.getValue(),
+						cara_bayar_ke: 3
+					},
 					callback: function(opts, success, response)  {
 							if (success) {
 								if(cek_jual_paket_DataStore.getCount()){
@@ -1534,7 +1579,10 @@ Ext.onReady(function(){
 				break;								
 			case 'transfer' :
 				transfer_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 3
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 								jpaket_transfer_record=transfer_jual_paket_DataStore.getAt(0);
@@ -1551,7 +1599,10 @@ Ext.onReady(function(){
 				break;
 			case 'tunai' :
 				tunai_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 3
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(tunai_jual_paket_DataStore.getCount()){
@@ -1565,7 +1616,10 @@ Ext.onReady(function(){
 				break;
 			case 'voucher' :
 				voucher_jual_paket_DataStore.load({
-						params : { no_faktur: jpaket_nobuktiField.getValue() },
+						params : {
+							no_faktur: jpaket_nobuktiField.getValue(),
+							cara_bayar_ke: 3
+						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
 									if(voucher_jual_paket_DataStore.getCount()){

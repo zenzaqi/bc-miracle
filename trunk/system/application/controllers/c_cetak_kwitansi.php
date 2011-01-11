@@ -111,25 +111,29 @@ class C_cetak_kwitansi extends Controller {
 	
 	function get_cek_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
-		$result = $this->m_public_function->get_cek_by_ref($ref_id);
+		$cara_bayar_ke = 1;
+		$result = $this->m_public_function->get_cek_by_ref($ref_id ,$cara_bayar_ke);
 		echo $result;
 	}
 	
 	function get_card_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
-		$result = $this->m_public_function->get_card_by_ref($ref_id);
+		$cara_bayar_ke = 1;
+		$result = $this->m_public_function->get_card_by_ref($ref_id ,$cara_bayar_ke);
 		echo $result;
 	}
 	
 	function get_transfer_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
-		$result = $this->m_public_function->get_transfer_by_ref($ref_id);
+		$cara_bayar_ke = 1;
+		$result = $this->m_public_function->get_transfer_by_ref($ref_id ,$cara_bayar_ke);
 		echo $result;
 	}
 	
 	function get_tunai_by_ref(){
 		$ref_id = (isset($_POST['no_faktur']) ? $_POST['no_faktur'] : $_GET['no_faktur']);
-		$result = $this->m_public_function->get_tunai_by_ref($ref_id);
+		$cara_bayar_ke = 1;
+		$result = $this->m_public_function->get_tunai_by_ref($ref_id ,$cara_bayar_ke);
 		echo $result;
 	}
 	
