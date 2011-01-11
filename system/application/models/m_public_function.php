@@ -335,17 +335,104 @@ class M_public_function extends Model{
 			}
 	}
 		
-	function get_kwitansi_by_ref($ref_id){
-		$sql="SELECT jkwitansi_id
-				,kwitansi_no
-				,jkwitansi_nilai
-				,cust_nama
-				,kwitansi_sisa
-				,kwitansi_id
-			FROM jual_kwitansi
-			LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
-			LEFT JOIN customer ON(kwitansi_cust=cust_id)
-			WHERE jkwitansi_ref='".$ref_id."'";
+	function get_kwitansi_by_ref($ref_id ,$cara_bayar_ke){
+		$sql = "SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'
+					LIMIT 0,1";
+			}else{
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'
+					LIMIT 1,1";
+			}else{
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'
+					LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'
+					LIMIT 2,1";
+			}else{
+				$sql="SELECT jkwitansi_id
+						,kwitansi_no
+						,jkwitansi_nilai
+						,cust_nama
+						,kwitansi_sisa
+						,kwitansi_id
+					FROM jual_kwitansi
+					LEFT JOIN cetak_kwitansi ON(jkwitansi_master=kwitansi_id)
+					LEFT JOIN customer ON(kwitansi_cust=cust_id)
+					WHERE jkwitansi_ref='".$ref_id."'";
+			}
+		}
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -359,8 +446,37 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_card_by_ref($ref_id){
-		$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+	function get_card_by_ref($ref_id ,$cara_bayar_ke){
+		$sql = "SELECT jcard_id FROM jual_card WHERE jcard_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."' LIMIT 0,1";
+			}else{
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."' LIMIT 1,1";
+			}else{
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."' LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."' LIMIT 2,1";
+			}else{
+				$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
+			}
+		}
+		//$sql="SELECT jcard_id,jcard_no,jcard_nama,jcard_edc,jcard_nilai FROM jual_card where jcard_ref='".$ref_id."'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -374,8 +490,37 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_cek_by_ref($ref_id){
-		$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek where jcek_ref='".$ref_id."'";
+	function get_cek_by_ref($ref_id ,$cara_bayar_ke){
+		$sql="SELECT jcek_id FROM jual_cek WHERE jcek_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."' LIMIT 0,1";
+			}else{
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."' LIMIT 1,1";
+			}else{
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."' LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."' LIMIT 2,1";
+			}else{
+				$sql="SELECT jcek_id,jcek_nama,jcek_no,jcek_valid,jcek_bank,jcek_nilai FROM jual_cek WHERE jcek_ref='".$ref_id."'";
+			}
+		}
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -389,8 +534,37 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_transfer_by_ref($ref_id){
-		$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer where jtransfer_ref='".$ref_id."'";
+	function get_transfer_by_ref($ref_id ,$cara_bayar_ke){
+		$sql="SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."' LIMIT 0,1";
+			}else{
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."' LIMIT 1,1";
+			}else{
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."' LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."' LIMIT 2,1";
+			}else{
+				$sql="SELECT jtransfer_id,jtransfer_bank,jtransfer_nama,jtransfer_nilai FROM jual_transfer WHERE jtransfer_ref='".$ref_id."'";
+			}
+		}
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -404,8 +578,37 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_tunai_by_ref($ref_id){
-		$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+	function get_tunai_by_ref($ref_id ,$cara_bayar_ke){
+		$sql="SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."' LIMIT 0,1";
+			}else{
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."' LIMIT 1,1";
+			}else{
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."' LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."' LIMIT 2,1";
+			}else{
+				$sql="SELECT jtunai_id,jtunai_nilai FROM jual_tunai WHERE jtunai_ref='".$ref_id."'";
+			}
+		}
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -419,9 +622,37 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_voucher_by_ref($ref_id){
-		//$sql="SELECT tvoucher_id,tvoucher_novoucher,voucher_cashback FROM voucher_terima INNER JOIN voucher_kupon ON(tvoucher_novoucher=kvoucher_nomor) INNER JOIN voucher ON(kvoucher_master=voucher_id) WHERE tvoucher_ref='".$ref_id."'";
-		$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
+	function get_voucher_by_ref($ref_id ,$cara_bayar_ke){
+		$sql="SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
+		$rs = $this->db->query($sql);
+		$nbrows = $rs->num_rows();
+		
+		if($cara_bayar_ke==''){
+			$cara_bayar_ke = 1;
+		}
+		
+		if($cara_bayar_ke==1){
+			if($nbrows>1){
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."' LIMIT 0,1";
+			}else{
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==2){
+			if($nbrows>1){
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."' LIMIT 1,1";
+			}else{
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
+			}
+		}elseif($cara_bayar_ke==3){
+			if($nbrows==2){
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."' LIMIT 1,1";
+			}elseif($nbrows==3){
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."' LIMIT 2,1";
+			}else{
+				$sql="SELECT tvoucher_id,tvoucher_novoucher,tvoucher_nilai FROM voucher_terima WHERE tvoucher_ref='".$ref_id."'";
+			}
+		}
+		
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
