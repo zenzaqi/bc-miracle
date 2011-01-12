@@ -1317,7 +1317,7 @@ Ext.onReady(function(){
 				kwitansi_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 1
+						cara_bayar_ke: 1
 					},
 					callback: function(opts, success, response)  {
 						  if (success) {
@@ -1358,7 +1358,7 @@ Ext.onReady(function(){
 				cek_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 1
+						cara_bayar_ke: 1
 					},
 					callback: function(opts, success, response)  {
 							if (success) {
@@ -1379,7 +1379,7 @@ Ext.onReady(function(){
 				transfer_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 1
+							cara_bayar_ke: 1
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1398,7 +1398,7 @@ Ext.onReady(function(){
 				tunai_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 1
+							cara_bayar_ke: 1
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1415,7 +1415,7 @@ Ext.onReady(function(){
 				voucher_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 1
+							cara_bayar_ke: 1
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1436,7 +1436,7 @@ Ext.onReady(function(){
 				kwitansi_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 2
+						cara_bayar_ke: 2
 					},
 					callback: function(opts, success, response)  {
 						  if (success) {
@@ -1476,7 +1476,7 @@ Ext.onReady(function(){
 				cek_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 2
+						cara_bayar_ke: 2
 					},
 					callback: function(opts, success, response)  {
 							if (success) {
@@ -1497,7 +1497,7 @@ Ext.onReady(function(){
 				transfer_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 2
+							cara_bayar_ke: 2
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1517,7 +1517,7 @@ Ext.onReady(function(){
 				tunai_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 2
+							cara_bayar_ke: 2
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1534,7 +1534,7 @@ Ext.onReady(function(){
 				voucher_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 2
+							cara_bayar_ke: 2
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1555,7 +1555,7 @@ Ext.onReady(function(){
 				kwitansi_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 3
+						cara_bayar_ke: 3
 					},
 					callback: function(opts, success, response)  {
 						  if (success) {
@@ -1595,7 +1595,7 @@ Ext.onReady(function(){
 				cek_jual_produk_DataStore.load({
 					params : {
 						no_faktur: jproduk_nobuktiField.getValue(),
-						cara_bayar_ke = 3
+						cara_bayar_ke: 3
 					},
 					callback: function(opts, success, response)  {
 							if (success) {
@@ -1616,7 +1616,7 @@ Ext.onReady(function(){
 				transfer_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 3
+							cara_bayar_ke: 3
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1636,7 +1636,7 @@ Ext.onReady(function(){
 				tunai_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 3
+							cara_bayar_ke: 3
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
@@ -1653,7 +1653,7 @@ Ext.onReady(function(){
 				voucher_jual_produk_DataStore.load({
 						params : {
 							no_faktur: jproduk_nobuktiField.getValue(),
-							cara_bayar_ke = 3
+							cara_bayar_ke: 3
 						},
 					  	callback: function(opts, success, response)  {
 							if (success) {
