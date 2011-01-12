@@ -1,14 +1,14 @@
 <?php
 /* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: Penjualan Print
 	+ Description	: For Print View
 	+ Filename 		: p_rekap_jual.php
- 	+ Author  		: 
+ 	+ Author  		:
  	+ Created on 01/Feb/2010 14:30:05
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -24,7 +24,7 @@
 	<thead>
     	<tr>
         	<th scope='col'>No</th>
-            <th scope='col'>No SP</th>           
+            <th scope='col'>No SP</th>
             <th scope='col'>Tanggal</th>
             <th scope='col'>Supplier</th>
             <th scope='col'>Total Item</th>
@@ -41,7 +41,7 @@
     </thead>
 
 	<tbody>
-		<?php	$i=0; $tanggal=""; 
+		<?php	$i=0; $tanggal="";
 				$total_item=0;
 				$total_subtotal=0;
 				$total_cashback=0;
@@ -50,7 +50,7 @@
 				$total_uangmuka=0;
 				$total_bayar=0;
 				$total_nilai=0;
-				foreach($data_print as $print) { $i++; 
+				foreach($data_print as $print) { $i++;
 					$total_nilai=($print->total_nilai*(100-$print->order_diskon)/100)-$print->order_cashback+$print->order_biaya;
 					$total_bayar=$total_nilai-$print->order_bayar;
 				?>
@@ -70,7 +70,7 @@
             <td align="right"><?php echo ucfirst($print->order_carabayar); ?></td>
             <td align="right"><?php echo ucfirst($print->order_status); ?></td>
        </tr>
-		<?php 
+		<?php
 				$total_item+=$print->jumlah_barang;
 				$total_subtotal+=$print->total_nilai;
 				$total_cashback+=$print->order_cashback;
@@ -78,7 +78,7 @@
 				$total_totalnilai+=$total_nilai;
 				$total_uangmuka+=$print->order_bayar;
 				$total_bayar+=$total_bayar;
-				
+
 				} ?>
 	</tbody>
 	<tfoot>
