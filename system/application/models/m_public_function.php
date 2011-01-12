@@ -876,11 +876,13 @@ class M_public_function extends Model{
 	
 	function get_nomor_member($table,$field,$pattern,$length){
 		$date=date('y');
-		$len_pattern=strlen($pattern);
-		$len_lpad=$length-$len_pattern;
+		$len_pattern=strlen($pattern); // = 12
+		$len_lpad=$length-$len_pattern; // = 4
 		//$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
 		//$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE SUBSTRING(".$field.",1,6) LIKE '%".$date."'"; //ini yang benar
-		$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE SUBSTRING(".$field.",1,6) LIKE '%10'"; //sementara, supaya no_member bisa urut terus
+		$sql=  "SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key 
+				FROM ".$table." 
+				WHERE SUBSTRING(".$field.",1,6) LIKE '%10' or SUBSTRING(member_no,1,6) LIKE '%11'"; //sementara, supaya no_member bisa urut terus
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
