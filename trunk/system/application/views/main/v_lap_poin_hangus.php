@@ -459,7 +459,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	lap_poin_hangusListEditorGrid.addListener('rowcontextmenu', onlap_poin_hangus_ListEditGridContextMenu);
-	//lap_poin_hangus_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
+	lap_poin_hangus_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
 	
 	/* Function for action list search */
 	function lap_poin_hangus_list_search(){
@@ -474,7 +474,7 @@ Ext.onReady(function(){
 		var lap_poin_hangus_cashback_search=null;
 		var lap_poin_hangus_cust_search=null;
 		
-		if(lap_poin_hangus_nmcustSearchField.getValue()!==null){lap_poin_hangus_nmcust_search=lap_poin_hangus_nmcustSearchField.getValue();}
+		//if(lap_poin_hangus_nmcustSearchField.getValue()!==null){lap_poin_hangus_nmcust_search=lap_poin_hangus_nmcustSearchField.getValue();}
 		if(lap_poin_hangus_namaSearchField.getValue()!==null){lap_poin_hangus_nama_search=lap_poin_hangus_namaSearchField.getValue();}
 		if(lap_poin_hangus_transaksi_custField.getValue()!==null){lap_poin_hangus_transaksi_search=lap_poin_hangus_transaksi_custField.getValue();}
 		if(lap_poin_hangus_pointSearchField.getValue()!==null){lap_poin_hangus_point_search=lap_poin_hangus_pointSearchField.getValue();}
@@ -485,9 +485,9 @@ Ext.onReady(function(){
 		lap_poin_hangus_DataStore.baseParams = {
 			task: 'SEARCH',
 			//lap_poin_hangus_nama	:	lap_poin_hangus_nama_search,
-			//lap_poin_hangus_member_no:	lap_poin_hangus_transaksi_search,
+			lap_poin_hangus_nmcust:	lap_poin_hangus_transaksi_search,
 			//lap_poin_hangus_cust	:	lap_poin_hangus_cust_search, 
-			lap_poin_hangus_nmcust		:	lap_poin_hangus_nmcust_search, 
+			//lap_poin_hangus_nmcust		:	lap_poin_hangus_nmcust_search, 
 			//lap_poin_hangus_point	:	lap_poin_hangus_point_search, 
 			lap_poin_hangus_tanggal_start : lap_poin_hangus_tanggal_start_search_date,
 			lap_poin_hangus_tanggal_end   : lap_poin_hangus_tanggal_end_search_date
@@ -510,14 +510,15 @@ Ext.onReady(function(){
 		lap_poin_hangus_namaSearchField.reset();
 		lap_poin_hangus_transaksi_custField.reset();
 		lap_poin_hangus_transaksi_custField.setValue(null);
-		lap_poin_hangus_nmcustSearchField.reset();
+		//lap_poin_hangus_nmcustSearchField.reset();
 		lap_poin_hangus_pointSearchField.reset();
 		lap_poin_hangus_kadaluarsaSearchField.reset();
 		lap_poin_hangus_cashbackSearchField.reset();
 	}
 
 	
-	lap_poin_hangus_nmcustSearchField= new Ext.form.TextField({
+	
+	/*lap_poin_hangus_nmcustSearchField= new Ext.form.TextField({
 		id: 'lap_poin_hangus_nmcustSearchField',
 		fieldLabel: 'Nama Customer',
 		maxLength: 50,
@@ -525,7 +526,7 @@ Ext.onReady(function(){
 	
 	});
 		
-	/*lap_poin_hangus_custSearchField= new Ext.form.TextField({
+	lap_poin_hangus_custSearchField= new Ext.form.TextField({
 		id: 'lap_poin_hangus_custSearchField',
 		fieldLabel: 'No Member',
 		maxLength: 50,
@@ -564,7 +565,7 @@ Ext.onReady(function(){
 		store: cbo_lap_poin_hangus_transaksi_customerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
-		valueField: 'member_no',
+		valueField: 'cust_nama',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
@@ -578,8 +579,6 @@ Ext.onReady(function(){
 		disabled:false,
 		anchor: '90%'
 	});
-	
-	
 	
 	/* Identify  lap_poin_hangus_point Search Field */
 	lap_poin_hangus_pointSearchField= new Ext.form.NumberField({
@@ -636,14 +635,15 @@ Ext.onReady(function(){
 		items:[lap_poin_hangus_tanggal_startSearchField, lap_poin_hangus_label_tanggalField, lap_poin_hangus_tanggal_endSearchField]
 	});
 	
-	   
+
+	
 	/* Function for retrieve search Form Panel */
 	lap_poin_hangus_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
 		width: 400,        
-		items: [lap_poin_hangus_nmcustSearchField, lap_poin_hangus_tanggal_opsiSearchField],
+		items: [lap_poin_hangus_transaksi_custField, lap_poin_hangus_tanggal_opsiSearchField],
 		buttons: [{
 				text: 'Search',
 				handler: lap_poin_hangus_list_search

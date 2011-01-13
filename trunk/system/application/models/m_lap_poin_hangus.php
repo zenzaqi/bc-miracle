@@ -51,10 +51,10 @@ class M_lap_poin_hangus extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " ( cust_nama LIKE '%".addslashes($filter)."%' )";
 			}
-			else //default hari ini
-			{
-				$query .= " WHERE (date_format(log_date_create, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d'))";
-			}
+			//else //default hari ini
+			//{
+				//$query .= " WHERE (date_format(log_date_create, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d'))";
+			//}
 			
 			$query .= " order by l.log_date_create desc ";
 			
