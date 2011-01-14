@@ -156,7 +156,8 @@ Ext.onReady(function(){
 			{name: 'jum_cust_surgery', type: 'int', mapping: 'sum(jum_cust_surgery)'},
 			{name: 'jum_cust_antiaging', type: 'int', mapping: 'sum(jum_cust_antiaging)'},
 			{name: 'jum_cust_nonmedis', type: 'int', mapping: 'sum(jum_cust_nonmedis)'},
-			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'}
+			{name: 'jum_cust_produk', type: 'int', mapping: 'sum(jum_cust_produk)'},
+			{name: 'jum_cust_kelamin', type: 'int', mapping: 'sum(jum_cust_kelamin)'}
 		])
 		//sortInfo:{field: 'tgl_tindakan', direction: "DESC"}
 	});
@@ -542,9 +543,17 @@ Ext.onReady(function(){
 		var lap_kunjungan_id_search=null;
 		var lap_kunjungan_tgl_start_search=null;
 		var lap_kunjungan_tgl_end_search=null;
+		var lap_kunjungan_kelamin_search=null;
+		var lap_kunjungan_member_search=null;
+		var lap_kunjungan_cust_search=null;
 		//var report_tindakan_dokter_search=null;
 
+		
+		
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_search=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_search=lap_kunjungan_custSearchField.getValue();}
 		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_search=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_search=lap_kunjungan_kelaminSearchField.getValue();}
 		if(Ext.getCmp('lap_kunjungan_tglStartSearchField').getValue()!==null){lap_kunjungan_tgl_start_search=Ext.getCmp('lap_kunjungan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue()!==null){lap_kunjungan_tgl_end_search=Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue();}
 		//if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
@@ -554,7 +563,10 @@ Ext.onReady(function(){
 			//variable here
 			lap_kunjungan_id	:	lap_kunjungan_id_search, 
 			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_search,
-			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_search,
+			lap_kunjungan_member : lap_kunjungan_member_search,
+			lap_kunjungan_cust : lap_kunjungan_cust_search
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
 		lap_totalkunjungan_DataStore.baseParams = {
@@ -562,7 +574,10 @@ Ext.onReady(function(){
 			//variable here
 			lap_kunjungan_id	:	lap_kunjungan_id_search, 
 			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_search,
-			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_search,
+			lap_kunjungan_member : lap_kunjungan_member_search,
+			lap_kunjungan_cust : lap_kunjungan_cust_search
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
 		lap_average_kunjungan_DataStore.baseParams = {
@@ -570,7 +585,10 @@ Ext.onReady(function(){
 			//variable here
 			lap_kunjungan_id	:	lap_kunjungan_id_search, 
 			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_search,
-			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_search,
+			lap_kunjungan_member : lap_kunjungan_member_search,
+			lap_kunjungan_cust : lap_kunjungan_cust_search
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
 		
@@ -605,6 +623,53 @@ Ext.onReady(function(){
 
 	var dt = new Date(); 
 	
+	/* Identify  lap_kunjungan_kelamin Field */
+	lap_kunjungan_kelaminSearchField= new Ext.form.ComboBox({
+		id: 'lap_kunjungan_kelaminSearchField',
+		fieldLabel: 'Jenis Kelamin',
+		store:new Ext.data.SimpleStore({
+			fields:['lap_kunjungan_kelamin_value', 'lap_kunjungan_kelamin_display'],
+			data:[['L','Laki-laki'],['P','Perempuan'],['S','Semua']]
+		}),
+		mode: 'local',
+		displayField: 'lap_kunjungan_kelamin_display',
+		valueField: 'lap_kunjungan_kelamin_value',
+		anchor: '100%',
+		triggerAction: 'all'	
+	});
+	
+	/* Identify  lap_kunjungan_member Field */
+	lap_kunjungan_memberSearchField= new Ext.form.ComboBox({
+		id: 'lap_kunjungan_memberSearchField',
+		fieldLabel: 'Member',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['lap_kunjungan_member_value', 'lap_kunjungan_member_display'],
+			data: [['Lama','Lama'],['Baru','Baru'],['Non Member','Non Member'],['Semua','Semua']]
+		}),
+		mode: 'local',
+		displayField: 'lap_kunjungan_member_display',
+		valueField: 'lap_kunjungan_member_value',
+		anchor: '100%',
+		triggerAction: 'all'
+	});
+	
+	/* Identify  lap_kunjungan_cust Field */
+	lap_kunjungan_custSearchField= new Ext.form.ComboBox({
+		id: 'lap_kunjungan_custSearchField',
+		fieldLabel: 'Customer',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['lap_kunjungan_cust_value', 'lap_kunjungan_cust_display'],
+			data: [['Lama','Lama'],['Baru','Baru'],['Semua','Semua']]
+		}),
+		mode: 'local',
+		displayField: 'lap_kunjungan_cust_display',
+		valueField: 'lap_kunjungan_cust_value',
+		anchor: '100%',
+		triggerAction: 'all'
+	});
+	
 	/* Function for retrieve search Form Panel */
 	lap_kunjungan_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -638,7 +703,7 @@ Ext.onReady(function(){
 									allowBlank: false,
 									format: 'd-m-Y',
 							        endDateField: 'lap_kunjungan_tglEndSearchField' // id of the end date field Ext.getCmp('lap_kunjungan_tglStartSearchField').isValid()
-							    }] 
+							    },lap_kunjungan_kelaminSearchField,lap_kunjungan_memberSearchField,lap_kunjungan_custSearchField] 
 						},
 						{
 							columnWidth:0.30,
@@ -677,6 +742,9 @@ Ext.onReady(function(){
     
 	function lap_kunjungan_reset_formSearch(){
 		lap_kunjungan_idSearchField.reset();
+		lap_kunjungan_kelaminSearchField.reset();
+		lap_kunjungan_memberSearchField.reset();
+		lap_kunjungan_custSearchField.reset();
 		lap_kunjungan_idSearchField.setValue(null);
 		Ext.getCmp('lap_kunjungan_tglStartSearchField').reset();
 		Ext.getCmp('lap_kunjungan_tglStartSearchField').setValue(null);
