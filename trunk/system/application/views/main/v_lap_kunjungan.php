@@ -218,6 +218,31 @@ Ext.onReady(function(){
 	/* End of Function */
 	
 
+	lap_kunjungan_customertextField=new Ext.form.TextField({
+		id: 'lap_kunjungan_customertextField',
+		name: 'lap_kunjungan_customertextField',
+		fieldLabel: '<b>Customer</b>',
+		width: 70,
+		readOnly: true
+	});
+	
+	lap_kunjungan_membertextField=new Ext.form.TextField({
+		id: 'lap_kunjungan_membertextField',
+		name: 'lap_kunjungan_membertextField',
+		fieldLabel: '<b>Member</b>',
+		width: 70,
+		readOnly: true
+	});
+	
+	lap_kunjungan_kelamintextField=new Ext.form.TextField({
+		id: 'lap_kunjungan_kelamintextField',
+		name: 'lap_kunjungan_kelamintextField',
+		fieldLabel: '<b>Kelamin</b>',
+		width: 50,
+		readOnly: true
+	});
+	
+	
   	/* Function for Identify of Window Column Model */
 	lap_kunjunganColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -440,7 +465,20 @@ Ext.onReady(function(){
 			iconCls:'icon-print',
 			disabled : true,
 			handler: lap_kunjungan_print  
-		}
+		},
+		{
+			'text':'Customer : '
+		},
+		lap_kunjungan_customertextField,
+		{
+			'text':'Member : '
+		},
+		lap_kunjungan_membertextField,
+		{
+			'text':'Kelamin : '
+		},
+		lap_kunjungan_kelamintextField
+		
 		]
 	});
 	lap_kunjunganListEditorGrid.render();
@@ -558,6 +596,13 @@ Ext.onReady(function(){
 		if(Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue()!==null){lap_kunjungan_tgl_end_search=Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue();}
 		//if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
 		// change the store parameters
+		
+		lap_kunjungan_customertextField.setValue(lap_kunjungan_custSearchField.getValue());
+		lap_kunjungan_membertextField.setValue(lap_kunjungan_memberSearchField.getValue());
+		lap_kunjungan_kelamintextField.setValue(lap_kunjungan_kelaminSearchField.getValue());
+		
+		
+		
 		lap_kunjunganDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
@@ -629,7 +674,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Jenis Kelamin',
 		store:new Ext.data.SimpleStore({
 			fields:['lap_kunjungan_kelamin_value', 'lap_kunjungan_kelamin_display'],
-			data:[['L','Laki-laki'],['P','Perempuan'],['S','Semua']]
+			data:[['L','Laki-laki'],['P','Perempuan'],['Semua','Semua']]
 		}),
 		mode: 'local',
 		displayField: 'lap_kunjungan_kelamin_display',
