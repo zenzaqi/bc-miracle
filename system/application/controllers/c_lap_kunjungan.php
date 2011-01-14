@@ -111,12 +111,21 @@ class C_lap_kunjungan extends Controller {
 			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
 		else
 			$trawat_tglapp_end="";
-
+			
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
 		//$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan->lap_kunjungan_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end);
+		$result = $this->m_lap_kunjungan->lap_kunjungan_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end);
 		echo $result;
 	}
 
@@ -132,11 +141,20 @@ class C_lap_kunjungan extends Controller {
 		else
 			$trawat_tglapp_end="";
 
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan->lap_kunjungan_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_lap_kunjungan->lap_kunjungan_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end);
 		echo $result;
 	}
 	
@@ -152,11 +170,20 @@ class C_lap_kunjungan extends Controller {
 		else
 			$trawat_tglapp_end="";
 
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan->lap_kunjungan_search3($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_lap_kunjungan->lap_kunjungan_search3($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end);
 		echo $result;
 	}
 	
