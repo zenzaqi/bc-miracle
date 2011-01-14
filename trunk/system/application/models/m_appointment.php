@@ -1074,7 +1074,7 @@ class M_appointment extends Model{
 	}
 	
 	//function for get list record
-	function appointment_list($filter,$start,$end,$tgl_app,$jenis_rawat){
+	function appointment_list($filter,$start,$end,$tgl_app,$jenis_rawat,$dokter_id){
 		if($jenis_rawat=="")
 			$jenis_rawat="Medis";
 		//$query = "SELECT * FROM appointment";
@@ -1092,12 +1092,12 @@ class M_appointment extends Model{
 				$query .=" AND dapp_tglreservasi >= '$dt'";
 			}
 			// For simple search
-			if ($filter<>"" && is_numeric($filter)==false){
+			/*if ($filter<>"" && is_numeric($filter)==false){
 				$query="SELECT * FROM vu_appointment ";
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
-			}
+			}*/
 		}elseif($jenis_rawat=="Non Medis" && $filter==''){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .=" kategori_nama='Non Medis'";
@@ -1108,16 +1108,16 @@ class M_appointment extends Model{
 				$query .=" AND dapp_tglreservasi >= '$dt'";
 			}
 			// For simple search
-			if ($filter<>"" && is_numeric($filter)==false){
+			/*if ($filter<>"" && is_numeric($filter)==false){
 				$query="SELECT * FROM vu_appointment ";
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//search customer,perawatan,dokter,therapist
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
-			}
+			}*/
 		}
 		
 		// For Pilihan Dokter pada tbar
-		if ($filter<>"" && is_numeric($filter)==true){
+		if ($dokter_id<>"" && is_numeric($dokter_id)==true){
 			if($tgl_app!=""){
 				$dt=date('Y-m-d', strtotime($tgl_app));
 				$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi = '$dt'";
@@ -1126,11 +1126,11 @@ class M_appointment extends Model{
 			}
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			//search customer,perawatan,dokter,therapist
-			$query .= " (dokter_id = '".addslashes($filter)."') AND (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
+			$query .= " (dokter_id = '".addslashes($dokter_id)."') AND (kategori_nama='Medis' OR kategori_nama = 'Surgery' OR kategori_nama = 'Anti Aging')";
 		}
 		
 		// For Pilihan Tanggal Appointment di tbar dengan pilihan dokter kosong
-		if($filter=="" && is_numeric($filter)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
+		if($dokter_id=="" && is_numeric($dokter_id)==false && $tgl_app!="" && $jenis_rawat=="Medis"){
 			$dt=date('Y-m-d', strtotime($tgl_app));
 			$query="SELECT * FROM vu_appointment WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama = 'Anti Aging') AND dapp_tglreservasi = '$dt'";
 		}
@@ -1138,11 +1138,11 @@ class M_appointment extends Model{
 		/*  For simple search
 		 *  Simple Search ==> untuk mencari data di hari ini saja
 		*/
-		if($filter<>'' && is_numeric($filter)==false){
+		if($filter<>''){
 			$query="SELECT * FROM vu_appointment WHERE dapp_tglreservasi >= '".$dt."'";
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			//search customer,perawatan,dokter,therapist
-			$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
+			$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' )";
 		}
 		
 		$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";

@@ -231,7 +231,8 @@ class C_appointment extends Controller {
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_appointment->appointment_list($query,$start,$end,$tgl_app,$jenis_rawat);
+		$dokter_id = isset($_POST['dokter_id']) ? $_POST['dokter_id'] : "";
+		$result=$this->m_appointment->appointment_list($query,$start,$end,$tgl_app,$jenis_rawat,$dokter_id);
 		echo $result;
 	}
 
