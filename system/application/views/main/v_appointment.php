@@ -1436,7 +1436,8 @@ Ext.onReady(function(){
 			task: 'LIST',
 			start: 0,
 			limit: pageS,
-			query: Ext.getCmp('cbo_dokter').getValue(),
+			query: '',
+			dokter_id: Ext.getCmp('cbo_dokter').getValue(),
 			tgl_app: tbar_dokter_tglField.getValue()
 		}});
 	});
