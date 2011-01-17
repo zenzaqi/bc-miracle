@@ -1333,9 +1333,9 @@ class M_master_jual_rawat extends Model{
 				 * ==> JIKA sama, maka update status_dokumen dari db.master_jual_rawat terlebih dahulu untuk mengunci Faktur ini agar Tidak Ada detail dari Tindakan yang bisa masuk.
 				 * ==> JIKA tidak sama, maka langsung dilanjutkan ke proses selanjutnya
 				*/
-				if($cetak==1){
+				/*if($cetak==1){
 					/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
-					if($jrawat_tanggal<>$date_now){
+					/*if($jrawat_tanggal<>$date_now){
 						$jrawat_date_update = $jrawat_tanggal;
 					}else{
 						$jrawat_date_update = $datetime_now;
@@ -1349,7 +1349,7 @@ class M_master_jual_rawat extends Model{
 					$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 					$this->db->query($sqlu);
 					$this->db->query('UNLOCK TABLES');
-				}
+				}*/
 				
 				$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
 				$rs=$this->db->query($sql);
@@ -1371,6 +1371,18 @@ class M_master_jual_rawat extends Model{
 					"jrawat_date_update"=>$datetime_now,
 					"jrawat_revised"=>$jrawat_revised+1
 				);
+				
+				if($cetak==1){
+					/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
+					if($jrawat_tanggal<>$date_now){
+						$jrawat_date_update = $jrawat_tanggal;
+					}else{
+						$jrawat_date_update = $datetime_now;
+					}
+					
+					$data["jrawat_stat_dok"] = 'Tertutup';
+				}
+				
 				if($jrawat_tanggal<>$date_now){
 					$data["jrawat_date_update"] = $jrawat_tanggal;
 					$bayar_date_create = $jrawat_tanggal;
@@ -1597,7 +1609,33 @@ class M_master_jual_rawat extends Model{
 					}
 					
 					if($cetak==1){
-						return $jrawat_id;
+						//LOCKED db.tindakan_detail
+						$sql="SELECT drawat_dtrawat
+							FROM detail_jual_rawat
+							WHERE drawat_master='".$jrawat_id."'
+								AND drawat_dtrawat > 0";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							$sql="UPDATE tindakan_detail SET dtrawat_locked=1 ";
+							foreach($rs->result() as $row_drawat){
+								$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+								$sql.="dtrawat_id='".$row_drawat->drawat_dtrawat."' ";
+							}
+							$this->db->query($sql);
+						}
+						
+						$result_point = $this->member_point_update($jrawat_id);
+						if($result_point==1){
+							$result_membership = $this->membership_insert($jrawat_id);
+							if($result_membership==1){
+								$result_piutang = $this->catatan_piutang_update($jrawat_id);
+								if($result_piutang==1){
+									return $jrawat_id;
+								}
+							}
+						}
+						
+						//return $jrawat_id;
 					}else{
 						return '0';
 					}
