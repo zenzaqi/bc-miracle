@@ -294,7 +294,7 @@ Ext.onReady(function(){
 		if(karyawan_notelp2Field.getValue()!== null){karyawan_notelp2_create = karyawan_notelp2Field.getValue();}
 		if(karyawan_notelp3Field.getValue()!== null){karyawan_notelp3_create = karyawan_notelp3Field.getValue();}
 		if(karyawan_notelp4Field.getValue()!== null){karyawan_notelp4_create = karyawan_notelp4Field.getValue();}
-		if(karyawan_cabangField.getValue()!== null){karyawan_cabang_create = karyawan_cabangField.getValue();}
+		//if(karyawan_cabangField.getValue()!== null){karyawan_cabang_create = karyawan_cabangField.getValue();}
 		if(karyawan_jabatanField.getValue()!== null){karyawan_jabatan_create = karyawan_jabatanField.getValue();}
 		if(karyawan_departemenField.getValue()!== null){karyawan_departemen_create = karyawan_departemenField.getValue();}
 		if(karyawan_golonganField.getValue()!== null){karyawan_golongan_create = karyawan_golonganField.getValue();}
@@ -338,7 +338,25 @@ Ext.onReady(function(){
 					karyawan_tglmasuk	: karyawan_tglmasuk_create_date,	
 					karyawan_tgl_batas	: karyawan_tglbatas_create_date,					
 					karyawan_atasan	: karyawan_atasan_create,	
-					karyawan_aktif	: karyawan_aktif_create,	
+					karyawan_aktif	: karyawan_aktif_create,
+					karyawan_cab_th : karyawan_cab_thField.getValue(),
+					karyawan_cab_ki : karyawan_cab_kiField.getValue(),
+					karyawan_cab_hr : karyawan_cab_hrField.getValue(),
+					karyawan_cab_tp : karyawan_cab_tpField.getValue(),
+					karyawan_cab_dps : karyawan_cab_dpsField.getValue(),
+					karyawan_cab_jkt : karyawan_cab_jktField.getValue(),
+					karyawan_cab_blpn : karyawan_cab_blpnField.getValue(),
+					karyawan_cab_kuta : karyawan_cab_kutaField.getValue(),
+					karyawan_cab_btm : karyawan_cab_btmField.getValue(),
+					karyawan_cab_mks : karyawan_cab_mksField.getValue(),
+					karyawan_cab_mdn : karyawan_cab_mdnField.getValue(),
+					karyawan_cab_lbk : karyawan_cab_lbkField.getValue(),
+					karyawan_cab_mnd : karyawan_cab_mndField.getValue(),
+					karyawan_cab_ygk : karyawan_cab_ygkField.getValue(),
+					karyawan_cab_mlg : karyawan_cab_mlgField.getValue(),
+					karyawan_cab_corp : karyawan_cab_corpField.getValue(),
+					karyawan_cab_maa : karyawan_cab_maaField.getValue(),
+					karyawan_cab_mg : karyawan_cab_mgField.getValue()					
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -440,8 +458,8 @@ Ext.onReady(function(){
 		karyawan_notelp3Field.setValue(null);
 		karyawan_notelp4Field.reset();
 		karyawan_notelp4Field.setValue(null);
-		karyawan_cabangField.reset();
-		karyawan_cabangField.setValue(null);
+	//	karyawan_cabangField.reset();
+		//karyawan_cabangField.setValue(null);
 		karyawan_jabatanField.reset();
 		karyawan_jabatanField.setValue(null);
 		karyawan_departemenField.reset();
@@ -457,6 +475,42 @@ Ext.onReady(function(){
 		karyawan_aktifField.reset();
 		karyawan_aktifField.setValue('Aktif');
 		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: -1}});
+		karyawan_cab_thField.reset();
+		//karyawan_cab_thField.setValue(true);
+		karyawan_cab_kiField.reset();
+		//karyawan_cab_kiField.setValue(true);
+		karyawan_cab_hrField.reset();
+		//karyawan_cab_hrField.setValue(true);
+		karyawan_cab_tpField.reset();
+		//karyawan_cab_tpField.setValue(true);
+		karyawan_cab_dpsField.reset();
+		//karyawan_cab_dpsField.setValue(true);
+		karyawan_cab_jktField.reset();
+		//karyawan_cab_jktField.setValue(true);
+		karyawan_cab_blpnField.reset();
+		//karyawan_cab_blpnField.setValue(true);
+		karyawan_cab_kutaField.reset();
+		//karyawan_cab_kutaField.setValue(true);
+		karyawan_cab_btmField.reset();
+		//karyawan_cab_btmField.setValue(true);
+		karyawan_cab_mksField.reset();
+		//karyawan_cab_mksField.setValue(true);
+		karyawan_cab_mdnField.reset();
+		//karyawan_cab_mdnField.setValue(true);
+		karyawan_cab_lbkField.reset();
+		//karyawan_cab_lbkField.setValue(true);
+		karyawan_cab_mndField.reset();
+		//karyawan_cab_mndField.setValue(true);
+		karyawan_cab_ygkField.reset();
+		//karyawan_cab_ygkField.setValue(true);	
+		karyawan_cab_mlgField.reset();
+		//karyawan_cab_mlgField.setValue(true);
+		karyawan_cab_corpField.reset();
+		//karyawan_cab_corpField.setValue(true);
+		karyawan_cab_maaField.reset();
+		//karyawan_cab_maaField.setValue(true);
+		karyawan_cab_mgField.reset();
+		//karyawan_cab_mgField.setValue(true);	
 		
 	}
  	/* End of Function */
@@ -483,7 +537,7 @@ Ext.onReady(function(){
 		karyawan_notelp2Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp2'));
 		karyawan_notelp3Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp3'));
 		karyawan_notelp4Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp4'));
-		karyawan_cabangField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang'));
+		//karyawan_cabangField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang'));
 		karyawan_jabatanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jabatan'));
 		karyawan_departemenField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_departemen'));
 		karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_idgolongan'));
@@ -493,6 +547,96 @@ Ext.onReady(function(){
 		karyawan_aktifField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_aktif'));
 		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: get_pk_id()}});
 		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(0)=="1")	
+			karyawan_cab_thField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(0)=="0")
+			karyawan_cab_thField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(1)=="1")	
+			karyawan_cab_kiField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(1)=="0")
+			karyawan_cab_kiField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(2)=="1")	
+			karyawan_cab_hrField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(2)=="0")
+			karyawan_cab_hrField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(3)=="1")
+			karyawan_cab_tpField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(3)=="0")
+			karyawan_cab_tpField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(4)=="1")	
+			karyawan_cab_dpsField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(4)=="0")
+			karyawan_cab_dpsField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(5)=="1")	
+			karyawan_cab_jktField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(5)=="0")
+			karyawan_cab_jktField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(6)=="1")	
+			karyawan_cab_blpnField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(6)=="0")
+			karyawan_cab_blpnField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(7)=="1")	
+			karyawan_cab_kutaField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(7)=="0")
+			karyawan_cab_kutaField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(8)=="1")	
+			karyawan_cab_btmField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(8)=="0")
+			karyawan_cab_btmField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(9)=="1")	
+			karyawan_cab_mksField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(9)=="0")
+			karyawan_cab_mksField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(10)=="1")	
+			karyawan_cab_mdnField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(10)=="0")
+			karyawan_cab_mdnField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(11)=="1")	
+			karyawan_cab_lbkField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(11)=="0")
+			karyawan_cab_lbkField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(12)=="1")
+			karyawan_cab_mndField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(12)=="0")
+			karyawan_cab_mndField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(13)=="1")	
+			karyawan_cab_ygkField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(13)=="0")
+			karyawan_cab_ygkField.setValue(false);
+			
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(14)=="1")	
+			karyawan_cab_mlgField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(14)=="0")
+			karyawan_cab_mlgField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(15)=="1")	
+			karyawan_cab_corpField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(15)=="0")
+			karyawan_cab_corpField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(16)=="1")
+			karyawan_cab_maaField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(16)=="0")
+			karyawan_cab_maaField.setValue(false);
+		
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(17)=="1")	
+			karyawan_cab_mgField.setValue(true);	
+		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(17)=="0")
+			karyawan_cab_mgField.setValue(false);
+	
 	}
 	/* End setValue to EDIT*/
   
@@ -500,7 +644,7 @@ Ext.onReady(function(){
 	function is_karyawan_form_valid(){
 		return ( karyawan_namaField.isValid() && 
 				karyawan_usernameField.isValid() &&  
-				karyawan_cabangField.isValid() &&
+				//karyawan_cabangField.isValid() &&
 				karyawan_jabatanField.isValid() && 
 				karyawan_departemenField.isValid() && 
 				karyawan_kelaminField.isValid() && 
@@ -653,7 +797,7 @@ Ext.onReady(function(){
 			{name: 'karyawan_notelp2', type: 'string', mapping: 'karyawan_notelp2'},
 			{name: 'karyawan_notelp3', type: 'string', mapping: 'karyawan_notelp3'},
 			{name: 'karyawan_notelp4', type: 'string', mapping: 'karyawan_notelp4'},
-			{name: 'karyawan_cabang', type: 'string', mapping: 'cabang_nama'},
+			//{name: 'karyawan_cabang', type: 'string', mapping: 'cabang_nama'},
 			{name: 'karyawan_jabatan', type: 'string', mapping: 'jabatan_nama'},
 			{name: 'karyawan_departemen', type: 'string', mapping: 'departemen_nama'},
 			{name: 'karyawan_idgolongan', type: 'string', mapping: 'nama_golongan'},
@@ -668,7 +812,8 @@ Ext.onReady(function(){
 			{name: 'karyawan_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'karyawan_date_create'},
 			{name: 'karyawan_update', type: 'string', mapping: 'karyawan_update'},
 			{name: 'karyawan_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'karyawan_date_update'},
-			{name: 'karyawan_revised', type: 'int', mapping: 'karyawan_revised'}
+			{name: 'karyawan_revised', type: 'int', mapping: 'karyawan_revised'},
+			{name: 'karyawan_cabang2', type: 'string', mapping: 'karyawan_cabang2'}
 		]),
 		sortInfo:{field: 'karyawan_id', direction: "ASC"}
 	});
@@ -718,7 +863,7 @@ Ext.onReady(function(){
 			totalProperty: 'total'
 		},[
 			{name: 'karyawan_cabang_display', type: 'string', mapping: 'cabang_nama'},
-			{name: 'karyawan_cabang_value', type: 'int', mapping: 'cabang_id'}
+			{name: 'karyawan_cabang_value', type: 'int', mapping: 'cabang_value'}
 		]),
 		sortInfo:{field: 'karyawan_cabang_value', direction: "ASC"}
 	});
@@ -1050,8 +1195,8 @@ Ext.onReady(function(){
 			<?php } ?>
 			
 		},
-		{
-			/*index=17*/
+		/*{
+			index=17
 			header: 'Cabang',
 			dataIndex: 'karyawan_cabang',
 			width: 100,
@@ -1070,7 +1215,7 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 			<?php } ?>
-		},
+		},*/
 		{
 			/*index=18*/
 			header: 'Jabatan',
@@ -1416,7 +1561,7 @@ Ext.onReady(function(){
 	
 	//cbo_karyawan_golongan_DataStore.load();
 	//cbo_karyawan_jabatan_DataStore.load();
-	//cbo_karyawan_cabang_DataStore.load();
+	cbo_karyawan_cabang_DataStore.load();
 	//cbo_karyawan_departemen_DataStore.load();
 	//cbo_karyawan_atasan_DataStore.load();
 	
@@ -1594,7 +1739,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	/* Identify  karyawan_cabang Field */
-	karyawan_cabangField= new Ext.form.ComboBox({
+	/*karyawan_cabangField= new Ext.form.ComboBox({
 		id: 'karyawan_cabangField ',
 		fieldLabel: 'Cabang <span style="color: #ec0000">*</span>',
 		store:cbo_karyawan_cabang_DataStore,
@@ -1605,7 +1750,7 @@ Ext.onReady(function(){
 		valueField: 'karyawan_cabang_value',
 		anchor: '95%',
 		triggerAction: 'all'
-	});
+	});*/
 	/* Identify  karyawan_jabatan Field */
 	karyawan_jabatanField= new Ext.form.ComboBox({
 		id: 'karyawan_jabatanField',
@@ -1680,6 +1825,161 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'
 	});
+	
+		/* Identify Paket Aktif*/
+	karyawan_cab_thField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_thField',
+		boxLabel: 'Thamrin',
+		maxLength: 250,
+		name: 'karyawan_cab_th'
+	});
+	
+	karyawan_cab_kiField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_kiField',
+		boxLabel: 'Kertajaya_Indah',
+		maxLength: 250,
+		name: 'karyawan_cab_ki'
+	});
+	
+	karyawan_cab_hrField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_hrField',
+		boxLabel: 'HR_Muhammad',
+		maxLength: 250,
+		name: 'karyawan_cab_hr'
+	});
+	
+	karyawan_cab_tpField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_tpField',
+		boxLabel: 'TP',
+		maxLength: 250,
+		name: 'karyawan_cab_tp'
+	});
+	
+	karyawan_cab_dpsField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_dpsField',
+		boxLabel: 'Denpasar',
+		maxLength: 250,
+		name: 'karyawan_cab_dps'
+	});
+	
+	karyawan_cab_jktField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_jktField',
+		boxLabel: 'Jakarta',
+		maxLength: 250,
+		name: 'karyawan_cab_jkt'
+	});
+	
+	karyawan_cab_blpnField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_blpnField',
+		boxLabel: 'Balikpapan',
+		maxLength: 250,
+		name: 'karyawan_cab_blpn'
+	});
+	
+	karyawan_cab_kutaField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_kutaField',
+		boxLabel: 'Kuta',
+		maxLength: 250,
+		name: 'karyawan_cab_kuta'
+	});
+	
+	karyawan_cab_btmField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_btmField',
+		boxLabel: 'Batam',
+		maxLength: 250,
+		name: 'karyawan_cab_btm'
+	});
+	
+	karyawan_cab_mksField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_mksField',
+		boxLabel: 'Makasar',
+		maxLength: 250,
+		name: 'karyawan_cab_mks'
+	});
+	
+	karyawan_cab_mdnField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_mdnField',
+		boxLabel: 'Medan',
+		maxLength: 250,
+		name: 'karyawan_cab_mdn'
+	});
+	
+	karyawan_cab_lbkField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_lbkField',
+		boxLabel: 'Lombok',
+		maxLength: 250,
+		name: 'karyawan_cab_lbk'
+	});
+	
+	karyawan_cab_mndField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_mndField',
+		boxLabel: 'Manado',
+		maxLength: 250,
+		name: 'karyawan_cab_mnd'
+	});
+	
+	karyawan_cab_ygkField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_ygkField',
+		boxLabel: 'Yogyakarta',
+		maxLength: 250,
+		name: 'karyawan_cab_ygk'
+	});
+	
+	karyawan_cab_mlgField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_mlgField',
+		boxLabel: 'Malang',
+		maxLength: 250,
+		name: 'karyawan_cab_mlg'
+	});
+	
+	karyawan_cab_corpField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_corpField',
+		boxLabel: 'Corporate',
+		maxLength: 250,
+		name: 'karyawan_cab_corp'
+	});
+	
+	karyawan_cab_maaField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_maaField',
+		boxLabel: 'MAA',
+		maxLength: 250,
+		name: 'karyawan_cab_maa'
+	});
+	
+	karyawan_cab_mgField=new Ext.form.Checkbox({
+		id : 'karyawan_cab_mgField',
+		boxLabel: 'Manyar_Garden',
+		maxLength: 250,
+		name: 'karyawan_cab_mg'
+	});
+	
+	karyawan_cabGroup = new Ext.form.FieldSet({
+		title: 'Cabang',
+		layout:'column',
+		autoHeight: true,
+		store:cbo_karyawan_cabang_DataStore,
+		mode: 'remote',
+		//collapsed: true,
+		//collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ karyawan_cab_corpField, karyawan_cab_thField, karyawan_cab_kiField, karyawan_cab_hrField, karyawan_cab_tpField,  karyawan_cab_mlgField, karyawan_cab_dpsField, karyawan_cab_jktField, karyawan_cab_blpnField, karyawan_cab_maaField, karyawan_cab_mgField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[karyawan_cab_kutaField, karyawan_cab_btmField, karyawan_cab_mksField, karyawan_cab_mdnField, karyawan_cab_lbkField, karyawan_cab_mndField, karyawan_cab_ygkField]
+			   }
+		]
+	});
+	
 	/* Identify  karyawan_aktif Field */
 	karyawan_aktifField= new Ext.form.ComboBox({
 		id: 'karyawan_aktifField',
@@ -1718,7 +2018,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabangField ,karyawan_jabatanField, karyawan_sipField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
+		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabGroup ,karyawan_jabatanField, karyawan_sipField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
 	});
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -1727,7 +2027,7 @@ Ext.onReady(function(){
 		labelWidth: 120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 1100,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1742,7 +2042,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,	
-				items: [group_pekerjaan, karyawan_keteranganField, karyawan_aktifField] 
+				items: [group_pekerjaan, karyawan_keteranganField, karyawan_aktifField ] 
 			}
 			]
 		}]
@@ -1836,6 +2136,7 @@ Ext.onReady(function(){
 		if(karyawan_tglmasukSearchField.getValue()!==""){karyawan_tglmasuk_search_date=karyawan_tglmasukSearchField.getValue().format('Y-m-d');}
 		if(karyawan_atasanSearchField.getValue()!==null){karyawan_atasan_search=karyawan_atasanSearchField.getValue();}
 		if(karyawan_aktifSearchField.getValue()!==null){karyawan_aktif_search=karyawan_aktifSearchField.getValue();}
+			
 		// change the store parameters
 		karyawan_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -2170,6 +2471,7 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	
 	});
+	
 	/* Identify  karyawan_aktif Search Field */
 	karyawan_aktifSearchField= new Ext.form.ComboBox({
 		id: 'karyawan_aktifSearchField',

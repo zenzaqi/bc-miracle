@@ -467,15 +467,15 @@ Ext.onReady(function(){
 			handler: lap_kunjungan_print  
 		},
 		{
-			'text':'Customer : '
+			'text':'Cust: '
 		},
 		lap_kunjungan_customertextField,
 		{
-			'text':'Member : '
+			'text':'Member: '
 		},
 		lap_kunjungan_membertextField,
 		{
-			'text':'Kelamin : '
+			'text':'Jns Klmn: '
 		},
 		lap_kunjungan_kelamintextField
 		
