@@ -362,7 +362,9 @@ class M_tindakan_medis extends Model{
 			FROM detail_jual_rawat
 			LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id)
 			WHERE drawat_dtrawat='$dtrawat_id'";
+		$this->db->query('LOCK TABLE detail_jual_rawat WRITE, tindakan_detail WRITE');
 		$rs=$this->db->query($sql);
+		$this->db->query('UNLOCK TABLES');
 		if($rs->num_rows()){
 			$record=$rs->row_array();
 			$dtrawat_dapp = $record['dtrawat_dapp'];
