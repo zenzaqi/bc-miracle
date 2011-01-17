@@ -54,7 +54,7 @@ class M_karyawan extends Model{
 		}
 		
 		function get_karyawan_cabang_list(){
-			$sql="SELECT cabang_id,cabang_nama FROM cabang where cabang_aktif='Aktif'";
+			$sql="SELECT cabang_value,cabang_nama FROM cabang where cabang_aktif='Aktif'";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -130,7 +130,100 @@ class M_karyawan extends Model{
 		}
 		
 		//function for update record
-		function karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21, $karyawan_marriage, $karyawan_tgllahir ,$karyawan_tmplahir, $karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
+		function karyawan_update($karyawan_id ,$karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21, $karyawan_marriage, $karyawan_tgllahir ,$karyawan_tmplahir, $karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised, $karyawan_cab_th ,$karyawan_cab_ki ,$karyawan_cab_hr ,$karyawan_cab_tp ,$karyawan_cab_dps ,$karyawan_cab_jkt ,$karyawan_cab_blpn ,$karyawan_cab_kuta ,$karyawan_cab_btm ,$karyawan_cab_mks ,$karyawan_cab_mdn ,$karyawan_cab_lbk ,$karyawan_cab_mnd ,$karyawan_cab_ygk, $karyawan_cab_mlg ,$karyawan_cab_corp ,$karyawan_cab_maa,$karyawan_cab_mg ){
+				
+		if($karyawan_cab_th=='true')
+			$th="1";
+		if($karyawan_cab_th=='false')
+			$th="0";	
+			
+		if($karyawan_cab_ki=='true')
+			$ki="1";
+		if($karyawan_cab_ki=='false')
+			$ki="0";			
+
+		if($karyawan_cab_hr=='true')
+			$hr="1";
+		if($karyawan_cab_hr=='false')
+			$hr="0";	
+			
+		if($karyawan_cab_tp=='true')
+			$tp="1";
+		if($karyawan_cab_tp=='false')
+			$tp="0";	
+			
+		if($karyawan_cab_dps=='true')
+			$dps="1";
+		if($karyawan_cab_dps=='false')
+			$dps="0";	
+			
+		if($karyawan_cab_jkt=='true')
+			$jkt="1";
+		if($karyawan_cab_jkt=='false')
+			$jkt="0";	
+			
+		if($karyawan_cab_blpn=='true')
+			$blpn="1";
+		if($karyawan_cab_blpn=='false')
+			$blpn="0";	
+			
+		if($karyawan_cab_kuta=='true')
+			$kuta="1";
+		if($karyawan_cab_kuta=='false')
+			$kuta="0";	
+			
+		if($karyawan_cab_btm=='true')
+			$btm="1";
+		if($karyawan_cab_btm=='false')
+			$btm="0";	
+			
+		if($karyawan_cab_mks=='true')
+			$mks="1";
+		if($karyawan_cab_mks=='false')
+			$mks="0";	
+			
+		if($karyawan_cab_mdn=='true')
+			$mdn="1";
+		if($karyawan_cab_mdn=='false')
+			$mdn="0";	
+			
+		if($karyawan_cab_lbk=='true')
+			$lbk="1";
+		if($karyawan_cab_lbk=='false')
+			$lbk="0";	
+			
+		if($karyawan_cab_mnd=='true')
+			$mnd="1";
+		if($karyawan_cab_mnd=='false')
+			$mnd="0";	
+			
+		if($karyawan_cab_ygk=='true')
+			$ygk="1";
+		if($karyawan_cab_ygk=='false')
+			$ygk="0";	
+			
+		if($karyawan_cab_mlg=='true')
+			$mlg="1";
+		if($karyawan_cab_mlg=='false')
+			$mlg="0";	
+			
+		if($karyawan_cab_corp=='true')
+			$corp="1";
+		if($karyawan_cab_corp=='false')
+			$corp="0";	
+			
+		if($karyawan_cab_maa=='true')
+			$maa="1";
+		if($karyawan_cab_maa=='false')
+			$maa="0";	
+			
+		if($karyawan_cab_mg=='true')
+			$mg="1";
+		if($karyawan_cab_mg=='false')
+			$mg="0";	
+			
+		$temp_cabang=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.$corp.$maa.$mg;
+		
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
 			$data = array(
@@ -161,7 +254,8 @@ class M_karyawan extends Model{
 				"karyawan_aktif"=>$karyawan_aktif,			
 				// "karyawan_creator"=>$karyawan_creator,			
 				// "karyawan_date_create"=>$karyawan_date_create,			
-				"karyawan_update"=>$_SESSION[SESSION_USERID],			
+				"karyawan_update"=>$_SESSION[SESSION_USERID],	
+				"karyawan_cabang2"=>$temp_cabang,				
 				"karyawan_date_update"=>date('Y-m-d H:i:s')		
 				// "karyawan_revised"=>$karyawan_revised			
 			);
@@ -202,7 +296,99 @@ class M_karyawan extends Model{
 		}
 		
 		//function for create new record
-		function karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ){
+		function karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised, $karyawan_cab_th ,$karyawan_cab_ki ,$karyawan_cab_hr ,$karyawan_cab_tp ,$karyawan_cab_dps ,$karyawan_cab_jkt ,$karyawan_cab_blpn ,$karyawan_cab_kuta ,$karyawan_cab_btm ,$karyawan_cab_mks ,$karyawan_cab_mdn ,$karyawan_cab_lbk ,$karyawan_cab_mnd ,$karyawan_cab_ygk, $karyawan_cab_mlg ,$karyawan_cab_corp ,$karyawan_cab_maa,$karyawan_cab_mg ){
+		if($karyawan_cab_th=='true')
+			$th="1";
+		if($karyawan_cab_th=='false')
+			$th="0";	
+			
+		if($karyawan_cab_ki=='true')
+			$ki="1";
+		if($karyawan_cab_ki=='false')
+			$ki="0";			
+
+		if($karyawan_cab_hr=='true')
+			$hr="1";
+		if($karyawan_cab_hr=='false')
+			$hr="0";	
+			
+		if($karyawan_cab_tp=='true')
+			$tp="1";
+		if($karyawan_cab_tp=='false')
+			$tp="0";	
+			
+		if($karyawan_cab_dps=='true')
+			$dps="1";
+		if($karyawan_cab_dps=='false')
+			$dps="0";	
+			
+		if($karyawan_cab_jkt=='true')
+			$jkt="1";
+		if($karyawan_cab_jkt=='false')
+			$jkt="0";	
+			
+		if($karyawan_cab_blpn=='true')
+			$blpn="1";
+		if($karyawan_cab_blpn=='false')
+			$blpn="0";	
+			
+		if($karyawan_cab_kuta=='true')
+			$kuta="1";
+		if($karyawan_cab_kuta=='false')
+			$kuta="0";	
+			
+		if($karyawan_cab_btm=='true')
+			$btm="1";
+		if($karyawan_cab_btm=='false')
+			$btm="0";	
+			
+		if($karyawan_cab_mks=='true')
+			$mks="1";
+		if($karyawan_cab_mks=='false')
+			$mks="0";	
+			
+		if($karyawan_cab_mdn=='true')
+			$mdn="1";
+		if($karyawan_cab_mdn=='false')
+			$mdn="0";	
+			
+		if($karyawan_cab_lbk=='true')
+			$lbk="1";
+		if($karyawan_cab_lbk=='false')
+			$lbk="0";	
+			
+		if($karyawan_cab_mnd=='true')
+			$mnd="1";
+		if($karyawan_cab_mnd=='false')
+			$mnd="0";	
+			
+		if($karyawan_cab_ygk=='true')
+			$ygk="1";
+		if($karyawan_cab_ygk=='false')
+			$ygk="0";	
+
+		if($karyawan_cab_mlg=='true')
+			$mlg="1";
+		if($karyawan_cab_mlg=='false')
+			$mlg="0";	
+			
+		if($karyawan_cab_corp=='true')
+			$corp="1";
+		if($karyawan_cab_corp=='false')
+			$corp="0";	
+			
+		if($karyawan_cab_maa=='true')
+			$maa="1";
+		if($karyawan_cab_maa=='false')
+			$maa="0";	
+			
+		if($karyawan_cab_mg=='true')
+			$mg="1";
+		if($karyawan_cab_mg=='false')
+			$mg="0";			
+		
+		$temp_cabang=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.$corp.$maa.$mg;	
+		
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
 			$data = array(
@@ -238,7 +424,8 @@ class M_karyawan extends Model{
 				"karyawan_creator"=>$_SESSION[SESSION_USERID],			
 				"karyawan_date_create"=>date('Y-m-d H:i:s'),		
 				"karyawan_update"=>$karyawan_update,	
-				"karyawan_date_update"=>$karyawan_date_update,	
+				"karyawan_date_update"=>$karyawan_date_update,
+				"karyawan_cabang2"=>$temp_cabang,				
 				"karyawan_revised"=>'0'	
 			);
 			$this->db->insert('karyawan', $data); 
@@ -350,7 +537,7 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_cabang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_cabang LIKE '%".$karyawan_cabang."%'";
+				$query.= " substr(karyawan_cabang2, ".$karyawan_cabang." ,1) = '1'" ;
 			};
 			if($karyawan_jabatan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
