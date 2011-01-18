@@ -622,7 +622,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">' + 'Stat Dok' + '</div>',
+			header: '<div align="center">' + 'Stat PB' + '</div>',
 			dataIndex: 'order_status',
 			width: 60
 		}, 
@@ -888,7 +888,7 @@ Ext.onReady(function(){
 	});
 	order_statusField= new Ext.form.ComboBox({
 		id: 'order_statusField',
-		fieldLabel: 'Status Dok',
+		fieldLabel: 'Status PB',
 		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_value', 'order_status_display'],
@@ -1754,7 +1754,7 @@ Ext.onReady(function(){
 	
 	order_statusSearchField= new Ext.form.ComboBox({
 		id: 'order_statusSearchField',
-		fieldLabel: 'Status',
+		fieldLabel: 'Status PB',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'order_status'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
