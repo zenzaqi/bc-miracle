@@ -1,0 +1,1 @@
+default Inf Pengambilan Paket = > 0
