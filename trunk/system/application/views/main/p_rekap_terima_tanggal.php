@@ -73,10 +73,10 @@
                 <td><?php echo $print_list->no_bukti; ?></td>
                 <td><?php echo $print_list->order_no; ?></td>
                 <td><?php echo $print_list->supplier_nama." (".$print_list->supplier_akun.")"; ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang_bonus,0,",","."); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->order_diskon,0,",","."); ?></td>
-				<td align="right" class="numeric"><?php echo number_format($total_nilai,2,",","."); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang_bonus,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print_list->order_diskon,0,",",","); ?></td>
+				<td align="right" class="numeric"><?php echo number_format($total_nilai,0,",",","); ?></td>
 				<td align="right"><?php echo ucfirst($print_list->terima_surat_jalan); ?></td>
                 <td align="right"><?php echo ucfirst($print_list->terima_pengirim); ?></td>
       		</tr>
@@ -115,19 +115,19 @@
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Item</th>
-            <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_item,0,",","."); ?></td>
+            <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_item,0,",",","); ?></td>
             <td colspan='8' class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Item Bonus</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_bonus,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_bonus,0,",",","); ?></td>
              <td colspan='8' class="clear">&nbsp;</td>
         </tr>
 		<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Grand Total Nilai</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_totalnilai,0,",","."); ?></td>
+            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_totalnilai,0,",",","); ?></td>
              <td colspan='8' class="clear">&nbsp;</td>
         </tr>
 	</tfoot>
