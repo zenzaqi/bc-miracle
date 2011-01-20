@@ -156,6 +156,8 @@ var cust_unitSearchField;
 var cust_aktifSearchField;
 var sortby_SearchField;
 var fretfulness_SearchField;
+var cust_umurstartSearchField;
+var cust_umurendSearchField;
 
 var editor_cust_note;
 /* Function for get PK field */
@@ -672,6 +674,8 @@ var editor_cust_note;
 		var cust_aktif_search=null;
 		var sortby_search=null;
 		var fretfulness_search=null;
+		var cust_umurstart_search=null;
+		var cust_umurend_search=null;
 
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
@@ -699,16 +703,6 @@ var editor_cust_note;
 		if(cust_profesiSearchField.getValue()!==null){cust_profesi_search=cust_profesiSearchField.getValue();}
 		if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
 		if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
-		//if(cust_hobiSearchField.getValue()!==null){cust_hobi_search=cust_hobiSearchField.getValue();}
-		/*if(cust_hobi_bacaSearchField.getValue()!==null){cust_hobi_bacaSearch=cust_hobi_bacaSearchField.getValue();}
-		if(cust_hobi_olahSearchField.getValue()!==null){cust_hobi_olahSearch=cust_hobi_olahSearchField.getValue();}
-		if(cust_hobi_masakSearchField.getValue()!==null){cust_hobi_masakSearch=cust_hobi_masakSearchField.getValue();}
-		if(cust_hobi_travelSearchField.getValue()!==null){cust_hobi_travelSearch=cust_hobi_travelSearchField.getValue();}
-		if(cust_hobi_fotoSearchField.getValue()!==null){cust_hobi_fotoSearch=cust_hobi_fotoSearchField.getValue();}
-		if(cust_hobi_lukisSearchField.getValue()!==null){cust_hobi_lukisSearch=cust_hobi_lukisSearchField.getValue();}
-		if(cust_hobi_nariSearchField.getValue()!==null){cust_hobi_nariSearch=cust_hobi_nariSearchField.getValue();}
-		if(cust_hobi_lainSearchField.getValue()!==null){cust_hobi_lainSearch=cust_hobi_lainSearchField.getValue();}
-*/		
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
 		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_search=cust_referensilainSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
@@ -723,6 +717,10 @@ var editor_cust_note;
 		if(cust_aktifSearchField.getValue()!==null){cust_aktif_search=cust_aktifSearchField.getValue();}
 		if(sortby_SearchField.getValue()!==null){sortby_search=sortby_SearchField.getValue();}
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_search=fretfulness_SearchField.getValue();}
+		
+		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_search=cust_umurstartSearchField.getValue();}
+		if(cust_umurendSearchField.getValue()!==null){cust_umurend_search=cust_umurendSearchField.getValue();}
+
 		// change the store parameters
 		customer_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -777,7 +775,9 @@ var editor_cust_note;
 			cust_unit	:	cust_unit_search, 
 			cust_aktif	:	cust_aktif_search,
 			sortby		:	sortby_search,
-			cust_fretfulness : fretfulness_search
+			cust_fretfulness : fretfulness_search,
+			cust_umurstart : cust_umurstart_search,
+			cust_umurend : cust_umurend_search,
 		};
 		// Cause the datastore to do another query : 
 		//customer_DataStore.load({params: {start: 0, limit: pageS}});
@@ -848,6 +848,8 @@ var editor_cust_note;
 		cust_hobi_lukisSearchField.reset();
 		cust_hobi_nariSearchField.reset();
 		cust_hobi_lainSearchField.reset();
+		cust_umurstartSearchField.reset();
+		cust_umurendSearchField.reset();
 	}
 
 	
@@ -1889,7 +1891,7 @@ Ext.onReady(function(){
 			{name: 'cust_tweeter2', type: 'int', mapping: 'cust_tweeter2'},
 			{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
 			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
-			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'},
 		]),
 		//sortInfo:{field: 'cust_id', direction: "ASC"}
 	});
@@ -3845,6 +3847,7 @@ Ext.onReady(function(){
 	});
 	
 	cust_label_nocustSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+
 	
 	cust_nocust_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_nocust_opsiSearchField',
@@ -4349,7 +4352,6 @@ Ext.onReady(function(){
 	});
 	
 	cust_label_tgldaftarSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
-	
 	cust_tanggaldaftar_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_tanggaldaftar_opsiSearchField',
 		title: 'Tanggal Daftar',
@@ -4461,7 +4463,36 @@ Ext.onReady(function(){
 		anchor: '50%',
 		triggerAction: 'all'	
 	});
-		
+	
+	/* Identify  umur Field */
+	cust_umurstartSearchField= new Ext.form.TextField({
+		id: 'cust_umurstartSearchField',
+		fieldLabel: 'Umur',
+		maxLength: 10,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  batas umur Field */
+	cust_umurendSearchField= new Ext.form.TextField({
+		id: 'cust_umurendSearchField',
+		//fieldLabel: 'Telp. Rumah 2',
+		hideLabel:true,
+		maxLength: 10,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	cust_label_umurSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	cust_label_thncustSearchField=new Ext.form.Label({ html: ' &nbsp; tahun'});
+	cust_umur_groupSearch = new Ext.form.FieldSet({
+		title: 'Umur',
+		labelWidth: 100,
+		anchor: '95%',
+		layout:'column',
+		items: [cust_umurstartSearchField, cust_label_umurSearchField, cust_umurendSearchField,cust_label_thncustSearchField]
+
+	});
+	
 	cust_alamat_groupSearch = new Ext.form.FieldSet({
 		title: 'Alamat',
 		autoHeight: true,
@@ -4519,13 +4550,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch] 
+				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch,cust_emailSearchField,cust_email2SearchField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_emailSearchField,cust_email2SearchField,cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]
