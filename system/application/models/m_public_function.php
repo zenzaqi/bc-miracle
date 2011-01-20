@@ -876,13 +876,11 @@ class M_public_function extends Model{
 	
 	function get_nomor_member($table,$field,$pattern,$length){
 		$date=date('y');
-		$len_pattern=strlen($pattern); // = 12
-		$len_lpad=$length-$len_pattern; // = 4
+		$len_pattern=strlen($pattern);
+		$len_lpad=$length-$len_pattern;
 		//$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE ".$field." LIKE '".$date."%'";
 		//$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE SUBSTRING(".$field.",1,6) LIKE '%".$date."'"; //ini yang benar
-		$sql=  "SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key 
-				FROM ".$table." 
-				WHERE SUBSTRING(".$field.",1,6) LIKE '%10' or SUBSTRING(member_no,1,6) LIKE '%11'"; //sementara, supaya no_member bisa urut terus
+		$sql="SELECT LPAD((RIGHT(MAX(SUBSTRING(".$field.",-4)),".$len_lpad.")+1),".$len_lpad.",0) AS max_key FROM ".$table." WHERE SUBSTRING(".$field.",1,6) LIKE '%10'"; //sementara, supaya no_member bisa urut terus
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
@@ -907,10 +905,10 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_kode_1($table,$field,$pattern,$length){
+	function get_custno_gen($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
-		$sql="select concat(left(max(".$field."),".$len_pattern."),LPAD((right(max(".$field."),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." is not null and ".$field."<>'' and cust_aktif='Aktif'";
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
@@ -933,10 +931,10 @@ class M_public_function extends Model{
 		}
 	}
 	
-	function get_custno_gen($table,$field,$pattern,$length){
+	function get_kode_1($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
-		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." is not null and ".$field."<>'' and cust_aktif='Aktif'";
+		$sql="select concat(left(max(".$field."),".$len_pattern."),LPAD((right(max(".$field."),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){
@@ -984,8 +982,31 @@ class M_public_function extends Model{
 		}
 	}
 	
-
-	
+	function get_nik_karyawan($table,$field,$pattern,$length){
+		$len_pattern=strlen($pattern);
+		$len_lpad=$length-$len_pattern;
+		$sql="select concat(left(max(".$field."),".$len_pattern."),LPAD((right(max(".$field."),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." like '".$pattern."%'";
+		
+		$query=$this->db->query($sql);
+		if($query->num_rows()){
+			$data=$query->row();
+			$kode=$data->max_key;
+			if(is_null($kode))
+			{
+				$pad="";
+				for($i=1;$i<$len_lpad;$i++)
+					$pad.="0";
+				$kode=$pattern.$pad."1";
+			}
+			return $kode;
+		}else{
+			$pad="";
+			for($i=1;$i<$len_lpad;$i++)
+				$pad.="0";
+			$kode=$pattern.$pad."1";
+			return $kode;
+		}
+	}
 	
 	function get_resep_kode($table,$field,$pattern,$length){
 		$len_pattern=strlen($pattern);
