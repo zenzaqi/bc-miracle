@@ -48,6 +48,7 @@ class C_master_terima_beli extends Controller {
 		$data['no_surat_jalan']=$master->terima_surat_jalan;
         $data['tanggal'] = $master->tanggal;
         $data['supplier_nama'] = $master->supplier_nama;
+		$data['order_no'] = $master->order_no;
 		$print_view=$this->load->view("main/p_faktur_terima_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){

@@ -5,7 +5,7 @@
 <title>Surat Penerimaan Barang</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle_nocolor.css'/>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
     <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -39,6 +39,12 @@
             <td align="right" class="clear"><strong>Surat Jalan</strong></td>
             <td align="right" class="clear">:</td>
             <td class="clear"><?=$no_surat_jalan; ?></td>
+          </tr>
+		  </tr>
+           <tr class="clear">
+            <td align="right" class="clear"><strong>No. Order Pembelian</strong></td>
+            <td align="right" class="clear">:</td>
+            <td class="clear"><?=$order_no; ?></td>
           </tr>
         </table></td>
       </tr>
@@ -83,10 +89,10 @@
           <tr>
             <td width="50%" align="center" class="clear"><center><p><strong>Accounting</strong></p></center>
               <p>&nbsp;</p>
-              <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   )</p></td>
+              <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;)</p></td>
             <td width="50%" align="center"  class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
               <p>&nbsp;</p>
-              <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;)</p></center></td>
+              <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;)</p></center></td>
           </tr>
         </table></td>
       </tr>
