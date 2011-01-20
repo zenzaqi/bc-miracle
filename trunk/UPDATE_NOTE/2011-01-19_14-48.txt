@@ -1,0 +1,4 @@
+1. tambah check/uncheck all pada multicabang master paket 
+2. tambah check/uncheck all pada multicabang master karyawan
+3. autogenerate NIK karyawan
+4. tambah field cabang_kode pada tabel cabang (2011-01-19_08-31.sql)

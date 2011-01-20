@@ -1,0 +1,21 @@
+ALTER TABLE `cabang`  ADD COLUMN `cabang_kode` VARCHAR(10) NOT NULL AFTER `cabang_value`;
+
+SELECT `cabang_id`, `cabang_nama`, `cabang_alamat`, `cabang_kota`, `cabang_kodepos`, `cabang_propinsi`, `cabang_keterangan`, `cabang_aktif`, `cabang_creator`, `cabang_date_create`, `cabang_update`, `cabang_date_update`, `cabang_revised`, `cabang_value`, `cabang_kode` FROM `miracledb`.`cabang` LIMIT 0, 1000;
+UPDATE `cabang` SET `cabang_kode`='TH' WHERE `cabang_id`=1 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='HR' WHERE `cabang_id`=2 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='CORP' WHERE `cabang_id`=7 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='KI' WHERE `cabang_id`=8 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='TP' WHERE `cabang_id`=9 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MLG' WHERE `cabang_id`=10 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='DPS' WHERE `cabang_id`=11 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='KUTA' WHERE `cabang_id`=12 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='JKT' WHERE `cabang_id`=13 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MKS' WHERE `cabang_id`=14 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='BLPN' WHERE `cabang_id`=15 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='BTM' WHERE `cabang_id`=16 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MG' WHERE `cabang_id`=17 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MDN' WHERE `cabang_id`=18 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='LBK' WHERE `cabang_id`=20 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MND' WHERE `cabang_id`=21 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='YGK' WHERE `cabang_id`=22 LIMIT 1;
+UPDATE `cabang` SET `cabang_kode`='MAA' WHERE `cabang_id`=23 LIMIT 1;
