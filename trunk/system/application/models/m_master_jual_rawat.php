@@ -1304,10 +1304,11 @@ class M_master_jual_rawat extends Model{
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
 													,$array_drawat_diskon ,$array_drawat_diskon_jenis);
 					if($rs_jrawat=='0'){
-						$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+						/*$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 													,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
 													,$jrawat_tanggal);
-						return $rs_drawat_cu;
+						return $rs_drawat_cu;*/
+                        return '0';
 					}else{
 						return $rs_jrawat;
 					}
@@ -1333,23 +1334,6 @@ class M_master_jual_rawat extends Model{
 				 * ==> JIKA sama, maka update status_dokumen dari db.master_jual_rawat terlebih dahulu untuk mengunci Faktur ini agar Tidak Ada detail dari Tindakan yang bisa masuk.
 				 * ==> JIKA tidak sama, maka langsung dilanjutkan ke proses selanjutnya
 				*/
-				/*if($cetak==1){
-					/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
-					/*if($jrawat_tanggal<>$date_now){
-						$jrawat_date_update = $jrawat_tanggal;
-					}else{
-						$jrawat_date_update = $datetime_now;
-					}
-					$sqlu = "UPDATE master_jual_rawat
-						SET jrawat_stat_dok='Tertutup'
-							,jrawat_update='".@$_SESSION[SESSION_USERID]."'
-							,jrawat_date_update='".$jrawat_date_update."'
-							,jrawat_revised=jrawat_revised+1
-						WHERE jrawat_id='$jrawat_id'";
-					$this->db->query('LOCK TABLE master_jual_rawat WRITE');
-					$this->db->query($sqlu);
-					$this->db->query('UNLOCK TABLES');
-				}*/
 				
 				$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
 				$rs=$this->db->query($sql);
@@ -1672,7 +1656,7 @@ class M_master_jual_rawat extends Model{
 				/*
 				 * di View Kasir Penjualan Perawatan ada penambahan detail baru
 				*/
-				$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+				$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 															,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
 															,$jrawat_tanggal);
 				return $rs_drawat_cu;
@@ -1762,6 +1746,7 @@ class M_master_jual_rawat extends Model{
 		$affected_rows = $this->db->affected_rows();
 		$this->db->query('UNLOCK TABLES');
 		if($affected_rows>0){
+            $jrawat_id = $this->db->insert_id();
 			$time_now = date('H:i:s');
 			$bayar_date_create_temp = $jrawat_tanggal.' '.$time_now;
 			$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
@@ -1945,7 +1930,7 @@ class M_master_jual_rawat extends Model{
 				}
 			}
 			
-			$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+			$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 														,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
 														,$jrawat_tanggal);
 			return $rs_drawat_cu;
