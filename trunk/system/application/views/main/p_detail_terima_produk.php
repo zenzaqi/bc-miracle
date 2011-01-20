@@ -26,6 +26,7 @@
         	<th scope='col'>No</th>
             <th scope='col'>Tanggal</th>
             <th scope='col'>No Faktur</th>
+            <th scope='col'>Kode</th>
             <th scope='col'>Supplier</th>
             <th scope='col'>Jumlah</th>
             <th scope='col'>Satuan</th>
@@ -53,8 +54,7 @@
 			<?php if($produk!==$print->produk_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td><b><?php echo $print->produk_kode;?></b></td>
-				<td colspan="10"><b><?php echo $print->produk_nama;?></b></td>
+				<td colspan="12"><b><?php echo $print->produk_nama;?></b></td>
            </tr>
            <?php
 
@@ -77,6 +77,7 @@
                 <td><? echo $i; ?></td>
                 <td><?php echo $print_list->tanggal;?></td>
                 <td><?php echo $print_list->no_bukti;?></td>
+				<td><?php echo $print->produk_kode;?></td>
                 <td><?php echo $print_list->supplier_nama."(".$print_list->supplier_akun.")";?></td>
                 <td><?php echo $print_list->satuan_nama; ?></td>
                 <td class="numeric"><?php echo number_format($print_list->jumlah,0,",",","); ?></td>
@@ -90,7 +91,7 @@
            <?php } ?>
            <?php } ?>
            <tr>
-                <td colspan="5">&nbsp;</td>
+                <td colspan="6">&nbsp;</td>
                 <td align="right" class="numeric"><b><?php echo number_format($sub_jumlah,0,",",","); ?></b></td>
                 <td align="right" class="numeric">&nbsp;</td>
 				<td align="right" class="numeric">&nbsp;</td>
@@ -109,29 +110,29 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total</th>
-            <td colspan='9'><?php echo count($data_print); ?> data</td>
+            <td colspan='10'><?php echo count($data_print); ?> data</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan="10">Summary</th>
+        	<th scope='row' colspan="11">Summary</th>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Item</th>
             <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",",","); ?></td>
-            <td colspan="8" class="clear">&nbsp;</td>
+            <td colspan="9" class="clear">&nbsp;</td>
         </tr>
 		<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Diskon (Rp)</th>
             <td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",",","); ?></td>
-            <td colspan="8" class="clear">&nbsp;</td>
+            <td colspan="9" class="clear">&nbsp;</td>
         </tr>
         <tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Nilai (Rp)</th>
             <td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",",","); ?></td>
-            <td colspan="8" class="clear">&nbsp;</td>
+            <td colspan="9" class="clear">&nbsp;</td>
         </tr>
 	</tfoot>
 </table>
