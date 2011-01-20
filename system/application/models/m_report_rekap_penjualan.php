@@ -187,10 +187,10 @@ class M_report_rekap_penjualan extends Model{
 					LEFT JOIN kategori ON ((perawatan.rawat_kategori = kategori.kategori_id)))";
 				if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup'";
+					$query.= "date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d') BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}else if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d')='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup'";
+					$query.= "date_format(detail_ambil_paket.dapaket_date_create, '%Y-%m-%d')='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}			
 				if($rekap_penjualan_group!='' && $rekap_penjualan_group!='Semua'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -341,10 +341,10 @@ class M_report_rekap_penjualan extends Model{
 					LEFT JOIN kategori ON ((perawatan.rawat_kategori = kategori.kategori_id)))";
 				if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup'";
+					$query.= "detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}else if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "detail_ambil_paket.dapaket_tgl_ambil='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup'";
+					$query.= "detail_ambil_paket.dapaket_tgl_ambil='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}			
 				if($rekap_penjualan_group!='' && $rekap_penjualan_group!='Semua'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -503,10 +503,10 @@ class M_report_rekap_penjualan extends Model{
 					LEFT JOIN kategori ON ((perawatan.rawat_kategori = kategori.kategori_id)))";
 				if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup'";
+					$query.= "detail_ambil_paket.dapaket_tgl_ambil BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}else if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= "detail_ambil_paket.dapaket_tgl_ambil='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup'";
+					$query.= "detail_ambil_paket.dapaket_tgl_ambil='".$rekap_penjualan_tglapp_start."' AND detail_ambil_paket.dapaket_stat_dok  = 'Tertutup' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}			
 				if($rekap_penjualan_group!='' && $rekap_penjualan_group!='Semua'){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
