@@ -54,7 +54,7 @@ class M_karyawan extends Model{
 		}
 		
 		function get_karyawan_cabang_list(){
-			$sql="SELECT cabang_value,cabang_nama FROM cabang where cabang_aktif='Aktif'";
+			$sql="SELECT cabang_value,cabang_nama,cabang_id FROM cabang where cabang_aktif='Aktif'";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -224,10 +224,37 @@ class M_karyawan extends Model{
 			
 		$temp_cabang=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.$corp.$maa.$mg;
 		
+		//autogenerate NIK
+		if($karyawan_no=="")
+		{	
+			if(is_numeric($karyawan_cabang))
+				{$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_id = ".$karyawan_cabang;}
+			else
+			{	$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_nama = '".$karyawan_cabang."'";}
+			
+			$a_cabang_kode = $this->db->query($sql_cabang_kode);
+			if($a_cabang_kode->num_rows()>0){
+				$record = $a_cabang_kode->row_array();
+				$cabang_kode = $record['cabang_kode'];
+			}		
+			$karyawan_tglmasuk_pattern=strtotime($karyawan_tglmasuk);
+			$pattern=$cabang_kode."/".date("ym",$karyawan_tglmasuk_pattern)."-";
+			$panjang = strlen($cabang_kode);
+			$pjg = 11;		
+			if ($panjang==4)
+				$pjg = 13;
+			else if ($panjang==3)
+				$pjg = 12;		
+			
+			$karyawan_no=$this->m_public_function->get_nik_karyawan('karyawan','karyawan_no',$pattern,$pjg);
+		}//end of autogenerate NIK
+	
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
+
+			
 			$data = array(
-				"karyawan_id"=>$karyawan_id,			
+				"karyawan_id"=>$karyawan_id,
 				"karyawan_no"=>$karyawan_no,
 				"karyawan_sip"=>$karyawan_sip,
 				"karyawan_npwp"=>$karyawan_npwp,			
@@ -296,7 +323,7 @@ class M_karyawan extends Model{
 		}
 		
 		//function for create new record
-		function karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised, $karyawan_cab_th ,$karyawan_cab_ki ,$karyawan_cab_hr ,$karyawan_cab_tp ,$karyawan_cab_dps ,$karyawan_cab_jkt ,$karyawan_cab_blpn ,$karyawan_cab_kuta ,$karyawan_cab_btm ,$karyawan_cab_mks ,$karyawan_cab_mdn ,$karyawan_cab_lbk ,$karyawan_cab_mnd ,$karyawan_cab_ygk, $karyawan_cab_mlg ,$karyawan_cab_corp ,$karyawan_cab_maa,$karyawan_cab_mg ){
+		function karyawan_create($karyawan_no ,$karyawan_sip, $karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_pph21 ,$karyawan_marriage ,$karyawan_tgllahir ,$karyawan_tmplahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_tgl_batas ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised, $karyawan_cab_th ,$karyawan_cab_ki ,$karyawan_cab_hr ,$karyawan_cab_tp ,$karyawan_cab_dps ,$karyawan_cab_jkt ,$karyawan_cab_blpn ,$karyawan_cab_kuta ,$karyawan_cab_btm ,$karyawan_cab_mks ,$karyawan_cab_mdn ,$karyawan_cab_lbk ,$karyawan_cab_mnd ,$karyawan_cab_ygk, $karyawan_cab_mlg ,$karyawan_cab_corp ,$karyawan_cab_maa,$karyawan_cab_mg,$cabang_date_create ){
 		if($karyawan_cab_th=='true')
 			$th="1";
 		if($karyawan_cab_th=='false')
@@ -388,6 +415,24 @@ class M_karyawan extends Model{
 			$mg="0";			
 		
 		$temp_cabang=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.$corp.$maa.$mg;	
+		
+		//autogenerate NIK
+		$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_id = ".$karyawan_cabang;
+		$a_cabang_kode = $this->db->query($sql_cabang_kode);
+		if($a_cabang_kode->num_rows()>0){
+			$record = $a_cabang_kode->row_array();
+			$cabang_kode = $record['cabang_kode'];
+		}		
+		$karyawan_tglmasuk_pattern=strtotime($karyawan_tglmasuk);
+		$pattern=$cabang_kode."/".date("ym",$karyawan_tglmasuk_pattern)."-";
+		$panjang = strlen($cabang_kode);
+		$pjg = 11;		
+		if ($panjang==4)
+			$pjg = 13;
+		else if ($panjang==3)
+			$pjg = 12;		
+		$karyawan_no=$this->m_public_function->get_nik_karyawan('karyawan','karyawan_no',$pattern,$pjg);
+		//end of autogenerate NIK
 		
 		if ($karyawan_aktif=="")
 			$karyawan_aktif = "Aktif";
