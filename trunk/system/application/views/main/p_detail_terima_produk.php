@@ -53,7 +53,8 @@
 			<?php if($produk!==$print->produk_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="11"><b><?php echo $print->produk_nama."( ".$print->produk_kode.")";?></b></td>
+                <td><b><?php echo $print->produk_kode;?></b></td>
+				<td colspan="10"><b><?php echo $print->produk_nama;?></b></td>
            </tr>
            <?php
 
