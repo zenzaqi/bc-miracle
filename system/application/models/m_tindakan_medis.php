@@ -1855,7 +1855,7 @@ class M_tindakan_medis extends Model{
 			$trawat_cust = $record['trawat_cust'];
 			$dtrawat_tglapp = $record['dtrawat_tglapp'];
 			$jpaket_id = $record['jpaket_id'];
-			//$dpaket_id = $record['dpaket_id'];
+			$dpaket_id_awal = $record['dpaket_id'];
 			$dpaket_paket = $record['dpaket_paket'];
 			$dtrawat_revised = $record['dtrawat_revised'];
 			
@@ -1873,14 +1873,14 @@ class M_tindakan_medis extends Model{
 					"dtrawat_revised"=>$dtrawat_revised+1
 				);
 				if(($dtrawat_status_awal=='selesai') && ($dtrawat_status<>'selesai')){
-					if($dpaket_id!=0){
+					if($dpaket_id_awal!=0){
 						/* $dpaket_id != 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
 						** 1. Delete di db.detail_ambil_paket + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
 						*/
 						$this->detail_ambil_paket_delete($dtrawat_id);
 						
-					}else if($dpaket_id==0){
+					}else if($dpaket_id_awal==0){
 						/* $dpaket_id == 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
 						** 1. Delete di db.detail_jual_rawat + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
@@ -1896,7 +1896,7 @@ class M_tindakan_medis extends Model{
 					 * >> Jika != 0 ==> masuk Kasir Pengambilan Paket
 					 * # Update tindakan_detail
 				    */
-					if($dpaket_id!=0){
+					if($dpaket_id_awal!=0){
 						/* ditujukan untuk Pengambilan Paket, tapi sebelum dimasukkan ke Pengambilan Paket harus di-check terlebih dahulu
 						 * # Check utk sisa dan jumlah paket yang masih bisa diambil
 						 * >> Jika masih bisa diambil ==> masukkan ke Pengambilan Paket
@@ -2200,4 +2200,5 @@ class M_tindakan_medis extends Model{
 		}
 		
 }
-?>
+?>	
+	
