@@ -146,17 +146,21 @@ Ext.onReady(function(){
   
   	/* Function for Saving inLine Editing */
 	function tindakan_medis_update(oGrid_event){
+	
 		tindakanListEditorGrid.setDisabled(true);
 		var trawat_id_update_pk="";
 		var dtrawat_id_update=null;
 		var dtrawat_perawatan_update=null;
 		var dtrawat_perawatan_id_update=null;
+		var trawat_cust_id_update=null;
 		var dtrawat_dokter_update=null;
 		var dtrawat_dokter_id_update=null;
 		var dtrawat_jam_update=null;
 		var dtrawat_keterangan_update=null;
+		var dtrawat_dpaket_id_update=null;
+		var dpaket_id_update=null;
 		var dtrawat_ambil_paket_update="";
-		var dtrawat_jumlah_update=1;
+		var dtrawat_jumlah_update=null;
 		
 		var dtrawat_status_update='';
 		
@@ -164,10 +168,15 @@ Ext.onReady(function(){
 		dtrawat_id_update = oGrid_event.record.data.dtrawat_id;
 		dtrawat_perawatan_update = oGrid_event.record.data.dtrawat_perawatan;
 		dtrawat_perawatan_id_update = oGrid_event.record.data.dtrawat_perawatan_id;
+		dtrawat_dpaket_id_update = oGrid_event.record.data.paket_nama;
+		//dpaket_id_update = oGrid_event.record.data.dtrawat_dpaket_id;
+		dpaket_id_update = tindakanListEditorGrid.getSelectionModel().getSelected().get("dtrawat_dpaket_id");
+		trawat_cust_id_update = oGrid_event.record.data.trawat_cust_id;
 		dtrawat_dokter_update = oGrid_event.record.data.dtrawat_petugas1;
 		dtrawat_dokter_id_update = oGrid_event.record.data.dtrawat_petugas1_id;
 		if(oGrid_event.record.data.dtrawat_jam!== null){dtrawat_jam_update = oGrid_event.record.data.dtrawat_jam;}
 		if(oGrid_event.record.data.dtrawat_keterangan!== null){dtrawat_keterangan_update = oGrid_event.record.data.dtrawat_keterangan;}
+		//if(trawat_dpaket_idField.getValue()!== null){trawat_info_nobukti_update = trawat_dpaket_idField.getValue();} 
 		dtrawat_ambil_paket_update = oGrid_event.record.data.dtrawat_ambil_paket;
 		dtrawat_jumlah_update = oGrid_event.record.data.dtrawat_jumlah;
 		
@@ -196,6 +205,10 @@ Ext.onReady(function(){
 					dtrawat_id	:dtrawat_id_update,
 					dtrawat_perawatan	:dtrawat_perawatan_update,
 					dtrawat_perawatan_id	:dtrawat_perawatan_id_update,
+					trawat_cust_id		: trawat_cust_id_update,
+					/* dtrawat_dpaket_id ini digunakan hanya utk mengganti Ambil Paket*/
+					dtrawat_dpaket_id		: combo_list_paket.getValue(),
+					dpaket_id		: dpaket_id_update,
 					dtrawat_dokter : dtrawat_dokter_update,
 					dtrawat_dokter_id : dtrawat_dokter_id_update,
 					dtrawat_jam	: dtrawat_jam_update,
@@ -267,6 +280,20 @@ Ext.onReady(function(){
 							   icon: Ext.MessageBox.WARNING
 							});
 							break;
+							
+						case -4:
+							tindakan_medisDataStore.reload();
+							tindakanListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   width: 330,
+							   msg: 'Isi paket tidak cukup untuk diambil.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;	
+							
 						default:
 							tindakan_medisDataStore.reload();
 							tindakanListEditorGrid.setDisabled(false);
@@ -306,6 +333,9 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
+  
+
+  
   
   	/* Function for add data, open window create form */
 	function tindakan_medis_create(){
@@ -665,6 +695,7 @@ Ext.onReady(function(){
 		trawat_medis_custField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_cust'));
 		trawat_medis_custidField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_cust_id'));
 		trawat_medis_keteranganField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('trawat_keterangan'));
+		trawat_dpaket_idField.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get('dtrawat_dpaket_id'));
 	}
 	/* End setValue to EDIT*/
   
@@ -835,6 +866,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_dapp', type: 'int', mapping: 'dtrawat_dapp'},
 			{name: 'dtrawat_perawatan_id', type: 'int', mapping: 'dtrawat_perawatan'},
 			{name: 'dtrawat_perawatan', type: 'string', mapping: 'rawat_nama'},
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'},
 			{name: 'dtrawat_petugas1', type: 'string', mapping: 'dokter_username'},
 			{name: 'dtrawat_petugas1_id', type: 'int', mapping: 'dokter_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
@@ -847,6 +879,8 @@ Ext.onReady(function(){
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
+			{name: 'dtrawat_dpaket_id', type: 'int', mapping: 'dtrawat_dpaket_id'},
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			/*{name: 'cust_punya_paket', type: 'string', mapping: 'cust_punya_paket'},
 			{name: 'dapaket_dpaket', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
@@ -927,6 +961,42 @@ Ext.onReady(function(){
 		}
 	});
 
+	/*Datastore utk list paket customer */
+	medis_listpaket_customerDataStore = new Ext.data.Store({
+		id: 'medis_listpaket_customerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_tindakan_medis&m=get_customer_paket_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'rawat_id'
+		},[
+			{name: 'perawatan_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'perawatan_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'perawatan_group', type: 'string', mapping: 'group_nama'},
+			{name: 'perawatan_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'},
+			{name: 'paket_display', type: 'string', mapping: 'paket_nama'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
+			{name: 'dpaket_sisa_paket', type: 'int', mapping: 'dpaket_sisa_paket'},
+			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			{name: 'perawatan_du', type: 'float', mapping: 'rawat_du'},
+			{name: 'perawatan_dm', type: 'float', mapping: 'rawat_dm'},
+			{name: 'perawatan_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'perawatan_display', direction: "ASC"}
+	});
+	var customer_listpaket_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{jpaket_nobukti} | Pemilik : {cust_nama} | <b>{paket_display}</b> | Sisa : {dpaket_sisa_paket} | Kadaluarsa : {dpaket_kadaluarsa:date("j M, Y")}',
+		'</div></tpl>'
+    );
+	
+	
 	cbo_dtindakan_dokterDataStore = new Ext.data.Store({
 		id: 'cbo_dtindakan_dokterDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -960,6 +1030,27 @@ Ext.onReady(function(){
 			window_medis_editing_lock();
 		}
 	});
+	
+	
+	/* combo utk melihat daftar paket yg dimiliki customer*/
+	var combo_list_paket=new Ext.form.ComboBox({
+			store: medis_listpaket_customerDataStore,
+			mode: 'remote',
+			typeAhead: false,
+			displayField: 'paket_display',
+			valueField: 'dpaket_id',
+			loadingText: 'Searching...',
+			pageSize:10,
+			hideTrigger:false,
+			tpl: customer_listpaket_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			maskRe: /([^0-9]+)$/
+	});
+
+	
     
   	/* Function for Identify of Window Column Model */
 	tindakan_medisColumnModel = new Ext.grid.ColumnModel(
@@ -1086,6 +1177,47 @@ Ext.onReady(function(){
 			hidden: true
 		}, 
 		{
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_MEDIS'))){ ?>
+			header: '<div align="center">' + 'Ambil Paket' + '</div>',
+			dataIndex: 'paket_nama',
+			width: 185,	//210,
+			sortable: true,
+			editor : combo_list_paket
+			//renderer: Ext.util.Format.comboRenderer(combo_list_paket)
+			/*
+			editor: new Ext.form.ComboBox({
+				store: medis_listpaket_customerDataStore,
+				mode: 'remote',
+				displayField: 'jpaket_nobukti',
+				valueField: 'dpaket_id',
+				tpl: customer_listpaket_tpl,
+				itemSelector: 'div.search-item',
+				loadingText: 'Searching...',
+				pageSize:15,
+				triggerAction: 'all',
+				anchor: '95%'
+			})*/
+			<?php } ?>
+			
+		}, 
+		
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Jml' + '</div>',
+			dataIndex: 'dtrawat_jumlah',
+			width: 30,	//150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: true,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		},
+		
+		/*
+		{
 			xtype: 'booleancolumn',
 			header: 'Ambil Paket',
 			dataIndex: 'dtrawat_ambil_paket',
@@ -1099,7 +1231,8 @@ Ext.onReady(function(){
                 xtype: 'checkbox'
             }
 			<?php } ?>
-		},/*
+		},*/
+		/*
 		{
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
@@ -1242,8 +1375,39 @@ Ext.onReady(function(){
 	/* End of DataStore */
 	tindakanListEditorGrid.on('rowdblclick', function(){
 		dmedis_status_inline_beforeedit = tindakanListEditorGrid.getSelectionModel().getSelected().get('dtrawat_status');
+		
+		//var recordMaster = tindakanListEditorGrid.getSelectionModel().getSelected();
+		//trawat_cust_idField.setValue(recordMaster.get("trawat_cust_id"));
+		//trawat_perawatan_idField.setValue(recordMaster.get("dtrawat_perawatan_id"));
+		//trawat_dpaket_idField.setValue(recordMaster.get("dtrawat_dpaket_id"));
+
 	});
-     
+	
+	tindakanListEditorGrid.on('rowclick', function(){
+		var recordMaster = tindakanListEditorGrid.getSelectionModel().getSelected();
+		trawat_cust_idField.setValue(recordMaster.get("trawat_cust_id"));
+		trawat_perawatan_idField.setValue(recordMaster.get("dtrawat_perawatan_id"));
+		combo_list_paket.setValue(tindakanListEditorGrid.getSelectionModel().getSelected().get("dtrawat_dpaket_id"));
+	});
+	
+	
+	tindakanListEditorGrid.on('rowdblclick', function () {
+		medis_listpaket_customerDataStore.load({params : {trawat_cust_id : trawat_cust_idField.getValue(), dtrawat_rawat_id : trawat_perawatan_idField.getValue()}});	
+		
+		
+    });
+	
+
+	/*
+	combo_list_paket.on('focus',function(){
+		//var recordMaster = tindakanListEditorGrid.getSelectionModel().getSelected();
+		//trawat_cust_idField.setValue(recordMaster.get("trawat_cust_id"));
+		//trawat_perawatan_idField.setValue(recordMaster.get("dtrawat_perawatan_id"));
+		medis_listpaket_customerDataStore.load({params : {trawat_cust_id : trawat_cust_idField.getValue(), dtrawat_rawat_id : trawat_perawatan_idField.getValue()}});	
+		
+	});
+	*/
+
 	/* Create Context Menu */
 	tindakan_medisContextMenu = new Ext.menu.Menu({
 		id: 'tindakan_medisListEditorGridContextMenu',
@@ -1293,6 +1457,13 @@ Ext.onReady(function(){
 	tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
 	tindakan_medisDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
+	
+	trawat_cust_idField= new Ext.form.NumberField();
+	trawat_perawatan_idField= new Ext.form.NumberField();
+	
+	/* Identify  dpaket_id Field */
+	trawat_dpaket_idField= new Ext.form.TextField();
+	
 	
 	/* Identify  trawat_id Field */
 	trawat_medis_idField= new Ext.form.NumberField({
@@ -1499,6 +1670,7 @@ Ext.onReady(function(){
 			maskRe: /([^0-9]+)$/
 	});
 	
+
 	var combo_dapp_dokter=new Ext.form.ComboBox({
 			store: cbo_dtindakan_dokterDataStore,
 			mode: 'remote',
@@ -1586,7 +1758,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
-			width: 200,
+			width: 150,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 250,
@@ -2686,7 +2858,21 @@ Ext.onReady(function(){
 		}
 	}
 	
-	
+	/*
+	combo_list_paket.on("select",function(){		
+		medis_listpaket_customerDataStore.load({
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(medis_listpaket_customerDataStore.getCount()){
+								auto_nobukti=medis_listpaket_customerDataStore.getAt(0).data;
+								trawat_dpaket_idField.setValue(auto_nobukti.jpaket_nobukti);
+							}
+						}
+					}
+			}); 
+	});
+	*/
+
 	/* END Screen Lock Function */
 	
 	
