@@ -384,7 +384,7 @@ class M_customer extends Model{
 		}
 		
 		//function for create new record
-		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain ){
+		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain , $cust_umurstart, $cust_umurend, $cust_umur){
 			if($cust_no=='' && $cust_aktif != 'Tidak Aktif'){
 				//Generate Nomor Customer
 				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
@@ -503,7 +503,7 @@ class M_customer extends Model{
 				"cust_profesi"=>$cust_profesi,
 				"cust_tmptlahir"=>$cust_tmptlahir,
 				"cust_tgllahir"=>$cust_tgllahir,	
-				"cust_umur"=>$cust_umur,
+				//"cust_umur"=>$cust_umur,
 				"cust_hobi"=>$temp_hobi,			
 				"cust_referensi"=>$cust_referensi,			
 				"cust_referensilain"=>$cust_referensilain,			
@@ -666,6 +666,7 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
 			};
+			
 			if($cust_tgllahir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
@@ -753,10 +754,24 @@ class M_customer extends Model{
 					$query.= " cust_member = ''";
 				}				
 			};
-			if($cust_terdaftar!=''){
+			if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";						
 			};
+			
+			/*if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
+				}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
+				}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
+					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
+				}
+				
+			};	*/
+						
 			if($cust_statusnikah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_statusnikah='".$cust_statusnikah."'";
@@ -845,7 +860,7 @@ class M_customer extends Model{
 			}
 		}
 		
-		//function for print label
+		//function for search label
 		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter,  $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
