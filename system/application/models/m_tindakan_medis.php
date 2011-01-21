@@ -42,9 +42,98 @@ class M_tindakan_medis extends Model{
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		
+		//$this->firephp->log($sql);
+		
 		$query=$this->db->query($sql);
 		return $query->result();
 	}
+		
+	function get_customer_paket_list($trawat_cust_id,$dtrawat_rawat_id,$start,$end){
+			$rs_rows=0;
+			if(is_numeric($trawat_cust_id)==true AND is_numeric($dtrawat_rawat_id)==true){
+		
+				
+				//$sql_backup20100405="SELECT apaket_id, rawat_id, rawat_kode, rawat_nama, apaket_sisa_item FROM master_ambil_paket LEFT JOIN perawatan ON(apaket_item=rawat_id) WHERE apaket_jpaket='$apaket_jpaket' AND apaket_paket='$apaket_paket'";
+				//$sql="SELECT rawat_id, rawat_kode, rawat_nama FROM paket_isi_perawatan LEFT JOIN paket ON(rpaket_master=paket_id) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE rpaket_master='$dapaket_paket'";
+				
+				$sql="
+				(
+				SELECT 
+					pengguna_paket.ppaket_id
+					,pengguna_paket.ppaket_master
+					,pengguna_paket.ppaket_cust
+					,detail_jual_paket.dpaket_master
+					,detail_jual_paket.dpaket_paket
+					,customer.cust_id
+					,customer.cust_no
+					,customer.cust_nama
+					,master_jual_paket.jpaket_tanggal
+					,master_jual_paket.jpaket_nobukti
+					,paket.paket_kode
+					,paket.paket_nama
+					,perawatan.rawat_id
+					,perawatan.rawat_nama
+					,detail_jual_paket.dpaket_id
+					,detail_jual_paket.dpaket_jumlah
+					,detail_jual_paket.dpaket_sisa_paket
+					,detail_jual_paket.dpaket_kadaluarsa 
+				FROM pengguna_paket
+				LEFT JOIN detail_jual_paket ON(detail_jual_paket.dpaket_master=pengguna_paket.ppaket_master)
+				LEFT JOIN master_jual_paket ON(detail_jual_paket.dpaket_master=master_jual_paket.jpaket_id) 
+				LEFT JOIN customer ON(master_jual_paket.jpaket_cust=customer.cust_id) 
+				LEFT JOIN paket ON(detail_jual_paket.dpaket_paket=paket.paket_id)
+				LEFT JOIN paket_isi_perawatan ON (paket_isi_perawatan.rpaket_master = paket.paket_id)
+				LEFT JOIN perawatan ON (perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan)
+				WHERE detail_jual_paket.dpaket_sisa_paket > 0
+					AND date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
+					AND master_jual_paket.jpaket_stat_dok='Tertutup'
+					AND detail_jual_paket.dpaket_sisa_paket>0
+					AND (customer.cust_id = '$trawat_cust_id' OR pengguna_paket.ppaket_cust = '$trawat_cust_id')
+					AND perawatan.rawat_id = '$dtrawat_rawat_id'
+					AND paket_isi_perawatan.rpaket_perawatan = '$dtrawat_rawat_id'
+					GROUP BY master_jual_paket.jpaket_nobukti, detail_jual_paket.dpaket_id
+				)
+				UNION
+				(
+				select 
+					0 as ppaket_id
+					,0 as ppaket_master
+					,0 as ppaket_cust
+					,0 as dpaket_master
+					,0 as dpaket_paket
+					,0 as cust_id
+					,0 as cust_no
+					,'-' as cust_nama
+					,0 as jpaket_tanggal
+					,'-' as jpaket_nobukti
+					,0 as paket_kode
+					,'TIDAK JADI Ambil Paket' as paket_nama
+					,0 as rawat_id
+					,0 as rawat_nama
+					,0 as dpaket_id
+					,0 as dpaket_jumlah
+					,'-' as dpaket_sisa_paket
+					,'-' as dpaket_kadaluarsa 
+				)";
+				
+				$result = $this->db->query($sql);
+				$nbrows = $result->num_rows();
+				$limit = $sql." LIMIT ".$start.",".$end;			
+				
+				$result = $this->db->query($limit); 
+				if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
+				}
+			}
+		}
+		
+		
 		
 	function other_global_customer_check_paket($cust_id, $rawat_id, $jumlah_ambil){
 		//Milik Orang Lain yang perawatan yang diambil ada di dalam paket Orang Lain itu.
@@ -59,7 +148,7 @@ class M_tindakan_medis extends Model{
 			LEFT JOIN pengguna_paket ON(ppaket_master=jpaket_id)
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
-				AND jpaket_stat_dok='Tertutup'
+				AND jpaket_stat_dok<>'Batal'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
@@ -114,7 +203,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok='Tertutup'
+				AND jpaket_stat_dok<>'Batal'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 				AND rpaket_jumlah>0
 			ORDER BY detail_jual_paket.dpaket_id ASC";
@@ -172,7 +261,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok='Tertutup'
+				AND jpaket_stat_dok<>'Batal'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 			ORDER BY detail_jual_paket.dpaket_id ASC";
 		
@@ -229,7 +318,7 @@ class M_tindakan_medis extends Model{
 			WHERE ppaket_cust='$cust_id'
 				AND rpaket_perawatan='$rawat_id'
 				AND jpaket_cust='$cust_id'
-				AND jpaket_stat_dok='Tertutup'
+				AND jpaket_stat_dok<>'Batal'
 				AND dpaket_sisa_paket>='".$jumlah_ambil."'
 				AND rpaket_jumlah>0
 			ORDER BY detail_jual_paket.dpaket_id ASC";
@@ -273,6 +362,179 @@ class M_tindakan_medis extends Model{
 		}
 	}
 		
+	//insert detail record
+			
+		function customer_check_sisa_paket($dtrawat_id, $dtrawat_dpaket_id_awal, $dtrawat_perawatan_awal, $dtrawat_jumlah, $dtrawat_dokter_awal, $dtrawat_tglapp, $jpaket_id, $dpaket_id, $dpaket_paket, $trawat_cust){
+			$nilai_return='0';
+			//* Check apakah sisa_item dari $dapaket_item tsb masih memiliki sisa ? /
+			$sql_punya_paket="SELECT (dpaket_jumlah*rpaket_jumlah) AS rpaket_jumlah
+					,dpaket_id
+					,dpaket_master
+					,dpaket_paket
+					,dpaket_sisa_paket
+				FROM paket_isi_perawatan
+					LEFT JOIN detail_jual_paket ON(rpaket_master=dpaket_paket)
+					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id)
+				WHERE dpaket_id='$dtrawat_dpaket_id_awal'
+					AND rpaket_perawatan='$dtrawat_perawatan_awal'";
+			$rs_punya_paket=$this->db->query($sql_punya_paket);
+			if($rs_punya_paket->num_rows()){
+				$punya_paket_rows = $rs_punya_paket->num_rows();
+				$i=0;
+				foreach($rs_punya_paket->result() as $row_punya_paket){
+					$i++;
+					$sql_paket_terpakai="SELECT sum(dapaket_jumlah) AS total_item_terpakai
+						FROM detail_ambil_paket
+						WHERE dapaket_dpaket='$row_punya_paket->dpaket_id'
+							AND dapaket_stat_dok<>'Batal'
+						GROUP BY dapaket_dpaket";
+					$rs_paket_terpakai=$this->db->query($sql_paket_terpakai);
+					if($rs_paket_terpakai->num_rows()){
+						$record_paket_terpakai = $rs_paket_terpakai->row();
+						
+						//Mencari dtrawat_dapp ==> untuk meng-UNLOCKED db.appointment_detail
+						$sql = "SELECT dtrawat_dapp
+								FROM tindakan_detail
+								LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+								WHERE dtrawat_id='$dtrawat_id'";
+								$rs = $this->db->query($sql);
+								if($rs->num_rows()){
+									$record = $rs->row_array();
+									$dtrawat_dapp = $record['dtrawat_dapp'];
+								}
+						
+						//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
+						$date_now = date('Y-m-d');
+						$jpaket_nobukti = "";
+						$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+						$record = $rs->row_array();
+						$jpaket_nobukti = $record['jpaket_nobukti'];
+						}
+								
+						
+						if(($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah))){
+							//return $row_punya_paket;
+							//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
+							$dti_dapaket=array(
+							"dapaket_dpaket"=>$dtrawat_dpaket_id_awal,
+							"dapaket_jpaket"=>$jpaket_id,
+							"dapaket_paket"=>$dpaket_paket,
+							"dapaket_item"=>$dtrawat_perawatan_awal,
+							"dapaket_jenis_item"=>'perawatan',
+							"dapaket_jumlah"=>$dtrawat_jumlah,
+							"dapaket_cust"=>$trawat_cust,
+							"dapaket_dtrawat"=>$dtrawat_id,
+							"dapaket_creator"=>@$_SESSION[SESSION_USERID],
+							"dapaket_tgl_ambil"=>$dtrawat_tglapp,
+							"dapaket_referal"=>$dtrawat_dokter_awal
+							//"dapaket_keterangan"=>$keterangan
+							);
+							$this->db->insert('detail_ambil_paket', $dti_dapaket);
+							
+							if($this->db->affected_rows()){
+							
+								/* me-LOCKED db.appointment_detail ==> jika $dtrawat_dapp>0 */
+								if($dtrawat_dapp>0){
+									$dtu_dapp=array(
+									"dapp_locked"=>1
+									);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $dtu_dapp);
+								}
+
+								//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
+								$this->total_sisa_paket_update($dtrawat_dpaket_id_awal ,$jpaket_id ,$dpaket_paket);
+								$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
+								
+								return 1;
+
+							}
+							else{
+								return 0;
+							}
+						}
+						return -4;
+			
+						
+					}else{
+							//Mencari dtrawat_dapp ==> untuk meng-UNLOCKED db.appointment_detail
+								$sql = "SELECT dtrawat_dapp
+								FROM tindakan_detail
+								LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+								WHERE dtrawat_id='$dtrawat_id'";
+								$rs = $this->db->query($sql);
+								if($rs->num_rows()){
+									$record = $rs->row_array();
+									$dtrawat_dapp = $record['dtrawat_dapp'];
+								}
+								
+								//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
+								$date_now = date('Y-m-d');
+								$jpaket_nobukti = "";
+								$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+								$rs=$this->db->query($sql);
+								if($rs->num_rows()){
+								$record = $rs->row_array();
+								$jpaket_nobukti = $record['jpaket_nobukti'];
+								}
+					
+						//return $row_punya_paket;
+						//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
+						$dti_dapaket=array(
+						"dapaket_dpaket"=>$dtrawat_dpaket_id_awal,
+							"dapaket_jpaket"=>$jpaket_id,
+							"dapaket_paket"=>$dpaket_paket,
+							"dapaket_item"=>$dtrawat_perawatan_awal,
+							"dapaket_jenis_item"=>'perawatan',
+							"dapaket_jumlah"=>$dtrawat_jumlah,
+							"dapaket_cust"=>$trawat_cust,
+							"dapaket_dtrawat"=>$dtrawat_id,
+							"dapaket_creator"=>@$_SESSION[SESSION_USERID],
+							"dapaket_tgl_ambil"=>$dtrawat_tglapp,
+							"dapaket_referal"=>$dtrawat_dokter_awal
+						);
+						$this->db->insert('detail_ambil_paket', $dti_dapaket);
+						
+						if($this->db->affected_rows()){
+						
+							/* me-LOCKED db.appointment_detail ==> jika $dtrawat_dapp>0 */
+								if($dtrawat_dapp>0){
+									$dtu_dapp=array(
+									"dapp_locked"=>1
+									);
+								$this->db->where('dapp_id', $dtrawat_dapp);
+								$this->db->update('appointment_detail', $dtu_dapp);
+								}
+						
+						
+							//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
+							$dpaket_sisa_update = $this->total_sisa_paket_update($dtrawat_dpaket_id_awal ,$jpaket_id ,$dpaket_paket);
+							$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
+							if($dpaket_sisa_update==1){
+								return 1;
+								break;
+							}else{
+								return -4;
+								break;
+							}
+							
+						}else{
+							return 0;
+							break;
+						}
+						
+					}
+				}
+				
+			}else{
+				return '1';
+			}
+
+		}	
+		
+
 	function get_nonmedis_in_tmedis_list($query,$start,$end){
 		$rs_rows=0;
 		if(is_numeric($query)==true){
@@ -509,12 +771,8 @@ class M_tindakan_medis extends Model{
 			"jrawat_tanggal"=>$date_now,
 			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
-			
-			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 			$this->db->insert('master_jual_rawat', $data_jrawat);
-			$affected_rows = $this->db->affected_rows();
-			$this->db->query('UNLOCK TABLES');
-			if($affected_rows>0){
+			if($this->db->affected_rows()){
 				/* INSERT to db.detail_jual_rawat */
 				$sql="SELECT jrawat_id
 					FROM master_jual_rawat
@@ -761,12 +1019,8 @@ class M_tindakan_medis extends Model{
 			"jrawat_tanggal"=>$date_now,
 			"jrawat_creator"=>@$_SESSION[SESSION_USERID]
 			);
-			
-			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
 			$this->db->insert('master_jual_rawat', $dti_jrawat);
-			$affected_rows = $this->db->affected_rows();
-			$this->db->query('UNLOCK TABLES');
-			if($affected_rows>0){
+			if($this->db->affected_rows()){
 				//Cari jrawat_id dulu.....
 				$sql_jrawat="SELECT jrawat_id, jrawat_nobukti
 					FROM master_jual_rawat
@@ -991,6 +1245,7 @@ class M_tindakan_medis extends Model{
 				AND detail_jual_paket.dpaket_master='$dapaket_jpaket'
 				AND detail_jual_paket.dpaket_paket='$dapaket_paket'";
 		$this->db->query($sql_sisa_paket);
+		return 1;
 		
 	}
 	
@@ -1319,6 +1574,7 @@ class M_tindakan_medis extends Model{
 					"dtrawat_petugas1"=>5,
 					"dtrawat_tglapp"=>$date_now,
 					"dtrawat_status"=>"selesai",
+					"dtrawat_kategori"=>'Medis',
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
@@ -1536,12 +1792,18 @@ class M_tindakan_medis extends Model{
 		
 		
 	function tindakan_update_list($trawat_id
+								,$trawat_cust_id
 								,$dtrawat_id
 								,$dtrawat_perawatan
+								,$dtrawat_perawatan_id
 								,$dtrawat_dokter
 								,$dtrawat_jam
 								,$dtrawat_keterangan
 								,$dtrawat_ambil_paket
+								/* dtrawat_dpaket_id ini digunakan hanya utk mengganti Ambil Paket saja*/
+								,$dtrawat_dpaket_id
+								/* ketika melakukan update status,dll, maka membawa dpaket_id ini*/
+								,$dpaket_id
 								,$dtrawat_status
 								,$dtrawat_jumlah){
 		/*
@@ -1562,11 +1824,20 @@ class M_tindakan_medis extends Model{
 				,dtrawat_jam_batal
 				,dtrawat_keterangan
 				,dtrawat_ambil_paket
+				,dtrawat_dpaket_id
 				,dtrawat_status
+				,dtrawat_jumlah
 				,dtrawat_revised
 				,trawat_cust
+				,date_format(dtrawat_tglapp, '%Y-%m-%d') as dtrawat_tglapp
+				,master_jual_paket.jpaket_nobukti
+				,master_jual_paket.jpaket_id
+				,detail_jual_paket.dpaket_id
+				,detail_jual_paket.dpaket_paket
 			FROM tindakan_detail
 			LEFT JOIN tindakan ON(dtrawat_master=trawat_id)
+			LEFT JOIN detail_jual_paket ON (detail_jual_paket.dpaket_id=tindakan_detail.dtrawat_dpaket_id)
+			LEFT JOIN master_jual_paket ON (detail_jual_paket.dpaket_master = master_jual_paket.jpaket_id)
 			WHERE dtrawat_id='$dtrawat_id'
 				AND dtrawat_locked=0";
 		$rs_check_locked = $this->db->query($sql_check_locked);
@@ -1578,8 +1849,14 @@ class M_tindakan_medis extends Model{
 			$dtrawat_jam_awal = $record['dtrawat_jam'];
 			$dtrawat_keterangan_awal = $record['dtrawat_keterangan'];
 			$dtrawat_ambil_paket_awal = $record['dtrawat_ambil_paket'];
+			$dtrawat_dpaket_id_awal = $record['dtrawat_dpaket_id'];
 			$dtrawat_status_awal = $record['dtrawat_status'];
+			$dtrawat_jumlah_awal = $record['dtrawat_jumlah'];
 			$trawat_cust = $record['trawat_cust'];
+			$dtrawat_tglapp = $record['dtrawat_tglapp'];
+			$jpaket_id = $record['jpaket_id'];
+			//$dpaket_id = $record['dpaket_id'];
+			$dpaket_paket = $record['dpaket_paket'];
 			$dtrawat_revised = $record['dtrawat_revised'];
 			
 			//proses Editing
@@ -1590,18 +1867,21 @@ class M_tindakan_medis extends Model{
 					"dtrawat_status"=>$dtrawat_status,
 					"dtrawat_update"=>@$_SESSION[SESSION_USERID],
 					"dtrawat_date_update"=>$datetime_now,
+					//"dtrawat_jumlah"=>$dtrawat_jumlah,
+					//"dtrawat_dpaket_id"=>$dpaket_id,
+					//"dtrawat_keterangan"=>$dtrawat_keterangan,
 					"dtrawat_revised"=>$dtrawat_revised+1
 				);
 				if(($dtrawat_status_awal=='selesai') && ($dtrawat_status<>'selesai')){
-					if($dtrawat_ambil_paket_awal=='true'){
-						/* $dtrawat_ambil_paket_awal=='true' ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
+					if($dpaket_id!=0){
+						/* $dpaket_id != 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
 						** 1. Delete di db.detail_ambil_paket + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
 						*/
 						$this->detail_ambil_paket_delete($dtrawat_id);
 						
-					}else if($dtrawat_ambil_paket_awal=='false'){
-						/* $dtrawat_ambil_paket_awal=='true' ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
+					}else if($dpaket_id==0){
+						/* $dpaket_id == 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
 						** 1. Delete di db.detail_jual_rawat + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
 						*/
@@ -1611,30 +1891,35 @@ class M_tindakan_medis extends Model{
 				}else if(($dtrawat_status_awal<>'selesai') && ($dtrawat_status=='selesai')){
 					/* Perubahan status dari !='selesai' menjadi ='selesai', yg artinya: tindakan sudah 'selesai' dan masuk bagian Kasir
 					 * Proses yg dilakukan:
-					 * # Check $dtrawat_ambil_paket_awal
-					 * >> Jika = 'false' ==> masuk Kasir Penjualan Perawatan
-					 * >> Jika = 'true' ==> masuk Kasir Pengambilan Paket
+					 * # Check $dpaket_id
+					 * >> Jika == 0 ==> masuk Kasir Penjualan Perawatan
+					 * >> Jika != 0 ==> masuk Kasir Pengambilan Paket
 					 * # Update tindakan_detail
 				    */
-					if($dtrawat_ambil_paket_awal=='true'){
+					if($dpaket_id!=0){
 						/* ditujukan untuk Pengambilan Paket, tapi sebelum dimasukkan ke Pengambilan Paket harus di-check terlebih dahulu
-						 * # Check kepemilikan paket untuk Customer + Perawatan yang dipilih
-						 * >> Jika = Punya ==> masukkan ke Pengambilan Paket
-						 * >> Jika = Tidak Punya ==> keluar message: "Customer Tidak Memiliki paket dengan perawatan yang dipilih.
-						 * 		Silakan menghilangkan centang Ambil-Paket untuk dimasukkan ke Kasir Penjualan Perawatan."
+						 * # Check utk sisa dan jumlah paket yang masih bisa diambil
+						 * >> Jika masih bisa diambil ==> masukkan ke Pengambilan Paket
+						 * >> Jika Tidak bisa diambil ==> keluar message: "Isi paket tidak mencukupi"
 						*/
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
-						if(sizeof($sql_check_paket)>0){
-							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
-							** UPDATE db.tindakan_detail + INSERT to db.detail_ambil_paket
-							*/
-							//$result_dapaket_i = $this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master, $sql_check_paket->dpaket_paket, $dtrawat_perawatan_awal, $trawat_cust, $dtrawat_id);
-							$this->detail_ambil_paket_insert($sql_check_paket->dpaket_id, $sql_check_paket->dpaket_master
-															 ,$sql_check_paket->dpaket_paket, $dtrawat_perawatan_awal, $trawat_cust, $dtrawat_id);
+						//$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
+						$sql_check_sisa_paket=$this->customer_check_sisa_paket($dtrawat_id, $dtrawat_dpaket_id_awal, $dtrawat_perawatan_awal, $dtrawat_jumlah, $dtrawat_dokter_awal, $dtrawat_tglapp, $jpaket_id, $dpaket_id, $dpaket_paket, $trawat_cust);
+						if($sql_check_sisa_paket==1){
+							$this->db->where('dtrawat_id', $dtrawat_id);
+							$this->db->update('tindakan_detail', $data);
 							
-						}else{
-							return '-1';
+							if($this->db->affected_rows()){
+							return '1';
+							}else{
+							return '0';
+							}
 						}
+						else if($sql_check_sisa_paket==-4){
+							/* Keluar Message bahwa Isi Paket Tidak Mencukupi*/
+							return '-4';
+
+						}
+					
 						
 					}else{
 						//Default-nya adalah Mengambil Perawatan Satuan
@@ -1666,38 +1951,21 @@ class M_tindakan_medis extends Model{
 				 * Karena Status !=='selesai', dan tidak ada perubahan status ==> maka Update yang terjadi hanya di db.tindakan_detail
 				*/
 				$data = array(
-					"dtrawat_keterangan"=>$dtrawat_keterangan,
 					"dtrawat_update"=>@$_SESSION[SESSION_USERID],
 					"dtrawat_date_update"=>$datetime_now,
+					"dtrawat_keterangan"=>$dtrawat_keterangan,
+					//"dtrawat_dpaket_id"=>$dtrawat_dpaket_id,
 					"dtrawat_revised"=>$dtrawat_revised+1
 				);
 				if(is_numeric($dtrawat_perawatan) && ($dtrawat_perawatan_awal<>$dtrawat_perawatan)){
 					//Edit perawatan ==> jika is_numeric terpenuhi, ini artinya ada perubahan perawatan
-					if($dtrawat_ambil_paket_awal=='true'){
-						/* Perawatan yg diubah ini harus di check: apakah si Customer memiliki paket u/ perawatan ini atau tidak?
-						** jika tidak punya paket, akan keluar message: "bahwa customer tidak punya paket"
-						** >>> jika tetap akan mengganti perawatan, maka checkbox ambil-paket harus dihilangkan terlebih dahulu
-						** jika punya paket, maka akan update db.tindakan_detail
+						/* Perawatan yg diubah ini akan mereset Field Ambil Paket menjadi 0
+						** >>> Jika ingin tetap mengambil paket dengan perawatan yg dirubah, maka user harus mengisi Field Ambil Paket lagi dari awal
 						*/
-						//1. checking kepemilikan paket
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan, $dtrawat_jumlah);
-						if(sizeof($sql_check_paket)>0){
-							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
-							** UPDATE db.tindakan_detail
-							*/
 							$data['dtrawat_perawatan'] = $dtrawat_perawatan;
+							$data['dtrawat_dpaket_id'] = 0;
 							
-						}else{
-							//Secara Default ==> Mengambil Perawatan Satuan
-							$data['dtrawat_perawatan'] = $dtrawat_perawatan;
-							$data['dtrawat_ambil_paket'] = 'false';
-						}
-						
-					}else{
-						//Mengambil perawatan satuan
-						$data['dtrawat_perawatan'] = $dtrawat_perawatan;
-						
-					}
+			
 				}else if(is_numeric($dtrawat_dokter) && ($dtrawat_dokter_awal<>$dtrawat_dokter)){
 					//Edit Dokter ==> maka lakukan UPDATE db.tindakan_detail dan db.report_tindakan
 					$data['dtrawat_petugas1'] = $dtrawat_dokter;
@@ -1706,31 +1974,20 @@ class M_tindakan_medis extends Model{
 				}else if($dtrawat_jam_awal<>$dtrawat_jam){
 					//Edit Kolom Jam App
 					$data['dtrawat_jam'] = $dtrawat_jam;
-					
-				}else if($dtrawat_ambil_paket_awal<>$dtrawat_ambil_paket){
-					if($dtrawat_ambil_paket_awal=='true' && $dtrawat_ambil_paket=='false'){
-						/* 
-						** Edit checkbox ambil-paket dari 'true' ke 'false', maka lakukan UPDATE db.tindakan_detail
-						*/
-						$data['dtrawat_ambil_paket'] = $dtrawat_ambil_paket;
-						
-					}else if($dtrawat_ambil_paket_awal=='false' && $dtrawat_ambil_paket=='true'){
-						//1. checking kepemilikan paket, dari $trawat_cust dan $dtrawat_perawatan_awal
-						$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
-						if(sizeof($sql_check_paket)>0){
-							/* artinya: Customer memiliki paket untuk perawatan yang dipilih
-							** UPDATE db.tindakan_detail
-							*/
-							$data['dtrawat_ambil_paket'] = $dtrawat_ambil_paket;
-							
-						}else{
-							return '-1';
-						}
-					}else{
-						return '0';
-					}
 				}
-				
+				else if($dtrawat_jumlah_awal<>$dtrawat_jumlah){
+					//Edit Kolom Jam App
+					$data['dtrawat_jumlah'] = $dtrawat_jumlah;
+				}
+				else if($dtrawat_dpaket_id_awal<>$dtrawat_dpaket_id){
+					//Edit Kolom Ambil Paket List
+					$data['dtrawat_dpaket_id'] = $dtrawat_dpaket_id;
+				}
+				else if($dtrawat_keterangan_awal<>$dtrawat_keterangan){
+					//Edit Kolom Keterangan
+					$data['dtrawat_keterangan'] = $dtrawat_keterangan;
+				}
+		
 				$this->db->where('dtrawat_id', $dtrawat_id);
 				$this->db->update('tindakan_detail', $data);
 				if($this->db->affected_rows()){
