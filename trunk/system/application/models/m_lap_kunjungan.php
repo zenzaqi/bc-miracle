@@ -138,7 +138,7 @@ from
 					master_jual_rawat.jrawat_tanggal as tgl_tindakan
 				from detail_jual_rawat
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
-				left join customer on (detail_jual_rawat.jrawat_cust = customer.cust_id)
+				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 

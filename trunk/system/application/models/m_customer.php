@@ -667,10 +667,23 @@ class M_customer extends Model{
 				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
 			};
 			
-			if($cust_tgllahir!=''){
+			/*if($cust_tgllahir!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
-			};	
+			};	*/
+			
+			if($cust_tgllahir!='' or $cust_tgllahirend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_tgllahir!='' and $cust_tgllahirend!=''){
+					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+				}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
+					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
+				}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
+					$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+				}
+				
+			};
 			
 			if($cust_umurstart!='' or $cust_umurend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -754,12 +767,12 @@ class M_customer extends Model{
 					$query.= " cust_member = ''";
 				}				
 			};
-			if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+			/*if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";						
-			};
+			};*/
 			
-			/*if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+			if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				
 				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
@@ -770,7 +783,7 @@ class M_customer extends Model{
 					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
 				}
 				
-			};	*/
+			};
 						
 			if($cust_statusnikah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

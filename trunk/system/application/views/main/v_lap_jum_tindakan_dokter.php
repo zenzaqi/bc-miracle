@@ -212,7 +212,7 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
     
-  	/* Function for Identify of Window Column Model */
+	/* Function for Identify of Window Column Model */
 	report_tindakanColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
@@ -593,6 +593,7 @@ Ext.onReady(function(){
 		report_tindakan_dokterSearchField.setValue(null);
 		report_tindakan_groupbyField.reset();
 		report_tindakan_groupbyField.setValue(null);
+		report_tindakan_groupbyField.setValue('Semua');
 		Ext.getCmp('report_tindakan_tglStartSearchField').reset();
 		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(null);
 		Ext.getCmp('report_tindakan_tglEndSearchField').reset();
@@ -621,6 +622,7 @@ Ext.onReady(function(){
 		if(!report_tindakan_searchWindow.isVisible()){
 			report_tindakan_reset_formSearch();
 			report_tindakan_searchWindow.show();
+
 		} else {
 			report_tindakan_searchWindow.toFront();
 		}

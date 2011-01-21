@@ -1,0 +1,2 @@
+master customer (nambah batas advsearch tgl terdaftar, tgl lahir)
+lap tindakan dokter (nambah advsearch 'semua')

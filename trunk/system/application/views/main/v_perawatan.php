@@ -272,6 +272,21 @@ Ext.onReady(function(){
 				rawat_harga	: rawat_harga_create, 
 				rawat_gudang	: rawat_gudang_create, 
 				rawat_aktif	: rawat_aktif_create, 
+				rawat_aktif_th : rawat_aktif_thField.getValue(),
+				rawat_aktif_ki : rawat_aktif_kiField.getValue(),
+				rawat_aktif_hr : rawat_aktif_hrField.getValue(),
+				rawat_aktif_tp : rawat_aktif_tpField.getValue(),
+				rawat_aktif_dps : rawat_aktif_dpsField.getValue(),
+				rawat_aktif_jkt : rawat_aktif_jktField.getValue(),
+				rawat_aktif_blpn : rawat_aktif_blpnField.getValue(),
+				rawat_aktif_kuta : rawat_aktif_kutaField.getValue(),
+				rawat_aktif_btm : rawat_aktif_btmField.getValue(),
+				rawat_aktif_mks : rawat_aktif_mksField.getValue(),
+				rawat_aktif_mdn : rawat_aktif_mdnField.getValue(),
+				rawat_aktif_lbk : rawat_aktif_lbkField.getValue(),
+				rawat_aktif_mnd : rawat_aktif_mndField.getValue(),
+				rawat_aktif_ygk : rawat_aktif_ygkField.getValue(),
+				rawat_aktif_mlg : rawat_aktif_mlgField.getValue()
 			}, 
 			success: function(response){             
 				/*var result=eval(response.responseText);
@@ -385,6 +400,38 @@ Ext.onReady(function(){
 		rawat_gudangField.setValue(null);
 		rawat_aktifField.reset();
 		rawat_aktifField.setValue('Aktif');
+		rawat_aktif_thField.reset();
+		rawat_aktif_thField.setValue(true);
+		rawat_aktif_kiField.reset();
+		rawat_aktif_kiField.setValue(true);
+		rawat_aktif_hrField.reset();
+		rawat_aktif_hrField.setValue(true);
+		rawat_aktif_tpField.reset();
+		rawat_aktif_tpField.setValue(true);
+		rawat_aktif_dpsField.reset();
+		rawat_aktif_dpsField.setValue(true);
+		rawat_aktif_jktField.reset();
+		rawat_aktif_jktField.setValue(true);
+		rawat_aktif_blpnField.reset();
+		rawat_aktif_blpnField.setValue(true);
+		rawat_aktif_kutaField.reset();
+		rawat_aktif_kutaField.setValue(true);
+		rawat_aktif_btmField.reset();
+		rawat_aktif_btmField.setValue(true);
+		rawat_aktif_mksField.reset();
+		rawat_aktif_mksField.setValue(true);
+		rawat_aktif_mdnField.reset();
+		rawat_aktif_mdnField.setValue(true);
+		rawat_aktif_lbkField.reset();
+		rawat_aktif_lbkField.setValue(true);
+		rawat_aktif_mndField.reset();
+		rawat_aktif_mndField.setValue(true);
+		rawat_aktif_ygkField.reset();
+		rawat_aktif_ygkField.setValue(true);		
+		rawat_aktif_mlgField.reset();
+		rawat_aktif_mlgField.setValue(true);
+		rawat_aktif_checkField.reset();
+		rawat_aktif_checkField.setValue(true);
 		
 		cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
 		cbo_satuan_produkDataStore.load();
@@ -414,6 +461,81 @@ Ext.onReady(function(){
 		//rawat_jumlah_tindakanField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_jumlah_tindakan'));
 		rawat_gudangField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_gudang'));
 		rawat_aktifField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif'));
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(0)=="1")	
+			rawat_aktif_thField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(0)=="0")
+			rawat_aktif_thField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(1)=="1")	
+			rawat_aktif_kiField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(1)=="0")
+			rawat_aktif_kiField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(2)=="1")	
+			rawat_aktif_hrField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(2)=="0")
+			rawat_aktif_hrField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(3)=="1")
+			rawat_aktif_tpField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(3)=="0")
+			rawat_aktif_tpField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(4)=="1")	
+			rawat_aktif_dpsField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(4)=="0")
+			rawat_aktif_dpsField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(5)=="1")	
+			rawat_aktif_jktField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(5)=="0")
+			rawat_aktif_jktField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(6)=="1")	
+			rawat_aktif_blpnField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(6)=="0")
+			rawat_aktif_blpnField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(7)=="1")	
+			rawat_aktif_kutaField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(7)=="0")
+			rawat_aktif_kutaField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(8)=="1")	
+			rawat_aktif_btmField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(8)=="0")
+			rawat_aktif_btmField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(9)=="1")	
+			rawat_aktif_mksField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(9)=="0")
+			rawat_aktif_mksField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(10)=="1")	
+			rawat_aktif_mdnField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(10)=="0")
+			rawat_aktif_mdnField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(11)=="1")	
+			rawat_aktif_lbkField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(11)=="0")
+			rawat_aktif_lbkField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(12)=="1")
+			rawat_aktif_mndField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(12)=="0")
+			rawat_aktif_mndField.setValue(false);
+		
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(13)=="1")	
+			rawat_aktif_ygkField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(13)=="0")
+			rawat_aktif_ygkField.setValue(false);
+			
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(14)=="1")	
+			rawat_aktif_mlgField.setValue(true);	
+		if(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_aktif_cabang').charAt(14)=="0")
+			rawat_aktif_mlgField.setValue(false);	
 		
 		cbo_rawat_produkDataStore.setBaseParam('query',get_pk_id());
 		cbo_rawat_produkDataStore.load();
@@ -574,7 +696,8 @@ Ext.onReady(function(){
 			{name: 'rawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rawat_date_create'}, 
 			{name: 'rawat_update', type: 'string', mapping: 'rawat_update'}, 
 			{name: 'rawat_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rawat_date_update'}, 
-			{name: 'rawat_revised', type: 'int', mapping: 'rawat_revised'} 
+			{name: 'rawat_revised', type: 'int', mapping: 'rawat_revised'},
+			{name: 'rawat_aktif_cabang', type: 'string', mapping: 'rawat_aktif_cabang'}			
 		]),
 		sortInfo:{field: 'rawat_id', direction: "DESC"}
 	});
@@ -1366,6 +1489,186 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	/* Identify Paket Aktif*/
+	rawat_aktif_thField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_thField',
+		boxLabel: 'TH',
+		maxLength: 250,
+		name: 'rawat_aktif_th'
+	});
+	
+	rawat_aktif_kiField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_kiField',
+		boxLabel: 'KI',
+		maxLength: 250,
+		name: 'rawat_aktif_ki'
+	});
+	
+	rawat_aktif_hrField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_hrField',
+		boxLabel: 'HR',
+		maxLength: 250,
+		name: 'rawat_aktif_hr'
+	});
+	
+	rawat_aktif_tpField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_tpField',
+		boxLabel: 'TP',
+		maxLength: 250,
+		name: 'rawat_aktif_tp'
+	});
+	
+	rawat_aktif_dpsField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_dpsField',
+		boxLabel: 'DPS',
+		maxLength: 250,
+		name: 'rawat_aktif_dps'
+	});
+	
+	rawat_aktif_jktField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_jktField',
+		boxLabel: 'JKT',
+		maxLength: 250,
+		name: 'rawat_aktif_jkt'
+	});
+	
+	rawat_aktif_blpnField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_blpnField',
+		boxLabel: 'BLPN',
+		maxLength: 250,
+		name: 'rawat_aktif_blpn'
+	});
+	
+	rawat_aktif_kutaField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_kutaField',
+		boxLabel: 'KUTA',
+		maxLength: 250,
+		name: 'rawat_aktif_kuta'
+	});
+	
+	rawat_aktif_btmField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_btmField',
+		boxLabel: 'BTM',
+		maxLength: 250,
+		name: 'rawat_aktif_btm'
+	});
+	
+	rawat_aktif_mksField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_mksField',
+		boxLabel: 'MKS',
+		maxLength: 250,
+		name: 'rawat_aktif_mks'
+	});
+	
+	rawat_aktif_mdnField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_mdnField',
+		boxLabel: 'MDN',
+		maxLength: 250,
+		name: 'rawat_aktif_mdn'
+	});
+	
+	rawat_aktif_lbkField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_lbkField',
+		boxLabel: 'LBK',
+		maxLength: 250,
+		name: 'rawat_aktif_lbk'
+	});
+	
+	rawat_aktif_mndField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_mndField',
+		boxLabel: 'MND',
+		maxLength: 250,
+		name: 'rawat_aktif_mnd'
+	});
+	
+	rawat_aktif_ygkField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_ygkField',
+		boxLabel: 'YGK',
+		maxLength: 250,
+		name: 'rawat_aktif_ygk'
+	});
+	
+	rawat_aktif_mlgField=new Ext.form.Checkbox({
+		id : 'rawat_aktif_mlgField',
+		boxLabel: 'MLG',
+		maxLength: 250,
+		name: 'rawat_aktif_mlg'
+	});
+	
+	rawat_checkallField= new Ext.form.Checkbox({
+		id: 'rawat_checkallField',
+		fieldLabel: 'Check All',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
+	rawat_aktif_checkField=new Ext.form.Checkbox({
+		id : '',
+		boxLabel: 'Check All',
+		maxLength: 250,
+		handler: function(node,checked){
+			if (checked) {
+				rawat_aktif_thField.setValue(true);
+				rawat_aktif_kiField.setValue(true);
+				rawat_aktif_hrField.setValue(true);
+				rawat_aktif_tpField.setValue(true);
+				rawat_aktif_dpsField.setValue(true);
+				rawat_aktif_jktField.setValue(true);
+				rawat_aktif_blpnField.setValue(true);
+				rawat_aktif_kutaField.setValue(true);
+				rawat_aktif_btmField.setValue(true);
+				rawat_aktif_mksField.setValue(true);
+				rawat_aktif_mdnField.setValue(true);
+				rawat_aktif_lbkField.setValue(true);
+				rawat_aktif_mndField.setValue(true);
+				rawat_aktif_ygkField.setValue(true);
+				rawat_aktif_mlgField.setValue(true);
+			}
+			else {
+				rawat_aktif_thField.setValue(false);
+				rawat_aktif_kiField.setValue(false);
+				rawat_aktif_hrField.setValue(false);
+				rawat_aktif_tpField.setValue(false);
+				rawat_aktif_dpsField.setValue(false);
+				rawat_aktif_jktField.setValue(false);
+				rawat_aktif_blpnField.setValue(false);
+				rawat_aktif_kutaField.setValue(false);
+				rawat_aktif_btmField.setValue(false);
+				rawat_aktif_mksField.setValue(false);
+				rawat_aktif_mdnField.setValue(false);
+				rawat_aktif_lbkField.setValue(false);
+				rawat_aktif_mndField.setValue(false);
+				rawat_aktif_ygkField.setValue(false);
+				rawat_aktif_mlgField.setValue(false);
+			}
+		}
+	});
+	
+	rawat_aktifGroup = new Ext.form.FieldSet({
+		title: 'Rawat Aktif',
+		layout:'column',
+		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ rawat_aktif_thField, rawat_aktif_kiField, rawat_aktif_hrField, rawat_aktif_tpField, rawat_aktif_mlgField, rawat_aktif_dpsField, rawat_aktif_jktField, rawat_aktif_blpnField, rawat_aktif_checkField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[rawat_aktif_kutaField, rawat_aktif_btmField, rawat_aktif_mksField, rawat_aktif_mdnField, rawat_aktif_lbkField, rawat_aktif_mndField, rawat_aktif_ygkField]
+			   }
+		]
+	});	
+	
 	rawat_groupField.on('select', function(){
 		var record=cbo_rawat_groupDataStore.findExact('rawat_group_value', rawat_groupField.getValue(),0);
 		if(cbo_rawat_groupDataStore.getCount()){
@@ -1403,7 +1706,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_durasiField, rawat_pointField, rawat_kreditField, rawat_hargaField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField, rawat_aktifField, rawat_idField] 
+				items: [rawat_durasiField, rawat_pointField, rawat_kreditField, rawat_hargaField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField, rawat_aktifField, rawat_idField, rawat_aktifGroup] 
 			}
 			]
 	
@@ -1526,7 +1829,8 @@ Ext.onReady(function(){
 			{name: 'rawat_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'rawat_produk_dm', type: 'float', mapping: 'produk_dm'},
-			{name: 'rawat_produk_display', type: 'string', mapping: 'produk_nama'}
+			{name: 'rawat_produk_display', type: 'string', mapping: 'produk_nama'},
+			{name: 'rawat_paket_aktif', type: 'string', mapping: 'rawat_aktif_cabang'}	
 		]),
 		sortInfo:{field: 'rawat_produk_display', direction: "ASC"}
 	});
@@ -2092,7 +2396,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,
+		width: 800,
 		items: [perawatan_masterGroup,detail_tab_rawat],
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
