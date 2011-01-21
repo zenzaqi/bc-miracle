@@ -597,7 +597,7 @@ Ext.onReady(function(){
 		lap_jum_tindakan_terapis_dokterSearchField.reset();
 		lap_jum_tindakan_terapis_dokterSearchField.setValue(null);
 		lap_jum_tindakan_terapis_groupbyField.reset();
-		lap_jum_tindakan_terapis_groupbyField.setValue(null);
+		lap_jum_tindakan_terapis_groupbyField.setValue('Semua');
 		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').reset();
 		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').setValue(null);
 		Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').reset();

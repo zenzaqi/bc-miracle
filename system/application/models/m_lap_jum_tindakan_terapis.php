@@ -130,10 +130,45 @@ class M_lap_jum_tindakan_terapis extends Model{
 	function lap_jum_tindakan_terapis_search($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
 	
-			if ($lapjum_groupby == '')
-				$lapjum_groupby = 'Semua';
+			if ($lapjum_groupby == 'Semua')
+			{
+			$query ="select karyawan.karyawan_username as karyawan_username,
+						perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+						count(perawatan.rawat_nama) as Jumlah_rawat,
+						perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+						detail_ambil_paket.dapaket_tgl_ambil as tanggal,
+						karyawan.karyawan_id as karyawan_id,
+						perawatan.rawat_id as perawatan_id,
+						detail_ambil_paket.dapaket_stat_dok as stat_dok
+					from detail_ambil_paket
+						left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
+						left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)
+					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+						and (karyawan_id != 67 and rawat_id is not null and (dapaket_stat_dok='Terbuka' or dapaket_stat_dok='Tertutup'))
+						group by karyawan_username, rawat_nama
+					union
+					select karyawan.karyawan_username as karyawan_username,
+						perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+						count(perawatan.rawat_nama) as Jumlah_rawat,
+						perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+						master_jual_rawat.jrawat_tanggal as tanggal,
+						karyawan.karyawan_id as karyawan_id,
+						perawatan.rawat_id as perawatan_id,
+						master_jual_rawat.jrawat_stat_dok as stat_dok
+					from detail_jual_rawat
+						left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
+						left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
+						left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
+						left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)
+					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+						and (karyawan_id != 67 and rawat_id is not null and jrawat_stat_dok='Tertutup')
+					group by karyawan_username, rawat_nama";
+			}
+				
 
-			if ($lapjum_groupby == 'Perawatan')
+			else if ($lapjum_groupby == 'Perawatan')
 			{
 			$query ="select karyawan.karyawan_username,
 					perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
@@ -209,9 +244,46 @@ class M_lap_jum_tindakan_terapis extends Model{
 	//function for advanced search record
 	function lap_jum_tindakan_terapis_search2($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
-			if ($lapjum_groupby == '')
-				$lapjum_groupby = 'Semua';
-
+			if ($lapjum_groupby == 'Semua')
+			{
+			$query ="select sum(table_union.Total_kredit) as grand_total
+					from(
+					(select karyawan.karyawan_username as karyawan_username,
+						perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+						count(perawatan.rawat_nama) as Jumlah_rawat,
+						perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+						detail_ambil_paket.dapaket_tgl_ambil as tanggal,
+						karyawan.karyawan_id as karyawan_id,
+						perawatan.rawat_id as perawatan_id,
+						detail_ambil_paket.dapaket_stat_dok as stat_dok
+					from detail_ambil_paket
+						left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
+						left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)
+					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+						and (karyawan_id != 67 and rawat_id is not null and (dapaket_stat_dok='Terbuka' or dapaket_stat_dok='Tertutup'))
+						group by karyawan_username, rawat_nama)
+					union
+					(select karyawan.karyawan_username as karyawan_username,
+						perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+						count(perawatan.rawat_nama) as Jumlah_rawat,
+						perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+						master_jual_rawat.jrawat_tanggal as tanggal,
+						karyawan.karyawan_id as karyawan_id,
+						perawatan.rawat_id as perawatan_id,
+						master_jual_rawat.jrawat_stat_dok as stat_dok
+					from detail_jual_rawat
+						left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
+						left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
+						left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
+						left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)
+					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+						and (karyawan_id != 67 and rawat_id is not null and jrawat_stat_dok='Tertutup') 
+					group by karyawan_username, rawat_nama)) as table_union"
+				;
+			}
+			
 			if ($lapjum_groupby == 'Perawatan')
 			{
 			$query ="select sum(vu_kredit.Total_kredit) as grand_total 

@@ -263,7 +263,90 @@ class M_produk extends Model{
 		}
 		
 		//function for update record
-		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg ){
+		
+		if ($produk_aktif=="")
+			$produk_aktif = "Aktif";
+		if ($produk_point=="")
+			$produk_point = 1;
+
+		if($produk_aktif_th=='true')
+			$th="1";
+		if($produk_aktif_th=='false')
+			$th="0";	
+			
+		if($produk_aktif_ki=='true')
+			$ki="1";
+		if($produk_aktif_ki=='false')
+			$ki="0";			
+
+		if($produk_aktif_hr=='true')
+			$hr="1";
+		if($produk_aktif_hr=='false')
+			$hr="0";	
+			
+		if($produk_aktif_tp=='true')
+			$tp="1";
+		if($produk_aktif_tp=='false')
+			$tp="0";	
+			
+		if($produk_aktif_dps=='true')
+			$dps="1";
+		if($produk_aktif_dps=='false')
+			$dps="0";	
+			
+		if($produk_aktif_jkt=='true')
+			$jkt="1";
+		if($produk_aktif_jkt=='false')
+			$jkt="0";	
+			
+		if($produk_aktif_blpn=='true')
+			$blpn="1";
+		if($produk_aktif_blpn=='false')
+			$blpn="0";	
+			
+		if($produk_aktif_kuta=='true')
+			$kuta="1";
+		if($produk_aktif_kuta=='false')
+			$kuta="0";	
+			
+		if($produk_aktif_btm=='true')
+			$btm="1";
+		if($produk_aktif_btm=='false')
+			$btm="0";	
+			
+		if($produk_aktif_mks=='true')
+			$mks="1";
+		if($produk_aktif_mks=='false')
+			$mks="0";	
+			
+		if($produk_aktif_mdn=='true')
+			$mdn="1";
+		if($produk_aktif_mdn=='false')
+			$mdn="0";	
+			
+		if($produk_aktif_lbk=='true')
+			$lbk="1";
+		if($produk_aktif_lbk=='false')
+			$lbk="0";	
+			
+		if($produk_aktif_mnd=='true')
+			$mnd="1";
+		if($produk_aktif_mnd=='false')
+			$mnd="0";	
+			
+		if($produk_aktif_ygk=='true')
+			$ygk="1";
+		if($produk_aktif_ygk=='false')
+			$ygk="0";	
+			
+		if($produk_aktif_mlg=='true')
+			$mlg="1";
+		if($produk_aktif_mlg=='false')
+			$mlg="0";	
+			
+		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg;
+		
 			if ($produk_aktif=="")
 				$produk_aktif = "Aktif";
 			if ($produk_point=="")
@@ -278,6 +361,7 @@ class M_produk extends Model{
 				"produk_du"=>$produk_du,
 				"produk_dm"=>$produk_dm,
 				"produk_keterangan"=>$produk_keterangan, 
+				"produk_aktif_cabang"=>$temp_aktif,
 				"produk_aktif"=>$produk_aktif 
 			);
 			
@@ -361,13 +445,91 @@ class M_produk extends Model{
 		}
 		
 		//function for create new record
-		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ){
+		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg ){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			if($produk_harga=="")
 				$produk_harga=0;
 			if($produk_point=="")
 				$produk_point=1;
+				
+			if($produk_aktif_th=='true')
+				$th="1";
+			if($produk_aktif_th=='false')
+				$th="0";	
+				
+			if($produk_aktif_ki=='true')
+				$ki="1";
+			if($produk_aktif_ki=='false')
+				$ki="0";			
+
+			if($produk_aktif_hr=='true')
+				$hr="1";
+			if($produk_aktif_hr=='false')
+				$hr="0";	
+				
+			if($produk_aktif_tp=='true')
+				$tp="1";
+			if($produk_aktif_tp=='false')
+				$tp="0";	
+				
+			if($produk_aktif_dps=='true')
+				$dps="1";
+			if($produk_aktif_dps=='false')
+				$dps="0";	
+				
+			if($produk_aktif_jkt=='true')
+				$jkt="1";
+			if($produk_aktif_jkt=='false')
+				$jkt="0";	
+				
+			if($produk_aktif_blpn=='true')
+				$blpn="1";
+			if($produk_aktif_blpn=='false')
+				$blpn="0";	
+				
+			if($produk_aktif_kuta=='true')
+				$kuta="1";
+			if($produk_aktif_kuta=='false')
+				$kuta="0";	
+				
+			if($produk_aktif_btm=='true')
+				$btm="1";
+			if($produk_aktif_btm=='false')
+				$btm="0";	
+				
+			if($produk_aktif_mks=='true')
+				$mks="1";
+			if($produk_aktif_mks=='false')
+				$mks="0";	
+				
+			if($produk_aktif_mdn=='true')
+				$mdn="1";
+			if($produk_aktif_mdn=='false')
+				$mdn="0";	
+				
+			if($produk_aktif_lbk=='true')
+				$lbk="1";
+			if($produk_aktif_lbk=='false')
+				$lbk="0";	
+				
+			if($produk_aktif_mnd=='true')
+				$mnd="1";
+			if($produk_aktif_mnd=='false')
+				$mnd="0";	
+				
+			if($produk_aktif_ygk=='true')
+				$ygk="1";
+			if($produk_aktif_ygk=='false')
+				$ygk="0";	
+				
+			if($produk_aktif_mlg=='true')
+				$mlg="1";
+			if($produk_aktif_mlg=='false')
+				$mlg="0";
+				
+			$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';						
+				
 			$data = array(
 				"produk_kode"=>$produk_kode,
 				"produk_kodelama"=>$produk_kodelama,
@@ -384,6 +546,7 @@ class M_produk extends Model{
 				"produk_harga"=>$produk_harga, 
 				"produk_jenis"=>$produk_jenis,
 				"produk_keterangan"=>$produk_keterangan, 
+				"produk_aktif_cabang"=>$temp_aktif,
 				"produk_aktif"=>$produk_aktif 
 			);
 			
