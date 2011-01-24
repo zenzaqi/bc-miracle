@@ -588,6 +588,7 @@ class M_tindakan_medis extends Model{
 						,dtrawat_jam_datang
                         ,dtrawat_kategori
                         ,dtrawat_status
+						,dtrawat_jumlah
                         ,dtrawat_keterangan
                         ,dtrawat_ambil_paket
                 FROM tindakan_detail
@@ -1393,6 +1394,7 @@ class M_tindakan_medis extends Model{
 	function detail_tindakan_medis_detail_insert($array_dtrawat_id
 												 ,$dtrawat_master
 												 ,$array_dtrawat_perawatan
+												 ,$array_dtrawat_jumlah
 												 ,$array_dtrawat_petugas1
 												 ,$array_dtrawat_jamreservasi
 												 ,$array_dtrawat_status
@@ -1407,6 +1409,7 @@ class M_tindakan_medis extends Model{
 		for($i = 0; $i < sizeof($array_dtrawat_perawatan); $i++){
 			$dtrawat_id = $array_dtrawat_id[$i];
 			$dtrawat_perawatan = $array_dtrawat_perawatan[$i];
+			$dtrawat_jumlah = $array_dtrawat_jumlah[$i];
 			$dtrawat_petugas1 = $array_dtrawat_petugas1[$i];
 			$dtrawat_jamreservasi = $array_dtrawat_jamreservasi[$i];
 			$dtrawat_status = $array_dtrawat_status[$i];
@@ -1416,6 +1419,7 @@ class M_tindakan_medis extends Model{
 				// Data sudah masuk di db.tindakan_detail, sehingga yang diperbolehkan adalah Editing dengan syarat $dtrawat_status="datang"
 				$sqlu = "UPDATE tindakan_detail
 					SET dtrawat_perawatan='".$dtrawat_perawatan."'
+						,dtrawat_jumlah='".$dtrawat_jumlah."'
 						,dtrawat_petugas1='".$dtrawat_petugas1."'
 						,dtrawat_jam='".$dtrawat_jamreservasi."'
 						,dtrawat_keterangan='".$dtrawat_keterangan."'
@@ -1443,6 +1447,7 @@ class M_tindakan_medis extends Model{
 					$dti_dtrawat=array(
 					"dtrawat_master"=>$dtrawat_master,
 					"dtrawat_perawatan"=>$dtrawat_perawatan,
+					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_petugas1"=>$dtrawat_petugas1,
 					"dtrawat_kategori"=>'Medis',
 					"dtrawat_tglapp"=>$date_now,
