@@ -48,7 +48,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok ='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -63,7 +63,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -93,7 +93,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)	
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -109,7 +109,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -140,7 +140,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -156,7 +156,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -188,7 +188,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -204,7 +204,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -222,7 +222,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now' 
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now' 
 		group by tgl_tindakan
 	)
 
@@ -251,7 +251,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
@@ -266,7 +266,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -282,7 +282,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)	
 		)as table_union2
 		group by tgl_tindakan
@@ -342,7 +342,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -357,7 +357,7 @@ from
 				from detail_ambil_paket
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -387,7 +387,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -403,7 +403,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -434,7 +434,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -450,7 +450,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -482,7 +482,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -498,7 +498,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -516,7 +516,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
 
@@ -545,7 +545,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
@@ -560,7 +560,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -576,7 +576,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)
 			
 			)as table_union2
@@ -637,7 +637,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -652,7 +652,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -682,7 +682,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -698,7 +698,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -729,7 +729,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -745,7 +745,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -777,7 +777,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -793,7 +793,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -811,7 +811,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
 
@@ -840,7 +840,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
@@ -855,7 +855,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -871,7 +871,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join customer on (detail_ambil_paket.dapaket_cust = customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$date_now'
 			)
 			
 			)as table_union2
@@ -978,7 +978,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -993,7 +993,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -1023,7 +1023,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1039,7 +1039,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -1070,7 +1070,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1086,7 +1086,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging 
 		group by tgl_tindakan
 
@@ -1118,7 +1118,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1134,7 +1134,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -1152,7 +1152,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1181,7 +1181,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '". $trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -1196,7 +1196,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -1212,7 +1212,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			)as table_union2
@@ -1257,7 +1257,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1272,7 +1272,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -1302,7 +1302,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1318,7 +1318,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -1349,7 +1349,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1365,7 +1365,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -1397,7 +1397,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1413,7 +1413,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -1431,7 +1431,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.fproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1460,7 +1460,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -1475,7 +1475,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -1491,7 +1491,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			)as table_union2
@@ -1604,7 +1604,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1619,7 +1619,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -1649,7 +1649,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1665,7 +1665,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -1696,7 +1696,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1712,7 +1712,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -1744,7 +1744,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1760,7 +1760,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'and vu_customer.cust_kelamin = '".$lap_kunjungan_kelamin."'".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'and vu_customer.cust_kelamin = '".$lap_kunjungan_kelamin."'".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -1778,7 +1778,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1807,7 +1807,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -1822,7 +1822,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -1838,7 +1838,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			)as table_union2
 		group by tgl_tindakan
@@ -1883,7 +1883,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1898,7 +1898,7 @@ from
 				from detail_ambil_paket
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -1928,7 +1928,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1944,7 +1944,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -1975,7 +1975,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1991,7 +1991,7 @@ from
 				from detail_ambil_paket
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -2023,7 +2023,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2039,7 +2039,7 @@ from
 				from detail_ambil_paket
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -2057,7 +2057,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2086,7 +2086,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -2101,7 +2101,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2117,7 +2117,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			)as table_union2
@@ -2227,7 +2227,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2242,7 +2242,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -2272,7 +2272,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2288,7 +2288,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -2319,7 +2319,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2335,7 +2335,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -2367,7 +2367,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2383,7 +2383,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -2401,7 +2401,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2430,7 +2430,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -2445,7 +2445,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2461,7 +2461,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			)as table_union2
 		group by tgl_tindakan
@@ -2506,7 +2506,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2521,7 +2521,7 @@ from
 				from detail_ambil_paket
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -2551,7 +2551,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2567,7 +2567,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -2598,7 +2598,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2614,7 +2614,7 @@ from
 				from detail_ambil_paket
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -2646,7 +2646,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok<> 'Batal' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2662,7 +2662,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -2680,7 +2680,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2709,7 +2709,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where master_jual_rawat.jrawat_stat_dok <> 'Batal'
+				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
 				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
@@ -2723,7 +2723,7 @@ from
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok <> 'Batal' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2739,7 +2739,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok <> 'Batal' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			)as table_union2
