@@ -594,7 +594,7 @@ class M_tindakan_medis extends Model{
                 INNER JOIN perawatan ON(dtrawat_perawatan=rawat_id)
                 INNER JOIN karyawan ON(dtrawat_petugas1=karyawan_id)
                 LEFT JOIN kategori ON(rawat_kategori=kategori_id)
-                WHERE dtrawat_master='".$master_id."' AND (kategori_nama='Medis' OR kategori_nama ='Surgery')";
+                WHERE dtrawat_master='".$master_id."' AND (kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama ='Anti Aging')";
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;			
