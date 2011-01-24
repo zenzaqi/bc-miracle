@@ -343,7 +343,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	function check_acc(){
-		if(acc_group!==9){
+		if((acc_group!==9) && (acc_group!==1)){
 			order_harga_satuanField.setDisabled(true);
 			order_diskon_satuanField.setDisabled(true);
 		}else{

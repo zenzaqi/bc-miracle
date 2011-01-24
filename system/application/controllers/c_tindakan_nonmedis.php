@@ -81,6 +81,18 @@ class C_tindakan_nonmedis extends Controller {
 		echo '1'; 
 	}
 	
+	function get_customer_paket_list(){
+		//$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
+		$trawat_cust_id = isset($_POST['trawat_cust_id']) ? $_POST['trawat_cust_id'] : 0;
+		$dtrawat_rawat_id = isset($_POST['dtrawat_rawat_id']) ? $_POST['dtrawat_rawat_id'] : 0;
+		//$dapaket_paket = isset($_POST['dapaket_paket']) ? $_POST['dapaket_paket'] : 0;
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_tindakan_nonmedis->get_customer_paket_list($trawat_cust_id,$dtrawat_rawat_id,$start,$end);
+		echo $result;
+	}
+	
+	
 	function get_customer_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -223,23 +235,31 @@ class C_tindakan_nonmedis extends Controller {
 		if($mode_edit_case=='update_list'){
 			//Edit InLine
 			$trawat_id=trim(@$_POST["trawat_id"]);
+			$trawat_cust_id=trim(@$_POST["trawat_cust_id"]);
 			$dtrawat_id=trim(@$_POST["dtrawat_id"]);
 			$dtrawat_perawatan=trim(@$_POST["dtrawat_perawatan"]);
+			$dtrawat_perawatan_id=trim(@$_POST["dtrawat_perawatan_id"]);
 			$dtrawat_terapis=trim(@$_POST["dtrawat_terapis"]);
 			$dtrawat_jam=trim(@$_POST["dtrawat_jam"]);
 			$dtrawat_keterangan=trim(@$_POST["dtrawat_keterangan"]);
 			$dtrawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$dtrawat_keterangan);
 			$dtrawat_ambil_paket=trim(@$_POST["dtrawat_ambil_paket"]);
+			$dtrawat_dpaket_id=trim(@$_POST["dtrawat_dpaket_id"]);
+			$dpaket_id=trim(@$_POST["dpaket_id"]);
 			$dtrawat_status=trim(@$_POST["dtrawat_status"]);
 			$dtrawat_jumlah=trim(@$_POST["dtrawat_jumlah"]);
 			
 			$result = $this->m_tindakan_nonmedis->tindakan_update_list($trawat_id
+																	,$trawat_cust_id
 																  ,$dtrawat_id
 																  ,$dtrawat_perawatan
+																  ,$dtrawat_perawatan_id
 																  ,$dtrawat_terapis
 																  ,$dtrawat_jam
 																  ,$dtrawat_keterangan
 																  ,$dtrawat_ambil_paket
+																  ,$dtrawat_dpaket_id
+																  ,$dpaket_id
 																  ,$dtrawat_status
 																  ,$dtrawat_jumlah);
 			echo $result;

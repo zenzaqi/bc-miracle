@@ -449,20 +449,25 @@ var editor_cust_note;
   	/* End of Function */
   
   function get_umur(){
-				var datDate1=cust_tgllahirField.getValue();
-				var getBlnLahir=datDate1.getMonth()+1;
-				var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
-				var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
-				
-				var tempBln=0;
-				if(getSelisihBln<0){
-					tempBln=12-getBlnLahir;
-					getSelisihBln=tempBln+(-(getSelisihBln));
-				}
-				var umur=getUmur+" Th, "+getSelisihBln+" Bln";
-				
-				cust_umurField.setValue(umur);
-			}
+		var datDate1=cust_tgllahirField.getValue();
+		var getBlnLahir=datDate1.getMonth()+1;
+		var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
+		var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
+		
+		var tempBln=0;
+		/*if(getSelisihBln<0){
+			tempBln=12-getBlnLahir;
+			getSelisihBln=tempBln+(-(getSelisihBln));
+		}*/
+		
+		if((getBlnLahir) < (dt.getMonth()+1)){
+			getUmur=getUmur+1;
+		}
+		var umur=getUmur+" Th"
+		//+getSelisihBln+" Bln";
+		
+		cust_umurField.setValue(umur);
+	}
   
   
   
@@ -892,7 +897,7 @@ var editor_cust_note;
 		var cust_pendidikan_print=null;
 		var cust_profesi_print=null;
 		var cust_tgllahir_print_date="";
-		var cust_hobi_print=null;
+		//var cust_hobi_print=null;
 		var cust_referensi_print=null;
 		var cust_keterangan_print=null;
 		var cust_member_print=null;
@@ -931,7 +936,7 @@ var editor_cust_note;
 		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_print = customer_DataStore.baseParams.cust_pendidikan;}
 		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_print = customer_DataStore.baseParams.cust_profesi;}
 		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_print_date = customer_DataStore.baseParams.cust_tgllahir;}
-		if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
+		//if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
@@ -976,7 +981,7 @@ var editor_cust_note;
 			cust_pendidikan : cust_pendidikan_print,
 			cust_profesi : cust_profesi_print,
 		  	cust_tgllahir : cust_tgllahir_print_date, 
-			cust_hobi : cust_hobi_print,
+			//cust_hobi : cust_hobi_print,
 			cust_referensi : cust_referensi_print,
 			cust_keterangan : cust_keterangan_print,
 			cust_member : cust_member_print,
@@ -1197,7 +1202,7 @@ var editor_cust_note;
 		var cust_pendidikan_2excel=null;
 		var cust_profesi_2excel=null;
 		var cust_tgllahir_2excel_date="";
-		var cust_hobi_2excel=null;
+		//var cust_hobi_2excel=null;
 		var cust_referensi_2excel=null;
 		var cust_keterangan_2excel=null;
 		var cust_member_2excel=null;
@@ -1236,7 +1241,7 @@ var editor_cust_note;
 		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_2excel = customer_DataStore.baseParams.cust_pendidikan;}
 		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_2excel = customer_DataStore.baseParams.cust_profesi;}
 		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_2excel_date = customer_DataStore.baseParams.cust_tgllahir;}
-		if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_2excel = customer_DataStore.baseParams.cust_hobi;}
+		//if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_2excel = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_2excel = customer_DataStore.baseParams.cust_referensi;}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_2excel = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_2excel = customer_DataStore.baseParams.cust_member;}
@@ -1281,7 +1286,7 @@ var editor_cust_note;
 			cust_pendidikan : cust_pendidikan_2excel,
 			cust_profesi : cust_profesi_2excel,
 		  	cust_tgllahir : cust_tgllahir_2excel_date, 
-			cust_hobi : cust_hobi_2excel,
+			//cust_hobi : cust_hobi_2excel,
 			cust_referensi : cust_referensi_2excel,
 			cust_keterangan : cust_keterangan_2excel,
 			cust_member : cust_member_2excel,
@@ -1357,7 +1362,7 @@ var editor_cust_note;
 		var cust_pendidikan_update=null;
 		var cust_profesi_update=null;
 		var cust_tgllahir_update_date="";
-		var cust_hobi_update=null;
+		//var cust_hobi_update=null;
 		var cust_referensi_update=null;
 		var cust_referensilain_update=null;
 		var cust_keterangan_update=null;
@@ -1396,7 +1401,7 @@ var editor_cust_note;
 		if(oGrid_event.record.data.cust_pendidikan!== null){cust_pendidikan_update = oGrid_event.record.data.cust_pendidikan;}
 		if(oGrid_event.record.data.cust_profesi!== null){cust_profesi_update = oGrid_event.record.data.cust_profesi;}
 		if(oGrid_event.record.data.cust_tgllahir!== ""){cust_tgllahir_update_date = oGrid_event.record.data.cust_tgllahir.format('Y-m-d');}
-		if(oGrid_event.record.data.cust_hobi!== null){cust_hobi_update = oGrid_event.record.data.cust_hobi;}
+		//if(oGrid_event.record.data.cust_hobi!== null){cust_hobi_update = oGrid_event.record.data.cust_hobi;}
 		if(oGrid_event.record.data.cust_referensi!== null){cust_referensi_update = oGrid_event.record.data.cust_referensi;}
 		if(oGrid_event.record.data.cust_referensilain!== null){cust_referensilain_update = oGrid_event.record.data.cust_referensilain;}
 		if(oGrid_event.record.data.cust_keterangan!== null){cust_keterangan_update = oGrid_event.record.data.cust_keterangan;}
@@ -1441,7 +1446,7 @@ var editor_cust_note;
 				cust_pendidikan	:cust_pendidikan_update,		
 				cust_profesi	:cust_profesi_update,		
 				cust_tgllahir	: cust_tgllahir_update_date,				
-				cust_hobi		:cust_hobi_update,		
+				//cust_hobi		:cust_hobi_update,		
 				cust_referensi	:cust_referensi_update,		
 				cust_referensilain	:cust_referensilain_update,		
 				cust_keterangan	:cust_keterangan_update,		
@@ -3216,11 +3221,16 @@ Ext.onReady(function(){
 				var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
 				
 				var tempBln=0;
-				if(getSelisihBln<0){
+				/*if(getSelisihBln<0){
 					tempBln=12-getBlnLahir;
 					getSelisihBln=tempBln+(-(getSelisihBln));
+				}*/
+				
+				if((getBlnLahir) < (dt.getMonth()+1)){
+					getUmur=getUmur+1;
 				}
-				var umur=getUmur+" Th, "+getSelisihBln+" Bln";
+				var umur=getUmur+" Th"
+				//+getSelisihBln+" Bln";
 				
 				cust_umurField.setValue(umur);
 			}
@@ -3239,11 +3249,16 @@ Ext.onReady(function(){
 		var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
 		
 		var tempBln=0;
-		if(getSelisihBln<0){
+		/*if(getSelisihBln<0){
 			tempBln=12-getBlnLahir;
 			getSelisihBln=tempBln+(-(getSelisihBln));
+		}*/
+		
+		if((getBlnLahir) < (dt.getMonth()+1)){
+			getUmur=getUmur+1;
 		}
-		var umur=getUmur+" Th, "+getSelisihBln+" Bln";
+		var umur=getUmur+" Th"
+		//+getSelisihBln+" Bln";
 		
 		cust_umurField.setValue(umur);
 	});

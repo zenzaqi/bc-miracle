@@ -792,7 +792,14 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_customer->customer_print($cust_id,$cust_no, $cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif,$sortby,$cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised,$option,$filter)->result();
+		$data["data_print"] = $this->m_customer->customer_print($cust_id,$cust_no,$cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,
+		$cust_alamat2,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,
+		$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,
+		$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,
+		$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,
+		$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,
+		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
+		$cust_date_update,$cust_revised,$option,$filter)->result();
 		
 		$print_view=$this->load->view("main/p_customer.php",$data,TRUE);
 		if(!file_exists("print")){
