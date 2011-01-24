@@ -342,6 +342,7 @@ Ext.onReady(function(){
 		//* penampungan data Detail List Tindakan Medis /
 		var dtrawat_medis_id=[];
 		var dtrawat_medis_perawatan=[];
+		var dtrawat_medis_jumlah=[];
 		var dtrawat_medis_petugas1=[];
 		var dtrawat_medis_jamreservasi=[];
 		var dtrawat_medis_status=[];
@@ -402,6 +403,12 @@ Ext.onReady(function(){
 							dtrawat_medis_status.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status);
 						}
 						
+						if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah==undefined || tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah==0){
+							dtrawat_medis_jumlah.push(1);
+						}else{
+							dtrawat_medis_jumlah.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah);
+						}
+						
 						if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan==undefined){
 							dtrawat_medis_keterangan.push('');
 						}else{
@@ -455,6 +462,7 @@ Ext.onReady(function(){
 					//tampungan array dari List Detail Tindakan Medis
 					var encoded_array_dtrawat_medis_id = Ext.encode(dtrawat_medis_id);
 					var encoded_array_dtrawat_medis_perawatan = Ext.encode(dtrawat_medis_perawatan);
+					var encoded_array_dtrawat_medis_jumlah = Ext.encode(dtrawat_medis_jumlah);
 					var encoded_array_dtrawat_medis_petugas1 = Ext.encode(dtrawat_medis_petugas1);
 					var encoded_array_dtrawat_medis_jamreservasi = Ext.encode(dtrawat_medis_jamreservasi);
 					var encoded_array_dtrawat_medis_status = Ext.encode(dtrawat_medis_status);
@@ -487,6 +495,7 @@ Ext.onReady(function(){
 								
 								dtrawat_medis_id	: encoded_array_dtrawat_medis_id,
 								dtrawat_medis_perawatan	: encoded_array_dtrawat_medis_perawatan,
+								dtrawat_medis_jumlah	: encoded_array_dtrawat_medis_jumlah,
 								dtrawat_medis_petugas1	: encoded_array_dtrawat_medis_petugas1,
 								dtrawat_medis_jamreservasi	: encoded_array_dtrawat_medis_jamreservasi,
 								dtrawat_medis_status	: encoded_array_dtrawat_medis_status,
@@ -1536,6 +1545,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'}, 
 			{name: 'dtrawat_master', type: 'int', mapping: 'dtrawat_master'}, 
 			{name: 'dtrawat_perawatan', type: 'int', mapping: 'dtrawat_perawatan'}, 
+			{name: 'dtrawat_jumlah', type: 'int', mapping: 'dtrawat_jumlah'}, 
 			{name: 'dtrawat_petugas1', type: 'int', mapping: 'dtrawat_petugas1'}, 
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'}, 
 			{name: 'dtrawat_jam_datang', type: 'string', mapping: 'dtrawat_jam_datang'}, 
@@ -1690,6 +1700,16 @@ Ext.onReady(function(){
 		width: 75
 	});
 	
+	
+	var dtindakan_medis_jmlField= new Ext.form.NumberField({
+		id: 'dtindakan_medis_jmlField',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	//declaration of detail coloumn model
 	tindakan_medisdetail_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -1700,6 +1720,13 @@ Ext.onReady(function(){
 			sortable: true,
 			editor: combo_trawat_rawat,
 			renderer: Ext.util.Format.comboRenderer(combo_trawat_rawat)
+		},
+		{
+			header: 'Jml',
+			dataIndex: 'dtrawat_jumlah',
+			width: 50,
+			sortable: true,
+			editor: dtindakan_medis_jmlField
 		},
 		{
 			header: '<div align="center">' + 'Dokter' + '</div>',
@@ -1814,7 +1841,8 @@ Ext.onReady(function(){
 	//function of detail add
 	function tindakan_medisdetail_add(){
 		var edit_tindakan_medisdetail= new tindakan_medisdetailListEditorGrid.store.recordType({
-			dtrawat_perawatan	:'',		
+			dtrawat_perawatan	:'',
+			dtrawat_jumlah		:1,
 			dtrawat_petugas1	:'',		
 			dtrawat_jam	:'',		
 			dtrawat_status	:'datang',
@@ -1838,6 +1866,7 @@ Ext.onReady(function(){
 	function tindakan_medisdetail_insert(){
 		var dtrawat_id=[];
 		var dtrawat_perawatan=[];
+		var dtrawat_jumlah=[];
 		var dtrawat_petugas1=[];
 		var dtrawat_jamreservasi=[];
 		var dtrawat_status=[];
@@ -1877,6 +1906,12 @@ Ext.onReady(function(){
 						dtrawat_status.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_status);
 					}
 					
+					if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah==undefined || tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah==0){
+						dtrawat_jumlah.push(1);
+					}else{
+						dtrawat_jumlah.push(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_jumlah);
+					}
+					
 					if(tindakan_medis_detail_DataStore.getAt(i).data.dtrawat_keterangan==undefined){
 						dtrawat_keterangan.push('');
 					}else{
@@ -1887,6 +1922,7 @@ Ext.onReady(function(){
 				if(i==dcount){
 					var encoded_array_dtrawat_id = Ext.encode(dtrawat_id);
 					var encoded_array_dtrawat_perawatan = Ext.encode(dtrawat_perawatan);
+					var encoded_array_dtrawat_jumlah = Ext.encode(dtrawat_jumlah);
 					var encoded_array_dtrawat_petugas1 = Ext.encode(dtrawat_petugas1);
 					var encoded_array_dtrawat_jamreservasi = Ext.encode(dtrawat_jamreservasi);
 					var encoded_array_dtrawat_status = Ext.encode(dtrawat_status);
@@ -1899,6 +1935,7 @@ Ext.onReady(function(){
 						dtrawat_id	: encoded_array_dtrawat_id,
 						dtrawat_master	: eval(trawat_medis_idField.getValue()), 
 						dtrawat_perawatan	: encoded_array_dtrawat_perawatan,
+						dtrawat_jumlah		: encoded_array_dtrawat_jumlah,
 						dtrawat_petugas1	: encoded_array_dtrawat_petugas1,
 						dtrawat_jamreservasi	: encoded_array_dtrawat_jamreservasi,
 						dtrawat_status	: encoded_array_dtrawat_status,

@@ -186,6 +186,7 @@ class C_tindakan_medis extends Controller {
 	function detail_tindakan_medis_detail_insert($dtrawat_id
 												 ,$dtrawat_master
 												 ,$dtrawat_perawatan
+												 ,$dtrawat_jumlah
 												 ,$dtrawat_petugas1
 												 ,$dtrawat_jamreservasi
 												 ,$dtrawat_status
@@ -194,6 +195,7 @@ class C_tindakan_medis extends Controller {
 		//POST variable here
 		$array_dtrawat_id = json_decode(stripslashes($dtrawat_id));
 		$array_dtrawat_perawatan = json_decode(stripslashes($dtrawat_perawatan));
+		$array_dtrawat_jumlah = json_decode(stripslashes($dtrawat_jumlah));
 		$array_dtrawat_petugas1 = json_decode(stripslashes($dtrawat_petugas1));
 		$array_dtrawat_jamreservasi = json_decode(stripslashes($dtrawat_jamreservasi));
 		$array_dtrawat_status = json_decode(stripslashes($dtrawat_status));
@@ -202,6 +204,7 @@ class C_tindakan_medis extends Controller {
 		$result=$this->m_tindakan_medis->detail_tindakan_medis_detail_insert($array_dtrawat_id
 																			 ,$dtrawat_master
 																			 ,$array_dtrawat_perawatan
+																			 ,$array_dtrawat_jumlah
 																			 ,$array_dtrawat_petugas1
 																			 ,$array_dtrawat_jamreservasi
 																			 ,$array_dtrawat_status
@@ -405,6 +408,7 @@ class C_tindakan_medis extends Controller {
 			//menerima POST Detail List Tindakan Medis
 			$dtrawat_medis_id = $_POST['dtrawat_medis_id']; // Get our array back and translate it :
 			$dtrawat_medis_perawatan = $_POST['dtrawat_medis_perawatan']; // Get our array back and translate it :
+			$dtrawat_medis_jumlah = $_POST['dtrawat_medis_jumlah'];
 			$dtrawat_medis_petugas1 = $_POST['dtrawat_medis_petugas1']; // Get our array back and translate it :
 			$dtrawat_medis_jamreservasi = $_POST['dtrawat_medis_jamreservasi']; // Get our array back and translate it :
 			$dtrawat_medis_status = $_POST['dtrawat_medis_status']; // Get our array back and translate it :
@@ -425,6 +429,7 @@ class C_tindakan_medis extends Controller {
 				$result_medis = $this->detail_tindakan_medis_detail_insert($dtrawat_medis_id
 														   ,$trawat_id
 														   ,$dtrawat_medis_perawatan
+														   ,$dtrawat_medis_jumlah
 														   ,$dtrawat_medis_petugas1
 														   ,$dtrawat_medis_jamreservasi
 														   ,$dtrawat_medis_status
