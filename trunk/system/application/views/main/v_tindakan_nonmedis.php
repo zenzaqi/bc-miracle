@@ -147,6 +147,8 @@ Ext.onReady(function(){
 		var dtrawat_id_update=null;
 		var dtrawat_perawatan_update=null;
 		var dtrawat_perawatan_id_update=null;
+		var trawat_cust_id_update=null;
+		var dpaket_id_update=null;
 		var dtrawat_terapis_update=null;
 		var dtrawat_terapis_id_update=null;
 		var dtrawat_jam_update=null;
@@ -160,6 +162,8 @@ Ext.onReady(function(){
 		dtrawat_id_update = oGrid_event.record.data.dtrawat_id;
 		dtrawat_perawatan_update = oGrid_event.record.data.dtrawat_perawatan;
 		dtrawat_perawatan_id_update = oGrid_event.record.data.dtrawat_perawatan_id;
+		trawat_cust_id_update = oGrid_event.record.data.trawat_cust_id;
+		dpaket_id_update = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get("dtrawat_dpaket_id");
 		dtrawat_terapis_update = oGrid_event.record.data.dtrawat_petugas2;
 		dtrawat_terapis_id_update = oGrid_event.record.data.dtrawat_petugas2_id;
 		if(oGrid_event.record.data.dtrawat_jam!== null){dtrawat_jam_update = oGrid_event.record.data.dtrawat_jam;}
@@ -193,6 +197,9 @@ Ext.onReady(function(){
 					dtrawat_id	:dtrawat_id_update,
 					dtrawat_perawatan	:dtrawat_perawatan_update,
 					dtrawat_perawatan_id	:dtrawat_perawatan_id_update,
+					dpaket_id		: dpaket_id_update,
+					dtrawat_dpaket_id		: nonmedis_combo_list_paket.getValue(),
+					trawat_cust_id		: trawat_cust_id_update,
 					dtrawat_terapis	: dtrawat_terapis_update,
 					dtrawat_terapis_id	: dtrawat_terapis_id_update,
 					dtrawat_jam	: dtrawat_jam_update,
@@ -264,6 +271,20 @@ Ext.onReady(function(){
 							   icon: Ext.MessageBox.WARNING
 							});
 							break;
+							
+						case -4:
+							tindakan_medisDataStore.reload();
+							tindakanListEditorGrid.setDisabled(false);
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   width: 330,
+							   msg: 'Isi paket tidak cukup untuk diambil.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;		
+							
 						default:
 							tindakan_nonmedis_DataStore.reload();
 							tindakan_nonmedisListEditorGrid.setDisabled(false);
@@ -539,6 +560,7 @@ Ext.onReady(function(){
 		trawat_nonmedis_custField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_cust'));
 		trawat_nonmedis_custidField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_cust_id'));
 		trawat_nonmedis_keteranganField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('trawat_keterangan'));
+		trawat_nonmedis_dpaket_idField.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('dtrawat_dpaket_id'));
 	}
 	/* End setValue to EDIT*/
   
@@ -704,6 +726,8 @@ Ext.onReady(function(){
 			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
 			{name: 'perawatan_du', type: 'int', mapping: 'rawat_du'},
 			{name: 'perawatan_dm', type: 'int', mapping: 'rawat_dm'},
+			{name: 'dtrawat_dpaket_id', type: 'int', mapping: 'dtrawat_dpaket_id'},
+			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'cust_member', type: 'string', mapping: 'cust_member'},
 			{name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
 			{name: 'dtrawat_ambil_paket', type: 'string', mapping: 'dtrawat_ambil_paket'},
@@ -747,6 +771,42 @@ Ext.onReady(function(){
             'Alamat: {cust_alamat}&nbsp;&nbsp;&nbsp;[Telp. {cust_telprumah}]',
         '</div></tpl>'
     );
+	
+	/*Datastore utk list paket customer */
+	nonmedis_listpaket_customerDataStore = new Ext.data.Store({
+		id: 'nonmedis_listpaket_customerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_tindakan_nonmedis&m=get_customer_paket_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'rawat_id'
+		},[
+			{name: 'perawatan_value', type: 'int', mapping: 'rawat_id'},
+			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
+			{name: 'perawatan_kode', type: 'string', mapping: 'rawat_kode'},
+			{name: 'perawatan_group', type: 'string', mapping: 'group_nama'},
+			{name: 'perawatan_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'},
+			{name: 'paket_display', type: 'string', mapping: 'paket_nama'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
+			{name: 'dpaket_sisa_paket', type: 'int', mapping: 'dpaket_sisa_paket'},
+			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			{name: 'perawatan_du', type: 'float', mapping: 'rawat_du'},
+			{name: 'perawatan_dm', type: 'float', mapping: 'rawat_dm'},
+			{name: 'perawatan_display', type: 'string', mapping: 'rawat_nama'}
+		]),
+		sortInfo:{field: 'perawatan_display', direction: "ASC"}
+	});
+	var nonmedis_cust_listpaket_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{jpaket_nobukti} | Pemilik : {cust_nama} | <b>{paket_display}</b> | Sisa : {dpaket_sisa_paket} | Kadaluarsa : {dpaket_kadaluarsa:date("j M, Y")}',
+		'</div></tpl>'
+    );
+	
 	
 	trawat_nonmedis_perawatanDataStore = new Ext.data.Store({
 		id: 'trawat_nonmedis_perawatanDataStore',
@@ -817,6 +877,27 @@ Ext.onReady(function(){
             '</div></tpl>'
         );
     
+	
+	/* combo utk melihat daftar paket yg dimiliki customer*/
+	var nonmedis_combo_list_paket=new Ext.form.ComboBox({
+			store: nonmedis_listpaket_customerDataStore,
+			mode: 'remote',
+			typeAhead: false,
+			displayField: 'paket_display',
+			valueField: 'dpaket_id',
+			loadingText: 'Searching...',
+			pageSize:10,
+			hideTrigger:false,
+			tpl: nonmedis_cust_listpaket_tpl,
+			//applyTo: 'search',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			lazyRender:true,
+			maskRe: /([^0-9]+)$/
+	});
+	
+	
+	
   	/* Function for Identify of Window Column Model */
 	tindakan_nonmedis_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -833,7 +914,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Customer',
 			dataIndex: 'trawat_cust',
-			width: 185,	//210,
+			width: 180,	//210,
 			sortable: true,
 			editable:false,
 			readOnly: true
@@ -856,6 +937,34 @@ Ext.onReady(function(){
 			})
 			<?php } ?>
 		}, 
+		
+		{
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_MEDIS'))){ ?>
+			header: '<div align="center">' + 'Ambil Paket' + '</div>',
+			dataIndex: 'paket_nama',
+			width: 150,	//210,
+			sortable: true,
+			editor : nonmedis_combo_list_paket
+			<?php } ?>
+			
+		},
+		
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Jml' + '</div>',
+			dataIndex: 'dtrawat_jumlah',
+			width: 30,	//150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: true,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		},
+		
+		/*
 		{
 			xtype: 'booleancolumn',
 			header: 'Ambil Paket',
@@ -871,6 +980,7 @@ Ext.onReady(function(){
             }
 			<?php } ?>
 		},
+		*/
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
@@ -908,7 +1018,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'dtrawat_status',
-			width: 60,
+			width: 55,
 			sortable: true,
             renderer: ch_status
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
@@ -932,7 +1042,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
-			width: 185,
+			width: 180,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 			,
@@ -944,11 +1054,12 @@ Ext.onReady(function(){
 		{
 			header: 'Tgl App',
 			dataIndex: 'dtrawat_tglapp',
-			width: 150,
+			width: 80,
 			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			sortable: true,
 			hidden: true
 		}, 
+		/*
 		{
 			header: '<div align="center">' + 'Info Paket' + '</div>',
 			dataIndex: 'cust_punya_paket',
@@ -956,16 +1067,17 @@ Ext.onReady(function(){
 			sortable: false,
 			hidden: true
 		},
+		*/
 		{
 			header: '<div align="center">' + 'Stat Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 60,	//55,
+			width: 55,	//55,
 			sortable: false
 		},
 		{
 			header: 'Creator',
 			dataIndex: 'trawat_creator',
-			width: 150,
+			width: 60,
 			sortable: true,
 			hidden: true,
 			readOnly: true,
@@ -973,7 +1085,7 @@ Ext.onReady(function(){
 		{
 			header: 'Create on',
 			dataIndex: 'trawat_date_create',
-			width: 150,
+			width: 60,
 			sortable: true,
 			hidden: true,
 			readOnly: true
@@ -981,7 +1093,7 @@ Ext.onReady(function(){
 		{
 			header: 'Last Update by',
 			dataIndex: 'trawat_update',
-			width: 150,
+			width: 60,
 			sortable: true,
 			hidden: true,
 			readOnly: true
@@ -989,7 +1101,7 @@ Ext.onReady(function(){
 		{
 			header: 'Last Update on',
 			dataIndex: 'trawat_date_update',
-			width: 150,
+			width: 60,
 			sortable: true,
 			hidden: true,
 			readOnly: true
@@ -997,7 +1109,7 @@ Ext.onReady(function(){
 		{
 			header: 'Revised',
 			dataIndex: 'trawat_revised',
-			width: 150,
+			width: 60,
 			sortable: true,
 			hidden: true,
 			readOnly: true
@@ -1095,7 +1207,18 @@ Ext.onReady(function(){
 	/* End of DataStore */
 	tindakan_nonmedisListEditorGrid.on('rowdblclick', function(){
 		this.dnonmedis_status_inline_beforeedit = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get('dtrawat_status');
+		nonmedis_listpaket_customerDataStore.load({params : {trawat_cust_id : trawat_nonmedis_cust_idField.getValue(), dtrawat_rawat_id : trawat_nonmedis_perawatan_idField.getValue()}});	
+
 	});
+	
+	tindakan_nonmedisListEditorGrid.on('rowclick', function(){
+		var non_recordMaster = tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected();
+		trawat_nonmedis_cust_idField.setValue(non_recordMaster.get("trawat_cust_id"));
+		trawat_nonmedis_perawatan_idField.setValue(non_recordMaster.get("dtrawat_perawatan_id"));
+		nonmedis_combo_list_paket.setValue(tindakan_nonmedisListEditorGrid.getSelectionModel().getSelected().get("dtrawat_dpaket_id"));
+	});
+	
+	
 	
 	/* Create Context Menu */
 	tindakan_nonmedisContextMenu = new Ext.menu.Menu({
@@ -1146,6 +1269,15 @@ Ext.onReady(function(){
 	tindakan_nonmedisListEditorGrid.addListener('rowcontextmenu', ontindakan_nonmedis_ListEditGridContextMenu);
 	tindakan_nonmedis_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	tindakan_nonmedisListEditorGrid.on('afteredit', tindakan_nonmedis_update); // inLine Editing Record
+	
+	
+	trawat_nonmedis_cust_idField= new Ext.form.NumberField();
+	trawat_nonmedis_perawatan_idField= new Ext.form.NumberField();
+	
+	/* Identify  dpaket_id Field */
+	trawat_nonmedis_dpaket_idField= new Ext.form.TextField();
+	
+	
 	
 	/* Identify  trawat_id Field */
 	trawat_nonmedis_idField= new Ext.form.NumberField({
