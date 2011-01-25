@@ -707,8 +707,7 @@ var editor_cust_note;
 		if(cust_agamaSearchField.getValue()!==null){cust_agama_search=cust_agamaSearchField.getValue();}
 		if(cust_pendidikanSearchField.getValue()!==null){cust_pendidikan_search=cust_pendidikanSearchField.getValue();}
 		if(cust_profesiSearchField.getValue()!==null){cust_profesi_search=cust_profesiSearchField.getValue();}
-		if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
-		if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		
 		if(cust_referensiSearchField.getValue()!==null){cust_referensi_search=cust_referensiSearchField.getValue();}
 		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_search=cust_referensilainSearchField.getValue();}
 		if(cust_keteranganSearchField.getValue()!==null){cust_keterangan_search=cust_keteranganSearchField.getValue();}
@@ -725,10 +724,17 @@ var editor_cust_note;
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_search=fretfulness_SearchField.getValue();}
 		
 		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_search=cust_umurstartSearchField.getValue();}
-		if(cust_umurendSearchField.getValue()!==null){cust_umurend_search=cust_umurendSearchField.getValue();}
-		if(cust_tglSearchField.getValue()!==null){cust_tgl_search=cust_tglSearchField.getValue();}
-		if(cust_bulanSearchField.getValue()!==null){cust_bulan_search=cust_bulanSearchField.getValue();}
-
+		if(cust_umurendSearchField.getValue()!==null){cust_umurend_search=cust_umurendSearchField.getValue();}	
+		
+		if(cust_tgl_opsiField.getValue()==true){
+			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		}		
+		else if(cust_bulan_opsiField.getValue()==true){
+			if(cust_tglSearchField.getValue()!==null){cust_tgl_search=cust_tglSearchField.getValue();}
+			if(cust_bulanSearchField.getValue()!==null){cust_bulan_search=cust_bulanSearchField.getValue();}
+		}
+		
 		// change the store parameters
 		customer_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -4163,7 +4169,8 @@ Ext.onReady(function(){
 		displayField: 'cust_tgl_display',
 		valueField: 'cust_tgl_display',
 		anchor: '80%',
-		triggerAction: 'all'
+		triggerAction: 'all',
+		
 	});
 	
 	cust_bulanSearchField=new Ext.form.ComboBox({
@@ -4207,6 +4214,14 @@ Ext.onReady(function(){
 		width:100,
 		name: 'filter_lahir',
 		checked: true
+		/*handler: function(node,checked){
+		if(cust_tgl_opsiField.checked==true){
+			cust_tgllahirSearchField.disabled=false;
+			cust_tgllahirSearchFieldEnd.disabled=false;
+		}else{
+			cust_tgllahirSearchField.disabled=true;
+			cust_tgllahirSearchFieldEnd.disabled=true;
+		}}*/
 	});
 	
 	cust_bulan_opsiField=new Ext.form.Radio({
@@ -4700,15 +4715,15 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 	 
-	cust_tgl_opsiField.on("check",function(){
+	/*cust_tgl_opsiField.on("check",function(){
 	if(cust_tgl_opsiField.getValue()==true){
-		cust_tgllahirSearchField.enable=false;
-		cust_tgllahirSearchFieldEnd.enable=false;
+		cust_tgllahirSearchField.disabled=false;
+		cust_tgllahirSearchFieldEnd.disabled=false;
 	}else{
-		cust_tgllahirSearchField.enable=true;
-		cust_tgllahirSearchFieldEnd.enable=true;
+		cust_tgllahirSearchField.disabled=true;
+		cust_tgllahirSearchFieldEnd.disabled=true;
 	}
-	});
+	});*/
 	
 });
 	</script>

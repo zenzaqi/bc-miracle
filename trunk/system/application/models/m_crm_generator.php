@@ -167,7 +167,7 @@ class M_crm_generator extends Model{
 						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0  
 							and (p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
 							and date_add(m.jrawat_tanggal, interval '$setcrm_frequency_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
 						
@@ -178,7 +178,7 @@ class M_crm_generator extends Model{
 							m.jproduk_tanggal as tgl_tindakan
 						from master_jual_produk m
 						where 
-							m.jproduk_stat_dok <> 'Batal' and m.jproduk_bayar <> 0 
+							m.jproduk_stat_dok = 'Tertutup' and m.jproduk_bayar <> 0 
 							and date_add(m.jproduk_tanggal, interval '$setcrm_frequency_days' day) >= date_format(now(), '%Y-%m-%d') and m.jproduk_cust = '$crmvalue_cust'
 												
 						union
@@ -190,7 +190,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						where 
 							(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
-							and d.dapaket_stat_dok <> 'Batal' 							
+							and d.dapaket_stat_dok = 'Tertutup' 							
 							and date_add(d.dapaket_tgl_ambil, interval '$setcrm_frequency_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
 						
 						)
@@ -262,12 +262,12 @@ class M_crm_generator extends Model{
 						FROM detail_retur_jual_produk dr
 						LEFT JOIN master_retur_jual_produk mr ON dr.drproduk_master = mr.rproduk_id
 						WHERE 
-							date_add(mr.rproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND mr.rproduk_stat_dok <> 'Batal' ),0) 
+							date_add(mr.rproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND mr.rproduk_stat_dok = 'Tertutup' ),0) 
 					AS tot_net
 				FROM detail_jual_produk d
 				LEFT JOIN master_jual_produk m ON d.dproduk_master = m.jproduk_id
 				WHERE
-					date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jproduk_stat_dok <> 'Batal'";
+					date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jproduk_stat_dok = 'Tertutup'";
 			
 			$query_spending_produk_all	= $this->db->query($sql_spending_produk_all);
 			$data_spending_produk_all	= $query_spending_produk_all->row();
@@ -283,7 +283,7 @@ class M_crm_generator extends Model{
 				LEFT JOIN perawatan ON d.drawat_rawat = perawatan.rawat_id
 				LEFT JOIN kategori ON perawatan.rawat_kategori = kategori.kategori_id
 				WHERE
-					date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jrawat_stat_dok <> 'Batal'";
+					date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jrawat_stat_dok = 'Tertutup'";
 			
 			$query_spending_perawatan_all	= $this->db->query($sql_spending_perawatan_all);
 			$data_spending_perawatan_all	= $query_spending_perawatan_all->row();
@@ -301,7 +301,7 @@ class M_crm_generator extends Model{
 				left join vu_jumlah_isi_paket v on d.dapaket_paket = v.paket_id
 				left join detail_jual_paket dj on d.dapaket_dpaket = dj.dpaket_id
 				WHERE
-					date_add(d.dapaket_tgl_ambil, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND d.dapaket_stat_dok <> 'Batal'";
+					date_add(d.dapaket_tgl_ambil, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND d.dapaket_stat_dok = 'Tertutup'";
 			
 			$query_spending_apaket_all	= $this->db->query($sql_spending_apaket_all);
 			$data_spending_apaket_all	= $query_spending_apaket_all->row();
@@ -327,7 +327,7 @@ class M_crm_generator extends Model{
 						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0  
 							and (p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
 							and date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d')
 						
@@ -338,7 +338,7 @@ class M_crm_generator extends Model{
 							m.jproduk_tanggal as tgl_tindakan
 						from master_jual_produk m
 						where 
-							m.jproduk_stat_dok <> 'Batal' and m.jproduk_bayar <> 0 
+							m.jproduk_stat_dok = 'Tertutup' and m.jproduk_bayar <> 0 
 							and date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d')
 												
 						union
@@ -350,7 +350,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						where 
 							(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
-							and d.dapaket_stat_dok <> 'Batal' 							
+							and d.dapaket_stat_dok = 'Tertutup' 							
 							and date_add(d.dapaket_tgl_ambil, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d')
 						
 						)
@@ -379,13 +379,13 @@ class M_crm_generator extends Model{
 						LEFT JOIN master_retur_jual_produk mr ON dr.drproduk_master = mr.rproduk_id
 						WHERE 
 							date_add(mr.rproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND mr.rproduk_cust = '$crmvalue_cust' AND
-							mr.rproduk_stat_dok <> 'Batal' ),0) 
+							mr.rproduk_stat_dok = 'Tertutup' ),0) 
 					AS tot_net
 				FROM detail_jual_produk d
 				LEFT JOIN master_jual_produk m ON d.dproduk_master = m.jproduk_id
 				WHERE
 					date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jproduk_cust = '$crmvalue_cust' AND
-					m.jproduk_stat_dok <> 'Batal'";
+					m.jproduk_stat_dok = 'Tertutup'";
 			
 			$query_spending_produk_cust	= $this->db->query($sql_spending_produk_cust);
 			$data_spending_produk_cust	= $query_spending_produk_cust->row();
@@ -402,7 +402,7 @@ class M_crm_generator extends Model{
 				LEFT JOIN kategori ON perawatan.rawat_kategori = kategori.kategori_id
 				WHERE
 					date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jrawat_cust = '$crmvalue_cust' AND
-					m.jrawat_stat_dok <> 'Batal'";
+					m.jrawat_stat_dok = 'Tertutup'";
 			
 			$query_spending_perawatan_cust	= $this->db->query($sql_spending_perawatan_cust);
 			$data_spending_perawatan_cust	= $query_spending_perawatan_cust->row();
@@ -421,7 +421,7 @@ class M_crm_generator extends Model{
 				left join detail_jual_paket dj on d.dapaket_dpaket = dj.dpaket_id
 				WHERE
 					date_add(d.dapaket_tgl_ambil, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') AND m.jpaket_cust = '$crmvalue_cust' AND
-					d.dapaket_stat_dok <> 'Batal'";
+					d.dapaket_stat_dok = 'Tertutup'";
 			
 			$query_spending_apaket_cust	= $this->db->query($sql_spending_apaket_cust);
 			$data_spending_apaket_cust	= $query_spending_apaket_cust->row();
@@ -451,7 +451,7 @@ class M_crm_generator extends Model{
 						left join master_jual_rawat m on (d.drawat_master = m.jrawat_id)
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0  
 							and (p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
 							and date_add(m.jrawat_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
 						
@@ -462,7 +462,7 @@ class M_crm_generator extends Model{
 							m.jproduk_tanggal as tgl_tindakan
 						from master_jual_produk m
 						where 
-							m.jproduk_stat_dok <> 'Batal' and m.jproduk_bayar <> 0 
+							m.jproduk_stat_dok = 'Tertutup' and m.jproduk_bayar <> 0 
 							and date_add(m.jproduk_tanggal, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') and m.jproduk_cust = '$crmvalue_cust'
 												
 						union
@@ -474,7 +474,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						where 
 							(p.rawat_kategori = 2 or p.rawat_kategori = 3 or p.rawat_kategori = 4 or p.rawat_kategori = 16)
-							and d.dapaket_stat_dok <> 'Batal' 							
+							and d.dapaket_stat_dok = 'Tertutup' 							
 							and date_add(d.dapaket_tgl_ambil, interval '$setcrm_spending_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
 						
 						)
@@ -525,7 +525,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0 and p.rawat_highmargin = 1 and
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0 and p.rawat_highmargin = 1 and
 							date_add(m.jrawat_tanggal, interval '$setcrm_highmargin_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
 						
 						union
@@ -537,7 +537,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							d.dapaket_stat_dok <> 'Batal' and p.rawat_highmargin = 1 and
+							d.dapaket_stat_dok = 'Tertutup' and p.rawat_highmargin = 1 and
 							date_add(d.dapaket_tgl_ambil, interval '$setcrm_highmargin_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
 						
 						)
@@ -630,13 +630,17 @@ class M_crm_generator extends Model{
 			$data_app_all		= $query_app_all->row();
 			$total_app_all		= $data_app_all->total_app_all;
 			
-			if (($total_app_batal / $total_app_all) >= ($setcrm_disiplin_persentase_pembatalan / 100)) {
+			if ($total_app_all == 0) {	//menghindari division by zero
 				$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_morethan;
+			} else {
+				if (($total_app_batal / $total_app_all) >= ($setcrm_disiplin_persentase_pembatalan / 100)) {
+					$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_morethan;
+				}
+				else {
+					$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_lessthan;
+				}				
 			}
-			else {
-				$crmvalue_disiplin_batal = $setcrm_disiplin_batal_value_lessthan;
-			}
-			
+						
 			
 			//UNTUK MENGHITUNG DISIPLIN: TELAT
 			
@@ -662,11 +666,15 @@ class M_crm_generator extends Model{
 			$data_app_dtg_all		= $query_app_dtg_all->row();
 			$total_app_dtg_all		= $data_app_dtg_all->total_app_dtg_all;
 			
-			if (($total_app_dtg_telat / $total_app_dtg_all) >= ($setcrm_disiplin_persentase_telat / 100)) {
+			if ($total_app_dtg_all == 0) { //menghindari division by zero
 				$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_morethan;
-			}
-			else {
-				$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_lessthan;
+			} else {
+				if (($total_app_dtg_telat / $total_app_dtg_all) >= ($setcrm_disiplin_persentase_telat / 100)) {
+					$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_morethan;
+				}
+				else {
+					$crmvalue_disiplin_telat = $setcrm_disiplin_telat_value_lessthan;
+				}				
 			}
 			
 			
@@ -690,7 +698,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
 							(p.rawat_kategori = 2 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and
 							date_add(m.jrawat_tanggal, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
 						
@@ -703,7 +711,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							d.dapaket_stat_dok <> 'Batal' and g1.group_treatment_utama = 1 and
+							d.dapaket_stat_dok = 'Tertutup' and g1.group_treatment_utama = 1 and
 							(p.rawat_kategori = 2 or p.rawat_kategori = 4 or p.rawat_kategori = 16) and
 							date_add(d.dapaket_tgl_ambil, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
 						
@@ -735,7 +743,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.drawat_rawat=p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							m.jrawat_stat_dok <> 'Batal' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
+							m.jrawat_stat_dok = 'Tertutup' and m.jrawat_bayar <> 0  and g1.group_treatment_utama = 1 and
 							p.rawat_kategori = 3 and
 							date_add(m.jrawat_tanggal, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and m.jrawat_cust = '$crmvalue_cust'
 						
@@ -748,7 +756,7 @@ class M_crm_generator extends Model{
 						left join perawatan p on (d.dapaket_item = p.rawat_id)
 						left join produk_group g1 on g1.group_id = p.rawat_group
 						where 
-							d.dapaket_stat_dok <> 'Batal' and g1.group_treatment_utama = 1 and
+							d.dapaket_stat_dok = 'Tertutup' and g1.group_treatment_utama = 1 and
 							p.rawat_kategori = 3 and
 							date_add(d.dapaket_tgl_ambil, interval '$setcrm_treatment_days' day) >= date_format(now(), '%Y-%m-%d') and d.dapaket_cust = '$crmvalue_cust'
 						
@@ -789,7 +797,8 @@ class M_crm_generator extends Model{
 				$crmvalue_priority = 'Low';
 			}
 			
-			
+			if ($total_app_all == 0) {$crmvalue_disiplin_batal_real = 0;} else {$crmvalue_disiplin_batal_real = ($total_app_batal / $total_app_all);}
+			if ($total_app_dtg_all == 0) {$crmvalue_disiplin_telat_real = 0;} else {$crmvalue_disiplin_telat_real = ($total_app_dtg_telat / $total_app_dtg_all);}					
 			$data=array(
 				"crmvalue_frequency"			=> $crmvalue_frequency,
 				"crmvalue_frequency_real"		=> $tot_kunjungan_cust_by_freq,
@@ -805,9 +814,9 @@ class M_crm_generator extends Model{
 				"crmvalue_kerewelan"			=> $crmvalue_fretfulness,
 				"crmvalue_kerewelan_real"		=> $cust_fretfulness,
 				"crmvalue_disiplin_batal"		=> $crmvalue_disiplin_batal,
-				"crmvalue_disiplin_batal_real"	=> ($total_app_batal / $total_app_all),
+				"crmvalue_disiplin_batal_real"	=> $crmvalue_disiplin_batal_real,
 				"crmvalue_disiplin_telat"		=> $crmvalue_disiplin_telat,
-				"crmvalue_disiplin_telat_real"	=> ($total_app_dtg_telat / $total_app_dtg_all),
+				"crmvalue_disiplin_telat_real"	=> $crmvalue_disiplin_telat_real,
 				"crmvalue_treatment"				=> $crmvalue_treatment,
 				"crmvalue_treatment_medis_real"		=> $tot_tx_utama_medis,
 				"crmvalue_treatment_non_medis_real"	=> $tot_tx_utama_non_medis,
