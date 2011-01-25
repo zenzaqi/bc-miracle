@@ -414,7 +414,7 @@ class M_tindakan_medis extends Model{
 						}
 								
 						
-						if(($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah))){
+						if((($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah))){
 							//return $row_punya_paket;
 							//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 							$dti_dapaket=array(
@@ -458,7 +458,8 @@ class M_tindakan_medis extends Model{
 						return -4;
 			
 						
-					}else{
+					}
+					else{
 							//Mencari dtrawat_dapp ==> untuk meng-UNLOCKED db.appointment_detail
 								$sql = "SELECT dtrawat_dapp
 								FROM tindakan_detail
@@ -480,6 +481,8 @@ class M_tindakan_medis extends Model{
 								$jpaket_nobukti = $record['jpaket_nobukti'];
 								}
 					
+						if($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)
+						{
 						//return $row_punya_paket;
 						//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 						$dti_dapaket=array(
@@ -526,7 +529,14 @@ class M_tindakan_medis extends Model{
 						}
 						
 					}
+					else 
+					{
+						return -4;
+						break;
+					}
 				}
+					
+			}
 				
 			}else{
 				return '1';
