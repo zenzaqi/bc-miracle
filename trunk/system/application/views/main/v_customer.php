@@ -59,6 +59,7 @@ var customer_ContextMenu;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var thismonth=new Date().format('m');
 
 /* declare variable here */
 var cust_idField;
@@ -158,6 +159,8 @@ var sortby_SearchField;
 var fretfulness_SearchField;
 var cust_umurstartSearchField;
 var cust_umurendSearchField;
+var cust_bulanSearchField;
+var cust_tglSearchField;
 
 var editor_cust_note;
 /* Function for get PK field */
@@ -325,11 +328,7 @@ var editor_cust_note;
 						}
 					}
 				}
-			}); 
-		
-		
-		
-		
+			}); 	
 	}
   
 	/* setValue to EDIT */
@@ -681,6 +680,8 @@ var editor_cust_note;
 		var fretfulness_search=null;
 		var cust_umurstart_search=null;
 		var cust_umurend_search=null;
+		var cust_tgl_search=null;
+		var cust_bulan_search=null;
 
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
@@ -725,6 +726,8 @@ var editor_cust_note;
 		
 		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_search=cust_umurstartSearchField.getValue();}
 		if(cust_umurendSearchField.getValue()!==null){cust_umurend_search=cust_umurendSearchField.getValue();}
+		if(cust_tglSearchField.getValue()!==null){cust_tgl_search=cust_tglSearchField.getValue();}
+		if(cust_bulanSearchField.getValue()!==null){cust_bulan_search=cust_bulanSearchField.getValue();}
 
 		// change the store parameters
 		customer_DataStore.baseParams = {
@@ -783,6 +786,8 @@ var editor_cust_note;
 			cust_fretfulness : fretfulness_search,
 			cust_umurstart : cust_umurstart_search,
 			cust_umurend : cust_umurend_search,
+			cust_tgl	: cust_tgl_search,
+			cust_bulan	: cust_bulan_search,
 		};
 		// Cause the datastore to do another query : 
 		//customer_DataStore.load({params: {start: 0, limit: pageS}});
@@ -855,6 +860,8 @@ var editor_cust_note;
 		cust_hobi_lainSearchField.reset();
 		cust_umurstartSearchField.reset();
 		cust_umurendSearchField.reset();
+		cust_tglSearchField.reset();
+		cust_bulanSearchField.reset();
 	}
 
 	
@@ -4143,8 +4150,39 @@ Ext.onReady(function(){
 		anchor: '50%'
 	});*/
 	
+	// Identify  cust_hobi Field 
+	cust_tglSearchField= new Ext.form.ComboBox({
+		id: 'cust_tglSearchField',
+		//fieldLabel: 'Hobi',
+		//maxLength: 500,
+		store:new Ext.data.SimpleStore({
+			fields:['cust_tgl_display'],
+			data: [['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['10'],['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
+		}),	
+		mode: 'local',
+		displayField: 'cust_tgl_display',
+		valueField: 'cust_tgl_display',
+		anchor: '80%',
+		triggerAction: 'all'
+	});
+	
+	cust_bulanSearchField=new Ext.form.ComboBox({
+		id:'cust_bulanSearchField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
 	cust_tgllahirSearchField= new Ext.form.DateField({
-		fieldLabel: 'Tanggal Lahir',
+		//fieldLabel: 'Tanggal Lahir',
 		//name: 'cust_tgllahirSearchField',
 		id: 'cust_tgllahirSearchField',
 		//vtype: 'daterange',
@@ -4163,7 +4201,23 @@ Ext.onReady(function(){
 		//startDateField: 'cust_tgllahirSearchField' // id of the end date field
 	});
 	
-	cust_label_tgllahirSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	cust_tgl_opsiField=new Ext.form.Radio({
+		id:'cust_tgl_opsiField',
+		boxLabel:'Antara Tanggal',
+		width:100,
+		name: 'filter_lahir',
+		checked: true
+	});
+	
+	cust_bulan_opsiField=new Ext.form.Radio({
+		id:'cust_bulan_opsiField',
+		boxLabel:'Tanggal & Bulan',
+		width:100,
+		name: 'filter_lahir'
+	});
+	
+
+	//cust_label_tgllahirSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 	
 	cust_tanggal_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_tanggal_opsiSearchField',
@@ -4173,7 +4227,47 @@ Ext.onReady(function(){
 		anchor: '95%',
 		//border : false,
 		//frame: false,
-		items:[cust_tgllahirSearchField, cust_label_tgllahirSearchField, cust_tgllahirSearchFieldEnd]
+		//items:[cust_tgllahirSearchField, cust_label_tgllahirSearchField, cust_tgllahirSearchFieldEnd]
+		
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[rpt_jpaket_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[cust_tgl_opsiField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[cust_tgllahirSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[cust_tgllahirSearchFieldEnd]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[cust_bulan_opsiField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[cust_tglSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[cust_bulanSearchField]
+					   }]
+			}]
 	});
 	
 	/* Identify  cust_hobi Field */
@@ -4606,7 +4700,15 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 	 
-  	
+	cust_tgl_opsiField.on("check",function(){
+	if(cust_tgl_opsiField.getValue()==true){
+		cust_tgllahirSearchField.enable=false;
+		cust_tgllahirSearchFieldEnd.enable=false;
+	}else{
+		cust_tgllahirSearchField.enable=true;
+		cust_tgllahirSearchFieldEnd.enable=true;
+	}
+	});
 	
 });
 	</script>
