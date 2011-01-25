@@ -273,8 +273,8 @@ Ext.onReady(function(){
 							break;
 							
 						case -4:
-							tindakan_medisDataStore.reload();
-							tindakanListEditorGrid.setDisabled(false);
+							tindakan_nonmedis_DataStore.reload();
+							tindakan_nonmedisListEditorGrid.setDisabled(false);
 							Ext.MessageBox.show({
 							   title: 'Warning',
 							   width: 330,
