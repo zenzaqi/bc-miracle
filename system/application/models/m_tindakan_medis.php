@@ -481,7 +481,7 @@ class M_tindakan_medis extends Model{
 								$jpaket_nobukti = $record['jpaket_nobukti'];
 								}
 					
-						if($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)
+						if(($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)))
 						{
 						//return $row_punya_paket;
 						//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
