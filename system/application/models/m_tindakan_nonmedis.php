@@ -303,7 +303,7 @@ class M_tindakan_nonmedis extends Model{
 						}
 								
 						
-						if(($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah))){
+						if((($row_punya_paket->rpaket_jumlah > $record_paket_terpakai->total_item_terpakai) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)) || (($row_punya_paket->rpaket_jumlah==0) && ($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah))){
 							//return $row_punya_paket;
 							//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 							$dti_dapaket=array(
@@ -369,6 +369,8 @@ class M_tindakan_nonmedis extends Model{
 								$jpaket_nobukti = $record['jpaket_nobukti'];
 								}
 					
+						if($row_punya_paket->dpaket_sisa_paket >= $dtrawat_jumlah)
+						{
 						//return $row_punya_paket;
 						//* INSERT ke db.detail_ambil_paket sebagai History Pengambilan Paket /
 						$dti_dapaket=array(
@@ -413,6 +415,12 @@ class M_tindakan_nonmedis extends Model{
 							return 0;
 							break;
 						}
+					}
+					else 
+					{
+						return -4;
+						break;
+					}
 						
 					}
 				}
