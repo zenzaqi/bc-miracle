@@ -939,7 +939,7 @@ Ext.onReady(function(){
 		}, 
 		
 		{
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_MEDIS'))){ ?>
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
 			header: '<div align="center">' + 'Ambil Paket' + '</div>',
 			dataIndex: 'paket_nama',
 			width: 150,	//210,
