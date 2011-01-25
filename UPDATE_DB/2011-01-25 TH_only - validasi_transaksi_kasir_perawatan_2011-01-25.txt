@@ -1,0 +1,409 @@
+/*Create VIEW untuk Sinkronisasi*/
+CREATE OR REPLACE ALGORITHM=UNDEFINED SQL SECURITY INVOKER VIEW vu_jrawat_novalid_temp AS 
+SELECT m.jrawat_cust,
+       m.jrawat_nobukti,
+       m.jrawat_tanggal,
+       m.jrawat_date_create,
+       v.total_nilai,
+       m.jrawat_bayar,
+       m.jrawat_diskon,
+       m.jrawat_cashback,
+       p.lpiutang_total
+  FROM master_jual_rawat m
+       LEFT JOIN vu_total_jual_rawat_group v
+          ON v.drawat_master = m.jrawat_id
+       LEFT JOIN master_lunas_piutang p
+          ON p.lpiutang_faktur = m.jrawat_nobukti
+ WHERE (  v.total_nilai
+        - m.jrawat_bayar
+        - v.total_nilai * (m.jrawat_diskon / 100)
+        - m.jrawat_cashback) <> ifnull(p.lpiutang_total, 0)
+       AND m.jrawat_stat_dok = 'Tertutup';
+
+
+/*PR/1010-0413*/
+DELETE FROM master_lunas_piutang
+ WHERE lpiutang_faktur = 'PR/1010-0413';
+
+
+/*PR/1010-0613*/
+UPDATE    master_lunas_piutang
+       JOIN
+          vu_jrawat_novalid_temp
+       ON (master_lunas_piutang.lpiutang_faktur =
+              vu_jrawat_novalid_temp.jrawat_nobukti)
+   SET master_lunas_piutang.lpiutang_total =
+          vu_jrawat_novalid_temp.total_nilai,
+       master_lunas_piutang.lpiutang_sisa = vu_jrawat_novalid_temp.total_nilai
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1010-0613';
+
+
+/*PR/1010-0744*/
+DELETE FROM master_lunas_piutang
+ WHERE lpiutang_faktur = 'PR/1010-0744';
+
+
+/*PR/1010-0752*/
+DELETE FROM master_lunas_piutang
+ WHERE lpiutang_faktur = 'PR/1010-0752';
+
+
+/*PR/1010-0977*/
+DELETE FROM master_lunas_piutang
+ WHERE lpiutang_faktur = 'PR/1010-0977';
+
+
+/*PR/1010-1130*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       570000,
+       570000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1010-1130';
+
+
+/*PR/1010-1307*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       950000,
+       950000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1010-1307';
+
+
+/*PR/1101-0448*/
+/*Customer Kelebihan membayar perawatannya sebesar: Rp 635.000,-*/
+
+
+/*PR/1101-0458*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       977250,
+       977250,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0458';
+
+
+/*PR/1101-0501*/
+UPDATE    master_lunas_piutang
+       JOIN
+          vu_jrawat_novalid_temp
+       ON (master_lunas_piutang.lpiutang_faktur =
+              vu_jrawat_novalid_temp.jrawat_nobukti)
+   SET master_lunas_piutang.lpiutang_total =
+          vu_jrawat_novalid_temp.total_nilai,
+       master_lunas_piutang.lpiutang_sisa = vu_jrawat_novalid_temp.total_nilai
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0501';
+
+
+/*PR/1101-0523*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       1400000,
+       1400000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0523';
+
+
+/*PR/1101-0530*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       2900000,
+       2900000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0530';
+
+
+/*PR/1101-0595*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       340000,
+       340000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0595';
+
+
+/*PR/1101-0627*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       677700,
+       677700,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0627';
+
+
+/*PR/1101-0680*/
+/*Customer Kelebihan membayar perawatannya sebesar: Rp 650.000,-*/
+
+
+/*PR/1101-0727*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       240000,
+       240000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0727';
+
+
+/*PR/1101-0735*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       50000,
+       50000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0735';
+
+
+/*PR/1101-0754*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       585000,
+       585000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0754';
+
+
+/*PR/1101-0786*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       260000,
+       260000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0786';
+
+
+/*PR/1101-0839*/
+INSERT INTO master_lunas_piutang (
+   lpiutang_faktur
+  ,lpiutang_cust
+  ,lpiutang_faktur_tanggal
+  ,lpiutang_status
+  ,lpiutang_creator
+  ,lpiutang_date_create
+  ,lpiutang_date_update
+  ,lpiutang_total
+  ,lpiutang_sisa
+  ,lpiutang_jenis_transaksi
+  ,lpiutang_stat_dok
+)SELECT vu_jrawat_novalid_temp.jrawat_nobukti,
+       vu_jrawat_novalid_temp.jrawat_cust,
+       vu_jrawat_novalid_temp.jrawat_tanggal,
+       'piutang',
+       'hendri',
+       vu_jrawat_novalid_temp.jrawat_date_create,
+       now(),
+       80000,
+       80000,
+       'jual_rawat',
+       'Terbuka'
+  FROM vu_jrawat_novalid_temp
+ WHERE vu_jrawat_novalid_temp.jrawat_nobukti = 'PR/1101-0839';
