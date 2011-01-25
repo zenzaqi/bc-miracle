@@ -62,7 +62,7 @@ class M_public_function extends Model{
 								sum(nilai_tunai) as nilai_tunai,
 								sum(nilai_voucher) as nilai_voucher 
 					FROM 		vu_trans_terima_jual 
-					WHERE 		stat_dok<>'Batal' AND 
+					WHERE 		stat_dok='Tertutup' AND 
 								no_ref<>'' 
 					GROUP BY 	jenis_transaksi 
 					ORDER BY 	jenis_transaksi";
@@ -77,7 +77,7 @@ class M_public_function extends Model{
 								sum(nilai_voucher) as nilai_voucher 
 					FROM 		vu_trans_terima_jual 
 					WHERE 		date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
-								AND stat_dok<>'Batal'
+								AND stat_dok='Tertutup'
 								AND no_ref<>''
 					GROUP BY  	jenis_transaksi 
 					ORDER BY 	jenis_transaksi";
@@ -93,7 +93,7 @@ class M_public_function extends Model{
 					FROM 		vu_trans_terima_jual 
 					WHERE 		date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
 								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
-								stat_dok<>'Batal' 
+								stat_dok='Tertutup' 
 					GROUP BY  	jenis_transaksi 
 					ORDER BY 	jenis_transaksi";
 
