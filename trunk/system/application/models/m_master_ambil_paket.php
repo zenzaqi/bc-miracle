@@ -275,6 +275,30 @@ class M_master_ambil_paket extends Model{
 			}
 		}
 		
+		function get_daftar_pemakai_paket($dpaket_master,$start,$end){
+			$query = "select customer.cust_nama, customer.cust_alamat, customer.cust_no, customer.cust_id
+						from pengguna_paket
+						left join detail_jual_paket on (detail_jual_paket.dpaket_master = pengguna_paket.ppaket_master)
+						left join customer on (customer.cust_id = pengguna_paket.ppaket_cust)
+					where ppaket_master = '$dpaket_master'
+					group by customer.cust_nama";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+
 		//Ambil Perawatan berdasarkan db.paket_isi_perawatan.rpaket_perawatan yang dihasilkan dari (db.paket_isi_perawatan.rpaket_master = paket.paket_id)
 		function get_isi_rawat_list($dapaket_dpaket,$dapaket_jpaket,$dapaket_paket,$start,$end){
 			$rs_rows=0;

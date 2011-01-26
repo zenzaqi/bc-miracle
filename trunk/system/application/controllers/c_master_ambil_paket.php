@@ -149,6 +149,18 @@ class C_master_ambil_paket extends Controller {
 		echo $result;
 	}
 	
+	function get_daftar_pemakai_paket(){
+		$dpaket_master = isset($_POST['dpaket_master']) ? $_POST['dpaket_master'] : 0;
+		//$dpaket_paket = isset($_POST['dpaket_paket']) ? $_POST['dpaket_paket'] : 0;*/
+		//$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		//$result = $this->m_master_ambil_paket->get_history_ambil_paket($dpaket_master,$dpaket_paket,$start,$end);
+		$result = $this->m_master_ambil_paket->get_daftar_pemakai_paket($dpaket_master,$start,$end);
+		echo $result;
+	}
+	
+	
 	function get_isi_rawat_list(){
 		//$apaket_id = isset($_POST['master_id']) ? $_POST['master_id'] : 0;
 		$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
