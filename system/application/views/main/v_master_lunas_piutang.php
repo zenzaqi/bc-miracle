@@ -652,6 +652,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_lunas_piutang_confirm_delete   // Confirm before deleting
 		}, '-', 
 		<?php } ?>
@@ -713,6 +714,7 @@ Ext.onReady(function(){
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
+			disabled : true,
 			handler: master_lunas_piutang_confirm_delete 
 		},
 		<?php } ?>
