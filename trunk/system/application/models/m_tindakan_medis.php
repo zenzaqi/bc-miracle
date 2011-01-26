@@ -31,14 +31,14 @@ class M_tindakan_medis extends Model{
 			
 		if($periode=='all')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL) ".$order_by;
+					WHERE (kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama ='Anti Aging') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL) ".$order_by;
 		else if($periode=='bulan')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE ((kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL))
+					WHERE ((kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama ='Anti Aging') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL))
 					AND date_format(dtrawat_tglapp,'%Y-%m')='".$tgl_awal."' ".$order_by;
 		else if($periode=='tanggal')
 			$sql="SELECT *,date_format(dtrawat_tglapp,'%Y-%m-%d') as dtrawat_tglapp FROM vu_tindakan 
-					WHERE  ((kategori_nama='Medis' OR kategori_nama ='Surgery') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL)) 
+					WHERE  ((kategori_nama='Medis' OR kategori_nama ='Surgery' OR kategori_nama ='Anti Aging') OR (kategori_nama='Non Medis' AND terapis_id is NULL AND dokter_id is NULL)) 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')>='".$tgl_awal."' 
 					AND date_format(dtrawat_tglapp,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		
@@ -389,6 +389,8 @@ class M_tindakan_medis extends Model{
 							AND dapaket_stat_dok<>'Batal'
 						GROUP BY dapaket_dpaket";
 					$rs_paket_terpakai=$this->db->query($sql_paket_terpakai);
+					/* Query ini ditujukan utk mengecek, apakah paket tersebut sudah pernah terpakai sebelumnya (memiliki history pengambilan yg statdoknya <> Batal, jika punya, maka akan masuk ke IF dibawah ini,
+						dan melakukan pengecekan.. Jika Tidak memiliki history yg statdok nya <> batal, maka akan masuk ke Else dr IF ini..*/
 					if($rs_paket_terpakai->num_rows()){
 						$record_paket_terpakai = $rs_paket_terpakai->row();
 						
@@ -403,7 +405,7 @@ class M_tindakan_medis extends Model{
 									$dtrawat_dapp = $record['dtrawat_dapp'];
 								}
 						
-						//* Mengambil db.master_jual_paket.jpaket_nobukti ==> masukkan ke db.detail_pakai_cabin /
+						//* Mengambil db.master_jual_paket.jpaket_nobukti ==> untuk memasukkan ke db.detail_pakai_cabin /
 						$date_now = date('Y-m-d');
 						$jpaket_nobukti = "";
 						$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
@@ -1889,14 +1891,14 @@ class M_tindakan_medis extends Model{
 				);
 				if(($dtrawat_status_awal=='selesai') && ($dtrawat_status<>'selesai')){
 					if($dpaket_id_awal!=0){
-						/* $dpaket_id != 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
+						/* $dpaket_id_awal != 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_ambil_paket, maka proses editingnya:
 						** 1. Delete di db.detail_ambil_paket + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
 						*/
 						$this->detail_ambil_paket_delete($dtrawat_id);
 						
 					}else if($dpaket_id_awal==0){
-						/* $dpaket_id == 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
+						/* $dpaket_id_awal == 0 ==> ini artinya: data sebelumnya sudah masuk ke db.detail_jual_rawat, maka proses editingnya:
 						** 1. Delete di db.detail_jual_rawat + Delete db.detail_pakai_cabin
 						** 2. Update db.tindakan_detail.
 						*/
@@ -1906,7 +1908,7 @@ class M_tindakan_medis extends Model{
 				}else if(($dtrawat_status_awal<>'selesai') && ($dtrawat_status=='selesai')){
 					/* Perubahan status dari !='selesai' menjadi ='selesai', yg artinya: tindakan sudah 'selesai' dan masuk bagian Kasir
 					 * Proses yg dilakukan:
-					 * # Check $dpaket_id
+					 * # Check $dpaket_id_awal
 					 * >> Jika == 0 ==> masuk Kasir Penjualan Perawatan
 					 * >> Jika != 0 ==> masuk Kasir Pengambilan Paket
 					 * # Update tindakan_detail
@@ -1991,7 +1993,7 @@ class M_tindakan_medis extends Model{
 					$data['dtrawat_jam'] = $dtrawat_jam;
 				}
 				else if($dtrawat_jumlah_awal<>$dtrawat_jumlah){
-					//Edit Kolom Jam App
+					//Edit Kolom Jumlah
 					$data['dtrawat_jumlah'] = $dtrawat_jumlah;
 				}
 				else if($dtrawat_dpaket_id_awal<>$dtrawat_dpaket_id){
