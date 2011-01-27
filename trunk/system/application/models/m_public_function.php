@@ -2059,7 +2059,6 @@ class M_public_function extends Model{
                                                                                           ,$cetak);
                                         
                                     }elseif($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0){
-                                        $this->firephp->log($jrawat_card_nilai, 'jrawat_card_nilai - 2');
                                         $result_bayar = $this->m_public_function->cara_bayar_card_insert($jrawat_card_nama
                                                                                       ,$jrawat_card_edc
                                                                                       ,$jrawat_card_no
