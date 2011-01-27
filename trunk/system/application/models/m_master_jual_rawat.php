@@ -1093,6 +1093,150 @@ class M_master_jual_rawat extends Model{
 			return '0';
 
 	}
+    
+    function jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
+                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                                ,$jrawat_cara
+                                ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
+                                ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
+                                ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
+                                ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
+                                ,$jrawat_tunai_nilai
+                                ,$jrawat_voucher_no ,$jrawat_voucher_cashback
+                                ,$jrawat_cara2
+                                ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
+                                ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
+                                ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
+                                ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
+                                ,$jrawat_cara3
+                                ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
+                                ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
+                                ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
+                                ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
+                                ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                ,$jenis_transaksi ,$cetak){
+        $date_now = date('Y-m-d');
+        
+        $sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
+        $rs=$this->db->query($sql);
+        if($rs->num_rows()){
+            $rs_record=$rs->row_array();
+            $jrawat_revised = $rs_record['jrawat_revised'];
+        }
+        //UPDATE table.master_jual_rawat
+        $data = array(
+            "jrawat_tanggal"=>$jrawat_tanggal, 
+            "jrawat_diskon"=>$jrawat_diskon,
+            "jrawat_cashback"=>$jrawat_cashback,
+            "jrawat_bayar"=>$jrawat_bayar,
+            "jrawat_totalbiaya"=>$jrawat_total,
+            "jrawat_keterangan"=>$jrawat_keterangan,
+            "jrawat_ket_disk"=>$jrawat_ket_disk,
+            "jrawat_update"=>$_SESSION[SESSION_USERID],
+            "jrawat_date_update"=>$datetime_now,
+            "jrawat_revised"=>$jrawat_revised+1
+        );
+        
+        if($cetak==1){
+            /* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
+            if($jrawat_tanggal<>$date_now){
+                $jrawat_date_update = $jrawat_tanggal;
+            }else{
+                $jrawat_date_update = $datetime_now;
+            }
+            
+            $data["jrawat_stat_dok"] = 'Tertutup';
+        }
+        
+        if($jrawat_tanggal<>$date_now){
+            $data["jrawat_date_update"] = $jrawat_tanggal;
+            $bayar_date_create = $jrawat_tanggal;
+        }else{
+            $data["jrawat_date_update"] = $datetime_now;
+            $bayar_date_create = $datetime_now;
+        }
+        if($jrawat_cara!=null){
+            if(($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0)
+                || ($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0)
+                || ($jrawat_cek_nilai<>'' && $jrawat_cek_nilai<>0)
+                || ($jrawat_transfer_nilai<>'' && $jrawat_transfer_nilai<>0)
+                || ($jrawat_tunai_nilai<>'' && $jrawat_tunai_nilai<>0)
+                || ($jrawat_voucher_cashback<>'' && $jrawat_voucher_cashback<>0)){
+                $data["jrawat_cara"]=$jrawat_cara;
+            }else{
+                $data["jrawat_cara"]=NULL;
+            }
+        }
+        if($jrawat_cara2!=null){
+            if(($jrawat_kwitansi_nilai2<>'' && $jrawat_kwitansi_nilai2<>0)
+                || ($jrawat_card_nilai2<>'' && $jrawat_card_nilai2<>0)
+                || ($jrawat_cek_nilai2<>'' && $jrawat_cek_nilai2<>0)
+                || ($jrawat_transfer_nilai2<>'' && $jrawat_transfer_nilai2<>0)
+                || ($jrawat_tunai_nilai2<>'' && $jrawat_tunai_nilai2<>0)
+                || ($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0)){
+                $data["jrawat_cara2"]=$jrawat_cara2;
+            }else{
+                $data["jrawat_cara2"]=NULL;
+            }
+        }
+        if($jrawat_cara3!=null){
+            if(($jrawat_kwitansi_nilai3<>'' && $jrawat_kwitansi_nilai3<>0)
+                || ($jrawat_card_nilai3<>'' && $jrawat_card_nilai3<>0)
+                || ($jrawat_cek_nilai3<>'' && $jrawat_cek_nilai3<>0)
+                || ($jrawat_transfer_nilai3<>'' && $jrawat_transfer_nilai3<>0)
+                || ($jrawat_tunai_nilai3<>'' && $jrawat_tunai_nilai3<>0)
+                || ($jrawat_voucher_cashback3<>'' && $jrawat_voucher_cashback3<>0)){
+                $data["jrawat_cara3"]=$jrawat_cara3;
+            }else{
+                $data["jrawat_cara3"]=NULL;
+            }
+        }
+        $sql="select cust_id from customer where cust_id='".$jrawat_cust."'";
+        $query=$this->db->query($sql);
+        if($query->num_rows())
+            $data["jrawat_cust"]=$jrawat_cust;
+        
+        $this->db->query('LOCK TABLE master_jual_rawat WRITE');
+        $this->db->where('jrawat_id', $jrawat_id);
+        $this->db->update('master_jual_rawat', $data);
+        $affected_rows = $this->db->affected_rows();
+        $this->db->query('UNLOCK TABLES');
+        if($affected_rows>-1){
+            $time_now = date('H:i:s');
+            $bayar_date_create_temp = $jrawat_tanggal.' '.$time_now;
+            $bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
+            
+            $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+                                        ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
+                                        ,$jrawat_tanggal);
+            
+            $this->m_public_function->cara_bayar_ftpkpr_insert($jrawat_nobukti ,$jrawat_cara ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
+                       ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
+                       ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
+                       ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
+                       ,$jrawat_tunai_nilai
+                       ,$jrawat_voucher_no ,$jrawat_voucher_cashback
+                       ,$jrawat_cara2
+                       ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
+                       ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
+                       ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
+                       ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                       ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
+                       ,$jrawat_cara3
+                       ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
+                       ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
+                       ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
+                       ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                       ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
+                       ,$bayar_date_create ,$jenis_transaksi ,$cetak);
+            
+            return 1;
+            
+        }
+    }
 	
 	//function for get list record
 	function master_jual_rawat_list($filter,$start,$end){
@@ -1331,117 +1475,34 @@ class M_master_jual_rawat extends Model{
 				 * ==> JIKA sama, maka update status_dokumen dari db.master_jual_rawat terlebih dahulu untuk mengunci Faktur ini agar Tidak Ada detail dari Tindakan yang bisa masuk.
 				 * ==> JIKA tidak sama, maka langsung dilanjutkan ke proses selanjutnya
 				*/
-				
-				$sql="SELECT jrawat_cara, jrawat_cara2, jrawat_cara3, jrawat_date_create, jrawat_revised FROM master_jual_rawat WHERE jrawat_id='$jrawat_id'";
-				$rs=$this->db->query($sql);
-				if($rs->num_rows()){
-					$rs_record=$rs->row_array();
-					$jrawat_revised = $rs_record['jrawat_revised'];
-				}
-				//UPDATE table.master_jual_rawat
-				$data = array(
-					"jrawat_tanggal"=>$jrawat_tanggal, 
-					"jrawat_diskon"=>$jrawat_diskon,
-					"jrawat_cashback"=>$jrawat_cashback,
-					"jrawat_bayar"=>$jrawat_bayar,
-					"jrawat_totalbiaya"=>$jrawat_total,
-					"jrawat_keterangan"=>$jrawat_keterangan,
-					"jrawat_ket_disk"=>$jrawat_ket_disk,
-					"jrawat_update"=>$_SESSION[SESSION_USERID],
-					"jrawat_date_update"=>$datetime_now,
-					"jrawat_revised"=>$jrawat_revised+1
-				);
-				
-				if($cetak==1){
-					/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
-					if($jrawat_tanggal<>$date_now){
-						$jrawat_date_update = $jrawat_tanggal;
-					}else{
-						$jrawat_date_update = $datetime_now;
-					}
-					
-					$data["jrawat_stat_dok"] = 'Tertutup';
-				}
-				
-				if($jrawat_tanggal<>$date_now){
-					$data["jrawat_date_update"] = $jrawat_tanggal;
-					$bayar_date_create = $jrawat_tanggal;
-				}else{
-					$data["jrawat_date_update"] = $datetime_now;
-					$bayar_date_create = $datetime_now;
-				}
-                if($jrawat_cara!=null){
-					if(($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0)
-						|| ($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0)
-						|| ($jrawat_cek_nilai<>'' && $jrawat_cek_nilai<>0)
-						|| ($jrawat_transfer_nilai<>'' && $jrawat_transfer_nilai<>0)
-						|| ($jrawat_tunai_nilai<>'' && $jrawat_tunai_nilai<>0)
-						|| ($jrawat_voucher_cashback<>'' && $jrawat_voucher_cashback<>0)){
-						$data["jrawat_cara"]=$jrawat_cara;
-					}else{
-						$data["jrawat_cara"]=NULL;
-					}
-				}
-				if($jrawat_cara2!=null){
-					if(($jrawat_kwitansi_nilai2<>'' && $jrawat_kwitansi_nilai2<>0)
-						|| ($jrawat_card_nilai2<>'' && $jrawat_card_nilai2<>0)
-						|| ($jrawat_cek_nilai2<>'' && $jrawat_cek_nilai2<>0)
-						|| ($jrawat_transfer_nilai2<>'' && $jrawat_transfer_nilai2<>0)
-						|| ($jrawat_tunai_nilai2<>'' && $jrawat_tunai_nilai2<>0)
-						|| ($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0)){
-						$data["jrawat_cara2"]=$jrawat_cara2;
-					}else{
-						$data["jrawat_cara2"]=NULL;
-					}
-				}
-				if($jrawat_cara3!=null){
-					if(($jrawat_kwitansi_nilai3<>'' && $jrawat_kwitansi_nilai3<>0)
-						|| ($jrawat_card_nilai3<>'' && $jrawat_card_nilai3<>0)
-						|| ($jrawat_cek_nilai3<>'' && $jrawat_cek_nilai3<>0)
-						|| ($jrawat_transfer_nilai3<>'' && $jrawat_transfer_nilai3<>0)
-						|| ($jrawat_tunai_nilai3<>'' && $jrawat_tunai_nilai3<>0)
-						|| ($jrawat_voucher_cashback3<>'' && $jrawat_voucher_cashback3<>0)){
-						$data["jrawat_cara3"]=$jrawat_cara3;
-					}else{
-						$data["jrawat_cara3"]=NULL;
-					}
-				}
-				$sql="select cust_id from customer where cust_id='".$jrawat_cust."'";
-				$query=$this->db->query($sql);
-				if($query->num_rows())
-					$data["jrawat_cust"]=$jrawat_cust;
-				
-				$this->db->query('LOCK TABLE master_jual_rawat WRITE');
-				$this->db->where('jrawat_id', $jrawat_id);
-				$this->db->update('master_jual_rawat', $data);
-				$affected_rows = $this->db->affected_rows();
-				$this->db->query('UNLOCK TABLES');
-				if($affected_rows>-1){
-					$time_now = date('H:i:s');
-					$bayar_date_create_temp = $jrawat_tanggal.' '.$time_now;
-					$bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
-					
-					$this->m_public_function->cara_bayar_ftpkpr_insert($jrawat_nobukti ,$jrawat_cara ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
-                               ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
-                               ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
-                               ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
-                               ,$jrawat_tunai_nilai
-                               ,$jrawat_voucher_no ,$jrawat_voucher_cashback
-                               ,$jrawat_cara2
-                               ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
-                               ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
-                               ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
-                               ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
-                               ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
-                               ,$jrawat_cara3
-                               ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
-                               ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
-                               ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
-                               ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
-                               ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
-                               ,$bayar_date_create ,$jenis_transaksi ,$cetak);
-					
-					if($cetak==1){
+                
+                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
+                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                                                            ,$jrawat_cara
+                                                            ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
+                                                            ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
+                                                            ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
+                                                            ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
+                                                            ,$jrawat_tunai_nilai
+                                                            ,$jrawat_voucher_no ,$jrawat_voucher_cashback
+                                                            ,$jrawat_cara2
+                                                            ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
+                                                            ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
+                                                            ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
+                                                            ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                                            ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
+                                                            ,$jrawat_cara3
+                                                            ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
+                                                            ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
+                                                            ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
+                                                            ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                                            ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
+                                                            ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                                            ,$jenis_transaksi ,$cetak);
+                
+                if($jrawat_drawat_u==1){
+                    if($cetak==1){
 						//LOCKED db.tindakan_detail
 						$sql="SELECT drawat_dtrawat
 							FROM detail_jual_rawat
@@ -1468,17 +1529,40 @@ class M_master_jual_rawat extends Model{
 							}
 						}
 						
-						//return $jrawat_id;
 					}else{
 						return '0';
 					}
-					
-				}
+                }
+				
 			}else if(($dcount_drawat_id<1) && ($drawat_count>0) && ($rs_rows<>$drawat_count)){
 				/*
 				 * Tidak ada penambahan detail di View Kasir Penjualan Perawatan, tapi ada penambahan detail dari Tindakan
 				 * maka keluarkan peringatan "untuk mengcancel terlebih dahulu, kemudian dibuka lagi"
 				*/
+                $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
+                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                                ,$jrawat_cara
+                                ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
+                                ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
+                                ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
+                                ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
+                                ,$jrawat_tunai_nilai
+                                ,$jrawat_voucher_no ,$jrawat_voucher_cashback
+                                ,$jrawat_cara2
+                                ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
+                                ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
+                                ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
+                                ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
+                                ,$jrawat_cara3
+                                ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
+                                ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
+                                ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
+                                ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
+                                ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                ,$jenis_transaksi ,$cetak);
 				return '-7';
 			}else if(($dcount_drawat_id<1) && ($drawat_count==0) && ($rs_rows==0)){
 				/*
@@ -1505,104 +1589,32 @@ class M_master_jual_rawat extends Model{
 				/*
 				 * di View Kasir Penjualan Perawatan ada penambahan detail baru
 				*/
-                if($jrawat_tanggal<>$date_now){
-					$bayar_date_create = $jrawat_tanggal;
-				}else{
-					$bayar_date_create = $datetime_now;
-				}
+                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
+                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                                                            ,$jrawat_cara
+                                                            ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
+                                                            ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
+                                                            ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
+                                                            ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
+                                                            ,$jrawat_tunai_nilai
+                                                            ,$jrawat_voucher_no ,$jrawat_voucher_cashback
+                                                            ,$jrawat_cara2
+                                                            ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
+                                                            ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
+                                                            ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
+                                                            ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                                            ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
+                                                            ,$jrawat_cara3
+                                                            ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
+                                                            ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
+                                                            ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
+                                                            ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                                            ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
+                                                            ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
+                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                                            ,$jenis_transaksi ,$cetak);
                 
-                //UPDATE table.master_jual_rawat
-				$data = array(
-					"jrawat_tanggal"=>$jrawat_tanggal, 
-					"jrawat_diskon"=>$jrawat_diskon,
-					"jrawat_cashback"=>$jrawat_cashback,
-					"jrawat_bayar"=>$jrawat_bayar,
-					"jrawat_totalbiaya"=>$jrawat_total,
-					"jrawat_keterangan"=>$jrawat_keterangan,
-					"jrawat_ket_disk"=>$jrawat_ket_disk,
-					"jrawat_update"=>$_SESSION[SESSION_USERID],
-					"jrawat_date_update"=>$datetime_now
-				);
-				
-				if($jrawat_tanggal<>$date_now){
-					$data["jrawat_date_update"] = $jrawat_tanggal;
-					$bayar_date_create = $jrawat_tanggal;
-				}else{
-					$data["jrawat_date_update"] = $datetime_now;
-					$bayar_date_create = $datetime_now;
-				}
-                if($jrawat_cara!=null){
-					if(($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0)
-						|| ($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0)
-						|| ($jrawat_cek_nilai<>'' && $jrawat_cek_nilai<>0)
-						|| ($jrawat_transfer_nilai<>'' && $jrawat_transfer_nilai<>0)
-						|| ($jrawat_tunai_nilai<>'' && $jrawat_tunai_nilai<>0)
-						|| ($jrawat_voucher_cashback<>'' && $jrawat_voucher_cashback<>0)){
-						$data["jrawat_cara"]=$jrawat_cara;
-					}else{
-						$data["jrawat_cara"]=NULL;
-					}
-				}
-				if($jrawat_cara2!=null){
-					if(($jrawat_kwitansi_nilai2<>'' && $jrawat_kwitansi_nilai2<>0)
-						|| ($jrawat_card_nilai2<>'' && $jrawat_card_nilai2<>0)
-						|| ($jrawat_cek_nilai2<>'' && $jrawat_cek_nilai2<>0)
-						|| ($jrawat_transfer_nilai2<>'' && $jrawat_transfer_nilai2<>0)
-						|| ($jrawat_tunai_nilai2<>'' && $jrawat_tunai_nilai2<>0)
-						|| ($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0)){
-						$data["jrawat_cara2"]=$jrawat_cara2;
-					}else{
-						$data["jrawat_cara2"]=NULL;
-					}
-				}
-				if($jrawat_cara3!=null){
-					if(($jrawat_kwitansi_nilai3<>'' && $jrawat_kwitansi_nilai3<>0)
-						|| ($jrawat_card_nilai3<>'' && $jrawat_card_nilai3<>0)
-						|| ($jrawat_cek_nilai3<>'' && $jrawat_cek_nilai3<>0)
-						|| ($jrawat_transfer_nilai3<>'' && $jrawat_transfer_nilai3<>0)
-						|| ($jrawat_tunai_nilai3<>'' && $jrawat_tunai_nilai3<>0)
-						|| ($jrawat_voucher_cashback3<>'' && $jrawat_voucher_cashback3<>0)){
-						$data["jrawat_cara3"]=$jrawat_cara3;
-					}else{
-						$data["jrawat_cara3"]=NULL;
-					}
-				}
-                
-                if($cetak==1){
-					/* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
-					$data["jrawat_stat_dok"] = 'Tertutup';
-				}
-				
-				$this->db->query('LOCK TABLE master_jual_rawat WRITE');
-				$this->db->where('jrawat_id', $jrawat_id);
-				$this->db->update('master_jual_rawat', $data);
-				$affected_rows = $this->db->affected_rows();
-				$this->db->query('UNLOCK TABLES');
-                if($affected_rows>0){
-                    $rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
-                                                                ,$jrawat_tanggal);
-                    
-                    $this->m_public_function->cara_bayar_ftpkpr_insert($jrawat_nobukti ,$jrawat_cara ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
-                                   ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
-                                   ,$jrawat_cek_nama ,$jrawat_cek_no ,$jrawat_cek_valid ,$jrawat_cek_bank ,$jrawat_cek_nilai
-                                   ,$jrawat_transfer_bank ,$jrawat_transfer_nama ,$jrawat_transfer_nilai
-                                   ,$jrawat_tunai_nilai
-                                   ,$jrawat_voucher_no ,$jrawat_voucher_cashback
-                                   ,$jrawat_cara2
-                                   ,$jrawat_kwitansi_no2 ,$jrawat_kwitansi_nilai2
-                                   ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
-                                   ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
-                                   ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
-                                   ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
-                                   ,$jrawat_cara3
-                                   ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
-                                   ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
-                                   ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
-                                   ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
-                                   ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
-                                   ,$bayar_date_create ,$jenis_transaksi ,$cetak);
-                    
+                if($jrawat_drawat_u==1){
                     if($cetak==1){
                         $result_point = $this->member_point_update($jrawat_id);
                         if($result_point==1){
@@ -1617,12 +1629,11 @@ class M_master_jual_rawat extends Model{
                     }else{
                         return '0';
                     }
-                    
                 }else{
                     return '-13';
                 }
-            
-			}else{
+                
+            }else{
 				return '-11';
 			}
 			
