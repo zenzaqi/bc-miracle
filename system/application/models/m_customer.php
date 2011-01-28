@@ -215,11 +215,7 @@ class M_customer extends Model{
 		
 		//function for update record
 		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain ){
-			if($cust_no=='' && $cust_aktif !='Tidak Aktif'){
-				//Generate Nomor Customer
-				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
-			}
-			
+		
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			if ($cust_unit=="Miracle Thamrin")
@@ -299,89 +295,196 @@ class M_customer extends Model{
 			if($cust_hobi_lain=='false')
 			$lain="0";	
 			
-			$temp_hobi=$baca.$olah.$masak.$travel.$foto.$lukis.$nari.$lain;		
+			$temp_hobi=$baca.$olah.$masak.$travel.$foto.$lukis.$nari.$lain;	 
+			
+			if($cust_aktif=='Tidak Aktif'){
+				$sql="SELECT detail_jual_paket.dpaket_sisa_paket
+				FROM master_jual_paket 
+				LEFT JOIN detail_jual_paket on (master_jual_paket.jpaket_id = detail_jual_paket.dpaket_master)
+				LEFT JOIN customer on (customer.cust_id = master_jual_paket.jpaket_cust)
+				where detail_jual_paket.dpaket_sisa_paket>0 and master_jual_paket.jpaket_stat_dok='Tertutup' and customer.cust_id = '$cust_id'";
+
+				$rs = $this->db->query($sql);
+				$nbrows = $rs->num_rows();
+							
+				if ($nbrows>0){
+					return 2;
+				}
+				else
+				{
+					if($cust_no==''/* && $cust_aktif !='Tidak Aktif'*/){
+					//Generate Nomor Customer
+					$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
+					}
+					
+				$data = array(
+					"cust_id"=>$cust_id,			
+					"cust_no"=>$cust_no,
+					"cust_nolama"=>$cust_nolama,
+					"cust_nama"=>$cust_nama,
+					"cust_panggilan"=>$cust_panggilan,
+					"cust_kelamin"=>$cust_kelamin,
+					"cust_title"=>$cust_title,
+					"cust_alamat"=>$cust_alamat,			
+					"cust_kota"=>$cust_kota,			
+					"cust_kodepos"=>$cust_kodepos,			
+					"cust_propinsi"=>$cust_propinsi,			
+					"cust_negara"=>$cust_negara,
+					"cust_alamat2"=>$cust_alamat2,
+					"cust_kota2"=>$cust_kota2,			
+					"cust_kodepos2"=>$cust_kodepos2,			
+					"cust_propinsi2"=>$cust_propinsi2,			
+					"cust_negara2"=>$cust_negara2,
+					"cust_telprumah"=>$cust_telprumah,			
+					"cust_telprumah2"=>$cust_telprumah2,			
+					"cust_telpkantor"=>$cust_telpkantor,			
+					"cust_hp"=>$cust_hp,			
+					"cust_hp2"=>$cust_hp2,			
+					"cust_hp3"=>$cust_hp3,			
+					"cust_email"=>$cust_email,
+					"cust_email2"=>$cust_email2,
+					"cust_agama"=>$cust_agama,			
+					"cust_pendidikan"=>$cust_pendidikan,			
+					"cust_profesi"=>$cust_profesi,			
+					"cust_tmptlahir"=>$cust_tmptlahir,
+					"cust_tgllahir"=>$cust_tgllahir,				
+					"cust_hobi"=>$temp_hobi,			
+					"cust_referensilain"=>$cust_referensilain,			
+					"cust_keterangan"=>$cust_keterangan,			
+					"cust_terdaftar"=>$cust_terdaftar,			
+					"cust_statusnikah"=>$cust_statusnikah,
+					//"cust_priority"=>$cust_priority,
+					"cust_jmlanak"=>$cust_jmlanak,
+					"cust_aktif"=>$cust_aktif,
+					"cust_fretfulness"=>$cust_fretfulness,
+					"cust_update"=>$_SESSION[SESSION_USERID],
+					"cust_date_update"=>$date_now,			
+					//"cust_revised"=>"(cust_revised+1)",
+					"cust_cp"=>$cust_cp,
+					"cust_cptelp"=>$cust_cptelp
+				);
+				if($cust_fb=='true')
+					$data["cust_fb"]=1;
+				if($cust_fb=='false')
+					$data["cust_fb"]=0;
+				if($cust_tweeter=='true')
+					$data["cust_tweeter"]=1;
+				if($cust_tweeter=='false')
+					$data["cust_tweeter"]=0;
+				if($cust_fb2=='true')
+					$data["cust_fb2"]=1;
+				if($cust_fb2=='false')
+					$data["cust_fb2"]=0;
+				if($cust_tweeter2=='true')
+					$data["cust_tweeter2"]=1;
+				if($cust_tweeter2=='false')
+					$data["cust_tweeter2"]=0;
 				
-			$data = array(
-				"cust_id"=>$cust_id,			
-				"cust_no"=>$cust_no,
-				"cust_nolama"=>$cust_nolama,
-				"cust_nama"=>$cust_nama,
-				"cust_panggilan"=>$cust_panggilan,
-				"cust_kelamin"=>$cust_kelamin,
-				"cust_title"=>$cust_title,
-				"cust_alamat"=>$cust_alamat,			
-				"cust_kota"=>$cust_kota,			
-				"cust_kodepos"=>$cust_kodepos,			
-				"cust_propinsi"=>$cust_propinsi,			
-				"cust_negara"=>$cust_negara,
-				"cust_alamat2"=>$cust_alamat2,
-				"cust_kota2"=>$cust_kota2,			
-				"cust_kodepos2"=>$cust_kodepos2,			
-				"cust_propinsi2"=>$cust_propinsi2,			
-				"cust_negara2"=>$cust_negara2,
-				"cust_telprumah"=>$cust_telprumah,			
-				"cust_telprumah2"=>$cust_telprumah2,			
-				"cust_telpkantor"=>$cust_telpkantor,			
-				"cust_hp"=>$cust_hp,			
-				"cust_hp2"=>$cust_hp2,			
-				"cust_hp3"=>$cust_hp3,			
-				"cust_email"=>$cust_email,
-				"cust_email2"=>$cust_email2,
-				"cust_agama"=>$cust_agama,			
-				"cust_pendidikan"=>$cust_pendidikan,			
-				"cust_profesi"=>$cust_profesi,			
-				"cust_tmptlahir"=>$cust_tmptlahir,
-				"cust_tgllahir"=>$cust_tgllahir,				
-				"cust_hobi"=>$temp_hobi,			
-				"cust_referensilain"=>$cust_referensilain,			
-				"cust_keterangan"=>$cust_keterangan,			
-				"cust_terdaftar"=>$cust_terdaftar,			
-				"cust_statusnikah"=>$cust_statusnikah,
-				//"cust_priority"=>$cust_priority,
-				"cust_jmlanak"=>$cust_jmlanak,
-				"cust_aktif"=>$cust_aktif,
-				"cust_fretfulness"=>$cust_fretfulness,
-				"cust_update"=>$_SESSION[SESSION_USERID],
-				"cust_date_update"=>$date_now,			
-				//"cust_revised"=>"(cust_revised+1)",
-				"cust_cp"=>$cust_cp,
-				"cust_cptelp"=>$cust_cptelp
-			);
-			if($cust_fb=='true')
-				$data["cust_fb"]=1;
-			if($cust_fb=='false')
-				$data["cust_fb"]=0;
-			if($cust_tweeter=='true')
-				$data["cust_tweeter"]=1;
-			if($cust_tweeter=='false')
-				$data["cust_tweeter"]=0;
-			if($cust_fb2=='true')
-				$data["cust_fb2"]=1;
-			if($cust_fb2=='false')
-				$data["cust_fb2"]=0;
-			if($cust_tweeter2=='true')
-				$data["cust_tweeter2"]=1;
-			if($cust_tweeter2=='false')
-				$data["cust_tweeter2"]=0;
-			
-			$sql="select cabang_id from cabang where cabang_id='".$cust_unit."'";
-			$result=$this->db->query($sql);
-			if($result->num_rows())
-				$data["cust_unit"]=$cust_unit;
-			
-			$sql="SELECT cust_id FROM customer WHERE cust_id='".$cust_referensi."'";
-			$result=$this->db->query($sql);
-			if($result->num_rows())
-				$data["cust_referensi"]=$cust_referensi;
-			
-			$this->db->where('cust_id', $cust_id);
-			$this->db->update('customer', $data);
-			$sql="UPDATE customer SET cust_revised=(cust_revised+1) WHERE cust_id='$cust_id'";
-			$this->db->query($sql);
-			
-			return '1';
-		
-		}
+				$sql="select cabang_id from cabang where cabang_id='".$cust_unit."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows())
+					$data["cust_unit"]=$cust_unit;
+				
+				$sql="SELECT cust_id FROM customer WHERE cust_id='".$cust_referensi."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows())
+					$data["cust_referensi"]=$cust_referensi;
+				
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $data);
+				$sql="UPDATE customer SET cust_revised=(cust_revised+1) WHERE cust_id='$cust_id'";
+				$this->db->query($sql);
+				
+				return '1';
+				}
+			} 
+			else if ($cust_aktif=='Aktif') {
+				if($cust_no==''/* && $cust_aktif !='Tidak Aktif'*/){
+					//Generate Nomor Customer
+					$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
+					}
+					
+				$data = array(
+					"cust_id"=>$cust_id,			
+					"cust_no"=>$cust_no,
+					"cust_nolama"=>$cust_nolama,
+					"cust_nama"=>$cust_nama,
+					"cust_panggilan"=>$cust_panggilan,
+					"cust_kelamin"=>$cust_kelamin,
+					"cust_title"=>$cust_title,
+					"cust_alamat"=>$cust_alamat,			
+					"cust_kota"=>$cust_kota,			
+					"cust_kodepos"=>$cust_kodepos,			
+					"cust_propinsi"=>$cust_propinsi,			
+					"cust_negara"=>$cust_negara,
+					"cust_alamat2"=>$cust_alamat2,
+					"cust_kota2"=>$cust_kota2,			
+					"cust_kodepos2"=>$cust_kodepos2,			
+					"cust_propinsi2"=>$cust_propinsi2,			
+					"cust_negara2"=>$cust_negara2,
+					"cust_telprumah"=>$cust_telprumah,			
+					"cust_telprumah2"=>$cust_telprumah2,			
+					"cust_telpkantor"=>$cust_telpkantor,			
+					"cust_hp"=>$cust_hp,			
+					"cust_hp2"=>$cust_hp2,			
+					"cust_hp3"=>$cust_hp3,			
+					"cust_email"=>$cust_email,
+					"cust_email2"=>$cust_email2,
+					"cust_agama"=>$cust_agama,			
+					"cust_pendidikan"=>$cust_pendidikan,			
+					"cust_profesi"=>$cust_profesi,			
+					"cust_tmptlahir"=>$cust_tmptlahir,
+					"cust_tgllahir"=>$cust_tgllahir,				
+					"cust_hobi"=>$temp_hobi,			
+					"cust_referensilain"=>$cust_referensilain,			
+					"cust_keterangan"=>$cust_keterangan,			
+					"cust_terdaftar"=>$cust_terdaftar,			
+					"cust_statusnikah"=>$cust_statusnikah,
+					//"cust_priority"=>$cust_priority,
+					"cust_jmlanak"=>$cust_jmlanak,
+					"cust_aktif"=>$cust_aktif,
+					"cust_fretfulness"=>$cust_fretfulness,
+					"cust_update"=>$_SESSION[SESSION_USERID],
+					"cust_date_update"=>$date_now,			
+					//"cust_revised"=>"(cust_revised+1)",
+					"cust_cp"=>$cust_cp,
+					"cust_cptelp"=>$cust_cptelp
+				);
+				if($cust_fb=='true')
+					$data["cust_fb"]=1;
+				if($cust_fb=='false')
+					$data["cust_fb"]=0;
+				if($cust_tweeter=='true')
+					$data["cust_tweeter"]=1;
+				if($cust_tweeter=='false')
+					$data["cust_tweeter"]=0;
+				if($cust_fb2=='true')
+					$data["cust_fb2"]=1;
+				if($cust_fb2=='false')
+					$data["cust_fb2"]=0;
+				if($cust_tweeter2=='true')
+					$data["cust_tweeter2"]=1;
+				if($cust_tweeter2=='false')
+					$data["cust_tweeter2"]=0;
+				
+				$sql="select cabang_id from cabang where cabang_id='".$cust_unit."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows())
+					$data["cust_unit"]=$cust_unit;
+				
+				$sql="SELECT cust_id FROM customer WHERE cust_id='".$cust_referensi."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows())
+					$data["cust_referensi"]=$cust_referensi;
+				
+				$this->db->where('cust_id', $cust_id);
+				$this->db->update('customer', $data);
+				$sql="UPDATE customer SET cust_revised=(cust_revised+1) WHERE cust_id='$cust_id'";
+				$this->db->query($sql);
+				
+				return '1';
+				}
+	}
 		
 		//function for create new record
 		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain , $cust_umurstart, $cust_umurend, $cust_umur){

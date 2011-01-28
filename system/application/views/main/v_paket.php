@@ -242,6 +242,7 @@ Ext.onReady(function(){
 				paket_aktif_tp : paket_aktif_tpField.getValue(),
 				paket_aktif_dps : paket_aktif_dpsField.getValue(),
 				paket_aktif_jkt : paket_aktif_jktField.getValue(),
+				paket_aktif_mta : paket_aktif_mtaField.getValue(),
 				paket_aktif_blpn : paket_aktif_blpnField.getValue(),
 				paket_aktif_kuta : paket_aktif_kutaField.getValue(),
 				paket_aktif_btm : paket_aktif_btmField.getValue(),
@@ -354,6 +355,8 @@ Ext.onReady(function(){
 		paket_aktif_dpsField.setValue(true);
 		paket_aktif_jktField.reset();
 		paket_aktif_jktField.setValue(true);
+		paket_aktif_mtaField.reset();
+		paket_aktif_mtaField.setValue(true);
 		paket_aktif_blpnField.reset();
 		paket_aktif_blpnField.setValue(true);
 		paket_aktif_kutaField.reset();
@@ -383,7 +386,7 @@ Ext.onReady(function(){
 
 	/* setValue to EDIT */
 	function paket_set_form(){
-		paket_checkallField.setValue(false);
+		//paket_checkallField.setValue(false);
 		paket_idField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_id'));
 		paket_kodeField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
 		paket_kodelamaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kodelama'));
@@ -434,48 +437,53 @@ Ext.onReady(function(){
 			paket_aktif_jktField.setValue(false);
 		
 		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(6)=="1")	
-			paket_aktif_blpnField.setValue(true);	
+			paket_aktif_mtaField.setValue(true);	
 		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(6)=="0")
+			paket_aktif_mtaField.setValue(false);
+			
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="1")	
+			paket_aktif_blpnField.setValue(true);	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="0")
 			paket_aktif_blpnField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="1")	
 			paket_aktif_kutaField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(7)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="0")
 			paket_aktif_kutaField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="1")	
 			paket_aktif_btmField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(8)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="0")
 			paket_aktif_btmField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="1")	
 			paket_aktif_mksField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(9)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="0")
 			paket_aktif_mksField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="1")	
 			paket_aktif_mdnField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(10)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="0")
 			paket_aktif_mdnField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="1")	
 			paket_aktif_lbkField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(11)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="0")
 			paket_aktif_lbkField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="1")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="1")
 			paket_aktif_mndField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(12)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="0")
 			paket_aktif_mndField.setValue(false);
 		
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(14)=="1")	
 			paket_aktif_ygkField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(13)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(14)=="0")
 			paket_aktif_ygkField.setValue(false);
 			
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(14)=="1")	
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(15)=="1")	
 			paket_aktif_mlgField.setValue(true);	
-		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(14)=="0")
+		if(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang').charAt(15)=="0")
 			paket_aktif_mlgField.setValue(false);	
 		
 		/*paket_aktif_kiField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));
@@ -1196,6 +1204,13 @@ Ext.onReady(function(){
 		name: 'paket_aktif_jkt'
 	});
 	
+	paket_aktif_mtaField=new Ext.form.Checkbox({
+		id : 'paket_aktif_mtaField',
+		boxLabel: 'MTA',
+		maxLength: 250,
+		name: 'paket_aktif_mta'
+	});
+	
 	paket_aktif_blpnField=new Ext.form.Checkbox({
 		id : 'paket_aktif_blpnField',
 		boxLabel: 'BLPN',
@@ -1259,13 +1274,6 @@ Ext.onReady(function(){
 		name: 'paket_aktif_mlg'
 	});
 	
-	paket_checkallField= new Ext.form.Checkbox({
-		id: 'paket_checkallField',
-		fieldLabel: 'Check All',
-		maxLength: 250,
-		anchor: '95%'
-	});
-	
 	paket_aktif_checkField=new Ext.form.Checkbox({
 		id : '',
 		boxLabel: 'Check All',
@@ -1278,6 +1286,7 @@ Ext.onReady(function(){
 				paket_aktif_tpField.setValue(true);
 				paket_aktif_dpsField.setValue(true);
 				paket_aktif_jktField.setValue(true);
+				paket_aktif_mtaField.setValue(true);
 				paket_aktif_blpnField.setValue(true);
 				paket_aktif_kutaField.setValue(true);
 				paket_aktif_btmField.setValue(true);
@@ -1295,6 +1304,7 @@ Ext.onReady(function(){
 				paket_aktif_tpField.setValue(false);
 				paket_aktif_dpsField.setValue(false);
 				paket_aktif_jktField.setValue(false);
+				paket_aktif_mtaField.setValue(false);
 				paket_aktif_blpnField.setValue(false);
 				paket_aktif_kutaField.setValue(false);
 				paket_aktif_btmField.setValue(false);
@@ -1320,7 +1330,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [ paket_aktif_thField, paket_aktif_kiField, paket_aktif_hrField, paket_aktif_tpField, paket_aktif_mlgField, paket_aktif_dpsField, paket_aktif_jktField, paket_aktif_blpnField, paket_aktif_checkField]
+				items: [ paket_aktif_thField, paket_aktif_kiField, paket_aktif_hrField, paket_aktif_tpField, paket_aktif_mlgField, paket_aktif_dpsField, paket_aktif_jktField, paket_aktif_mtaField, paket_aktif_blpnField, paket_aktif_checkField]
 			},
 			 {
 				   	layout: 'form',
