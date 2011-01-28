@@ -184,6 +184,12 @@ class C_paket extends Controller {
 		$result=$this->m_paket->paket_list($query,$start,$end);
 		echo $result;
 	}
+	
+	function get_permission(){
+		$group = (integer) (isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		$result=$this->m_paket->get_permission($group);
+		echo $result;
+	}
 
 	//function for update record
 	function paket_update(){
@@ -201,7 +207,7 @@ class C_paket extends Controller {
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace(",", ",",$paket_nama);
 		$paket_nama=str_replace("'", '"',$paket_nama);
-		//$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
+		$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
 		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_keterangan=trim(@$_POST["paket_keterangan"]);
 		$paket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_keterangan);
@@ -240,6 +246,10 @@ class C_paket extends Controller {
 		$paket_aktif_jkt=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_jkt);
 		$paket_aktif_jkt=str_replace(",", ",",$paket_aktif_jkt);
 		$paket_aktif_jkt=str_replace("'", '"',$paket_aktif_jkt);
+		$paket_aktif_mta=trim(@$_POST["paket_aktif_mta"]);
+		$paket_aktif_mta=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_mta);
+		$paket_aktif_mta=str_replace(",", ",",$paket_aktif_mta);
+		$paket_aktif_mta=str_replace("'", '"',$paket_aktif_mta);
 		$paket_aktif_blpn=trim(@$_POST["paket_aktif_blpn"]);
 		$paket_aktif_blpn=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_blpn);
 		$paket_aktif_blpn=str_replace(",", ",",$paket_aktif_blpn);
@@ -272,7 +282,12 @@ class C_paket extends Controller {
 		$paket_aktif_ygk=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_ygk);
 		$paket_aktif_ygk=str_replace(",", ",",$paket_aktif_ygk);
 		$paket_aktif_ygk=str_replace("'", '"',$paket_aktif_ygk);
-		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk);
+		$paket_aktif_mlg=trim(@$_POST["paket_aktif_mlg"]);
+		$paket_aktif_mlg=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_mlg);
+		$paket_aktif_mlg=str_replace(",", ",",$paket_aktif_mlg);
+		$paket_aktif_mlg=str_replace("'", '"',$paket_aktif_mlg);
+		
+		$result = $this->m_paket->paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama ,$paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg);
 		echo $result;
 	}
 	
@@ -289,7 +304,7 @@ class C_paket extends Controller {
 		$paket_nama=trim(@$_POST["paket_nama"]);
 		$paket_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_nama);
 		$paket_nama=str_replace("'", '"',$paket_nama);
-		//$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
+		$paket_standart_tetap=trim(@$_POST["paket_standart_tetap"]);
 		$paket_group=trim(@$_POST["paket_group"]);
 		$paket_keterangan=trim(@$_POST["paket_keterangan"]);
 		$paket_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_keterangan);
@@ -320,6 +335,9 @@ class C_paket extends Controller {
 		$paket_aktif_jkt=trim(@$_POST["paket_aktif_jkt"]);
 		$paket_aktif_jkt=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_jkt);
 		$paket_aktif_jkt=str_replace("'", '"',$paket_aktif_jkt);
+		$paket_aktif_mta=trim(@$_POST["paket_aktif_mta"]);
+		$paket_aktif_mta=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_mta);
+		$paket_aktif_mta=str_replace("'", '"',$paket_aktif_mta);
 		$paket_aktif_blpn=trim(@$_POST["paket_aktif_blpn"]);
 		$paket_aktif_blpn=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_blpn);
 		$paket_aktif_blpn=str_replace("'", '"',$paket_aktif_blpn);
@@ -344,7 +362,11 @@ class C_paket extends Controller {
 		$paket_aktif_ygk=trim(@$_POST["paket_aktif_ygk"]);
 		$paket_aktif_ygk=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_ygk);
 		$paket_aktif_ygk=str_replace("'", '"',$paket_aktif_ygk);
-		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk);
+		$paket_aktif_mlg=trim(@$_POST["paket_aktif_mlg"]);
+		$paket_aktif_mlg=str_replace("/(<\/?)(p)([^>]*>)", "",$paket_aktif_mlg);
+		$paket_aktif_mlg=str_replace("'", '"',$paket_aktif_mlg);
+		
+		$result=$this->m_paket->paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_standart_tetap, $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg);
 		echo $result;
 	}
 

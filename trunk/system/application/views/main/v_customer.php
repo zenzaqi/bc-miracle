@@ -468,8 +468,16 @@ var editor_cust_note;
 		cust_umurField.setValue(umur);
 	}
   
+	function crm_generator(){
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
+	}
   
-  
+	function crm_generator_button(btn){
+		if(btn=='yes'){
+			crm_generator_save();
+		}
+	
+	}
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
@@ -1480,6 +1488,7 @@ var editor_cust_note;
 						//cbo_cust_hobi_DataStore.reload();
 						//cbo_cust_cabang_DataStore.reload();
 						break;
+				//	default:
 					default:
 						Ext.MessageBox.show({
 							   title: 'Warning',
@@ -1490,6 +1499,7 @@ var editor_cust_note;
 							   icon: Ext.MessageBox.WARNING
 						});
 						break;
+						
 				}
 			},
 			failure: function(response){
@@ -1688,6 +1698,16 @@ var editor_cust_note;
 							Ext.MessageBox.alert(post2db+' OK','Data customer berhasil disimpan');
 							
 							break;
+						case 2:						
+						Ext.MessageBox.show({
+							   title: 'Warning',
+//							   msg: 'We could\'t not save the customer.',
+							   msg: 'Tidak dapat di non-aktifkan, Customer masih memiliki sisa paket',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+						});
+						break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
@@ -2827,7 +2847,12 @@ Ext.onReady(function(){
 			handler: customer_confirm_delete 
 		},
 		<?php } ?>
-		'-',
+		/*{ 
+			text: 'CRM Value Generator',
+			iconCls:'icon-update',
+			handler: customer_crm
+		},
+		'-',*/
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',

@@ -268,6 +268,7 @@ Ext.onReady(function(){
 				produk_aktif_tp : produk_aktif_tpField.getValue(),
 				produk_aktif_dps : produk_aktif_dpsField.getValue(),
 				produk_aktif_jkt : produk_aktif_jktField.getValue(),
+				produk_aktif_mta : produk_aktif_mtaField.getValue(),
 				produk_aktif_blpn : produk_aktif_blpnField.getValue(),
 				produk_aktif_kuta : produk_aktif_kutaField.getValue(),
 				produk_aktif_btm : produk_aktif_btmField.getValue(),
@@ -383,6 +384,8 @@ Ext.onReady(function(){
 		produk_aktif_dpsField.setValue(true);
 		produk_aktif_jktField.reset();
 		produk_aktif_jktField.setValue(true);
+		produk_aktif_mtaField.reset();
+		produk_aktif_mtaField.setValue(true);
 		produk_aktif_blpnField.reset();
 		produk_aktif_blpnField.setValue(true);
 		produk_aktif_kutaField.reset();
@@ -458,48 +461,53 @@ Ext.onReady(function(){
 			produk_aktif_jktField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(6)=="1")	
-			produk_aktif_blpnField.setValue(true);	
+			produk_aktif_mtaField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(6)=="0")
-			produk_aktif_blpnField.setValue(false);
+			produk_aktif_mtaField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(7)=="1")	
-			produk_aktif_kutaField.setValue(true);	
+			produk_aktif_blpnField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(7)=="0")
-			produk_aktif_kutaField.setValue(false);
+			produk_aktif_blpnField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(8)=="1")	
-			produk_aktif_btmField.setValue(true);	
+			produk_aktif_kutaField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(8)=="0")
-			produk_aktif_btmField.setValue(false);
+			produk_aktif_kutaField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(9)=="1")	
-			produk_aktif_mksField.setValue(true);	
+			produk_aktif_btmField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(9)=="0")
-			produk_aktif_mksField.setValue(false);
+			produk_aktif_btmField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(10)=="1")	
-			produk_aktif_mdnField.setValue(true);	
+			produk_aktif_mksField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(10)=="0")
-			produk_aktif_mdnField.setValue(false);
+			produk_aktif_mksField.setValue(false);
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(11)=="1")	
-			produk_aktif_lbkField.setValue(true);	
+			produk_aktif_mdnField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(11)=="0")
+			produk_aktif_mdnField.setValue(false);
+		
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(12)=="1")	
+			produk_aktif_lbkField.setValue(true);	
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(12)=="0")
 			produk_aktif_lbkField.setValue(false);
 		
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(12)=="1")
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(13)=="1")
 			produk_aktif_mndField.setValue(true);	
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(12)=="0")
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(13)=="0")
 			produk_aktif_mndField.setValue(false);
 		
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(13)=="1")	
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(14)=="1")	
 			produk_aktif_ygkField.setValue(true);	
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(13)=="0")
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(14)=="0")
 			produk_aktif_ygkField.setValue(false);
 			
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(14)=="1")	
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(15)=="1")	
 			produk_aktif_mlgField.setValue(true);	
-		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(14)=="0")
+		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(15)=="0")
 			produk_aktif_mlgField.setValue(false);
 	}
 	/* End setValue to EDIT*/
@@ -1427,6 +1435,13 @@ Ext.onReady(function(){
 		name: 'produk_aktif_jkt'
 	});
 	
+	produk_aktif_mtaField=new Ext.form.Checkbox({
+		id : 'produk_aktif_mtaField',
+		boxLabel: 'MTA',
+		maxLength: 250,
+		name: 'produk_aktif_mta'
+	});
+	
 	produk_aktif_blpnField=new Ext.form.Checkbox({
 		id : 'produk_aktif_blpnField',
 		boxLabel: 'BLPN',
@@ -1509,6 +1524,7 @@ Ext.onReady(function(){
 				produk_aktif_tpField.setValue(true);
 				produk_aktif_dpsField.setValue(true);
 				produk_aktif_jktField.setValue(true);
+				produk_aktif_mtaField.setValue(true);
 				produk_aktif_blpnField.setValue(true);
 				produk_aktif_kutaField.setValue(true);
 				produk_aktif_btmField.setValue(true);
@@ -1526,6 +1542,7 @@ Ext.onReady(function(){
 				produk_aktif_tpField.setValue(false);
 				produk_aktif_dpsField.setValue(false);
 				produk_aktif_jktField.setValue(false);
+				produk_aktif_mtaField.setValue(false);
 				produk_aktif_blpnField.setValue(false);
 				produk_aktif_kutaField.setValue(false);
 				produk_aktif_btmField.setValue(false);
@@ -1551,7 +1568,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [ produk_aktif_thField, produk_aktif_kiField, produk_aktif_hrField, produk_aktif_tpField, produk_aktif_mlgField, produk_aktif_dpsField, produk_aktif_jktField, produk_aktif_blpnField, produk_aktif_checkField]
+				items: [ produk_aktif_thField, produk_aktif_kiField, produk_aktif_hrField, produk_aktif_tpField, produk_aktif_mlgField, produk_aktif_dpsField, produk_aktif_jktField, produk_aktif_mtaField, produk_aktif_blpnField, produk_aktif_checkField]
 			},
 			 {
 				   	layout: 'form',

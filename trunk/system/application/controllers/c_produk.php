@@ -245,6 +245,10 @@ class C_produk extends Controller {
 		$produk_aktif_jkt=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_jkt);
 		$produk_aktif_jkt=str_replace(",", ",",$produk_aktif_jkt);
 		$produk_aktif_jkt=str_replace("'", '"',$produk_aktif_jkt);
+		$produk_aktif_mta=trim(@$_POST["produk_aktif_mta"]);
+		$produk_aktif_mta=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_mta);
+		$produk_aktif_mta=str_replace(",", ",",$produk_aktif_mta);
+		$produk_aktif_mta=str_replace("'", '"',$produk_aktif_mta);
 		$produk_aktif_blpn=trim(@$_POST["produk_aktif_blpn"]);
 		$produk_aktif_blpn=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_blpn);
 		$produk_aktif_blpn=str_replace(",", ",",$produk_aktif_blpn);
@@ -281,7 +285,7 @@ class C_produk extends Controller {
 		$produk_aktif_mlg=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_mlg);
 		$produk_aktif_mlg=str_replace(",", ",",$produk_aktif_mlg);
 		$produk_aktif_mlg=str_replace("'", '"',$produk_aktif_mlg);
-		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg );
+		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg );
 		echo $result;
 	}
 	
@@ -333,6 +337,9 @@ class C_produk extends Controller {
 		$produk_aktif_jkt=trim(@$_POST["produk_aktif_jkt"]);
 		$produk_aktif_jkt=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_jkt);
 		$produk_aktif_jkt=str_replace("'", '"',$produk_aktif_jkt);
+		$produk_aktif_mta=trim(@$_POST["produk_aktif_mta"]);
+		$produk_aktif_mta=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_mta);
+		$produk_aktif_mta=str_replace("'", '"',$produk_aktif_mta);
 		$produk_aktif_blpn=trim(@$_POST["produk_aktif_blpn"]);
 		$produk_aktif_blpn=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_blpn);
 		$produk_aktif_blpn=str_replace("'", '"',$produk_aktif_blpn);
@@ -360,7 +367,7 @@ class C_produk extends Controller {
 		$produk_aktif_mlg=trim(@$_POST["produk_aktif_mlg"]);
 		$produk_aktif_mlg=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_aktif_mlg);
 		$produk_aktif_mlg=str_replace("'", '"',$produk_aktif_mlg);
-		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg );
+		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg );
 		echo $result;
 	}
 
