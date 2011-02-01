@@ -535,15 +535,34 @@ Ext.onReady(function(){
 				if(jrawat_subTotalField.getValue()!== null){jrawat_subtotal_create = jrawat_subTotalField.getValue();} 
 				if(jrawat_hutangField.getValue()!== null){jrawat_hutang_create = jrawat_hutangField.getValue();} 
 				//kwitansi value
-				if(jrawat_kwitansi_noField.getValue()!== null){jrawat_kwitansi_nomor_create = jrawat_kwitansi_noField.getValue();} 
+				if((jrawat_kwitansi_noField.getValue()!== null) && (jrawat_kwitansi_noField.getValue()!=='')){
+                    if(/^\d+$/.test(jrawat_kwitansi_noField.getValue())){
+                        jrawat_kwitansi_nomor_create = jrawat_kwitansi_noField.getValue();
+                    }else{
+                        jrawat_kwitansi_nomor_create = jrawat_kwitansi_no_idField.getValue();
+                    }
+                }
+                
 				if(jrawat_kwitansi_namaField.getValue()!== null){jrawat_kwitansi_nama_create = jrawat_kwitansi_namaField.getValue();} 
 				if((jrawat_kwitansi_nilaiField.getValue()!==null) && (jrawat_kwitansi_nilaiField.getValue()!=='') && (jrawat_kwitansi_nilaiField.getValue()!==0)){jrawat_kwitansi_nilai_create = jrawat_kwitansi_nilaiField.getValue();} 
 				//kwitansi-2 value
-				if(jrawat_kwitansi_no2Field.getValue()!== null){jrawat_kwitansi_nomor2_create = jrawat_kwitansi_no2Field.getValue();} 
+                if((jrawat_kwitansi_no2Field.getValue()!== null) && (jrawat_kwitansi_no2Field.getValue()!=='')){
+                    if(/^\d+$/.test(jrawat_kwitansi_no2Field.getValue())){
+                        jrawat_kwitansi_nomor2_create = jrawat_kwitansi_no2Field.getValue();
+                    }else{
+                        jrawat_kwitansi_nomor2_create = jrawat_kwitansi_no2_idField.getValue();
+                    }
+                }
 				if(jrawat_kwitansi_nama2Field.getValue()!== null){jrawat_kwitansi_nama2_create = jrawat_kwitansi_nama2Field.getValue();} 
 				if((jrawat_kwitansi_nilai2Field.getValue()!==null) && (jrawat_kwitansi_nilai2Field.getValue()!==null) && (jrawat_kwitansi_nilai2Field.getValue()!==0)){jrawat_kwitansi_nilai2_create = jrawat_kwitansi_nilai2Field.getValue();} 
 				//kwitansi-3 value
-				if(jrawat_kwitansi_no3Field.getValue()!== null){jrawat_kwitansi_nomor3_create = jrawat_kwitansi_no3Field.getValue();} 
+                if((jrawat_kwitansi_no3Field.getValue()!== null) && (jrawat_kwitansi_no3Field.getValue()!=='')){
+                    if(/^\d+$/.test(jrawat_kwitansi_no3Field.getValue())){
+                        jrawat_kwitansi_nomor3_create = jrawat_kwitansi_no3Field.getValue();
+                    }else{
+                        jrawat_kwitansi_nomor3_create = jrawat_kwitansi_no3_idField.getValue();
+                    }
+                }
 				if(jrawat_kwitansi_nama3Field.getValue()!== null){jrawat_kwitansi_nama3_create = jrawat_kwitansi_nama3Field.getValue();} 
 				if((jrawat_kwitansi_nilai3Field.getValue()!==null) && (jrawat_kwitansi_nilai3Field.getValue()!=='') && (jrawat_kwitansi_nilai3Field.getValue()!==0)){jrawat_kwitansi_nilai3_create = jrawat_kwitansi_nilai3Field.getValue();} 
 				//card value
@@ -1001,11 +1020,13 @@ Ext.onReady(function(){
 		jrawat_kwitansi_nilaiField.reset();
 		jrawat_kwitansi_nilai_cfField.reset();
 		jrawat_kwitansi_noField.reset();
+        jrawat_kwitansi_no_idField.reset();
 		jrawat_kwitansi_sisaField.reset();
 		jrawat_kwitansi_namaField.setValue("");
 		jrawat_kwitansi_nilaiField.setValue(null);
 		jrawat_kwitansi_nilai_cfField.setValue(null);
 		jrawat_kwitansi_noField.setValue("");
+        jrawat_kwitansi_no_idField.setValue(null);
 		jrawat_kwitansi_sisaField.setValue(null);
 	}
 	// Reset kwitansi-2 option
@@ -1014,11 +1035,13 @@ Ext.onReady(function(){
 		jrawat_kwitansi_nilai2Field.reset();
 		jrawat_kwitansi_nilai2_cfField.reset();
 		jrawat_kwitansi_no2Field.reset();
+        jrawat_kwitansi_no2_idField.reset();
 		jrawat_kwitansi_sisa2Field.reset();
 		jrawat_kwitansi_nama2Field.setValue("");
 		jrawat_kwitansi_nilai2Field.setValue(null);
 		jrawat_kwitansi_nilai2_cfField.setValue(null);
 		jrawat_kwitansi_no2Field.setValue("");
+        jrawat_kwitansi_no2_idField.setValue(null);
 		jrawat_kwitansi_sisa2Field.setValue(null);
 	}
 	// Reset kwitansi-3 option
@@ -1423,6 +1446,7 @@ Ext.onReady(function(){
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
 								jrawat_kwitansi_noField.setValue(jrawat_kwitansi_record.kwitansi_no);
+                                jrawat_kwitansi_no_idField.setValue(jrawat_kwitansi_record.kwitansi_id);
 								jrawat_kwitansi_namaField.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilaiField.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 								jrawat_kwitansi_nilai_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
@@ -1540,6 +1564,7 @@ Ext.onReady(function(){
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
 								jrawat_kwitansi_no2Field.setValue(jrawat_kwitansi_record.kwitansi_no);
+                                jrawat_kwitansi_no2_idField.setValue(jrawat_kwitansi_record.kwitansi_id);
 								jrawat_kwitansi_nama2Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai2Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 								jrawat_kwitansi_nilai2_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
@@ -1658,6 +1683,7 @@ Ext.onReady(function(){
 							if(kwitansi_jual_rawat_DataStore.getCount()){
 								jrawat_kwitansi_record=kwitansi_jual_rawat_DataStore.getAt(0).data;
 								jrawat_kwitansi_no3Field.setValue(jrawat_kwitansi_record.kwitansi_no);
+                                jrawat_kwitansi_no3_idField.setValue(jrawat_kwitansi_record.kwitansi_id);
 								jrawat_kwitansi_nama3Field.setValue(jrawat_kwitansi_record.cust_nama);
 								jrawat_kwitansi_nilai3Field.setValue(jrawat_kwitansi_record.jkwitansi_nilai);
 								jrawat_kwitansi_nilai3_cfField.setValue(CurrencyFormatted(jrawat_kwitansi_record.jkwitansi_nilai));
@@ -2297,6 +2323,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jkwitansi_id', type: 'int', mapping: 'jkwitansi_id'},
 			{name: 'kwitansi_no', type: 'string', mapping: 'kwitansi_no'},
+            {name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'},
 			{name: 'jkwitansi_nilai', type: 'float', mapping: 'jkwitansi_nilai'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
 		]),
@@ -4172,6 +4199,9 @@ Ext.onReady(function(){
 			}
 		}
 	});
+    jrawat_kwitansi_no_idField= new Ext.form.NumberField({
+		maskRe: /([0-9]+)$/
+	});
 	
 	jrawat_kwitansi_sisaField= new Ext.form.NumberField({
 		id: 'jrawat_kwitansi_sisaField',
@@ -4263,6 +4293,9 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+    jrawat_kwitansi_no2_idField= new Ext.form.NumberField({
+		maskRe: /([0-9]+)$/
+	});
 	
 	jrawat_kwitansi_sisa2Field= new Ext.form.NumberField({
 		id: 'jrawat_kwitansi_sisa2Field',
@@ -4353,6 +4386,9 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
+	});
+    jrawat_kwitansi_no3_idField= new Ext.form.NumberField({
+		maskRe: /([0-9]+)$/
 	});
 	
 	jrawat_kwitansi_sisa3Field= new Ext.form.NumberField({
