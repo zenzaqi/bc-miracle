@@ -264,11 +264,6 @@ Ext.onReady(function(){
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
 		terima_statusField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status'));
-
-		if(terima_statusField.getValue() == 'Tertutup'){
-
-		}
-		
 		
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
 			terima_idField.setDisabled(false);
@@ -282,6 +277,7 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(false);
 			terima_keteranganField.setDisabled(false);
 			terima_statusField.setDisabled(false);
+			master_terima_beli_createForm.tbeli_savePrint.enable();
 		}
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
 			terima_idField.setDisabled(true);
@@ -295,6 +291,11 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(true);
 			terima_keteranganField.setDisabled(true);
 			terima_statusField.setDisabled(false);
+			if(cetak==1){
+					//jproduk_cetak(jproduk_id_for_cetak);
+				cetak=0;
+			}
+			
 		}
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Batal"){
 			terima_idField.setDisabled(true);
