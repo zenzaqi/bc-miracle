@@ -31,11 +31,6 @@ class C_master_terima_beli extends Controller {
 		$this->load->view('main/v_lap_terima_beli');
 	}
 	
-	function laporan_no_harga(){
-		$this->load->view('main/v_lap_terima_beli_no_harga');
-	}
-	
-	
 	function print_faktur(){
 		
 		
@@ -53,7 +48,6 @@ class C_master_terima_beli extends Controller {
 		$data['no_surat_jalan']=$master->terima_surat_jalan;
         $data['tanggal'] = $master->tanggal;
         $data['supplier_nama'] = $master->supplier_nama;
-		$data['order_no'] = $master->order_no;
 		$print_view=$this->load->view("main/p_faktur_terima_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){
@@ -115,60 +109,6 @@ class C_master_terima_beli extends Controller {
 		fwrite($print_file, $print_view);
 		echo '1'; 
 	}
-	
-	
-	function print_laporan_noharga(){
-		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
-		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
-		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
-		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
-		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
-		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
-		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
-		
-		$data["jenis"]='Produk';
-		if($periode=="all"){
-			$data["periode"]="Semua Periode";
-		}else if($periode=="bulan"){
-			$tgl_awal=$tahun."-".$bulan;
-			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
-		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
-		}
-		
-		$data["data_print"]=$this->m_master_terima_beli->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,"");
-		if($opsi=='rekap'){
-				
-			switch($group){
-				case "Tanggal": $print_view=$this->load->view("main/p_rekap_terima_tanggal.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_rekap_terima_supplier.php",$data,TRUE);break;
-				default: $print_view=$this->load->view("main/p_rekap_terima.php",$data,TRUE);break;
-			}
-			
-		}else{
-			switch($group){
-				case "Tanggal": $print_view=$this->load->view("main/p_detail_terima_tanggal_noharga.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_detail_terima_supplier_noharga.php",$data,TRUE);break;
-				case "Produk": $print_view=$this->load->view("main/p_detail_terima_produk_noharga.php",$data,TRUE);break;
-				default: $print_view=$this->load->view("main/p_detail_terima_noharga.php",$data,TRUE);break;
-			}
-		}
-		
-		if(!file_exists("print")){
-			mkdir("print");
-		}
-		if($opsi=='rekap')
-			$print_file=fopen("print/report_terimabeli.html","w+");
-		else
-			$print_file=fopen("print/report_terimabeli.html","w+");
-			
-		fwrite($print_file, $print_view);
-		echo '1'; 
-	}
-	
-	
-	
-	
 	
 	
 	function get_order_beli_detail_by_order_id(){
@@ -357,6 +297,9 @@ class C_master_terima_beli extends Controller {
 			case "CREATE":
 				$this->master_terima_beli_create();
 				break;
+			case "CEK":
+				$this->master_terima_beli_pengecekan();
+				break;	
 			case "DELETE":
 				$this->master_terima_beli_delete();
 				break;
@@ -390,6 +333,14 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 
+	function master_terima_beli_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 	//function for update record
 	function master_terima_beli_update(){
 		//POST variable here
@@ -410,9 +361,10 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
+		$cetak=trim(@$_POST["cetak"]);
 		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
-																		 $terima_keterangan, $terima_status  );
+																		 $terima_keterangan, $terima_status,$cetak  );
 		echo $result;
 	}
 	
@@ -436,9 +388,10 @@ class C_master_terima_beli extends Controller {
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
 		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
+		$cetak=trim(@$_POST["cetak"]);
 		
 		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
-																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status);
+																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status, $cetak);
 		echo $result;
 	}
 

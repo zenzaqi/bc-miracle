@@ -67,6 +67,7 @@ var post2db = '';
 var today=new Date().format('Y-m-d');
 var msg = '';
 var pageS=15;
+var cetak=0;
 
 /* declare variable here for Field*/
 var terima_idField;
@@ -100,7 +101,6 @@ Ext.onReady(function(){
 
   	/* Function for add data, open window create form */
 	function master_terima_beli_create(opsi){
-
 		if(detail_terima_beli_DataStore.getCount()<1){
 
 			Ext.MessageBox.show({
@@ -132,7 +132,7 @@ Ext.onReady(function(){
 		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');}
 		if(terima_keteranganField.getValue()!== null){terima_keterangan_create = terima_keteranganField.getValue();}
 		if(terima_statusField.getValue()!== null){terima_status_create = terima_statusField.getValue();}
-
+		
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=get_action',
@@ -146,7 +146,8 @@ Ext.onReady(function(){
 				terima_pengirim		: terima_pengirim_create,
 				terima_tanggal		: terima_tanggal_create_date,
 				terima_keterangan	: terima_keterangan_create,
-				terima_status		: terima_status_create
+				terima_status		: terima_status_create,
+				cetak				: cetak
 			},
 			success: function(response){
 				var result=eval(response.responseText);
@@ -227,6 +228,17 @@ Ext.onReady(function(){
 		terima_keteranganField.setValue(null);
 		terima_statusField.reset();
 		terima_statusField.setValue('Terbuka');
+		terima_idField.setDisabled(false);
+		terima_noField.setDisabled(false);
+		terima_orderField.setDisabled(false);
+		terima_order_idField.setDisabled(false);
+		terima_supplierField.setDisabled(false);
+		terima_surat_jalanField.setDisabled(false);
+		terima_supplier_idField.setDisabled(false);
+		terima_pengirimField.setDisabled(false);
+		terima_tanggalField.setDisabled(false);
+		terima_keteranganField.setDisabled(false);
+		terima_statusField.setDisabled(false);
 
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
@@ -235,7 +247,7 @@ Ext.onReady(function(){
 		detail_terima_beli_DataStore.load();
 		detail_terima_bonus_DataStore.setBaseParam('master_id', -1);
 		detail_terima_bonus_DataStore.load();
-
+		master_terima_beli_createForm.tbeli_savePrint.enable();
 	}
  	/* End of Function */
 
@@ -253,6 +265,102 @@ Ext.onReady(function(){
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
 		terima_statusField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status'));
 
+		if(terima_statusField.getValue() == 'Tertutup'){
+
+		}
+		
+		
+		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
+			terima_idField.setDisabled(false);
+			terima_noField.setDisabled(false);
+			terima_orderField.setDisabled(false);
+			terima_order_idField.setDisabled(false);
+			terima_supplierField.setDisabled(false);
+			terima_surat_jalanField.setDisabled(false);
+			terima_supplier_idField.setDisabled(false);
+			terima_pengirimField.setDisabled(false);
+			terima_tanggalField.setDisabled(false);
+			terima_keteranganField.setDisabled(false);
+			terima_statusField.setDisabled(false);
+		}
+		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
+			terima_idField.setDisabled(true);
+			terima_noField.setDisabled(true);
+			terima_orderField.setDisabled(true);
+			terima_order_idField.setDisabled(true);
+			terima_supplierField.setDisabled(true);
+			terima_surat_jalanField.setDisabled(true);
+			terima_supplier_idField.setDisabled(true);
+			terima_pengirimField.setDisabled(true);
+			terima_tanggalField.setDisabled(true);
+			terima_keteranganField.setDisabled(true);
+			terima_statusField.setDisabled(false);
+		}
+		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Batal"){
+			terima_idField.setDisabled(true);
+			terima_noField.setDisabled(true);
+			terima_orderField.setDisabled(true);
+			terima_order_idField.setDisabled(true);
+			terima_supplierField.setDisabled(true);
+			terima_surat_jalanField.setDisabled(true);
+			terima_supplier_idField.setDisabled(true);
+			terima_pengirimField.setDisabled(true);
+			terima_tanggalField.setDisabled(true);
+			terima_keteranganField.setDisabled(true);
+			terima_statusField.setDisabled(true);
+			master_terima_beli_createForm.tbeli_savePrint.disable();
+		}
+		
+		
+		terima_statusField.on("select",function(){
+		var status_awal = master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status');
+		if(status_awal =='Terbuka' && terima_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		terima_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && terima_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		terima_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && terima_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		terima_statusField.setValue('Tertutup');
+		}
+		
+		else if(terima_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', terima_status_batal);
+		}
+        
+       else if(status_awal =='Tertutup' && terima_statusField.getValue()=='Tertutup'){
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+			master_terima_beli_createForm.tbeli_savePrint.enable();
+			<?php } ?>
+        }
+		
+		});	
+		
+		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_produkDataStore.load();
@@ -294,6 +402,18 @@ Ext.onReady(function(){
 	}
 	/* End setValue to EDIT*/
 
+	function terima_status_batal(btn){
+	if(btn=='yes')
+	{
+		terima_statusField.setValue('Batal');
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+        master_terima_beli_createForm.tbeli_savePrint.disable();
+		<?php } ?>
+	}  
+	else
+		terima_statusField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status'));
+	}
+	
 	/* Function for Check if the form is valid */
 	function is_master_terima_beli_form_valid(){
 		return (terima_orderField.isValid());
@@ -1625,7 +1745,14 @@ Ext.onReady(function(){
 	});
 	//eof
 
-
+	function save_andPrint(){
+		cetak=1;
+		//master_terima_beli_create('show');
+		master_terima_beli_create('print');
+	//	jproduk_pesanLabel.setText('');
+	//	jproduk_lunasLabel.setText('');
+	}
+	
 	//function of detail add
 	function detail_terima_bonus_add(){
 		var edit_detail_terima_bonus= new detail_terima_bonusListEditorGrid.store.recordType({
@@ -1806,7 +1933,8 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
-
+	
+	
 	//event on update of detail data store
 	detail_terima_bonus_DataStore.on('update', refresh_detail_terima_bonus);
 
@@ -1852,10 +1980,13 @@ Ext.onReady(function(){
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
 			{
 				text: 'Save and Print',
-				handler: function() { master_terima_beli_create('print'); }
+				ref: '../tbeli_savePrint',
+				handler: save_andPrint
+				//{cetak=1;}
 			},{
 				text: 'Save',
-				handler: function() { master_terima_beli_create('close'); }
+				handler: pengecekan_dokumen 
+				//{ master_terima_beli_create('close'); }
 			}
 			,
 			<?php } ?>
@@ -2186,6 +2317,50 @@ Ext.onReady(function(){
 
 	}
 
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var terima_tanggal_create_date = "";
+		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_terima_beli&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: terima_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							master_terima_beli_create();
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penjualan Produk tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						  // master_terima_beli_create('print')
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
 	/* Function for print List Grid */
 	function master_terima_beli_print(){
 		var searchquery = "";
