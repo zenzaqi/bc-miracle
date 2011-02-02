@@ -532,7 +532,7 @@ class M_master_terima_beli extends Model{
 
 		//function for update record
 		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
-										   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status ){
+										   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status , $cetak){
 			$data = array(
 				"terima_id"=>$terima_id,
 				"terima_no"=>$terima_no,
@@ -554,6 +554,14 @@ class M_master_terima_beli extends Model{
 			if($rs->num_rows())
 				$data["terima_order"]=$terima_order;
 
+				
+			if($cetak==1){
+				$data['terima_status'] = 'Tertutup';
+			}//else{
+				//$data['terima_status'] = 'Terbuka';
+			//}
+			
+				
 			$this->db->where('terima_id', $terima_id);
 			$this->db->update('master_terima_beli', $data);
 
@@ -568,7 +576,7 @@ class M_master_terima_beli extends Model{
 
 		//function for create new record
 		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-										   $terima_tanggal , $terima_keterangan, $terima_status ){
+										   $terima_tanggal , $terima_keterangan, $terima_status, $cetak ){
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
 			$pattern="PB/".date("ym")."-";
@@ -591,6 +599,11 @@ class M_master_terima_beli extends Model{
 					"terima_date_create"=>date('Y-m-d H:i:s'),
 					"terima_revised"=>0
 				);
+				if($cetak==1){
+					$data['terima_status'] = 'Tertutup';
+				}else{
+					$data['terima_status'] = 'Terbuka';
+				}
 				$this->db->insert('master_terima_beli', $data);
 				if($this->db->affected_rows())
 					return $this->db->insert_id();
