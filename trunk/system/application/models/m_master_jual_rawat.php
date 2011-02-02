@@ -1108,12 +1108,14 @@ class M_master_jual_rawat extends Model{
                                 ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                                 ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                                 ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                ,$jrawat_tunai_nilai2
                                 ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                                 ,$jrawat_cara3
                                 ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                                 ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                                 ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                                 ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                ,$jrawat_tunai_nilai3
                                 ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                 ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
@@ -1224,12 +1226,14 @@ class M_master_jual_rawat extends Model{
                        ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                        ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                        ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                       ,$jrawat_tunai_nilai2
                        ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                        ,$jrawat_cara3
                        ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                        ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                        ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                        ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                       ,$jrawat_tunai_nilai3
                        ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                        ,$bayar_date_create ,$jenis_transaksi ,$cetak);
             
@@ -1490,12 +1494,14 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                                                             ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                                                             ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                                            ,$jrawat_tunai_nilai2
                                                             ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                                                             ,$jrawat_cara3
                                                             ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                                                             ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                                                             ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                                                             ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                                            ,$jrawat_tunai_nilai3
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                                             ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
@@ -1553,12 +1559,14 @@ class M_master_jual_rawat extends Model{
                                 ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                                 ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                                 ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                ,$jrawat_tunai_nilai2
                                 ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                                 ,$jrawat_cara3
                                 ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                                 ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                                 ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                                 ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                ,$jrawat_tunai_nilai3
                                 ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                 ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
@@ -1603,12 +1611,14 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                                                             ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                                                             ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                                                            ,$jrawat_tunai_nilai2
                                                             ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                                                             ,$jrawat_cara3
                                                             ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                                                             ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                                                             ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                                                             ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                                                            ,$jrawat_tunai_nilai3
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                                             ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
@@ -1746,12 +1756,14 @@ class M_master_jual_rawat extends Model{
                                ,$jrawat_card_nama2 ,$jrawat_card_edc2 ,$jrawat_card_no2 ,$jrawat_card_nilai2
                                ,$jrawat_cek_nama2 ,$jrawat_cek_no2 ,$jrawat_cek_valid2 ,$jrawat_cek_bank2 ,$jrawat_cek_nilai2
                                ,$jrawat_transfer_bank2 ,$jrawat_transfer_nama2 ,$jrawat_transfer_nilai2
+                               ,$jrawat_tunai_nilai2
                                ,$jrawat_voucher_no2 ,$jrawat_voucher_cashback2
                                ,$jrawat_cara3
                                ,$jrawat_kwitansi_no3 ,$jrawat_kwitansi_nilai3
                                ,$jrawat_card_nama3 ,$jrawat_card_edc3 ,$jrawat_card_no3 ,$jrawat_card_nilai3
                                ,$jrawat_cek_nama3 ,$jrawat_cek_no3 ,$jrawat_cek_valid3 ,$jrawat_cek_bank3 ,$jrawat_cek_nilai3
                                ,$jrawat_transfer_bank3 ,$jrawat_transfer_nama3 ,$jrawat_transfer_nilai3
+                               ,$jrawat_tunai_nilai3
                                ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                ,$bayar_date_create ,$jenis_transaksi ,$cetak);
 			
