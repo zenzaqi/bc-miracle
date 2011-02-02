@@ -2051,7 +2051,7 @@ class M_public_function extends Model{
                             if($this->db->affected_rows()>-1){
                                 if($jrawat_cara!=null || $jrawat_cara!=''){
                                     if($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_kwitansi_insert($jrawat_kwitansi_no
+                                        $result_bayar = $this->cara_bayar_kwitansi_insert($jrawat_kwitansi_no
                                                                                           ,$jrawat_kwitansi_nilai
                                                                                           ,$jrawat_nobukti
                                                                                           ,$bayar_date_create
@@ -2059,7 +2059,7 @@ class M_public_function extends Model{
                                                                                           ,$cetak);
                                         
                                     }elseif($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_card_insert($jrawat_card_nama
+                                        $result_bayar = $this->cara_bayar_card_insert($jrawat_card_nama
                                                                                       ,$jrawat_card_edc
                                                                                       ,$jrawat_card_no
                                                                                       ,$jrawat_card_nilai
@@ -2068,7 +2068,7 @@ class M_public_function extends Model{
                                                                                       ,$jenis_transaksi
                                                                                       ,$cetak);
                                     }elseif($jrawat_cek_nilai<>'' && $jrawat_cek_nilai<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_cek_insert($jrawat_cek_nama
+                                        $result_bayar = $this->cara_bayar_cek_insert($jrawat_cek_nama
                                                                                      ,$jrawat_cek_no
                                                                                      ,$jrawat_cek_valid
                                                                                      ,$jrawat_cek_bank
@@ -2078,7 +2078,7 @@ class M_public_function extends Model{
                                                                                      ,$jenis_transaksi
                                                                                      ,$cetak);
                                     }elseif($jrawat_transfer_nilai<>'' && $jrawat_transfer_nilai<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_transfer_insert($jrawat_transfer_bank
+                                        $result_bayar = $this->cara_bayar_transfer_insert($jrawat_transfer_bank
                                                                                           ,$jrawat_transfer_nama
                                                                                           ,$jrawat_transfer_nilai
                                                                                           ,$jrawat_nobukti
@@ -2086,13 +2086,13 @@ class M_public_function extends Model{
                                                                                           ,$jenis_transaksi
                                                                                           ,$cetak);
                                     }elseif($jrawat_tunai_nilai<>'' && $jrawat_tunai_nilai<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_tunai_insert($jrawat_tunai_nilai
+                                        $result_bayar = $this->cara_bayar_tunai_insert($jrawat_tunai_nilai
                                                                                        ,$jrawat_nobukti
                                                                                        ,$bayar_date_create
                                                                                        ,$jenis_transaksi
                                                                                        ,$cetak);
                                     }elseif($jrawat_voucher_cashback<>'' && $jrawat_voucher_cashback<>0){
-                                        $result_bayar = $this->m_public_function->cara_bayar_voucher_insert($jrawat_voucher_no
+                                        $result_bayar = $this->cara_bayar_voucher_insert($jrawat_voucher_no
                                                                                          ,$jrawat_nobukti
                                                                                          ,$jrawat_voucher_cashback
                                                                                          ,$bayar_date_create
@@ -2102,7 +2102,7 @@ class M_public_function extends Model{
                                 }
                                 if($jrawat_cara2!=null || $jrawat_cara2!=''){
                                     if($jrawat_kwitansi_nilai2<>'' && $jrawat_kwitansi_nilai2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_kwitansi_insert($jrawat_kwitansi_no2
+                                        $result_bayar2 = $this->cara_bayar_kwitansi_insert($jrawat_kwitansi_no2
                                                                                           ,$jrawat_kwitansi_nilai2
                                                                                           ,$jrawat_nobukti
                                                                                           ,$bayar_date_create
@@ -2110,7 +2110,7 @@ class M_public_function extends Model{
                                                                                           ,$cetak);
                                         
                                     }elseif($jrawat_card_nilai2<>'' && $jrawat_card_nilai2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_card_insert($jrawat_card_nama2
+                                        $result_bayar2 = $this->cara_bayar_card_insert($jrawat_card_nama2
                                                                                       ,$jrawat_card_edc2
                                                                                       ,$jrawat_card_no2
                                                                                       ,$jrawat_card_nilai2
@@ -2119,7 +2119,7 @@ class M_public_function extends Model{
                                                                                       ,$jenis_transaksi
                                                                                       ,$cetak);
                                     }elseif($jrawat_cek_nilai2<>'' && $jrawat_cek_nilai2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_cek_insert($jrawat_cek_nama2
+                                        $result_bayar2 = $this->cara_bayar_cek_insert($jrawat_cek_nama2
                                                                                      ,$jrawat_cek_no2
                                                                                      ,$jrawat_cek_valid2
                                                                                      ,$jrawat_cek_bank2
@@ -2129,7 +2129,7 @@ class M_public_function extends Model{
                                                                                      ,$jenis_transaksi
                                                                                      ,$cetak);
                                     }elseif($jrawat_transfer_nilai2<>'' && $jrawat_transfer_nilai2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_transfer_insert($jrawat_transfer_bank2
+                                        $result_bayar2 = $this->cara_bayar_transfer_insert($jrawat_transfer_bank2
                                                                                           ,$jrawat_transfer_nama2
                                                                                           ,$jrawat_transfer_nilai2
                                                                                           ,$jrawat_nobukti
@@ -2137,13 +2137,13 @@ class M_public_function extends Model{
                                                                                           ,$jenis_transaksi
                                                                                           ,$cetak);
                                     }elseif($jrawat_tunai_nilai2<>'' && $jrawat_tunai_nilai2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_tunai_insert($jrawat_tunai_nilai2
+                                        $result_bayar2 = $this->cara_bayar_tunai_insert($jrawat_tunai_nilai2
                                                                                        ,$jrawat_nobukti
                                                                                        ,$bayar_date_create
                                                                                        ,$jenis_transaksi
                                                                                        ,$cetak);
                                     }elseif($jrawat_voucher_cashback2<>'' && $jrawat_voucher_cashback2<>0){
-                                        $result_bayar2 = $this->m_public_function->cara_bayar_voucher_insert($jrawat_voucher_no2
+                                        $result_bayar2 = $this->cara_bayar_voucher_insert($jrawat_voucher_no2
                                                                                          ,$jrawat_nobukti
                                                                                          ,$jrawat_voucher_cashback2
                                                                                          ,$bayar_date_create
@@ -2153,7 +2153,7 @@ class M_public_function extends Model{
                                 }
                                 if($jrawat_cara3!=null || $jrawat_cara3!=''){
                                     if($jrawat_kwitansi_nilai3<>'' && $jrawat_kwitansi_nilai3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_kwitansi_insert($jrawat_kwitansi_no3
+                                        $result_bayar3 = $this->cara_bayar_kwitansi_insert($jrawat_kwitansi_no3
                                                                                           ,$jrawat_kwitansi_nilai3
                                                                                           ,$jrawat_nobukti
                                                                                           ,$bayar_date_create
@@ -2161,7 +2161,7 @@ class M_public_function extends Model{
                                                                                           ,$cetak);
                                         
                                     }elseif($jrawat_card_nilai3<>'' && $jrawat_card_nilai3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_card_insert($jrawat_card_nama3
+                                        $result_bayar3 = $this->cara_bayar_card_insert($jrawat_card_nama3
                                                                                       ,$jrawat_card_edc3
                                                                                       ,$jrawat_card_no3
                                                                                       ,$jrawat_card_nilai3
@@ -2170,7 +2170,7 @@ class M_public_function extends Model{
                                                                                       ,$jenis_transaksi
                                                                                       ,$cetak);
                                     }elseif($jrawat_cek_nilai3<>'' && $jrawat_cek_nilai3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_cek_insert($jrawat_cek_nama3
+                                        $result_bayar3 = $this->cara_bayar_cek_insert($jrawat_cek_nama3
                                                                                      ,$jrawat_cek_no3
                                                                                      ,$jrawat_cek_valid3
                                                                                      ,$jrawat_cek_bank3
@@ -2180,7 +2180,7 @@ class M_public_function extends Model{
                                                                                      ,$jenis_transaksi
                                                                                      ,$cetak);
                                     }elseif($jrawat_transfer_nilai3<>'' && $jrawat_transfer_nilai3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_transfer_insert($jrawat_transfer_bank3
+                                        $result_bayar3 = $this->cara_bayar_transfer_insert($jrawat_transfer_bank3
                                                                                           ,$jrawat_transfer_nama3
                                                                                           ,$jrawat_transfer_nilai3
                                                                                           ,$jrawat_nobukti
@@ -2188,13 +2188,13 @@ class M_public_function extends Model{
                                                                                           ,$jenis_transaksi
                                                                                           ,$cetak);
                                     }elseif($jrawat_tunai_nilai3<>'' && $jrawat_tunai_nilai3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_tunai_insert($jrawat_tunai_nilai3
+                                        $result_bayar3 = $this->cara_bayar_tunai_insert($jrawat_tunai_nilai3
                                                                                        ,$jrawat_nobukti
                                                                                        ,$bayar_date_create
                                                                                        ,$jenis_transaksi
                                                                                        ,$cetak);
                                     }elseif($jrawat_voucher_cashback3<>'' && $jrawat_voucher_cashback3<>0){
-                                        $result_bayar3 = $this->m_public_function->cara_bayar_voucher_insert($jrawat_voucher_no3
+                                        $result_bayar3 = $this->cara_bayar_voucher_insert($jrawat_voucher_no3
                                                                                          ,$jrawat_nobukti
                                                                                          ,$jrawat_voucher_cashback3
                                                                                          ,$bayar_date_create

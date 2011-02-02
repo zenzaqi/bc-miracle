@@ -406,16 +406,16 @@ Ext.onReady(function(){
 			   && ((/^\d+$/.test(jrawat_custField.getValue()) && jrawat_post2db=="CREATE") || jrawat_post2db=="UPDATE")
 			   && jrawat_stat_dokField.getValue()=='Terbuka'){
 				var jrawat_id_create_pk=0; 
-				var jrawat_nobukti_create=null; 
+				var jrawat_nobukti_create=''; 
 				var jrawat_cust_create=0; 
 				var jrawat_tanggal_create_date=""; 
-				var jrawat_diskon_create=null; 
+				var jrawat_diskon_create=0; 
 				var jrawat_cara_create=null; 
 				var jrawat_cara2_create=null; 
 				var jrawat_cara3_create=null; 
-				var jrawat_keterangan_create=null; 
-				var jrawat_ket_disk_create=null; 
-				var jrawat_stat_dok_create=null;
+				var jrawat_keterangan_create=''; 
+				var jrawat_ket_disk_create=''; 
+				var jrawat_stat_dok_create='';
 				//tunai
 				var jrawat_tunai_nilai_create=0;
 				//tunai-2
@@ -423,77 +423,77 @@ Ext.onReady(function(){
 				//tunai-3
 				var jrawat_tunai_nilai3_create=0;
 				//voucher
-				var jrawat_voucher_no_create=null;
-				var jrawat_voucher_cashback_create=null;
+				var jrawat_voucher_no_create='';
+				var jrawat_voucher_cashback_create=0;
 				//voucher-2
-				var jrawat_voucher_no2_create=null;
-				var jrawat_voucher_cashback2_create=null;
+				var jrawat_voucher_no2_create='';
+				var jrawat_voucher_cashback2_create=0;
 				//voucher-3
-				var jrawat_voucher_no3_create=null;
-				var jrawat_voucher_cashback3_create=null;
+				var jrawat_voucher_no3_create='';
+				var jrawat_voucher_cashback3_create=0;
 				
-				var jrawat_cashback_create=null;
+				var jrawat_cashback_create=0;
 				//bayar
-				var jrawat_subtotal_create=null;
-				var jrawat_total_create=null;
+				var jrawat_subtotal_create=0;
+				var jrawat_total_create=0;
 				var jrawat_bayar_create=0;
-				var jrawat_hutang_create=null;
+				var jrawat_hutang_create=0;
 				//kwitansi
-				var jrawat_kwitansi_nama_create=null;
-				var jrawat_kwitansi_nomor_create=null;
+				var jrawat_kwitansi_nama_create='';
+				var jrawat_kwitansi_nomor_create='';
 				var jrawat_kwitansi_nilai_create=0;
 				//kwitansi-2
-				var jrawat_kwitansi_nama2_create=null;
-				var jrawat_kwitansi_nomor2_create=null;
+				var jrawat_kwitansi_nama2_create='';
+				var jrawat_kwitansi_nomor2_create='';
 				var jrawat_kwitansi_nilai2_create=0;
 				//kwitansi-3
-				var jrawat_kwitansi_nama3_create=null;
-				var jrawat_kwitansi_nomor3_create=null;
+				var jrawat_kwitansi_nama3_create='';
+				var jrawat_kwitansi_nomor3_create='';
 				var jrawat_kwitansi_nilai3_create=0;
 				//card
-				var jrawat_card_nama_create=null;
-				var jrawat_card_edc_create=null;
-				var jrawat_card_no_create=null;
+				var jrawat_card_nama_create='';
+				var jrawat_card_edc_create='';
+				var jrawat_card_no_create='';
 				var jrawat_card_nilai_create=0;
 				//card-2
-				var jrawat_card_nama2_create=null;
-				var jrawat_card_edc2_create=null;
-				var jrawat_card_no2_create=null;
+				var jrawat_card_nama2_create='';
+				var jrawat_card_edc2_create='';
+				var jrawat_card_no2_create='';
 				var jrawat_card_nilai2_create=0;
 				//card-3
-				var jrawat_card_nama3_create=null;
-				var jrawat_card_edc3_create=null;
-				var jrawat_card_no3_create=null;
+				var jrawat_card_nama3_create='';
+				var jrawat_card_edc3_create='';
+				var jrawat_card_no3_create='';
 				var jrawat_card_nilai3_create=0;
 				//cek
-				var jrawat_cek_nama_create=null;
-				var jrawat_cek_nomor_create=null;
+				var jrawat_cek_nama_create='';
+				var jrawat_cek_nomor_create='';
 				var jrawat_cek_valid_create="";
-				var jrawat_cek_bank_create=null;
+				var jrawat_cek_bank_create='';
 				var jrawat_cek_nilai_create=0;
 				//cek-2
-				var jrawat_cek_nama2_create=null;
-				var jrawat_cek_nomor2_create=null;
+				var jrawat_cek_nama2_create='';
+				var jrawat_cek_nomor2_create='';
 				var jrawat_cek_valid2_create="";
-				var jrawat_cek_bank2_create=null;
+				var jrawat_cek_bank2_create='';
 				var jrawat_cek_nilai2_create=0;
 				//cek-3
-				var jrawat_cek_nama3_create=null;
-				var jrawat_cek_nomor3_create=null;
+				var jrawat_cek_nama3_create='';
+				var jrawat_cek_nomor3_create='';
 				var jrawat_cek_valid3_create="";
-				var jrawat_cek_bank3_create=null;
+				var jrawat_cek_bank3_create='';
 				var jrawat_cek_nilai3_create=0;
 				//transfer
-				var jrawat_transfer_bank_create=null;
-				var jrawat_transfer_nama_create=null;
+				var jrawat_transfer_bank_create='';
+				var jrawat_transfer_nama_create='';
 				var jrawat_transfer_nilai_create=0;
 				//transfer-2
-				var jrawat_transfer_bank2_create=null;
-				var jrawat_transfer_nama2_create=null;
+				var jrawat_transfer_bank2_create='';
+				var jrawat_transfer_nama2_create='';
 				var jrawat_transfer_nilai2_create=0;
 				//transfer-3
-				var jrawat_transfer_bank3_create=null;
-				var jrawat_transfer_nama3_create=null;
+				var jrawat_transfer_bank3_create='';
+				var jrawat_transfer_nama3_create='';
 				var jrawat_transfer_nilai3_create=0;
 				
 				if(/^\d+$/.test(jrawat_custField.getValue())){
