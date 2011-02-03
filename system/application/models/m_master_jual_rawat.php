@@ -2678,69 +2678,80 @@ class M_master_jual_rawat extends Model{
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$record=$rs->row();
+            $jrawat_nobukti = $record->jrawat_nobukti;
 			if(($record->jrawat_cara !== NULL || $record->jrawat_cara !== '')){
 				if($record->jrawat_cara == 'tunai'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jtunai_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, jtunai_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}elseif($record->jrawat_cara == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}elseif($record->jrawat_cara == 'card'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jcard_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT jcard_id FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, jcard_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}elseif($record->jrawat_cara == 'cek/giro'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jcek_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
-				}elseif($record->jrawat_cara == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jkwitansi_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT jcek_id FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, jcek_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}elseif($record->jrawat_cara == 'transfer'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, jtransfer_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}elseif($record->jrawat_cara == 'voucher'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
+                    $sql = "SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+                    
+                    $sql="SELECT jrawat_nobukti, jrawat_cara, tvoucher_nilai AS bayar_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 0,1";
+                    $rs=$this->db->query($sql);
+                    if($rs->num_rows()){
+                        return $rs->row();
+                    }else{
+                        return NULL;
+                    }
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}else{
-			return '';
+			return NULL;
 		}
 	}
 	
@@ -2749,62 +2760,127 @@ class M_master_jual_rawat extends Model{
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$record=$rs->row();
+            $jrawat_nobukti = $record->jrawat_nobukti;
 			if(($record->jrawat_cara2 !== NULL || $record->jrawat_cara2 !== '')){
 				if($record->jrawat_cara2 == 'tunai'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtunai_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara2 == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara2 == 'card'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jcard_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT jcard_id FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcard_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcard_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara2 == 'cek/giro'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
-					}
-				}elseif($record->jrawat_cara2 == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jkwitansi_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT jcek_id FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara2 == 'transfer'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, jtransfer_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtransfer_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jtransfer_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara2 == 'voucher'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara2, tvoucher_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return NULL;
+                    $sql = "SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, tvoucher_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, tvoucher_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}
 			}else{
@@ -2820,69 +2896,182 @@ class M_master_jual_rawat extends Model{
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$record=$rs->row();
+            $jrawat_nobukti = $record->jrawat_nobukti;
 			if(($record->jrawat_cara3 !== NULL || $record->jrawat_cara3 !== '')){
 				if($record->jrawat_cara3 == 'tunai'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT jtunai_id FROM jual_tunai WHERE jtunai_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtunai_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_tunai ON(jtunai_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara3 == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT jkwitansi_id FROM jual_kwitansi WHERE jkwitansi_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara3 == 'card'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT jcard_id FROM jual_card WHERE jcard_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcard_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_card ON(jcard_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara3 == 'cek/giro'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
-					}
-				}elseif($record->jrawat_cara3 == 'kwitansi'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jkwitansi_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_kwitansi ON(jkwitansi_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT jcek_id FROM jual_cek WHERE jcek_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara2, jcek_nilai AS bayar2_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jcek_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_cek ON(jcek_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara3 == 'transfer'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT jtransfer_id FROM jual_transfer WHERE jtransfer_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, jtransfer_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN jual_transfer ON(jtransfer_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}elseif($record->jrawat_cara3 == 'voucher'){
-					$sql="SELECT jrawat_nobukti, jrawat_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
-					$rs=$this->db->query($sql);
-					if($rs->num_rows()){
-						return $rs->row();
-					}else{
-						return '';
+                    $sql = "SELECT tvoucher_id FROM voucher_terima WHERE tvoucher_ref='".$jrawat_nobukti."'";
+					$rs = $this->db->query($sql);
+					if($rs->num_rows()==1){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id'";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==2){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 1,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
+					}else if($rs->num_rows()==3){
+						$sql="SELECT jrawat_nobukti, jrawat_cara3, tvoucher_nilai AS bayar3_nilai FROM master_jual_rawat LEFT JOIN voucher_terima ON(tvoucher_ref=jrawat_nobukti) WHERE jrawat_id='$jrawat_id' LIMIT 2,1";
+						$rs=$this->db->query($sql);
+						if($rs->num_rows()){
+							return $rs->row();
+						}else{
+							return NULL;
+						}
 					}
 				}
 			}else{
-				return '';
+				return NULL;
 			}
 		}else{
-			return '';
+			return NULL;
 		}
 	}
 	
