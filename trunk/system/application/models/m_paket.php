@@ -408,8 +408,6 @@ class M_paket extends Model{
 			"paket_update"=>$_SESSION[SESSION_USERID],
 			"paket_date_update"=>date('Y-m-d H:i:s')
 		);
-
-
 			
 		$sql="SELECT group_id,group_dupaket,group_dmpaket FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
@@ -420,20 +418,6 @@ class M_paket extends Model{
 			$data["paket_dm"]=$rs_sql->group_dmpaket;
 		}
 
-//			$sql="SELECT group_id, group_kode FROM paket,produk_group WHERE group_id='".$paket_group."' AND paket.paket_group!='".$paket_group."' AND paket_id='".$paket_id."'";
-//			$rs=$this->db->query($sql);
-//			if($rs->num_rows()){
-//				$sql_2="SELECT paket_id,paket_kode FROM paket WHERE paket_id='".$paket_id."'";
-//				$rs_2=$this->db->query($sql_2);
-//				if($rs->num_rows()){
-//					$rs_sql_2=$rs_2->row();
-//					$data["paket_kodelama"]=$rs_sql_2->paket_kode;
-//				}
-//
-//				$row=$rs->row();
-//				$data["paket_group"]=$paket_group;
-//				$data["paket_kode"]=$this->get_kode($row->group_kode);
-//			}
 		$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs_g=$this->db->query($sql_g);
 		if($rs_g->num_rows()){
@@ -443,7 +427,7 @@ class M_paket extends Model{
 
 			$pattern=$group_kode;
 			//echo $jenis_kode;
-			$paket_kode=$this->get_kode($pattern);
+			$paket_kode=$this->m_public_function->get_kode_1("paket","paket_kode",$group_kode,5);
 			if($pattern!=="" && strlen($pattern)==2)
 				$data["paket_kode"]=$paket_kode;
 		}else{
@@ -451,7 +435,7 @@ class M_paket extends Model{
 			$rs_g=$this->db->query($sql_g);
 			if($rs_g->num_rows()){
 				$rs_sql_g=$rs_g->row();
-				$group_kode=$rs_sql_g->group_kode;
+				$group_kode=$rs_sql_g->group_kode;		
 			}
 		}
 
@@ -565,7 +549,8 @@ class M_paket extends Model{
 		if($paket_aktif_mlg=='false')
 			$mlg="0";
 			
-		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';			
+		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';	
+		
 		$data = array(
 			"paket_kodelama"=>$paket_kodelama,
 			"paket_nama"=>$paket_nama,
@@ -581,15 +566,33 @@ class M_paket extends Model{
 			"paket_creator"=>$_SESSION[SESSION_USERID],
 			"paket_date_create"=>date('Y-m-d H:i:s'),
 			"paket_revised"=>'0'
-		);			
+		);
 		
-		$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
+		/*$sql="SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$row=$rs->row();
 			$data["paket_kode"]=$this->get_kode($row->group_kode);
-		}
+		}*/
 
+		//autogenerate kodebaru
+		$sql = "SELECT group_id, group_kode FROM produk_group WHERE group_id='".$paket_group."'";
+		$rs = $this->db->query($sql);
+		if($rs->num_rows()){
+			$row = $rs->row_array();
+			$group_kode = $row['group_kode'];
+		}		
+		
+		$panjang = strlen($group_kode);
+		$pjg = 5;		
+		if ($panjang==4)
+			$pjg = 7;
+		else if ($panjang==3)
+			$pjg = 6;
+		
+		$data["paket_kode"]=$this->m_public_function->get_kode_1("paket","paket_kode",$group_kode,5);
+		//end of autogenerate
+		
 		$this->db->insert('paket', $data);
 		if($this->db->affected_rows())
 			return '1';

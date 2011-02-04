@@ -72,7 +72,7 @@ var paket_idField;
 var paket_kodeField;
 var paket_kodelamaField;
 var paket_namaField;
-var paket_standart_tetapField;
+
 var paket_groupField;
 var paket_kategoriField;
 var paket_kategoritxtField;
@@ -225,7 +225,7 @@ Ext.onReady(function(){
 				paket_kode	: paket_kode_create,
 				paket_kodelama	: paket_kodelama_create,
 				paket_nama	: paket_nama_create,
-				paket_standart_tetap : paket_standart_tetapField.getValue(),
+				
 				paket_group	: paket_group_create,
 				paket_keterangan	: paket_keterangan_create,
 				paket_du	: paket_du_create,
@@ -318,8 +318,8 @@ Ext.onReady(function(){
 		paket_kodelamaField.setValue(null);
 		paket_namaField.reset();
 		paket_namaField.setValue(null);
-		paket_standart_tetapField.reset();
-		paket_standart_tetapField.setValue(null);
+		
+		
 		paket_groupField.reset();
 		paket_groupField.setValue(null);
 		paket_keteranganField.reset();
@@ -386,12 +386,12 @@ Ext.onReady(function(){
 
 	/* setValue to EDIT */
 	function paket_set_form(){
-		paket_aktif_checkField.setValue(false);
+		//paket_checkallField.setValue(false);
 		paket_idField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_id'));
 		paket_kodeField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kode'));
 		paket_kodelamaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_kodelama'));
 		paket_namaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_nama'));
-		paket_standart_tetapField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_standart_tetap'));
+	
 		paket_groupField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_group'));
 		paket_keteranganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_keterangan'));
 		paket_duField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_du'));
@@ -634,7 +634,7 @@ Ext.onReady(function(){
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
 			{name: 'paket_kodelama', type: 'string', mapping: 'paket_kodelama'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
-			{name: 'paket_standart_tetap', type: 'int', mapping: 'paket_standart_tetap'},
+		
 			{name: 'paket_group', type: 'string', mapping: 'group_nama'},
 			{name: 'paket_keterangan', type: 'string', mapping: 'paket_keterangan'},
 			{name: 'paket_du', type: 'int', mapping: 'paket_du'},
@@ -1154,12 +1154,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 
-	/* Identify Paket standart Tetap*/
-	paket_standart_tetapField=new Ext.form.Checkbox({
-		id : 'paket_standart_tetapField',
-		boxLabel: 'Paket Standart Tetap?',
-		name: 'paket_standart_tetap'
-	});
+
 	
 	/* Identify Paket Aktif*/
 	paket_aktif_thField=new Ext.form.Checkbox({
@@ -1496,7 +1491,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelWidth: 120,
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_standart_tetapField, paket_groupField, paket_hargaField, paket_duField, paket_dmField]
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_duField, paket_dmField]
 			}
 			,{
 				columnWidth:0.5,
