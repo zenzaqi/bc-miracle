@@ -880,6 +880,9 @@ Ext.onReady(function(){
 			{name: 'dtrawat_petugas1_id', type: 'int', mapping: 'dokter_id'},
 			{name: 'dtrawat_jam', type: 'string', mapping: 'dtrawat_jam'},
 			{name: 'dtrawat_jam_datang', type: 'string', mapping: 'dtrawat_jam_datang'},
+			{name: 'dtrawat_jam_siap', type: 'string', mapping: 'dtrawat_jam_siap'},
+			{name: 'dtrawat_jam_selesai', type: 'string', mapping: 'dtrawat_jam_selesai'},
+			{name: 'est_jam_selesai', type: 'string', mapping: 'est_jam_selesai'},
 			{name: 'dtrawat_tglapp', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_tglapp'},
 			{name: 'dtrawat_status', type: 'string', mapping: 'dtrawat_status'},
 			{name: 'perawatan_harga', type: 'float', mapping: 'rawat_harga'},
@@ -1129,16 +1132,22 @@ Ext.onReady(function(){
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Jam App' + '</div>',
+			header: '<div align="center">' + 'App' + '</div>',
 			dataIndex: 'dtrawat_jam',
-			width: 55,
-			sortable: true
+			width: 50,
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,5);
+			}
 		}, 
 		{
-			header: '<div align="center">' + 'Jam Datang' + '</div>',
+			header: '<div align="center">' + 'Dtg' + '</div>',
 			dataIndex: 'dtrawat_jam_datang',
-			width: 55,
-			sortable: true
+			width: 50,
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,5);
+			}
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
@@ -1164,7 +1173,35 @@ Ext.onReady(function(){
             })
 			<?php } ?>
             
+		},
+		{
+			header: '<div align="center">' + 'Siap' + '</div>',
+			dataIndex: 'dtrawat_jam_siap',
+			width: 50,
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,5);
+			}
 		}, 
+		{
+			header: '<div align="center">' + 'Est Sls' + '</div>',
+			dataIndex: 'est_jam_selesai',
+			width: 50,
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,5);
+			}
+		}, 
+		{
+			header: '<div align="center">' + 'Sls' + '</div>',
+			dataIndex: 'dtrawat_jam_selesai',
+			width: 50,
+			sortable: true,
+			renderer: function(value, cell, record){
+				return value.substring(0,5);
+			}
+		}, 
+				
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',

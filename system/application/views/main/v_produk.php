@@ -61,6 +61,7 @@ var satuan_konversi_proxy;
 var satuan_konversi_writer;
 var satuan_konversi_reader;
 var editor_satuan_konversi;
+var editor_satuan_konversi_cancel;
 var produk_racikan_DataStore;
 var produk_racikanListEditorGrid;
 var produk_racikan_ColumnModel;
@@ -70,6 +71,7 @@ var produk_racikan_reader;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var temp_satuan_add=0;
 
 /* declare variable here for Field*/
 var produk_idField;
@@ -322,6 +324,21 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
+	
+	function satuan_konversi_confirm_add(){
+		combo_produk_satuan.setDisabled(false);
+		combo_produk_nilai.setDisabled(false);
+		temp_satuan_add = 1;
+		satuan_konversi_add();
+	}
+	
+	/* Function utk mengset field Satuan dan Nilai menjadi Disabled, ketika tombol update ditekan*/ 
+	function satuan_konversi_change_disabled(){
+		combo_produk_satuan.setDisabled(true);
+		combo_produk_nilai.setDisabled(true);
+		temp_satuan_add = 0;
+	}
+	
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -406,6 +423,9 @@ Ext.onReady(function(){
 		produk_aktif_mlgField.setValue(true);
 		produk_aktif_checkField.reset();
 		produk_aktif_checkField.setValue(true);
+		
+		combo_produk_satuan.setDisabled(false);
+		combo_produk_nilai.setDisabled(false);
 	}
  	/* End of Function */
   
@@ -509,8 +529,25 @@ Ext.onReady(function(){
 			produk_aktif_mlgField.setValue(true);	
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(15)=="0")
 			produk_aktif_mlgField.setValue(false);
+			
+			
 	}
 	/* End setValue to EDIT*/
+  
+	/*Function untuk disabled satuan dan nilai ketika klik Edit */
+	function produk_set_updating(){
+		if(post2db=="UPDATE"){
+			combo_produk_satuan.setDisabled(true);
+			combo_produk_nilai.setDisabled(true);
+		}
+	
+	
+	}
+  
+	
+  
+  
+  
   
 	/* Function for Check if the form is valid */
 	function is_produk_form_valid(){
@@ -572,6 +609,7 @@ Ext.onReady(function(){
 		if(produkListEditorGrid.selModel.getCount() == 1) {
 			produk_set_form();
 			post2db='UPDATE';
+			produk_set_updating();
 			cbo_produk_racik_satuanDataStore.load();
 			satuan_konversi_DataStore.load({
 			params: {master_id: get_pk_id(), start:0, limit:15},
@@ -1693,9 +1731,16 @@ Ext.onReady(function(){
 	//eof
 	
 	//function for editor of detail
+	var editor_satuan_konversi_cancel= new Ext.ux.grid.RowEditor({
+        saveText: 'Cancel'
+    });
+	//eof
+	
+	//function for editor of detail
 	var editor_produk_racikan= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
 	});
+	
 	
 	
 	Ext.util.Format.comboRenderer = function(combo){
@@ -1772,6 +1817,16 @@ Ext.onReady(function(){
 //		sortInfo:{field: 'produk_satuan_value', direction: "ASC"}
 //	});
 	
+	var combo_produk_nilai = new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+	});
+	
+	
 	var combo_produk_satuan=new Ext.form.ComboBox({
 			store: cbo_produk_satuanDataStore,
 			mode: 'remote',
@@ -1811,7 +1866,9 @@ Ext.onReady(function(){
 			dataIndex: 'konversi_satuan',
 			width: 295,
 			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			editor: combo_produk_satuan,
+			<?php } ?>
 			renderer: Ext.util.Format.comboRenderer(combo_produk_satuan)
 		},
 		{
@@ -1819,14 +1876,7 @@ Ext.onReady(function(){
 			dataIndex: 'konversi_nilai',
 			width: 295,
 			sortable: false,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: combo_produk_nilai
 		},
 		{
 			xtype: 'booleancolumn',
@@ -1918,13 +1968,15 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: satuan_konversi_add
+			handler: satuan_konversi_confirm_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			disabled: true,
 			handler: satuan_konversi_confirm_delete
-		}
+		}, '-', 
+		'<span style="color:white;">Warning: <b>Field Satuan dan Nilai tidak dapat di Edit lagi, pastikan terinput dengan benar.</b></span>'
 		]
 		<?php } ?>
 	});
@@ -1991,6 +2043,13 @@ Ext.onReady(function(){
 	
 	//function of detail add
 	function satuan_konversi_add(){
+		/*
+		if(temp_satuan_add==1)
+		{
+		combo_produk_satuan.setDisabled(false);
+		combo_produk_nilai.setDisabled(false);
+		}
+		*/
 		var edit_satuan_konversi= new satuan_konversiListEditorGrid.store.recordType({
 			konversi_id	:'',		
 			konversi_produk	:'',		
@@ -1999,16 +2058,20 @@ Ext.onReady(function(){
 			konversi_default :false
 		});
 		editor_satuan_konversi.stopEditing();
+		//editor_satuan_konversi_cancel.stopEditing();
 		satuan_konversi_DataStore.insert(0, edit_satuan_konversi);
 		satuan_konversiListEditorGrid.getView().refresh();
 		satuan_konversiListEditorGrid.getSelectionModel().selectRow(0);
 		editor_satuan_konversi.startEditing(0);
+		//editor_satuan_konversi_cancel.startEditing();
+
 	}
 	
 	//function for refresh detail
 	function refresh_satuan_konversi(){
 		satuan_konversi_DataStore.commitChanges();
 		satuan_konversiListEditorGrid.getView().refresh();
+		satuan_konversi_change_disabled();
 	}
 	//eof
 	
