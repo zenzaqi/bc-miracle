@@ -378,7 +378,7 @@ Ext.onReady(function(){
 		paket_aktif_checkField.reset();
 		paket_aktif_checkField.setValue(true);
 		
-		paket_isi_perawatan_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
+		//paket_isi_perawatan_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
 		paket_isi_produk_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
 
 	}
@@ -1539,7 +1539,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'rpaket_id', direction: "ASC"}
 	});
 	/* End of Function */
-	paket_isi_perawatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+	//paket_isi_perawatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
 
 	//function for editor of detail
 	var editor_paket_isi_perawatan= new Ext.ux.grid.RowEditor({
