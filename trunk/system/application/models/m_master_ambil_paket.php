@@ -637,8 +637,9 @@ class M_master_ambil_paket extends Model{
 
 		
 		
-		function pengecekan_dokumen($tanggal_pengecekan){
-		
+		/* Pengecekan Dokumen untuk membatalkan paket yang sudah terambil*/ 
+		function pengecekan_dokumen_untuk_batal($tanggal_pengecekan){
+			
 		$date = date('Y-m-d');
 			//$date_1 = '01';
 			//$date_2 = '02';
@@ -806,6 +807,12 @@ class M_master_ambil_paket extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " detail_jual_paket.dpaket_sisa_paket >= 0 ";	
 			};
+			
+			if($apaket_sisa=='Sisa 0'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_jual_paket.dpaket_sisa_paket = 0 ";	
+			};
+			
 			
 			if($apaket_kadaluarsa!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -1748,8 +1748,8 @@ Ext.onReady(function(){
 
 	function save_andPrint(){
 		cetak=1;
-		//master_terima_beli_create('show');
-		master_terima_beli_create('print');
+		pengecekan_dokumen();
+		//master_terima_beli_create('print');
 	//	jproduk_pesanLabel.setText('');
 	//	jproduk_lunasLabel.setText('');
 	}
@@ -2334,12 +2334,13 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 						case 1:
-							master_terima_beli_create();
+							cetak=1,
+							master_terima_beli_create('print');
 						break;
 						default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   msg: 'Data Penjualan Produk tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   msg: 'Data Peneriamaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING,
