@@ -64,6 +64,7 @@ var editor_detail_terima_beli;
 
 //declare konstant
 var post2db = '';
+var task = '';
 var today=new Date().format('Y-m-d');
 var msg = '';
 var pageS=15;
@@ -99,6 +100,94 @@ Ext.util.Format.comboRenderer = function(combo){
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 
+	/*Function for pengecekan _dokumen untuk save n print */		
+	function pengecekan_dokumen(){
+		var terima_tanggal_create_date = "";
+		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_terima_beli&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: terima_tanggal_create_date	
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							cetak=1;
+							master_terima_beli_create('print');
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						  // master_terima_beli_create('print')
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+	/*Function for pengecekan _dokumen untuk save*/
+	function pengecekan_dokumen2(){
+		var terima_tanggal_create_date = "";
+		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_terima_beli&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: terima_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							master_terima_beli_create();
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						  // master_terima_beli_create('print')
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+		
   	/* Function for add data, open window create form */
 	function master_terima_beli_create(opsi){
 		if(detail_terima_beli_DataStore.getCount()<1){
@@ -1745,14 +1834,6 @@ Ext.onReady(function(){
 		<?php } ?>
 	});
 	//eof
-
-	function save_andPrint(){
-		cetak=1;
-		pengecekan_dokumen();
-		//master_terima_beli_create('print');
-	//	jproduk_pesanLabel.setText('');
-	//	jproduk_lunasLabel.setText('');
-	}
 	
 	//function of detail add
 	function detail_terima_bonus_add(){
@@ -1982,11 +2063,11 @@ Ext.onReady(function(){
 			{
 				text: 'Save and Print',
 				ref: '../tbeli_savePrint',
-				handler: save_andPrint
+				handler: pengecekan_dokumen
 				//{cetak=1;}
 			},{
 				text: 'Save',
-				handler: pengecekan_dokumen 
+				handler: pengecekan_dokumen2
 				//{ master_terima_beli_create('close'); }
 			}
 			,
@@ -2315,53 +2396,9 @@ Ext.onReady(function(){
 			});
 		}
 		});
-
 	}
 
-	/*Function for pengecekan _dokumen */
-	function pengecekan_dokumen(){
-		var terima_tanggal_create_date = "";
-		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');} 
-		Ext.Ajax.request({  
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_terima_beli&m=get_action',
-			params: {
-				task: "CEK",
-				tanggal_pengecekan	: terima_tanggal_create_date
-		
-			}, 
-			success: function(response){							
-				var result=eval(response.responseText);
-				switch(result){
-						case 1:
-							cetak=1,
-							master_terima_beli_create('print');
-						break;
-						default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data Peneriamaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING,
-						  // master_terima_beli_create('print')
-						});
-						//jproduk_btn_cancel();
-						break;
-				}
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Could not connect to the database. retry later.',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});	
-			}									    
-		});   
-	}
+
 	
 	/* Function for print List Grid */
 	function master_terima_beli_print(){
@@ -2527,7 +2564,7 @@ Ext.onReady(function(){
 	//EVENTS
 
 	master_terima_beliListEditorGrid.addListener('rowcontextmenu', onmaster_terima_beli_ListEditGridContextMenu);
-	master_terima_beli_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	master_terima_beli_DataStore.load({params: {task: "LIST", start: 0, limit: pageS}});	// load DataStore
 
 	detail_terima_beli_DataStore.on("load",detail_terima_beli_total);
 	detail_terima_bonus_DataStore.on("load",detail_terima_bonus_total);
@@ -2652,7 +2689,12 @@ Ext.onReady(function(){
 		detail_terima_beli_total();
 	});
 
+	
+	post2db = '';
+	task = '';
+	
 });
+
 	</script>
 <body>
 <div>

@@ -67,6 +67,7 @@ var firstday=(new Date().format('Y-m'))+'-01';
 var post2db = '';
 var msg = '';
 var pageS=15;
+var cetak_order=0;
 var acc_group=<?=$_SESSION[SESSION_GROUPID];?>;
 var stat='ADD';
 /* declare variable here for Field*/
@@ -96,6 +97,91 @@ var detail_order_beli_DataStore;
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
+  /*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var order_tanggal_create_date = "";
+		if(order_tanggalField.getValue()!== ""){order_tanggal_create_date = order_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_order_beli&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: order_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							cetak_order=1;
+							master_order_beli_create('print');
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Order Pembelian tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+	/*Function for pengecekan _dokumen untuk save */
+	function pengecekan_dokumen2(){
+		var order_tanggal_create_date = "";
+		if(order_tanggalField.getValue()!== ""){order_tanggal_create_date = order_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_order_beli&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: order_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							master_order_beli_create();
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Order Pembelian tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
   
   	/* Function for add data, open window create form */
 	function master_order_beli_create(opsi){
@@ -165,7 +251,8 @@ Ext.onReady(function(){
 				order_bayar			: order_bayar_create, 
 				order_keterangan	: order_keterangan_create,
 				order_status		: order_status_create,
-				order_status_acc	: order_status_acc_create
+				order_status_acc	: order_status_acc_create,
+				cetak_order			: cetak_order
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -243,9 +330,22 @@ Ext.onReady(function(){
 		order_statusField.setValue('Terbuka');
 		order_status_accField.reset();
 		order_status_accField.setValue('Terbuka');
+		order_idField.setDisabled(false);
+		order_noField.setDisabled(false);
+		order_supplierField.setDisabled(false);
+		order_tanggalField.setDisabled(false);
+		order_carabayarField.setDisabled(false);
+		order_diskonField.setDisabled(false);
+		order_cashbackField.setDisabled(false);
+		order_biayaField.setDisabled(false);
+		order_bayarField.setDisabled(false);
+		order_keteranganField.setDisabled(false);
+		order_statusField.setDisabled(false);
+		order_status_accField.setDisabled(false);
 		/*cbo_order_satuanDataStore.load();
 		cbo_order_produk_DataStore.load();*/
 		detail_order_beli_DataStore.load({params: {master_id:-1}});
+		master_order_beli_createForm.obeli_savePrint.enable();
 		
 		/*cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
@@ -283,6 +383,105 @@ Ext.onReady(function(){
 		order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
 		order_status_accField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status_acc'));
 		
+		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
+			order_idField.setDisabled(false);
+			order_noField.setDisabled(false);
+			order_supplierField.setDisabled(false);
+			order_tanggalField.setDisabled(false);
+			order_carabayarField.setDisabled(false);
+			order_diskonField.setDisabled(false);
+			order_cashbackField.setDisabled(false);
+			order_biayaField.setDisabled(false);
+			order_bayarField.setDisabled(false);
+			order_keteranganField.setDisabled(false);
+			order_statusField.setDisabled(false);
+			order_status_accField.setDisabled(false);
+			master_order_beli_createForm.obeli_savePrint.enable();
+		}
+		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Tertutup"){
+			order_idField.setDisabled(true);
+			order_noField.setDisabled(true);
+			order_supplierField.setDisabled(true);
+			order_tanggalField.setDisabled(true);
+			order_carabayarField.setDisabled(true);
+			order_diskonField.setDisabled(true);
+			order_cashbackField.setDisabled(true);
+			order_biayaField.setDisabled(true);
+			order_bayarField.setDisabled(true);
+			order_keteranganField.setDisabled(true);
+			order_status_accField.setDisabled(true);
+			order_statusField.setDisabled(false);
+			if(cetak_order==1){
+					//jproduk_cetak(jproduk_id_for_cetak);
+				cetak_order=0;
+			}
+			
+		}
+		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Batal"){
+			order_idField.setDisabled(true);
+			order_noField.setDisabled(true);
+			order_supplierField.setDisabled(true);
+			order_tanggalField.setDisabled(true);
+			order_carabayarField.setDisabled(true);
+			order_diskonField.setDisabled(true);
+			order_cashbackField.setDisabled(true);
+			order_biayaField.setDisabled(true);
+			order_bayarField.setDisabled(true);
+			order_keteranganField.setDisabled(true);
+			order_status_accField.setDisabled(true);
+			order_statusField.setDisabled(true);
+			master_order_beli_createForm.obeli_savePrint.disable();
+		}
+		
+		
+		order_statusField.on("select",function(){
+		var status_awal = master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status');
+		if(status_awal =='Terbuka' && order_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		order_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && order_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		order_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && order_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		order_statusField.setValue('Tertutup');
+		}
+		
+		else if(order_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', order_status_batal);
+		}
+        
+       else if(status_awal =='Tertutup' && order_statusField.getValue()=='Tertutup'){
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+			master_order_beli_createForm.obeli_savePrint.enable();
+			<?php } ?>
+        }
+		
+		});	
+		
 		cbo_order_satuanDataStore.setBaseParam('task','detail');
 		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_order_satuanDataStore.load();
@@ -302,6 +501,19 @@ Ext.onReady(function(){
 		
 	}
 	/* End setValue to EDIT*/
+  
+	function order_status_batal(btn){
+		if(btn=='yes')
+		{
+			order_statusField.setValue('Batal');
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+			master_order_beli_createForm.obeli_savePrint.disable();
+			<?php } ?>
+		}  
+		else
+			order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
+	}
+  
   
 	/* Function for Check if the form is valid */
 	function is_master_order_beli_form_valid(){
@@ -343,7 +555,7 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	function check_acc(){
-		if((acc_group!==9) && (acc_group!==1)){
+		if(acc_group!==9){
 			order_harga_satuanField.setDisabled(true);
 			order_diskon_satuanField.setDisabled(true);
 		}else{
@@ -622,7 +834,7 @@ Ext.onReady(function(){
           	})
 		}, 
 		{
-			header: '<div align="center">' + 'Stat PB' + '</div>',
+			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'order_status',
 			width: 60
 		}, 
@@ -888,7 +1100,7 @@ Ext.onReady(function(){
 	});
 	order_statusField= new Ext.form.ComboBox({
 		id: 'order_statusField',
-		fieldLabel: 'Status PB',
+		fieldLabel: 'Status Dok',
 		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['order_status_value', 'order_status_display'],
@@ -1312,7 +1524,7 @@ Ext.onReady(function(){
 		<?php } ?>
 	});
 	//eof
-	
+
 	//function of detail add
 	function detail_order_beli_add(){
 		var edit_detail_order_beli= new detail_order_beliListEditorGrid.store.recordType({
@@ -1458,8 +1670,7 @@ Ext.onReady(function(){
 				detail_order_beli_DataStore.commitChanges();
 				detail_order_beli_total();
 			}
-		} 
-		
+		} 		
 	}
 	//eof
 	
@@ -1475,10 +1686,11 @@ Ext.onReady(function(){
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
 			{
 				text: 'Save and Print',
-				handler: function() { master_order_beli_create('print'); }
+				ref: '../obeli_savePrint',
+				handler: pengecekan_dokumen
 			},{
 				text: 'Save',
-				handler: function() { master_order_beli_create('close'); }
+				handler: pengecekan_dokumen2 
 			}
 			,
 			<?php } ?>
@@ -1596,8 +1808,7 @@ Ext.onReady(function(){
 			   icon: Ext.MessageBox.ERROR
 			});		
 		} 	                     
-		});
-		
+		});		
 	}
 	
 	function master_order_beli_reset_SearchForm(){
@@ -1754,7 +1965,7 @@ Ext.onReady(function(){
 	
 	order_statusSearchField= new Ext.form.ComboBox({
 		id: 'order_statusSearchField',
-		fieldLabel: 'Status PB',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'order_status'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
@@ -1871,6 +2082,8 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
+	
+	
 	
 	/* Function for print List Grid */
 	function master_order_beli_print(){

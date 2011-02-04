@@ -215,6 +215,9 @@ class C_master_order_beli extends Controller {
 			case "CREATE":
 				$this->master_order_beli_create();
 				break;
+			case "CEK":
+				$this->master_order_beli_pengecekan();
+				break;
 			case "DELETE":
 				$this->master_order_beli_delete();
 				break;
@@ -244,6 +247,14 @@ class C_master_order_beli extends Controller {
 		echo $result;
 	}
 
+	function master_order_beli_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 	//function for update record
 	function master_order_beli_update(){
 		//POST variable here
@@ -274,9 +285,10 @@ class C_master_order_beli extends Controller {
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
 		$order_status_acc=str_replace(",", ",",$order_status_acc);
 		$order_status_acc=str_replace("'", '"',$order_status_acc);
+		$cetak_order = trim(@$_POST["cetak_order"]);
 		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, 
 																	   $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan,
-																	   $order_status, $order_status_acc);
+																	   $order_status, $order_status_acc, $cetak_order);
 		echo $result;
 	}
 	
@@ -305,9 +317,10 @@ class C_master_order_beli extends Controller {
 		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
 		$order_status_acc=str_replace("'", '"',$order_status_acc);
+		$cetak_order = trim(@$_POST["cetak_order"]);
 		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, 
 																	 $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, 
-																	 $order_status_acc);
+																	 $order_status_acc,$cetak_order);
 		echo $result;
 	}
 
