@@ -97,7 +97,7 @@ Ext.onReady(function(){
   
   
 	/*Function for pengecekan _dokumen */
-	function pengecekan_dokumen(){
+	function pengecekan_dokumen_untuk_batal(){
 
 		var selections = history_ambil_paketPanel.selModel.getSelections();
 		var tgl_ambil = [];
@@ -110,7 +110,7 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_ambil_paket&m=get_action',
 			params: {
-				task: "CEK",
+				task: "CEK_BATAL",
 				tgl_ambil	: encoded_array_tgl_ambil	
 			}, 
 			success: function(response){							
@@ -145,7 +145,7 @@ Ext.onReady(function(){
 	}
   
   
-	/*Function for pengecekan _dokumen */
+	/*Function for pengecekan status ADJ */
 	function adj_status_update(){
 
 		var selections = history_ambil_paketPanel.selModel.getSelections();
@@ -203,6 +203,52 @@ Ext.onReady(function(){
 		});   
 	}
   
+	
+	/*Function for pengecekan _dokumen */
+	function pengecekan_dokumen_untuk_ambil_paket(){
+		var count_detail=ambil_paket_isi_perawatan_DataStore.getCount();
+		for(i=0;i<ambil_paket_isi_perawatan_DataStore.getCount();i++){
+			var count_i = i;
+			ambil_paket_isi_perawatan_record=ambil_paket_isi_perawatan_DataStore.getAt(i);
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_master_ambil_paket&m=get_action',
+				params:{
+				task : "CEK_AMBIL",
+				tgl_ambil	: ambil_paket_isi_perawatan_record.data.tgl_ambil.format('Y-m-d'),
+			
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+					case 1:
+						ambil_paket_create();
+						break;
+					default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Pengambilan Paket tidak bisa dilakukan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	  }
+	}
+	
   
   	/* Function for Saving inLine Editing */
 	function ambil_paket_update(oGrid_event){
@@ -1158,7 +1204,7 @@ Ext.onReady(function(){
 				text: 'Batal',
 				tooltip: 'Membatalkan pengambilan paket',
 				iconCls:'icon-delete',    				// this is defined in our styles.css
-				handler: pengecekan_dokumen
+				handler: pengecekan_dokumen_untuk_batal
 			},'-',
 			{
 				text: 'Adjustment',
@@ -2109,7 +2155,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Sisa',
 		store:new Ext.data.SimpleStore({
 			fields:['apaket_sisa_value', 'apaket_sisa_display'],
-			data:[['0','Semua'],['1','Lebih dari 0']]
+			data:[['0','Semua'],['1','Lebih dari 0'],['Sisa 0','Yang Sisanya 0']]
 		}),
 		mode: 'local',
 		displayField: 'apaket_sisa_display',
