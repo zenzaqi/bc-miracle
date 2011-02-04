@@ -1,0 +1,10 @@
+v_paket:
+checkbox 'check all',
+kalo create : default kecentang
+kalo edit : default tidak terecentang
+
+vcm_master_order_beli
+fungsi statdok
+
+v_master_terima_beli :
+perbaikan

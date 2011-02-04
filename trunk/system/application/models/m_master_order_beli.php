@@ -334,7 +334,7 @@ class M_master_order_beli extends Model{
 		
 		//function for update record
 		function master_order_beli_update($order_id ,$order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,
-										  $order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
+										  $order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc, $cetak_order){
 			$data = array(
 				"order_id"=>$order_id, 
 				"order_no"=>$order_no, 
@@ -359,6 +359,10 @@ class M_master_order_beli extends Model{
 			if($query->num_rows())
 				$data["order_supplier"]=$order_supplier;
 				
+			if($cetak_order==1){
+				$data['order_status'] = 'Tertutup';
+			}
+				
 			$this->db->where('order_id', $order_id);
 			$this->db->update('master_order_beli', $data);
 			
@@ -372,7 +376,7 @@ class M_master_order_beli extends Model{
 		}
 		
 		//function for create new record
-		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc){
+		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc, $cetak_order){
 			$date_now=date('Y-m-d');
 			if($order_tanggal==""){
 				$order_tanggal=$date_now;
@@ -393,7 +397,12 @@ class M_master_order_beli extends Model{
 				"order_date_create"=>date('Y-m-d H:i:s'),
 				"order_revised"=>0
 			);
-			
+			if($cetak_order==1){
+				$data['order_status'] = 'Tertutup';
+			}else{
+				$data['order_status'] = 'Terbuka';
+			}
+				
 			if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ 
 				$data["order_diskon"]=$order_diskon;
 				$data["order_cashback"]=$order_cashback;
