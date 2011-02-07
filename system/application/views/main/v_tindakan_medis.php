@@ -1179,6 +1179,7 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_jam_siap',
 			width: 50,
 			sortable: true,
+			hidden: true,
 			renderer: function(value, cell, record){
 				return value.substring(0,5);
 			}
@@ -1188,6 +1189,7 @@ Ext.onReady(function(){
 			dataIndex: 'est_jam_selesai',
 			width: 50,
 			sortable: true,
+			hidden: true,
 			renderer: function(value, cell, record){
 				return value.substring(0,5);
 			}
@@ -1197,6 +1199,7 @@ Ext.onReady(function(){
 			dataIndex: 'dtrawat_jam_selesai',
 			width: 50,
 			sortable: true,
+			hidden: true,
 			renderer: function(value, cell, record){
 				return value.substring(0,5);
 			}
