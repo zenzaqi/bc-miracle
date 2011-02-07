@@ -1563,13 +1563,17 @@ class M_tindakan_nonmedis extends Model{
 
 						}
 						
-					}else{
+					}else if(($dtrawat_dpaket_id==0) && ($dpaket_id==0)){
 						//Default-nya adalah Mengambil Perawatan Satuan
 						$result_drawat_i = $this->detail_jual_rawat_insert($dtrawat_id);
 						if($result_drawat_i==1){
 							$data['dtrawat_jam_selesai'] = $time_now;
 						}
 					}
+					else{
+						return '10';
+					}
+					
 					
 				}else{
 					//Perubahan Status dari !=='selesai' ==> !=='selesai' yang lain
