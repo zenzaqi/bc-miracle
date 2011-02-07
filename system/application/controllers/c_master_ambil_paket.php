@@ -239,8 +239,11 @@ class C_master_ambil_paket extends Controller {
 			case "CREATE":
 				$this->ambil_paket_create();
 				break;
-			case "CEK":
-				$this->ambil_paket_pengecekan();
+			case "CEK_BATAL":
+				$this->ambil_paket_pengecekan_batal();
+				break;
+			case "CEK_AMBIL":
+				$this->ambil_paket_pengecekan_ambil();
 				break;
 			case "ADJ":
 				$this->ambil_paket_status_adj();
@@ -277,15 +280,25 @@ class C_master_ambil_paket extends Controller {
 	}
 
 	
-	function ambil_paket_pengecekan(){
+	function ambil_paket_pengecekan_batal(){
 	
 		$tanggal_pengecekan=trim(@$_POST["tgl_ambil"]);
 		//$dapaket_id = $_POST['dapaket_id']; // Get our array back and translate it :
 		$tanggal_pengecekan = json_decode(stripslashes($tanggal_pengecekan));
 	
-		$result=$this->m_master_ambil_paket->pengecekan_dokumen($tanggal_pengecekan);
+		$result=$this->m_master_ambil_paket->pengecekan_dokumen_untuk_batal($tanggal_pengecekan);
 		echo $result;
 	}
+	
+	function ambil_paket_pengecekan_ambil(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tgl_ambil"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
+	
 	
 	function ambil_paket_status_adj(){
 	
