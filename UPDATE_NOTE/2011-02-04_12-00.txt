@@ -1,0 +1,1 @@
+menambahkan field est_jam_selesai pada vu_tindakan (2011-02-04_12-00.sql)
