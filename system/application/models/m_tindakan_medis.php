@@ -433,7 +433,9 @@ class M_tindakan_medis extends Model{
 							"dapaket_referal"=>$dtrawat_dokter_awal
 							//"dapaket_keterangan"=>$keterangan
 							);
+							$this->db->query('LOCK TABLE detail_ambil_paket WRITE');
 							$this->db->insert('detail_ambil_paket', $dti_dapaket);
+							$this->db->query('UNLOCK TABLES');
 							
 							if($this->db->affected_rows()){
 							

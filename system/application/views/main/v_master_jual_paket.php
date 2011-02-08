@@ -4970,8 +4970,15 @@ Ext.onReady(function(){
 		
 		if(detail_pengguna_paket_DataStore.getCount()>0){
 			for(i=0; i<detail_pengguna_paket_DataStore.getCount();i++){
-				if(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id==0){
-					ppaket_id.push(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id);
+				if((/^\d+$/.test(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust))
+				   && detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust!==undefined
+				   && detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust!==''
+				   && detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust!==0){
+					if(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id==undefined){
+						ppaket_id.push('');
+					}else{
+						ppaket_id.push(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_id);
+					}
 					
 					if(detail_pengguna_paket_DataStore.getAt(i).data.ppaket_cust==undefined){
 						ppaket_cust.push('');
@@ -5040,10 +5047,50 @@ Ext.onReady(function(){
 	//function for Delete of detail
 	function detail_pengguna_paket_delete(btn){
 		if(btn=='yes'){
-			var s = detail_pengguna_paketListEditorGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				detail_pengguna_paket_DataStore.remove(r);
-			}
+			var selection = detail_pengguna_paketListEditorGrid.getSelectionModel().getSelections();
+			//for(var i = 0, r; r = s[i]; i++){
+				if(selection[0].data.ppaket_id==0){
+					detail_pengguna_paket_DataStore.remove(selection[0]);
+				}else{
+					var r = selection[0];
+					Ext.Ajax.request({
+						waitMsg: 'Please Wait',
+						url: 'index.php?c=c_master_jual_paket&m=get_action', 
+						params: {
+							task: "PENGGUNADELETE",
+							ppaket_master:  r.data.ppaket_master,
+							ppaket_cust: r.data.ppaket_cust
+						},
+						success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:  // Success : simply reload
+									detail_pengguna_paket_DataStore.remove(selection[0]);
+									break;
+								default:
+									Ext.MessageBox.show({
+										title: 'Warning',
+										msg: 'Pengguna Paket tidak dapat dihapus, karena sudah melakukan pengambilan paket di Faktur Paket ini.',
+										buttons: Ext.MessageBox.OK,
+										animEl: 'save',
+										icon: Ext.MessageBox.WARNING
+									});
+									break;
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});	
+						}
+					});
+				}
+			//}
 		} 
 		detail_pengguna_paket_DataStore.commitChanges();
 	}

@@ -166,7 +166,10 @@ class M_master_jual_paket extends Model{
 		}
 		
 		function detail_pengguna_paket_list($master_id,$start,$end){
-			$query="SELECT ppaket_cust FROM pengguna_paket INNER JOIN master_jual_paket ON(ppaket_master=jpaket_id) WHERE ppaket_master='$master_id' AND ppaket_cust!=jpaket_cust";
+			$query="SELECT ppaket_id ,ppaket_master ,ppaket_cust
+				FROM pengguna_paket
+					INNER JOIN master_jual_paket ON(ppaket_master=jpaket_id)
+				WHERE ppaket_master='".$master_id."' AND ppaket_cust!=jpaket_cust";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -196,18 +199,47 @@ class M_master_jual_paket extends Model{
 				$ppaket_id = $array_ppaket_id[$i];
 				$ppaket_cust = $array_ppaket_cust[$i];
 				
-				$dti_ppaket = array(
-				"ppaket_master"=>$ppaket_master, 
-				"ppaket_cust"=>$ppaket_cust
-				);
-				$sql="SELECT ppaket_id FROM pengguna_paket WHERE ppaket_master='$ppaket_master' AND ppaket_cust='$ppaket_cust'";
-				$rs=$this->db->query($sql);
-				if(!$rs->num_rows()){
-					//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /
-					$this->db->insert('pengguna_paket', $dti_ppaket); 
-				}
-				if($i==$size_array){
-					return '1';
+				/*
+				 * JIKA $ppaket_id==0 <== berarti penambahan pemakai baru
+				 * JIKA $ppaket_id<>0 <== berarti sudah ada sebagai pengguna paket, sehingga masuk mode EDIT
+				 * ==> di mode EDIT, ada pengecheckan apakah Customer itu sudah pernah mengambil paket untuk Faktur yang dimaksud atau belum???
+				 * ==> Jika Customer itu sudah pernah ambil paket, maka tidak boleh di-EDIT
+				 * ==> Jika Customer itu belum pernah ambil paket, maka boleh di-GANTI itu Customer
+				*/
+				
+				$sql = "SELECT dapaket_id FROM detail_ambil_paket WHERE dapaket_jpaket='".$ppaket_master."' AND dapaket_cust='".$ppaket_cust."'";
+				$rs = $this->db->query($sql);
+				if($rs->num_rows()){
+					if($i==$size_array){
+						return '1';
+					}
+				}else{
+					if($ppaket_id==0){
+						//penambahan pemakai baru
+						$dti_ppaket = array(
+						"ppaket_master"=>$ppaket_master, 
+						"ppaket_cust"=>$ppaket_cust
+						);
+						$sql="SELECT ppaket_id FROM pengguna_paket WHERE ppaket_master='$ppaket_master' AND ppaket_cust='$ppaket_cust'";
+						$rs=$this->db->query($sql);
+						if(!$rs->num_rows()){
+							//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /
+							$this->db->insert('pengguna_paket', $dti_ppaket); 
+						}
+						if($i==$size_array){
+							return '1';
+						}
+					}else{
+						//mode EDIT pemakai paket
+						$dtu_ppaket = array(
+						"ppaket_cust"=>$ppaket_cust
+						);
+						$this->db->where('ppaket_id' ,$ppaket_id);
+						$this->db->update('pengguna_paket' ,$dtu_ppaket);
+						if($i==$size_array){
+							return '1';
+						}
+					}
 				}
 			}
 			
@@ -1552,6 +1584,29 @@ class M_master_jual_paket extends Model{
 			}else{
 				//* artinya: Customer belum pernah ambil perawatan di paket ini. Sehingga masih boleh di-delete /
 				$query = "DELETE FROM detail_jual_paket WHERE dpaket_id = ".$dpaket_id;
+				$this->db->query($query);
+				if($this->db->affected_rows()>0)
+					return '1';
+				else
+					return '-1';
+			}
+			
+		}
+		
+		function pengguna_paket_delete($ppaket_master ,$ppaket_cust){
+            $date_now = date('Y-m-d');
+			$datetime_now = date('Y-m-d H:i:s');
+			$sql = "SELECT dapaket_id
+				FROM detail_ambil_paket
+				WHERE dapaket_jpaket='".$ppaket_master."'
+					AND dapaket_cust='".$ppaket_cust."'";
+			$rs = $this->db->query($sql);
+			if($rs->num_rows()){
+				//* artinya: Customer sudah pernah mengambil perawatan di paket ini. Sehingga tidak boleh di-Delete. /
+				return '0';
+			}else{
+				//* artinya: Customer belum pernah ambil perawatan di paket ini. Sehingga masih boleh di-delete /
+				$query = "DELETE FROM pengguna_paket WHERE ppaket_master='".$ppaket_master."' AND ppaket_cust='".$ppaket_cust."'";
 				$this->db->query($query);
 				if($this->db->affected_rows()>0)
 					return '1';
