@@ -190,13 +190,24 @@ class C_lap_jum_tindakan_dokter extends Controller {
 	function report_tindakan_export_excel(){
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$report_groupby=trim(@$_POST["report_groupby"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_lap_jum_tindakan_dokter->report_tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
-		
-		to_excel($query,"tindakan"); 
+		$query = $this->m_lap_jum_tindakan_dokter->report_tindakan_export_excel($trawat_id ,$trawat_tglapp_start , $trawat_tglapp_end, $trawat_dokter,
+																				$report_groupby, $option, $filter);
+		$this->load->plugin('to_excel');
+		to_excel($query,"Report_Tindakan_Dokter"); 
 		echo '1';
 			
 	}
