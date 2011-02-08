@@ -116,10 +116,10 @@ class M_master_jual_paket extends Model{
 			}
 		}
 		
-		function get_customer_pengguna_list($query,$start,$end){
+		function get_customer_pengguna_list($jpaket_id,$query,$start,$end){
 			$rs_rows=0;
-			if(is_numeric($query)==true){
-				$sql_cust="SELECT distinct(ppaket_cust) FROM pengguna_paket WHERE ppaket_master='$query'";
+			if(is_numeric($jpaket_id)==true){
+				$sql_cust="SELECT distinct(ppaket_cust) FROM pengguna_paket WHERE ppaket_master='$jpaket_id'";
 				$rs=$this->db->query($sql_cust);
 				$rs_rows=$rs->num_rows();
 			}
@@ -133,13 +133,13 @@ class M_master_jual_paket extends Model{
 					,CONCAT(vu_customer.cust_nama, ' (', vu_customer.cust_no, ')') as cust_display
 				FROM vu_customer
 				WHERE cust_aktif='Aktif'";
-			if($query<>"" && is_numeric($query)==false){
+			if($query<>""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.=" (cust_nama LIKE '%".$query."%' ) ";
+				$sql.=" (cust_nama LIKE '%".$query."%' OR cust_no LIKE '%".$query."%') ";
 			}else{
 				if($rs_rows){
 					$filter="";
-					$sql.=eregi("AND",$query)? " OR ":" AND ";
+					$sql.=eregi("AND",$jpaket_id)? " OR ":" AND ";
 					foreach($rs->result() as $row_cust){
 						
 						$filter.="OR cust_id='".$row_cust->ppaket_cust."' ";

@@ -1891,7 +1891,12 @@ Ext.onReady(function(){
 	function master_jual_paket_confirm_update(){
 		/* only one record is selected here */
 		if(master_jual_paketListEditorGrid.selModel.getCount() == 1) {
-			cbo_cust_pengguna_paket_DataStore.load({params:{query:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id')}});
+			cbo_cust_pengguna_paket_DataStore.load({
+				params:{
+					jpaket_id:master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'),
+					query:''
+				}
+			});
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jpaket_post2db='UPDATE';
 			cbo_dpaket_paketDataStore.load({
@@ -4882,8 +4887,7 @@ Ext.onReady(function(){
         itemSelector: 'div.search-item',
 		triggerAction: 'query',
 		lazyRender:true,
-		listClass: 'x-combo-list-small',
-		maskRe: /([^0-9]+)$/
+		listClass: 'x-combo-list-small'
 	});
 
 	//declaration of detail coloumn model
