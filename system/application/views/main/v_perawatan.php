@@ -834,11 +834,11 @@ Ext.onReady(function(){
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: true,
 				maxLength: 20
-          	})
+          	})*/
 			<?php } ?>
 		},
 		{
@@ -854,43 +854,45 @@ Ext.onReady(function(){
 			width: 300,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
-          	})
+          	})*/
 			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'rawat_group',
 			width: 150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_groupDataStore,
 				mode: 'remote',
 				displayField: 'rawat_group_display',
 				valueField: 'rawat_group_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'rawat_jenis',
 			width: 150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 			,
-			editor: new Ext.form.ComboBox({
+			/*editor: new Ext.form.ComboBox({
 				store: cbo_rawat_jenisDataSore,
 				mode: 'remote',
 				displayField: 'rawat_jenis_display',
 				valueField: 'rawat_jenis_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -905,11 +907,12 @@ Ext.onReady(function(){
 			align: 'right',
 			dataIndex: 'rawat_du',
 			width: 80,	//100,
+			readOnly: true,
 			renderer: function(val){
 				return '<span>' + val + ' </span>' + '</div>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -918,7 +921,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -926,11 +929,12 @@ Ext.onReady(function(){
 			align: 'right',
 			dataIndex: 'rawat_dm',
 			width: 80,	//100,
+			readOnly: true,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -939,7 +943,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -947,9 +951,10 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_point',
 			align: 'right',
 			width: 80,	//100,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -957,7 +962,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		
@@ -966,9 +971,10 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_durasi',
 			align: 'right',
 			width: 80,	//100,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -976,7 +982,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		
@@ -985,9 +991,10 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_kredit',
 			align: 'right',
 			width: 80,	//100,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+		/*	,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -995,7 +1002,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		
@@ -1006,11 +1013,12 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			hidden : true,
+			readOnly: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -1018,7 +1026,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		
@@ -1028,11 +1036,12 @@ Ext.onReady(function(){
 			align: 'right',
 			width: 100,	//150,
 			sortable: true,
+			readOnly: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -1040,23 +1049,24 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Gudang' + '</div>',
 			dataIndex: 'rawat_gudang',
 			width: 150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_gudangDataSore,
 				mode: 'remote',
 				displayField: 'rawat_gudang_display',
 				valueField: 'rawat_gudang_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -1064,9 +1074,10 @@ Ext.onReady(function(){
 			dataIndex: 'rawat_kontribusi',
 			width: 150,
 			sortable: true,
-			hidden: true
+			hidden: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+		/*	,
 			editor: new Ext.form.ComboBox({
 				store: cbo_rawat_kontribusiDataSore,
 				mode: 'remote',
@@ -1074,16 +1085,17 @@ Ext.onReady(function(){
 				displayField: 'rawat_kontribusi_display',
 				valueField: 'rawat_kontribusi_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'rawat_aktif',
 			width: 80,	//150,
-			sortable: true
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1096,7 +1108,7 @@ Ext.onReady(function(){
                	valueField: 'rawat_aktif_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            })*/
 			<?php } ?>
 		}, 
 		{

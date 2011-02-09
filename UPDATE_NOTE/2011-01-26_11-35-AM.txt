@@ -1,0 +1,2 @@
+[update by zaqi.smart@gmail.com]
+- Fix bug, print laporan stok mutasi

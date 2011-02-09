@@ -66,7 +66,11 @@ class M_stok_mutasi extends Model{
 				$sql.="	produk_kode LIKE '%".addslashes($filter)."%' OR
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
+			
+			$sql.=" ORDER BY produk_id ASC";
 
+//			$this->firephp->log($sql);
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 
