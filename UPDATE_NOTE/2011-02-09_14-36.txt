@@ -1,0 +1,2 @@
+ubah view `vu_detail_jual_produk`, `vu_detail_jual_rawat`, `vu_detail_jual_paket` untuk menambahkan 
+cara bayar, total biaya, total bayar, disk persen, voucher untuk kepentingan format laporan baru.
