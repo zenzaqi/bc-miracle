@@ -1134,6 +1134,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'App' + '</div>',
 			dataIndex: 'dtrawat_jam',
+			align: 'center',
 			width: 50,
 			sortable: true,
 			renderer: function(value, cell, record){
@@ -1143,10 +1144,11 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Dtg' + '</div>',
 			dataIndex: 'dtrawat_jam_datang',
+			align: 'center',
 			width: 50,
 			sortable: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,5);
+				return '<span style="color:red;">' + value.substring(0,5) + '</span>';
 			}
 		}, 
 		{
@@ -1177,31 +1179,34 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Siap' + '</div>',
 			dataIndex: 'dtrawat_jam_siap',
+			align: 'center',
 			width: 50,
 			sortable: true,
 			hidden: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,5);
+				return '<span style="color:green;">' + value.substring(0,5) + '</span>';
 			}
 		}, 
 		{
 			header: '<div align="center">' + 'Est Sls' + '</div>',
 			dataIndex: 'est_jam_selesai',
+			align: 'center',
 			width: 50,
 			sortable: true,
 			hidden: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,5);
+				return '<span style="color:blue;">' + value.substring(0,5) + '</span>';
 			}
 		}, 
 		{
 			header: '<div align="center">' + 'Sls' + '</div>',
 			dataIndex: 'dtrawat_jam_selesai',
+			align: 'center',
 			width: 50,
 			sortable: true,
 			hidden: true,
 			renderer: function(value, cell, record){
-				return value.substring(0,5);
+				return '<span style="color:blue;"><b>' + value.substring(0,5) + '</b></span>';
 			}
 		}, 
 				
