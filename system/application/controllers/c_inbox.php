@@ -16,12 +16,12 @@ class C_inbox extends Controller {
 	//constructor
 	function C_inbox(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_inbox', '', TRUE);
 	}
 	
 	//set index
 	function index(){
-		session_start();
 		$this->load->helper('asset');
 		$this->load->view('main/v_inbox');
 	}
@@ -77,16 +77,32 @@ class C_inbox extends Controller {
 		$inbox_message=trim(@$_POST["inbox_message"]);
 		$inbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_message);
 		$inbox_message=str_replace("'", "''",$inbox_message);
+		$inbox_status=trim(@$_POST["inbox_status"]);
+		$inbox_status=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_status);
+		$inbox_status=str_replace("'", "''",$inbox_status);
 		$inbox_date=trim(@$_POST["inbox_date"]);
 		$inbox_creator=@$_SESSION[SESSION_USERID];
 		$inbox_date_create=date('m/d/Y');
 		//$inbox_update=NULL;
 		//$inbox_date_update=NULL;
 		//$inbox_revised=0;
-		$result=$this->m_inbox->inbox_create($inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create );
+		$result=$this->m_inbox->inbox_create($inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create,$inbox_status );
 		echo $result;
 	}
 	
+	function inbox_save(){
+		$result=0;
+		$inbox_pengirim 	= (isset($_POST['inbox_pengirim']) ? @$_POST['inbox_pengirim'] : @$_GET['inbox_pengirim']);
+		$inbox_isi 		= (isset($_POST['inbox_isi']) ? @$_POST['inbox_isi'] : @$_GET['inbox_isi']);
+		$inbox_task 	= (isset($_POST['inbox_task']) ? @$_POST['inbox_task'] : @$_GET['inbox_task']);
+		$inbox_id=trim(@$_POST["inbox_id"]);
+		
+		$inbox_isi=htmlspecialchars($inbox_isi,ENT_QUOTES);
+		
+		$result=$this->m_inbox->inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$inbox_id);
+		
+		echo $result;
+	}
 	
 	//function for update record
 	function inbox_update(){
@@ -98,13 +114,16 @@ class C_inbox extends Controller {
 		$inbox_message=trim(@$_POST["inbox_message"]);
 		$inbox_message=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_message);
 		$inbox_message=str_replace("'", "''",$inbox_message);
+		$inbox_status=trim(@$_POST["inbox_status"]);
+		$inbox_status=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_status);
+		$inbox_status=str_replace("'", "''",$inbox_status);
 		$inbox_date=trim(@$_POST["inbox_date"]);
 		//$inbox_creator="inbox_creator";
 		//$inbox_date_create="inbox_date_create";
 		$inbox_update=@$_SESSION[SESSION_USERID];
 		$inbox_date_update=date('m/d/Y');
 		//$inbox_revised="(revised+1)";
-		$result = $this->m_inbox->inbox_update($inbox_id,$inbox_sender,$inbox_message,$inbox_date,$inbox_update,$inbox_date_update);
+		$result = $this->m_inbox->inbox_update($inbox_id,$inbox_sender,$inbox_message,$inbox_date,$inbox_update,$inbox_date_update,$inbox_status);
 		echo $result;
 	}
 	
