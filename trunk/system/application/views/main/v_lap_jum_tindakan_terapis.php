@@ -110,7 +110,7 @@ var today=new Date().format('d-m-Y');
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+var pageS=25;
 
 /* declare variable here for Field*/
 //var lap_jum_tindakan_terapis_idField;
@@ -691,11 +691,20 @@ Ext.onReady(function(){
 	function lap_jum_tindakan_terapis_export_excel(){
 		var searchquery = "";
 		var tindakan_dokter_2excel=null;
+		var lap_jum_tindakan_terapis_tgl_start_search=null;
+		var lap_jum_tindakan_terapis_tgl_end_search=null;
+		var lap_jum_tindakan_terapis_dokter_search=null;
+		var lap_jum_tindakan_terapis_groupby_search=null;
 		var win;              
 		// check if we do have some search data...
 		if(lap_jum_tindakan_terapisDataStore.baseParams.query!==null){searchquery = lap_jum_tindakan_terapisDataStore.baseParams.query;}
-		if(lap_jum_tindakan_terapisDataStore.baseParams.terapis_id!==null){tindakan_dokter_2excel = lap_jum_tindakan_terapisDataStore.baseParams.terapis_id;}
+		//if(lap_jum_tindakan_terapisDataStore.baseParams.terapis_id!==null){tindakan_dokter_2excel = lap_jum_tindakan_terapisDataStore.baseParams.terapis_id;}
+		if(Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue();}
+		if(Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue();}
+		if(lap_jum_tindakan_terapis_dokterSearchField.getValue()!==null){lap_jum_tindakan_terapis_dokter_search=lap_jum_tindakan_terapis_dokterSearchField.getValue();}
+		if(lap_jum_tindakan_terapis_groupbyField.getValue()!==null){lap_jum_tindakan_terapis_groupby_search=lap_jum_tindakan_terapis_groupbyField.getValue();}
 
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_lap_jum_tindakan_terapis&m=get_action',
@@ -703,7 +712,11 @@ Ext.onReady(function(){
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			terapis_id : tindakan_dokter_2excel,
+			//terapis_id : tindakan_dokter_2excel,
+			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
+			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
+			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
+			lapjum_groupby	: lap_jum_tindakan_terapis_groupby_search,
 		  	currentlisting: lap_jum_tindakan_terapisDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
