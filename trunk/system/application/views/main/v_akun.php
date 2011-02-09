@@ -80,6 +80,7 @@ var akun_debetSearchField;
 var akun_kreditSearchField;
 var akun_saldoSearchField;
 var akun_aktifSearchField;
+var akun_deptField;
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -100,11 +101,13 @@ Ext.onReady(function(){
 			var akun_kredit_field=null; 
 			var akun_saldo_field=null; 
 			var akun_aktif_field=null; 
+			var akun_dept_field=null;
 
 			akun_id_field_pk=get_pk_id();
 			if(akun_kodeField.getValue()!== null){akun_kode_field = akun_kodeField.getValue();} 
 			if(akun_jenisField.getValue()!== null){akun_jenis_field = akun_jenisField.getValue();} 
-			if(akun_parentField.getValue()!== null){akun_parent_field = akun_parentField.getValue();} 
+			if(akun_parentField.getValue()!== null){akun_parent_field = akun_parentField.getValue();}
+			if(akun_deptField.getValue()!== null){akun_dept_field = akun_deptField.getValue();} 			
 			//if(akun_levelField.getValue()!== null){akun_level_field = akun_levelField.getValue();} 
 			if(akun_namaField.getValue()!== null){akun_nama_field = akun_namaField.getValue();} 
 			if(akun_debetField.getValue()!== null){akun_debet_field = convertToNumber(akun_debetField.getValue());} 
@@ -120,6 +123,7 @@ Ext.onReady(function(){
 					akun_kode	: akun_kode_field, 
 					akun_jenis	: akun_jenis_field, 
 					akun_parent	: akun_parent_field, 
+					akun_departemen	: akun_dept_field,
 					//akun_level	: akun_level_field, 
 					akun_nama	: akun_nama_field, 
 					akun_debet	: akun_debet_field, 
@@ -134,6 +138,7 @@ Ext.onReady(function(){
 						case 1:
 							Ext.MessageBox.alert(post2db+' OK','Data Kode Akun berhasil disimpan.');
 							akun_DataStore.reload();
+							cbo_akun_departemen_DataStore.reload();
 							akun_saveWindow.hide();
 							break;
 						default:
@@ -200,6 +205,8 @@ Ext.onReady(function(){
 		akun_saldoField.setValue('Debet');
 		akun_aktifField.reset();
 		akun_aktifField.setValue('Aktif');
+		akun_deptField.reset();
+		akun_deptField.setValue(null);
 	}
  	/* End of Function */
   
@@ -208,6 +215,7 @@ Ext.onReady(function(){
 		akun_kodeField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_kode'));
 		akun_jenisField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_jenis'));
 		akun_parentField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_parent'));
+		akun_deptField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_departemen'));
 		//akun_levelField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_level'));
 		akun_namaField.setValue(akunListEditorGrid.getSelectionModel().getSelected().get('akun_nama'));
 		akun_debetField.setValue(CurrencyFormatted(akunListEditorGrid.getSelectionModel().getSelected().get('akun_debet')));
@@ -227,6 +235,7 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+	cbo_akun_departemen_DataStore.reload();
 		if(!akun_saveWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
@@ -353,7 +362,8 @@ Ext.onReady(function(){
 			{name: 'akun_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_create'}, 
 			{name: 'akun_update', type: 'string', mapping: 'akun_update'}, 
 			{name: 'akun_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'akun_date_update'}, 
-			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'} 
+			{name: 'akun_revised', type: 'int', mapping: 'akun_revised'},
+			{name: 'akun_departemen', type: 'string', mapping: 'departemen_nama'},
 		]),
 		sortInfo:{field: 'akun_id', direction: "ASC"}
 	});
@@ -379,10 +389,28 @@ Ext.onReady(function(){
 			{name: 'akun_nama', type: 'string', mapping: 'akun_nama'}, 
 			{name: 'akun_debet', type: 'float', mapping: 'akun_debet'}, 
 			{name: 'akun_kredit', type: 'float', mapping: 'akun_kredit'}, 
-			{name: 'akun_saldo', type: 'string', mapping: 'akun_saldo'}
+			{name: 'akun_saldo', type: 'string', mapping: 'akun_saldo'},
+			{name: 'akun_departemen', type: 'string', mapping: 'departemen_nama'}
 		]),
 		sortInfo:{field: 'akun_id', direction: "DESC"}
 	});
+	
+	cbo_akun_departemen_DataStore = new Ext.data.Store({
+		id: 'cbo_akun_departemen_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_akun&m=get_akun_departemen_list', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+			{name: 'akun_departemen_display', type: 'string', mapping: 'departemen_nama'},
+			{name: 'akun_departemen_value', type: 'int', mapping: 'departemen_id'}
+		]),
+		sortInfo:{field: 'akun_departemen_value', direction: "ASC"}
+	});
+	
 	
 	//function combo render
 	Ext.util.Format.comboRenderer = function(combo){		
@@ -680,6 +708,24 @@ Ext.onReady(function(){
 		hideTrigger: false
 	});
 	
+	/* Identify  dept field */
+	akun_deptField= new Ext.form.ComboBox({
+		id: 'akun_deptField',
+		fieldLabel: 'Departemen',
+		store: cbo_akun_departemen_DataStore,
+		mode: 'remote',
+		displayField: 'akun_departemen_display',
+		valueField: 'akun_departemen_value',
+		loadingText: 'Searching...',
+		typeAhead: false,
+		pageSize: pageS,
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		hideTrigger: false
+	});
+	
 	akun_parent_kodeField= new Ext.form.TextField({
 		id: 'akun_parent_kodeField',
 		fieldLabel: 'Kode Induk',
@@ -776,7 +822,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [akun_kodeField, akun_parentField, akun_parent_kodeField, akun_namaField, akun_jenisField, 
+				items: [akun_kodeField, akun_deptField, akun_parentField, akun_parent_kodeField, akun_namaField, akun_jenisField, 
 						akun_debetField, akun_kreditField, akun_saldoField, akun_aktifField] 
 			}
 			],
@@ -864,6 +910,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		akun_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		akun_DataStore.reload({params: {start: 0, limit: pageS}});
+		cbo_akun_departemen_DataStore.reload();
 		akun_searchWindow.close();
 	};
 	/* End of Fuction */

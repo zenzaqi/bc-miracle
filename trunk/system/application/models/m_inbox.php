@@ -20,7 +20,7 @@ class M_inbox extends Model{
 		
 		//function for get list record
 		function inbox_list($filter,$start,$end){
-			$query = "SELECT * FROM inbox";
+			$query = "SELECT * FROM inbox WHERE inbox_status!='Hide'";
 			
 			// For simple search
 			// For simple search
@@ -48,18 +48,59 @@ class M_inbox extends Model{
 			}
 		}
 		
+		function inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$inbox_id){
+			$sql="";
+			//yg disimpan cukup message & tanggalnya aja. by hendri 2010-06-16
+			if($inbox_task=='draft'){
+				$sql="insert into draft(
+						draft_message,
+						draft_date,
+						draft_creator,
+						draft_date_create)
+					 values(
+						'".$inbox_isi."',
+						'".date('Y/m/d H:i:s')."',
+						'".$_SESSION[SESSION_USERID]."',
+						'".date('Y/m/d H:i:s')."')";
+				$this->db->query($sql);
+				//echo $sql;
+			}
+			else{
+				$sql="insert into outbox(
+						outbox_destination,
+						outbox_message,
+						outbox_date,
+						outbox_status,
+						outbox_creator,
+						outbox_date_create)
+					values(
+						'".$inbox_pengirim."',
+						'".$inbox_isi."',
+						'".date('Y/m/d H:i:s')."',
+						'unsent',
+						'".$_SESSION[SESSION_USERID]."',
+						'".date('Y/m/d H:i:s')."')";
+				
+				$sql2="update inbox set inbox_status='Replied' where inbox_id='".$inbox_id."'";
+				$this->db->query($sql);
+				$this->db->query($sql2);
+				$sql="";				
+			}	
+			return '1';
+		}
 		
-		//fcuntion for delete record
+		
+		//fcuntion for delete record (tidak benar2 dhapus, hanya dihide)
 		function inbox_delete($pkid){
 			// You could do some checkups here and return '0' or other error consts.
 			// Make a single query to delete all of the inboxs at the same time :
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM inbox WHERE inbox_id = ".$pkid[0];
+				$query = "UPDATE inbox SET inbox_status='Hide' WHERE inbox_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
-				$query = "DELETE FROM inbox WHERE ";
+				$query = "UPDATE inbox SET inbox_status='Hide' WHERE ";
 				for($i = 0; $i < sizeof($pkid); $i++){
 					$query = $query . "inbox_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){

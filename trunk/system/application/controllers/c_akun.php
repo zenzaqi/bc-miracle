@@ -77,6 +77,11 @@ class C_akun extends Controller {
 		echo $result;
 	}
 	
+	function get_akun_departemen_list(){
+		$result=$this->m_akun->get_akun_departemen_list();
+		echo $result;
+	}
+	
 	//function for create new record
 	function akun_create(){
 		//POST varible here
@@ -95,11 +100,12 @@ class C_akun extends Controller {
 		$akun_aktif=str_replace("'", "''",$akun_aktif);
 		$akun_creator=@$_SESSION[SESSION_USERID];
 		$akun_date_create=date(LONG_FORMATDATE);
+		$akun_departemen=trim(@$_POST["akun_departemen"]);
 		$akun_level="";
 		//$akun_update=NULL;
 		//$akun_date_update=NULL;
 		//$akun_revised=0;
-		$result=$this->m_akun->akun_create($akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create );
+		$result=$this->m_akun->akun_create($akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,$akun_creator ,$akun_date_create,$akun_departemen );
 		echo $result;
 	}
 	
@@ -125,12 +131,13 @@ class C_akun extends Controller {
 		$akun_aktif=trim(@$_POST["akun_aktif"]);
 		$akun_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$akun_aktif);
 		$akun_aktif=str_replace("'", "''",$akun_aktif);
+		$akun_departemen=trim(@$_POST["akun_departemen"]);
 		//$akun_creator="akun_creator";
 		//$akun_date_create="akun_date_create";
 		$akun_update=@$_SESSION[SESSION_USERID];
 		$akun_date_update=date(LONG_FORMATDATE);
 		//$akun_revised="(revised+1)";
-		$result = $this->m_akun->akun_update($akun_id,$akun_kode,$akun_jenis,$akun_parent,$akun_level,$akun_nama,$akun_debet,$akun_kredit,$akun_saldo,$akun_aktif,$akun_update,$akun_date_update);
+		$result = $this->m_akun->akun_update($akun_id,$akun_kode,$akun_jenis,$akun_parent,$akun_level,$akun_nama,$akun_debet,$akun_kredit,$akun_saldo,$akun_aktif,$akun_update,$akun_date_update,$akun_departemen);
 		echo $result;
 	}
 	

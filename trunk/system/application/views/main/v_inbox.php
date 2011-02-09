@@ -51,6 +51,7 @@ var inbox_saveForm;
 var inbox_saveWindow;
 var inbox_searchForm;
 var inbox_searchWindow;
+var inbox_replyWindow;
 var inbox_SelectedRow;
 var inbox_ContextMenu;
 
@@ -68,6 +69,8 @@ var inbox_idSearchField;
 var inbox_senderSearchField;
 var inbox_messageSearchField;
 var inbox_dateSearchField;
+var max_isi=320;
+var dua_sms = 'no';
 
 var taskinbox = {
 	run: function(){
@@ -83,6 +86,89 @@ Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
 //   runinbox.start(taskinbox); //ditutup sementara, karena selalu refresh ke hal 1 misalnya kita sudah ke hal 2 dst. 2010-08-04
+  
+  /* Function for add and edit data form, open window form */
+	function inbox_save(post2db){
+	
+		if(is_inbox_form_valid()){
+			var inbox_pk="";
+			var inbox_status="";
+			var inbox_pengirim="";
+			var inbox_isi="";
+			var inbox_id_temp="";
+			var balas=1;
+			
+			if(inbox_detailField.getValue()!=="") inbox_isi=inbox_detailField.getValue();
+			if(inbox_idField.getValue()!=="") inbox_id_temp=inbox_idField.getValue();
+			inbox_pengirim=inbox_pengirimField.getValue();
+			
+			Ext.Ajax.request({  
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_inbox&m=inbox_save',
+				timeout: 3600000,
+				params: {
+					inbox_pengirim	: inbox_pengirim,
+					inbox_isi	: inbox_isi,
+					inbox_status: inbox_status,
+					inbox_id :inbox_id_temp,
+					inbox_task	: post2db
+				}, 
+				success: function(response){             
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							if (post2db=='send') {
+								Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+							}
+							else {
+								Ext.MessageBox.alert(post2db+' OK','New SMS berhasil disimpan di Draft SMS');
+							}
+							mainPanel.remove(mainPanel.getActiveTab().getId());
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'New SMS tidak bisa disimpan',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}        
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
+			
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Form anda belum lengkap',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	
+	}
+ 	/* End of Function */  
+  
+	function inboxreply_set_form(){
+		inbox_pengirimField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_sender'));	
+		inbox_idField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_id'));
+	}  
+	
+	function is_inbox_form_valid(){
+		return (inbox_detailField.isValid());
+	}
   
   	/* Function for Delete Confirm */
 	function inbox_confirm_delete(){
@@ -103,7 +189,30 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
-	  
+	/* Function for Update Confirm */
+	function inbox_confirm_reply(){
+		//Ext.getCmp('btn_saveclose').setVisible(false);
+		/* only one record is selected here */
+		if(inboxListEditorGrid.selModel.getCount() == 1) {
+			inboxreply_set_form();
+			display_form_save_window();
+			
+			//msg='updated';
+			
+			//customer_createWindow.show();
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+//				msg: 'Tidak ada data yang dipilih untuk diedit',
+				msg: 'Anda belum memilih pesan yang akan dibalas',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+	
   	/* Function for Delete Record */
 	function inbox_delete(btn){
 		if(btn=='yes'){
@@ -170,7 +279,8 @@ Ext.onReady(function(){
 			{name: 'inbox_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'inbox_date_create'}, 
 			{name: 'inbox_update', type: 'string', mapping: 'inbox_update'}, 
 			{name: 'inbox_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'inbox_date_update'}, 
-			{name: 'inbox_revised', type: 'int', mapping: 'inbox_revised'} 
+			{name: 'inbox_revised', type: 'int', mapping: 'inbox_revised'},
+			{name: 'inbox_status', type: 'string', mapping: 'inbox_status'},
 		]),
 		sortInfo:{field: 'inbox_id', direction: "DESC"}
 	});
@@ -200,7 +310,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Pengirim</div>',
 			dataIndex: 'inbox_sender',
-			width: 20,
+			width: 30,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -211,6 +321,13 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true
 		}, 
+		{
+			header: '<div align="center">Status</div>',
+			dataIndex: 'inbox_status',
+			width: 20,
+			sortable: true,
+			readOnly: true
+		},
 		{
 			header: 'Creator',
 			dataIndex: 'inbox_creator',
@@ -276,6 +393,12 @@ Ext.onReady(function(){
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		{
+			text: 'Reply',
+			tooltip: 'Reply selected record',
+			iconCls:'icon-search',
+			handler: inbox_confirm_reply 
+		}, '-',
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
 		{
 			text: 'Delete',
@@ -319,12 +442,17 @@ Ext.onReady(function(){
 	inbox_ContextMenu = new Ext.menu.Menu({
 		id: 'inbox_ListEditorGridContextMenu',
 		items: [
+		{
+			text: 'Reply',
+			tooltip: 'Reply selected record',
+			iconCls:'icon-search',
+			handler: inbox_confirm_reply 
+		}, '-',
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			disabled: true,
 			handler: inbox_confirm_delete 
 		},
 		<?php } ?>
@@ -467,7 +595,120 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
-	 
+	
+	inbox_idField = new Ext.form.NumberField({
+	id: 'inbox_idField'
+	});
+	
+	inbox_pengirimField= new Ext.form.TextArea({
+		id: 'inbox_pengirimField',
+		fieldLabel: 'Pengirim',
+		bodyStyle:'padding:5px',
+		width:150,
+		//anchor: '95%',
+		height:20,
+		allowBlank: false,
+		readOnly : true
+	});
+	
+	inbox_detailField= new Ext.form.TextArea({
+		id: 'inbox_detailField',
+		fieldLabel: 'Isi Pesan',
+		maxLength: 500,
+		bodyStyle:'padding:5px',
+		anchor: '95%',
+		allowBlank: false,
+		enableKeyEvents: true,
+		maxLength: 320
+	});
+	
+	inbox_count_isiField= new Ext.form.NumberField({
+		width: 40
+	});
+	
+	inbox_detailField.on('keyup', function(){
+		var isi_length = inbox_detailField.getValue().length;
+		var sisa_length = max_isi - isi_length;
+		inbox_count_isiField.setValue(isi_length);
+		if(dua_sms=='no' && isi_length==161){
+			//* satu sms terlewati /
+			Ext.Msg.alert('Content SMS', 'Pengiriman = 2 SMS.');
+			dua_sms = 'yes';
+		}else if(isi_length==321){
+			//* dua sms terlewati /
+			Ext.MessageBox.show({
+				title: 'Warning',
+				width: 200,
+				msg: 'Maksimal pengiriman adalah 2 SMS.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			 });
+		}else if(isi_length==160 && dua_sms=='yes'){
+			dua_sms = 'no';
+		}
+	});
+	
+
+	/* Function for retrieve reply Form Panel */
+	inbox_saveForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 500,        
+		items: [{
+			layout:'column',
+			border:false,
+			items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [inbox_pengirimField, inbox_detailField, inbox_count_isiField] 
+			}
+			]
+		}]
+		,
+		buttons: [{
+				text: 'Send',
+				handler: function(){ inbox_save('send'); }
+			},{
+				text: 'Save to Draft',
+				handler: function(){ inbox_save('draft'); }
+			}
+			,{
+				text: 'Cancel',
+				handler: function(){
+					//mainPanel.remove(mainPanel.getActiveTab().getId());
+					inbox_saveWindow.hide();
+				}
+			}
+		]
+	});
+    /* End of Function */ 
+
+	/* Function for retrieve create Window Form */
+	inbox_saveWindow= new Ext.Window({
+		id: 'inbox_saveWindow',
+		title: 'Reply SMS',
+		closable:false,
+		closeAction: 'close',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_inbox_save',
+		items: inbox_saveForm
+	});
+	/* End Window */
+	
+
+	//inbox_saveWindow.show();
+	//sms_count_isiField.setValue(max_isi);
+	
 	/* Function for retrieve search Window Form, used for andvaced search */
 	inbox_searchWindow = new Ext.Window({
 		title: 'Pencarian Inbox SMS',
@@ -484,13 +725,23 @@ Ext.onReady(function(){
 		items: inbox_searchForm
 	});
     /* End of Function */ 
-	 
+	
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!inbox_searchWindow.isVisible()){
 			inbox_searchWindow.show();
 		} else {
 			inbox_searchWindow.toFront();
+		}
+	}
+  	/* End Function */
+	
+	/* Function for Displaying  Search Window Form */
+	function display_form_save_window(){
+		if(!inbox_saveWindow.isVisible()){
+			inbox_saveWindow.show();
+		} else {
+			inbox_saveWindow.toFront();
 		}
 	}
   	/* End Function */

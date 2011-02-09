@@ -1,0 +1,2 @@
+1. vcm_inbox : reply inbox
+2. 2011-02-04_15-00.sql : menambah field status pada tabel inbox
