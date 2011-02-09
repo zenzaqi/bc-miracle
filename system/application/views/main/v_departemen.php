@@ -61,6 +61,7 @@ var pageS=15;
 /* declare variable here */
 var departemen_idField;
 var departemen_namaField;
+var departemen_kode_akunField;
 var departemen_keteranganField;
 var departemen_aktifField;
 
@@ -133,11 +134,13 @@ Ext.onReady(function(){
 		
 		var departemen_id_create_pk=null;
 		var departemen_nama_create=null;
+		var departemen_kode_akun_create=null;
 		var departemen_keterangan_create=null;
 		var departemen_aktif_create=null;
 
 		departemen_id_create_pk=get_pk_id();
 		if(departemen_namaField.getValue()!== null){departemen_nama_create = departemen_namaField.getValue();}
+		if(departemen_kode_akunField.getValue()!== null){departemen_kode_akun_create = departemen_kode_akunField.getValue();}
 		if(departemen_keteranganField.getValue()!== null){departemen_keterangan_create = departemen_keteranganField.getValue();}
 		if(departemen_aktifField.getValue()!== null){departemen_aktif_create = departemen_aktifField.getValue();}
 
@@ -147,6 +150,7 @@ Ext.onReady(function(){
 				params: {
 					task: post2db,
 					departemen_id	: departemen_id_create_pk,	
+					departemen_kode_akun	: departemen_kode_akun_create,	
 					departemen_nama	: departemen_nama_create,	
 					departemen_keterangan	: departemen_keterangan_create,	
 					departemen_aktif	: departemen_aktif_create,	
@@ -206,6 +210,8 @@ Ext.onReady(function(){
 	function departemen_reset_form(){
 		departemen_namaField.reset();
 		departemen_namaField.setValue(null);
+		departemen_kode_akunField.reset();
+		departemen_kode_akunField.setValue(null);
 		departemen_keteranganField.reset();
 		departemen_keteranganField.setValue(null);
 		departemen_aktifField.reset();
@@ -216,6 +222,7 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function departemen_set_form(){
 		departemen_namaField.setValue(departemenListEditorGrid.getSelectionModel().getSelected().get('departemen_nama'));
+		departemen_kode_akunField.setValue(departemenListEditorGrid.getSelectionModel().getSelected().get('departemen_kode_akun'));
 		departemen_keteranganField.setValue(departemenListEditorGrid.getSelectionModel().getSelected().get('departemen_keterangan'));
 		departemen_aktifField.setValue(departemenListEditorGrid.getSelectionModel().getSelected().get('departemen_aktif'));
 	}
@@ -223,7 +230,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_departemen_form_valid(){
-		return (departemen_namaField.isValid());
+		return (departemen_namaField.isValid() && departemen_kode_akunField.isValid());
 	}
   	/* End of Function */
   
@@ -343,6 +350,7 @@ Ext.onReady(function(){
 		},[
 			{name: 'departemen_id', type: 'int', mapping: 'departemen_id'},
 			{name: 'departemen_nama', type: 'string', mapping: 'departemen_nama'},
+			{name: 'departemen_kode_akun', type: 'string', mapping: 'departemen_kode_akun'},
 			{name: 'departemen_keterangan', type: 'string', mapping: 'departemen_keterangan'},
 			{name: 'departemen_aktif', type: 'string', mapping: 'departemen_aktif'},
 			{name: 'departemen_creator', type: 'string', mapping: 'departemen_creator'},
@@ -624,8 +632,20 @@ Ext.onReady(function(){
 		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
 		maxLength: 250,
 		allowBlank: false,
+
 		anchor: '95%'
 	});
+	
+	/* Identify  departemen_kode_akun Field */
+	departemen_kode_akunField= new Ext.form.TextField({
+		id: 'departemen_kode_akunField',
+		fieldLabel: 'Kode Dept <span style="color: #ec0000">*</span>',
+		maxLength: 2,
+		allowBlank: false,
+		maskRe: /([0-9]+)$/,
+		anchor: '95%'
+	});
+	
 	/* Identify  departemen_keterangan Field */
 	departemen_keteranganField= new Ext.form.TextArea({
 		id: 'departemen_keteranganField',
@@ -664,7 +684,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [departemen_namaField, departemen_keteranganField, departemen_aktifField] 
+				items: [departemen_kode_akunField, departemen_namaField, departemen_keteranganField, departemen_aktifField] 
 			}
 			]
 		}]

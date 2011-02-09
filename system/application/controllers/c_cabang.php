@@ -73,6 +73,14 @@ class C_cabang extends Controller {
 	function cabang_update(){
 		//POST variable here
 		$cabang_id=trim(@$_POST["cabang_id"]);
+		$cabang_kode_akun=trim(@$_POST["cabang_kode_akun"]);
+		$cabang_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode_akun);
+		$cabang_kode_akun=str_replace(",", ",",$cabang_kode_akun);
+		$cabang_kode_akun=str_replace("'", '"',$cabang_kode_akun);
+		$cabang_kode=trim(@$_POST["cabang_kode"]);
+		$cabang_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode);
+		$cabang_kode=str_replace(",", ",",$cabang_kode);
+		$cabang_kode=str_replace("'", '"',$cabang_kode);
 		$cabang_nama=trim(@$_POST["cabang_nama"]);
 		$cabang_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_nama);
 		$cabang_nama=str_replace(",", ",",$cabang_nama);
@@ -101,7 +109,7 @@ class C_cabang extends Controller {
 		$cabang_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_aktif);
 		$cabang_aktif=str_replace(",", ",",$cabang_aktif);
 		$cabang_aktif=str_replace("'", '"',$cabang_aktif);
-		$result = $this->m_cabang->cabang_update($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif );
+		$result = $this->m_cabang->cabang_update($cabang_id ,$cabang_kode, $cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif );
 		echo $result;
 	}
 	
@@ -109,6 +117,12 @@ class C_cabang extends Controller {
 	function cabang_create(){
 		//POST varible here
 		//auto increment, don't accept anything from form values
+		$cabang_kode=trim(@$_POST["cabang_kode"]);
+		$cabang_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode);
+		$cabang_kode=str_replace("'", '"',$cabang_kode);
+		$cabang_kode_akun=trim(@$_POST["cabang_kode_akun"]);
+		$cabang_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode_akun);
+		$cabang_kode_akun=str_replace("'", '"',$cabang_kode_akun);
 		$cabang_nama=trim(@$_POST["cabang_nama"]);
 		$cabang_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_nama);
 		$cabang_nama=str_replace("'", '"',$cabang_nama);
@@ -130,7 +144,7 @@ class C_cabang extends Controller {
 		$cabang_aktif=trim(@$_POST["cabang_aktif"]);
 		$cabang_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_aktif);
 		$cabang_aktif=str_replace("'", '"',$cabang_aktif);
-		$result=$this->m_cabang->cabang_create($cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif );
+		$result=$this->m_cabang->cabang_create($cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif );
 		echo $result;
 	}
 
@@ -178,6 +192,12 @@ class C_cabang extends Controller {
 	function cabang_print(){
   		//POST varibale here
 		$cabang_id=trim(@$_POST["cabang_id"]);
+		$cabang_kode=trim(@$_POST["cabang_kode"]);
+		$cabang_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode);
+		$cabang_kode=str_replace("'", '"',$cabang_kode);
+		$cabang_kode_akun=trim(@$_POST["cabang_kode_akun"]);
+		$cabang_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode_akun);
+		$cabang_kode_akun=str_replace("'", '"',$cabang_kode_akun);
 		$cabang_nama=trim(@$_POST["cabang_nama"]);
 		$cabang_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_nama);
 		$cabang_nama=str_replace("'", '"',$cabang_nama);
@@ -202,7 +222,7 @@ class C_cabang extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_cabang->cabang_print($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter);
+		$result = $this->m_cabang->cabang_print($cabang_id ,$cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=12;
    		/* We now have our array, let's build our HTML file */
@@ -249,6 +269,12 @@ class C_cabang extends Controller {
 	function cabang_export_excel(){
 		//POST varibale here
 		$cabang_id=trim(@$_POST["cabang_id"]);
+		$cabang_kode=trim(@$_POST["cabang_kode"]);
+		$cabang_kode=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode);
+		$cabang_kode=str_replace("'", '"',$cabang_kode);
+		$cabang_kode_akun=trim(@$_POST["cabang_kode_akun"]);
+		$cabang_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_kode_akun);
+		$cabang_kode_akun=str_replace("'", '"',$cabang_kode_akun);
 		$cabang_nama=trim(@$_POST["cabang_nama"]);
 		$cabang_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cabang_nama);
 		$cabang_nama=str_replace("'", '"',$cabang_nama);
@@ -273,7 +299,7 @@ class C_cabang extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_cabang->cabang_export_excel($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter);
+		$query = $this->m_cabang->cabang_export_excel($cabang_id ,$cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter);
 		
 		to_excel($query,"cabang"); 
 		echo '1';

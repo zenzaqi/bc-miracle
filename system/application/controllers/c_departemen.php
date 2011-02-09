@@ -76,7 +76,10 @@ class C_departemen extends Controller {
 		$departemen_nama=trim(@$_POST["departemen_nama"]);
 		$departemen_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_nama);
 		$departemen_nama=str_replace(",", ",",$departemen_nama);
-		$departemen_nama=str_replace("'", '"',$departemen_nama);
+		$departemen_kode_akun=trim(@$_POST["departemen_kode_akun"]);
+		$departemen_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_kode_akun);
+		$departemen_kode_akun=str_replace(",", ",",$departemen_kode_akun);
+		$departemen_kode_akun=str_replace("'", '"',$departemen_kode_akun);
 		$departemen_keterangan=trim(@$_POST["departemen_keterangan"]);
 		$departemen_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_keterangan);
 		$departemen_keterangan=str_replace(",", ",",$departemen_keterangan);
@@ -85,7 +88,7 @@ class C_departemen extends Controller {
 		$departemen_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_aktif);
 		$departemen_aktif=str_replace(",", ",",$departemen_aktif);
 		$departemen_aktif=str_replace("'", '"',$departemen_aktif);
-		$result = $this->m_departemen->departemen_update($departemen_id ,$departemen_nama ,$departemen_keterangan ,$departemen_aktif );
+		$result = $this->m_departemen->departemen_update($departemen_id ,$departemen_nama ,$departemen_kode_akun,$departemen_keterangan ,$departemen_aktif );
 		echo $result;
 	}
 	
@@ -96,13 +99,16 @@ class C_departemen extends Controller {
 		$departemen_nama=trim(@$_POST["departemen_nama"]);
 		$departemen_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_nama);
 		$departemen_nama=str_replace("'", '"',$departemen_nama);
+		$departemen_kode_akun=trim(@$_POST["departemen_kode_akun"]);
+		$departemen_kode_akun=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_kode_akun);
+		$departemen_kode_akun=str_replace("'", '"',$departemen_kode_akun);
 		$departemen_keterangan=trim(@$_POST["departemen_keterangan"]);
 		$departemen_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_keterangan);
 		$departemen_keterangan=str_replace("'", '"',$departemen_keterangan);
 		$departemen_aktif=trim(@$_POST["departemen_aktif"]);
 		$departemen_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$departemen_aktif);
 		$departemen_aktif=str_replace("'", '"',$departemen_aktif);
-		$result=$this->m_departemen->departemen_create($departemen_nama ,$departemen_keterangan ,$departemen_aktif );
+		$result=$this->m_departemen->departemen_create($departemen_nama ,$departemen_kode_akun ,$departemen_keterangan ,$departemen_aktif );
 		echo $result;
 	}
 
