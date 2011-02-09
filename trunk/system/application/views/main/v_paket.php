@@ -749,11 +749,11 @@ Ext.onReady(function(){
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 20
-          	})
+          	})*/
 			<?php } ?>
 		},
 		{
@@ -769,11 +769,11 @@ Ext.onReady(function(){
 			width: 300,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
-          	})
+          	})*/
 			<?php } ?>
 		},
 		{
@@ -782,7 +782,7 @@ Ext.onReady(function(){
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -792,7 +792,7 @@ Ext.onReady(function(){
                	valueField: 'paket_group_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            })*/
 			<?php } ?>
 		},
 		{
@@ -813,7 +813,7 @@ Ext.onReady(function(){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -821,7 +821,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -833,7 +833,7 @@ Ext.onReady(function(){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
@@ -842,7 +842,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -852,7 +852,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -860,7 +860,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -873,7 +873,7 @@ Ext.onReady(function(){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -881,7 +881,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -893,7 +893,7 @@ Ext.onReady(function(){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			sortable: true,
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
@@ -901,7 +901,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 3,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -910,7 +910,7 @@ Ext.onReady(function(){
 			width: 80,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -923,7 +923,7 @@ Ext.onReady(function(){
                	valueField: 'paket_aktif_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            })*/
 			<?php } ?>
 		},
 		{

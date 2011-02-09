@@ -87,13 +87,17 @@ class C_stok_mutasi extends Controller {
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
 		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$option=@$_POST['currentlisting'];
+		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		
 /*		$data["data_print"] = $this->m_stok_mutasi->stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 																	  $tanggal_end,$option,$filter);*/
-		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
+		$data["data_print"]=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 													   $tanggal_end,$query,$start,$end,"print");
+		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
+		$data["gudang_nama"]= $this->m_public_function->get_gudang_nama($gudang);
 		
 		$print_view=$this->load->view("main/p_stok_mutasi.php",$data,TRUE);
 		if(!file_exists("print")){

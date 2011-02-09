@@ -1,0 +1,10 @@
+[by zaqi.smart@gmail.com ]
+- Update Laporan Order Beli
+  o Update view detail order beli : 2011-02-09_12-30-AM.sql
+- Update Produk
+  o Add kolom Saldo Awal dan Nilai Saldo awal
+  o Inline edit disable, menyebabkan error karena ada field aktif cabang
+- Update Perawatan
+  o Inline edit disable, menyebabkan error karena ada field aktif cabang
+- Update Paket
+  o Inline edit disable, menyebabkan error karena ada field aktif cabang

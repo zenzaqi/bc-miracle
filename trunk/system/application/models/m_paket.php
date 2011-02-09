@@ -804,8 +804,12 @@ class M_paket extends Model{
 						 paket_nama LIKE '%".addslashes($filter)."%' OR
 						 group_nama LIKE '%".addslashes($filter)."%' OR
 						 kategori2_nama LIKE '%".addslashes($filter)."%')";
-
+			$query.=" AND paket_aktif='Aktif'";
 		} else if($option=='SEARCH'){
+			
+			if ($paket_aktif==""){
+				$paket_aktif = "Aktif";
+			}
 			
 			if($paket_kode!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

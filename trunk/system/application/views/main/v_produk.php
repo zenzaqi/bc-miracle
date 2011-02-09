@@ -66,7 +66,8 @@ var produk_racikan_DataStore;
 var produk_racikanListEditorGrid;
 var produk_racikan_ColumnModel;
 var produk_racikan_reader;
-
+var produk_awal_jumlah;
+var produk_awal_nilai;
 //declare konstant
 var post2db = '';
 var msg = '';
@@ -92,6 +93,9 @@ var produk_volumeField;
 var produk_hargaField;
 var produk_keteranganField;
 var produk_aktifField;
+
+var produk_awal_jumlahField;
+var produk_awal_nilaiField;
 
 var produk_idSearchField;
 var produk_kodeSearchField;
@@ -224,7 +228,9 @@ Ext.onReady(function(){
 		var produk_harga_create=null; 
 		var produk_keterangan_create=null; 
 		var produk_aktif_create=null; 
-
+		var produk_awal_jumlah_create=null;
+		var produk_awal_nilai_create=null;
+		
 		if(produk_idField.getValue()!== null){produk_id_create_pk = produk_idField.getValue();}else{produk_id_create_pk=get_pk_id();} 
 		if(produk_kodeField.getValue()!== null){produk_kode_create = produk_kodeField.getValue();} 
 		if(produk_kodelamaField.getValue()!== null){produk_kodelama_create = produk_kodelamaField.getValue();} 
@@ -241,7 +247,9 @@ Ext.onReady(function(){
 		if(produk_hargaField.getValue()!== null){produk_harga_create = convertToNumber(produk_hargaField.getValue());} 
 		if(produk_keteranganField.getValue()!== null){produk_keterangan_create = produk_keteranganField.getValue();} 
 		if(produk_aktifField.getValue()!== null){produk_aktif_create = produk_aktifField.getValue();} 
-
+		if(produk_awal_jumlahField.getValue()!== null){produk_awal_jumlah_create = convertToNumber(produk_awal_jumlahField.getValue());} 
+		if(produk_awal_nilaiField.getValue()!== null){produk_awal_nilai_create = convertToNumber(produk_awal_nilaiField.getValue());} 
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_produk&m=get_action',
@@ -279,7 +287,9 @@ Ext.onReady(function(){
 				produk_aktif_lbk : produk_aktif_lbkField.getValue(),
 				produk_aktif_mnd : produk_aktif_mndField.getValue(),
 				produk_aktif_ygk : produk_aktif_ygkField.getValue(),
-				produk_aktif_mlg : produk_aktif_mlgField.getValue()
+				produk_aktif_mlg : produk_aktif_mlgField.getValue(),
+				produk_awal_jumlah : produk_awal_jumlah_create,
+				produk_awal_nilai : produk_awal_nilai_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -426,6 +436,11 @@ Ext.onReady(function(){
 		
 		combo_produk_satuan.setDisabled(false);
 		combo_produk_nilai.setDisabled(false);
+		
+		produk_awal_jumlahField.reset();
+		produk_awal_jumlahField.setValue('0');
+		produk_awal_nilaiField.reset();
+		produk_awal_nilaiField.setValue('0');
 	}
  	/* End of Function */
   
@@ -530,7 +545,10 @@ Ext.onReady(function(){
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(15)=="0")
 			produk_aktif_mlgField.setValue(false);
 			
-			
+		
+		produk_awal_jumlahField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_saldo_awal')));
+		produk_awal_nilaiField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_nilai_saldo_awal')));
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -716,7 +734,9 @@ Ext.onReady(function(){
 			{name: 'produk_update', type: 'string', mapping: 'produk_update'}, 
 			{name: 'produk_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'produk_date_update'}, 
 			{name: 'produk_revised', type: 'int', mapping: 'produk_revised'},
-			{name: 'produk_aktif_cabang', type: 'string', mapping: 'produk_aktif_cabang'}
+			{name: 'produk_aktif_cabang', type: 'string', mapping: 'produk_aktif_cabang'},
+			{name: 'produk_saldo_awal', type: 'float', mapping: 'produk_saldo_awal'},
+			{name: 'produk_nilai_saldo_awal', type: 'float', mapping: 'produk_nilai_saldo_awal'}
 		]),
 		sortInfo:{field: 'produk_id', direction: "DESC"}
 	});
@@ -865,11 +885,11 @@ Ext.onReady(function(){
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 20
-          	})
+          	})*/
 			<?php } ?>
 		},
 		{
@@ -885,11 +905,11 @@ Ext.onReady(function(){
 			width: 260,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
-          	})
+          	})*/
 			<?php } ?>
 		}, 
 		{
@@ -898,14 +918,14 @@ Ext.onReady(function(){
 			width: 120, //150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_groupDataStore,
 				mode: 'remote',
 				displayField: 'produk_group_display',
 				valueField: 'produk_group_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -914,14 +934,14 @@ Ext.onReady(function(){
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				store: cbo_produk_jenis_DataStore,
 				mode: 'remote',
 				displayField: 'produk_jenis_display',
 				valueField: 'produk_jenis_value',
 				triggerAction: 'all'
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -948,7 +968,7 @@ Ext.onReady(function(){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -956,7 +976,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -969,7 +989,7 @@ Ext.onReady(function(){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -977,7 +997,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -987,7 +1007,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: false,
@@ -995,7 +1015,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -1005,11 +1025,11 @@ Ext.onReady(function(){
 			width: 60,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.TextField({
 				allowBlank: false,
 				maxLength: 250
-			})
+			})*/
 			<?php } ?>
 		},
 		{
@@ -1022,7 +1042,7 @@ Ext.onReady(function(){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.NumberField({
 				allowBlank: false,
 				allowDecimals: true,
@@ -1030,7 +1050,7 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 22,
 				maskRe: /([0-9]+)$/
-			})
+			})*/
 			<?php } ?>
 		}, 
 		{
@@ -1039,7 +1059,7 @@ Ext.onReady(function(){
 			width: 80,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			,
+			/*,
 			editor: new Ext.form.ComboBox({
 				typeAhead: true,
 				triggerAction: 'all',
@@ -1052,7 +1072,7 @@ Ext.onReady(function(){
                	valueField: 'produk_aktif_value',
                	lazyRender:true,
                	listClass: 'x-combo-list-small'
-            })
+            })*/
 			<?php } ?>
 		}, 
 		{
@@ -1421,6 +1441,31 @@ Ext.onReady(function(){
 		width: 150,
 		maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  produk_harga Field */
+	produk_awal_jumlahField= new Ext.form.TextField({
+		id: 'produk_awal_jumlahField',
+		name: 'produk_awal_jumlahField',
+		fieldLabel: 'Saldo Awal',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		allowBlank: true,
+		width: 150,
+		maskRe: /([0-9]+)$/
+	});
+	
+	produk_awal_nilaiField= new Ext.form.TextField({
+		id: 'produk_awal_nilaiField',
+		name: 'produk_awal_nilaiField',
+		fieldLabel: 'Nilai Saldo Awal (Rp)',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		allowBlank: true,
+		width: 150,
+		maskRe: /([0-9]+)$/
+	});
+	
+	
 	/* Identify  produk_keterangan Field */
 	produk_keteranganField= new Ext.form.TextArea({
 		id: 'produk_keteranganField',
@@ -1658,7 +1703,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoritxtField, produk_namaField, produk_racikanField, produk_hargaField, produk_duField, produk_dmField] 
+				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoritxtField, produk_namaField, produk_racikanField, produk_hargaField, produk_duField, produk_dmField, produk_awal_jumlahField, produk_awal_nilaiField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2901,6 +2946,12 @@ Ext.onReady(function(){
 	
 	produk_hargaField.on('focus',function(){ produk_hargaField.setValue(convertToNumber(produk_hargaField.getValue())); });
 	produk_hargaField.on('blur',function(){ produk_hargaField.setValue(CurrencyFormatted(produk_hargaField.getValue())); });
+	
+	produk_awal_jumlahField.on('focus',function(){ produk_awal_jumlahField.setValue(convertToNumber(produk_awal_jumlahField.getValue())); });
+	produk_awal_jumlahField.on('blur',function(){ produk_awal_jumlahField.setValue(CurrencyFormatted(produk_awal_jumlahField.getValue())); });
+	
+	produk_awal_nilaiField.on('focus',function(){ produk_awal_nilaiField.setValue(convertToNumber(produk_awal_nilaiField.getValue())); });
+	produk_awal_nilaiField.on('blur',function(){ produk_awal_nilaiField.setValue(CurrencyFormatted(produk_awal_nilaiField.getValue())); });
 	
 	combo_satuan_produk_racik.on('focus', function(){
 		cbo_produk_racik_satuanDataStore.setBaseParam('produk_id',combo_rawat_produk.getValue());

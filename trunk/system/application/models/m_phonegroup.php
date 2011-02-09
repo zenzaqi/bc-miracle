@@ -285,6 +285,8 @@ class M_phonegroup extends Model{
 			$limit = $sql." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			
+			$this->firephp->log($limit);
+			
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -310,8 +312,7 @@ class M_phonegroup extends Model{
 			$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 			$sql.="	CONVERT(cust_hp, SIGNED INTEGER) > 0";
 			
-			
-			
+						
 			if($umur!=""){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.= " cust_umur LIKE '%".$umur."%'";
@@ -370,12 +371,13 @@ class M_phonegroup extends Model{
 				$sql.=" cust_hp like '%".$query."%'";
 			}
 			
-			//$this->firephp->log($sql);
+			
 			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
+			$this->firephp->log($limit);
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
