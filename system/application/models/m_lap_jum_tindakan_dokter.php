@@ -131,12 +131,13 @@ class M_lap_jum_tindakan_dokter extends Model{
 			//full query	
 			if ($report_groupby == 'Semua')
 			{
-			$query="select rawat_kode as rawat_kode, rawat_nama as rawat_nama, jumlah_rawat as Jumlah_rawat, rawat_kredit as rawat_kredit, total_kredit as Total_Kredit, sum(Total_kredit) as Total_kredit 
+			$query="select rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, total_kredit as Total_Kredit, sum(Total_kredit) as Total_kredit 
 						from(
 							(select karyawan.karyawan_username as karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -154,6 +155,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -254,6 +256,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -271,6 +274,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -408,18 +412,13 @@ class M_lap_jum_tindakan_dokter extends Model{
 				
 			if ($report_groupby == 'Semua')
 			{
-			$query="select karyawan_username,
-					rawat_kode as rawat_kode, 
-					rawat_nama as rawat_nama, 
-					jumlah_rawat as Jumlah_rawat, 
-					rawat_kredit as rawat_kredit, 
-					total_kredit as Total_Kredit, 
-					sum(Total_kredit) as Total_kredit
+			$query="select rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, total_kredit as Total_Kredit, sum(Total_kredit) as Total_kredit 
 						from(
 							(select karyawan.karyawan_username as karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -437,6 +436,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							count(perawatan.rawat_nama) as Jumlah_rawat,
 							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							karyawan.karyawan_id as karyawan_id,
 							perawatan.rawat_id as perawatan_id,
@@ -508,7 +508,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 			$query.=" karyawan.karyawan_id != 60 and perawatan.rawat_id is not null and (detail_ambil_paket.dapaket_stat_dok='Terbuka' or detail_ambil_paket.dapaket_stat_dok='Tertutup')"; //60 = Available . Dr
 			$query.=" group by karyawan.karyawan_username, perawatan.rawat_nama";
 			}
-		
+		 
 			$result = $this->db->query($query);  
 			return $result;
 		}
