@@ -145,7 +145,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)
-						WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						WHERE (karyawan_id = '".$terapis_id."') and 
 							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 							and (karyawan_id != 67 and rawat_id is not null and (dapaket_stat_dok='Terbuka' or dapaket_stat_dok='Tertutup'))
 							group by karyawan_username, rawat_nama
@@ -163,7 +163,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
 							left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)
-						WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						WHERE (karyawan_id = '".$terapis_id."') and 
 							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 							and (karyawan_id != 67 and rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
@@ -186,7 +186,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
@@ -213,7 +213,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
@@ -263,7 +263,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 					from detail_ambil_paket
 						left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 						left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)
-					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+					WHERE (karyawan_id = '".$terapis_id."') and 
 						(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 						and (karyawan_id != 67 and rawat_id is not null and (dapaket_stat_dok='Terbuka' or dapaket_stat_dok='Tertutup'))
 						group by karyawan_username, rawat_nama)
@@ -281,7 +281,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 						left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 						left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
 						left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)
-					WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+					WHERE (karyawan_id = '".$terapis_id."') and 
 						(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 						and (karyawan_id != 67 and rawat_id is not null and jrawat_stat_dok='Tertutup') 
 					group by karyawan_username, rawat_nama)) as table_union"
@@ -304,7 +304,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 		
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
@@ -333,7 +333,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
@@ -412,7 +412,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)
-						WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						WHERE (karyawan_id = '".$terapis_id."') and 
 							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 							and (karyawan_id != 67 and rawat_id is not null and (dapaket_stat_dok='Terbuka' or dapaket_stat_dok='Tertutup'))
 							group by karyawan_username, rawat_nama
@@ -430,7 +430,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
 							left join karyawan on (tindakan_detail.dtrawat_petugas2=karyawan.karyawan_id)
-						WHERE (karyawan_username LIKE '%".$terapis_id."%') and 
+						WHERE (karyawan_id = '".$terapis_id."') and 
 							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
 							and (karyawan_id != 67 and rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
@@ -453,7 +453,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
@@ -480,7 +480,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 			
 			if($terapis_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$terapis_id."%'";
+				$query.= " karyawan.karyawan_id = '".$terapis_id."'";
 			};
 		
 			if($lapjum_tglapp_start!='' && $lapjum_tglapp_end!=''){
