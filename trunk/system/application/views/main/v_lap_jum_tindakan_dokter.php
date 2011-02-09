@@ -499,7 +499,7 @@ Ext.onReady(function(){
 		store: cbo_dtindakan_dokterDataStore,
 		mode: 'remote',
 		displayField:'karyawan_username',
-		valueField: 'karyawan_username',
+		valueField: 'karyawan_value',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,

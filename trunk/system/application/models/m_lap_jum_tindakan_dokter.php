@@ -167,7 +167,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
-							where karyawan_username LIKE '%".$trawat_dokter."%'
+							where karyawan_id ='".$trawat_dokter."'
 							group by karyawan_username,rawat_nama
 							";
 							
@@ -187,7 +187,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 			
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -213,7 +213,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 								left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)";
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -286,7 +286,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
-							where karyawan_username LIKE '%".$trawat_dokter."%'
+							where karyawan_id = '".$trawat_dokter."'
 							
 							";
 							
@@ -318,7 +318,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 	
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -347,7 +347,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 	
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -448,7 +448,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
-							where karyawan_username LIKE '%".$trawat_dokter."%'
+							where karyawan_username = '".$trawat_dokter."'
 							group by karyawan_username,rawat_nama
 							";
 							
@@ -468,7 +468,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 			
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -494,7 +494,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 								left join karyawan on(karyawan.karyawan_id=detail_ambil_paket.dapaket_referal)";
 			if($trawat_dokter!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan.karyawan_username LIKE '%".$trawat_dokter."%'";
+				$query.= " karyawan.karyawan_id = '".$trawat_dokter."'";
 			};
 		
 			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
