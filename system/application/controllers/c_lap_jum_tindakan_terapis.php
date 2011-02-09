@@ -190,13 +190,24 @@ class C_lap_jum_tindakan_terapis extends Controller {
 	function lap_jum_tindakan_terapis_export_excel(){
 		//POST varibale here
 		$lapjum_id=trim(@$_POST["lapjum_id"]);
+		if(trim(@$_POST["lapjum_tglapp_start"])!="")
+			$lapjum_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["lapjum_tglapp_start"])));
+		else
+			$lapjum_tglapp_start="";
+		if(trim(@$_POST["lapjum_tglapp_end"])!="")
+			$lapjum_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["lapjum_tglapp_end"])));
+		else
+			$lapjum_tglapp_end="";
+
 		$terapis_id=trim(@$_POST["terapis_id"]);
+		$lapjum_groupby=trim(@$_POST["lapjum_groupby"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_export_excel($lapjum_id ,$terapis_id ,$option,$filter);
-		
-		to_excel($query,"tindakan"); 
+		$query = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_export_excel($lapjum_id ,$terapis_id , $lapjum_tglapp_start, $lapjum_tglapp_end,
+																							$lapjum_groupby, $option,$filter);
+		$this->load->plugin('to_excel');
+		to_excel($query,"Report_Tindakan_Terapis"); 
 		echo '1';
 			
 	}
