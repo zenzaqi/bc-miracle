@@ -45,12 +45,13 @@ class M_departemen extends Model{
 		}
 		
 		//function for update record
-		function departemen_update($departemen_id ,$departemen_nama ,$departemen_keterangan ,$departemen_aktif ){
+		function departemen_update($departemen_id ,$departemen_nama ,$departemen_kode_akun,$departemen_keterangan ,$departemen_aktif ){
 			if ($departemen_aktif=="")
 				$departemen_aktif = "Aktif";
 			$data = array(
 				"departemen_id"=>$departemen_id,			
-				"departemen_nama"=>$departemen_nama,			
+				"departemen_nama"=>$departemen_nama,
+				"departemen_kode_akun"=>$departemen_kode_akun,				
 				"departemen_keterangan"=>$departemen_keterangan,			
 				"departemen_aktif"=>$departemen_aktif,			
 //				"departemen_creator"=>$departemen_creator,			
@@ -69,12 +70,13 @@ class M_departemen extends Model{
 		}
 		
 		//function for create new record
-		function departemen_create($departemen_nama ,$departemen_keterangan ,$departemen_aktif ){
+		function departemen_create($departemen_nama ,$departemen_kode_akun,$departemen_keterangan ,$departemen_aktif ){
 			if ($departemen_aktif=="")
 				$departemen_aktif = "Aktif";
 			$data = array(
 	
-				"departemen_nama"=>$departemen_nama,	
+				"departemen_nama"=>$departemen_nama,
+				"departemen_kode_akun"=>$departemen_kode_akun,				
 				"departemen_keterangan"=>$departemen_keterangan,	
 				"departemen_aktif"=>$departemen_aktif,	
 				"departemen_creator"=>$_SESSION[SESSION_USERID],	

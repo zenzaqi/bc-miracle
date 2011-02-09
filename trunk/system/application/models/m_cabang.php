@@ -45,11 +45,13 @@ class M_cabang extends Model{
 		}
 		
 		//function for update record
-		function cabang_update($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
+		function cabang_update($cabang_id ,$cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
 			if ($cabang_aktif=="")
 				$cabang_aktif = "Aktif";
 			$data = array(
-				"cabang_id"=>$cabang_id,			
+				"cabang_id"=>$cabang_id,
+				"cabang_kode"=>$cabang_kode,
+				"cabang_kode_akun"=>$cabang_kode_akun,				
 				"cabang_nama"=>$cabang_nama,			
 				"cabang_alamat"=>$cabang_alamat,			
 				"cabang_kota"=>$cabang_kota,
@@ -75,11 +77,12 @@ class M_cabang extends Model{
 		}
 		
 		//function for create new record
-		function cabang_create($cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
+		function cabang_create($cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ){
 			if ($cabang_aktif=="")
 				$cabang_aktif = "Aktif";
 			$data = array(
-	
+				"cabang_kode"=>$cabang_kode,
+				"cabang_kode_akun"=>$cabang_kode_akun,
 				"cabang_nama"=>$cabang_nama,	
 				"cabang_alamat"=>$cabang_alamat,	
 				"cabang_kota"=>$cabang_kota,	
@@ -182,7 +185,7 @@ class M_cabang extends Model{
 		}
 		
 		//function for print record
-		function cabang_print($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter){
+		function cabang_print($cabang_id ,$cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter){
 			//full query
 			$query="select * from cabang";
 			if($option=='LIST'){
@@ -194,6 +197,7 @@ class M_cabang extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cabang_id LIKE '%".$cabang_id."%'";
 				};
+				
 				if($cabang_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cabang_nama LIKE '%".$cabang_nama."%'";
@@ -228,9 +232,11 @@ class M_cabang extends Model{
 		}
 		
 		//function  for export to excel
-		function cabang_export_excel($cabang_id ,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter){
+		function cabang_export_excel($cabang_id ,$cabang_kode,$cabang_kode_akun,$cabang_nama ,$cabang_alamat ,$cabang_kota ,$cabang_kodepos ,$cabang_propinsi ,$cabang_keterangan ,$cabang_aktif ,$option,$filter){
 			//full query
 			$query="select cabang_nama AS nama,
+							cabang_kode AS kode,
+							cabang_kode_akun AS kode_akun,
 							cabang_alamat AS alamat,
 							cabang_kota AS kota,
 							cabang_kodepos AS kodepos,
@@ -240,12 +246,20 @@ class M_cabang extends Model{
 					from cabang";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cabang_id LIKE '%".addslashes($filter)."%' OR cabang_nama LIKE '%".addslashes($filter)."%' OR cabang_alamat LIKE '%".addslashes($filter)."%' OR cabang_kota LIKE '%".addslashes($filter)."%' OR cabang_kodepos LIKE '%".addslashes($filter)."%' OR cabang_propinsi LIKE '%".addslashes($filter)."%' OR cabang_keterangan LIKE '%".addslashes($filter)."%' OR cabang_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (cabang_id LIKE '%".addslashes($filter)."%' OR cabang_kode LIKE '%".addslashes($filter)."%' OR cabang_kode_akun LIKE '%".addslashes($filter)."%' OR cabang_nama LIKE '%".addslashes($filter)."%' OR cabang_alamat LIKE '%".addslashes($filter)."%' OR cabang_kota LIKE '%".addslashes($filter)."%' OR cabang_kodepos LIKE '%".addslashes($filter)."%' OR cabang_propinsi LIKE '%".addslashes($filter)."%' OR cabang_keterangan LIKE '%".addslashes($filter)."%' OR cabang_aktif LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($cabang_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cabang_id LIKE '%".$cabang_id."%'";
+				};
+				if($cabang_kode!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cabang_kode LIKE '%".$cabang_kode."%'";
+				};
+				if($cabang_kode_akun!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cabang_kode_akun LIKE '%".$cabang_kode_akun."%'";
 				};
 				if($cabang_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

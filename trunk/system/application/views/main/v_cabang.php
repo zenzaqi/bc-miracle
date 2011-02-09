@@ -61,6 +61,8 @@ var pageS=15;
 /* declare variable here */
 var cabang_idField;
 var cabang_namaField;
+var cabang_kodeField;
+var cabang_kode_akunField;
 var cabang_alamatField;
 var cabang_kotaField;
 var cabang_kodeposField;
@@ -153,6 +155,8 @@ Ext.onReady(function(){
 		
 		var cabang_id_create_pk=null;
 		var cabang_nama_create=null;
+		var cabang_kode_create=null;
+		var cabang_kode_akun_create=null;
 		var cabang_alamat_create=null;
 		var cabang_kota_create=null;
 		var cabang_kodepos_create=null;
@@ -162,6 +166,8 @@ Ext.onReady(function(){
 
 		cabang_id_create_pk=get_pk_id();
 		if(cabang_namaField.getValue()!== null){cabang_nama_create = cabang_namaField.getValue();}
+		if(cabang_kodeField.getValue()!== null){cabang_kode_create = cabang_kodeField.getValue();}
+		if(cabang_kode_akunField.getValue()!== null){cabang_kode_akun_create = cabang_kode_akunField.getValue();}
 		if(cabang_alamatField.getValue()!== null){cabang_alamat_create = cabang_alamatField.getValue();}
 		if(cabang_kotaField.getValue()!== null){cabang_kota_create = cabang_kotaField.getValue();}
 		if(cabang_kodeposField.getValue()!== null){cabang_kodepos_create = cabang_kodeposField.getValue();}
@@ -175,6 +181,8 @@ Ext.onReady(function(){
 				params: {
 					task: post2db,
 					cabang_id	: cabang_id_create_pk,	
+					cabang_kode	: cabang_kode_create,
+					cabang_kode_akun	: cabang_kode_akun_create,
 					cabang_nama	: cabang_nama_create,	
 					cabang_alamat	: cabang_alamat_create,	
 					cabang_kota	: cabang_kota_create,	
@@ -238,6 +246,10 @@ Ext.onReady(function(){
 	function cabang_reset_form(){
 		cabang_namaField.reset();
 		cabang_namaField.setValue(null);
+		cabang_kodeField.reset();
+		cabang_kodeField.setValue(null);
+		cabang_kode_akunField.reset();
+		cabang_kode_akunField.setValue(null);
 		cabang_alamatField.reset();
 		cabang_alamatField.setValue(null);
 		cabang_kotaField.reset();
@@ -256,6 +268,8 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function cabang_set_form(){
 		cabang_namaField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_nama'));
+		cabang_kodeField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_kode'));
+		cabang_kode_akunField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_kode_akun'));
 		cabang_alamatField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_alamat'));
 		cabang_kotaField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_kota'));
 		cabang_kodeposField.setValue(cabangListEditorGrid.getSelectionModel().getSelected().get('cabang_kodepos'));
@@ -267,7 +281,7 @@ Ext.onReady(function(){
   
 	/* Function for Check if the form is valid */
 	function is_cabang_form_valid(){
-		return (cabang_namaField.isValid() && cabang_alamatField.isValid());
+		return (cabang_namaField.isValid() && cabang_alamatField.isValid() && cabang_kodeField.isValid() && cabang_kode_akunField.isValid());
 	}
   	/* End of Function */
   
@@ -386,6 +400,8 @@ Ext.onReady(function(){
 			id: 'cabang_id'
 		},[
 			{name: 'cabang_id', type: 'int', mapping: 'cabang_id'},
+			{name: 'cabang_kode', type: 'string', mapping: 'cabang_kode'},
+			{name: 'cabang_kode_akun', type: 'string', mapping: 'cabang_kode_akun'},
 			{name: 'cabang_nama', type: 'string', mapping: 'cabang_nama'},
 			{name: 'cabang_alamat', type: 'string', mapping: 'cabang_alamat'},
 			{name: 'cabang_kota', type: 'string', mapping: 'cabang_kota'},
@@ -716,10 +732,44 @@ Ext.onReady(function(){
 	cabang_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	cabangListEditorGrid.on('afteredit', cabang_update); // inLine Editing Record
 	
+	/* Identify  cabang_kode Field */
+	cabang_kodeField= new Ext.form.TextField({
+		id: 'cabang_kodeField',
+		fieldLabel: 'Cabang<span style="color: #ec0000">*</span>',
+		maxLength: 100,
+		allowBlank: false,
+		anchor: '100%'
+	});
+	
+	/* Identify  cabang_kode_akun Field */
+	cabang_kode_akunField= new Ext.form.TextField({
+		id: 'cabang_kode_akunField',
+		fieldLabel: 'Cabang Akun<span style="color: #ec0000">*</span>',
+		maxLength: 2,
+		allowBlank: false,
+		maskRe: /([0-9]+)$/,
+		anchor: '100%'
+	});
+	
+	cabang_kode_group = new Ext.form.FieldSet({
+		title: 'Kode',
+		labelWidth: 100,
+		anchor: '95%',
+		layout:'form',
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [cabang_kode_akunField, cabang_kodeField]
+			}
+		]
+	});
+	
 	/* Identify  cabang_nama Field */
 	cabang_namaField= new Ext.form.TextField({
 		id: 'cabang_namaField',
-		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Nama Cabang<span style="color: #ec0000">*</span>',
 		maxLength: 250,
 		allowBlank: false,
 		anchor: '95%'
@@ -792,7 +842,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [cabang_namaField, cabang_alamatField, cabang_kotaField, cabang_kodeposField, cabang_propinsiField, cabang_keteranganField, 
+				items: [cabang_kode_group, cabang_namaField, cabang_alamatField, cabang_kotaField, cabang_kodeposField, cabang_propinsiField, cabang_keteranganField, 
 						cabang_aktifField] 
 			}
 			]
