@@ -4997,7 +4997,7 @@ Ext.onReady(function(){
 		},
 		{
 			align: 'Right',
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			header: '<div align="center">' + 'Disk (%)' + '</div>',
 			dataIndex: 'drawat_diskon',
 			width: 60,
 			sortable: false,
@@ -5028,13 +5028,13 @@ Ext.onReady(function(){
 			sortable: false
 		},
 		{
-			header: '<div align="center">' + 'Referal(Tindakan)' + '</div>',
+			header: '<div align="center">' + 'Referal (Tindakan)' + '</div>',
 			dataIndex: 'referal',
 			width: 110,
 			sortable: false
 		},
 		{
-			header: '<div align="center">' + 'Referal(Kasir)' + '</div>',
+			header: '<div align="center">' + 'Referal (Kasir)' + '</div>',
 			dataIndex: 'drawat_sales',
 			width: 110,
 			sortable: true,
