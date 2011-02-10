@@ -628,6 +628,7 @@ Ext.onReady(function(){
 				var drawat_harga = [];
 				var drawat_diskon = [];
 				var drawat_diskon_jenis = [];
+				var drawat_sales = [];
 				
 				var dcount = detail_jual_rawat_DataStore.getCount() - 1;
 				
@@ -671,6 +672,18 @@ Ext.onReady(function(){
 							}else{
 								drawat_diskon_jenis.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_diskon_jenis);
 							}
+							
+							/* by fred*/
+							if((detail_jual_rawat_DataStore.getAt(i).data.drawat_sales==undefined) || (detail_jual_rawat_DataStore.getAt(i).data.drawat_sales=='')){
+								drawat_sales.push(0);
+							}else{
+								drawat_sales.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_sales);
+							}
+							
+							//drawat_sales.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_sales);
+							
+							
+							
 						}
 					}
 				}
@@ -682,6 +695,7 @@ Ext.onReady(function(){
 				var encoded_array_drawat_harga = Ext.encode(drawat_harga);
 				var encoded_array_drawat_diskon = Ext.encode(drawat_diskon);
 				var encoded_array_drawat_diskon_jenis = Ext.encode(drawat_diskon_jenis);
+				var encoded_array_drawat_sales = Ext.encode(drawat_sales);
 				
 				Ext.Ajax.request({  
 					waitMsg: 'Please wait...',
@@ -790,7 +804,8 @@ Ext.onReady(function(){
 						drawat_jumlah: encoded_array_drawat_jumlah,
 						drawat_harga: encoded_array_drawat_harga,
 						drawat_diskon: encoded_array_drawat_diskon,
-						drawat_diskon_jenis: encoded_array_drawat_diskon_jenis
+						drawat_diskon_jenis: encoded_array_drawat_diskon_jenis,
+						drawat_sales : encoded_array_drawat_sales
 					},
 					callback: function(opts, success, response){
 						if(success){
@@ -4697,6 +4712,31 @@ Ext.onReady(function(){
     });
 	//eof
 	
+	/* Store utk referal Kasir*/ 
+	cbo_referalKasirDataStore = new Ext.data.Store({
+		id: 'cbo_referalKasirDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_referal_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'}
+		]),
+		sortInfo:{field: 'karyawan_username', direction: "ASC"}
+	});
+	var cbo_referal_kasir_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            //'<span><b>{dokter_username}</b> | {dokter_display} | <b>{dokter_count}</b>',
+			'<span>{karyawan_username}',
+        '</div></tpl>'
+    );
+	
 	
 	memberDataStore = new Ext.data.Store({
 		id: 'memberDataStore',
@@ -4730,6 +4770,24 @@ Ext.onReady(function(){
 			window_jrawat_editing_lock();
 		}
 	});*/
+	
+	/* Combo box utk Referal Kasir*/
+	var combo_referal_kasir= new Ext.form.ComboBox({
+			store: cbo_referalKasirDataStore,
+			mode: 'remote',
+			tpl: cbo_referal_kasir_tpl,
+			displayField: 'karyawan_username',
+			valueField: 'karyawan_id',
+			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all',
+			anchor: '95%'
+	});
+	/*combo_referal_kasir.on('focus', function(){
+		cbo_referalKasirDataStore.reload();
+	});
+	*/
+	
 	
 	var combo_jual_rawat=new Ext.form.ComboBox({
 		store: cbo_drawat_rawatDataStore,
@@ -4884,7 +4942,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'drawat_rawat',
-			width: 300,
+			width: 250,
 			sortable: true,
 			allowBlank: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
@@ -4896,7 +4954,7 @@ Ext.onReady(function(){
 			align: 'Right',
 			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'drawat_jumlah',
-			width: 60,
+			width: 50,
 			sortable: false,
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
 			editor: drawat_jumlahField,
@@ -4970,11 +5028,20 @@ Ext.onReady(function(){
 			sortable: false
 		},
 		{
-			header: '<div align="center">' + 'Referal' + '</div>',
+			header: '<div align="center">' + 'Referal(Tindakan)' + '</div>',
 			dataIndex: 'referal',
-			width: 160,
+			width: 110,
 			sortable: false
-		}]
+		},
+		{
+			header: '<div align="center">' + 'Referal(Kasir)' + '</div>',
+			dataIndex: 'drawat_sales',
+			width: 110,
+			sortable: true,
+			editor: combo_referal_kasir,
+			renderer: Ext.util.Format.comboRenderer(combo_referal_kasir)
+		}
+		]
 	);
 	detail_jual_rawat_ColumnModel.defaultSortable= true;
 	//eof
@@ -5065,7 +5132,8 @@ Ext.onReady(function(){
 			drawat_subtotal	:0,
 			drawat_diskon_jenis: '',
 			drawat_diskon	:0,
-			drawat_subtotal_net	:0
+			drawat_subtotal_net	:0,
+			drawat_sales : ''
 		});
 		editor_detail_jual_rawat.stopEditing();
 		detail_jual_rawat_DataStore.insert(0, edit_detail_jual_rawat);

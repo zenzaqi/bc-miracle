@@ -254,6 +254,32 @@ class M_master_jual_rawat extends Model{
 			return "";
 	}
 	
+	function get_referal_list($query){
+			$sql=  "SELECT 
+						karyawan_id,karyawan_nama,karyawan_username
+					FROM karyawan 
+					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
+					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff')";
+			if($query<>"" && is_numeric($query)==false){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (karyawan_username LIKE '%".addslashes($query)."%')";
+			}
+		
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+	
+	
+	
 	//fungsi untuk pengambilan paket
 	//get record list
 	function detail_ambil_paket_list($dpaket_id,$tanggal,$dapaket_cust,$query,$dapaket_stat_dok,$start,$end) {
@@ -831,6 +857,7 @@ class M_master_jual_rawat extends Model{
 									  ,$array_drawat_harga
 									  ,$array_drawat_diskon
 									  ,$array_drawat_diskon_jenis
+									  ,$array_drawat_sales
 									  ,$cetak
 									  ,$cust_id
 									  ,$tanggal_transaksi){
@@ -861,6 +888,7 @@ class M_master_jual_rawat extends Model{
 				$drawat_harga = $array_drawat_harga[$i];
 				$drawat_diskon = $array_drawat_diskon[$i];
 				$drawat_diskon_jenis = $array_drawat_diskon_jenis[$i];
+				$drawat_sales = $array_drawat_sales[$i];
 				
 				if($drawat_id==0){
 					//* Insert to db.detail_jual_rawat WHERE detail yang ditambahkan adalah data baru /
@@ -870,7 +898,8 @@ class M_master_jual_rawat extends Model{
 					"drawat_jumlah"=>$drawat_jumlah,
 					"drawat_harga"=>$drawat_harga,
 					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis
+					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
+					"drawat_sales"=>$drawat_sales
 					);
                     $this->db->query('LOCK TABLE detail_jual_rawat WRITE');
 					$this->db->insert('detail_jual_rawat', $dti_drawat);
@@ -883,7 +912,8 @@ class M_master_jual_rawat extends Model{
 					"drawat_jumlah"=>$drawat_jumlah,
 					"drawat_harga"=>$drawat_harga,
 					"drawat_diskon"=>$drawat_diskon,
-					"drawat_diskon_jenis"=>$drawat_diskon_jenis
+					"drawat_diskon_jenis"=>$drawat_diskon_jenis,
+					"drawat_sales"=>$drawat_sales
 					);
                     $this->db->query('LOCK TABLE detail_jual_rawat WRITE');
 					$this->db->where('drawat_id', $drawat_id);
@@ -1118,7 +1148,7 @@ class M_master_jual_rawat extends Model{
                                 ,$jrawat_tunai_nilai3
                                 ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
                                 ,$jenis_transaksi ,$cetak){
         $date_now = date('Y-m-d');
         
@@ -1212,7 +1242,7 @@ class M_master_jual_rawat extends Model{
             $bayar_date_create = date('Y-m-d H:i:s', strtotime($bayar_date_create_temp));
             
             $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                        ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
+                                        ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis , $array_drawat_sales, 0 ,$jrawat_cust
                                         ,$jrawat_tanggal);
             
             $this->m_public_function->cara_bayar_ftpkpr_insert($jrawat_nobukti ,$jrawat_cara ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
@@ -1375,7 +1405,7 @@ class M_master_jual_rawat extends Model{
 									  ,$cetak, $jrawat_ket_disk, $drawat_count, $dcount_drawat_id
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 									  ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
-									  ,$array_drawat_diskon_jenis){
+									  ,$array_drawat_diskon_jenis, $array_drawat_sales){
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		
@@ -1427,7 +1457,7 @@ class M_master_jual_rawat extends Model{
 					$record = $rs->row_array();
 					$jrawat_id = $record['jrawat_id'];
 					$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-												,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
+												,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis , $array_drawat_sales, 0 ,$jrawat_cust
 												,$jrawat_tanggal);
 					return $rs_drawat_cu;
 				}else{
@@ -1447,7 +1477,7 @@ class M_master_jual_rawat extends Model{
 													,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
 													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
-													,$array_drawat_diskon ,$array_drawat_diskon_jenis);
+													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales);
 					if($rs_jrawat=='0'){
 						/*$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 													,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
@@ -1504,7 +1534,7 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_tunai_nilai3
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
                                                             ,$jenis_transaksi ,$cetak);
                 
                 if($jrawat_drawat_u==1){
@@ -1569,7 +1599,7 @@ class M_master_jual_rawat extends Model{
                                 ,$jrawat_tunai_nilai3
                                 ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
                                 ,$jenis_transaksi ,$cetak);
 				return '-7';
 			}else if(($dcount_drawat_id<1) && ($drawat_count==0) && ($rs_rows==0)){
@@ -1621,7 +1651,7 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_tunai_nilai3
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis
+                                                            ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
                                                             ,$jenis_transaksi ,$cetak);
                 
                 if($jrawat_drawat_u==1){
@@ -1669,7 +1699,7 @@ class M_master_jual_rawat extends Model{
 									  ,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
 									  ,$jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
-									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis){
+									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales){
 		$date_now = date('Y-m-d');
 		
 		$jenis_transaksi = 'jual_rawat';
@@ -1768,7 +1798,7 @@ class M_master_jual_rawat extends Model{
                                ,$bayar_date_create ,$jenis_transaksi ,$cetak);
 			
 			$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,$jrawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
-														,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
+														,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis , $array_drawat_sales, 0 ,$jrawat_cust
 														,$jrawat_tanggal);
 			return $rs_drawat_cu;
 			
