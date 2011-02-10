@@ -415,7 +415,7 @@ Ext.onReady(function(){
 		cbo_dtindakan_dokterDataStore.load({
 		 	callback: function(r,opt,success){
 				if(success==true){
-					var j=cbo_dtindakan_dokterDataStore.findExact('karyawan_username',report_tindakan_dokterSearchField.getValue(),0);
+					var j=cbo_dtindakan_dokterDataStore.findExact('karyawan_value',report_tindakan_dokterSearchField.getValue(),0);
 					if(j>-1){
 						var dokter_record=cbo_dtindakan_dokterDataStore.getAt(j);
 						report_tindakan_dokterField.setValue(dokter_record.data.karyawan_username);
@@ -592,7 +592,6 @@ Ext.onReady(function(){
 		report_tindakan_dokterSearchField.reset();
 		report_tindakan_dokterSearchField.setValue(null);
 		report_tindakan_groupbyField.reset();
-		report_tindakan_groupbyField.setValue(null);
 		report_tindakan_groupbyField.setValue('Semua');
 		Ext.getCmp('report_tindakan_tglStartSearchField').reset();
 		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(null);
@@ -703,11 +702,11 @@ Ext.onReady(function(){
 		var win;              
 		// check if we do have some search data...
 		if(report_tindakanDataStore.baseParams.query!==null){searchquery = report_tindakanDataStore.baseParams.query;}
-		if(report_tindakanDataStore.baseParams.trawat_dokter!==null){tindakan_dokter_2excel = report_tindakanDataStore.baseParams.trawat_dokter;}
-		if(report_tindakanDataStore.baseParams.tindakan_perawatan!==null){tindakan_perawatan_2excel = report_tindakanDataStore.baseParams.tindakan_perawatan;}
-		if(report_tindakanDataStore.baseParams.dtrawat_edit!==null){dtrawat_edit_2excel = report_tindakanDataStore.baseParams.dtrawat_edit;}
-		if(report_tindakanDataStore.baseParams.dtrawat_skredit!==null){dtrawat_skredit_2excel = report_tindakanDataStore.baseParams.dtrawat_skredit;}
-		if(report_tindakanDataStore.baseParams.dtrawat_jkredit!==null){dtrawat_jkredit_2excel = report_tindakanDataStore.baseParams.dtrawat_jkredit;}
+		//if(report_tindakanDataStore.baseParams.trawat_dokter!==null){tindakan_dokter_2excel = report_tindakanDataStore.baseParams.trawat_dokter;}
+		//if(report_tindakanDataStore.baseParams.tindakan_perawatan!==null){tindakan_perawatan_2excel = report_tindakanDataStore.baseParams.tindakan_perawatan;}
+		//if(report_tindakanDataStore.baseParams.dtrawat_edit!==null){dtrawat_edit_2excel = report_tindakanDataStore.baseParams.dtrawat_edit;}
+		//if(report_tindakanDataStore.baseParams.dtrawat_skredit!==null){dtrawat_skredit_2excel = report_tindakanDataStore.baseParams.dtrawat_skredit;}
+		//if(report_tindakanDataStore.baseParams.dtrawat_jkredit!==null){dtrawat_jkredit_2excel = report_tindakanDataStore.baseParams.dtrawat_jkredit;}
 		//if(report_tindakanDataStore.baseParams.dtrawat_kredit!==null){dtrawat_kredit_2excel = report_tindakanDataStore.baseParams.dtrawat_kredit;}
 		
 		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_tglStartSearchField').getValue();}

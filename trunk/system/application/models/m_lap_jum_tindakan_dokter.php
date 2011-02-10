@@ -448,7 +448,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
-							where karyawan_username = '".$trawat_dokter."'
+							where karyawan_id ='".$trawat_dokter."'
 							group by karyawan_username,rawat_nama
 							";
 							
