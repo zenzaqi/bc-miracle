@@ -247,6 +247,11 @@ class M_customer extends Model{
 			if ($cust_unit=="Miracle Medan")
 				$cust_unit = 18;
 			$date_now = date('Y-m-d H:i:s');
+			$date = date('Y-m-d');
+			
+			if($cust_terdaftar=='')
+			$cust_terdaftar=$date;
+			
 			
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
@@ -527,6 +532,11 @@ class M_customer extends Model{
 				$cust_unit = 18;
 				
 			$date_now = date('Y-m-d H:i:s');
+			$date = date('Y-m-d');
+			
+			if($cust_terdaftar=='')
+			$cust_terdaftar=$date;
+			
 			
 			if($cust_hobi_baca=='true')
 			$baca="1";
