@@ -401,7 +401,7 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for update record
-		function master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
+		function master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $koreksi_cetak){
 			$data = array(
 				"koreksi_id"=>$koreksi_id, 
 				"koreksi_no"=>$koreksi_no,
@@ -416,6 +416,10 @@ class M_master_koreksi_stok extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["koreksi_gudang"]=$koreksi_gudang;
+				
+			if($koreksi_cetak==1){
+				$data['koreksi_status'] = 'Tertutup';
+			}
 			
 			$this->db->where('koreksi_id', $koreksi_id);
 			$this->db->update('master_koreksi_stok', $data);
@@ -430,7 +434,7 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for create new record
-		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status){
+		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $koreksi_cetak){
 			$pattern="PS/".date("ym")."-";
 			$koreksi_no=$this->m_public_function->get_kode_1('master_koreksi_stok','koreksi_no',$pattern,12);
 			
@@ -444,6 +448,13 @@ class M_master_koreksi_stok extends Model{
 				"koreksi_date_create"=>date('Y-m-d H:i:s'),
 				"koreksi_revised"=>0
 			);
+			
+			if($koreksi_cetak==1){
+				$data['koreksi_status'] = 'Tertutup';
+			}else{
+				$data['koreksi_status'] = 'Terbuka';
+			}
+				
 			$this->db->insert('master_koreksi_stok', $data); 
 			if($this->db->affected_rows())
 				return $this->db->insert_id();
