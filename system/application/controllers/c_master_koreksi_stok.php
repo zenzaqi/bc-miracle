@@ -224,6 +224,9 @@ class C_master_koreksi_stok extends Controller {
 			case "CREATE":
 				$this->master_koreksi_stok_create();
 				break;
+			case "CEK":
+				$this->master_koreksi_stok_pengecekan();
+				break;
 			case "DELETE":
 				$this->master_koreksi_stok_delete();
 				break;
@@ -252,6 +255,14 @@ class C_master_koreksi_stok extends Controller {
 		echo $result;
 	}
 
+	function master_koreksi_stok_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 	//function for update record
 	function master_koreksi_stok_update(){
 		//POST variable here
@@ -267,9 +278,13 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=str_replace(",", ",",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
+		$koreksi_status=str_replace(",", ",",$koreksi_status);
+		$koreksi_status=str_replace("'", '"',$koreksi_status);
+		$koreksi_cetak = trim(@$_POST["koreksi_cetak"]);
 
 		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,
-																		   $koreksi_keterangan, $koreksi_status);
+																		   $koreksi_keterangan, $koreksi_status,$koreksi_cetak);
 		echo $result;
 	}
 	
@@ -286,9 +301,12 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_keterangan);
 		$koreksi_keterangan=str_replace("'", '"',$koreksi_keterangan);
 		$koreksi_status=trim(@$_POST["koreksi_status"]);
+		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
+		$koreksi_status=str_replace("'", '"',$koreksi_status);
+		$koreksi_cetak = trim(@$_POST["koreksi_cetak"]);
 
 		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, 
-																		 $koreksi_status);
+																		 $koreksi_status,$koreksi_cetak);
 		echo $result;
 	}
 

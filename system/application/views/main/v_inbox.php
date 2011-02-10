@@ -123,7 +123,9 @@ Ext.onReady(function(){
 							else {
 								Ext.MessageBox.alert(post2db+' OK','New SMS berhasil disimpan di Draft SMS');
 							}
-							mainPanel.remove(mainPanel.getActiveTab().getId());
+							inbox_saveWindow.hide();
+							inbox_DataStore.reload();
+							//mainPanel.remove(mainPanel.getActiveTab().getId());
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -164,6 +166,8 @@ Ext.onReady(function(){
 	function inboxreply_set_form(){
 		inbox_pengirimField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_sender'));	
 		inbox_idField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_id'));
+		inbox_detailField.reset();
+		inbox_count_isiField.reset();
 	}  
 	
 	function is_inbox_form_valid(){
@@ -396,7 +400,7 @@ Ext.onReady(function(){
 		{
 			text: 'Reply',
 			tooltip: 'Reply selected record',
-			iconCls:'icon-search',
+			iconCls:'icon-notes',
 			handler: inbox_confirm_reply 
 		}, '-',
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
@@ -445,7 +449,7 @@ Ext.onReady(function(){
 		{
 			text: 'Reply',
 			tooltip: 'Reply selected record',
-			iconCls:'icon-search',
+			iconCls:'icon-notes',
 			handler: inbox_confirm_reply 
 		}, '-',
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_INBOX'))){ ?>
@@ -527,6 +531,12 @@ Ext.onReady(function(){
 		inbox_searchWindow.close();
 	};
 	/* End of Fuction */
+	
+	function inbox_reset_form(){
+		inbox_pengirimField.reset();
+		inbox_detailField.reset();
+		inbox_count_isiField.reset();
+	}
 	
 	/* Field for search */
 	/* Identify  inbox_id Search Field */
@@ -680,6 +690,7 @@ Ext.onReady(function(){
 				text: 'Cancel',
 				handler: function(){
 					//mainPanel.remove(mainPanel.getActiveTab().getId());
+					inbox_reset_form();
 					inbox_saveWindow.hide();
 				}
 			}

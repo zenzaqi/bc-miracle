@@ -66,6 +66,7 @@ var editor_detail_koreksi_stok;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var koreksi_cetak=0;
 var today=new Date().format('Y-m-d');
 
 /* declare variable here for Field*/
@@ -84,7 +85,92 @@ var koreksi_statusSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+	
+ /*Function for pengecekan _dokumen */
+	function pengecekan_dokumen(){
+		var koreksi_tanggal_create_date = "";
+		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: koreksi_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							koreksi_cetak=1;
+							master_koreksi_stok_create('print');
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penyesuaian Stok tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+	/*Function for pengecekan _dokumen untuk save */
+	function pengecekan_dokumen2(){
+		var koreksi_tanggal_create_date = "";
+		if(koreksi_tanggalField.getValue()!== ""){koreksi_tanggal_create_date = koreksi_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: koreksi_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							master_koreksi_stok_create();
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penyesuaian Stok tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						});
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
   	/* Function for add data, open window create form */
 	function master_koreksi_stok_create(opsi){
 		
@@ -124,18 +210,19 @@ Ext.onReady(function(){
 				koreksi_gudang		: koreksi_gudang_create, 
 				koreksi_tanggal		: koreksi_tgl_awal_create_date, 
 				koreksi_keterangan	: koreksi_keterangan_create,
-				koreksi_status		: koreksi_status_create
+				koreksi_status		: koreksi_status_create,
+				koreksi_cetak		: koreksi_cetak
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
 				if(result!==0){
-						detail_koreksi_stok_insert(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data Penyesuaian Stok berhasil disimpan');
+						detail_koreksi_stok_insert(result,opsi);
 						master_koreksi_stok_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
 						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   //msg: 'We could\'t not '+msg+' the Master_koreksi_beli.',
 						   msg: 'Data Penyesuaian Stok  tidak bisa disimpan',
 						   buttons: Ext.MessageBox.OK,
 						   animEl: 'save',
@@ -209,6 +296,7 @@ Ext.onReady(function(){
 		cbo_stok_produkDataStore.load();
 		detail_koreksi_stok_DataStore.setBaseParam('master_id', -1);		
 		detail_koreksi_stok_DataStore.load();
+		master_koreksi_stok_createForm.kstok_savePrint.enable();
 		check_gudang();
 	}
 	
@@ -234,6 +322,87 @@ Ext.onReady(function(){
 		koreksi_keteranganField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_keterangan'));
 		koreksi_statusField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status'));
 		
+		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Terbuka"){
+			koreksi_idField.setDisabled(false);
+			koreksi_noField.setDisabled(false);
+			koreksi_gudangField.setDisabled(false);
+			koreksi_tanggalField.setDisabled(false);
+			koreksi_keteranganField.setDisabled(false);
+			koreksi_statusField.setDisabled(false);
+			master_koreksi_stok_createForm.kstok_savePrint.enable();
+		}
+		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Tertutup"){
+			koreksi_idField.setDisabled(true);
+			koreksi_noField.setDisabled(true);
+			koreksi_gudangField.setDisabled(true);
+			koreksi_tanggalField.setDisabled(true);
+			koreksi_keteranganField.setDisabled(true);
+			koreksi_statusField.setDisabled(false);
+			if(koreksi_cetak==1){
+					//jproduk_cetak(jproduk_id_for_cetak);
+				koreksi_cetak=0;
+			}
+			
+		}
+		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Batal"){
+			koreksi_idField.setDisabled(true);
+			koreksi_noField.setDisabled(true);
+			koreksi_gudangField.setDisabled(true);
+			koreksi_tanggalField.setDisabled(true);
+			koreksi_keteranganField.setDisabled(true);
+			koreksi_statusField.setDisabled(true);
+			master_koreksi_stok_createForm.kstok_savePrint.disable();
+		}
+		
+		
+		koreksi_statusField.on("select",function(){
+		var status_awal = master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status');
+		if(status_awal =='Terbuka' && koreksi_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		koreksi_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && koreksi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		koreksi_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && koreksi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		koreksi_statusField.setValue('Tertutup');
+		}
+		
+		else if(koreksi_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', koreksi_status_batal);
+		}
+        
+       else if(status_awal =='Tertutup' && koreksi_statusField.getValue()=='Tertutup'){
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
+			master_koreksi_stok_createForm.kstok_savePrint.enable();
+			<?php } ?>
+        }
+		
+		});	
+		
 		cbo_stok_satuanDataStore.setBaseParam('task','detail');
 		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_stok_satuanDataStore.load();
@@ -253,6 +422,18 @@ Ext.onReady(function(){
 		check_gudang();
 	}
 	/* End setValue to EDIT*/
+  
+  function koreksi_status_batal(btn){
+		if(btn=='yes')
+		{
+			koreksi_statusField.setValue('Batal');
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
+			master_koreksi_stok_createForm.kstok_savePrint.disable();
+			<?php } ?>
+		}  
+		else
+			koreksi_statusField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status'));
+	}
   
 	/* Function for Check if the form is valid */
 	function is_master_koreksi_stok_form_valid(){
@@ -1115,8 +1296,8 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					if(opsi=='print'){
 						master_koreksi_stok_cetak_faktur(pkid);
-						master_koreksi_stok_DataStore.reload();
 					}
+					master_koreksi_stok_DataStore.reload();
 				},
 				failure: function(response){
 					Ext.MessageBox.hide();
@@ -1194,11 +1375,12 @@ Ext.onReady(function(){
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
 			{
 				text: 'Save and Print',
-				handler: function(){ master_koreksi_stok_create('print'); }
+				ref: '../kstok_savePrint',
+				handler: pengecekan_dokumen
 			},
 			{
 				text: 'Save',
-				handler: function(){ master_koreksi_stok_create('close'); }
+				handler: pengecekan_dokumen2
 			}
 			,
 			<?php } ?>
@@ -1369,9 +1551,7 @@ Ext.onReady(function(){
 		anchor: '80%',
 		triggerAction: 'all'	 
 	
-	});
-	
-	
+	});	
     
 	/* Function for retrieve search Form Panel */
 	master_koreksi_stok_searchForm = new Ext.FormPanel({

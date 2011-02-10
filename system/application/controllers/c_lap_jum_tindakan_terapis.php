@@ -29,7 +29,7 @@ class C_lap_jum_tindakan_terapis extends Controller {
 		//ID dokter pada tabel departemen adalah 8
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		//$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
-		$result=$this->m_public_function->get_terapis_list($query);
+		$result=$this->m_lap_jum_tindakan_terapis->get_terapis_list($query);
 		echo $result;
 	}
 
