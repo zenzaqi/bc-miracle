@@ -632,6 +632,7 @@ Ext.onReady(function(){
 			data:[['L','Laki-laki'],['P','Perempuan'],['S','Semua']]
 		}),
 		mode: 'local',
+		blankText:'Semua',
 		displayField: 'lap_kunjungan_kelamin_display',
 		valueField: 'lap_kunjungan_kelamin_value',
 		anchor: '100%',
@@ -743,8 +744,11 @@ Ext.onReady(function(){
 	function lap_kunjungan_reset_formSearch(){
 		lap_kunjungan_idSearchField.reset();
 		lap_kunjungan_kelaminSearchField.reset();
+		lap_kunjungan_kelaminSearchField.setValue('S');
 		lap_kunjungan_memberSearchField.reset();
+		lap_kunjungan_memberSearchField.setValue('Semua');
 		lap_kunjungan_custSearchField.reset();
+		lap_kunjungan_custSearchField.setValue('Semua');
 		lap_kunjungan_idSearchField.setValue(null);
 		Ext.getCmp('lap_kunjungan_tglStartSearchField').reset();
 		Ext.getCmp('lap_kunjungan_tglStartSearchField').setValue(null);

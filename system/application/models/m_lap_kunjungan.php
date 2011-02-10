@@ -900,7 +900,7 @@ from
 	function lap_kunjungan_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
 			//full query
 
-		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'Semua')
+		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'S')
 		{
 			$cust_kelamin = "";
 		}			
@@ -1525,7 +1525,7 @@ from
 			//full query
 
 		
-		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'Semua')
+		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'S')
 		{
 			$cust_kelamin = "";
 		}			
@@ -2149,7 +2149,7 @@ from
 			//full query
 		
 		
-		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'Semua')
+		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'S')
 		{
 			$cust_kelamin = "";
 		}			
