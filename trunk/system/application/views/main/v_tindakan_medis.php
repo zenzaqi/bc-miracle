@@ -1113,6 +1113,20 @@ Ext.onReady(function(){
 			<?php } ?>
 		}, 
 		{
+			align : 'Right',
+			header: '<div align="center">' + 'Jml' + '</div>',
+			dataIndex: 'dtrawat_jumlah',
+			width: 30,	//150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: true,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})
+		},		
+		{
 			header: '<div align="center">' + 'Dokter' + '</div>',
 			dataIndex: 'dtrawat_petugas1',
 			width: 80,
@@ -1255,20 +1269,6 @@ Ext.onReady(function(){
 			
 		}, 
 		
-		{
-			align : 'Right',
-			header: '<div align="center">' + 'Jml' + '</div>',
-			dataIndex: 'dtrawat_jumlah',
-			width: 30,	//150,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: true,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
-		},
 		
 		/*
 		{

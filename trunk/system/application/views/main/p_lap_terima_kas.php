@@ -60,7 +60,7 @@
 			$paket_transfer=0;
 			$paket_voucher=0;
 			$paket_total=0;
-			//kwintansi
+			//kwitansi
 			$kwitansi_tunai=0;
 			$kwitansi_kwitansi=0;
 			$kwitansi_kredit=0;
@@ -68,6 +68,14 @@
 			$kwitansi_transfer=0;
 			$kwitansi_voucher=0;
 			$kwitansi_total=0;
+			//lunas
+			$lunas_tunai=0;
+			$lunas_kwitansi=0;
+			$lunas_kredit=0;
+			$lunas_cek=0;
+			$lunas_transfer=0;
+			$lunas_voucher=0;
+			$lunas_total=0;
 			//total
 			$total_tunai=0;
 			$total_kwitansi=0;
@@ -83,7 +91,7 @@
 				if($print->jenis_transaksi=="jual_produk")
 				{
 					$produk_tunai=$print->nilai_tunai;
-					$produk_kwintansi=$print->nilai_kwitansi;
+					$produk_kwitansi=$print->nilai_kwitansi;
 					$produk_kredit=$print->nilai_card;
 					$produk_cek=$print->nilai_cek;
 					$produk_transfer=$print->nilai_transfer;
@@ -92,7 +100,7 @@
 				}elseif($print->jenis_transaksi=="jual_rawat")
 				{
 					$rawat_tunai=$print->nilai_tunai;
-					$rawat_kwintansi=$print->nilai_kwitansi;
+					$rawat_kwitansi=$print->nilai_kwitansi;
 					$rawat_kredit=$print->nilai_card;
 					$rawat_cek=$print->nilai_cek;
 					$rawat_transfer=$print->nilai_transfer;
@@ -101,7 +109,7 @@
 				}elseif($print->jenis_transaksi=="jual_paket")
 				{
 					$paket_tunai=$print->nilai_tunai;
-					$paket_kwintansi=$print->nilai_kwitansi;
+					$paket_kwitansi=$print->nilai_kwitansi;
 					$paket_kredit=$print->nilai_card;
 					$paket_cek=$print->nilai_cek;
 					$paket_transfer=$print->nilai_transfer;
@@ -110,22 +118,31 @@
 				}elseif($print->jenis_transaksi=="jual_kwitansi")
 				{
 					$kwitansi_tunai=$print->nilai_tunai;
-					$kwitansi_kwintansi=$print->nilai_kwitansi;
+					$kwitansi_kwitansi=$print->nilai_kwitansi;
 					$kwitansi_kredit=$print->nilai_card;
 					$kwitansi_cek=$print->nilai_cek;
 					$kwitansi_transfer=$print->nilai_transfer;
 					$kwitansi_voucher=$print->nilai_voucher;
 					$kwitansi_total=$kwitansi_tunai+$kwitansi_kwitansi+$kwitansi_kredit+$kwitansi_cek+$kwitansi_transfer+$kwitansi_voucher;	
+				}elseif($print->jenis_transaksi=="jual_lunas")
+				{
+					$lunas_tunai=$print->nilai_tunai;
+					$lunas_kwitansi=$print->nilai_kwitansi;
+					$lunas_kredit=$print->nilai_card;
+					$lunas_cek=$print->nilai_cek;
+					$lunas_transfer=$print->nilai_transfer;
+					$lunas_voucher=$print->nilai_voucher;
+					$lunas_total=$lunas_tunai+$lunas_kwitansi+$lunas_kredit+$lunas_cek+$lunas_transfer+$lunas_voucher;	
 				}
 			}
 			
-			$total_tunai=$produk_tunai+$rawat_tunai+$paket_tunai+$kwitansi_tunai;
-			$total_kredit=$produk_kredit+$rawat_kredit+$paket_kredit+$kwitansi_kredit;
-			$total_kwitansi=$produk_kwitansi+$rawat_kwitansi+$paket_kwitansi+$kwitansi_kwitansi;
-			$total_cek=$produk_cek+$rawat_cek+$paket_cek+$kwitansi_cek;
-			$total_transfer=$produk_transfer+$rawat_transfer+$paket_transfer+$kwitansi_transfer;
-			$total_voucher=$produk_voucher+$rawat_voucher+$paket_voucher+$kwitansi_voucher;
-			$total_nilai=$produk_total+$rawat_total+$paket_total+$kwitansi_total;
+			$total_tunai=$produk_tunai+$rawat_tunai+$paket_tunai+$kwitansi_tunai+$lunas_tunai;
+			$total_kredit=$produk_kredit+$rawat_kredit+$paket_kredit+$kwitansi_kredit+$lunas_kredit;
+			$total_kwitansi=$produk_kwitansi+$rawat_kwitansi+$paket_kwitansi+$kwitansi_kwitansi+$lunas_kwitansi;
+			$total_cek=$produk_cek+$rawat_cek+$paket_cek+$kwitansi_cek+$lunas_cek;
+			$total_transfer=$produk_transfer+$rawat_transfer+$paket_transfer+$kwitansi_transfer+$lunas_transfer;
+			$total_voucher=$produk_voucher+$rawat_voucher+$paket_voucher+$kwitansi_voucher+$lunas_voucher;
+			$total_nilai=$produk_total+$rawat_total+$paket_total+$kwitansi_total+$lunas_total;
 			
 		?>
         <tr>
@@ -171,6 +188,17 @@
             <td  class="numeric"><?php echo number_format($kwitansi_transfer); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_voucher); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_total); ?></td>
+       </tr>
+	   <tr>
+        	<td>5.</td>
+            <td>Pelunasan Piutang</td>
+            <td  class="numeric"><?php echo number_format($lunas_tunai); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_kwitansi); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_kredit); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_cek); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_transfer); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_voucher); ?></td>
+            <td  class="numeric"><?php echo number_format($lunas_total); ?></td>
        </tr>
 	</tbody>
     	<tfoot>
