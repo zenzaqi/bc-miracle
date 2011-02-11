@@ -419,7 +419,7 @@ Ext.onReady(function(){
 		cbo_dtindakan_dokterDataStore.load({
 		 	callback: function(r,opt,success){
 				if(success==true){
-					var j=cbo_dtindakan_dokterDataStore.findExact('karyawan_username',lap_jum_tindakan_terapis_dokterSearchField.getValue(),0);
+					var j=cbo_dtindakan_dokterDataStore.findExact('karyawan_value',lap_jum_tindakan_terapis_dokterSearchField.getValue(),0);
 					if(j>-1){
 						var dokter_record=cbo_dtindakan_dokterDataStore.getAt(j);
 						lap_jum_tindakan_terapis_dokterField.setValue(dokter_record.data.karyawan_username);

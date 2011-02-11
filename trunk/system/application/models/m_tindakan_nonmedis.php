@@ -85,7 +85,7 @@ class M_tindakan_nonmedis extends Model{
 				LEFT JOIN perawatan ON (perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan)
 				WHERE detail_jual_paket.dpaket_sisa_paket > 0
 					AND date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
-					AND master_jual_paket.jpaket_stat_dok='Tertutup'
+					AND master_jual_paket.jpaket_stat_dok<>'Batal'
 					AND detail_jual_paket.dpaket_sisa_paket>0
 					AND (customer.cust_id = '$trawat_cust_id' OR pengguna_paket.ppaket_cust = '$trawat_cust_id')
 					AND perawatan.rawat_id = '$dtrawat_rawat_id'
