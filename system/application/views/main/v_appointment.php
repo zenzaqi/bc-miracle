@@ -1326,10 +1326,20 @@ Ext.onReady(function(){
 			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
 				specialkey: function(f,e){
-					tbar_jenis_rawatField.reset();
 					if(e.getKey() == e.ENTER){
 						//appointment_ColumnModel.setHidden(5,false);
 						//appointment_ColumnModel.setHidden(6,false);
+						tbar_jenis_rawatField.reset();
+						Ext.getCmp('cbo_dokter').reset();
+						tbar_dokter_tglField.reset();
+						tbar_nonmedis_tglField.reset();
+						tbar_dokter_tglField.setDisabled(true);
+						Ext.getCmp('cbo_dokter').setDisabled(true);
+						tbar_nonmedis_tglField.setDisabled(true);
+						
+						appointment_DataStore.setBaseParam('jenis_rawat','');
+						appointment_DataStore.setBaseParam('tgl_app','');
+						appointment_DataStore.setBaseParam('dokter_id','');
 						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 						appointment_DataStore.groupBy('dokter_username');
 		            }
@@ -1395,13 +1405,19 @@ Ext.onReady(function(){
 	
 	tbar_jenis_rawatField.on('select', function(){
 		column_set_editable();
+		Ext.getCmp('simpleSearch').reset();
 		appointment_DataStore.setBaseParam('query','');
 		if(tbar_jenis_rawatField.getValue()=="Medis"){
 			tbar_nonmedis_tglField.reset();
 			tbar_dokter_tglField.setVisible(true);
 			Ext.getCmp('cbo_dokter').setVisible(true);
 			tbar_nonmedis_tglField.setVisible(false);
+			tbar_dokter_tglField.reset();
+			tbar_dokter_tglField.setDisabled(false);
+			Ext.getCmp('cbo_dokter').setDisabled(false);
 			
+			appointment_DataStore.setBaseParam('tgl_app','');
+			appointment_DataStore.setBaseParam('dokter_id','');
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1417,7 +1433,11 @@ Ext.onReady(function(){
 			tbar_dokter_tglField.setVisible(false);
 			Ext.getCmp('cbo_dokter').setVisible(false);
 			tbar_nonmedis_tglField.setVisible(true);
+			tbar_nonmedis_tglField.reset();
+			tbar_nonmedis_tglField.setDisabled(false);
 			
+			appointment_DataStore.setBaseParam('tgl_app','');
+			appointment_DataStore.setBaseParam('dokter_id','');
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
@@ -1443,9 +1463,13 @@ Ext.onReady(function(){
 	});
 	
 	tbar_dokter_tglField.on('select',function(){
-		appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
+		//appointment_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
+		Ext.getCmp('simpleSearch').reset();
+		Ext.getCmp('cbo_dokter').reset();
+		appointment_DataStore.setBaseParam('query','');
 		appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
 		appointment_DataStore.setBaseParam('tgl_app',tbar_dokter_tglField.getValue());
+		appointment_DataStore.setBaseParam('dokter_id','');
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
@@ -1454,9 +1478,12 @@ Ext.onReady(function(){
 	});
 	
 	tbar_nonmedis_tglField.on('select',function(){
+		Ext.getCmp('simpleSearch').reset();
+		Ext.getCmp('cbo_dokter').reset();
 		appointment_DataStore.setBaseParam('query','');
 		appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
 		appointment_DataStore.setBaseParam('tgl_app',tbar_nonmedis_tglField.getValue());
+		appointment_DataStore.setBaseParam('dokter_id','');
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
@@ -1511,6 +1538,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	appointmentListEditorGrid.addListener('rowcontextmenu', onappointment_ListEditGridContextMenu);
+	appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
 	appointment_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	appointmentListEditorGrid.on('afteredit', appointment_update); // inLine Editing Record
 	

@@ -1075,8 +1075,8 @@ class M_appointment extends Model{
 	
 	//function for get list record
 	function appointment_list($filter,$start,$end,$tgl_app,$jenis_rawat,$dokter_id){
-		if($jenis_rawat=="")
-			$jenis_rawat="Medis";
+		/*if($jenis_rawat=="")
+			$jenis_rawat="Medis";*/
 		//$query = "SELECT * FROM appointment";
 		$dt=date('Y-m-d');
 		$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));
@@ -1091,13 +1091,6 @@ class M_appointment extends Model{
 			}else{
 				$query .=" AND dapp_tglreservasi >= '$dt'";
 			}
-			// For simple search
-			/*if ($filter<>"" && is_numeric($filter)==false){
-				$query="SELECT * FROM vu_appointment ";
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
-			}*/
 		}elseif($jenis_rawat=="Non Medis" && $filter==''){
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .=" kategori_nama='Non Medis'";
@@ -1107,13 +1100,6 @@ class M_appointment extends Model{
 			}else{
 				$query .=" AND dapp_tglreservasi >= '$dt'";
 			}
-			// For simple search
-			/*if ($filter<>"" && is_numeric($filter)==false){
-				$query="SELECT * FROM vu_appointment ";
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				//search customer,perawatan,dokter,therapist
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%')";
-			}*/
 		}
 		
 		// For Pilihan Dokter pada tbar
@@ -1146,7 +1132,6 @@ class M_appointment extends Model{
 		}
 		
 		$query.=" ORDER BY dapp_tglreservasi ASC, dapp_jamreservasi ASC";
-		//echo $query;
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		$limit = $query." LIMIT ".$start.",".$end;		

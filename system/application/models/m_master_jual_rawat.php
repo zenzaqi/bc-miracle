@@ -2591,11 +2591,13 @@ class M_master_jual_rawat extends Model{
 			$record = $rs->row_array();
 			$dapaket_dtrawat = $record['dapaket_dtrawat'];
 			/* db.detail_ambil_paket.dapaket_stat_dok = 'Tertutup' */
-			$dtu_dapaket=array(
-			"dapaket_stat_dok"=>'Tertutup'
-			);
-			$this->db->where('dapaket_id', $dapaket_id);
-			$this->db->update('detail_ambil_paket', $dtu_dapaket);
+            $sql = "UPDATE detail_ambil_paket
+                SET dapaket_stat_dok='Tertutup'
+                WHERE dapaket_id='".$dapaket_id."'
+                    AND dapaket_stat_dok='Terbuka'";
+            $this->db->query('LOCK TABLE detail_ambil_paket WRITE');
+            $this->db->query($sql);
+            $this->db->query('UNLOCK TABLES');
 			
 			/* me-Lock db.tindakan_detail agar tidak bisa di-edit */
 			$dtu_dtrawat = array(
@@ -2648,6 +2650,16 @@ class M_master_jual_rawat extends Model{
 	
 	function print_paper_apaket($dapaket_cust ,$dapaket_date_create){
 		$sql = "SELECT dapaket_id
+            FROM detail_ambil_paket
+            WHERE dapaket_cust='$dapaket_cust'
+				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'
+                AND dapaket_stat_dok='Terbuka'";
+        $rss = $this->db->query($sql);
+        foreach($rss->result() as $row){
+			$this->detail_ambil_paket_status_update($row->dapaket_id);
+		}
+        
+        $sql = "SELECT dapaket_id
 				,jpaket_nobukti
 				,paket_nama
 				,rawat_nama
@@ -2666,12 +2678,11 @@ class M_master_jual_rawat extends Model{
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 			LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id)
 			WHERE dapaket_cust='$dapaket_cust'
-				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'"; //mencetak semua pengambilan paket dari customer dalam tanggal yang dipilih
+				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'
+                AND dapaket_stat_dok='Tertutup'"; //mencetak semua pengambilan paket dari customer dalam tanggal yang dipilih
 		
-		$result = $this->db->query($sql);
-		foreach($result->result() as $row){
-			$this->detail_ambil_paket_status_update($row->dapaket_id);
-		}
+        $result = $this->db->query($sql);
+		
 		return $result;
 	}
 	
