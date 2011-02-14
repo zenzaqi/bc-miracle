@@ -132,6 +132,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	function get_dpaket_byjpaket_list($mode,$jpaket_id,$start,$end){
+	$date_now=date('Y-m-d');
 		if($mode=='create'){
 			$sql = "SELECT vu_dpaket_total_bayar.dpaket_id AS dpaket_id
 					,vu_dpaket_total_bayar.dpaket_paket AS dpaket_paket
@@ -144,12 +145,13 @@ class M_master_retur_jual_paket extends Model{
 				FROM vu_dpaket_total_bayar
 					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = vu_dpaket_total_bayar.dpaket_id)
 					LEFT JOIN vu_paket_harga_satu_rawat_now ON(vu_paket_harga_satu_rawat_now.paket_id=vu_dpaket_total_bayar.dpaket_paket)
+					left join detail_jual_paket on (detail_jual_paket.dpaket_id = vu_dpaket_total_bayar.dpaket_id)
 				WHERE vu_dpaket_total_bayar.jpaket_id='".$jpaket_id."'
 					AND vu_dpaket_total_bayar.dpaket_id NOT IN
 						(SELECT detail_retur_paket_rawat.drpaket_dpaket
 						FROM detail_retur_paket_rawat
 							JOIN master_retur_jual_paket ON (drpaket_master = rpaket_id)
-						WHERE master_retur_jual_paket.rpaket_stat_dok <> 'Batal')";
+						WHERE master_retur_jual_paket.rpaket_stat_dok <> 'Batal') and '".$date_now."' < (detail_jual_paket.dpaket_kadaluarsa + INTERVAL 1 YEAR)";
 		}else{
 			$sql = "SELECT vu_dpaket_total_bayar.dpaket_id AS dpaket_id
 					,vu_dpaket_total_bayar.dpaket_paket AS dpaket_paket
@@ -162,7 +164,8 @@ class M_master_retur_jual_paket extends Model{
 				FROM vu_dpaket_total_bayar
 					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = vu_dpaket_total_bayar.dpaket_id)
 					LEFT JOIN vu_paket_harga_satu_rawat_now ON(vu_paket_harga_satu_rawat_now.paket_id=vu_dpaket_total_bayar.dpaket_paket)
-				WHERE detail_jual_paket.dpaket_master='".$jpaket_id."'";
+					left join detail_jual_paket on (detail_jual_paket.dpaket_id = vu_dpaket_total_bayar.dpaket_id)
+				WHERE detail_jual_paket.dpaket_master='".$jpaket_id."' and '".$date_now."' < (detail_jual_paket.dpaket_kadaluarsa + INTERVAL 1 YEAR)";
 		}
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();

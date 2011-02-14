@@ -93,11 +93,21 @@ class C_lap_kunjungan_non extends Controller {
 		else
 			$trawat_tglapp_end="";
 
+		$lap_kunjungan_nonkelamin=trim(@$_POST["lap_kunjungan_nonkelamin"]);
+		$lap_kunjungan_nonkelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_nonkelamin);
+		$lap_kunjungan_nonkelamin=str_replace("'", '"',$lap_kunjungan_nonkelamin);
+		$lap_kunjungan_nonmember=trim(@$_POST["lap_kunjungan_nonmember"]);
+		$lap_kunjungan_nonmember=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_nonmember);
+		$lap_kunjungan_nonmember=str_replace("'", '"',$lap_kunjungan_nonmember);
+		$lap_kunjungan_noncust=trim(@$_POST["lap_kunjungan_noncust"]);
+		$lap_kunjungan_noncust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_noncust);
+		$lap_kunjungan_noncust=str_replace("'", '"',$lap_kunjungan_noncust);
+		
 		//$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan_non->lap_kunjungan_non_search($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end);
+		$result = $this->m_lap_kunjungan_non->lap_kunjungan_non_search($lap_kunjungan_nonkelamin, $lap_kunjungan_nonmember, $lap_kunjungan_noncust,$lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$start,$end);
 		echo $result;
 	}
 
@@ -113,11 +123,20 @@ class C_lap_kunjungan_non extends Controller {
 		else
 			$trawat_tglapp_end="";
 
+		$lap_kunjungan_nonkelamin=trim(@$_POST["lap_kunjungan_nonkelamin"]);
+		$lap_kunjungan_nonkelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_nonkelamin);
+		$lap_kunjungan_nonkelamin=str_replace("'", '"',$lap_kunjungan_nonkelamin);
+		$lap_kunjungan_nonmember=trim(@$_POST["lap_kunjungan_nonmember"]);
+		$lap_kunjungan_nonmember=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_nonmember);
+		$lap_kunjungan_nonmember=str_replace("'", '"',$lap_kunjungan_nonmember);
+		$lap_kunjungan_noncust=trim(@$_POST["lap_kunjungan_noncust"]);
+		$lap_kunjungan_noncust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_noncust);
+		$lap_kunjungan_noncust=str_replace("'", '"',$lap_kunjungan_noncust);
 		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan_non->lap_kunjungan_non_search2($lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
+		$result = $this->m_lap_kunjungan_non->lap_kunjungan_non_search2($lap_kunjungan_nonkelamin, $lap_kunjungan_nonmember, $lap_kunjungan_noncust, $lap_kunjungan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
 		echo $result;
 	}
 	
