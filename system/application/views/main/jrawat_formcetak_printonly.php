@@ -13,20 +13,17 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
+		<td height="10px" align="right"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
+			<h1><i>COPY</i></h1><br>
+		</td>
 		<td height="110px"><table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
           <tr>
             <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
             <td width="540px" valign="bottom"><table width="540px" border="0" cellspacing="0" cellpadding="0">
               <tr>
-				<td></td>
-				<td height="5px" align="right">
-					<font size=5><b><i>COPY</i></b></font>
-				</td>
-			  </tr>
-			  <tr>
                 <td width="60px" align="right">Tanggal</td>
                 <td width="480px">:&nbsp;&nbsp;<?=$jrawat_tanggal;?></td>
               </tr>
@@ -94,7 +91,7 @@ html,body,table,tr,td{
 		$j=0;
 		foreach($detail_apaket as $list => $row_apaket){ $j+=1;?>
 		<tr>
-			<td width="970px">&nbsp;<?=$j;?>.&nbsp;<?=$row_apaket->paket_nama;?>&nbsp;(<?=$row_apaket->rawat_nama;?>&nbsp;-&nbsp;<?=$row_apaket->jpaket_nobukti;?>)</td>
+			<td width="970px">&nbsp;<?=$j;?>.&nbsp;<?=$row_apaket->paket_nama;?>&nbsp;(<?=$row_apaket->rawat_nama;?>&nbsp;-&nbsp;<?=$row_apaket->jpaket_nobukti;?>)&nbsp;<b>Jml : </b>&nbsp;<?=$row_apaket->dapaket_jumlah;?>&nbsp;<b>Sisa : </b>&nbsp;<?=$row_apaket->dpaket_sisa_paket;?></td>
 			<td width="270px" align="right">0</td>
 		</tr>
 		<?php }?>

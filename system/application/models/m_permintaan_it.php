@@ -18,6 +18,30 @@ class m_permintaan_it extends Model{
 			parent::Model();
 		}
 		
+		function sendmail(){
+		$config = Array(
+			'protocol' => 'smtp',
+			'smtp_host' => 'mail.miracle-clinic.com',
+			'smtp_port' => 25,
+			'smtp_user' => 'isaac@miracle-clinic.co,',
+			'smtp_pass' => '203675',
+		);
+		$this->load->library('email', $config);
+		$this->email->set_newline("\r\n");
+		
+		$this->email->from('isaac@miracle-clinic.com', 'IT');
+		$this->email->to('isaac@miracle-clinic.com');
+		
+		$this->email->subject(' CodeIgniter Rocks Socks ');
+		$this->email->message('Hello World');
+		
+		
+		if (!$this->email->send())
+			show_error($this->email->print_debugger());
+		else
+			echo 'Your e-mail has been sent!'; 
+		}
+		
 		function get_cabang_list(){
 			$sql="SELECT cabang_id,cabang_nama FROM cabang ";
 			$query = $this->db->query($sql);
@@ -181,6 +205,55 @@ class m_permintaan_it extends Model{
 				//"gudang_revised"=>'0'	
 			);
 			$this->db->insert('permintaan_it', $data); 
+			
+			// untuk kirim email
+			$sql_cabang= "SELECT cabang_nama FROM cabang WHERE cabang_id ='".$permintaan_cabang."'";
+			$query_cabang= $this->db->query($sql_cabang);
+			$data_cabang= $query_cabang->row();
+			$cabang_nama= $data_cabang->cabang_nama;
+			$config = Array(
+				'protocol' => 'smtp',
+				'smtp_host' => 'mail.miracle-clinic.com',
+				'smtp_port' => 25,
+				'smtp_user' => 'isaac@miracle-clinic.com',
+				'smtp_pass' => '203675',
+			);
+			$this->load->library('email', $config);
+			$this->email->set_newline("\r\n");
+			
+			$this->email->from('isaac@miracle-clinic.com', $username);
+			//$this->email->to('hendri@miracle-clinic.com');
+			$this->email->to('isaac@miracle-clinic.com, 
+			hendri@miracle-clinic.com, 
+			freddy@miracle-clinic.com, 
+			sindarto@miracle-clinic.com,
+			natalie@miracle-clinic.com,
+			it@miracle-clinic.com');
+			
+			$judul_email = 'Permintaan IT - '.$permintaan_tipe;
+			$isi_email = 
+				'Dear : IT '
+				."\n\n".
+				'Cabang		: '.$cabang_nama 
+				."\n".	
+				'Tanggal	: '.$permintaan_tanggalmasalah
+				."\n".
+				'Prioritas	: '.$permintaan_prioritas
+				."\n".
+				'Permintaan	: '.$permintaan_permintaan 
+				."\n". 
+				'Pemohon	: '.$username;
+			$this->email->subject($judul_email);
+			$this->email->message($isi_email);
+			$this->email->send();
+			/*
+			if (!$this->email->send())
+				show_error($this->email->print_debugger());
+			else
+				echo 'Your e-mail has been sent!'; 
+			*/
+			// end kirim email
+			
 			if($this->db->affected_rows())
 				return '1';
 			else
