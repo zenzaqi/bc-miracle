@@ -2671,12 +2671,14 @@ class M_master_jual_rawat extends Model{
 				,dapaket_customer.cust_nama AS dapaket_cust_nama
 				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
 				,dapaket_tgl_ambil
+				,detail_jual_paket.dpaket_sisa_paket AS dpaket_sisa_paket
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
 			LEFT JOIN customer AS dapaket_customer ON(dapaket_cust=dapaket_customer.cust_id)
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 			LEFT JOIN customer AS jpaket_customer ON(jpaket_cust=jpaket_customer.cust_id)
+			LEFT JOIN detail_jual_paket ON(detail_ambil_paket.dapaket_dpaket=detail_jual_paket.dpaket_id)
 			WHERE dapaket_cust='$dapaket_cust'
 				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'
                 AND dapaket_stat_dok='Tertutup'"; //mencetak semua pengambilan paket dari customer dalam tanggal yang dipilih
@@ -2697,11 +2699,13 @@ class M_master_jual_rawat extends Model{
 				,cust_alamat
 				,dapaket_tgl_ambil
 				,dapaket_dtrawat
+				,dpaket_sisa_paket
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
 			LEFT JOIN customer ON(dapaket_cust=cust_id)
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
+			LEFT JOIN detail_jual_paket ON(dapaket_dpaket=dpaket_id)
 			WHERE dapaket_cust='$dapaket_cust'
 				AND date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$dapaket_date_create'
 				AND dapaket_stat_dok='Terbuka'";

@@ -59,7 +59,7 @@ html,body,table,tr,td{
 		$i=0;
 		foreach($detail_ambil_paket as $list => $row) { $i+=1;?>
         <tr>
-          <td width="1240px">&nbsp;<?=$i;?>.&nbsp;<?=$row->paket_nama;?>&nbsp;(<?=$row->rawat_nama;?>&nbsp;-&nbsp;<?=$row->jpaket_nobukti;?>)&nbsp;&nbsp;<strong>diambil oleh:</strong> <?=$row->dapaket_cust_no;?> - <?=$row->dapaket_cust_nama;?></td>
+          <td width="1240px">&nbsp;<?=$i;?>.&nbsp;<?=$row->paket_nama;?>&nbsp;(<?=$row->rawat_nama;?>&nbsp;-&nbsp;<?=$row->jpaket_nobukti;?>)&nbsp;&nbsp;<strong>diambil oleh:</strong> <?=$row->dapaket_cust_no;?> - <?=$row->dapaket_cust_nama;?>&nbsp;- <b>Jml : </b>&nbsp;<?=$row->dapaket_jumlah;?>&nbsp;- <b>Sisa : </b>&nbsp;<?=$row->dpaket_sisa_paket;?></td>
         </tr>
 		<?php 
 		}
