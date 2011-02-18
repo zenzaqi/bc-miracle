@@ -567,7 +567,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Nama Peminta' + '</div>',
 			dataIndex: 'nama',
-			width: 200,
+			width: 180,
 			sortable: true,
 			readOnly: true
 			/*
@@ -579,7 +579,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Cabang' + '</div>',
 			dataIndex: 'cabang',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true
 			/*
@@ -591,7 +591,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tgl Permintaan' + '</div>',
 			dataIndex: 'tanggal_masalah',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
@@ -604,7 +604,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tipe Permintaan' + '</div>',
 			dataIndex: 'tipe',
-			width: 200,
+			width: 150,
 			sortable: true,
 			readOnly: true,
 			/*
@@ -628,7 +628,8 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Prioritas' + '</div>',
 			dataIndex: 'prioritas',
-			width: 200,
+			align: 'center',
+			width: 80,
 			sortable: true,
 			readOnly: true
 			/*
@@ -640,6 +641,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'status',
+			align: 'center',
 			width: 120,
 			sortable: true,
 			editor: new Ext.form.ComboBox({
