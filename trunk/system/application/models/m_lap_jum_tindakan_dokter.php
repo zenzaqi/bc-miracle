@@ -136,8 +136,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 							(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -149,14 +149,14 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama
 							)
 							union
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -167,7 +167,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
@@ -180,8 +180,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 			{
 			$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -193,7 +193,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama	
 						";
 		
@@ -203,8 +203,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 			{
 				$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -215,7 +215,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama";
 			}
 		
@@ -245,8 +245,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 						from(
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -258,14 +258,14 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama
 							)
 							union
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -276,7 +276,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
@@ -300,8 +300,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 						from(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -313,7 +313,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama) as vu_kredit
 								";
 			}
@@ -324,8 +324,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 						from(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -336,7 +336,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama) as vu_kredit";
 	
 		
@@ -397,8 +397,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 							(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -410,14 +410,14 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama
 							)
 							union
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -428,7 +428,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama
 							)
 							) as table_union
@@ -441,8 +441,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 			{
 			$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -454,7 +454,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)			
-							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (dokter.karyawan_id ='".$trawat_dokter."' or terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
+							where (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (rawat_id is not null and jrawat_stat_dok='Tertutup') and (detail_jual_rawat.drawat_sales = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas2 = '".$trawat_dokter."')
 							group by karyawan_username, rawat_nama	
 						";
 		
@@ -464,8 +464,8 @@ class M_lap_jum_tindakan_dokter extends Model{
 			{
 				$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
-							count(perawatan.rawat_nama) as Jumlah_rawat,
-							perawatan.rawat_kredit*count(perawatan.rawat_nama) as Total_kredit,
+							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
+							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -476,7 +476,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
-							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (terapis.karyawan_id = '".$trawat_dokter."' or referal.karyawan_id = '".$trawat_dokter."' or detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							where (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and (detail_ambil_paket.dapaket_referal = '".$trawat_dokter."' or tindakan_detail.dtrawat_petugas1 = '".$trawat_dokter."') and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username,rawat_nama";
 			}
 		 
