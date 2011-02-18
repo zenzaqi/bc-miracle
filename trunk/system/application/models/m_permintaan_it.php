@@ -86,6 +86,7 @@ class m_permintaan_it extends Model{
 			SELECT karyawan.karyawan_nama AS nama, 
 				cabang.cabang_nama AS cabang,
 				(SELECT karyawan_nama FROM karyawan WHERE karyawan_id = permintaan_it.permintaan_mengetahui) AS mengetahui_nama,
+				(SELECT karyawan_nama FROM karyawan WHERE karyawan_id = permintaan_it.permintaan_mengetahui2) AS mengetahui_nama2,
 				permintaan_it.permintaan_cabang AS cabang_id,
 				permintaan_it.permintaan_client AS client,
 				permintaan_it.permintaan_id as permintaan_id,
@@ -95,6 +96,7 @@ class m_permintaan_it extends Model{
 				permintaan_it.permintaan_masalah AS masalah,
 				permintaan_it.permintaan_prioritas AS prioritas,
 				permintaan_it.permintaan_mengetahui AS mengetahui,
+				permintaan_it.permintaan_mengetahui2 AS mengetahui2,
 				permintaan_it.permintaan_penyelesaian AS penyelesaian, 
 				permintaan_it.permintaan_tanggal_selesai AS tanggal_selesai, 
 				permintaan_it.permintaan_status AS status
@@ -104,7 +106,7 @@ class m_permintaan_it extends Model{
 			
 			if ($permintaan_client_id<>"2" && $permintaan_client_id<>"11" && $permintaan_client_id<>"66" && $permintaan_client_id<>"79"){
 				//$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " WHERE (permintaan_it.permintaan_client ='".$permintaan_client_id."' OR permintaan_it.permintaan_mengetahui ='".$permintaan_client_id."')";
+				$query .= " WHERE (permintaan_it.permintaan_client ='".$permintaan_client_id."' OR permintaan_it.permintaan_mengetahui ='".$permintaan_client_id."' OR permintaan_it.permintaan_mengetahui2 ='".$permintaan_client_id."')";
 			}
 			// For simple search
 			if ($filter<>""){
@@ -130,7 +132,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for update record
-		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -162,6 +164,11 @@ class m_permintaan_it extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["permintaan_mengetahui"]=$permintaan_mengetahui;
+			
+			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$permintaan_mengetahui2."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["permintaan_mengetahui2"]=$permintaan_mengetahui2;
 
 			$this->db->where('permintaan_id', $permintaan_id);
 			$this->db->update('permintaan_it', $data);
@@ -176,7 +183,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for create new record
-		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -199,6 +206,7 @@ class m_permintaan_it extends Model{
 				"permintaan_masalah"=>$permintaan_permintaan,	
 				"permintaan_prioritas"=>$permintaan_prioritas,	
 				"permintaan_mengetahui"=>$permintaan_mengetahui,
+				"permintaan_mengetahui2"=>$permintaan_mengetahui2,
 				"permintaan_penyelesaian"=>$permintaan_penyelesaian,
 				"permintaan_status"=>$permintaan_status,
 				"permintaan_tanggal_selesai"=>$permintaan_tanggalselesai			
@@ -211,26 +219,44 @@ class m_permintaan_it extends Model{
 			$query_cabang= $this->db->query($sql_cabang);
 			$data_cabang= $query_cabang->row();
 			$cabang_nama= $data_cabang->cabang_nama;
+			
+			// ambil email mengetahui
+			if ($permintaan_mengetahui <> 'Pilih Satu') {
+				$sql_mengetahui= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui."'";
+				$query_mengetahui= $this->db->query($sql_mengetahui);
+				$data_mengetahui= $query_mengetahui->row();
+				$email_mengetahui= $data_mengetahui->karyawan_email;
+			}
+			if ($permintaan_mengetahui2 <> 'Pilih Satu') {
+			$sql_mengetahui2= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui2."'";
+			$query_mengetahui2= $this->db->query($sql_mengetahui2);
+			$data_mengetahui2= $query_mengetahui2->row();
+			$email_mengetahui2= $data_mengetahui2->karyawan_email;
+			}
+			
+			
 			$config = Array(
 				'protocol' => 'smtp',
 				'smtp_host' => 'mail.miracle-clinic.com',
 				'smtp_port' => 25,
-				'smtp_user' => 'isaac@miracle-clinic.com',
-				'smtp_pass' => '203675',
+				'smtp_user' => 'admin@miracle-clinic.com',
+				'smtp_pass' => 'serve3LOVE',
 			);
 			$this->load->library('email', $config);
 			$this->email->set_newline("\r\n");
 			
-			$this->email->from('isaac@miracle-clinic.com', $username);
-			//$this->email->to('hendri@miracle-clinic.com');
-			$this->email->to('isaac@miracle-clinic.com, 
+			$this->email->from('admin@miracle-clinic.com', 'Miracle Information System');
+			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','
+			.'isaac@miracle-clinic.com, 
 			hendri@miracle-clinic.com, 
 			freddy@miracle-clinic.com, 
 			sindarto@miracle-clinic.com,
 			natalie@miracle-clinic.com,
-			it@miracle-clinic.com');
+			it@miracle-clinic.com';
+			//$this->email->to('isaac@miracle-clinic.com');
+			$this->email->to($email_kirim);
 			
-			$judul_email = 'Permintaan IT - '.$permintaan_tipe;
+			$judul_email = 'Permintaan IT dari '.$username;
 			$isi_email = 
 				'Dear : IT '
 				."\n\n".
@@ -289,6 +315,8 @@ class m_permintaan_it extends Model{
 		function permintaan_search($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_prioritas ,$permintaan_status, $permintaan_tanggalselesai, $start,$end){
 			//if($gudang_aktif=="")
 			//	$gudang_aktif="Aktif";
+			if($permintaan_status=="")
+				$permintaan_status="Open";
 			//full query
 			$username = $_SESSION[SESSION_USERID];
 			$sql_id_cust= "SELECT user_karyawan FROM users WHERE user_name ='".$username."'";
