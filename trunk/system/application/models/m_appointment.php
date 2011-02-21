@@ -36,7 +36,13 @@ class M_appointment extends Model{
 					vu_report_tindakan_dokter.dokter_bulan='$bln_filter') 
 					left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1) OR substring(karyawan_cabang2,(select info_cabang from info),1) = '1'";
+					AND(karyawan_cabang = (SELECT info_cabang FROM info limit 1) 
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id)
+					,1) = '1')";
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
