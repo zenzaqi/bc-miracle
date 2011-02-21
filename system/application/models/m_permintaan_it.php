@@ -190,6 +190,10 @@ class m_permintaan_it extends Model{
 				$permintaan_prioritas = "Low";
 			if ($permintaan_status=="")
 				$permintaan_status = "Open";
+			if ($permintaan_mengetahui=="")
+				$permintaan_mengetahui = "Pilih Satu";
+			if ($permintaan_mengetahui2=="")
+				$permintaan_mengetahui2 = "Pilih Satu";
 							
 			$username = $_SESSION[SESSION_USERID];
 			$sql_id_cust= "SELECT user_karyawan FROM users WHERE user_name ='".$username."'";
@@ -215,10 +219,15 @@ class m_permintaan_it extends Model{
 			$this->db->insert('permintaan_it', $data); 
 			
 			// untuk kirim email
+			if ($permintaan_cabang <> 'Pilih Satu') {
 			$sql_cabang= "SELECT cabang_nama FROM cabang WHERE cabang_id ='".$permintaan_cabang."'";
 			$query_cabang= $this->db->query($sql_cabang);
 			$data_cabang= $query_cabang->row();
 			$cabang_nama= $data_cabang->cabang_nama;
+			}
+			else {
+				$cabang_nama = "";
+			}
 			
 			// ambil email mengetahui
 			if ($permintaan_mengetahui <> 'Pilih Satu') {
@@ -246,6 +255,7 @@ class m_permintaan_it extends Model{
 			$this->email->set_newline("\r\n");
 			
 			$this->email->from('admin@miracle-clinic.com', 'Miracle Information System');
+			
 			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','
 			.'isaac@miracle-clinic.com, 
 			hendri@miracle-clinic.com, 
@@ -253,6 +263,7 @@ class m_permintaan_it extends Model{
 			sindarto@miracle-clinic.com,
 			natalie@miracle-clinic.com,
 			it@miracle-clinic.com';
+			
 			//$this->email->to('isaac@miracle-clinic.com');
 			$this->email->to($email_kirim);
 			
