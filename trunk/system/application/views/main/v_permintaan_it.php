@@ -185,8 +185,14 @@ Ext.onReady(function(){
 		if(permintaan_statusField.getValue()!== null){permintaan_status_create = permintaan_statusField.getValue();}
 		if(permintaan_tanggalselesaiField.getValue()!== ""){permintaan_tanggalselesai_create = permintaan_tanggalselesaiField.getValue().format('Y-m-d');}
 		
+		Ext.MessageBox.show({
+		   msg: 'Sedang menambahkan data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
 			Ext.Ajax.request({  
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_permintaan_it&m=get_action',
 				params: {
 					task: post2db,
