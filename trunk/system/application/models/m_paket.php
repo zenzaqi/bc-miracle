@@ -302,7 +302,7 @@ class M_paket extends Model{
 	}
 
 	//function for update record
-	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg){
+	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -402,6 +402,11 @@ class M_paket extends Model{
 //				"paket_dm"=>$paket_dm,
 			"paket_point"=>$paket_point,
 			"paket_harga"=>$paket_harga,
+			"paket_harga_ki"=>$paket_harga_ki,
+			"paket_harga_mdn"=>$paket_harga_mdn,
+			"paket_harga_mnd"=>$paket_harga_mnd,
+			"paket_harga_ygk"=>$paket_harga_ygk,
+			"paket_harga_mta"=>$paket_harga_mta,
 			"paket_expired"=>$paket_expired,
 			"paket_aktif"=>$paket_aktif,
 			"paket_aktif_cabang"=>$temp_aktif,
@@ -460,7 +465,7 @@ class M_paket extends Model{
 	}
 
 	//function for create new record
-	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg){
+	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -560,6 +565,11 @@ class M_paket extends Model{
 			"paket_dm"=>$paket_dm,
 			"paket_point"=>$paket_point,
 			"paket_harga"=>$paket_harga,
+			"paket_harga_ki"=>$paket_harga_ki,
+			"paket_harga_mdn"=>$paket_harga_mdn,
+			"paket_harga_mnd"=>$paket_harga_mnd,
+			"paket_harga_ygk"=>$paket_harga_ygk,
+			"paket_harga_mta"=>$paket_harga_mta,
 			"paket_expired"=>$paket_expired,
 			"paket_aktif"=>$paket_aktif,
 			"paket_aktif_cabang"=>$temp_aktif,

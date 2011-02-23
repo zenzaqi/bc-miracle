@@ -755,7 +755,7 @@ class M_master_ambil_paket extends Model{
 		}
 		
 		//function for advanced search record
-		function ambil_paket_search($apaket_faktur, $apaket_cust, $apaket_paket, $apaket_kadaluarsa, $apaket_kadaluarsa_akhir, $apaket_tgl_faktur, $apaket_tgl_faktur_akhir, $apaket_sisa, $start, $end){
+		function ambil_paket_search($apaket_faktur, $apaket_cust, $apaket_paket, $apaket_kadaluarsa, $apaket_kadaluarsa_akhir, $apaket_tgl_faktur, $apaket_tgl_faktur_akhir, $apaket_sisa, $apaket_jenis_kadaluarsa, $start, $end){
 			//full query
 			//$query="select * from paket";
 			//$query = "SELECT apaket_id, apaket_jpaket, apaket_faktur, apaket_faktur_tanggal, apaket_kadaluarsa, apaket_cust, apaket_cust_no, apaket_cust_nama, apaket_paket, apaket_paket_kode, apaket_paket_nama, apaket_paket_jumlah, apaket_sisa_paket FROM master_ambil_paket";
@@ -781,6 +781,9 @@ class M_master_ambil_paket extends Model{
 						LEFT JOIN customer ON(jpaket_cust=cust_id) 
 						LEFT JOIN paket ON(dpaket_paket=paket_id)
 						WHERE jpaket_stat_dok='Tertutup'";
+						
+			$datetime_now = date('Y-m-d H:i:s');
+			$date = date('Y-m-d');
 			
 			if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -823,6 +826,27 @@ class M_master_ambil_paket extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') <= '$apaket_kadaluarsa_akhir'";
 			};
+			
+			if($apaket_jenis_kadaluarsa=='Aktif&Tenggang'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')";	
+			};
+			
+			if($apaket_jenis_kadaluarsa=='Aktif'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= '$date' ";	
+			};
+			
+			if($apaket_jenis_kadaluarsa=='Tenggang'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (detail_jual_paket.dpaket_kadaluarsa between date_add(date_format(now(),'%Y-%m-%d'),INTERVAL -365 DAY) and date_format(now(),'%Y-%m-%d'))";	
+			};
+			
+			if($apaket_jenis_kadaluarsa=='Hangus'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (detail_jual_paket.dpaket_kadaluarsa <= date_add(date_format(now(),'%Y-%m-%d'),INTERVAL -365 DAY) )";	
+			};
+			
 			if($apaket_tgl_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " date_format(jpaket_tanggal,'%Y-%m-%d') >= '$apaket_tgl_faktur'";
