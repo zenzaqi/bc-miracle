@@ -48,7 +48,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok ='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok ='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -93,7 +93,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)	
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -140,7 +140,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -188,7 +188,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -252,7 +252,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -342,7 +342,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -387,7 +387,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -434,7 +434,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -482,7 +482,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -546,7 +546,7 @@ from
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -637,7 +637,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '$date_now'
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -682,7 +682,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -729,7 +729,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -777,7 +777,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal  = '$date_now'
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal  = '$date_now'
 
 			)
 			union
@@ -841,7 +841,7 @@ from
 				left join customer on (master_jual_rawat.jrawat_cust = customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$date_now'
 			)
 			union
 			(
@@ -978,7 +978,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1023,7 +1023,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1070,7 +1070,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1118,7 +1118,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1182,7 +1182,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '". $trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '". $trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1257,7 +1257,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1302,7 +1302,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1349,7 +1349,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1397,7 +1397,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1461,7 +1461,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1604,7 +1604,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1649,7 +1649,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1696,7 +1696,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1744,7 +1744,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1808,7 +1808,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1883,7 +1883,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -1928,7 +1928,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -1975,7 +1975,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2023,7 +2023,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2087,7 +2087,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2227,7 +2227,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2272,7 +2272,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2319,7 +2319,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2367,7 +2367,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2431,7 +2431,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2506,7 +2506,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
@@ -2551,7 +2551,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2598,7 +2598,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2646,7 +2646,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and master_jual_rawat.jrawat_bayar <> 0 and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 
 			)
 			union
@@ -2710,7 +2710,7 @@ from
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and master_jual_rawat.jrawat_bayar <> 0 and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			union
 			(
