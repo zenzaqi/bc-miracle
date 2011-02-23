@@ -81,6 +81,7 @@ var apaket_kadaluarsa_akhirSearchField;
 var apaket_tgl_fakturSearchField;
 var apaket_tgl_faktur_akhirSearchField;
 var apaket_sisaSearchField;
+var apaket_jenis_kadaluarsaSearchField;
 
 var dt = new Date();
 
@@ -1495,6 +1496,7 @@ Ext.onReady(function(){
 			displayField: 'karyawan_username',
 			valueField: 'karyawan_id',
 			loadingText: 'Searching...',
+			minChars : 3,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			anchor: '95%'
@@ -2029,7 +2031,8 @@ Ext.onReady(function(){
 		var apaket_paket_search=null;
 		var apaket_kadaluarsa_search=null;
 		var apaket_kadaluarsa_akhir_search=null;
-		var apakaet_sisa_search=null;
+		var apaket_sisa_search=null;
+		var apaket_jenis_kadaluarsa_search=null;
 		var apaket_tgl_faktur_search=null;
 		var apaket_tgl_faktur_akhir_search=null;
 
@@ -2037,6 +2040,7 @@ Ext.onReady(function(){
 		if(apaket_custSearchField.getValue()!==null){apaket_cust_search=apaket_custSearchField.getValue();}
 		if(apaket_paketSearchField.getValue()!==null){apaket_paket_search=apaket_paketSearchField.getValue();}
 		if(apaket_sisaSearchField.getValue()!==null){apaket_sisa_search=apaket_sisaSearchField.getValue();}
+		if(apaket_jenis_kadaluarsaSearchField.getValue()!==null){apaket_jenis_kadaluarsa_search=apaket_jenis_kadaluarsaSearchField.getValue();}
 		if(apaket_kadaluarsaSearchField.getValue()!==""){apaket_kadaluarsa_search=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
 		if(apaket_kadaluarsa_akhirSearchField.getValue()!==""){apaket_kadaluarsa_akhir_search=apaket_kadaluarsa_akhirSearchField.getValue().format('Y-m-d');}
 		if(apaket_tgl_fakturSearchField.getValue()!==""){apaket_tgl_faktur_search=apaket_tgl_fakturSearchField.getValue().format('Y-m-d');}
@@ -2051,7 +2055,8 @@ Ext.onReady(function(){
 			apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_search,
 			apaket_tgl_faktur		:	apaket_tgl_faktur_search,
 			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_search,
-			apaket_sisa				:	apaket_sisa_search
+			apaket_sisa				:	apaket_sisa_search,
+			apaket_jenis_kadaluarsa	:	apaket_jenis_kadaluarsa_search
 		};
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -2073,6 +2078,9 @@ Ext.onReady(function(){
 		apaket_custSearchField.reset();
 		apaket_paketSearchField.reset();
 		apaket_sisaSearchField.reset();
+		apaket_sisaSearchField.setValue('1');
+		apaket_jenis_kadaluarsaSearchField.reset();
+		apaket_jenis_kadaluarsaSearchField.setValue('Aktif&Tenggang');
 		apaket_kadaluarsaSearchField.reset();
 		apaket_kadaluarsa_akhirSearchField.reset();
 		apaket_tgl_fakturSearchField.reset();
@@ -2160,6 +2168,22 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'apaket_sisa_display',
 		valueField: 'apaket_sisa_value',
+		emptyText : 'Lebih dari 0',
+		anchor: '95%',
+		triggerAction: 'all'	
+	});
+	
+	apaket_jenis_kadaluarsaSearchField= new Ext.form.ComboBox({
+		id: 'apaket_jenis_kadaluarsaSearchField',
+		fieldLabel: 'Kadaluarsa',
+		store:new Ext.data.SimpleStore({
+			fields:['apaket_jenis_kadaluarsa_value', 'apaket_jenis_kadaluarsa_display'],
+			data:[['Aktif&Tenggang','Aktif & Masa Tenggang'],['Aktif','Aktif'],['Tenggang','Masa Tenggang'],['Hangus','Lewat Masa Tenggang(Hangus)']]
+		}),
+		mode: 'local',
+		displayField: 'apaket_jenis_kadaluarsa_display',
+		valueField: 'apaket_jenis_kadaluarsa_value',
+		emptyText : 'Aktif & Masa Tenggang',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
@@ -2235,7 +2259,8 @@ Ext.onReady(function(){
 							]
 						}								
 						]
-					}
+					},
+					apaket_jenis_kadaluarsaSearchField
 				] 
 			}
  			]

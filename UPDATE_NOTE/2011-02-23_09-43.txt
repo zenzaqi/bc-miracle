@@ -1,0 +1,4 @@
+VCM_paket : menambah harga paket untuk master paket (create & edit)
+2011-02-21_13-57.sql : menambah field2 harga paket pada tabel 'paket'
+2011-02-23_08-23.sql : mengubah field 'paket_harga_jgj' menjadi 'paket_harga_ygk'
+vu_paket.sql : menambah select paket2 harga dari tabel 'paket'
