@@ -293,11 +293,19 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: true
+		},   
+		{
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'log_date_create',
+			width: 50,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'cust_no',
-			width: 80,
+			width: 40,
 			sortable: true,
 			readOnly: true
 		},  
@@ -322,20 +330,12 @@ Ext.onReady(function(){
 			}
 		},*/
 		{
-			header: '<div align="center">' + 'Poin' + '</div>',
+			header: '<div align="center">' + 'Poin Hangus' + '</div>',
 			dataIndex: 'log_poin',
 			align: 'right',
-			width: 60,
+			width: 45,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
-			readOnly: true
-		},   
-		{
-			header: '<div align="center">' + 'Date Create' + '</div>',
-			dataIndex: 'log_date_create',
-			width: 80,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
 		}
 		]);
@@ -347,7 +347,7 @@ Ext.onReady(function(){
 	lap_poin_hangusListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'lap_poin_hangusListEditorGrid',
 		el: 'fp_lap_poin_hangus',
-		title: 'Daftar Penukaran dan Pengisian Poin Customer',
+		title: 'Daftar Poin Hangus',
 		autoHeight: true,
 		store: lap_poin_hangus_DataStore, // DataStore
 		cm: lap_poin_hangus_ColumnModel, // Nama-nama Columns
@@ -356,7 +356,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,
+	  	width: 600,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: lap_poin_hangus_DataStore,
