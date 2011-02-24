@@ -113,7 +113,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   terima_gudang_id AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -139,8 +139,9 @@ class M_stok_mutasi extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND terima_gudang_id='".$gudang."'
 							AND terima_status<>'Batal' 
+							
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
@@ -499,7 +500,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   terima_gudang_id AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -526,7 +527,7 @@ class M_stok_mutasi extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 							AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND terima_gudang_id='".$gudang."'
 							AND terima_status<>'Batal' 
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,
