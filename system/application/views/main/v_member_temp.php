@@ -326,6 +326,7 @@ Ext.onReady(function(){
 			{name: 'membert_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'membert_cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'membert_no', type: 'string', mapping: 'membert_no'}, 
+			{name: 'member_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'member_valid'}, 
 			{name: 'membert_register', type: 'date', dateFormat: 'Y-m-d', mapping: 'membert_register'}, 
 			{name: 'membert_valid', type: 'date', dateFormat: 'Y-m-d', mapping: 'membert_valid'}, 
 			{name: 'membert_jenis', type: 'string', mapping: 'membert_jenis'}, 
@@ -352,7 +353,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'No Cust' + '</div>',
 			dataIndex: 'membert_cust_no',
-			width: 80,
+			width: 60,
 			sortable: true
 		}, 
 		{
@@ -371,10 +372,18 @@ Ext.onReady(function(){
 			}
 		}, 
 		{
+			header: '<div align="center">' + 'Member Valid' + '</div>',
+			dataIndex: 'member_valid',
+			width: 70,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		}, 
+		{
 			header: '<div align="center">' + 'Tgl Daftar' + '</div>',
 			dataIndex: 'membert_register',
 			width: 70,
 			sortable: true,
+			hidden: true, //krn sptnya tidak berguna
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
@@ -382,6 +391,7 @@ Ext.onReady(function(){
 			dataIndex: 'membert_valid',
 			width: 70,
 			sortable: true,
+			hidden: true, //krn sptnya tidak berguna
 			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
@@ -394,13 +404,14 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'membert_status',
 			width: 80,
+			hidden: true, //krn sptnya tidak berguna
 			sortable: true
 		},
 		{
 			xtype: 'booleancolumn',
 			header: 'Daftarkan',
 			dataIndex: 'membert_check_daftar',
-			width: 80,	//65,
+			width: 60,	//65,
 			align: 'center',
 			trueText: 'Yes',
 			falseText: 'No',
@@ -425,7 +436,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,	//800,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: member_temp_DataStore,
