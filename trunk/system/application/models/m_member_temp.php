@@ -25,7 +25,10 @@ class M_member_temp extends Model{
 			$this->db->where('membert_register <', $date_now);
 			$this->db->delete('member_temp');
 			
-			$query = "SELECT membert_id, membert_cust, cust_no, cust_nama, membert_no, membert_register, membert_valid, membert_jenis, membert_status, membert_check_daftar FROM member_temp LEFT JOIN customer ON(membert_cust=cust_id) /*WHERE membert_check_daftar='false'*/";
+			$query =   "SELECT membert_id, membert_cust, cust_no, cust_nama, membert_no, membert_register, membert_valid, membert_jenis, membert_status, membert_check_daftar,
+						member_valid
+						FROM member_temp 
+						LEFT JOIN vu_customer ON (membert_cust=cust_id) /*WHERE membert_check_daftar='false'*/";
 			
 			
 			// For simple search

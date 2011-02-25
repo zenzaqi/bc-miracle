@@ -166,8 +166,28 @@
 						?>
 						<?php } $faktur=$print->no_bukti; ?>
 				<?php } ?>
-</tbody> 
-<? // <tfoot> ?>
+</tbody>
+
+<tfoot>
+<tr> 
+	<td class="foot">&nbsp;</td> 
+	<th scope='row' nowrap="nowrap">&nbsp;</th> 
+	<td colspan='8' class="foot">&nbsp;</td> 
+</tr> 
+<tr> 
+	<td class="foot">&nbsp;</td> 
+	<th scope='row' nowrap="nowrap">&nbsp;</th> 
+	<td colspan='8' class="foot">&nbsp;</td> 
+</tr> 
+<tr> 
+	<td class="foot">&nbsp;</td> 
+	<th scope='row' nowrap="nowrap">&nbsp;</th> 
+	<td colspan='8' class="foot">&nbsp;</td> 
+</tr> 
+</tfoot>
+
+ 
+<? //<tfoot> ?>
 <tr> 
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Jum data</th> 
@@ -231,7 +251,7 @@
 	<td colspan="7" class="foot">&nbsp;</td> 
 </tr> 
 
-<? // </tfoot> ?>
+<? //</tfoot> ?>
 </table>
 </body>
 </html>
