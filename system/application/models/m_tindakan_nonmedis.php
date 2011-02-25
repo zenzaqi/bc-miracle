@@ -1548,6 +1548,7 @@ class M_tindakan_nonmedis extends Model{
 						//$sql_check_paket=$this->customer_check_paket($trawat_cust, $dtrawat_perawatan_awal, $dtrawat_jumlah);
 						$sql_check_sisa_paket=$this->customer_check_sisa_paket($dtrawat_id, $dtrawat_dpaket_id_awal, $dtrawat_perawatan_awal, $dtrawat_jumlah, $dtrawat_terapis_awal, $dtrawat_tglapp, $jpaket_id, $dpaket_id, $dpaket_paket, $trawat_cust);
 						if($sql_check_sisa_paket==1){
+							$data['dtrawat_jam_selesai'] = $time_now;
 							$this->db->where('dtrawat_id', $dtrawat_id);
 							$this->db->update('tindakan_detail', $data);
 							
