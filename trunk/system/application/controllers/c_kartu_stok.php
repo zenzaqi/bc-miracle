@@ -48,6 +48,18 @@ class C_kartu_stok extends Controller {
 		}
 	}
 	
+	/*function generate_kartu_stok(){
+		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
+		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
+		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
+		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
+		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
+		
+		$result=$this->m_kartu_stok->generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
+		echo $result;
+
+	}*/
+	
 	//function fot list record
 	function kartu_stok_search(){
 		
