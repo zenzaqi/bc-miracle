@@ -1,0 +1,8 @@
+[update by zaqi.smart@gmail.com]
+- Update Persediaan
+  o Penyertaan perhitungan saldo awal produk
+    pada master produk pada perhitungan di
+    stok mutasi, stok akhir dan kartu stok
+  o Nilai saldo awal produk dianggap menggunakan
+    satuan default, sehingga jika satuan defaultnya bukan
+    merupakan satuan terkecil akan otomatis dikonversikan

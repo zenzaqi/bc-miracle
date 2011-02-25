@@ -19,6 +19,20 @@ class M_vu_stok_all_saldo extends Model{
 		}
 		
 		function get_stok_awal($produk_id,$tanggal_start){
+			
+			$stok_awal=0;
+			
+			$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai as jumlah
+					FROM 	produk, satuan_konversi
+					WHERE 	konversi_produk=produk_id
+					AND 	konversi_default=true
+					AND		produk_id='".$produk_id."'";
+			$rsawal=$this->db->query($sqlawal);
+			if($rsawal->num_rows()){
+				$row=$rsawal->row();
+				$stok_awal=$row->jumlah;
+			}
+			
 			$sql_stok_awal="SELECT 	sum(jml_terima_barang*konversi_nilai)
 										+sum(jml_terima_bonus*konversi_nilai)
 										-sum(jml_retur_beli*konversi_nilai)
@@ -41,10 +55,11 @@ class M_vu_stok_all_saldo extends Model{
 				if($q_stokawal->num_rows())
 				{
 					$ds_stokawal=$q_stokawal->row();
-					return $ds_stokawal->jumlah_awal;
-				}else{
-					return 0;
+					$stok_awal+=$ds_stokawal->jumlah_awal;
 				}
+				
+				return $stok_awal;
+				
 		}
 		
 		function get_detail_stok($opsi_satuan,$tanggal_start,$tanggal_end,$produk_id,$query,$start,$end){

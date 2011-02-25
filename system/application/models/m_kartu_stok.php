@@ -69,12 +69,25 @@ class M_kartu_stok extends Model{
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
+			$data[0]["stok_awal"]=0;
+			//Stok Awal
+			$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai as jumlah
+					FROM 	produk, satuan_konversi
+					WHERE 	konversi_produk=produk_id
+					AND 	konversi_default=true
+					AND		produk_id='".$produk_id."'";
+			$rsawal=$this->db->query($sqlawal);
+			if($rsawal->num_rows()){
+				$row=$rsawal->row();
+				$data[0]["stok_awal"]=$row->jumlah;
+			}
 			
+							
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
 			//$this->firephp->log('sql : '.$sql);
 			//echo $sql;
-			$data[0]["stok_awal"]=0;
+			
 			
 			if($nbrows>0){
 				$row=$result->row();
@@ -110,20 +123,14 @@ class M_kartu_stok extends Model{
 				if($q_stokawal->num_rows())
 				{
 					$ds_stokawal=$q_stokawal->row();
-					$data[0]["stok_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
-				}else{
-					$data[0]["stok_awal"]=0;
+					$data[0]["stok_awal"]+=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
 				}
 			}
 			
 			
-			if($nbrows>0){
-				$jsonresult = json_encode($data);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
-			
+			$jsonresult = json_encode($data);
+			return '({"total":"1","results":'.$jsonresult.'})';
+						
 		}
 		
 		function kartu_stok_awal_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter){
@@ -150,6 +157,17 @@ class M_kartu_stok extends Model{
 			$nbrows=$result->num_rows();
 
 			$data[0]["stok_awal"]=0;
+			//Stok Awal
+			$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai as jumlah
+					FROM 	produk, satuan_konversi
+					WHERE 	konversi_produk=produk_id
+					AND 	konversi_default=true
+					AND		produk_id='".$produk_id."'";
+			$rsawal=$this->db->query($sqlawal);
+			if($rsawal->num_rows()){
+				$row=$rsawal->row();
+				$data[0]["stok_awal"]=$row->jumlah;
+			}
 			
 			if($nbrows>0){
 				$row=$result->row();
@@ -185,20 +203,64 @@ class M_kartu_stok extends Model{
 				if($q_stokawal->num_rows())
 				{
 					$ds_stokawal=$q_stokawal->row();
-					$data[0]["stok_awal"]=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
-				}else{
-					$data[0]["stok_awal"]=0;
+					$data[0]["stok_awal"]+=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
 				}
 			}
 			
+			return $data;
+					
+		}
+		
+		/*function generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end){
 			
-			if($nbrows>0 && $i>0){
-				return $data;
-			} else {
-				return 0;
+			/* CEK SATUAN */
+			/*if($opsi_satuan=='terkecil')
+			{
+				$sql="SELECT konversi_satuan FROM satuan_konversi 
+						WHERE konversi_nilai=1
+						AND konversi_produk='".$produk_id."'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$row=$rs->row();
+					$current_satuan=$row->konversi_satuan;
+					$current_konversi=1;
+				}else{
+					return 0;
+					exit();
+				}
+				
+			}else{
+				
+				$sql="SELECT konversi_satuan, konversi_nilai FROM satuan_konversi 
+						WHERE konversi_default=true
+						AND konversi_produk='".$produk_id."'";
+				$rs=$this->db->query($sql);
+				if($rs->num_rows()){
+					$row=$rs->row();
+					$current_satuan=$row->konversi_satuan;
+					$current_konversi=$row->konversi_nilai;
+				}else{
+					return 0;
+					exit();
+				}
+				
 			}
 			
-		}
+			/* GUDANG CABIN, 
+				- Masuk = Terima Barang + Mutasi Masuk + Penyesuian tambah
+				- Keluar = Retur Barang + Mutasi Keluar + Penyesuaian kurang
+			*/
+			/*if($gudang=='1'){
+				//Terima Barang
+				$sql="";
+				
+			}else{
+			
+			}
+			
+						
+		}*/
+		
 		
 		function kartu_stok_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			if($opsi_satuan=='terkecil')
@@ -229,7 +291,7 @@ class M_kartu_stok extends Model{
 				else
 					$konversi=1/$rowproduk->konversi_nilai;
 				
-								
+			
 				//Pembelian -> Masuk
 				$sql="SELECT 	tanggal,
 								no_bukti, 

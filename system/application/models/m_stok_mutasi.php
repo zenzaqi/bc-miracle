@@ -113,7 +113,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   terima_gudang_id AS `gudang`,
+						   1 AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -139,7 +139,7 @@ class M_stok_mutasi extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND terima_gudang_id='".$gudang."'
+							AND 1='".$gudang."'
 							AND terima_status<>'Batal' 
 							
 					UNION
@@ -482,7 +482,19 @@ class M_stok_mutasi extends Model{
 				}else{
 					$data[$i]["jumlah_awal"]=0;
 				}
-
+				
+				$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai as jumlah
+					FROM 	produk, satuan_konversi
+					WHERE 	konversi_produk=produk_id
+					AND 	konversi_default=true
+					AND		produk_id='".$produk_id."'
+					AND 	'".$gudang."'='1'";
+				$rsawal=$this->db->query($sqlawal);
+				if($rsawal->num_rows()){
+					$row=$rsawal->row();
+					$data[$i]["jumlah_awal"]+=$row->jumlah;
+				}
+			
 				//STOK MUTASI
 				
 				$sql_stok_mutasi="SELECT  
@@ -500,7 +512,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   terima_gudang_id AS `gudang`,
+						   1 AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -527,7 +539,7 @@ class M_stok_mutasi extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 							AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND terima_gudang_id='".$gudang."'
+							AND 1='".$gudang."'
 							AND terima_status<>'Batal' 
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,
