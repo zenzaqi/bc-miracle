@@ -473,6 +473,7 @@ Ext.onReady(function(){
 		paket_kategoriField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_id'));
 		paket_kategoritxtField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('kategori_nama'));
 		paket_hargaField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga')));
+		paket_harga_thField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga')));		
 		paket_harga_kiField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_ki')));
 		paket_harga_mtaField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mta')));
 		paket_harga_mdnField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mdn')));
@@ -1408,10 +1409,10 @@ Ext.onReady(function(){
 	
 	paket_harga_thField=new Ext.form.TextField({
 		id : 'paket_harga_thField',
-		fieldLabel: 'Tamhrin',
+		fieldLabel: 'Thamrin',
 		maxLength: 20,
 		allowBlank: true,
-		readOnly : true,
+		disabled : true,
 		itemCls: 'rmoney',
 		maskRe: /([0-9]+)$/,
 		width: 100,

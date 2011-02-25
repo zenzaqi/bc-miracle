@@ -1,0 +1,2 @@
+VCM_master_terima_beli : menambah pilihan gudang
+2011-02-16_11-48.sql : query u/ menambah field 'terima_gudang_id' pada master_terima_beli, dan query vu yg ada

@@ -8,7 +8,7 @@
 	+ Filename 		: c_master_terima_beli.php
  	+ Author  		:
  	+ Created on 20/Aug/2009 15:44:15
-
+get_terima_
 */
 
 class M_master_terima_beli extends Model{
@@ -213,7 +213,22 @@ class M_master_terima_beli extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-
+		
+		function get_terima_gudang_list(){
+			$sql="SELECT gudang_id, gudang_nama, gudang_lokasi FROM gudang where gudang_aktif='Aktif'";
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		function get_satuan_detail_list($master_id){
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
 			if($master_id<>""){
@@ -284,12 +299,21 @@ class M_master_terima_beli extends Model{
 
 
 		function get_order_beli_list(){
+		$date_now=date('Y-m-d');
+		
+			$sql_day = "SELECT trans_op_days from transaksi_setting";
+			$query_day= $this->db->query($sql_day);
+			$data_day= $query_day->row();
+			$day= $data_day->trans_op_days;
+			
 			$sql=  "SELECT
 						order_id, order_no, order_tanggal, supplier_nama, supplier_id
-					FROM master_order_beli, supplier
+					FROM master_order_beli, supplier, transaksi_setting
 					WHERE order_supplier = supplier_id
-						AND order_status <> 'Batal'
+						AND order_status = 'Tertutup'
+						AND '".$date_now."' < (order_tanggal + INTERVAL '".$day."' DAY)
 					ORDER BY order_no desc";
+					
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -532,7 +556,7 @@ class M_master_terima_beli extends Model{
 
 		//function for update record
 		function master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
-										   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status , $cetak){
+										   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status , $cetak, $terima_gudang){
 			$data = array(
 				"terima_id"=>$terima_id,
 				"terima_no"=>$terima_no,
@@ -554,6 +578,10 @@ class M_master_terima_beli extends Model{
 			if($rs->num_rows())
 				$data["terima_order"]=$terima_order;
 
+			$sql="SELECT gudang_id FROM gudang WHERE gudang_id='".$terima_gudang."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["terima_gudang_id"]=$terima_gudang;
 				
 			if($cetak==1){
 				$data['terima_status'] = 'Tertutup';
@@ -576,12 +604,16 @@ class M_master_terima_beli extends Model{
 
 		//function for create new record
 		function master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-										   $terima_tanggal , $terima_keterangan, $terima_status, $cetak ){
+										   $terima_tanggal , $terima_keterangan, $terima_status, $cetak ,$terima_gudang ){
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
 			$pattern="PB/".date("ym")."-";
 			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,12);
 
+			if ($terima_gudang == 'GUDANG BESAR (CABIN)'){
+				$terima_gudang = 1;
+			}
+			
 			$sql="SELECT order_id FROM master_order_beli WHERE order_id='".$terima_order."'";
 			$result=$this->db->query($sql);
 			if($result->num_rows()){
@@ -595,6 +627,7 @@ class M_master_terima_beli extends Model{
 					"terima_tanggal"=>$terima_tanggal,
 					"terima_keterangan"=>$terima_keterangan,
 					"terima_status"=>$terima_status,
+					"terima_gudang_id"=>$terima_gudang,
 					"terima_creator"=>$_SESSION[SESSION_USERID],
 					"terima_date_create"=>date('Y-m-d H:i:s'),
 					"terima_revised"=>0
@@ -685,7 +718,7 @@ class M_master_terima_beli extends Model{
 		//function for advanced search record
 		function master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 										 $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal,
-										 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end){
+										 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end ,$terima_gudang){
 			//full query
 			$query="SELECT *  FROM vu_trans_terima";
 
@@ -705,6 +738,10 @@ class M_master_terima_beli extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
 			};
+			if($terima_gudang!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_gudang_id LIKE '%".$terima_gudang."%'";
+				};
 			if($terima_pengirim!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " terima_pengirim LIKE '%".$terima_pengirim."%'";
@@ -745,7 +782,7 @@ class M_master_terima_beli extends Model{
 
 		//function for print record
 		function master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-										  $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $option,$filter){
+										  $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $option,$filter ,$terima_gudang){
 			//full query
 			$query="SELECT *  FROM vu_trans_terima";
 			if($option=='LIST'){
@@ -788,6 +825,10 @@ class M_master_terima_beli extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " date_format(tanggal,'%Y-%m-%d') <= '".$terima_tgl_akhir."'";
 				};
+				if($terima_gudang!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_gudang_id LIKE '%".$terima_gudang."%'";
+				};
 				if($terima_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_keterangan LIKE '%".$terima_keterangan."%'";
@@ -806,7 +847,7 @@ class M_master_terima_beli extends Model{
 
 		//function  for export to excel
 		function master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,$terima_pengirim ,
-												 $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter){
+												 $terima_tgl_awal, $terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter ,$terima_gudang){
 			//full query
 			$query="SELECT tanggal as 'Tanggal', no_bukti as 'No Penerimaan', order_no as 'No Pesanan', supplier_nama as Supplier
 					,jumlah_barang as 'Jumlah Item', jumlah_barang_bonus as 'Jumlah Item Bonus', terima_surat_jalan as 'No Surat Jalan',
@@ -846,6 +887,10 @@ class M_master_terima_beli extends Model{
 				if($terima_tgl_awal!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " date_format(tanggal,'%Y-%m-%d') >= '".$terima_tgl_awal."'";
+				};
+				if($terima_gudang!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " terima_gudang_id LIKE '%".$terima_gudang."%'";
 				};
 				if($terima_tgl_akhir!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

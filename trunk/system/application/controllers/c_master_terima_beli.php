@@ -180,6 +180,11 @@ class C_master_terima_beli extends Controller {
 		echo $result;
 	}
 	
+	function get_terima_gudang_list(){
+		$result=$this->m_master_terima_beli->get_terima_gudang_list();
+		echo $result;
+	}
+	
 	function get_produk_detail_list(){
 		$query = isset($_POST['query']) ? @$_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
@@ -349,6 +354,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=trim(@$_POST["terima_no"]);
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
+		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
@@ -365,7 +371,7 @@ class C_master_terima_beli extends Controller {
 		$cetak=trim(@$_POST["cetak"]);
 		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
-																		 $terima_keterangan, $terima_status,$cetak  );
+																		 $terima_keterangan, $terima_status,$cetak, $terima_gudang  );
 		echo $result;
 	}
 	
@@ -377,6 +383,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
 		$terima_order=trim(@$_POST["terima_order"]);
+		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
@@ -392,7 +399,7 @@ class C_master_terima_beli extends Controller {
 		$cetak=trim(@$_POST["cetak"]);
 		
 		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
-																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status, $cetak);
+																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status, $cetak, $terima_gudang);
 		echo $result;
 	}
 
@@ -411,6 +418,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=trim(@$_POST["terima_no"]);
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
+		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
@@ -430,7 +438,7 @@ class C_master_terima_beli extends Controller {
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		$result = $this->m_master_terima_beli->master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal, 
-																		 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end);
+																		 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end, $terima_gudang);
 		echo $result;
 	}
 
@@ -442,6 +450,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
 		$terima_order=trim(@$_POST["terima_order"]);
+		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
@@ -460,7 +469,7 @@ class C_master_terima_beli extends Controller {
 		
 		$data["data_print"]  = $this->m_master_terima_beli->master_terima_beli_print($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		$terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal, 
-																		$terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter);
+																		$terima_tgl_akhir ,$terima_keterangan , $terima_status, $option,$filter,$terima_gudang);
 		$print_view=$this->load->view("main/p_list_terima.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -481,6 +490,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_no=str_replace("'", '"',$terima_no);
 		$terima_order=trim(@$_POST["terima_order"]);
+		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
@@ -499,7 +509,7 @@ class C_master_terima_beli extends Controller {
 		
 		$query = $this->m_master_terima_beli->master_terima_beli_export_excel($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																			  $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal ,
-																			  $terima_tgl_akhir, $terima_keterangan ,$terima_status,$option,$filter);
+																			  $terima_tgl_akhir, $terima_keterangan ,$terima_status,$option,$filter,$terima_gudang);
 		
 		$this->load->plugin('to_excel');
 		to_excel($query,"master_terima_beli"); 
