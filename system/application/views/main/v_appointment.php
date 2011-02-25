@@ -1575,6 +1575,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		anchor: '95%',
 		queryDelay:1200,
+		forceSelection: true,
 		listeners:{
 			/*beforequery: function(qe){
 	            delete qe.combo.lastQuery;
