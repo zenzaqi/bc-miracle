@@ -1651,7 +1651,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [ produk_aktif_thField, produk_aktif_kiField, produk_aktif_hrField, produk_aktif_tpField, produk_aktif_mlgField, produk_aktif_dpsField, produk_aktif_jktField, produk_aktif_mtaField, produk_aktif_blpnField, produk_aktif_checkField]
+				items: [ produk_aktif_thField, produk_aktif_kiField, produk_aktif_hrField, produk_aktif_tpField, produk_aktif_mlgField, produk_aktif_dpsField, produk_aktif_jktField, produk_aktif_mtaField, produk_aktif_blpnField]
 			},
 			 {
 				   	layout: 'form',
@@ -1659,7 +1659,7 @@ Ext.onReady(function(){
 					columnWidth: 0.5,
 					labelWidth: 80,
 					labelAlign: 'left',
-					items:[produk_aktif_kutaField, produk_aktif_btmField, produk_aktif_mksField, produk_aktif_mdnField, produk_aktif_lbkField, produk_aktif_mndField, produk_aktif_ygkField]
+					items:[produk_aktif_kutaField, produk_aktif_btmField, produk_aktif_mksField, produk_aktif_mdnField, produk_aktif_lbkField, produk_aktif_mndField, produk_aktif_ygkField, produk_aktif_checkField]
 			   }
 		]
 	});

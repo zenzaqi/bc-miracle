@@ -2168,7 +2168,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'apaket_sisa_display',
 		valueField: 'apaket_sisa_value',
-		emptyText : 'Lebih dari 0',
+		blankText : 'Lebih dari 0',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
@@ -2183,7 +2183,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'apaket_jenis_kadaluarsa_display',
 		valueField: 'apaket_jenis_kadaluarsa_value',
-		emptyText : 'Aktif & Masa Tenggang',
+		blankText : 'Aktif & Masa Tenggang',
 		anchor: '95%',
 		triggerAction: 'all'	
 	});

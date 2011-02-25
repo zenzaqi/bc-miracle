@@ -1,0 +1,6 @@
+1. vcm_master_terima_beli [gudang default adalah GUDANG BESAR, dan yg muncul pd OP hny yg statusnya tertutup n masa OP tidak melewati hari yg ditentukan pada transaksi_setting]
+
+2. vcm_transaksi_setting [menyimpan pengaturan batas hari berlaku OP]
+
+3. 2011-02-24_11-34.sql [query menambah menu dan create table transaksi_setting
+>> masukkan dulu data awal pada table 'transaksi_setting'

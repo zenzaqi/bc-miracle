@@ -157,9 +157,9 @@ Ext.onReady(function(){
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
 		sortInfo:{field: 'produk_id', direction: "DESC"}
-	});
-	
+	});	
 	/* End of Function */
+	
 	var produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{produk_nama} ({produk_kode})</b><br /></span>',
@@ -229,16 +229,7 @@ Ext.onReady(function(){
 			width: 150,
 			sortable: true,
 			readOnly: true
-		}/*,{
-			header: '<div align="center">Koreksi</div>',
-			dataIndex: 'jumlah_koreksi',
-			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
-			width: 150,
-			sortable: true,
-			readOnly: true
-		},*/
-		,
+		},
 		{
 			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'jumlah_stok',
@@ -252,8 +243,24 @@ Ext.onReady(function(){
 	stok_mutasi_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
-	  	/* Function for Displaying  Search Window Form */
+		 
+	function reset_search_form(){
+		stok_mutasi_gudangSearchField.reset();
+		stok_mutasi_gudangSearchField.setValue(null);
+		stok_mutasi_satuan_defaultField.setValue(true);
+		stok_mutasi_produk_allField.setValue(true);
+		stok_mutasi_produk_namaSearchField.reset();
+		stok_mutasi_produk_namaSearchField.setValue(null);
+		stok_mutasi_group1SearchField.reset();
+		stok_mutasi_group1SearchField.setValue(null);
+		stok_mutasi_jumlahSearchField.reset();
+		stok_mutasi_jumlahSearchField.setValue('Semua');
+	}
+	
+  	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
+		reset_search_form();
+		
 		if(!stok_mutasi_searchWindow.isVisible()){
 			stok_mutasi_searchWindow.show();
 		} else {
@@ -323,7 +330,7 @@ Ext.onReady(function(){
 		var opsi_satuan_search='default';
 		var opsi_produk_search='all';
 		var gudang_search=null;
-		
+		var stok_mutasi_jumlah_search=null;		
 		
 		mutasi_gudang_DataSore.load({
 		 	callback: function(r,opt,success){
@@ -344,6 +351,7 @@ Ext.onReady(function(){
 						
 		if(stok_mutasi_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_mutasi_produk_namaSearchField.getValue();}
 		if(stok_mutasi_group1SearchField.getValue()!==null){group1_search=stok_mutasi_group1SearchField.getValue();}
+		if(stok_mutasi_jumlahSearchField.getValue()!==null){stok_mutasi_jumlah_search=stok_mutasi_jumlahSearchField.getValue();}
 		
 		if(stok_mutasi_produk_allField.getValue()==true){ 
 			opsi_produk_search='all';
@@ -366,6 +374,7 @@ Ext.onReady(function(){
 			tanggal_end		:	tanggal_end_search,
 			opsi_satuan		: 	opsi_satuan_search,
 			gudang			: 	gudang_search,
+			mutasi_jumlah	: stok_mutasi_jumlah_search,
 			opsi_produk		: 	opsi_produk_search
 		};
 		// Cause the datastore to do another query : 
@@ -535,6 +544,24 @@ Ext.onReady(function(){
 	
 	stok_mutasi_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 	
+	/* Identify  jum stok Field */
+	stok_mutasi_jumlahSearchField= new Ext.form.ComboBox({
+		id: 'stok_mutasi_jumlahSearchField',
+		fieldLabel: 'Jumlah',
+		maxLength: 50,
+		store:new Ext.data.SimpleStore({
+			fields:['stok_mutasi_jumlah_value', 'stok_mutasi_jumlah_display'],
+			data: [['S','Semua'],['<','< 0'],['=','= 0'],['>','> 0']]
+		}),
+		mode: 'local',
+		editable: false,
+		displayField: 'stok_mutasi_jumlah_display',
+		valueField: 'stok_mutasi_jumlah_value',
+		anchor: '50%',
+		//allowBlank: false,
+		triggerAction: 'all'	
+	});
+	
 	stok_mutasi_tanggal_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_mutasi_tanggal_opsiSearchField',
 		title: 'Opsi Tanggal',
@@ -550,12 +577,12 @@ Ext.onReady(function(){
 		layout: 'form',
 		frame: false,
 		bodyStyle: 'padding: 5px;',
-		items:[{
+		items:[/*{
 			   		layout	: 'column',
 					bodyStyle: 'padding-bottom: 5px;',
 					border: false,
 					items	: [stok_mutasi_produk_allField]
-			   },
+			   },*/
 			   {
 				   layout	: 'column',
 				   bodyStyle: 'padding-bottom: 5px;',
@@ -591,6 +618,20 @@ Ext.onReady(function(){
 		]
 	});
 	
+	stok_mutasi_jumlah_opsiSearchField=new Ext.form.FieldSet({
+		id:'stok_mutasi_jumlah_opsiSearchField',
+		title: 'Opsi Stok Akhir',
+		layout: 'form',
+		frame: false,
+		bodyStyle: 'padding: 5px;',
+		items:[{
+			   		layout	: 'form',
+					border: false,
+					items	: [stok_mutasi_jumlahSearchField]
+			   }
+		]
+	});
+	
 	/* Function for retrieve search Form Panel */
 	stok_mutasi_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -605,7 +646,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField,stok_mutasi_satuan_opsiSearchField, stok_mutasi_tanggal_opsiSearchField] 
+				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField/*,stok_mutasi_jumlah_opsiSearchField*/,stok_mutasi_satuan_opsiSearchField, stok_mutasi_tanggal_opsiSearchField] 
 			}
 			]
 		}]
@@ -639,30 +680,7 @@ Ext.onReady(function(){
 		items: stok_mutasi_searchForm
 	});
     /* End of Function */ 
-	 
-	function reset_search_form(){
-		stok_mutasi_gudangSearchField.reset();
-		stok_mutasi_gudangSearchField.setValue(null);
-		stok_mutasi_satuan_defaultField.setValue(true);
-		stok_mutasi_produk_allField.setValue(true);
-		stok_mutasi_produk_namaSearchField.reset();
-		stok_mutasi_produk_namaSearchField.setValue(null);
-		stok_mutasi_group1SearchField.reset();
-		stok_mutasi_group1SearchField.setValue(null);
-	}
-	
-  	/* Function for Displaying  Search Window Form */
-	function display_form_search_window(){
-		reset_search_form();
-		
-		if(!stok_mutasi_searchWindow.isVisible()){
-			stok_mutasi_searchWindow.show();
-		} else {
-			stok_mutasi_searchWindow.toFront();
-		}
-	}
-  	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function stok_mutasi_print(){
 		var searchquery = "";
@@ -816,6 +834,8 @@ Ext.onReady(function(){
 	stok_mutasi_DataStore.on('load', function(){ Ext.MessageBox.hide(); });
 	
 	stok_mutasi_searchWindow.show();
+	stok_mutasi_jumlahSearchField.reset();
+	stok_mutasi_jumlahSearchField.setValue('Semua');
 	
 });
 	</script>

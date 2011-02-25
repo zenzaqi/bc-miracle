@@ -74,6 +74,7 @@ var cetak=0;
 var terima_idField;
 var terima_noField;
 var terima_orderField;
+var terima_gudangField;
 var terima_supplierField;
 var terima_surat_jalanField;
 var terima_pengirimField;
@@ -82,6 +83,7 @@ var terima_keteranganField;
 var terima_idSearchField;
 var terima_noSearchField;
 var terima_orderSearchField;
+var terima_gudangSearchField;
 var terima_supplierSearchField;
 var terima_surat_jalanSearchField;
 var terima_pengirimSearchField;
@@ -205,6 +207,7 @@ Ext.onReady(function(){
 		var terima_id_create_pk=null;
 		var terima_no_create=null;
 		var terima_order_create=null;
+		var terima_gudang_create=null;
 		var terima_supplier_create=null;
 		var terima_surat_jalan_create=null;
 		var terima_pengirim_create=null;
@@ -215,6 +218,7 @@ Ext.onReady(function(){
 		if(terima_idField.getValue()!== null){terima_id_create_pk = terima_idField.getValue();}else{terima_id_create_pk=get_pk_id();}
 		if(terima_noField.getValue()!== null){terima_no_create = terima_noField.getValue();}
 		if(terima_orderField.getValue()!== null){terima_order_create = terima_orderField.getValue();}
+		if(terima_gudangField.getValue()!== null){terima_gudang_create = terima_gudangField.getValue();}
 		if(terima_supplierField.getValue()!== null){terima_supplier_create = terima_supplier_idField.getValue();}
 		if(terima_surat_jalanField.getValue()!== null){terima_surat_jalan_create = terima_surat_jalanField.getValue();}
 		if(terima_pengirimField.getValue()!== null){terima_pengirim_create = terima_pengirimField.getValue();}
@@ -235,6 +239,7 @@ Ext.onReady(function(){
 				terima_pengirim		: terima_pengirim_create,
 				terima_tanggal		: terima_tanggal_create_date,
 				terima_keterangan	: terima_keterangan_create,
+				terima_gudang	: terima_gudang_create,
 				terima_status		: terima_status_create,
 				cetak				: cetak
 			},
@@ -252,6 +257,7 @@ Ext.onReady(function(){
 				else if(result!==0){
 						detail_terima_beli_insert(result,opsi);
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+						//cbo_terima_gudang_DataStore.reload();
 						master_terima_beli_createWindow.hide();
 				}
 				else{
@@ -317,10 +323,14 @@ Ext.onReady(function(){
 		terima_keteranganField.setValue(null);
 		terima_statusField.reset();
 		terima_statusField.setValue('Terbuka');
+		terima_gudangField.reset();
+		terima_gudangField.setValue('GUDANG BESAR (CABIN)');
 		terima_idField.setDisabled(false);
 		terima_noField.setDisabled(false);
 		terima_orderField.setDisabled(false);
 		terima_order_idField.setDisabled(false);
+		terima_gudangField.setDisabled(false);
+		terima_gudang_idField.setDisabled(false);
 		terima_supplierField.setDisabled(false);
 		terima_surat_jalanField.setDisabled(false);
 		terima_supplier_idField.setDisabled(false);
@@ -331,6 +341,7 @@ Ext.onReady(function(){
 
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
+		cbo_terima_gudang_DataStore.load();
 
 		detail_terima_beli_DataStore.setBaseParam('master_id', -1);
 		detail_terima_beli_DataStore.load();
@@ -353,10 +364,14 @@ Ext.onReady(function(){
 		terima_tanggalField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_tanggal'));
 		terima_keteranganField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_keterangan'));
 		terima_statusField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status'));
+		terima_gudangField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_gudang_nama'));
+		terima_gudang_idField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_gudang_id'));
+		//cbo_terima_gudang_DataStore.load();
 		
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
 			terima_idField.setDisabled(false);
 			terima_noField.setDisabled(false);
+			terima_gudangField.setDisabled(false);
 			terima_orderField.setDisabled(false);
 			terima_order_idField.setDisabled(false);
 			terima_supplierField.setDisabled(false);
@@ -371,6 +386,7 @@ Ext.onReady(function(){
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
 			terima_idField.setDisabled(true);
 			terima_noField.setDisabled(true);
+			terima_gudangField.setDisabled(true);
 			terima_orderField.setDisabled(true);
 			terima_order_idField.setDisabled(true);
 			terima_supplierField.setDisabled(true);
@@ -389,6 +405,7 @@ Ext.onReady(function(){
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Batal"){
 			terima_idField.setDisabled(true);
 			terima_noField.setDisabled(true);
+			terima_gudangField.setDisabled(true);
 			terima_orderField.setDisabled(true);
 			terima_order_idField.setDisabled(true);
 			terima_supplierField.setDisabled(true);
@@ -451,6 +468,7 @@ Ext.onReady(function(){
 		});	
 		
 		
+		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_produkDataStore.load();
@@ -506,12 +524,13 @@ Ext.onReady(function(){
 	
 	/* Function for Check if the form is valid */
 	function is_master_terima_beli_form_valid(){
-		return (terima_orderField.isValid());
+		return (terima_orderField.isValid() && terima_gudangField.isValid());
 	}
   	/* End of Function */
 
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+		cbo_terima_gudang_DataStore.load();
 		if(!master_terima_beli_createWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
@@ -549,6 +568,7 @@ Ext.onReady(function(){
 			post2db='UPDATE';
 			msg='updated';
 			master_terima_beli_set_form();
+			cbo_terima_gudang_DataStore.load();
 			master_terima_beli_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -624,6 +644,9 @@ Ext.onReady(function(){
 			{name: 'terima_no', type: 'string', mapping: 'no_bukti'},
 			{name: 'terima_order_id', type: 'int', mapping: 'terima_order'},
 			{name: 'terima_order', type: 'string', mapping: 'order_no'},
+			
+			{name: 'terima_gudang_nama', type: 'string', mapping: 'terima_gudang_nama'},
+			{name: 'terima_gudang_id', type: 'int', mapping: 'terima_gudang_id'},
 			{name: 'terima_supplier', type: 'string', mapping: 'supplier_nama'},
 			{name: 'jumlah_barang', type: 'float', mapping: 'jumlah_barang'},
 			{name: 'jumlah_barang_bonus', type: 'float', mapping: 'jumlah_barang_bonus'},
@@ -666,6 +689,25 @@ Ext.onReady(function(){
 		sortInfo:{field: 'tbeli_orderbeli_tgl', direction: "DESC"}
 	});
 
+	cbo_terima_gudang_DataStore = new Ext.data.Store({
+		id: 'cbo_terima_gudang_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_terima_beli&m=get_terima_gudang_list', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'gudang_id'
+		},[
+			{name: 'terima_gudang_display', type: 'string', mapping: 'gudang_nama'},
+			{name: 'terima_gudang_value', type: 'int', mapping: 'gudang_id'},
+			{name: 'terima_gudang_lokasi', type: 'string', mapping: 'gudang_lokasi'},
+			{name: 'terima_gudang_keterangan', type: 'string', mapping: 'gudang_keterangan'},
+		]),
+		sortInfo:{field: 'terima_gudang_value', direction: "ASC"}
+	});
+	
 	cbo_tbeli_orderbeli_search_DataSore = new Ext.data.Store({
 		id: 'cbo_tbeli_orderbeli_search_DataSore',
 		proxy: new Ext.data.HttpProxy({
@@ -723,7 +765,13 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 
-
+	var tbeli_gudangbeli_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{terima_gudang_display}</b><br /></span>',
+            'Lokasi: {terima_gudang_lokasi}<br>',
+        '</div></tpl>'
+    );
+	
   	/* Function for Identify of Window Column Model */
 	master_terima_beli_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -1051,6 +1099,28 @@ Ext.onReady(function(){
 	});
 
 	terima_order_idField= new Ext.form.NumberField();
+	
+	terima_gudangField= new Ext.form.ComboBox({
+		id: 'terima_gudangField',
+		fieldLabel: 'Gudang',
+		index : 4,
+		store:cbo_terima_gudang_DataStore,
+		mode: 'remote',
+		displayField: 'terima_gudang_display',
+		valueField: 'terima_gudang_value',
+		typeAhead: false,
+        hideTrigger:false,
+		tpl: tbeli_gudangbeli_tpl,
+		//blankText : 'GUDANG BESAR (CABING)',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
+	terima_gudang_idField= new Ext.form.TextField();
+	
 	/* Identify  terima_supplier Field */
 	terima_supplierField= new Ext.form.TextField({
 		id: 'terima_supplierField',
@@ -1169,7 +1239,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [terima_noField, terima_orderField, terima_supplierField, terima_surat_jalanField]
+				items: [terima_noField, terima_orderField, terima_supplierField, terima_surat_jalanField, terima_gudangField]
 			}
 			,
 			{
@@ -2105,6 +2175,7 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var terima_no_search=null;
 		var terima_order_search=null;
+		var terima_gudang_search=null;
 		var terima_supplier_search=null;
 		var terima_surat_jalan_search=null;
 		var terima_pengirim_search=null;
@@ -2116,6 +2187,7 @@ Ext.onReady(function(){
 		if(terima_noSearchField.getValue()!==null){terima_no_search=terima_noSearchField.getValue();}
 		if(terima_orderSearchField.getValue()!==null){terima_order_search=terima_orderSearchField.getValue();}
 		//if(terima_supplierSearchField.getValue()!==null){terima_supplier_search=terima_supplierSearchField.getValue();}
+		if(terima_gudangSearchField.getValue()!==null){terima_gudang_search=terima_gudangSearchField.getValue();}
 		if(terima_surat_jalanSearchField.getValue()!==null){terima_surat_jalan_search=terima_surat_jalanSearchField.getValue();}
 		if(terima_pengirimSearchField.getValue()!==null){terima_pengirim_search=terima_pengirimSearchField.getValue();}
 		if(terima_tgl_awalSearchField.getValue()!==""){terima_tgl_awal_search_date=terima_tgl_awalSearchField.getValue().format('Y-m-d');}
@@ -2128,6 +2200,7 @@ Ext.onReady(function(){
 			terima_no			: terima_no_search,
 			terima_order		: terima_order_search,
 			//terima_supplier	:	terima_supplier_search,
+			terima_gudang	:	terima_gudang_search, 
 			terima_surat_jalan	: terima_surat_jalan_search,
 			terima_pengirim		: terima_pengirim_search,
 			terima_tgl_awal		: terima_tgl_awal_search_date,
@@ -2143,6 +2216,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		master_terima_beli_DataStore.baseParams = { task: 'LIST',start:0,limit:15  };
 		master_terima_beli_DataStore.load({params: {start: 0, limit: 15}});
+		cbo_terima_gudang_DataStore.reload();
 		master_terima_beli_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -2150,6 +2224,8 @@ Ext.onReady(function(){
 	function master_terima_beli_reset_SearchForm(){
 		terima_noSearchField.reset();
 		terima_orderSearchField.reset();
+		terima_gudangSearchField.reset();
+		//terima_gudangSearchField.setValue(null);
 		terima_supplierSearchField.reset();
 		terima_surat_jalanSearchField.reset();
 		terima_pengirimSearchField.reset();
@@ -2196,6 +2272,24 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	
+	terima_gudangSearchField= new Ext.form.ComboBox({
+		id: 'terima_gudangSearchField',
+		fieldLabel: 'Gudang',
+		store:cbo_terima_gudang_DataStore,
+		mode: 'remote',
+		displayField: 'terima_gudang_display',
+		valueField: 'terima_gudang_value',
+		typeAhead: false,
+        hideTrigger:false,
+		tpl: tbeli_gudangbeli_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
 	/* Identify  terima_supplier Search Field */
 	terima_supplierSearchField= new Ext.form.ComboBox({
 		id: 'terima_supplierSearchField',
@@ -2294,7 +2388,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_pengirimSearchField,
+				items: [terima_noSearchField, terima_orderSearchField, terima_surat_jalanSearchField, terima_gudangSearchField, terima_pengirimSearchField,
 						{
 							layout: 'column',
 							border: false,
@@ -2406,6 +2500,7 @@ Ext.onReady(function(){
 		var terima_no_print=null;
 		var terima_order_print=null;
 		var terima_supplier_print=null;
+		var terima_gudang_print=null;
 		var terima_surat_jalan_print=null;
 		var terima_pengirim_print=null;
 		var terima_tgl_awal_print_date="";
@@ -2414,6 +2509,7 @@ Ext.onReady(function(){
 		// check if we do have some search data...
 		if(master_terima_beli_DataStore.baseParams.query!==null){searchquery = master_terima_beli_DataStore.baseParams.query;}
 		if(master_terima_beli_DataStore.baseParams.terima_no!==null){terima_no_print = master_terima_beli_DataStore.baseParams.terima_no;}
+		if(master_terima_beli_DataStore.baseParams.terima_gudang!==null){karyawan_cabang_print = master_terima_beli_DataStore.baseParams.terima_gudang;}
 		if(master_terima_beli_DataStore.baseParams.terima_order!==null){terima_order_print = master_terima_beli_DataStore.baseParams.terima_order;}
 		if(master_terima_beli_DataStore.baseParams.terima_supplier!==null){terima_supplier_print = master_terima_beli_DataStore.baseParams.terima_supplier;}
 		if(master_terima_beli_DataStore.baseParams.terima_surat_jalan!==null){terima_surat_jalan_print = master_terima_beli_DataStore.baseParams.terima_surat_jalan;}
@@ -2430,6 +2526,7 @@ Ext.onReady(function(){
 		  	query				: searchquery,
 			terima_no 			: terima_no_print,
 			terima_order 		: terima_order_print,
+			terima_gudang 		: terima_gudang_print,
 			terima_supplier 	: terima_supplier_print,
 			terima_surat_jalan 	: terima_surat_jalan_print,
 			terima_pengirim 	: terima_pengirim_print,
@@ -2478,6 +2575,7 @@ Ext.onReady(function(){
 		var terima_supplier_2excel=null;
 		var terima_surat_jalan_2excel=null;
 		var terima_pengirim_2excel=null;
+		var terima_gudang_2excel=null;
 		var terima_tgl_awal_2excel_date="";
 		var terima_tgl_akhir_2excel_date="";
 		var terima_keterangan_2excel=null;
@@ -2492,6 +2590,7 @@ Ext.onReady(function(){
 		if(master_terima_beli_DataStore.baseParams.terima_tgl_awal!==""){terima_tgl_awal_2excel_date = master_terima_beli_DataStore.baseParams.terima_tgl_awal;}
 		if(master_terima_beli_DataStore.baseParams.terima_tgl_akhir!==""){terima_tgl_akhir_2excel_date = master_terima_beli_DataStore.baseParams.terima_tgl_akhir;}
 		if(master_terima_beli_DataStore.baseParams.terima_keterangan!==null){terima_keterangan_2excel = master_terima_beli_DataStore.baseParams.terima_keterangan;}
+		if(master_terima_beli_DataStore.baseParams.terima_gudang!==null){terima_gudang_2excel = master_terima_beli_DataStore.baseParams.terima_gudang;}
 
 		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
@@ -2501,6 +2600,7 @@ Ext.onReady(function(){
 		  	query				: searchquery,
 			terima_no 			: terima_no_2excel,
 			terima_order 		: terima_order_2excel,
+			terima_gudang 		: terima_gudang_2excel,
 			terima_supplier 	: terima_supplier_2excel,
 			terima_surat_jalan 	: terima_surat_jalan_2excel,
 			terima_pengirim 	: terima_pengirim_2excel,
@@ -2663,6 +2763,7 @@ Ext.onReady(function(){
 			terima_supplierField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier);
 			terima_supplier_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier_id);
 			terima_order_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_value);
+			terima_gudang_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.terima_gudang_value);
 		}
 		tbeli_orderbeli_detail_DataStore.load({
 			params:{orderid: terima_orderField.getValue()},
