@@ -13,6 +13,50 @@ class M_lap_jum_penj_produk extends Model{
 		parent::Model();
 	}
 
+	
+	function get_petugas_list($query, $tgl_app="", $karyawan_jabatan, $jabatan_staff){
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
+/*		if($rawat_kategori==2)
+			$departemen_id=8;
+		elseif($rawat_kategori==3)
+			$departemen_id=9;
+		else
+			$departemen_id=0;*/
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		$bln_now=date('Y-m');
+		$sql=  "SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) 
+				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+				WHERE karyawan_jabatan=jabatan_id AND (jabatan_nama='$karyawan_jabatan' or jabatan_nama='$jabatan_staff') AND karyawan_aktif='Aktif'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1) 
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id)
+					,1) = '1')";
+		if($query<>""){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
+		}
+		if($tgl_app<>""){
+			$tgl_app = date('Y-m-d', strtotime($tgl_app));
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (absensi_tgl='".addslashes($tgl_app)."')";
+		}
+		//echo $sql;
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 		
 	//function for get list record
 	function lap_jum_penj_produk_list($filter,$start,$end){

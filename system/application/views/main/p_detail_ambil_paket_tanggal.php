@@ -25,6 +25,7 @@
 	<thead>
     	<tr>
         	<th width="22" scope='col'>No</th>
+			<th width="50" scope='col'>Jam</th>
             <th width="80" scope='col'>No Faktur</th>           
             <th width="355" scope='col'>Customer</th>
             <th width="300" scope='col'>Pemakai</th>
@@ -56,6 +57,7 @@
 		?>
 		<tr>
         	<td><? echo $i; ?></td>
+			<td><?php echo $print->time; ?></td>
             <td><?php echo $print->no_bukti; ?></td>
             <td ><?php echo $print->cust_nama." (".$print->cust_no.")"; ?></td>
             <td ><?php echo $print->pemakai_nama; ?></td>
@@ -81,7 +83,7 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Total</th>
-            <td colspan='7'><?php echo count($data_print); ?> data</td>
+            <td colspan='8'><?php echo count($data_print); ?> data</td>
         </tr>
     </tfoot>
 </table>

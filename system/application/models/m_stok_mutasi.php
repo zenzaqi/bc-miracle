@@ -47,7 +47,7 @@ class M_stok_mutasi extends Model{
 		}
 
 		function stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start, $tanggal_end, $filter,
-								  $start,$end,$opsi){
+								  $start,$end,$opsi,$mutasi_jumlah){
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
@@ -60,6 +60,14 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
 			}
+			
+			if($mutasi_jumlah=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_group='".$group1_id."' ";
+			}elseif($mutasi_jumlah=='produk'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_id='".$produk_id."' ";
+			}
 
 			if($filter!==""&&$filter!==NULL){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -67,7 +75,7 @@ class M_stok_mutasi extends Model{
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
-			$sql.=" ORDER BY produk_id ASC";
+			$sql.=" GROUP BY produk_id ASC";
 
 //			$this->firephp->log($sql);
 			
@@ -113,7 +121,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   terima_gudang_id AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -139,7 +147,7 @@ class M_stok_mutasi extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND terima_gudang_id='".$gudang."'
 							AND terima_status<>'Batal' 
 							
 					UNION
@@ -512,7 +520,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   terima_gudang_id AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -539,7 +547,7 @@ class M_stok_mutasi extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 							AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND terima_gudang_id='".$gudang."'
 							AND terima_status<>'Batal' 
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,

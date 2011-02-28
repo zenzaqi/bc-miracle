@@ -67,6 +67,7 @@ var post2db = '';
 var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
+var cetak=0;
 
 /* declare variable here for Field*/
 var mutasi_idField;
@@ -85,6 +86,94 @@ var mutasi_statusSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+  
+	/*Function for pengecekan _dokumen untuk save n print */		
+	function pengecekan_dokumen(){
+		var mutasi_tanggal_create_date = "";
+		if(mutasi_tanggalField.getValue()!== ""){mutasi_tanggal_create_date = mutasi_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_mutasi&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: mutasi_tanggal_create_date	
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							cetak=1;
+							master_mutasi_create('print');
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						  // master_mutasi_create('print')
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
+	
+	/*Function for pengecekan _dokumen untuk save*/
+	function pengecekan_dokumen2(){
+		var mutasi_tanggal_create_date = "";
+		if(mutasi_tanggalField.getValue()!== ""){mutasi_tanggal_create_date = mutasi_tanggalField.getValue().format('Y-m-d');} 
+		Ext.Ajax.request({  
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_mutasi&m=get_action',
+			params: {
+				task: "CEK",
+				tanggal_pengecekan	: mutasi_tanggal_create_date
+		
+			}, 
+			success: function(response){							
+				var result=eval(response.responseText);
+				switch(result){
+						case 1:
+							master_mutasi_create();
+						break;
+						default:
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Data Penerimaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING,
+						  // master_mutasi_create('print')
+						});
+						//jproduk_btn_cancel();
+						break;
+				}
+			},
+			failure: function(response){
+				var result=response.responseText;
+				Ext.MessageBox.show({
+				   title: 'Error',
+				   msg: 'Could not connect to the database. retry later.',
+				   buttons: Ext.MessageBox.OK,
+				   animEl: 'database',
+				   icon: Ext.MessageBox.ERROR
+				});	
+			}									    
+		});   
+	}
   
    	/* Function for add data, open window create form */
 	function master_mutasi_create(opsi){
@@ -126,7 +215,8 @@ Ext.onReady(function(){
 				mutasi_tujuan		: mutasi_tujuan_create, 
 				mutasi_tanggal		: mutasi_tanggal_create_date, 
 				mutasi_keterangan	: mutasi_keterangan_create,
-				mutasi_status		: mutasi_status_create
+				mutasi_status		: mutasi_status_create,
+				cetak				: cetak
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -172,6 +262,8 @@ Ext.onReady(function(){
 	function get_pk_id(){
 		if(post2db=='UPDATE')
 			return master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id');
+		else if(post2db=='CREATE')
+			return mutasi_idField.getValue();
 		else 
 			return 0;
 	}
@@ -226,6 +318,7 @@ Ext.onReady(function(){
 				}
 			}
 		});
+		master_mutasi_createForm.mmutasi_savePrint.enable();
 	}
  	/* End of Function */
   
@@ -238,6 +331,90 @@ Ext.onReady(function(){
 		mutasi_tanggalField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tanggal'));
 		mutasi_keteranganField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_keterangan'));
 		mutasi_statusField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status'));
+		
+		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Terbuka"){
+			mutasi_idField.setDisabled(false);
+			mutasi_noField.setDisabled(false);
+			mutasi_asalField.setDisabled(false);
+			mutasi_tujuanField.setDisabled(false);
+			mutasi_tanggalField.setDisabled(false);
+			mutasi_keteranganField.setDisabled(false);
+			mutasi_statusField.setDisabled(false);
+			master_mutasi_createForm.mmutasi_savePrint.enable();
+		}
+		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tertutup"){
+			mutasi_idField.setDisabled(true);
+			mutasi_noField.setDisabled(true);
+			mutasi_asalField.setDisabled(true);
+			mutasi_tujuanField.setDisabled(true);
+			mutasi_tanggalField.setDisabled(true);
+			mutasi_keteranganField.setDisabled(true);
+			mutasi_statusField.setDisabled(false);
+			if(cetak==1){
+					//jproduk_cetak(jproduk_id_for_cetak);
+				cetak=0;
+			}
+			
+		}
+		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Batal"){
+			mutasi_idField.setDisabled(true);
+			mutasi_noField.setDisabled(true);
+			mutasi_asalField.setDisabled(true);
+			mutasi_tujuanField.setDisabled(true);
+			mutasi_tanggalField.setDisabled(true);
+			mutasi_keteranganField.setDisabled(true);
+			mutasi_statusField.setDisabled(true);
+			master_mutasi_createForm.mmutasi_savePrint.disable();
+		}
+		
+		
+		mutasi_statusField.on("select",function(){
+		var status_awal = master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status');
+		if(status_awal =='Terbuka' && mutasi_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Terbuka');
+		}
+		
+		else if(status_awal =='Tertutup' && mutasi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Tertutup');
+		}
+		
+		else if(status_awal =='Batal' && mutasi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Tertutup');
+		}
+		
+		else if(mutasi_statusField.getValue()=='Batal')
+		{
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membatalkan dokumen ini? Pembatalan dokumen tidak bisa dikembalikan lagi', mutasi_status_batal);
+		}
+        
+       else if(status_awal =='Tertutup' && mutasi_statusField.getValue()=='Tertutup'){
+            <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
+			master_mutasi_createForm.tbeli_savePrint.enable();
+			<?php } ?>
+        }
+		
+		});	
 		
 		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
 		cbo_mutasi_satuanDataStore.setBaseParam('master_id',get_pk_id());
@@ -257,6 +434,18 @@ Ext.onReady(function(){
 		
 	}
 	/* End setValue to EDIT*/
+	
+	function mutasi_status_batal(btn){
+	if(btn=='yes')
+	{
+		mutasi_statusField.setValue('Batal');
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_MUTASI'))){ ?>
+        master_mutasi_createForm.mmutasi_savePrint.disable();
+		<?php } ?>
+	}  
+	else
+		mutasi_statusField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status'));
+	}
   
 	/* Function for Check if the form is valid */
 	function is_master_mutasi_form_valid(){
@@ -1157,11 +1346,14 @@ Ext.onReady(function(){
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_MUTASI'))){ ?>
 			{
 				text: 'Save and Print',
-				handler: function() { master_mutasi_create('print'); }
+				ref: '../mmutasi_savePrint',
+				handler: pengecekan_dokumen
+				//handler: function() { master_mutasi_create('print'); }
 			},
 			{
 				text: 'Save and Close',
-				handler: function() { master_mutasi_create('close'); }
+				handler: pengecekan_dokumen2
+				//handler: function() { master_mutasi_create('close'); }
 			}
 			,
 			<?php } ?>

@@ -1,0 +1,2 @@
+ubah view `vu_detail_jual_produk`, `vu_detail_jual_rawat`, `vu_detail_jual_paket`, `vu_detail_ambil_paket_rawat` 
+untuk menambahkan waktu print laporan penjualan dan pengambilan paket.

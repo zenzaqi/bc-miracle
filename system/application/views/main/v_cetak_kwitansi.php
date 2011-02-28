@@ -943,7 +943,7 @@ Ext.onReady(function(){
 			else if(status_awal_kwitansi =='Tertutup' && kwitansi_statusField.getValue()=='Terbuka')
 			{
 			Ext.MessageBox.show({
-				msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+				msg: 'Status dokumen yang sudah Tertutup tidak dapat diganti Terbuka',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -954,7 +954,7 @@ Ext.onReady(function(){
 			else if(status_awal_kwitansi =='Batal' && kwitansi_statusField.getValue()=='Terbuka')
 			{
 			Ext.MessageBox.show({
-				msg: 'Status yang sudah Tertutup tidak dapat diganti Terbuka',
+				msg: 'Status dokumen yang sudah Tertutup tidak dapat diganti Terbuka',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1432,7 +1432,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		}, 
 		{
-			header: 'Status',
+			header: 'Stat Dok',
 			dataIndex: 'kwitansi_status',
 			width: 80,	//55,
 			sortable: true
@@ -1747,7 +1747,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_status Field */
 	kwitansi_statusField= new Ext.form.ComboBox({
 		id: 'kwitansi_statusField',
-		fieldLabel: 'Status',
+		fieldLabel: 'Stat Dok',
 		store:new Ext.data.SimpleStore({
 			fields:['kwitansi_status_value', 'kwitansi_status_display'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
@@ -2777,7 +2777,7 @@ Ext.onReady(function(){
 	/* Identify  kwitansi_status Search Field */
 	kwitansi_statusSearchField= new Ext.form.ComboBox({
 		id: 'kwitansi_statusSearchField',
-		fieldLabel: 'Status',
+		fieldLabel: 'Stat Dok',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'kwitansi_status'],
 			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
