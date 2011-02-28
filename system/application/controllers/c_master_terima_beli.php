@@ -171,7 +171,11 @@ class C_master_terima_beli extends Controller {
 	
 	
 	function get_order_beli_list(){
-		$result=$this->m_master_terima_beli->get_order_beli_list();
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		
+		$result=$this->m_master_terima_beli->get_order_beli_list($query,$start, $end);
 		echo $result;
 	}
 	
