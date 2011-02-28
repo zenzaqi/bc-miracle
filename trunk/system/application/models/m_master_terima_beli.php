@@ -298,7 +298,7 @@ class M_master_terima_beli extends Model{
 		}
 
 
-		function get_order_beli_list(){
+		function get_order_beli_list($filter,$start,$end){
 		$date_now=date('Y-m-d');
 		
 			$sql_day = "SELECT trans_op_days from transaksi_setting";
@@ -311,11 +311,22 @@ class M_master_terima_beli extends Model{
 					FROM master_order_beli, supplier, transaksi_setting
 					WHERE order_supplier = supplier_id
 						AND order_status = 'Tertutup'
-						AND '".$date_now."' < (order_tanggal + INTERVAL '".$day."' DAY)
-					ORDER BY order_no desc";
+						AND '".$date_now."' < (order_tanggal + INTERVAL '".$day."' DAY)";
 					
+			if ($filter<>""){
+				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				$sql .= " (order_no LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%')";
+			}
+			
+			$sql .= " ORDER BY order_no desc ";			
+			$start=($start==""?0:$start);
+			$end=($end==""?15:$end);
+			
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
+			$limit = $sql." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit); 
+
 			if($nbrows>0){
 				foreach($query->result() as $row){
 					$arr[] = $row;
