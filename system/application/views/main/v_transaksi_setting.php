@@ -111,9 +111,27 @@ Ext.onReady(function(){
 	}
  	/* End of Function */
     
+	/*function transaksi_setting_reset_form(){
+	
+		transaksi_setting_DataStore.load({
+		
+		if(transaksi_setting_DataStore.getCount()){
+			info_op=transaksi_setting_DataStore.getAt(0).data;
+			trans_days_Field.setValue(info_op.trans_op_days);
+		}
+		});
+	}
+ 	/* End of Function */
+	
 	/* Function for Check if the form is valid */
 	function is_transaksi_setting_form_valid(){
 		return (trans_days_Field.isValid());
+	}
+  	/* End of Function */
+  
+  /* Function for Displaying  create Window Form */
+	/*function display_form_window(){
+		transaksi_setting_reset_form();
 	}
   	/* End of Function */
   
@@ -143,7 +161,8 @@ Ext.onReady(function(){
 	
 	trans_days_Field= new Ext.form.NumberField({
 		id: 'trans_days_Field',
-		name: 'trans_days',
+		name: 'trans_op_days',
+		fieldLabel: 'Masa Berlaku OP',
 		allowNegatife : false,
 		allowDecimals: true,
 		anchor: '20%',
@@ -151,9 +170,8 @@ Ext.onReady(function(){
 		maxLength : 11		
 	});
 	
-	set_trans_label_transField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Transaksi OP :<b> &nbsp;'});
-
-	set_trans_label_daysField=new Ext.form.Label({ html: '&nbsp; days<br> <br>'});
+	set_trans_label_transField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Masa berlaku OP : &nbsp;'});
+	set_trans_label_daysField=new Ext.form.Label({ html: '&nbsp; hari<br> <br>'});
 	
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -211,7 +229,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	transaksi_setting_saveWindow= new Ext.Window({
 		id: 'transaksi_setting_saveWindow',
-		title: 'Transaksi OP Setup',
+		title: 'Transaction Setting',
 		closable:true,
 		closeAction: 'hide',
 		closable: false,
