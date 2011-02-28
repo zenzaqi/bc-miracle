@@ -200,6 +200,9 @@ class C_master_mutasi extends Controller {
 			case "UPDATE":
 				$this->master_mutasi_update();
 				break;
+			case "CEK":
+				$this->master_mutasi_pengecekan();
+				break;	
 			case "CREATE":
 				$this->master_mutasi_create();
 				break;
@@ -252,7 +255,8 @@ class C_master_mutasi extends Controller {
 		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
 		$mutasi_status=str_replace(",", ",",$mutasi_status);
 		$mutasi_status=str_replace("'", '"',$mutasi_status);
-		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status);
+		$cetak=trim(@$_POST["cetak"]);
+		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status,$cetak);
 		echo $result;
 	}
 	
@@ -273,7 +277,8 @@ class C_master_mutasi extends Controller {
 		$mutasi_status=trim(@$_POST["mutasi_status"]);
 		$mutasi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$mutasi_status);
 		$mutasi_status=str_replace("'", '"',$mutasi_status);
-		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status );
+		$cetak=trim(@$_POST["cetak"]);
+		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $cetak );
 		echo $result;
 	}
 
@@ -285,6 +290,14 @@ class C_master_mutasi extends Controller {
 		echo $result;
 	}
 
+	function master_mutasi_pengecekan(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+	
+		$result=$this->m_public_function->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
 	//function for advanced search
 	function master_mutasi_search(){
 		//POST varibale here

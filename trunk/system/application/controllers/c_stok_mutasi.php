@@ -61,9 +61,10 @@ class C_stok_mutasi extends Controller {
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
 		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
+		$mutasi_jumlah = trim(@$_POST["mutasi_jumlah"]);
 		
 		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-													   $tanggal_end,$query,$start,$end,"list");
+													   $tanggal_end,$query,$start,$end,"list", $mutasi_jumlah);
 		echo $result;
 	}
 	
@@ -88,6 +89,7 @@ class C_stok_mutasi extends Controller {
 		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		$option=@$_POST['currentlisting'];
+		$mutasi_jumlah = trim(@$_POST["mutasi_jumlah"]);
 		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
@@ -95,7 +97,7 @@ class C_stok_mutasi extends Controller {
 /*		$data["data_print"] = $this->m_stok_mutasi->stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 																	  $tanggal_end,$option,$filter);*/
 		$data["data_print"]=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-													   $tanggal_end,$query,$start,$end,"print");
+													   $tanggal_end,$query,$start,$end,"print",$mutasi_jumlah);
 		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
 		$data["gudang_nama"]= $this->m_public_function->get_gudang_nama($gudang);
 		

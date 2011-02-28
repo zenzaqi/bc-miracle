@@ -310,7 +310,7 @@ Ext.onReady(function(){
 		order_idField.reset();
 		order_idField.setValue(null);
 		order_noField.reset();
-		order_noField.setValue(null);
+		order_noField.setValue('(Auto)');
 		order_supplierField.reset();
 		order_supplierField.setValue(null);
 		order_tanggalField.setValue(today);
@@ -1044,7 +1044,6 @@ Ext.onReady(function(){
 	/* Identify  order_no Field */
 	order_noField= new Ext.form.TextField({
 		id: 'order_noField',
-		//fieldLabel: 'No Order',
 		fieldLabel: 'No OP',
 		emptyText: '(Auto)',
 		readOnly: true,
