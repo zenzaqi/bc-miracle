@@ -11,7 +11,7 @@
 <caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?> <br/>Group By No Faktur</caption>
 <thead> 
 	<tr> 
-		<td scope='col'></td>
+		<?//<td scope='col'></td>?>
 		<th scope='col'>No</th>
 		<th scope='col'>Kode</th> 
 		<th scope='col'>Nama Barang/Jasa</th> 
@@ -83,8 +83,11 @@
 						$total_nilai+=$print_list->subtotal; 
 						$total_diskon_persen+=(($print_list->subtotal*$print->diskon_umum)/100);
 				?>
-						<tr> 
+						<tr>
+							<?/*
 							<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							*/
+							?>
 							<td><?php echo $i; ?></td> 
 							<td><?php echo $print_list->produk_kode; ?></td> 
 							<td><?php echo $print_list->produk_nama;?></td>
@@ -98,7 +101,7 @@
 							<td class="numeric"><?php echo number_format($print_list->subtotal,0,",",","); ?></td> 
 						</tr><?php } ?><?php } ?>
 						<tr> 
-							<td></td>
+							<?//<td></td>?>
 							<td colspan="3"><b>Jum Item</td> 
 							<td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",",","); ?></b></td> 
 							<td align="right" class="numeric">&nbsp;</td> 
@@ -107,7 +110,7 @@
 							<td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",",","); ?></b></td> 
 						</tr>
 						<tr> 
-							<td></td>
+							<?//<td></td>?>
 							<td colspan="4"><b>
 								<table class="bayar">
 									<tr>
@@ -127,7 +130,7 @@
 							<td align="right" class="numeric"><b><?php echo number_format($print->totalbiaya,0,",",","); ?></b></td> 
 						</tr>
 						<tr> 
-							<td></td>
+							<?//<td></td>?>
 							<td colspan="4"><b>
 								<table class="bayar">
 								<tr>
@@ -177,19 +180,19 @@
 
 <tfoot>
 <tr> 
-	<td class="clear"></td>
+	<?//<td class="clear"></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">&nbsp;</th> 
 	<td colspan='8' class="foot">&nbsp;</td> 
 </tr> 
 <tr> 
-	<td class="clear"></td>
+	<?//<td class="clear"></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">&nbsp;</th> 
 	<td colspan='8' class="foot">&nbsp;</td> 
 </tr> 
 <tr>
-	<td class="clear"></td>
+	<?//<td class="clear"></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">&nbsp;</th> 
 	<td colspan='8' class="foot">&nbsp;</td> 
@@ -199,20 +202,20 @@
  
 <? //<tfoot> ?>
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Jum data</th> 
 	<td colspan='8' class="foot"><?php echo count($data_print); ?> data</td> 
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' colspan="2">Summary</th> 
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' colspan="6">Cara Bayar :</th>
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Tot Item</th> 
 	<td class="numeric foot" nowrap="nowrap"><?php echo number_format($total_item,0,",",","); ?></td> 
@@ -222,7 +225,7 @@
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap"><?php echo number_format($total_nilai,0,",",","); ?></td> 
@@ -232,7 +235,7 @@
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr>
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total Disk (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_diskon_persen,0,",",","); ?></td> 
@@ -242,7 +245,7 @@
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total Voucher (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_voucher,0,",",","); ?></td> 
@@ -252,7 +255,7 @@
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total Bayar (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_bayar,0,",",","); ?></td> 
@@ -262,7 +265,7 @@
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr> 
 <tr> 
-	<td></td>
+	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total Hutang (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_hutang,0,",",","); ?></td> 
