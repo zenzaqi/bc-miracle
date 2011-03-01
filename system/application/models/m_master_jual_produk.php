@@ -881,15 +881,16 @@ class M_master_jual_produk extends Model{
 		$jenis_transaksi = 'jual_produk';
 		$bayar_date_create = $datetime_now;
 		
-		$sql="SELECT jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+		$sql="SELECT jproduk_cust ,jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$rs_record=$rs->row_array();
 			$jproduk_revised=$rs_record["jproduk_revised"];
+			$jproduk_cust=$rs_record["jproduk_cust"];
 		}
 		
 		$data = array(
-			"jproduk_nobukti"=>$jproduk_nobukti, 
+			//"jproduk_nobukti"=>$jproduk_nobukti, 
 			"jproduk_tanggal"=>$jproduk_tanggal, 
 			"jproduk_diskon"=>$jproduk_diskon,
 			"jproduk_cashback"=>$jproduk_cashback,
