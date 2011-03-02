@@ -222,7 +222,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now' 
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now' 
 		group by tgl_tindakan
 	)
 
@@ -266,7 +266,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -516,7 +516,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
 
@@ -560,7 +560,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -811,7 +811,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now'
 		group by tgl_tindakan
 	)
 
@@ -855,7 +855,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join customer on (master_jual_produk.jproduk_cust = customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '$date_now'
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$date_now'
 			)
 			
 			union
@@ -1152,7 +1152,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1196,7 +1196,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -1431,7 +1431,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.fproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1475,7 +1475,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -1778,7 +1778,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -1822,7 +1822,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2057,7 +2057,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2101,7 +2101,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2401,7 +2401,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2445,7 +2445,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
@@ -2680,7 +2680,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 		group by tgl_tindakan
 	)
 
@@ -2723,7 +2723,7 @@ from
 					master_jual_produk.jproduk_cust as cust,
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and master_jual_produk.jproduk_bayar <> 0 and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '".$trawat_tglapp_start."'".$cust_kelamin."".$cust_daftar."".$stat_member."
 			)
 			
 			union
