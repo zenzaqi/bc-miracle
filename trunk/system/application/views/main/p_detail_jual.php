@@ -58,8 +58,7 @@
 			if ($print->keterangan == ''){ 
 				$print->keterangan = '-'; }?>
 				<tr>
-				<td>
-				</td>
+				<?//<td></td>?>
 					<td>
 						<b><?php $j++; echo $j; ?></b>
 					</td>
