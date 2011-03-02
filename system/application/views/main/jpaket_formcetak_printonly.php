@@ -30,8 +30,11 @@ html,body,table,tr,td{
 				</td>
 			  </tr>
 			  <tr>
-                <td width="60px" align="right">Tanggal</td>
-                <td width="480px">:&nbsp;&nbsp;<?=$jpaket_tanggal;?></td>
+                <td width="100px" align="right">Tanggal & Jam</td>
+                <td width="480px">:&nbsp;&nbsp;
+				<?=$jpaket_tanggal;?>
+				<?=$jpaket_jam;?>
+				</td>
               </tr>
 			  <tr>
                 <td align="right">Nomor</td>

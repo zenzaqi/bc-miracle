@@ -755,6 +755,7 @@ class C_master_jual_paket extends Controller {
 		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);
 		
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['jpaket_jam']=$rs->jpaket_jam;
 		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
@@ -848,6 +849,7 @@ class C_master_jual_paket extends Controller {
 		$cara_bayar3=$this->m_master_jual_paket->cara_bayar3($jpaket_id);
 		
 		$data['jpaket_nobukti']=$rs->jpaket_nobukti;
+		$data['jpaket_jam']=$rs->jpaket_jam;
 		$data['jpaket_tanggal']=date('d-m-Y', strtotime($rs->jpaket_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
