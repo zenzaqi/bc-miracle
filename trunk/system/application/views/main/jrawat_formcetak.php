@@ -21,8 +21,10 @@ html,body,table,tr,td{
             <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
             <td width="540px" valign="bottom"><table width="540px" border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td width="60px" align="right">Tanggal</td>
-                <td width="480px">:&nbsp;&nbsp;<?=$jrawat_tanggal;?></td>
+                <td width="100px" align="right">Tanggal & Jam</td>
+                <td width="480px">:&nbsp;&nbsp;
+				<?=$jrawat_tanggal;?>
+				<?=$jrawat_jam;?></td>
               </tr>
 			  <tr>
                 <td align="right">Nomor</td>

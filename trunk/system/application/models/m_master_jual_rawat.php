@@ -2638,6 +2638,7 @@ class M_master_jual_rawat extends Model{
 				,jrawat_diskon
 				,jrawat_cashback
 				,jrawat_bayar
+				,TIME(jrawat_date_create) AS jrawat_jam
 			FROM detail_jual_rawat
 			LEFT JOIN master_jual_rawat ON(drawat_master=jrawat_id)
 			LEFT JOIN customer ON(jrawat_cust=cust_id)

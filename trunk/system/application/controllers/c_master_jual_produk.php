@@ -830,6 +830,7 @@ class C_master_jual_produk extends Controller {
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
+		$data['jproduk_jam']=$rs->jproduk_jam;
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
@@ -923,6 +924,7 @@ class C_master_jual_produk extends Controller {
 		$cara_bayar3=$this->m_master_jual_produk->cara_bayar3($jproduk_id);
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
+		$data['jproduk_jam']=$rs->jproduk_jam;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;

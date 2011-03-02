@@ -18,16 +18,17 @@ page-break-after: always;
 </head>
 <body onload="window.print();window.close();">
 <?php
-function myheader($jproduk_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$jproduk_nobukti){
+function myheader($jproduk_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$jproduk_nobukti, $jproduk_jam ){
 ?>
 <table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
     <td width="540px" valign="bottom"><table width="540px" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="60px" align="right">Tanggal</td>
+        <td width="100px" align="right">Tanggal & Jam</td>
         <td width="480px">:&nbsp;&nbsp;
-          <?=$jproduk_tanggal;?></td>
+          <?=$jproduk_tanggal;?> 
+		  <?=$jproduk_jam;?></td>
       </tr>
       <tr>
         <td align="right">Nomor</td>
@@ -77,6 +78,7 @@ function content_header(){
 		$f_cust_nama = $cust_nama;
 		$f_cust_alamat = $cust_alamat;
 		$f_jproduk_nobukti = $jproduk_nobukti;
+		$f_jproduk_jam = $jproduk_jam;
 		
 		/* data footer */
 		$f_cara_bayar1 = $cara_bayar1;
@@ -96,7 +98,7 @@ function content_header(){
 		foreach($detail_jproduk as $list => $row){
 			$i+=1;
 			if(($i%15)==1){
-				myheader($f_jproduk_tanggal ,$f_cust_no ,$f_cust_nama ,$f_cust_alamat ,$f_jproduk_nobukti);
+				myheader($f_jproduk_tanggal ,$f_cust_no ,$f_cust_nama ,$f_cust_alamat ,$f_jproduk_nobukti, $f_jproduk_jam);
 				content_header();
 			}
 	  ?>

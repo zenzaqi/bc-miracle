@@ -1926,7 +1926,27 @@ class M_master_jual_paket extends Model{
 		
 		function print_paper($jpaket_id){
 			//$this->master_jual_paket_status_update($jpaket_id);
-			$sql="SELECT jpaket_tanggal, cust_no, cust_nama, cust_alamat, jpaket_nobukti, paket_nama, dpaket_jumlah, dpaket_harga, dpaket_diskon, (dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, jpaket_creator, jpaket_diskon, jpaket_cashback FROM detail_jual_paket LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) LEFT JOIN customer ON(jpaket_cust=cust_id) LEFT JOIN paket ON(dpaket_paket=paket_id) WHERE jpaket_id='$jpaket_id'";
+			$sql="
+			SELECT 
+				jpaket_tanggal, 
+				cust_no, 
+				cust_nama, 
+				cust_alamat, 
+				jpaket_nobukti, 
+				paket_nama, 
+				dpaket_jumlah, 
+				dpaket_harga, 
+				dpaket_diskon, 
+				(dpaket_harga*((100-dpaket_diskon)/100)) AS jumlah_subtotal, 
+				jpaket_creator, 
+				jpaket_diskon, 
+				jpaket_cashback,
+				TIME(jpaket_date_create) AS jpaket_jam
+			FROM detail_jual_paket 
+			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
+			LEFT JOIN customer ON(jpaket_cust=cust_id) 
+			LEFT JOIN paket ON(dpaket_paket=paket_id) 
+			WHERE jpaket_id='$jpaket_id'";
 			$result = $this->db->query($sql);
 			return $result;
 		}
