@@ -2070,6 +2070,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			cbo_kwitansi_jual_rawat_DataStore.load();
+			cbo_referalKasirDataStore.load();
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jrawat_post2db='UPDATE';
 			

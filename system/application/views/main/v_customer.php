@@ -443,7 +443,7 @@ var editor_cust_note;
   
 	/* Function for Check if the form is valid */
 	function is_customer_form_valid(){
-		return (cust_namaField.isValid() && cust_noField.isValid());
+		return (cust_namaField.isValid() && cust_noField.isValid() && cust_kelaminField.isValid());
 	}
   	/* End of Function */
   
@@ -3003,6 +3003,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable: false,
+		allowBlank : false,
 		displayField: 'cust_kelamin_display',
 		valueField: 'cust_kelamin_value',
 		//allowBlank: false,
