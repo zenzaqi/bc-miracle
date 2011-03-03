@@ -39,7 +39,16 @@ html,body,table,tr,td{
               </tr>
               <tr>
                 <td align="right">Nama</td>
-                <td>:&nbsp;&nbsp;<?=$cust_nama;?></td>
+                <td>:&nbsp;&nbsp;
+				<?=$cust_nama;?>
+				<?
+					$nama_karyawan=$jproduk_karyawan;
+					if ($nama_karyawan <> 'NA')
+					{
+						?>(<?=$jproduk_karyawan;?>,<?=$jproduk_karyawan_no;?>)<? 
+					}
+				?>
+				</td>
               </tr>
               <tr>
                 <td align="right">Alamat</td>
