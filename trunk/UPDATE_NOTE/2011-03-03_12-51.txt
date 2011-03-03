@@ -1,0 +1,2 @@
+vcm_produk n vcm_perawatan : menambahkan harga
+2011-03-02_16-42.sql : query menambah field harga pada tabel produk,  perawatan, vu_produk dan vu_produk

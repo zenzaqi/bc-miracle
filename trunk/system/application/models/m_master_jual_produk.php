@@ -18,6 +18,27 @@ class M_master_jual_produk extends Model{
 		parent::Model();
 	}
 	
+	function get_allkaryawan_list($query,$start,$end){
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_username,karyawan_nama,karyawan_tgllahir,karyawan_alamat
+		FROM karyawan where karyawan_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%') ";
+		}
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
 		
 		switch($group){
@@ -783,6 +804,8 @@ class M_master_jual_produk extends Model{
 
 		$query = "SELECT jproduk_id
 				,jproduk_nobukti
+				,karyawan_no
+				,karyawan_nama
 				,cust_nama
 				,cust_no
 				,cust_member
@@ -807,7 +830,8 @@ class M_master_jual_produk extends Model{
 				,jproduk_revised
 				,jproduk_stat_dok
 			FROM vu_jproduk
-			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
+			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)
+			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jproduk.jproduk_grooming)";
 		
 		// For simple search
 		if ($filter<>""){
@@ -870,7 +894,7 @@ class M_master_jual_produk extends Model{
 									   ,$cetak ,$jproduk_ket_disk
 									   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
 									   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
-									   ,$array_dproduk_diskon ,$array_dproduk_karyawan){
+									   ,$array_dproduk_diskon ,$array_dproduk_karyawan, $jproduk_grooming){
 		$date_now = date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
 		
@@ -881,16 +905,16 @@ class M_master_jual_produk extends Model{
 		$jenis_transaksi = 'jual_produk';
 		$bayar_date_create = $datetime_now;
 		
-		$sql="SELECT jproduk_cust ,jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
+		$sql="SELECT jproduk_revised FROM master_jual_produk WHERE jproduk_id='$jproduk_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$rs_record=$rs->row_array();
 			$jproduk_revised=$rs_record["jproduk_revised"];
-			$jproduk_cust=$rs_record["jproduk_cust"];
 		}
 		
 		$data = array(
-			//"jproduk_nobukti"=>$jproduk_nobukti, 
+			"jproduk_nobukti"=>$jproduk_nobukti, 
+			"jproduk_grooming"=>$jproduk_grooming,
 			"jproduk_tanggal"=>$jproduk_tanggal, 
 			"jproduk_diskon"=>$jproduk_diskon,
 			"jproduk_cashback"=>$jproduk_cashback,
@@ -1167,7 +1191,7 @@ class M_master_jual_produk extends Model{
 									   ,$cetak ,$jproduk_ket_disk
 									   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
 									   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
-									   ,$array_dproduk_diskon ,$array_dproduk_karyawan){
+									   ,$array_dproduk_diskon ,$array_dproduk_karyawan, $jproduk_grooming){
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		
@@ -1183,6 +1207,7 @@ class M_master_jual_produk extends Model{
 		$data = array(
 			"jproduk_nobukti"=>$jproduk_nobukti, 
 			"jproduk_cust"=>$jproduk_cust, 
+			"jproduk_grooming"=>$jproduk_grooming,
 			"jproduk_tanggal"=>$jproduk_tanggal, 
 			"jproduk_diskon"=>$jproduk_diskon, 
 			"jproduk_cashback"=>$jproduk_cashback,
@@ -1718,14 +1743,33 @@ class M_master_jual_produk extends Model{
 	
 	function print_paper($jproduk_id){
 		//$sql="SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jtunai_nilai, jproduk_diskon, jproduk_cashback FROM detail_jual_produk LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) LEFT JOIN customer ON(jproduk_cust=cust_id) LEFT JOIN produk ON(dproduk_produk=produk_id) LEFT JOIN satuan ON(dproduk_satuan=satuan_id) LEFT JOIN jual_tunai ON(jtunai_ref=jproduk_nobukti) WHERE dproduk_master='$jproduk_id'";
-		$sql="
-			SELECT jproduk_tanggal, cust_no, cust_nama, cust_alamat, jproduk_nobukti, produk_nama, dproduk_jumlah, satuan_nama, dproduk_harga, dproduk_diskon, (dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, jproduk_creator, jproduk_diskon, jproduk_cashback, jproduk_bayar, TIME(jproduk_date_create) AS jproduk_jam
-			FROM detail_jual_produk 
-			LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) 
-			LEFT JOIN customer ON(jproduk_cust=cust_id) 
-			LEFT JOIN produk ON(dproduk_produk=produk_id) 
-			LEFT JOIN satuan ON(dproduk_satuan=satuan_id) 
-			WHERE dproduk_master='$jproduk_id' ORDER BY dproduk_diskon ASC";
+		$sql="SELECT 
+			jproduk_tanggal, 
+			cust_no, 
+			cust_nama, 
+			cust_alamat, 
+			jproduk_nobukti, 
+			produk_nama, 
+			dproduk_jumlah, 
+			satuan_nama, 
+			dproduk_harga, 
+			dproduk_diskon, 
+			(dproduk_harga*((100-dproduk_diskon)/100)) AS jumlah_subtotal, 
+			jproduk_creator, 
+			jproduk_diskon, 
+			jproduk_cashback, 
+			jproduk_bayar,
+			TIME(jproduk_date_create) AS jproduk_jam,
+			IFNULL(karyawan_nama,'NA') AS jproduk_karyawan,
+			IFNULL(karyawan_no,'NA') AS jproduk_karyawan_no
+		FROM detail_jual_produk 
+		LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id) 
+		LEFT JOIN customer ON(jproduk_cust=cust_id) 
+		LEFT JOIN produk ON(dproduk_produk=produk_id) 
+		LEFT JOIN satuan ON(dproduk_satuan=satuan_id)
+		LEFT JOIN karyawan ON (jproduk_grooming = karyawan_id)
+		WHERE dproduk_master='$jproduk_id' 
+		ORDER BY dproduk_diskon ASC";
 		$result = $this->db->query($sql);
 		return $result;
 	}

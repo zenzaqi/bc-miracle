@@ -348,6 +348,7 @@ Ext.onReady(function(){
 			   && jproduk_stat_dokField.getValue()=='Terbuka'){
 				var jproduk_id_create_pk=null; 
 				var jproduk_nobukti_create=null; 
+				var jproduk_grooming_create=null; 
 				var jproduk_cust_create=null; 
 				var jproduk_tanggal_create_date=""; 
 				var jproduk_diskon_create=null; 
@@ -438,7 +439,8 @@ Ext.onReady(function(){
 				var jproduk_transfer_nilai3_create=null;
 				
 				if(jproduk_idField.getValue()!== null){jproduk_id_create_pk = jproduk_idField.getValue();}else{jproduk_id_create_pk=get_jproduk_pk();} 
-				if(jproduk_nobuktiField.getValue()!== null){jproduk_nobukti_create = jproduk_nobuktiField.getValue();} 
+				if(jproduk_nobuktiField.getValue()!== null){jproduk_nobukti_create = jproduk_nobuktiField.getValue();}
+				if(jproduk_karyawanField.getValue()!== null){jproduk_grooming_create = jproduk_karyawanField.getValue();}				
 				if(jproduk_custField.getValue()!== null){jproduk_cust_create = jproduk_custField.getValue();} 
 				if(jproduk_tanggalField.getValue()!== ""){jproduk_tanggal_create_date = jproduk_tanggalField.getValue().format('Y-m-d');} 
 				if(jproduk_diskonField.getValue()!== null){jproduk_diskon_create = jproduk_diskonField.getValue();} 
@@ -622,6 +624,7 @@ Ext.onReady(function(){
 									task: jproduk_post2db,
 									cetak: jproduk_cetak_value,
 									jproduk_id			: 	jproduk_id_create_pk, 
+									jproduk_grooming	:	jproduk_grooming_create,
 									jproduk_nobukti		: 	jproduk_nobukti_create, 
 									jproduk_cust		: 	jproduk_cust_create, 
 									jproduk_tanggal		: 	jproduk_tanggal_create_date, 
@@ -1107,6 +1110,10 @@ Ext.onReady(function(){
 	function master_jual_produk_reset_form(){
 		jproduk_idField.reset();
 		jproduk_idField.setValue(null);
+		jproduk_karyawanField.reset();
+		jproduk_karyawanField.setValue(null);
+		jproduk_nikkaryawanField.reset();
+		jproduk_nikkaryawanField.setValue(null);
 		jproduk_nobuktiField.reset();
 		jproduk_nobuktiField.setValue(null);
 		jproduk_custField.reset();
@@ -1242,7 +1249,7 @@ Ext.onReady(function(){
 		dsub_total_netField.setDisabled(false);
 		combo_reveral.setDisabled(false);
 		dharga_defaultField.setDisabled(false);
-		
+				
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 		master_jual_produk_createForm.jproduk_savePrint.enable();
 		<?php } ?>
@@ -1267,6 +1274,8 @@ Ext.onReady(function(){
 	
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
+		jproduk_karyawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
+		jproduk_nikkaryawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
 		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust'));
 		jproduk_cust_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust_id'));
 		jproduk_tanggalField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_tanggal'));
@@ -1308,6 +1317,7 @@ Ext.onReady(function(){
 		jproduk_hutang_cfField.setValue(CurrencyFormatted(hutang_temp));
 		
 		load_membership();
+		load_karyawan();
 		update_group_carabayar_jual_produk();
 		update_group_carabayar2_jual_produk();
 		update_group_carabayar3_jual_produk();
@@ -1913,6 +1923,29 @@ Ext.onReady(function(){
 			}); 
 		}
 	}
+	
+	function load_karyawan(){
+		var karyawan_id=0;
+		if(jproduk_post2db=="CREATE"){
+			karyawan_id=jproduk_karyawanField.getValue();
+		}else if(jproduk_post2db=="UPDATE"){
+			karyawan_id=jproduk_cust_idField.getValue();
+		}
+		
+		if(jproduk_karyawanField.getValue()!=''){
+			karyawanDataStore.load({
+					params : { karyawan_id: karyawan_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(karyawanDataStore.getCount()){
+								jproduk_karyawan_record=karyawanDataStore.getAt(0).data;
+								jproduk_nikkaryawanField.setValue(jproduk_karyawan_record.karyawan_no);
+							}
+						}
+					}
+			}); 
+		}
+	}
 	/* Function for Check if the form is valid */
 	function is_master_jual_produk_form_valid(){
 		return (jproduk_diskonField.isValid());
@@ -2065,6 +2098,9 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jproduk_id', type: 'int', mapping: 'jproduk_id'}, 
 			{name: 'jproduk_nobukti', type: 'string', mapping: 'jproduk_nobukti'}, 
+			{name: 'jproduk_grooming', type: 'string', mapping: 'jproduk_grooming'},
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'jproduk_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'jproduk_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'jproduk_cust_member', type: 'string', mapping: 'cust_member'}, 
@@ -2142,6 +2178,33 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
+	
+	jproduk_karyawanDataStore = new Ext.data.Store({
+		id: 'jproduk_karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_allkaryawan_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
+			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+			//{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'},
+		]),
+		sortInfo:{field: 'karyawan_no', direction: "ASC"}
+	});
+	
+	var karyawan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{karyawan_display}</b> | {karyawan_no}</span>',
+        '</div></tpl>'
+    );
 	
 	/* Function for Retrieve Combo Kwitansi DataStore */
 	cbo_kwitansi_jual_produk_DataStore = new Ext.data.Store({
@@ -2710,7 +2773,56 @@ Ext.onReady(function(){
 		format : 'd-m-Y'
 	});
 	
+	/* Identify  jproduk_cust Field */
+	jproduk_karyawanField= new Ext.form.ComboBox({
+		id: 'jproduk_karyawanField',
+		fieldLabel: 'Karyawan',
+		store: jproduk_karyawanDataStore,
+		mode: 'remote',
+		displayField:'karyawan_display',
+		valueField: 'karyawan_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: karyawan_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+
 	
+	jproduk_nikkaryawanField= new Ext.form.TextField({
+		id: 'jproduk_nikkaryawanField',
+		fieldLabel: 'NIK',
+		emptyText : '(Auto)',
+		readOnly: true,
+		
+		renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
+	});
+	
+	jproduk_groomingGroup = new Ext.form.FieldSet({
+		id : 'jproduk_groomingGroup',
+		title: 'Grooming',
+		checkboxToggle:false,
+		autoHeight: true,
+		layout:'column',
+		collapsible: true,
+		collapsed : true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [jproduk_karyawanField, jproduk_nikkaryawanField] 
+			}]
+	
+	});
 	
 	/* Identify  jproduk_tanggal Field */
 	jproduk_tanggalField= new Ext.form.DateField({
@@ -4444,7 +4556,6 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 	
-	
 	cbo_dproduk_satuanDataStore = new Ext.data.Store({
 		id: 'cbo_dproduk_satuanDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -4487,6 +4598,25 @@ Ext.onReady(function(){
 			
 		]),
 		sortInfo:{field: 'member_id', direction: "ASC"}
+	});
+	
+	karyawanDataStore = new Ext.data.Store({
+		id: 'karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_produk&m=get_nik', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'karyawan_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'}
+			
+		]),
+		sortInfo:{field: 'karyawan_id', direction: "ASC"}
 	});
 	
 	var combo_jual_produk=new Ext.form.ComboBox({
@@ -6028,9 +6158,28 @@ Ext.onReady(function(){
 	jproduk_caraField.on("select",update_group_carabayar_jual_produk);
 	jproduk_cara2Field.on("select",update_group_carabayar2_jual_produk);
 	jproduk_cara3Field.on("select",update_group_carabayar3_jual_produk);
+	
+	jproduk_karyawanField.on("select",function(){
+		var karyawan_id=jproduk_karyawanField.getValue();		
+		if(karyawan_id!==0){
+			karyawanDataStore.load({
+					params : { karyawan_id: karyawan_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(karyawanDataStore.getCount()){
+								jproduk_karyawan_record=karyawanDataStore.getAt(0).data;
+								jproduk_nikkaryawanField.setValue(jproduk_karyawan_record.karyawan_no);
+							}else{
+								jproduk_cust_nomemberField.setValue("");
+							}
+						}
+					}
+			}); }
+
+	});
+	
 	jproduk_custField.on("select",function(){
 		var cust_id=jproduk_custField.getValue();
-		
 		if(cust_id!==0){
 			memberDataStore.load({
 					params : { member_cust: cust_id},
@@ -6040,6 +6189,12 @@ Ext.onReady(function(){
 								jproduk_member_record=memberDataStore.getAt(0).data;
 								jproduk_cust_nomemberField.setValue(jproduk_member_record.member_no);
 								jproduk_valid_memberField.setValue(jproduk_member_record.member_valid);
+								if (cust_id== '9'){
+									jproduk_karyawanField.setDisabled(false);
+								}
+								else {
+									jproduk_karyawanField.setDisabled(true);
+								}
 							}else{
 								jproduk_cust_nomemberField.setValue("");
 								jproduk_valid_memberField.setValue("");
@@ -6082,7 +6237,7 @@ Ext.onReady(function(){
 		autoHeight:true,
 		width: 	1220,	//940,
 		frame: true,
-		items: [master_jual_produk_masterGroup,detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
+		items: [master_jual_produk_masterGroup,jproduk_groomingGroup, detail_jual_produkListEditorGrid,master_jual_produk_bayarGroup]
 		,
 		buttons: [
 			{
@@ -6589,6 +6744,7 @@ Ext.onReady(function(){
 		jproduk_cashbackField.setValue(0);
 		jproduk_diskonField.setValue(0);
 		jproduk_diskonField.allowBlank=true;
+		jproduk_karyawanField.setDisabled(true);
 	}
 	pertamax();
 	
