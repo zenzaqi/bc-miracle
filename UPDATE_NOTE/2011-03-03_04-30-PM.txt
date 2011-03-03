@@ -1,0 +1,18 @@
+[update by zaqi.smart@gmail.com]
+o> UPDATE ALL PERSEDIAAN
+   - Perbaikan di view, untuk mencegah proses save ketika
+     data detail belum diload semua
+   - Catatan Info :
+     Query: Delete From... WHERE master... NOT IN...
+     Terjadi ketika proses edit detail:
+     proses ini untuk pembersihan data yang sudah dihapus di
+     detail grid, karena prosesnya meengupdate data detail adalah
+     o insert data dari data grid jika data termasuk data detail baru ditandai
+       dengan tidak punya detail id
+     o update data jika data grid dipertahankan ditandai dengan
+       detail id yang terekam
+     o delete data yang sudah dhapus dari grid, mencari detail id
+       yang masternya tersebut tidak termasuk detail2 yng diinput ato
+       diupdate
+     
+  

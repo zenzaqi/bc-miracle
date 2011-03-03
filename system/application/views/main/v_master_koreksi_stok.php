@@ -82,6 +82,9 @@ var koreksi_tgl_awalSearchField;
 var koreksi_keteranganSearchField;
 var koreksi_statusSearchField;
 
+var koreksi_button_saveField;
+var koreksi_button_saveprintField;
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -322,6 +325,36 @@ Ext.onReady(function(){
 		koreksi_keteranganField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_keterangan'));
 		koreksi_statusField.setValue(master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status'));
 		
+		//LOAD DETAIL
+		cbo_stok_satuanDataStore.setBaseParam('task','detail');
+		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_satuanDataStore.load();
+		
+		koreksi_button_saveField.setDisabled(true);
+		koreksi_button_saveprintField.setDisabled(true);
+								
+		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_stok_produkDataStore.setBaseParam('task','detail');
+		cbo_stok_produkDataStore.setBaseParam('gudang',master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang_id'));
+		cbo_stok_produkDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_koreksi_stok_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_koreksi_stok_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								koreksi_button_saveField.setDisabled(false);
+								koreksi_button_saveprintField.setDisabled(false);
+							}
+						}
+					});
+				}
+			}
+		});
+		
+		check_gudang();
+		//END OF DETAIL
+		
 		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Terbuka"){
 			koreksi_idField.setDisabled(false);
 			koreksi_noField.setDisabled(false);
@@ -403,23 +436,7 @@ Ext.onReady(function(){
 		
 		});	
 		
-		cbo_stok_satuanDataStore.setBaseParam('task','detail');
-		cbo_stok_satuanDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_stok_satuanDataStore.load();
 		
-		cbo_stok_produkDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_stok_produkDataStore.setBaseParam('task','detail');
-		cbo_stok_produkDataStore.setBaseParam('gudang',master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_gudang_id'));
-		cbo_stok_produkDataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_koreksi_stok_DataStore.setBaseParam('master_id',get_pk_id());
-					detail_koreksi_stok_DataStore.load();
-				}
-			}
-		});
-		
-		check_gudang();
 	}
 	/* End setValue to EDIT*/
   
@@ -1362,7 +1379,17 @@ Ext.onReady(function(){
 	}
 	//eof
 	
+	koreksi_button_saveprintField=new Ext.Button({
+		text: 'Save and Print',
+		ref: '../kstok_savePrint',
+		handler: pengecekan_dokumen
+	});
 
+	koreksi_button_saveField=new Ext.Button({
+		text: 'Save',
+		handler: pengecekan_dokumen2
+	});
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_koreksi_stok_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1373,15 +1400,9 @@ Ext.onReady(function(){
 		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid],
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
-			{
-				text: 'Save and Print',
-				ref: '../kstok_savePrint',
-				handler: pengecekan_dokumen
-			},
-			{
-				text: 'Save',
-				handler: pengecekan_dokumen2
-			}
+			koreksi_button_saveprintField
+			,
+			koreksi_button_saveField
 			,
 			<?php } ?>
 			{

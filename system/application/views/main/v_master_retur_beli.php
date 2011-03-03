@@ -81,6 +81,9 @@ var rbeli_tgl_awalSearchField;
 var rbeli_keteranganSearchField;
 var rbeli_statusSearchField;
 
+var rbeli_button_saveField;
+var rbeli_button_saveprintField;
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -226,13 +229,24 @@ Ext.onReady(function(){
 		cbo_satuan_DataStore.setBaseParam('task','detail');
 		cbo_satuan_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_DataStore.load();
+		
+		rbeli_button_saveField.setDisabled(true);
+		rbeli_button_saveprintField.setDisabled(true);
+								
 		cbo_produk_DataStore.setBaseParam('master_id',get_pk_id());
 		cbo_produk_DataStore.setBaseParam('task','detail');
 		cbo_produk_DataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
 					detail_retur_beli_DataStore.setBaseParam('master_id',get_pk_id());
-					detail_retur_beli_DataStore.load();
+					detail_retur_beli_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								rbeli_button_saveField.setDisabled(false);
+								rbeli_button_saveprintField.setDisabled(false);
+							}
+						}
+					});
 				}
 			}
 		});
@@ -1318,6 +1332,16 @@ Ext.onReady(function(){
 	}
 	//eof
 
+	rbeli_button_saveprintField=new Ext.Button({
+		text: 'Save and Print',
+		handler: function(){ master_retur_beli_create('print'); }
+	});
+	
+	rbeli_button_saveField=new Ext.Button({
+		text: 'Save',
+		handler: function () { master_retur_beli_create('close'); }
+	});
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_retur_beli_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1328,14 +1352,9 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURBELI'))){ ?>
-			{
-				text: 'Save and Print',
-				handler: function(){ master_retur_beli_create('print'); }
-			},
-			{
-				text: 'Save',
-				handler: function () { master_retur_beli_create('close'); }
-			}
+			rbeli_button_saveprintField
+			,
+			rbeli_button_saveField
 			,
 			<?php } ?>
 			{

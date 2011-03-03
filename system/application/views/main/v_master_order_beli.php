@@ -93,6 +93,10 @@ var order_keteranganSearchField;
 var order_statusSearchField;
 var order_status_accSearchField;
 var detail_order_beli_DataStore;
+
+var order_button_saveField;
+var order_button_saveprintField;
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -383,6 +387,37 @@ Ext.onReady(function(){
 		order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
 		order_status_accField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status_acc'));
 		
+		//LOAD DETAIL
+		cbo_order_satuanDataStore.setBaseParam('task','detail');
+		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_satuanDataStore.load();
+		
+		order_button_saveField.setDisabled(true);
+		order_button_saveprintField.setDisabled(true);
+		
+		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
+		cbo_order_produk_DataStore.setBaseParam('task','detail');
+		cbo_order_produk_DataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_order_beli_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								order_button_saveField.setDisabled(false);
+								order_button_saveprintField.setDisabled(false);
+							}
+						}
+					});
+				}
+			}
+		});
+		
+		//END OF LOAD
+		
+		
+		check_acc();
+		
 		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
 			order_idField.setDisabled(false);
 			order_noField.setDisabled(false);
@@ -482,22 +517,7 @@ Ext.onReady(function(){
 		
 		});	
 		
-		cbo_order_satuanDataStore.setBaseParam('task','detail');
-		cbo_order_satuanDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_order_satuanDataStore.load();
 		
-		cbo_order_produk_DataStore.setBaseParam('master_id',get_pk_id());
-		cbo_order_produk_DataStore.setBaseParam('task','detail');
-		cbo_order_produk_DataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_order_beli_DataStore.setBaseParam('master_id',get_pk_id());
-					detail_order_beli_DataStore.load();
-				}
-			}
-		});
-		
-		check_acc();
 		
 	}
 	/* End setValue to EDIT*/
@@ -1233,6 +1253,18 @@ Ext.onReady(function(){
 	});
   	/*Fieldset Master*/
 	
+	order_button_saveField=new Ext.Button({
+		text: 'Save',
+		handler: pengecekan_dokumen2 
+	});
+	
+	order_button_saveprintField=new Ext.Button({
+		text: 'Save and Print',
+		ref: '../obeli_savePrint',
+		handler: pengecekan_dokumen
+	});
+		
+		
 	master_order_beli_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
 		autoHeight: true,
@@ -1673,6 +1705,8 @@ Ext.onReady(function(){
 	}
 	//eof
 	
+		
+	
 	/* Function for retrieve create Window Panel*/ 
 	master_order_beli_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -1683,14 +1717,8 @@ Ext.onReady(function(){
 		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup],
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
-			{
-				text: 'Save and Print',
-				ref: '../obeli_savePrint',
-				handler: pengecekan_dokumen
-			},{
-				text: 'Save',
-				handler: pengecekan_dokumen2 
-			}
+			order_button_saveprintField
+			,order_button_saveField
 			,
 			<?php } ?>
 			{
