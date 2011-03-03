@@ -210,6 +210,12 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_nik(){
+		$karyawan_id = (integer) (isset($_POST['karyawan_id']) ? $_POST['karyawan_id'] : $_GET['karyawan_id']);
+		$result=$this->m_public_function->get_auto_karyawan_sip($karyawan_id); //untuk mendapatkan nik karyawan
+		echo $result;
+	}
+	
 	//for detail action
 	//list detail handler action
 	function  detail_detail_jual_produk_list(){
@@ -321,6 +327,13 @@ class C_master_jual_produk extends Controller {
 		echo $result;
 	}
 
+	function get_allkaryawan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_jual_produk->get_allkaryawan_list($query,$start,$end);
+		echo $result;
+	}
 	
 	function master_jual_produk_pengecekan(){
 	
@@ -335,6 +348,7 @@ class C_master_jual_produk extends Controller {
 		//POST variable here
 		$cetak=trim(@$_POST["cetak"]);
 		$jproduk_id=trim(@$_POST["jproduk_id"]);
+		$jproduk_grooming=trim(@$_POST["jproduk_grooming"]);
 		$jproduk_nobukti=trim(@$_POST["jproduk_nobukti"]);
 		$jproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_nobukti);
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
@@ -504,7 +518,7 @@ class C_master_jual_produk extends Controller {
 																		 ,$cetak ,$jproduk_ket_disk
 																		 ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
 																		 ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
-																		 ,$array_dproduk_diskon ,$array_dproduk_karyawan);
+																		 ,$array_dproduk_diskon ,$array_dproduk_karyawan, $jproduk_grooming);
 		echo $result;
 	}
 	
@@ -513,6 +527,7 @@ class C_master_jual_produk extends Controller {
 		//POST varible here
 		//auto increment, don't accept anything from form values
 		$cetak=trim(@$_POST["cetak"]);
+		$jproduk_grooming=trim(@$_POST["jproduk_grooming"]);
 		$jproduk_nobukti=trim(@$_POST["jproduk_nobukti"]);
 		$jproduk_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jproduk_nobukti);
 		$jproduk_nobukti=str_replace("'", '"',$jproduk_nobukti);
@@ -680,7 +695,7 @@ class C_master_jual_produk extends Controller {
 																	   ,$jproduk_ket_disk
 																	   ,$array_dproduk_id ,$array_dproduk_produk ,$array_dproduk_satuan
 																	   ,$array_dproduk_jumlah ,$array_dproduk_harga ,$array_dproduk_diskon_jenis
-																	   ,$array_dproduk_diskon ,$array_dproduk_karyawan);
+																	   ,$array_dproduk_diskon ,$array_dproduk_karyawan, $jproduk_grooming);
 		echo $result;
 	}
 
@@ -831,6 +846,8 @@ class C_master_jual_produk extends Controller {
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['jproduk_jam']=$rs->jproduk_jam;
+		$data['jproduk_karyawan']=$rs->jproduk_karyawan;
+		$data['jproduk_karyawan_no']=$rs->jproduk_karyawan_no;
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;
@@ -925,6 +942,8 @@ class C_master_jual_produk extends Controller {
 		
 		$data['jproduk_nobukti']=$rs->jproduk_nobukti;
 		$data['jproduk_jam']=$rs->jproduk_jam;
+		$data['jproduk_karyawan']=$rs->jproduk_karyawan;
+		$data['jproduk_karyawan_no']=$rs->jproduk_karyawan_no;
 		$data['jproduk_tanggal']=date('d-m-Y', strtotime($rs->jproduk_tanggal));
 		$data['cust_no']=$rs->cust_no;
 		$data['cust_nama']=$rs->cust_nama;

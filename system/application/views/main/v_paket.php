@@ -743,8 +743,6 @@ Ext.onReady(function(){
 	sortInfo:{field: 'produk_satuan_display', direction: "ASC"}
 	});
 
-
-
 	cbo_paket_groupDataStore = new Ext.data.Store({
 	id: 'cbo_paket_groupDataStore',
 	proxy: new Ext.data.HttpProxy({
@@ -1827,7 +1825,6 @@ Ext.onReady(function(){
 			]
 
 	});
-
 
 	/*Detail Declaration */
 

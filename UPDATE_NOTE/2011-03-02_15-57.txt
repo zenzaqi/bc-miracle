@@ -1,0 +1,2 @@
+VCM_master_jual_produk : menambah grooming
+2011-03-02_14-23.sql : menambah field jproduk_grooming pada tabel master_jual_produk untuk menyimpan id_karyawan, dan menambah field jproduk_grooming pada vu_jproduk
