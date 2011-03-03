@@ -91,6 +91,9 @@ var terima_tgl_awalSearchField;
 var terima_keteranganSearchField;
 var terima_statusSearchField;
 
+var terima_button_saveField;
+var terima_button_saveprintField;
+
 Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
@@ -368,6 +371,51 @@ Ext.onReady(function(){
 		terima_gudang_idField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_gudang_id'));
 		//cbo_terima_gudang_DataStore.load();
 		
+		//LOAD DETAIL
+		cbo_satuan_produkDataStore.setBaseParam('task','detail');
+		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_satuan_produkDataStore.load();
+
+		terima_button_saveField.setDisabled(true);
+		terima_button_saveprintField.setDisabled(true);
+								
+		cbo_produk_detailDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_detailDataStore.setBaseParam('task','detail');
+		cbo_produk_detailDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
+					detail_terima_beli_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_terima_beli_total();
+								terima_button_saveField.setDisabled(false);
+								terima_button_saveprintField.setDisabled(false);
+							}
+						}
+					});
+				}
+			}
+		});
+
+		cbo_produk_bonusDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_produk_bonusDataStore.setBaseParam('task','detail');
+		cbo_produk_bonusDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
+					detail_terima_bonus_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_terima_beli_total();
+							}
+						}
+					});
+				}
+			}
+		});
+		//END OF DETAIL
+
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
 			terima_idField.setDisabled(false);
 			terima_noField.setDisabled(false);
@@ -467,46 +515,8 @@ Ext.onReady(function(){
 		
 		});	
 		
+
 		
-		
-		cbo_satuan_produkDataStore.setBaseParam('task','detail');
-		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_satuan_produkDataStore.load();
-
-		cbo_produk_detailDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_produk_detailDataStore.setBaseParam('task','detail');
-		cbo_produk_detailDataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_terima_beli_DataStore.setBaseParam('master_id', get_pk_id());
-					detail_terima_beli_DataStore.load({
-						callback: function(r,opt,success){
-							if(success==true){
-								detail_terima_beli_total();
-							}
-						}
-					});
-				}
-			}
-		});
-
-		cbo_produk_bonusDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_produk_bonusDataStore.setBaseParam('task','detail');
-		cbo_produk_bonusDataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_terima_bonus_DataStore.setBaseParam('master_id', get_pk_id());
-					detail_terima_bonus_DataStore.load({
-						callback: function(r,opt,success){
-							if(success==true){
-								detail_terima_beli_total();
-							}
-						}
-					});
-				}
-			}
-		});
-
 	}
 	/* End setValue to EDIT*/
 
@@ -2121,6 +2131,19 @@ Ext.onReady(function(){
 				]
 	});
 
+	terima_button_saveprintField=new Ext.Button({
+		text: 'Save and Print',
+		ref: '../tbeli_savePrint',
+		handler: pengecekan_dokumen
+		//{cetak=1;}
+	});
+	
+	terima_button_saveField=new Ext.Button({
+		text: 'Save',
+		handler: pengecekan_dokumen2
+		//{ master_terima_beli_create('close'); }
+	});
+	
 	/* Function for retrieve create Window Panel*/
 	master_terima_beli_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -2130,16 +2153,8 @@ Ext.onReady(function(){
 		items: [master_terima_beli_masterGroup,detail_tab_terima],
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
-			{
-				text: 'Save and Print',
-				ref: '../tbeli_savePrint',
-				handler: pengecekan_dokumen
-				//{cetak=1;}
-			},{
-				text: 'Save',
-				handler: pengecekan_dokumen2
-				//{ master_terima_beli_create('close'); }
-			}
+			terima_button_saveprintField
+			,terima_button_saveField
 			,
 			<?php } ?>
 			{

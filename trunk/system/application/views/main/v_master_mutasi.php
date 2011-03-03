@@ -83,6 +83,9 @@ var mutasi_tanggalSearchField;
 var mutasi_keteranganSearchField;
 var mutasi_statusSearchField;
 
+var mutasi_button_saveField;
+var mutasi_button_saveprintField;
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -332,6 +335,36 @@ Ext.onReady(function(){
 		mutasi_keteranganField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_keterangan'));
 		mutasi_statusField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status'));
 		
+		//LOAD OF DETAIL
+		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
+		cbo_mutasi_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_satuanDataStore.load();
+		
+		cbo_mutasi_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_produkDataStore.setBaseParam('task','detail');
+		cbo_mutasi_produkDataStore.setBaseParam('gudang',master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id'));
+		
+		mutasi_button_saveField.setDisabled(true);
+		mutasi_button_saveprintField.setDisabled(true);
+
+		cbo_mutasi_produkDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					detail_mutasi_DataStore.setBaseParam('master_id',get_pk_id());
+					detail_mutasi_DataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								mutasi_button_saveField.setDisabled(false);
+								mutasi_button_saveprintField.setDisabled(false);
+							}
+						}
+					});
+				}
+			}
+		});
+		// END OF DETAIL
+		
+		
 		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Terbuka"){
 			mutasi_idField.setDisabled(false);
 			mutasi_noField.setDisabled(false);
@@ -416,21 +449,7 @@ Ext.onReady(function(){
 		
 		});	
 		
-		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
-		cbo_mutasi_satuanDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_mutasi_satuanDataStore.load();
 		
-		cbo_mutasi_produkDataStore.setBaseParam('master_id',get_pk_id());
-		cbo_mutasi_produkDataStore.setBaseParam('task','detail');
-		cbo_mutasi_produkDataStore.setBaseParam('gudang',master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id'));
-		cbo_mutasi_produkDataStore.load({
-			callback: function(r,opt,success){
-				if(success==true){
-					detail_mutasi_DataStore.setBaseParam('master_id',get_pk_id());
-					detail_mutasi_DataStore.load();
-				}
-			}
-		});
 		
 	}
 	/* End setValue to EDIT*/
@@ -926,6 +945,18 @@ Ext.onReady(function(){
 		anchor: '75%',
 	});
 	
+	mutasi_button_saveField=new Ext.Button({
+		text: 'Save and Close',
+		handler: pengecekan_dokumen2
+	});
+	
+	mutasi_button_saveprintField=new Ext.Button({
+		text: 'Save and Print',
+		ref: '../mmutasi_savePrint',
+		handler: pengecekan_dokumen
+	});
+
+
 	mutasi_itemjumlahField= new Ext.form.TextField({
 		id: 'mutasi_itemjumlahField',
 		fieldLabel: 'Jumlah Jenis Barang',
@@ -1344,17 +1375,9 @@ Ext.onReady(function(){
 		,
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_MUTASI'))){ ?>
-			{
-				text: 'Save and Print',
-				ref: '../mmutasi_savePrint',
-				handler: pengecekan_dokumen
-				//handler: function() { master_mutasi_create('print'); }
-			},
-			{
-				text: 'Save and Close',
-				handler: pengecekan_dokumen2
-				//handler: function() { master_mutasi_create('close'); }
-			}
+			mutasi_button_saveprintField
+			,
+			mutasi_button_saveField
 			,
 			<?php } ?>
 			{
