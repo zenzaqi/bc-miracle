@@ -98,6 +98,8 @@ var produk_harga_mtaField;
 var produk_harga_ygkField;
 var produk_keteranganField;
 var produk_aktifField;
+var produk_aktifGroup;
+var produk_hargaGroup;
 
 var produk_awal_jumlahField;
 var produk_awal_nilaiField;
@@ -1625,11 +1627,11 @@ Ext.onReady(function(){
 	
 	//untuk panel harga
 	produk_hargaGroup = new Ext.form.FieldSet({
-		title: 'Harga Produk',
+		title: 'Harga Cabang (Rp)',
 		layout:'column',
-		width:350,
 		autoHeight: true,
-		collapsed: true,
+		mode: 'remote',
+		//collapsed: true,
 		collapsible: true,
 		items:[
 			{
@@ -1994,6 +1996,7 @@ Ext.onReady(function(){
 		layout:'column',
 		autoHeight: true,
 		collapsed: true,
+		mode: 'remote',
 		collapsible: true,
 		items:[
 			{

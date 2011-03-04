@@ -2035,7 +2035,7 @@ Ext.onReady(function(){
 		layout:'column',
 		width:350,
 		autoHeight: true,
-		collapsed: true,
+		//collapsed: true,
 		collapsible: true,
 		items:[
 			{

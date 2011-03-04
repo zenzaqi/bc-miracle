@@ -1646,7 +1646,7 @@ Ext.onReady(function(){
 		layout:'column',
 		width:350,
 		autoHeight: true,
-		collapsed: true,
+		//collapsed: true,
 		collapsible: true,
 		items:[
 			{
@@ -1820,7 +1820,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_expiredField, paket_perpanjanganField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField, paket_aktifGroup]
+				items: [paket_expiredField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField, paket_aktifGroup]
 			}
 			]
 
