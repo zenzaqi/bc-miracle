@@ -75,7 +75,7 @@ class M_stok_mutasi extends Model{
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
 			
-			$sql.=" GROUP BY produk_id ASC";
+			$sql.=" GROUP BY produk_kode ASC";
 
 //			$this->firephp->log($sql);
 			
@@ -121,7 +121,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   terima_gudang_id AS `gudang`,
+						   1 AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -147,7 +147,7 @@ class M_stok_mutasi extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND terima_gudang_id='".$gudang."'
+							AND 1='".$gudang."'
 							AND terima_status<>'Batal' 
 							
 					UNION
@@ -478,10 +478,12 @@ class M_stok_mutasi extends Model{
 							AND cabin_produk='".$rowproduk->produk_id."'
 							AND cabin_gudang='".$gudang."'
 							) as mutasi
-					GROUP BY mutasi.produk";
+					GROUP BY mutasi.produk
+					ORDER BY mutasi.produk";
 				
 				//$sql_stok_awal="";
-
+				$this->firephp->log($sql_stok_awal);
+				
 				$q_stokawal=$this->db->query($sql_stok_awal);
 				if($q_stokawal->num_rows())
 				{
@@ -520,7 +522,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   terima_gudang_id AS `gudang`,
+						   1 AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -547,7 +549,7 @@ class M_stok_mutasi extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 							AND date_format(terima_tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND terima_gudang_id='".$gudang."'
+							AND 1='".$gudang."'
 							AND terima_status<>'Batal' 
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,
@@ -887,7 +889,8 @@ class M_stok_mutasi extends Model{
 							AND cabin_produk='".$rowproduk->produk_id."'
 							AND cabin_gudang='".$gudang."'
 							) as mutasi
-					GROUP BY mutasi.produk";
+					GROUP BY mutasi.produk
+					ORDER BY mutasi.produk";
 						
 				
 				$rs_mutasi=$this->db->query($sql_stok_mutasi);
