@@ -45,7 +45,7 @@ class M_master_order_beli extends Model{
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_order_beli order_status<>'Batal' AND  ".$order_by;
+					$sql="SELECT * FROM vu_detail_order_beli WHERE order_status<>'Batal' AND  ".$order_by;
 				else if($periode=='bulan')
 					$sql="SELECT * FROM vu_detail_order_beli WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
