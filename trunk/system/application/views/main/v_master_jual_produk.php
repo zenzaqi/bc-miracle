@@ -1954,7 +1954,7 @@ Ext.onReady(function(){
 	}
 	/* Function for Check if the form is valid */
 	function is_master_jual_produk_form_valid(){
-		return (jproduk_diskonField.isValid());
+		return (jproduk_diskonField.isValid() && jproduk_karyawanField.isValid() );
 	}
   	/* End of Function */
   
@@ -2790,6 +2790,7 @@ Ext.onReady(function(){
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
+		allowBlank : false,
         hideTrigger:false,
         tpl: karyawan_tpl,
         //applyTo: 'search',
