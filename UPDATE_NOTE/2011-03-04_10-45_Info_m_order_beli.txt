@@ -1,0 +1,3 @@
+m_master_order_beli.php 
+
+--> 2011-03-04 .. Telah dilakukan update sedikit pada function get_order_beli_list() --> Status OP tidak akan dibuat 'Terbuka', karena keperluan dari clinic, bahwa OP dapat dipanggil kapanpun..
