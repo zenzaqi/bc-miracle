@@ -111,7 +111,7 @@ Ext.onReady(function(){
 			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}, 
 			{name: 'jumlah_stok', type: 'float', mapping: 'jumlah_stok'}
 		]),
-		sortInfo:{field: 'produk_id', direction: "ASC"}
+		sortInfo:{field: 'produk_kode', direction: "ASC"}
 	});
 	/* End of Function */
 	
