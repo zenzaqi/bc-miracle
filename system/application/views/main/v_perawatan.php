@@ -2031,7 +2031,7 @@ Ext.onReady(function(){
 	
 	//untuk panel harga
 	rawat_hargaGroup = new Ext.form.FieldSet({
-		title: 'Harga Perawatan',
+		title: 'Harga Cabang (Rp)',
 		layout:'column',
 		width:350,
 		autoHeight: true,

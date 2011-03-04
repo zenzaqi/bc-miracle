@@ -1642,7 +1642,7 @@ Ext.onReady(function(){
 	
 	//untuk panel harga
 	paket_hargaGroup = new Ext.form.FieldSet({
-		title: 'Harga Paket',
+		title: 'Harga Cabang (Rp)',
 		layout:'column',
 		width:350,
 		autoHeight: true,
