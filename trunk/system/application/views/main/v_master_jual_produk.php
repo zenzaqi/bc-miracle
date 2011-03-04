@@ -1200,8 +1200,8 @@ Ext.onReady(function(){
 		/* Enable if jpaket_post2db="CREATE" */
 		jproduk_custField.setDisabled(false);
 		jproduk_tanggalField.setDisabled(false);
-		jproduk_custField.setDisabled(false);
-		jproduk_custField.setDisabled(false);
+		jproduk_karyawanField.setDisabled(false);
+		jproduk_nikkaryawanField.setDisabled(false);
 		jproduk_tanggalField.setDisabled(false);
 		jproduk_keteranganField.setDisabled(false);
 		master_cara_bayarTabPanel.setDisabled(false);
@@ -1761,6 +1761,8 @@ Ext.onReady(function(){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(false);
+			jproduk_karyawanField.setDisabled(true);
+			jproduk_nikkaryawanField.setDisabled(false);
 			//master_cara_bayarTabPanel.setDisabled(false);
 			//detail_jual_produkListEditorGrid.djproduk_add.enable(); //fredi
 			//detail_jual_produkListEditorGrid.djproduk_delete.enable(); //fredi
@@ -1807,6 +1809,8 @@ Ext.onReady(function(){
 			jproduk_custField.setDisabled(true);
 			jproduk_tanggalField.setDisabled(true);
 			jproduk_keteranganField.setDisabled(true);
+			jproduk_karyawanField.setDisabled(true);
+			jproduk_nikkaryawanField.setDisabled(true);
 			//master_cara_bayarTabPanel.setDisabled(true);
 			//detail_jual_produkListEditorGrid.djproduk_add.disable(); //fredi
 			//detail_jual_produkListEditorGrid.djproduk_delete.disable(); //fredi
@@ -1855,6 +1859,8 @@ Ext.onReady(function(){
 			jproduk_keteranganField.setDisabled(true);
 			jproduk_stat_dokField.setDisabled(true);
 			jproduk_caraField.setDisabled(true);
+			jproduk_karyawanField.setDisabled(true);
+			jproduk_nikkaryawanField.setDisabled(true);
 			master_jual_produk_tunaiGroup.setDisabled(true);
 			master_jual_produk_cardGroup.setDisabled(true);
 			master_jual_produk_cekGroup.setDisabled(true);
@@ -6194,6 +6200,8 @@ Ext.onReady(function(){
 								}
 								else {
 									jproduk_karyawanField.setDisabled(true);
+									jproduk_karyawanField.setValue(null);
+									jproduk_nikkaryawanField.setValue(null);
 								}
 							}else{
 								jproduk_cust_nomemberField.setValue("");
