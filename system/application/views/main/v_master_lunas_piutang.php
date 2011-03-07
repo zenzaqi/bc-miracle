@@ -401,7 +401,6 @@ Ext.onReady(function(){
 							}, 
 							success: function(response){
 								var result=eval(response.responseText);
-								console.log('resullt = '+result);
 								if(result==0){
 									Ext.MessageBox.alert(fpiutang_post2db+' OK','Data Pelunasan Piutang berhasil disimpan');
 									master_lunas_piutang_createWindow.hide();
@@ -1094,7 +1093,7 @@ Ext.onReady(function(){
     var fpiutang_customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
-            'Total Hutang: {lpiutang_total} | Sisa Hutang: {lpiutang_sisa}',
+            'Sisa Piutang: {lpiutang_sisa}',
         '</div></tpl>'
     );
 	
@@ -1468,8 +1467,8 @@ Ext.onReady(function(){
 			}
 		});
 		if(cbo_fpiutang_customerDataStore.getCount()>0){
-			fpiutang_total_cfField.setValue(CurrencyFormatted(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_total));
-			fpiutang_totalField.setValue(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_total);
+			fpiutang_total_cfField.setValue(CurrencyFormatted(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_sisa));
+			fpiutang_totalField.setValue(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_sisa);
 		}
 	});
 	
@@ -2762,6 +2761,7 @@ Ext.onReady(function(){
 		fpiutang_caraField.setValue("card");
 		master_lunas_piutang_cardGroup.setVisible(true);
 		fpiutang_post2db="CREATE";
+		cbo_fpiutang_customerDataStore.reload();
 	}
 	
 	function pertamax(){
