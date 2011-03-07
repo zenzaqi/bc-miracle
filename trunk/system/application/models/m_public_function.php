@@ -2223,6 +2223,48 @@ class M_public_function extends Model{
 				
 	}
 	
+	function get_piutang_cust_list($query,$start,$end){
+		/*$sql="SELECT lpiutang_id
+				,lpiutang_cust
+				,cust_nama
+				,cust_no
+				,SUM(lpiutang_total) AS lpiutang_total
+				,SUM(lpiutang_sisa) AS lpiutang_sisa
+			FROM master_lunas_piutang
+				LEFT JOIN customer ON(cust_id=lpiutang_cust)";*/
+		$sql = "SELECT master_lunas_piutang.lpiutang_id
+				,master_lunas_piutang.lpiutang_cust
+				,cust_nama
+				,cust_no
+				,sum(lpiutang_total) AS lpiutang_total
+				,(sum(lpiutang_total)) - ifnull(sum(vu_piutang_total_lunas.total_pelunasan),0) AS lpiutang_sisa
+			FROM master_lunas_piutang
+				LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
+				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)";
+		
+		if($query<>""){
+			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql .= " (cust_nama LIKE '%".addslashes($query)."%' OR cust_no LIKE '%".addslashes($query)."%' )";
+		}
+		$sql.=" GROUP BY lpiutang_cust";
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;		
+		$result = $this->db->query($limit);  
+		
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+		
+	}
+	
 }
 
 ?>
