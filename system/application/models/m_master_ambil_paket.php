@@ -806,10 +806,12 @@ class M_master_ambil_paket extends Model{
 				$query.= " detail_jual_paket.dpaket_sisa_paket > 0 ";	
 			};
 			
+			/*
 			if($apaket_sisa=='0'){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " detail_jual_paket.dpaket_sisa_paket >= 0 ";	
 			};
+			*/
 			
 			if($apaket_sisa=='Sisa 0'){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

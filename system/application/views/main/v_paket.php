@@ -448,8 +448,11 @@ Ext.onReady(function(){
 		paket_aktif_checkField.reset();
 		paket_aktif_checkField.setValue(true);
 		
+		combo_paket_produk.reset();
+		
+		
 		//paket_isi_perawatan_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
-		paket_isi_produk_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
+		//paket_isi_produk_DataStore.load({params: { master_id: -1, start:0, limit: pageS}});
 
 	}
  	/* End of Function */
@@ -580,7 +583,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!paket_createWindow.isVisible()){
 
-
+			paket_isi_perawatan_DataStore.load({params: {master_id:0}});
 			post2db='CREATE';
 			msg='created';
 			paket_reset_form();

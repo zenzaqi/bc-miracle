@@ -482,7 +482,7 @@ class M_stok_mutasi extends Model{
 					ORDER BY mutasi.produk";
 				
 				//$sql_stok_awal="";
-				$this->firephp->log($sql_stok_awal);
+				//$this->firephp->log($sql_stok_awal);
 				
 				$q_stokawal=$this->db->query($sql_stok_awal);
 				if($q_stokawal->num_rows())
