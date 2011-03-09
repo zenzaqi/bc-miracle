@@ -787,17 +787,14 @@ class M_master_ambil_paket extends Model{
 			
 			if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				//$query.= " apaket_faktur LIKE '%".$apaket_faktur."%'";
 				$query.= " jpaket_nobukti LIKE '%".$apaket_faktur."%'";
 			};
 			if($apaket_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				//$query.= " apaket_cust LIKE '%".$apaket_cust."%'";
 				$query.= " cust_id = '".$apaket_cust."'";
 			};
 			if($apaket_paket!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				//$query.= " apaket_paket LIKE '%".$apaket_paket."%'";
 				$query.= " paket_id = '".$apaket_paket."'";
 			};
 			
@@ -806,22 +803,13 @@ class M_master_ambil_paket extends Model{
 				$query.= " detail_jual_paket.dpaket_sisa_paket > 0 ";	
 			};
 			
-			/*
-			if($apaket_sisa=='0'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " detail_jual_paket.dpaket_sisa_paket >= 0 ";	
-			};
-			*/
-			
 			if($apaket_sisa=='Sisa 0'){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " detail_jual_paket.dpaket_sisa_paket = 0 ";	
 			};
 			
-			
 			if($apaket_kadaluarsa!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				//$query.= " date_format(apaket_kadaluarsa,'%Y-%m-%d')='$apaket_kadaluarsa'";
 				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= '$apaket_kadaluarsa'";
 			};
 			if($apaket_kadaluarsa_akhir!=''){
@@ -980,27 +968,29 @@ class M_master_ambil_paket extends Model{
 										,$apaket_kadaluarsa_akhir
 										,$apaket_tgl_faktur
 										,$apaket_tgl_faktur_akhir
+										,$apaket_jenis
 										,$apaket_sisa
 										,$option
 										,$filter){
 			//full query
 			if($option=='LIST'){
-				$query = "SELECT cust_no AS no_cust
-						,cust_nama AS customer
-						,jpaket_tanggal AS tanggal_faktur
-						,jpaket_nobukti AS no_faktur
-						,paket_kode AS kode_paket
-						,paket_nama AS nama_paket
-						,dpaket_sisa_paket AS sisa
-						,dpaket_kadaluarsa AS tgl_kadaluarsa
-					FROM detail_jual_paket 
-					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
-					LEFT JOIN customer ON(jpaket_cust=cust_id) 
-					LEFT JOIN paket ON(dpaket_paket=paket_id) 
-					WHERE dpaket_sisa_paket >= 0
-						AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
-						AND jpaket_stat_dok='Tertutup' ";
-						
+				$query = "SELECT 
+					cust_no as no_cust
+					,cust_nama as customer
+					,jpaket_tanggal as tanggal_faktur
+					,jpaket_nobukti as no_faktur
+					,paket_kode as kode_paket
+					,paket_nama as nama_paket
+					,dpaket_sisa_paket as sisa
+					,dpaket_kadaluarsa as tgl_kadaluarsa
+				FROM detail_jual_paket 
+				LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
+				LEFT JOIN customer ON(jpaket_cust=cust_id) 
+				LEFT JOIN paket ON(dpaket_paket=paket_id) 
+				WHERE dpaket_sisa_paket > 0
+					AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
+					AND jpaket_stat_dok='Tertutup' ";
+									
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
@@ -1014,54 +1004,76 @@ class M_master_ambil_paket extends Model{
 						,dpaket_sisa_paket AS sisa
 						,dpaket_kadaluarsa AS tgl_kadaluarsa
 					FROM detail_jual_paket 
-					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
-					LEFT JOIN customer ON(jpaket_cust=cust_id) 
-					LEFT JOIN paket ON(dpaket_paket=paket_id)
-					WHERE jpaket_stat_dok='Tertutup'";
+						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
+						LEFT JOIN customer ON(jpaket_cust=cust_id) 
+						LEFT JOIN paket ON(dpaket_paket=paket_id)
+						WHERE jpaket_stat_dok='Tertutup'";
+							
 					
-				if($apaket_faktur!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					//$query.= " apaket_faktur LIKE '%".$apaket_faktur."%'";
-					$query.= " jpaket_nobukti LIKE '%".$apaket_faktur."%'";
-				};
-				if($apaket_cust!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					//$query.= " apaket_cust LIKE '%".$apaket_cust."%'";
-					$query.= " cust_id = '".$apaket_cust."'";
-				};
-				if($apaket_paket!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					//$query.= " apaket_paket LIKE '%".$apaket_paket."%'";
-					$query.= " paket_id = '".$apaket_paket."'";
-				};
+			$datetime_now = date('Y-m-d H:i:s');
+			$date = date('Y-m-d');
+			
+			if($apaket_faktur!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " jpaket_nobukti LIKE '%".$apaket_faktur."%'";
+			};
+			if($apaket_cust!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_id = '".$apaket_cust."'";
+			};
+			if($apaket_paket!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_id = '".$apaket_paket."'";
+			};
+			
+			if($apaket_sisa=='1'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_jual_paket.dpaket_sisa_paket > 0 ";	
+			};
+			
+			if($apaket_sisa=='Sisa 0'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " detail_jual_paket.dpaket_sisa_paket = 0 ";	
+			};
+			
+			if($apaket_kadaluarsa!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= '$apaket_kadaluarsa'";
+			};
+			if($apaket_kadaluarsa_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') <= '$apaket_kadaluarsa_akhir'";
+			};
+			
+			if($apaket_jenis=='Aktif&Tenggang'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')";	
+			};
+			
+			if($apaket_jenis=='Aktif'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= '$date' ";	
+			};
+			
+			if($apaket_jenis=='Tenggang'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (detail_jual_paket.dpaket_kadaluarsa between date_add(date_format(now(),'%Y-%m-%d'),INTERVAL -365 DAY) and date_format(now(),'%Y-%m-%d'))";	
+			};
+			
+			if($apaket_jenis=='Hangus'){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " (detail_jual_paket.dpaket_kadaluarsa <= date_add(date_format(now(),'%Y-%m-%d'),INTERVAL -365 DAY) )";	
+			};
+			
+			if($apaket_tgl_faktur!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(jpaket_tanggal,'%Y-%m-%d') >= '$apaket_tgl_faktur'";
+			};
+			if($apaket_tgl_faktur_akhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " date_format(jpaket_tanggal,'%Y-%m-%d') <= '$apaket_tgl_faktur_akhir'";
+			};
 				
-				if($apaket_sisa=='1'){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " detail_jual_paket.dpaket_sisa_paket > 0 ";	
-				};
-				
-				if($apaket_sisa=='0'){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " detail_jual_paket.dpaket_sisa_paket >= 0 ";	
-				};
-				
-				if($apaket_kadaluarsa!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					//$query.= " date_format(apaket_kadaluarsa,'%Y-%m-%d')='$apaket_kadaluarsa'";
-					$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') >= '$apaket_kadaluarsa'";
-				};
-				if($apaket_kadaluarsa_akhir!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " date_format(dpaket_kadaluarsa,'%Y-%m-%d') <= '$apaket_kadaluarsa_akhir'";
-				};
-				if($apaket_tgl_faktur!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " date_format(jpaket_tanggal,'%Y-%m-%d') >= '$apaket_tgl_faktur'";
-				};
-				if($apaket_tgl_faktur_akhir!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " date_format(jpaket_tanggal,'%Y-%m-%d') <= '$apaket_tgl_faktur_akhir'";
-				};
 				$result = $this->db->query($query);
 			}
 			return $result;

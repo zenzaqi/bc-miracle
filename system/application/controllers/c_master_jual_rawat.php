@@ -104,7 +104,11 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 	
-	
+	function get_nik(){
+		$karyawan_id = (integer) (isset($_POST['karyawan_id']) ? $_POST['karyawan_id'] : $_GET['karyawan_id']);
+		$result=$this->m_public_function->get_auto_karyawan_sip($karyawan_id); //untuk mendapatkan nik karyawan
+		echo $result;
+	}
 	
 	function get_rawat_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -291,6 +295,14 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 
+	function get_allkaryawan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_master_jual_rawat->get_allkaryawan_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function master_jual_rawat_pengecekan(){
 	
 		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
@@ -307,6 +319,7 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_nobukti=trim(@$_POST["jrawat_nobukti"]);
 		$jrawat_nobukti=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_nobukti);
 		$jrawat_nobukti=str_replace("'", '"',$jrawat_nobukti);
+		$jrawat_grooming=trim(@$_POST["jrawat_grooming"]);
 		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
 		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		$jrawat_diskon=trim(@$_POST["jrawat_diskon"]);
@@ -454,6 +467,9 @@ class C_master_jual_rawat extends Controller {
 		$drawat_sales = $_POST['drawat_sales']; // Get our array back and translate it :
 		$array_drawat_sales = json_decode(stripslashes($drawat_sales));
 		
+		$drawat_karyawan = $_POST['drawat_karyawan']; // Get our array back and translate it :
+		$array_drawat_karyawan = json_decode(stripslashes($drawat_karyawan));
+		
 		$result = $this->m_master_jual_rawat->master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal
 																	   ,$jrawat_stat_dok, $jrawat_diskon ,$jrawat_cara ,$jrawat_cara2
 																	   ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai
@@ -477,7 +493,7 @@ class C_master_jual_rawat extends Controller {
 																	   ,$jrawat_ket_disk, $drawat_count, $dcount_drawat_id
 																	   ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 																	   ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
-																	   ,$array_drawat_diskon_jenis, $array_drawat_sales);
+																	   ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming);
 		echo $result;
 	}
 	
@@ -491,6 +507,7 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_cust=trim(@$_POST["jrawat_cust"]);
 		$jrawat_tanggal=trim(@$_POST["jrawat_tanggal"]);
 		$jrawat_diskon=trim(@$_POST["jrawat_diskon"]);
+		$jrawat_grooming=trim(@$_POST["jrawat_grooming"]);
 		$jrawat_cara=trim(@$_POST["jrawat_cara"]);
 		$jrawat_cara=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_cara);
 		$jrawat_cara=str_replace("'", '"',$jrawat_cara);
@@ -630,6 +647,9 @@ class C_master_jual_rawat extends Controller {
 		$drawat_sales = $_POST['drawat_sales']; // Get our array back and translate it :
 		$array_drawat_sales = json_decode(stripslashes($drawat_sales));
 		
+		$drawat_karyawan = $_POST['drawat_karyawan']; // Get our array back and translate it :
+		$array_drawat_karyawan = json_decode(stripslashes($drawat_karyawan));
+		
 		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok
 																	 ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback
 																	 ,$jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
@@ -652,7 +672,7 @@ class C_master_jual_rawat extends Controller {
 																	 ,$cetak_jrawat, $jrawat_ket_disk
 																	 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 																	 ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
-																	 ,$array_drawat_diskon_jenis, $array_drawat_sales);
+																	 ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming);
 		echo $result;
 	}
     

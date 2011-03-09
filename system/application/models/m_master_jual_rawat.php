@@ -18,6 +18,27 @@ class M_master_jual_rawat extends Model{
 		parent::Model();
 	}
 	
+	function get_allkaryawan_list($query,$start,$end){
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_username,karyawan_nama,karyawan_tgllahir,karyawan_alamat
+		FROM karyawan where karyawan_aktif='Aktif'";
+		if($query<>""){
+			$sql=$sql." and (karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%') ";
+		}
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		$limit = $sql." LIMIT ".$start.",".$end;			
+		$result = $this->db->query($limit);  
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
 		
 		switch($group){
@@ -1278,6 +1299,8 @@ class M_master_jual_rawat extends Model{
 		$query = "SELECT
 				jrawat_id,
 				jrawat_nobukti,
+				karyawan_no,
+				karyawan_nama,
 				vu_jrawat_pr.cust_nama,
 				jrawat_cust,
 				vu_jrawat_pr.cust_no,
@@ -1304,6 +1327,7 @@ class M_master_jual_rawat extends Model{
 				dpaket_id
 			FROM vu_jrawat_pr
 			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
+			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)
 			WHERE vu_jrawat_pr.jrawat_stat_dok='Terbuka' AND date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d')='$date_now'";
 		
 		// For simple search
@@ -1405,7 +1429,7 @@ class M_master_jual_rawat extends Model{
 									  ,$cetak, $jrawat_ket_disk, $drawat_count, $dcount_drawat_id
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 									  ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
-									  ,$array_drawat_diskon_jenis, $array_drawat_sales){
+									  ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming){
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		
@@ -1699,7 +1723,7 @@ class M_master_jual_rawat extends Model{
 									  ,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
 									  ,$jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
-									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales){
+									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming){
 		$date_now = date('Y-m-d');
 		
 		$jenis_transaksi = 'jual_rawat';
@@ -1716,6 +1740,7 @@ class M_master_jual_rawat extends Model{
 			"jrawat_nobukti"=>$jrawat_nobukti, 
 			"jrawat_cust"=>$jrawat_cust, 
 			"jrawat_tanggal"=>$jrawat_tanggal, 
+			"jrawat_grooming"=>$jrawat_grooming,
 			"jrawat_diskon"=>$jrawat_diskon, 
 			"jrawat_cashback"=>$jrawat_cashback,
 			"jrawat_totalbiaya"=>$jrawat_total,

@@ -431,7 +431,7 @@ class C_master_ambil_paket extends Controller {
 		$apaket_kadaluarsa_akhir=trim(@$_POST["apaket_kadaluarsa_akhir"]);
 		$apaket_tgl_faktur=trim(@$_POST["apaket_tgl_faktur"]);
 		$apaket_tgl_faktur_akhir=trim(@$_POST["apaket_tgl_faktur_akhir"]);
-		
+		$apaket_jenis=trim(@$_POST["apaket_jenis"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -442,6 +442,7 @@ class C_master_ambil_paket extends Controller {
 																	   ,$apaket_kadaluarsa_akhir
 																	   ,$apaket_tgl_faktur
 																	   ,$apaket_tgl_faktur_akhir
+																	   ,$apaket_jenis
 																	   ,$apaket_sisa
 																	   ,$option
 																	   ,$filter);
