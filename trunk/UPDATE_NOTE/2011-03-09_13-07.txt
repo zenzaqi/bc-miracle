@@ -1,0 +1,2 @@
+VCM_customer : menambah field pin bb
+2011-03-09_11-30.sql : menambah field cust_bb pada tabel customer dan vu_cust untuk menyimpan pin bb cust

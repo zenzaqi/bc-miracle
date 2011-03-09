@@ -86,6 +86,7 @@ var cust_telpkantorField;
 var cust_hpField;
 var cust_hp2Field;
 var cust_hp3Field;
+var cust_bbField;
 var cust_emailField;
 var cust_fbField;
 var cust_tweeterField;
@@ -130,6 +131,7 @@ var cust_telpkantorSearchField;
 var cust_hpSearchField;
 var cust_hp2SearchField;
 var cust_hp3SearchField;
+var cust_bbSearchField;
 var cust_emailSearchField;
 var cust_fbSearchField;
 var cust_tweeterSearchField;
@@ -197,6 +199,7 @@ var editor_cust_note;
 		cust_hpField.reset();
 		cust_hp2Field.reset();
 		cust_hp3Field.reset();
+		cust_bbField.reset();
 		cust_emailField.reset();
 		cust_fbField.reset();
 		cust_tweeterField.reset();
@@ -273,6 +276,7 @@ var editor_cust_note;
 		cust_hpField.setValue(null);
 		cust_hp2Field.setValue(null);
 		cust_hp3Field.setValue(null);
+		cust_bbField.setValue(null);
 		cust_emailField.setValue(null);
 		cust_fbField.setValue(null);
 		cust_tweeterField.setValue(null);
@@ -355,6 +359,7 @@ var editor_cust_note;
 		cust_hpField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hp'));
 		cust_hp2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hp2'));
 		cust_hp3Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_hp3'));
+		cust_bbField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_bb'));
 		cust_emailField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_email'));
 		cust_email2Field.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_email2'));
 		cust_agamaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_agama'));
@@ -666,6 +671,7 @@ var editor_cust_note;
 		var cust_hp_search=null;
 		var cust_hp2_search=null;
 		var cust_hp3_search=null;
+		var cust_bb_search=null;
 		var cust_email_search=null;
 		var cust_agama_search=null;
 		var cust_pendidikan_search=null;
@@ -690,6 +696,7 @@ var editor_cust_note;
 		var cust_umurend_search=null;
 		var cust_tgl_search=null;
 		var cust_bulan_search=null;
+		var cust_bb_search=null;
 
 
 		///if(cust_idSearchField.getValue()!==null){cust_id_search=cust_idSearchField.getValue();}
@@ -711,6 +718,7 @@ var editor_cust_note;
 		if(cust_hpSearchField.getValue()!==null){cust_hp_search=cust_hpSearchField.getValue();}
 		if(cust_hp2SearchField.getValue()!==null){cust_hp2_search=cust_hp2SearchField.getValue();}
 		if(cust_hp3SearchField.getValue()!==null){cust_hp3_search=cust_hp3SearchField.getValue();}
+		if(cust_bbSearchField.getValue()!==null){cust_bb_search=cust_bbSearchField.getValue();}
 		if(cust_emailSearchField.getValue()!==null){cust_email_search=cust_emailSearchField.getValue();}
 		if(cust_agamaSearchField.getValue()!==null){cust_agama_search=cust_agamaSearchField.getValue();}
 		if(cust_pendidikanSearchField.getValue()!==null){cust_pendidikan_search=cust_pendidikanSearchField.getValue();}
@@ -768,6 +776,7 @@ var editor_cust_note;
 			cust_hp			:	cust_hp_search, 
 			cust_hp2		:	cust_hp2_search, 
 			cust_hp3		:	cust_hp3_search, 
+			cust_bb		:	cust_bb_search, 
 			cust_email		:	cust_email_search, 
 			cust_agama		:	cust_agama_search, 
 			cust_pendidikan	:	cust_pendidikan_search, 
@@ -843,6 +852,7 @@ var editor_cust_note;
 		cust_hpSearchField.reset();
 		cust_hp2SearchField.reset();
 		cust_hp3SearchField.reset();
+		cust_bbSearchField.reset();
 		cust_emailSearchField.reset();
 		cust_agamaSearchField.reset();
 		cust_pendidikanSearchField.reset();
@@ -1377,6 +1387,7 @@ var editor_cust_note;
 		var cust_hp_update=null;
 		var cust_hp2_update=null;
 		var cust_hp3_update=null;
+		var cust_bb_update=null;
 		var cust_email_update=null;
 		var cust_email2_update=null;
 		var cust_agama_update=null;
@@ -1416,6 +1427,7 @@ var editor_cust_note;
 		if(oGrid_event.record.data.cust_hp!== null){cust_hp_update = oGrid_event.record.data.cust_hp;}
 		if(oGrid_event.record.data.cust_hp2!== null){cust_hp2_update = oGrid_event.record.data.cust_hp2;}
 		if(oGrid_event.record.data.cust_hp3!== null){cust_hp3_update = oGrid_event.record.data.cust_hp3;}
+		if(oGrid_event.record.data.cust_bb!== null){cust_bb_update = oGrid_event.record.data.cust_bb;}
 		if(oGrid_event.record.data.cust_email!== null){cust_email_update = oGrid_event.record.data.cust_email;}
 		if(oGrid_event.record.data.cust_email2!== null){cust_email2_update = oGrid_event.record.data.cust_email2;}
 		if(oGrid_event.record.data.cust_agama!== null){cust_agama_update = oGrid_event.record.data.cust_agama;}
@@ -1460,7 +1472,8 @@ var editor_cust_note;
 				cust_telpkantor	:cust_telpkantor_update,		
 				cust_hp			:cust_hp_update,		
 				cust_hp2		:cust_hp2_update,		
-				cust_hp3		:cust_hp3_update,		
+				cust_hp3		:cust_hp3_update,	
+				cust_bb			:cust_bb_update,					
 				cust_email		:cust_email_update,	
 				cust_email2		:cust_email2_update,	
 				cust_agama		:cust_agama_update,		
@@ -1543,6 +1556,7 @@ var editor_cust_note;
 		var cust_hp_create=null;
 		var cust_hp2_create=null;
 		var cust_hp3_create=null;
+		var cust_bb_create=null;
 		var cust_email_create=null;
 		//var cust_fb_create=false;
 		//var cust_tweeter_create=false;
@@ -1568,6 +1582,7 @@ var editor_cust_note;
 		var cust_kelamin_create=null;
 		var cust_cp_create=null;
 		var cust_cptelp_create=null;
+		var cust_bb_create=null;
 		
 		cust_id_create_pk=get_pk_id();
 		if(cust_noField.getValue()!== null){cust_no_create = cust_noField.getValue();}
@@ -1592,6 +1607,8 @@ var editor_cust_note;
 		if(cust_hpField.getValue()!== null){cust_hp_create = cust_hpField.getValue();}
 		if(cust_hp2Field.getValue()!== null){cust_hp2_create = cust_hp2Field.getValue();}
 		if(cust_hp3Field.getValue()!== null){cust_hp3_create = cust_hp3Field.getValue();}
+		if(cust_bbField.getValue()!== null){cust_bb_create = cust_bbField.getValue();}
+		if(cust_bbField.getValue()!== null){cust_bb_create = cust_bbField.getValue();}
 		if(cust_emailField.getValue()!== null){cust_email_create = cust_emailField.getValue();}
 		//if(cust_fbField.getValue()!== false){cust_fb_create = cust_fbField.getValue();}
 		//if(cust_tweeterField.getValue()!== false){cust_tweeter_create = cust_tweeterField.getValue();}
@@ -1648,7 +1665,8 @@ var editor_cust_note;
 					cust_telpkantor	:cust_telpkantor_create,		
 					cust_hp			:cust_hp_create,		
 					cust_hp2		:cust_hp2_create,		
-					cust_hp3		:cust_hp3_create,		
+					cust_hp3		:cust_hp3_create,
+					cust_bb			:cust_bb_create,					
 					cust_email		:cust_email_create,
 					cust_fb			:cust_fbField.getValue(),
 					cust_tweeter	:cust_tweeterField.getValue(),
@@ -1891,6 +1909,7 @@ Ext.onReady(function(){
 			{name: 'cust_hp', type: 'string', mapping: 'cust_hp'},
 			{name: 'cust_hp2', type: 'string', mapping: 'cust_hp2'},
 			{name: 'cust_hp3', type: 'string', mapping: 'cust_hp3'},
+			{name: 'cust_bb', type: 'string', mapping: 'cust_bb'},
 			{name: 'cust_email', type: 'string', mapping: 'cust_email'},
 			{name: 'cust_email2', type: 'string', mapping: 'cust_email2'},
 			{name: 'cust_agama', type: 'string', mapping: 'cust_agama'},
@@ -3161,6 +3180,15 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  pin bb Field */
+	cust_bbField= new Ext.form.TextField({
+		id: 'cust_bbField',
+		fieldLabel: 'Pin BB',
+		maxLength: 30,
+		anchor: '95%'
+	});
+	
 	/* Identify  cust_email Field */
 	cust_emailField= new Ext.form.TextField({
 		id: 'cust_emailField',
@@ -3687,7 +3715,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_telprumahField, cust_hpField]
+				items: [cust_telprumahField, cust_hpField, cust_bbField]
 			},{
 				columnWidth:0.25,
 				layout: 'form',
@@ -4088,6 +4116,15 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  cust_bbField */
+	cust_bbSearchField= new Ext.form.TextField({
+		id: 'cust_bbSearchField',
+		fieldLabel: 'Pin BB',
+		maxLength: 30,
+		anchor: '95%'
+	});
+	
 	/* Identify  cust_email Field */
 	cust_emailSearchField= new Ext.form.TextField({
 		id: 'cust_emailSearchField',
@@ -4669,7 +4706,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_telprumahSearchField, cust_hpSearchField]
+				items: [cust_telprumahSearchField, cust_hpSearchField, cust_bbSearchField]
 			},{
 				columnWidth:0.25,
 				layout: 'form',

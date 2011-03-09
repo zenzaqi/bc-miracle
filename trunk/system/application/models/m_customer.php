@@ -212,9 +212,34 @@ class M_customer extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
+
+		//function for get list record
+		function get_phonegroup_list($filter,$start,$end){
+			$query = "SELECT * FROM vu_phonegroup";
+
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (phonegroup_nama LIKE '%".addslashes($filter)."%' OR phonegroup_jumlah)";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
 		
 		//function for update record
-		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain ){
+		function customer_update($cust_id, $cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority, */$cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp ,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_bb ){
 		
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
@@ -345,7 +370,8 @@ class M_customer extends Model{
 					"cust_telpkantor"=>$cust_telpkantor,			
 					"cust_hp"=>$cust_hp,			
 					"cust_hp2"=>$cust_hp2,			
-					"cust_hp3"=>$cust_hp3,			
+					"cust_hp3"=>$cust_hp3,
+					"cust_bb"=>$cust_bb,
 					"cust_email"=>$cust_email,
 					"cust_email2"=>$cust_email2,
 					"cust_agama"=>$cust_agama,			
@@ -432,7 +458,8 @@ class M_customer extends Model{
 					"cust_telpkantor"=>$cust_telpkantor,			
 					"cust_hp"=>$cust_hp,			
 					"cust_hp2"=>$cust_hp2,			
-					"cust_hp3"=>$cust_hp3,			
+					"cust_hp3"=>$cust_hp3,	
+					"cust_bb"=>$cust_bb,					
 					"cust_email"=>$cust_email,
 					"cust_email2"=>$cust_email2,
 					"cust_agama"=>$cust_agama,			
@@ -492,7 +519,7 @@ class M_customer extends Model{
 	}
 		
 		//function for create new record
-		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain , $cust_umurstart, $cust_umurend, $cust_umur){
+		function customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah, /*$cust_priority,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp,$cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain , $cust_umurstart, $cust_umurend, $cust_umur,$cust_bb){
 			if($cust_no=='' && $cust_aktif != 'Tidak Aktif'){
 				//Generate Nomor Customer
 				$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
@@ -608,7 +635,8 @@ class M_customer extends Model{
 				"cust_telpkantor"=>$cust_telpkantor,			
 				"cust_hp"=>$cust_hp,			
 				"cust_hp2"=>$cust_hp2,			
-				"cust_hp3"=>$cust_hp3,			
+				"cust_hp3"=>$cust_hp3,	
+				"cust_bb"=>$cust_bb,				
 				"cust_email"=>$cust_email,
 				"cust_email2"=>$cust_email2,
 				"cust_agama"=>$cust_agama,			
@@ -659,6 +687,36 @@ class M_customer extends Model{
 				return '0';
 		}
 		
+		//function for add to phonegroup
+		function customer_addphonegroup($cust_phonegroup_id,$cust_phonegroup_nama,$cust_phonegroup_detail,$cust_phonegroup_update,$cust_phonegroup_date_update,$cust_phonegroup_data){
+			$data = array(
+				"phonegroup_nama"=>$cust_phonegroup_nama, 
+				"phonegroup_detail"=>$cust_phonegroup_detail, 
+				"phonegroup_update"=>$cust_phonegroup_update, 
+				"phonegroup_date_update"=>$cust_phonegroup_date_update 
+			);
+			$cust_phonegrouped_group=$cust_phonegroup_id;
+			$this->db->where('phonegroup_id', $cust_phonegroup_id);
+			$this->db->update('phonegroup', $data);
+			$sql="UPDATE phonegroup set phonegroup_revised=(phonegroup_revised+1) where phonegroup_id='".$cust_phonegroup_id."'";
+			$this->db->query($sql);
+			$sql="delete from phonegrouped where phonegrouped_group='".$cust_phonegrouped_group."'";
+			$this->db->query($sql);
+				
+			if($cust_phonegroup_data!=""){
+				$cust_phonegrouped_cust=split(",",$cust_phonegroup_data);
+				if(count($cust_phonegrouped_cust)>0){
+					foreach($cust_phonegrouped_cust as $pnumber=>$value){
+						$sql="insert into phonegrouped(phonegrouped_group,phonegrouped_cust)
+								values('".$cust_phonegrouped_group."','".$value."')";
+						$this->db->query($sql);
+						$sql="";
+					}
+				}
+			}
+			return '1';
+		}
+		
 		//fcuntion for delete record
 		function customer_delete($pkid){
 			// You could do some checkups here and return '0' or other error consts.
@@ -685,7 +743,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
@@ -762,6 +820,10 @@ class M_customer extends Model{
 			if($cust_hp3!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_hp3 LIKE '%".$cust_hp3."%'";
+			};
+			if($cust_bb!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_bb LIKE '%".$cust_bb."%'";
 			};
 			if($cust_email!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
