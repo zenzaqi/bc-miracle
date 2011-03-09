@@ -204,7 +204,7 @@ Ext.onReady(function(){
 	
 	/* Function for Check if the form is valid */
 	function is_perpanjang_paket_form_valid(){
-		return (true &&  perpanjang_paket_paketField.isValid() && true);
+		return (true &&  perpanjang_paket_paketField.isValid() && perpanjang_paket_keteranganField.isValid() && true);
 	}
   	/* End of Function */
   
@@ -286,9 +286,12 @@ Ext.onReady(function(){
 			{name: 'perpanjang_keterangan', type: 'string', mapping: 'perpanjang_keterangan'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_display', type: 'string', mapping: 'cust_display'},
+			{name: 'paket_display', type: 'string', mapping: 'paket_display'},
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
-			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}
+			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'},
+			{name: 'kadaluarsa_sebelum', type: 'date', dateFormat:'Y-m-d', mapping: 'kadaluarsa_sebelum'}
 		]),
 		sortInfo:{field: 'perpanjang_id', direction: "ASC"}
 	});
@@ -300,43 +303,47 @@ Ext.onReady(function(){
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'perpanjang_tanggal',
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			width: 70,
+			width: 40,
+			sortable: true
+			
+		}, 
+
+		{
+			header: '<div align="center">Customer</div>',
+			dataIndex: 'cust_display',
+			width: 130,
+			sortable: true
+		
+		}, 
+
+		{
+			header: '<div align="center">Paket</div>',
+			dataIndex: 'paket_display',
+			width: 165,
+			sortable: true
+		
+		}, 
+		{
+			header: '<div align="center">K.luarsa(sblm)</div>',
+			dataIndex: 'kadaluarsa_sebelum',
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			width: 45,
 			sortable: true
 			
 		}, 
 		{
-			header: '<div align="center">No Cust</div>',
-			dataIndex: 'cust_no',
-			width: 80,
+			header: '<div align="center">Hari</div>',
+			dataIndex: 'perpanjang_hari',
+			width: 20,
 			sortable: true
 		
 		}, 
-		{
-			header: '<div align="center">Customer</div>',
-			dataIndex: 'cust_nama',
-			width: 180,
-			sortable: true
 		
-		}, 
 		{
-			header: '<div align="center">No Faktur</div>',
-			dataIndex: 'jpaket_nobukti',
-			width: 80,
-			sortable: true
-		
-		}, 
-		{
-			header: '<div align="center">Paket</div>',
-			dataIndex: 'paket_nama',
-			width: 120,
-			sortable: true
-		
-		}, 
-		{
-			header: '<div align="center">Tgl Kadaluarsa</div>',
+			header: '<div align="center">K.luarsa(ssdh)</div>',
 			dataIndex: 'dpaket_kadaluarsa',
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			width: 100,
+			width: 45,
 			sortable: true
 			
 		}, 
@@ -344,7 +351,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'perpanjang_keterangan',
-			width: 225,
+			width: 190,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 200
@@ -359,7 +366,7 @@ Ext.onReady(function(){
 	perpanjang_paketListEditorGrid = new Ext.grid.EditorGridPanel({
 		id: 'perpanjang_paketListEditorGrid',
 		el: 'fp_perpanjangan_paket',
-		title: 'Daftar Paket yang di perpanjang',
+		title: 'Daftar Perpanjangan Masa Berlaku Paket',
 		autoHeight: true,
 		store: perpanjang_paket_DataStore, // DataStore
 		cm: perpanjang_paket_ColumnModel, // Nama-nama Columns
@@ -460,6 +467,7 @@ Ext.onReady(function(){
 		id: 'perpanjang_paket_keteranganField',
 		fieldLabel: 'Keterangan (Wajib diisi)',
 		maxLength: 200,
+		allowBlank : false,
 		anchor: '95%'
 	});
 		
