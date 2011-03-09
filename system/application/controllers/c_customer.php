@@ -56,6 +56,9 @@ class C_customer extends Controller {
 			case "EXCEL":
 				$this->customer_export_excel();
 				break;
+			case "ADDGROUP":
+				$this->customer_addphonegroup();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -85,7 +88,15 @@ class C_customer extends Controller {
 		echo $result;
 	}*/
 	
-	
+	function get_phonegroup_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_customer->get_phonegroup_list($query,$start,$end);
+		echo $result;
+	}
+		
+		
 	function get_cabang_list(){
 		$result=$this->m_customer->get_cabang_list();
 		echo $result;
@@ -211,6 +222,9 @@ class C_customer extends Controller {
 		$cust_hp3=trim(@$_POST["cust_hp3"]);
 		$cust_hp3=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp3);
 		$cust_hp3=str_replace("'", '"',$cust_hp3);
+		$cust_bb=trim(@$_POST["cust_bb"]);
+		$cust_bb=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_bb);
+		$cust_bb=str_replace("'", '"',$cust_bb);
 		$cust_email=trim(@$_POST["cust_email"]);
 		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
 		$cust_email=str_replace("'", '"',$cust_email);
@@ -320,7 +334,7 @@ class C_customer extends Controller {
 		$cust_cptelp=trim(@$_POST["cust_cptelp"]);
 		$cust_cptelp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_cptelp);
 		$cust_cptelp=str_replace("'", '"',$cust_cptelp);
-		$result = $this->m_customer->customer_update($cust_id ,$cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , /*$cust_priority , */$cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain );
+		$result = $this->m_customer->customer_update($cust_id ,$cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , /*$cust_priority , */$cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_bb );
 		echo $result;
 	}
 	
@@ -395,6 +409,9 @@ class C_customer extends Controller {
 		$cust_hp3=trim(@$_POST["cust_hp3"]);
 		$cust_hp3=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp3);
 		$cust_hp3=str_replace("'", '"',$cust_hp3);
+		$cust_bb=trim(@$_POST["cust_bb"]);
+		$cust_bb=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_bb);
+		$cust_bb=str_replace("'", '"',$cust_bb);
 		$cust_email=trim(@$_POST["cust_email"]);
 		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
 		$cust_email=str_replace("'", '"',$cust_email);
@@ -514,10 +531,37 @@ class C_customer extends Controller {
 		$cust_umur=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_umur);
 		$cust_umur=str_replace("'", '"',$cust_umur);
 		
-		$result = $this->m_customer->customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan, $cust_kelamin, $cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , /*$cust_priority ,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur  );
+		$result = $this->m_customer->customer_create($cust_no ,$cust_nolama ,$cust_nama, $cust_title, $cust_panggilan, $cust_kelamin, $cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara,$cust_alamat2 ,$cust_kota2 ,$cust_kodepos2 ,$cust_propinsi2 ,$cust_negara2 ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_fb ,$cust_tweeter , $cust_email2 ,$cust_fb2 ,$cust_tweeter2 ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tmptlahir ,$cust_tgllahir ,$cust_referensi, $cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_terdaftar ,$cust_statusnikah , /*$cust_priority ,*/ $cust_jmlanak ,$cust_unit ,$cust_aktif , $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$cust_cp ,$cust_cptelp, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur, $cust_bb  );
 		echo $result;
 	}
 
+	function customer_addphonegroup(){
+  		//POST varibale here
+		/*$cust_id=trim(@$_POST["cust_id"]);
+		$cust_hp=trim(@$_POST["cust_hp"]);
+		$cust_hp=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp);
+		$cust_hp=str_replace("'", '"',$cust_hp);
+		$filter=$_POST["query"];
+		
+		$result = $this->m_customer->customer_addphonegroup($cust_id ,$cust_hp );
+		echo $result;*/
+		
+		
+		$cust_phonegroup_id=trim(@$_POST["cust_phonegroup_id"]);
+		$cust_phonegroup_nama=trim(@$_POST["cust_phonegroup_nama"]);
+		$cust_phonegroup_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_phonegroup_nama);
+		$cust_phonegroup_nama=str_replace("'", "''",$cust_phonegroup_nama);
+		$cust_phonegroup_detail=trim(@$_POST["cust_phonegroup_detail"]);
+		$cust_phonegroup_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_phonegroup_detail);
+		$cust_phonegroup_detail=str_replace("'", "''",$cust_phonegroup_detail);
+		$cust_phonegroup_update=@$_SESSION[SESSION_USERID];
+		$cust_phonegroup_date_update=date('Y/m/d');
+		$cust_phonegroup_data=@$_POST["cust_phonegroup_data"];
+		$result = $this->m_customer->customer_addphonegroup($cust_phonegroup_id,$cust_phonegroup_nama,$cust_phonegroup_detail,$cust_phonegroup_update,$cust_phonegroup_date_update,$cust_phonegroup_data);
+		echo $result;
+	}
+	/* End Of Function */
+	
 	//function for delete selected record
 	function customer_delete(){
 		$ids = $_POST['ids']; // Get our array back and translate it :
@@ -581,6 +625,9 @@ class C_customer extends Controller {
 		$cust_hp3=trim(@$_POST["cust_hp3"]);
 		$cust_hp3=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_hp3);
 		$cust_hp3=str_replace("'", '"',$cust_hp3);
+		$cust_bb=trim(@$_POST["cust_bb"]);
+		$cust_bb=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_bb);
+		$cust_bb=str_replace("'", '"',$cust_bb);
 		$cust_email=trim(@$_POST["cust_email"]);
 		$cust_email=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_email);
 		$cust_email=str_replace("'", '"',$cust_email);
@@ -677,7 +724,7 @@ class C_customer extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan);
+		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb);
 		echo $result;
 	}
 
@@ -1081,7 +1128,7 @@ class C_customer extends Controller {
 		echo '1';        
 	}
 	/* End Of Function */
-
+	
 	/* Function to Export Excel document */
 	function customer_export_excel(){
 		//POST varibale here
