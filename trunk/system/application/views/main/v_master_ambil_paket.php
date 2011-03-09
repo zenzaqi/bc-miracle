@@ -583,6 +583,7 @@ Ext.onReady(function(){
 			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
 			//{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			{name: 'tanggal_hangus', type: 'date', dateFormat:'Y-m-d', mapping: 'tanggal_hangus'}, 
 			//{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
 //			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
 //			{name: 'apaket_cust_nama', type: 'string', mapping: 'apaket_cust_nama'},
@@ -809,6 +810,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tgl Kadaluarsa' + '</div>',
 			dataIndex: 'dpaket_kadaluarsa',
+			width: 70,
+			sortable: true,
+//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		} ,
+		{
+			header: '<div align="center">' + 'Tgl Hangus' + '</div>',
+			dataIndex: 'tanggal_hangus',
 			width: 70,
 			sortable: true,
 //			renderer: Ext.util.Format.dateRenderer('Y-m-d')

@@ -59,11 +59,11 @@ class M_perpanjang_paket extends Model{
 	function perpanjang_paket_list($filter,$start,$end){
 		
 			$query = "select 
-						customer.cust_nama, customer.cust_no,
-						master_jual_paket.jpaket_nobukti,
+						CONCAT(customer.cust_nama, ' (', customer.cust_no, ')') as cust_display,
+						CONCAT(paket.paket_nama, ' (', master_jual_paket.jpaket_nobukti, ')') as paket_display,
 						detail_jual_paket.dpaket_kadaluarsa,
-						paket.paket_nama,
-						perpanjang_paket.*
+						perpanjang_paket.*,
+						date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'),INTERVAL -perpanjang_hari DAY) as kadaluarsa_sebelum
 					from perpanjang_paket
 					left join detail_jual_paket on (detail_jual_paket.dpaket_id=perpanjang_paket.perpanjang_djpaket_id)
 					left join master_jual_paket on (master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master)
