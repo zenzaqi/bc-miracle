@@ -390,6 +390,7 @@ Ext.onReady(function(){
 	perpanjang_paketListEditorGrid.render();
 	
 	/* Event while selected row via context menu */
+	/*
 	function onjoincustomer_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
@@ -398,9 +399,10 @@ Ext.onReady(function(){
 		joincustomer_SelectedRow=rowIndex;
 		joincustomer_ContextMenu.showAt([coords[0], coords[1]]);
   	}
+	*/
   	/* End of Function */
 	
-	perpanjang_paketListEditorGrid.addListener('rowcontextmenu', onjoincustomer_ListEditGridContextMenu);
+	//perpanjang_paketListEditorGrid.addListener('rowcontextmenu', onjoincustomer_ListEditGridContextMenu);
 	perpanjang_paket_DataStore.load({params: {start: 0, limit: pageS}});
 
 	/* Identify  perpanjang_id Field */
@@ -456,7 +458,7 @@ Ext.onReady(function(){
 	
 	perpanjang_paket_keteranganField= new Ext.form.TextArea({
 		id: 'perpanjang_paket_keteranganField',
-		fieldLabel: 'Keterangan',
+		fieldLabel: 'Keterangan (Wajib diisi)',
 		maxLength: 200,
 		anchor: '95%'
 	});
@@ -475,7 +477,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [perpanjang_paket_idField,perpanjang_paket_tangalField, perpanjang_paket_paketField, perpanjangan_hari_Field, perpanjang_paket_keteranganField, perpanjang_paket_infoketeranganField] 
+				items: [perpanjang_paket_idField,perpanjang_paket_tangalField, perpanjang_paket_paketField, perpanjangan_hari_Field, perpanjang_paket_keteranganField] 
 			}
 			],
 		buttons: [{
@@ -496,7 +498,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	perpanjang_paket_saveWindow= new Ext.Window({
 		id: 'perpanjang_paket_saveWindow',
-		title:'Perpanjangan Paket',
+		title:'Perpanjangan masa berlaku Paket',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
