@@ -1,0 +1,3 @@
+vcm_master_jual_rawat : menambah grooming
+2011-03-08_11-18 : menambah field jrawat_grooming pada tabel master_jual_rawat,
+menambah select pada vu_jrawat_pr

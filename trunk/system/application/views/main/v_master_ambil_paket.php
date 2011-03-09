@@ -2513,6 +2513,7 @@ Ext.onReady(function(){
 		var apaket_kadaluarsa_2excel=null;
 		var apaket_kadaluarsa_akhir_2excel=null;
 		var apakaet_sisa_2excel=null;
+		var apaket_jenis_2excel=null;
 		var apaket_tgl_faktur_2excel=null;
 		var apaket_tgl_faktur_akhir_2excel=null;
 		var win;              
@@ -2522,10 +2523,11 @@ Ext.onReady(function(){
 		if(ambil_paket_DataStore.baseParams.apaket_cust!==null){apaket_cust_2excel = ambil_paket_DataStore.baseParams.apaket_cust;}
 		if(ambil_paket_DataStore.baseParams.apaket_paket!==null){apaket_paket_2excel = ambil_paket_DataStore.baseParams.apaket_paket;}
 		if(ambil_paket_DataStore.baseParams.apaket_sisa!==null){apaket_sisa_2excel = ambil_paket_DataStore.baseParams.apaket_sisa;}
-		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa!==""){apaket_kadaluarsa_2excel = ambil_paket_DataStore.baseParams.apaket_kadaluarsa;}
-		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir!==""){apaket_kadaluarsa_akhir_2excel = ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir;}
-		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur!==""){apaket_tgl_faktur_2excel = ambil_paket_DataStore.baseParams.apaket_tgl_faktur;}
-		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir!==""){apaket_tgl_faktur_akhir_2excel = ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir;}
+		if(apaket_kadaluarsaSearchField.getValue()!==""){apaket_kadaluarsa_2excel=apaket_kadaluarsaSearchField.getValue().format('Y-m-d');}
+		if(apaket_kadaluarsa_akhirSearchField.getValue()!==""){apaket_kadaluarsa_akhir_2excel=apaket_kadaluarsa_akhirSearchField.getValue().format('Y-m-d');}
+		if(apaket_tgl_fakturSearchField.getValue()!==""){apaket_tgl_faktur_2excel=apaket_tgl_fakturSearchField.getValue().format('Y-m-d');}
+		if(apaket_tgl_faktur_akhirSearchField.getValue()!==""){apaket_tgl_faktur_akhir_2excel=apaket_tgl_faktur_akhirSearchField.getValue().format('Y-m-d');}
+		if(apaket_jenis_kadaluarsaSearchField.getValue()!==null){apaket_jenis_2excel=apaket_jenis_kadaluarsaSearchField.getValue();}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -2541,6 +2543,7 @@ Ext.onReady(function(){
 			apaket_tgl_faktur		:	apaket_tgl_faktur_2excel,
 			apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_2excel,
 			apaket_sisa				:	apaket_sisa_2excel,
+			apaket_jenis			: apaket_jenis_2excel,
 		  	currentlisting: ambil_paket_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

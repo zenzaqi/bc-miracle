@@ -416,6 +416,7 @@ Ext.onReady(function(){
 				var jrawat_keterangan_create=''; 
 				var jrawat_ket_disk_create=''; 
 				var jrawat_stat_dok_create='';
+				var jrawat_grooming_create='';
 				//tunai
 				var jrawat_tunai_nilai_create=0;
 				//tunai-2
@@ -504,6 +505,7 @@ Ext.onReady(function(){
 				
 				if((jrawat_idField.getValue()!==null) && (jrawat_idField.getValue()!=='') && (jrawat_idField.getValue()!==0)){jrawat_id_create_pk = jrawat_idField.getValue();}else{jrawat_id_create_pk=get_pk_id();} 
 				if(jrawat_nobuktiField.getValue()!== null){jrawat_nobukti_create = jrawat_nobuktiField.getValue();} 
+				if(jrawat_karyawanField.getValue()!== null){jrawat_grooming_create = jrawat_karyawanField.getValue();}				
 				if(jrawat_tanggalField.getValue()!== ""){jrawat_tanggal_create_date = jrawat_tanggalField.getValue().format('Y-m-d');} 
 				if(jrawat_diskonField.getValue()!== null){jrawat_diskon_create = jrawat_diskonField.getValue();} 
 				if(jrawat_caraField.getValue()!== null){jrawat_cara_create = jrawat_caraField.getValue();} 
@@ -625,6 +627,7 @@ Ext.onReady(function(){
 				var drawat_dtrawat = [];
 				var drawat_rawat = [];
 				var drawat_jumlah = [];
+				var drawat_karyawan=[];
 				var drawat_harga = [];
 				var drawat_diskon = [];
 				var drawat_diskon_jenis = [];
@@ -682,7 +685,12 @@ Ext.onReady(function(){
 							
 							//drawat_sales.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_sales);
 							
-							
+							if((detail_jual_rawat_DataStore.getAt(i).data.drawat_karyawan==undefined)
+							   || (detail_jual_rawat_DataStore.getAt(i).data.drawat_karyawan=='')){
+								drawat_karyawan.push(0);
+							}else{
+								drawat_karyawan.push(detail_jual_rawat_DataStore.getAt(i).data.drawat_karyawan);
+							}
 							
 						}
 					}
@@ -696,6 +704,7 @@ Ext.onReady(function(){
 				var encoded_array_drawat_diskon = Ext.encode(drawat_diskon);
 				var encoded_array_drawat_diskon_jenis = Ext.encode(drawat_diskon_jenis);
 				var encoded_array_drawat_sales = Ext.encode(drawat_sales);
+				var encoded_array_drawat_karyawan = Ext.encode(drawat_karyawan);
 				
 				Ext.Ajax.request({  
 					waitMsg: 'Please wait...',
@@ -707,6 +716,7 @@ Ext.onReady(function(){
 						drawat_count: drawat_count_create,
 						dcount_drawat_id: dcount_drawat_id_create,
 						jrawat_id			: 	jrawat_id_create_pk, 
+						jrawat_grooming	:	jrawat_grooming_create,
 						jrawat_nobukti		: 	jrawat_nobukti_create, 
 						jrawat_cust		: 	jrawat_cust_create, 
 						jrawat_tanggal		: 	jrawat_tanggal_create_date, 
@@ -805,7 +815,8 @@ Ext.onReady(function(){
 						drawat_harga: encoded_array_drawat_harga,
 						drawat_diskon: encoded_array_drawat_diskon,
 						drawat_diskon_jenis: encoded_array_drawat_diskon_jenis,
-						drawat_sales : encoded_array_drawat_sales
+						drawat_sales : encoded_array_drawat_sales,
+						drawat_karyawan: encoded_array_drawat_karyawan
 					},
 					callback: function(opts, success, response){
 						if(success){
@@ -1010,7 +1021,7 @@ Ext.onReady(function(){
 			cetak_jrawat=0;
 		}
 		}
-		//jproduk_btn_cancel();	
+		//jrawat_btn_cancel();	
 	}
 	
 	
@@ -1247,6 +1258,10 @@ Ext.onReady(function(){
 	function master_jual_rawat_reset_form(){
 		jrawat_idField.reset();
 		jrawat_idField.setValue(null);
+		jrawat_karyawanField.reset();
+		jrawat_karyawanField.setValue(null);
+		jrawat_nikkaryawanField.reset();
+		jrawat_nikkaryawanField.setValue(null);
 		jrawat_nobuktiField.reset();
 		jrawat_nobuktiField.setValue(null);
 		jrawat_custField.reset();
@@ -1327,6 +1342,8 @@ Ext.onReady(function(){
 		update_group_carabayar3_jual_rawat();
 		
 		jrawat_custField.setDisabled(false);
+		jrawat_karyawanField.setDisabled(true);
+		jrawat_nikkaryawanField.setDisabled(false);
 		jrawat_tanggalField.setDisabled(false);
 		jrawat_tanggalField.setDisabled(false);
 		jrawat_keteranganField.setDisabled(false);
@@ -1397,6 +1414,8 @@ Ext.onReady(function(){
 		
 		dpaket_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'));
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
+		jrawat_karyawanField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
+		jrawat_nikkaryawanField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
 		if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=='paket'){
 			jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		}
@@ -1443,6 +1462,7 @@ Ext.onReady(function(){
 		
 		
 		load_membership();
+		load_karyawan();
 		update_group_carabayar_jual_rawat();
 		update_group_carabayar2_jual_rawat();
 		update_group_carabayar3_jual_rawat();
@@ -1869,6 +1889,8 @@ Ext.onReady(function(){
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
 				jrawat_ket_diskField.setDisabled(false);
+				jrawat_karyawanField.setDisabled(true);
+				jrawat_nikkaryawanField.setDisabled(false);
 				
 				//master_cara_bayarTabPanel.setDisabled(false);
 				
@@ -1918,6 +1940,8 @@ Ext.onReady(function(){
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(true);
 				jrawat_ket_diskField.setDisabled(true);
+				jrawat_karyawanField.setDisabled(true);
+				jrawat_nikkaryawanField.setDisabled(true);
 				
                 //master_cara_bayarTabPanel.setDisabled(true);
 				
@@ -1969,7 +1993,8 @@ Ext.onReady(function(){
 				jrawat_keteranganField.setDisabled(true);
 				jrawat_ket_diskField.setDisabled(true);
 				jrawat_stat_dokField.setDisabled(true);
-				
+				jrawat_karyawanField.setDisabled(true);
+				jrawat_nikkaryawanField.setDisabled(true);
 				//master_cara_bayarTabPanel.setDisabled(true);
 				
 				jrawat_caraField.setDisabled(true);
@@ -2036,9 +2061,33 @@ Ext.onReady(function(){
 			}); 
 		}
 	}
+	
+	function load_karyawan(){
+		var karyawan_id=0;
+		if(jrawat_post2db=="CREATE"){
+			karyawan_id=jrawat_karyawanField.getValue();
+		}else if(jrawat_post2db=="UPDATE"){
+			karyawan_id=jrawat_cust_idField.getValue();
+		}
+		
+		if(jrawat_karyawanField.getValue()!=''){
+			karyawanDataStore.load({
+					params : { karyawan_id: karyawan_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(karyawanDataStore.getCount()){
+								jrawat_karyawan_record=karyawanDataStore.getAt(0).data;
+								jrawat_nikkaryawanField.setValue(jrawat_karyawan_record.karyawan_no);
+							}
+						}
+					}
+			}); 
+		}
+	}
+	
 	/* Function for Check if the form is valid */
 	function is_master_jual_rawat_form_valid(){
-		return (true);
+		return (jrawat_diskonField.isValid() && jrawat_karyawanField.isValid());
 	}
   	/* End of Function */
   
@@ -2057,6 +2106,7 @@ Ext.onReady(function(){
 			master_jual_rawat_createForm.savePrintButton.disable();
 			<?php } ?>
             master_cara_bayarTabPanel.setDisabled(false);
+			jrawat_karyawanField.setDisabled(true);
 			master_jual_rawat_createWindow.show();
 		} else {
 			master_jual_rawat_createWindow.toFront();
@@ -2174,6 +2224,9 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jrawat_id', type: 'int', mapping: 'jrawat_id'}, 
 			{name: 'jrawat_nobukti', type: 'string', mapping: 'jrawat_nobukti'}, 
+			{name: 'jrawat_grooming', type: 'string', mapping: 'jrawat_grooming'},
+			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'jrawat_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'jrawat_cust_id', type: 'int', mapping: 'jrawat_cust'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
@@ -2201,6 +2254,33 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jrawat_nobukti', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	jrawat_karyawanDataStore = new Ext.data.Store({
+		id: 'jrawat_karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_allkaryawan_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
+			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
+			//{name: 'karyawan_jmltindakan', type: 'int', mapping: 'reportt_jmltindakan'},
+		]),
+		sortInfo:{field: 'karyawan_no', direction: "ASC"}
+	});
+	
+	var karyawan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{karyawan_display}</b> | {karyawan_no}</span>',
+        '</div></tpl>'
+    );
 	
 	cbo_voucher_jual_rawatDataStore = new Ext.data.Store({
 		id: 'cbo_voucher_jual_rawatDataStore',
@@ -2881,6 +2961,59 @@ Ext.onReady(function(){
 		disabled : true,
 		//renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 		format : 'd-m-Y'
+	});
+	
+	/* Identify  jrawat_cust Field */
+	jrawat_karyawanField= new Ext.form.ComboBox({
+		id: 'jrawat_karyawanField',
+		fieldLabel: 'Karyawan',
+		store: jrawat_karyawanDataStore,
+		mode: 'remote',
+		displayField:'karyawan_display',
+		valueField: 'karyawan_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+		allowBlank : false,
+        hideTrigger:false,
+        tpl: karyawan_tpl,
+		disabled : true,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+
+	
+	jrawat_nikkaryawanField= new Ext.form.TextField({
+		id: 'jrawat_nikkaryawanField',
+		fieldLabel: 'NIK',
+		emptyText : '(Auto)',
+		readOnly: true,
+		
+		renderer: function(value, cell, record){
+				return value.substring(0,6) + '-' + value.substring(6,12) + '-' + value.substring(12);
+			}
+	});
+	
+	jrawat_groomingGroup = new Ext.form.FieldSet({
+		id : 'jrawat_groomingGroup',
+		title: 'Grooming',
+		checkboxToggle:false,
+		autoHeight: true,
+		layout:'column',
+		collapsible: true,
+		collapsed : true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				border:false,
+				items: [jrawat_karyawanField, jrawat_nikkaryawanField] 
+			}]
+	
 	});
 	
 	/* Identify  jrawat_tanggal Field */
@@ -4664,6 +4797,8 @@ Ext.onReady(function(){
             {name: 'drawat_diskon', type: 'int', mapping: 'drawat_diskon'},
             {name: 'drawat_sales', type: 'string', mapping: 'drawat_sales'},
             {name: 'drawat_diskon_jenis', type: 'string', mapping: 'drawat_diskon_jenis'},
+			{name: 'nama_karyawan', type: 'string', mapping: 'karyawan_username'},
+			{name: 'drawat_karyawan', type: 'int', mapping: 'drawat_karyawan'},
             {name: 'drawat_subtotal', type: 'float', mapping: 'drawat_subtotal'},
             {name: 'drawat_subtotal_net', type: 'int', mapping: 'drawat_subtotal_net'},
             {name: 'dtrawat_keterangan', type: 'string', mapping: 'dtrawat_keterangan'},
@@ -4761,6 +4896,26 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'member_id', direction: "ASC"}
 	});
+	
+	karyawanDataStore = new Ext.data.Store({
+		id: 'karyawanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_jual_rawat&m=get_nik', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'karyawan_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'}
+			
+		]),
+		sortInfo:{field: 'karyawan_id', direction: "ASC"}
+	});
+	
 	/*memberDataStore.on('beforeload', function(){
 		var_jrawat_member_dstore = false;
 		master_jual_rawat_createWindow.setDisabled(true);
@@ -5134,6 +5289,7 @@ Ext.onReady(function(){
 			drawat_diskon_jenis: '',
 			drawat_diskon	:0,
 			drawat_subtotal_net	:0,
+			drawat_karyawan:'',
 			drawat_sales : ''
 		});
 		editor_detail_jual_rawat.stopEditing();
@@ -5876,18 +6032,53 @@ Ext.onReady(function(){
 	jrawat_caraField.on("select",update_group_carabayar_jual_rawat);
 	jrawat_cara2Field.on("select",update_group_carabayar2_jual_rawat);
 	jrawat_cara3Field.on("select",update_group_carabayar3_jual_rawat);
+	
+	jrawat_karyawanField.on("select",function(){
+		var karyawan_id=jrawat_karyawanField.getValue();		
+		if(karyawan_id!==0){
+			karyawanDataStore.load({
+					params : { karyawan_id: karyawan_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(karyawanDataStore.getCount()){
+								jrawat_karyawan_record=karyawanDataStore.getAt(0).data;
+								jrawat_nikkaryawanField.setValue(jrawat_karyawan_record.karyawan_no);
+							}else{
+								jrawat_cust_nomemberField.setValue("");
+							}
+						}
+					}
+			}); }
+	});
+	
 	jrawat_custField.on("select",function(){
-		load_membership();
-		j=memberDataStore.findExact('member_cust',jrawat_custField.getValue(),0);
-		if(j>-1){
-			jrawat_cust_nomemberField.setValue(memberDataStore.getAt(j).member_no);
-			jrawat_valid_memberField.setValue(memberDataStore.getAt(j).member_valid);
+		var cust_id=jrawat_custField.getValue();
+		if(cust_id!==0){
+			memberDataStore.load({
+					params : { member_cust: cust_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(memberDataStore.getCount()){
+								jrawat_member_record=memberDataStore.getAt(0).data;
+								jrawat_cust_nomemberField.setValue(jrawat_member_record.member_no);
+								jrawat_valid_memberField.setValue(jrawat_member_record.member_valid);
+								if (cust_id== '9'){
+									jrawat_karyawanField.setDisabled(false);
+								}
+								else {
+									jrawat_karyawanField.setDisabled(true);
+									jrawat_karyawanField.setValue(null);
+									jrawat_nikkaryawanField.setValue(null);
+								}
+							}else{
+								jrawat_cust_nomemberField.setValue("");
+								jrawat_valid_memberField.setValue("");
+							}
+						}
+					}
+			}); 
 		}
-		else
-		{
-			jrawat_cust_nomemberField.setValue("");
-			jrawat_valid_memberField.setValue("");
-		}
+		
 		cbo_cust=cbo_cust_jual_rawat_DataStore.findExact('cust_id',jrawat_custField.getValue(),0);
 		if(cbo_cust>-1){
 			//cbo_kwitansi_jual_rawat_DataStore.load({params: {kwitansi_cust: cbo_cust_jual_rawat_DataStore.getAt(cbo_cust).data.cust_id}});
@@ -6032,7 +6223,7 @@ Ext.onReady(function(){
 		width: 950,
 		//plain: true,
 		//layout: 'fit',
-		items: [master_jual_rawat_masterGroup,detail_jual_rawatListEditorGrid,detail_ambil_paketListGrid,master_jual_rawat_bayarGroup]
+		items: [master_jual_rawat_masterGroup,jrawat_groomingGroup, detail_jual_rawatListEditorGrid,detail_ambil_paketListGrid,master_jual_rawat_bayarGroup]
 		,
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
@@ -6493,18 +6684,17 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 	function jrawat_btn_cancel(){
-		master_jual_produk_reset_form();
-		detail_jual_produk_DataStore.load({params: {master_id:-1}});
-		jproduk_caraField.setValue("card");
-		master_jual_produk_cardGroup.setVisible(true);
+		master_jual_rawat_reset_form();
+		detail_jual_rawat_DataStore.load({params: {master_id:-1}});
+		jrawat_caraField.setValue("card");
+		master_jual_rawat_cardGroup.setVisible(true);
 		master_cara_bayarTabPanel.setActiveTab(0);
-		jproduk_post2db="CREATE";
-		jproduk_diskonField.setValue(0);
-		jproduk_cashbackField.setValue(0);
-		jproduk_pesanLabel.setText('');
-		jproduk_lunasLabel.setText('');
+		jrawat_post2db="CREATE";
+		jrawat_diskonField.setValue(0);
+		jrawat_cashbackField.setValue(0);
+		jrawat_pesanLabel.setText('');
+		jrawat_lunasLabel.setText('');
 	}
-	
 });
 	</script>
 <body>
