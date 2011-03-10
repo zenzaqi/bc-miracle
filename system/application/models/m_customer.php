@@ -743,7 +743,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
@@ -775,11 +775,7 @@ class M_customer extends Model{
 			};
 			if($cust_alamat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_alamat LIKE '%".$cust_alamat."%'";
-			};
-			if($cust_alamat2!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_alamat2 LIKE '%".$cust_alamat2."%'";
+				$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
 			};
 			if($cust_kota!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -799,27 +795,7 @@ class M_customer extends Model{
 			};
 			if($cust_telprumah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%'";
-			};
-			if($cust_telprumah2!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telprumah2 LIKE '%".$cust_telprumah2."%'";
-			};
-			if($cust_telpkantor!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telpkantor LIKE '%".$cust_telpkantor."%'";
-			};
-			if($cust_hp!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_hp LIKE '%".$cust_hp."%'";
-			};
-			if($cust_hp2!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_hp2 LIKE '%".$cust_hp2."%'";
-			};
-			if($cust_hp3!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_hp3 LIKE '%".$cust_hp3."%'";
+				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
 			};
 			if($cust_bb!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -827,7 +803,7 @@ class M_customer extends Model{
 			};
 			if($cust_email!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_email LIKE '%".$cust_email."%'";
+				$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
 			};
 			if($cust_agama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

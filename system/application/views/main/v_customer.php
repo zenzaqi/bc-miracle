@@ -120,22 +120,22 @@ var cust_no_akhirSearchField;
 var cust_namaSearchField;
 var cust_kelaminSearchField;
 var cust_alamatSearchField;
-var cust_alamat2SearchField;
+//var cust_alamat2SearchField;
 var cust_kotaSearchField;
 var cust_kodeposSearchField;
 var cust_propinsiSearchField;
 var cust_negaraSearchField;
 var cust_telprumahSearchField;
-var cust_telprumah2SearchField;
-var cust_telpkantorSearchField;
-var cust_hpSearchField;
-var cust_hp2SearchField;
-var cust_hp3SearchField;
+//var cust_telprumah2SearchField;
+//var cust_telpkantorSearchField;
+//var cust_hpSearchField;
+//var cust_hp2SearchField;
+//var cust_hp3SearchField;
 var cust_bbSearchField;
 var cust_emailSearchField;
 var cust_fbSearchField;
 var cust_tweeterSearchField;
-var cust_email2SearchField;
+//var cust_email2SearchField;
 var cust_fb2SearchField;
 var cust_tweeter2SearchField;
 var cust_agamaSearchField;
@@ -660,17 +660,17 @@ var editor_cust_note;
 		var cust_nama_search=null;
 		var cust_kelamin_search=null;
 		var cust_alamat_search=null;
-		var cust_alamat2_search=null;
+		//var cust_alamat2_search=null;
 		var cust_kota_search=null;
 		var cust_kodepos_search=null;
 		var cust_propinsi_search=null;
 		var cust_negara_search=null;
 		var cust_telprumah_search=null;
-		var cust_telprumah2_search=null;
-		var cust_telpkantor_search=null;
-		var cust_hp_search=null;
-		var cust_hp2_search=null;
-		var cust_hp3_search=null;
+		//var cust_telprumah2_search=null;
+		//var cust_telpkantor_search=null;
+		//var cust_hp_search=null;
+		//var cust_hp2_search=null;
+		//var cust_hp3_search=null;
 		var cust_bb_search=null;
 		var cust_email_search=null;
 		var cust_agama_search=null;
@@ -707,17 +707,17 @@ var editor_cust_note;
 		if(cust_namaSearchField.getValue()!==null){cust_nama_search=cust_namaSearchField.getValue();}
 		if(cust_kelaminSearchField.getValue()!==null){cust_kelamin_search=cust_kelaminSearchField.getValue();}
 		if(cust_alamatSearchField.getValue()!==null){cust_alamat_search=cust_alamatSearchField.getValue();}
-		if(cust_alamat2SearchField.getValue()!==null){cust_alamat2_search=cust_alamat2SearchField.getValue();}
+		//if(cust_alamat2SearchField.getValue()!==null){cust_alamat2_search=cust_alamat2SearchField.getValue();}
 		if(cust_kotaSearchField.getValue()!==null){cust_kota_search=cust_kotaSearchField.getValue();}
 		if(cust_kodeposSearchField.getValue()!==null){cust_kodepos_search=cust_kodeposSearchField.getValue();}
 		if(cust_propinsiSearchField.getValue()!==null){cust_propinsi_search=cust_propinsiSearchField.getValue();}
 		if(cust_negaraSearchField.getValue()!==null){cust_negara_search=cust_negaraSearchField.getValue();}
 		if(cust_telprumahSearchField.getValue()!==null){cust_telprumah_search=cust_telprumahSearchField.getValue();}
-		if(cust_telprumah2SearchField.getValue()!==null){cust_telprumah2_search=cust_telprumah2SearchField.getValue();}
-		if(cust_telpkantorSearchField.getValue()!==null){cust_telpkantor_search=cust_telpkantorSearchField.getValue();}
-		if(cust_hpSearchField.getValue()!==null){cust_hp_search=cust_hpSearchField.getValue();}
-		if(cust_hp2SearchField.getValue()!==null){cust_hp2_search=cust_hp2SearchField.getValue();}
-		if(cust_hp3SearchField.getValue()!==null){cust_hp3_search=cust_hp3SearchField.getValue();}
+		//if(cust_telprumah2SearchField.getValue()!==null){cust_telprumah2_search=cust_telprumah2SearchField.getValue();}
+		//if(cust_telpkantorSearchField.getValue()!==null){cust_telpkantor_search=cust_telpkantorSearchField.getValue();}
+		//if(cust_hpSearchField.getValue()!==null){cust_hp_search=cust_hpSearchField.getValue();}
+		//if(cust_hp2SearchField.getValue()!==null){cust_hp2_search=cust_hp2SearchField.getValue();}
+		//if(cust_hp3SearchField.getValue()!==null){cust_hp3_search=cust_hp3SearchField.getValue();}
 		if(cust_bbSearchField.getValue()!==null){cust_bb_search=cust_bbSearchField.getValue();}
 		if(cust_emailSearchField.getValue()!==null){cust_email_search=cust_emailSearchField.getValue();}
 		if(cust_agamaSearchField.getValue()!==null){cust_agama_search=cust_agamaSearchField.getValue();}
@@ -765,17 +765,17 @@ var editor_cust_note;
 			cust_nama	:	cust_nama_search, 
 			cust_kelamin	:	cust_kelamin_search, 
 			cust_alamat	:	cust_alamat_search, 
-			cust_alamat2	:	cust_alamat2_search, 
+			//cust_alamat2	:	cust_alamat2_search, 
 			cust_kota	:	cust_kota_search, 
 			cust_kodepos	:	cust_kodepos_search, 
 			cust_propinsi	:	cust_propinsi_search, 
 			cust_negara	:	cust_negara_search, 
 			cust_telprumah	:	cust_telprumah_search, 
-			cust_telprumah2	:	cust_telprumah2_search, 
-			cust_telpkantor	:	cust_telpkantor_search, 
-			cust_hp			:	cust_hp_search, 
-			cust_hp2		:	cust_hp2_search, 
-			cust_hp3		:	cust_hp3_search, 
+			//cust_telprumah2	:	cust_telprumah2_search, 
+			//cust_telpkantor	:	cust_telpkantor_search, 
+			//cust_hp			:	cust_hp_search, 
+			//cust_hp2		:	cust_hp2_search, 
+			//cust_hp3		:	cust_hp3_search, 
 			cust_bb		:	cust_bb_search, 
 			cust_email		:	cust_email_search, 
 			cust_agama		:	cust_agama_search, 
@@ -841,17 +841,17 @@ var editor_cust_note;
 		cust_namaSearchField.reset();
 		cust_kelaminSearchField.reset();
 		cust_alamatSearchField.reset();
-		cust_alamat2SearchField.reset();
+		//cust_alamat2SearchField.reset();
 		cust_kotaSearchField.reset();
 		cust_kodeposSearchField.reset();
 		cust_propinsiSearchField.reset();
 		cust_negaraSearchField.reset();
 		cust_telprumahSearchField.reset();
-		cust_telprumah2SearchField.reset();
-		cust_telpkantorSearchField.reset();
-		cust_hpSearchField.reset();
-		cust_hp2SearchField.reset();
-		cust_hp3SearchField.reset();
+		//cust_telprumah2SearchField.reset();
+		//cust_telpkantorSearchField.reset();
+		//cust_hpSearchField.reset();
+		//cust_hp2SearchField.reset();
+		//cust_hp3SearchField.reset();
 		cust_bbSearchField.reset();
 		cust_emailSearchField.reset();
 		cust_agamaSearchField.reset();
@@ -2782,17 +2782,22 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: customer_reset_search,
 			iconCls:'icon-refresh'
-		},'-',{
+		},'-',
+		 <?php if(eregi('P',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+		{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: customer_export_excel
-		}, '-',{
+		}, '-',
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: customer_print  
-		}, '-',{
+		}, '-',
+		<?php } ?>
+		{
 			text: 'Cetak Label',
 			tooltip: 'Menu untuk cetak label',
 			iconCls:'',
@@ -2872,6 +2877,7 @@ Ext.onReady(function(){
 			handler: customer_crm
 		},
 		'-',*/
+		<?php if(eregi('P',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
@@ -2886,6 +2892,7 @@ Ext.onReady(function(){
 			disabled: true,
 			handler: customer_export_excel 
 		}
+		<?php } ?>
 		]
 	}); 
 	/* End of Declaration */
@@ -4022,21 +4029,25 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  cust_alamat2 Field */
+	/*
 	cust_alamat2SearchField= new Ext.form.TextField({
 		id: 'cust_alamat2SearchField',
 		fieldLabel: 'Alamat',
 		maxLength: 150,
 		anchor: '95%'
 	});
-	
+	*/
 	/* Identify  cust_kota Field */
+	/*
 	cust_kota2SearchField= new Ext.form.TextField({
 		id: 'cust_kota2SearchField',
 		fieldLabel: 'Kota',
 		maxLength: 100,
 		anchor: '95%'
 	});
+	*/
 	/* Identify  cust_kodepos Field */
+	/*
 	cust_kodepos2SearchField= new Ext.form.TextField({
 		id: 'cust_kodepos2SearchField',
 		fieldLabel: 'Kode Pos',
@@ -4044,7 +4055,9 @@ Ext.onReady(function(){
 		anchor: '50%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	/* Identify  cust_propinsi Field */
+	/*
 	cust_propinsi2SearchField= new Ext.form.ComboBox({
 		id: 'cust_propinsi2SearchField',
 		fieldLabel: 'Propinsi',
@@ -4056,23 +4069,27 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'
 	});
+	*/
 	/* Identify  cust_negara Field */
+	/*
 	cust_negara2SearchField= new Ext.form.TextField({
 		id: 'cust_negara2SearchField',
 		fieldLabel: 'Negara',
 		maxLength: 100,
 		anchor: '95%'
 	});
+	*/
 	
 	/* Identify  cust_telprumah Field */
 	cust_telprumahSearchField= new Ext.form.TextField({
 		id: 'cust_telprumahSearchField',
-		fieldLabel: 'Telp Rumah',
+		fieldLabel: 'Telp',
 		maxLength: 30,
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
 	/* Identify  cust_telprumah2 Field */
+	/*
 	cust_telprumah2SearchField= new Ext.form.TextField({
 		id: 'cust_telprumah2SearchField',
 		//fieldLabel: 'Telp. Rumah 2',
@@ -4081,7 +4098,9 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	/* Identify  cust_telpkantor Field */
+	/*
 	cust_telpkantorSearchField= new Ext.form.TextField({
 		id: 'cust_telpkantorSearchField',
 		//fieldLabel: 'Telp. Kantor',
@@ -4090,7 +4109,9 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	/* Identify  cust_hp Field */
+	/*
 	cust_hpSearchField= new Ext.form.TextField({
 		id: 'cust_hpSearchField',
 		fieldLabel: 'HP',
@@ -4098,7 +4119,9 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	/* Identify  cust_hp2 Field */
+	/*
 	cust_hp2SearchField= new Ext.form.TextField({
 		id: 'cust_hp2SearchField',
 		//fieldLabel: 'No. Ponsel 2',
@@ -4107,7 +4130,9 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	/* Identify  cust_hp3 Field */
+	/*
 	cust_hp3SearchField= new Ext.form.TextField({
 		id: 'cust_hp3SearchField',
 		//fieldLabel: 'No. Ponsel 3',
@@ -4116,6 +4141,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 		//maskRe: /([0-9]+)$/
 	});
+	*/
 	
 	/* Identify  cust_bbField */
 	cust_bbSearchField= new Ext.form.TextField({
@@ -4134,12 +4160,14 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  cust_email Field */
+	/*
 	cust_email2SearchField= new Ext.form.TextField({
 		id: 'cust_email2Field',
 		fieldLabel: 'Email Alternatif',
 		maxLength: 100,
 		anchor: '95%'
 	});
+	*/
 	
 	/* Identify  cust_agama Field */
 	cust_agamaSearchField= new Ext.form.ComboBox({
@@ -4684,16 +4712,19 @@ Ext.onReady(function(){
 		title: 'Alamat',
 		autoHeight: true,
 		defaultType: 'textfield',
+		collapsed: true,
+		collapsible: true,
 		anchor: '95%',
 		items:[cust_alamatSearchField ,cust_kotaSearchField, cust_kodeposSearchField,cust_propinsiSearchField,cust_negaraSearchField]
 	});
+	
 	
 	cust_alamat2_groupSearch = new Ext.form.FieldSet({
 		title: 'Alamat Lain',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[cust_alamat2SearchField ,cust_kota2SearchField, cust_kodepos2SearchField,cust_propinsi2SearchField,cust_negara2SearchField]
+		items:[]
 	});
 	
 	cust_kontak_groupSearch = new Ext.form.FieldSet({
@@ -4701,23 +4732,14 @@ Ext.onReady(function(){
 		labelWidth: 100,
 		anchor: '95%',
 		layout:'column',
+		collapsed: true,
+		collapsible: true,
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:0.8,
 				layout: 'form',
 				border:false,
-				items: [cust_telprumahSearchField, cust_hpSearchField, cust_bbSearchField]
-			},{
-				columnWidth:0.25,
-				layout: 'form',
-				border:false,
-				items: [cust_telprumah2SearchField, cust_hp2SearchField] 
-			},
-			{
-				columnWidth:0.25,
-				layout: 'form',
-				border:false,
-				items: [cust_telpkantorSearchField, cust_hp3SearchField] 
+				items: [cust_telprumahSearchField, cust_bbSearchField, cust_emailSearchField]
 			}
 		]
 	});
@@ -4737,13 +4759,13 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_alamat2_groupSearch, cust_kontak_groupSearch,cust_emailSearchField,cust_email2SearchField] 
+				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_kontak_groupSearch, cust_hobiSearchField,cust_kelaminSearchField, cust_agamaSearchField, cust_pendidikanSearchField] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_kelaminSearchField, cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_agamaSearchField, cust_pendidikanSearchField,  cust_profesiSearchField, cust_hobiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_tanggaldaftar_opsiSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_tanggaldaftar_opsiSearchField,  cust_profesiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]
