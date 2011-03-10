@@ -13,7 +13,7 @@ class M_security extends Model{
 	function get_access_group($group_id,$form_id){
 		
 		if($_SESSION[SESSION_USERID]=='Super Admin'){
-			return 'RCUD';
+			return 'RCUDP';
 		}else{
 			
 		$sql="select perm_priv from permissions where perm_group='".$group_id."' and  perm_menu='".$form_id."'";
@@ -31,7 +31,7 @@ class M_security extends Model{
 	function get_access_group_by_kode($form_kode){
 		
 		if($_SESSION[SESSION_USERID]=='Super Admin'){
-			return 'RCUD';
+			return 'RCUDP';
 		}else{
 			
 		$sql="select perm_priv from vu_permissions where perm_group='".$_SESSION[SESSION_GROUPID]."' and  menu_kode='".$form_kode."'";
