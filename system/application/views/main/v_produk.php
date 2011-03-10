@@ -1113,7 +1113,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			header: '<div align="center">' + 'Harga Satuan Default (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_harga',
 			width: 100,	//150,
@@ -1339,7 +1339,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	produkListEditorGrid.addListener('rowcontextmenu', onproduk_ListEditGridContextMenu);
-	//produk_DataStore.load({params: {start: 0, limit: 15}});	// load DataStore
+	produk_DataStore.load({params: {start: 0, limit: 15}});	// load DataStore
 	produkListEditorGrid.on('afteredit', produk_update); // inLine Editing Record
 	
 	/* Identify  produk_id Field */
@@ -1786,7 +1786,7 @@ Ext.onReady(function(){
 	produk_hargaField= new Ext.form.TextField({
 		id: 'produk_hargaField',
 		name: 'produk_hargaField',
-		fieldLabel: 'Harga (Rp)',
+		fieldLabel: 'Harga Satuan Default (Rp)',
 		valueRenderer: 'numberToCurrency',
 		itemCls: 'rmoney',
 		allowBlank: true,
@@ -2971,7 +2971,7 @@ Ext.onReady(function(){
 	produk_hargaSearchField= new Ext.form.NumberField({
 		id: 'produk_hargaSearchField',
 		name: 'produk_hargaSearchField',
-		fieldLabel: 'Harga (Rp)',
+		fieldLabel: 'Harga Satuan Default (Rp)',
 		width: 100,
 		maskRe: /([0-9]+)$/
 	});

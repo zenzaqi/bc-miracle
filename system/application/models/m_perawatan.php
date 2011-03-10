@@ -316,7 +316,7 @@ class M_perawatan extends Model{
 		
 		//function for get list record
 		function perawatan_list($filter,$start,$end){
-			$query = "SELECT * from vu_perawatan";
+			$query = "SELECT * from vu_perawatan where rawat_aktif = 'Aktif'";
 			
 			// For simple search
 			if ($filter<>""){

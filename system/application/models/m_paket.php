@@ -271,7 +271,7 @@ class M_paket extends Model{
 	//function for get list record
 	function paket_list($filter,$start,$end){
 		//$query = "SELECT * FROM paket,produk_group where paket_group=group_id";
-		$query = "SELECT * FROM vu_paket";
+		$query = "SELECT * FROM vu_paket where paket_aktif = 'Aktif'";
 
 		// For simple search
 		if ($filter<>""){

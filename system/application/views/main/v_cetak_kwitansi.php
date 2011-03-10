@@ -2648,7 +2648,10 @@ Ext.onReady(function(){
 				text : 'Print Only',
 				handler : print_only
 			},
-			
+			{
+				xtype:'spacer',
+				width: 350
+			},
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
 			{
 				text: 'Save and Print',
