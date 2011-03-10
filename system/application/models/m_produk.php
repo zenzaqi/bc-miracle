@@ -238,7 +238,6 @@ class M_produk extends Model{
 		function produk_list($filter,$start,$end){
 			//$query = "SELECT * FROM produk,produk_group,kategori,satuan,jenis,kategori2 WHERE produk_group=group_id AND produk_kategori=kategori_id AND produk_satuan=satuan_id AND produk_jenis=jenis_id AND produk_kontribusi=kategori2_id";
 			$query="select * from vu_produk where produk_aktif = 'Aktif'";
-			$query.=" ORDER BY produk_id DESC";
 			
 			// For simple search
 			if ($filter<>""){
@@ -246,7 +245,7 @@ class M_produk extends Model{
 				$query .= " (produk_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR kategori_nama LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' )";
 				$query .= " AND produk_aktif = 'Aktif'"; // by hendri, simple search khusus aktif only
 			}
-			
+			$query.=" ORDER BY produk_id DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
