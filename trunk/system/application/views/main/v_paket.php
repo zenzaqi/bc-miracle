@@ -340,7 +340,6 @@ Ext.onReady(function(){
 		paket_namaField.reset();
 		paket_namaField.setValue(null);
 		
-		
 		paket_groupField.reset();
 		paket_groupField.setValue(null);
 		paket_keteranganField.reset();
@@ -1169,7 +1168,7 @@ Ext.onReady(function(){
 	/* End of Function */
 
 	paketListEditorGrid.addListener('rowcontextmenu', onpaket_ListEditGridContextMenu);
-	//paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	paket_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	paketListEditorGrid.on('afteredit', paket_update); // inLine Editing Record
 
 	/* Identify  paket_id Field */

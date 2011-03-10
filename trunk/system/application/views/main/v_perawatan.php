@@ -1380,7 +1380,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	perawatanListEditorGrid.addListener('rowcontextmenu', onperawatan_ListEditGridContextMenu);
-	//perawatan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	perawatan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	perawatanListEditorGrid.on('afteredit', perawatan_update); // inLine Editing Record
 	
 	/* Identify  rawat_id Field */

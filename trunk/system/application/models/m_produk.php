@@ -237,7 +237,8 @@ class M_produk extends Model{
 		//function for get list record
 		function produk_list($filter,$start,$end){
 			//$query = "SELECT * FROM produk,produk_group,kategori,satuan,jenis,kategori2 WHERE produk_group=group_id AND produk_kategori=kategori_id AND produk_satuan=satuan_id AND produk_jenis=jenis_id AND produk_kontribusi=kategori2_id";
-			$query="select * from vu_produk";
+			$query="select * from vu_produk where produk_aktif = 'Aktif'";
+			$query.=" ORDER BY produk_id DESC";
 			
 			// For simple search
 			if ($filter<>""){
