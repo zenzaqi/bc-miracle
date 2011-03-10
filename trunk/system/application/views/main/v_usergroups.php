@@ -204,6 +204,7 @@ Ext.onReady(function(){
 		group_allcreateprivField.setValue(false);
 		group_allupdateprivField.setValue(false);
 		group_alldeleteprivField.setValue(false);
+		group_allprintprivField.setValue(false);
 		group_activeField.setValue('Aktif');
 
 	}
@@ -219,6 +220,7 @@ Ext.onReady(function(){
 		group_allcreateprivField.setValue(false);
 		group_allupdateprivField.setValue(false);
 		group_alldeleteprivField.setValue(false);
+		group_allprintprivField.setValue(false);
 
 	}
 	/* End setValue to EDIT*/
@@ -615,6 +617,13 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
+	
+	group_allprintprivField= new Ext.form.Checkbox({
+		id: 'group_allprintprivField',
+		fieldLabel: 'All Print/Excel ?',
+		maxLength: 250,
+		anchor: '95%'
+	});
 
 	group_permissionField=new Ext.form.FieldSet({
 		fieldLabel:'Permission',
@@ -635,7 +644,7 @@ Ext.onReady(function(){
 					columnWidth: 0.5,
 					labelWidth: 80,
 					labelAlign: 'left',
-					items:[group_allreadprivField,group_allcreateprivField,group_allupdateprivField,group_alldeleteprivField]
+					items:[group_allreadprivField,group_allcreateprivField,group_allupdateprivField,group_alldeleteprivField,group_allprintprivField]
 			   }]
 	});
 	//detail permission
@@ -661,6 +670,7 @@ Ext.onReady(function(){
 			{name: 'perm_update', type: 'int', mapping: 'perm_update'},
 			{name: 'perm_read', type: 'int', mapping: 'perm_read'},
 			{name: 'perm_delete', type: 'int', mapping: 'perm_delete'},
+			{name: 'perm_print', type: 'int', mapping: 'perm_print'},
 		])
 	});
 
@@ -724,6 +734,21 @@ Ext.onReady(function(){
 				}
 			}
 	});
+	
+	var printColumn = new Ext.grid.CheckColumn({
+		header: "Print/Excel",
+		dataIndex: 'perm_print',
+		width: 80,
+		sortable: false,
+		renderer: function(v,params,record){
+				if(record.data.menu_parent==0)
+					return '';
+				else{
+				   	params.css = ' x-grid3-check-col-td';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
+				}
+			}
+	});
 
 	//readchk.unlock();
 	/* Function for Identify of Window Column Model */
@@ -754,7 +779,8 @@ Ext.onReady(function(){
 		readColumn,
 		createColumn,
 		updateColumn,
-		deleteColumn
+		deleteColumn,
+		printColumn
 		]
 	);
 
@@ -775,6 +801,8 @@ Ext.onReady(function(){
 				perm_priv=perm_priv+"U";
 			if(permission_record.data.perm_delete==1)
 				perm_priv=perm_priv+"D";
+			if(permission_record.data.perm_print==1)
+				perm_priv=perm_priv+"P";
 
 			if(perm_priv!==""){
 				permission.push(perm_priv);
@@ -843,7 +871,7 @@ Ext.onReady(function(){
 		cm: permission_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
-		plugins: [readColumn,createColumn,updateColumn,deleteColumn],
+		plugins: [readColumn,createColumn,updateColumn,deleteColumn,printColumn],
 		clicksToEdit:1, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true, markDirty: false },
@@ -1168,6 +1196,7 @@ Ext.onReady(function(){
 					datapriv.data.perm_create=1;
 					datapriv.data.perm_update=1;
 					datapriv.data.perm_delete=1;
+					datapriv.data.perm_print=1;
 				}
 			}else{
 				for(i=0;i<permission_DataStore.getCount();i++){
@@ -1176,6 +1205,7 @@ Ext.onReady(function(){
 					datapriv.data.perm_create=0;
 					datapriv.data.perm_update=0;
 					datapriv.data.perm_delete=0;
+					datapriv.data.perm_print=0;
 				}
 			}
 			permission_DataStore.commitChanges();
@@ -1244,6 +1274,23 @@ Ext.onReady(function(){
 				for(i=0;i<permission_DataStore.getCount();i++){
 					var datapriv=permission_DataStore.getAt(i);
 					datapriv.data.perm_delete=0;
+				}
+			}
+			permission_DataStore.commitChanges();
+			permissionListEditorGrid.reconfigure(permission_DataStore,permission_ColumnModel);
+	});
+	
+	group_allprintprivField.on('check',function(){
+			if(group_allprintprivField.getValue()==1)
+			{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_print=1;
+				}
+			}else{
+				for(i=0;i<permission_DataStore.getCount();i++){
+					var datapriv=permission_DataStore.getAt(i);
+					datapriv.data.perm_print=0;
 				}
 			}
 			permission_DataStore.commitChanges();

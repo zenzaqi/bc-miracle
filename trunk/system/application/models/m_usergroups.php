@@ -53,7 +53,7 @@ class M_usergroups extends Model{
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$query = "SELECT menu_id,menu_parent,menu_title,menu_position,1 as perm_read, 0 as perm_create,
-						0 as perm_update, 0 as perm_delete FROM menus 
+						0 as perm_update, 0 as perm_delete, 0 as perm_print FROM menus 
 						WHERE menu_parent=0 ORDER By menu_position";
 			$result = $this->db->query($query);
 
@@ -61,11 +61,11 @@ class M_usergroups extends Model{
 				foreach($result->result() as $row){
 					$arr[] = $row;
 					$sql = "SELECT menu_id,menu_parent,menu_title,menu_position,0 as perm_read, 0 as perm_create,
-							0 as perm_update, 0 as perm_delete FROM menus 
+							0 as perm_update, 0 as perm_delete, 0 as perm_print FROM menus 
 							WHERE menu_parent='".$row->menu_id."' ORDER By menu_position";
 					$rs_child=$this->db->query($sql);
 					foreach($rs_child->result() as $rowchild){
-						$sql_perm="SELECT menu_id,menu_parent,menu_title,menu_position,perm_read,perm_create,perm_update,perm_delete
+						$sql_perm="SELECT menu_id,menu_parent,menu_title,menu_position,perm_read,perm_create,perm_update,perm_delete,perm_print
 								FROM vu_permissions 
 								WHERE perm_menu='".$rowchild->menu_id."' AND perm_group='".$group."'";
 						$rs_perm=$this->db->query($sql_perm);
