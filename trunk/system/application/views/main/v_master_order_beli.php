@@ -702,7 +702,8 @@ Ext.onReady(function(){
 			{name: 'order_produk_value', type: 'int', mapping: 'produk_id'},
 			{name: 'order_produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'order_produk_kode', type: 'string', mapping: 'produk_kode'},
-			{name: 'order_produk_kategori', type: 'string', mapping: 'kategori_nama'}
+			{name: 'order_produk_kategori', type: 'string', mapping: 'kategori_nama'},
+			{name: 'order_produk_satuan', type: 'string', mapping: 'satuan_id'},
 		]),
 		sortInfo:{field: 'order_produk_nama', direction: "ASC"}
 	});
@@ -1375,7 +1376,8 @@ Ext.onReady(function(){
 		},[
 			{name: 'order_satuan_value', type: 'int', mapping: 'satuan_id'},
 			{name: 'order_satuan_kode', type: 'string', mapping: 'satuan_kode'},
-			{name: 'order_satuan_display', type: 'string', mapping: 'satuan_nama'}
+			{name: 'order_satuan_display', type: 'string', mapping: 'satuan_nama'},
+			{name: 'order_satuan_default', type: 'string', mapping: 'konversi_default'},
 		]),
 		sortInfo:{field: 'order_satuan_display', direction: "ASC"}
 	});
@@ -2309,7 +2311,25 @@ Ext.onReady(function(){
 	combo_order_produk.on("select",function(){
 		cbo_order_satuanDataStore.setBaseParam('task','produk');
 		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
-		cbo_order_satuanDataStore.load();
+		cbo_order_satuanDataStore.load({
+			callback: function(r,opt,success){
+				if(success==true){
+					console.log(cbo_order_satuanDataStore.getCount());
+					if(cbo_order_satuanDataStore.getCount()>0){
+						var j=cbo_order_satuanDataStore.findExact('order_satuan_default','true');
+						if(j>-1){
+							var sat_default=cbo_order_satuanDataStore.getAt(j);	
+							//combo_order_satuan.select(sat_default.data.order_satuan_id);
+							combo_order_satuan.setValue(sat_default.data.order_satuan_value);
+						}
+					}
+					
+				}
+			}
+									   
+		});
+		
+		
 	});
 	
 	

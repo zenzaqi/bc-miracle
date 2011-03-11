@@ -64,7 +64,7 @@ class M_master_order_beli extends Model{
 		
 		
 		function get_produk_selected_list($master_id,$selected_id,$query,$start,$end){
-			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk ";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id FROM vu_produk ";
 			
 			if($master_id!=="")
 				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
@@ -96,7 +96,8 @@ class M_master_order_beli extends Model{
 				
 		function get_produk_all_list($query,$start,$end){
 			
-			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk WHERE produk_aktif='Aktif'";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id FROM vu_produk
+						WHERE produk_aktif='Aktif'";
 			if($query!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." (produk_nama like '%".$query."%' OR produk_kode like '%".$query."%')";
 			}
@@ -119,7 +120,7 @@ class M_master_order_beli extends Model{
 		
 			
 		function get_produk_detail_list($master_id,$query,$start,$end){
-			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
+			$sql="SELECT distinct produk_id,produk_nama,produk_kode,kategori_nama,satuan_id FROM vu_produk";
 			if($master_id<>"")
 				$sql.=" WHERE produk_id IN(SELECT dorder_produk FROM detail_order_beli WHERE dorder_master='".$master_id."')";
 				
@@ -145,7 +146,7 @@ class M_master_order_beli extends Model{
 		
 		function get_satuan_produk_list($selected_id){
 			
-			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama,konversi_default FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
 			
 			if($selected_id!==""){
 				$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ")." produk_id='".$selected_id."'";

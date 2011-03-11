@@ -1,0 +1,8 @@
+[update by zaqi.smart@gmail.com]
+- Fixed bug
+  o Perbaikan stok mutasi, perhitungan disimpan sementara
+    di tabel stok_mutasi
+  o Perbaikan kartu stok, perhitungan disimpan sementara
+    di tabel kartu stok
+  o Order Pembelian
+    - Set default satuan untuk add new detail
