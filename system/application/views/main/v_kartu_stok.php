@@ -103,8 +103,7 @@ Ext.onReady(function(){
 			{name: 'stok_nobukti', type: 'string', mapping: 'no_bukti'}, 
 			{name: 'stok_keterangan', type: 'string', mapping: 'keterangan'}, 
 			{name: 'stok_masuk', type: 'float', mapping: 'masuk'}, 
-			{name: 'stok_keluar', type: 'float', mapping: 'keluar'}, 
-			{name: 'stok_koreksi', type: 'float', mapping: 'koreksi'}
+			{name: 'stok_keluar', type: 'float', mapping: 'keluar'}
 		]),
 		sortInfo:{field: 'stok_tanggal', direction: "ASC"}
 	});
@@ -127,6 +126,26 @@ Ext.onReady(function(){
 			{name: 'stok_awal', type: 'float', mapping: 'stok_awal'}
 		]),
 		sortInfo:{field: 'stok_awal', direction: "ASC"}
+	});
+	/* End of Function */
+	
+	/* Function for Retrieve DataStore */
+	kartu_stok_resume_DataStore = new Ext.data.Store({
+		id: 'kartu_stok_resume_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_kartu_stok&m=stok_resume', 
+			method: 'POST',
+			timeout: 3600000
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'stok_masuk'
+		},[
+			{name: 'stok_masuk', type: 'float', mapping: 'masuk'},
+			{name: 'stok_keluar', type: 'float', mapping: 'keluar'}
+		]),
+		sortInfo:{field: 'stok_masuk', direction: "ASC"}
 	});
 	/* End of Function */
 	
@@ -202,15 +221,6 @@ Ext.onReady(function(){
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000.00'),
 			width: 150,
-			sortable: true,
-			readOnly: true
-		},{
-			header: '<div align="center">Koreksi</div>',
-			dataIndex: 'stok_koreksi',
-			align: 'right',
-			renderer: Ext.util.Format.numberRenderer('0,000.00'),
-			width: 150,
-			hidden: true,
 			sortable: true,
 			readOnly: true
 		}]);
@@ -365,7 +375,8 @@ Ext.onReady(function(){
 	kartu_stokListEditorGrid.show();
 	
 	function is_valid_form(){
-		if(kartu_stok_produk_namaSearchField.getValue()!=="" && kartu_stok_gudangSearchField.getValue()!=="")
+		if(kartu_stok_produk_namaSearchField.getValue()!=="" && kartu_stok_gudangSearchField.getValue()!=="" && 
+		   kartu_stok_tanggal_startSearchField.isValid() && kartu_stok_tanggal_endSearchField.isValid())
 		{
 			return true;
 		}else
@@ -385,86 +396,119 @@ Ext.onReady(function(){
 		
 		if(is_valid_form()){
 		
-		if(kartu_stok_produk_namaSearchField.getValue()!==null){produk_nama_search=kartu_stok_produk_namaSearchField.getValue();}
-		/*if(kartu_stok_produk_allField.getValue()==true){ produk_nama_search=null; }*/
-		if(kartu_stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=kartu_stok_tanggal_startSearchField.getValue().format('Y-m-d');}
-		if(kartu_stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=kartu_stok_tanggal_endSearchField.getValue().format('Y-m-d');}
-		if(kartu_stok_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
-		if(kartu_stok_gudangSearchField.getValue()!==null){ gudang_search=kartu_stok_gudangSearchField.getValue()}
-		
-		kartu_stok_produk_DataStore.load({
-		 	params:{satuan: opsi_satuan_search },
-		 	callback: function(r,opt,success){
-				if(success==true){
-					var j=kartu_stok_produk_DataStore.findExact('produk_id',kartu_stok_produk_namaSearchField.getValue(),0);
-					if(j>-1){
-						var produk_record=kartu_stok_produk_DataStore.getAt(j);
-						kartu_stok_produkField.setValue(produk_record.data.produk_nama);
-						kartu_stok_satuanField.setValue(produk_record.data.satuan_nama);
+			if(kartu_stok_produk_namaSearchField.getValue()!==null){produk_nama_search=kartu_stok_produk_namaSearchField.getValue();}
+			/*if(kartu_stok_produk_allField.getValue()==true){ produk_nama_search=null; }*/
+			if(kartu_stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=kartu_stok_tanggal_startSearchField.getValue().format('Y-m-d');}
+			if(kartu_stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=kartu_stok_tanggal_endSearchField.getValue().format('Y-m-d');}
+			if(kartu_stok_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
+			if(kartu_stok_gudangSearchField.getValue()!==null){ gudang_search=kartu_stok_gudangSearchField.getValue()}
+			
+			kartu_stok_produk_DataStore.load({
+				params:{satuan: opsi_satuan_search },
+				callback: function(r,opt,success){
+					if(success==true){
+						var j=kartu_stok_produk_DataStore.findExact('produk_id',kartu_stok_produk_namaSearchField.getValue(),0);
+						if(j>-1){
+							var produk_record=kartu_stok_produk_DataStore.getAt(j);
+							kartu_stok_produkField.setValue(produk_record.data.produk_nama);
+							kartu_stok_satuanField.setValue(produk_record.data.satuan_nama);
+						}
 					}
 				}
-			}
-		});
+			});
 		
-		kartu_stok_DataStore.baseParams = {
-			task			: 	'SEARCH',
-			produk_id		:	produk_nama_search, 
-			tanggal_start	:	tanggal_start_search, 
-			tanggal_end		:	tanggal_end_search,
-			opsi_satuan		: 	opsi_satuan_search,
-			gudang			: 	gudang_search
-		};
-		// Cause the datastore to do another query : 
-		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, mohon tunggu...',
-		   progressText: 'proses...',
-		   width:350,
-		   wait:true
-		});
-		
-		kartu_stok_DataStore.reload({
-			params: {start: 0, limit: pageS, query: null},
-			callback: function(r,opt,success){
-				if(success==true){
-					kartu_stok_awal_DataStore.baseParams = {
-						task			: 'LIST',
-						produk_id		:	produk_nama_search, 
-						tanggal_start	:	tanggal_start_search, 
-						tanggal_end		:	tanggal_end_search,
-						opsi_satuan		: 	opsi_satuan_search,
-						gudang			: 	gudang_search
-					};
-					kartu_stok_awal_DataStore.load({
-						callback: function(r,opt,success){
-							if(success==true){ 
-								var stok_masuk=0;
-								var stok_keluar=0;
-								var stok_koreksi=0;
-								var stok_akhir=0;
-								var stok_awal=0;
-								
-								var data_awal=kartu_stok_awal_DataStore.getAt(0);
-								stok_awal=rounding(data_awal.data.stok_awal,2);
-								kartu_stok_awalField.setValue(stok_awal);
-								for(i=0;i<kartu_stok_DataStore.getCount();i++){
-									data_stok=kartu_stok_DataStore.getAt(i);
-									stok_masuk+=data_stok.data.stok_masuk;
-									stok_keluar+=data_stok.data.stok_keluar;
-									//stok_koreksi+=data_stok.data.stok_koreksi;
-									
-								}
-								stok_akhir=rounding(stok_awal+stok_masuk-stok_keluar+stok_koreksi,2);
-								
-								kartu_stok_saldoField.setValue(stok_akhir);
-								Ext.MessageBox.hide(); 
-							}
-						}
-					});
+			kartu_stok_DataStore.baseParams = {
+				task			: 	'SEARCH',
+				produk_id		:	produk_nama_search, 
+				tanggal_start	:	tanggal_start_search, 
+				tanggal_end		:	tanggal_end_search,
+				opsi_satuan		: 	opsi_satuan_search,
+				gudang			: 	gudang_search
+			};
+			
+			
+			
+			// Cause the datastore to do another query : 
+			Ext.MessageBox.show({
+			   msg: 'Sedang memproses data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
+			Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_kartu_stok&m=generate_kartu_stok',
+				params:{ 
+					produk_id		:	produk_nama_search, 
+					tanggal_start	:	tanggal_start_search, 
+					tanggal_end		:	tanggal_end_search,
+					opsi_satuan		: 	opsi_satuan_search,
+					gudang			: 	gudang_search 
+				},
+				success:function(response){
 					
-				}					 
-			}
-		});
-		
+					kartu_stok_DataStore.reload({
+					params: {start: 0, limit: pageS, query: null},
+					callback: function(r,opt,success){
+						if(success==true){
+							
+							kartu_stok_awal_DataStore.baseParams = {
+								task			: 'LIST',
+								produk_id		:	produk_nama_search, 
+								tanggal_start	:	tanggal_start_search, 
+								tanggal_end		:	tanggal_end_search,
+								opsi_satuan		: 	opsi_satuan_search,
+								gudang			: 	gudang_search
+							};
+							
+							kartu_stok_resume_DataStore.baseParams={
+								produk_id		:	produk_nama_search, 
+								tanggal_start	:	tanggal_start_search, 
+								tanggal_end		:	tanggal_end_search,
+								gudang			: 	gudang_search
+							};
+							kartu_stok_awal_DataStore.load({
+								callback: function(r,opt,success){
+									if(success==true){ 
+									
+										kartu_stok_resume_DataStore.load({
+										callback: function(r,opt,success){
+											if(success==true){ 
+												var stok_awal=0;
+												var stok_masuk=0;
+												var stok_keluar=0;
+																							
+												var data_awal=kartu_stok_awal_DataStore.getAt(0);
+												var data_resume=kartu_stok_resume_DataStore.getAt(0);
+												
+												stok_awal=rounding(data_awal.data.stok_awal,2);
+												stok_masuk=rounding(data_resume.data.stok_masuk,2);
+												stok_keluar=rounding(data_resume.data.stok_keluar,2);
+												
+												kartu_stok_awalField.setValue(stok_awal);
+												stok_akhir=rounding((stok_awal+stok_masuk-stok_keluar),2);
+										
+												kartu_stok_saldoField.setValue(stok_akhir);
+												Ext.MessageBox.hide(); 
+												kartu_stok_searchWindow.hide();
+												
+											}
+										}
+										});
+										
+									}
+								}
+							});
+						
+					}					 
+				}
+			});
+				}
+			});
+			
+			
+			
 		}else{
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -563,7 +607,8 @@ Ext.onReady(function(){
 	kartu_stok_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'kartu_stok_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
-		format: 'd-m-Y',		
+		format: 'd-m-Y',
+		allowBlank: false,
 		value: firstday
 	});
     
@@ -571,6 +616,7 @@ Ext.onReady(function(){
 		id: 'kartu_stok_tanggal_endSearchField',
 		fieldLabel: 's/d',
 		format: 'd-m-Y',
+		allowBlank: false,
 		value: today
 	});
 	

@@ -37,17 +37,17 @@
 				$total_keluar=0;
 				
 		foreach($data_print as $print) { 
-				$total_masuk+=$print['masuk'];	
-				$total_keluar+=$print['keluar'];	
+				$total_masuk+=$print->masuk;	
+				$total_keluar+=$print->keluar;	
 				$i++; 
 		?>
 		<tr>
         	<td><? echo $i; ?></td>
-            <td width="10"><?php echo $print['tanggal']; ?></td>
-            <td><?php echo $print['no_bukti']; ?></td>
-			<td><?php echo $print['keterangan']; ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print['keluar'],2); ?></td>
-			<td align="right" class="numeric"><?php echo number_format($print['masuk'],2); ?></td>
+            <td width="10"><?php echo $print->tanggal; ?></td>
+            <td><?php echo $print->no_bukti; ?></td>
+			<td><?php echo $print->keterangan; ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->keluar,2); ?></td>
+			<td align="right" class="numeric"><?php echo number_format($print->masuk,2); ?></td>
        </tr>
 		<?php } ?>
 	</tbody>
@@ -58,27 +58,27 @@
 			<td colspan="4"><?php echo count($data_print); ?> data</td>
         </tr>
        		<td align="right"><b>Summary</b></td>
-         	<td colspan="5" class="clear"> &nbsp;</td>
+         	<td colspan="5" class="clear">&nbsp; </td>
         <tr>
         <tr>
         	<td> Saldo Awal </td>
-         	<td align="right" class="numeric"><b><?php echo number_format(@$saldo_awal['stok_awal'],2); ?></b></td>
-            <td colspan="4" class="clear"> &nbsp;</td>
+         	<td align="right" class="numeric"><b><?php echo number_format(@$saldo_awal,2); ?></b></td>
+            <td colspan="4" class="clear">&nbsp; </td>
         </tr>  
         <tr>
         	<td> Jumlah Keluar </td>
          	<td align="right" class="numeric"><b><?php echo number_format($total_masuk,2); ?></b></td>
-            <td colspan="4" class="clear"> &nbsp;</td>
+            <td colspan="4" class="clear">&nbsp; </td>
         </tr>
         <tr>
         	<td> Jumlah Keluar </td>
          	<td align="right" class="numeric"><b><?php echo number_format($total_keluar,2); ?></b></td>
-            <td colspan="4" class="clear"> &nbsp;</td>
+            <td colspan="4" class="clear">&nbsp; </td>
         </tr>
         <tr>
         	<td> Saldo Akhir </td>
-         	<td align="right" class="numeric"><b><?php echo number_format(@$saldo_awal['stok_awal']+$total_masuk-$total_keluar,2); ?></b></td>
-            <td colspan="4" class="clear"> &nbsp;</td>
+         	<td align="right" class="numeric"><b><?php echo number_format(@$saldo_awal+$total_masuk-$total_keluar,2); ?></b></td>
+            <td colspan="4" class="clear">&nbsp; </td>
         </tr>
 	</tfoot>
 </table>

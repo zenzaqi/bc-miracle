@@ -104,12 +104,10 @@ Ext.onReady(function(){
 			{name: 'produk_kode', type: 'string', mapping: 'produk_kode'}, 
 			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
-			{name: 'jumlah_awal', type: 'float', mapping: 'jumlah_awal'}, 
-			{name: 'jumlah_in', type: 'float', mapping: 'jumlah_masuk'}, 
-			{name: 'jumlah_out', type: 'float', mapping: 'jumlah_keluar'},
-			{name: 'jumlah_koreksi', type: 'float', mapping: 'jumlah_koreksi'}, 
-			{name: 'gudang_nama', type: 'string', mapping: 'gudang_nama'}, 
-			{name: 'jumlah_stok', type: 'float', mapping: 'jumlah_stok'}
+			{name: 'jumlah_awal', type: 'float', mapping: 'stok_awal'}, 
+			{name: 'jumlah_in', type: 'float', mapping: 'stok_masuk'}, 
+			{name: 'jumlah_out', type: 'float', mapping: 'stok_keluar'},
+			{name: 'jumlah_stok', type: 'float', mapping: 'stok_akhir'}
 		]),
 		sortInfo:{field: 'produk_kode', direction: "ASC"}
 	});
@@ -374,19 +372,45 @@ Ext.onReady(function(){
 			tanggal_end		:	tanggal_end_search,
 			opsi_satuan		: 	opsi_satuan_search,
 			gudang			: 	gudang_search,
-			mutasi_jumlah	: stok_mutasi_jumlah_search,
+			mutasi_jumlah	: 	stok_mutasi_jumlah_search,
 			opsi_produk		: 	opsi_produk_search
 		};
 		// Cause the datastore to do another query : 
 		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
 		
-		stok_mutasi_DataStore.reload({
-			params: {start: 0, limit: pageS, query: null},
-			callback: function(r,opt,success){
-				if(success==true){
-					Ext.MessageBox.hide();
-				}					 
-			}
+		Ext.Ajax.request({
+				waitMsg: 'Mohon tunggu...',
+				url: 'index.php?c=c_stok_mutasi&m=generate_stok_mutasi',
+				params:{ 
+					produk_id		:	produk_nama_search, 
+					group1_id		:	group1_search,
+					tanggal_start	:	tanggal_start_search, 
+					tanggal_end		:	tanggal_end_search,
+					opsi_satuan		: 	opsi_satuan_search,
+					gudang			: 	gudang_search,
+					mutasi_jumlah	: 	stok_mutasi_jumlah_search,
+					opsi_produk		: 	opsi_produk_search
+				},
+				success:function(response){
+					
+					stok_mutasi_DataStore.reload({
+						params: {start: 0, limit: pageS, query: null},
+						callback: function(r,opt,success){
+							if(success==true){
+								Ext.MessageBox.hide();
+								stok_mutasi_searchWindow.hide();
+							}					 
+						}
+					});
+					
+					
+				}
 		});
 	}
 		
