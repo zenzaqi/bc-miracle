@@ -1655,25 +1655,7 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-	
-	//function for purge detail
-	function detail_order_beli_purge(pkid,opsi){
-		Ext.Ajax.request({
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_purge',
-			params:{ master_id: pkid },
-			success:function(response){
-				detail_order_beli_insert(pkid,opsi); //by masongbee
-				/*if(opsi=='print'){
-					master_order_beli_cetak_faktur();
-				}
-				master_order_beli_DataStore.reload();*/ //by masongbee
-			}
-		});
 		
-	}
-	//eof
-	
 	/* Function for Delete Confirm of detail */
 	function detail_order_beli_confirm_delete(){
 		// only one record is selected here

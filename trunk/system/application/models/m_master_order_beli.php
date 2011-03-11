@@ -245,12 +245,6 @@ class M_master_order_beli extends Model{
 		}
 		//eof
 		
-		//purge all detail from master
-		function detail_detail_order_beli_purge($master_id){
-			$sql="DELETE from detail_order_beli where dorder_master='".$master_id."'";
-			$result=$this->db->query($sql);
-		}
-		//*eof
 		
 		//insert detail record
 		function detail_detail_order_beli_insert($array_dorder_id
