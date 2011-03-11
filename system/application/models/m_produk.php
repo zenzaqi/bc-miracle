@@ -655,7 +655,7 @@ class M_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end){
+		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama){
 			//full query
 			if($produk_aktif=="")
 				$produk_aktif="Aktif";
@@ -680,6 +680,10 @@ class M_produk extends Model{
 			if($produk_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_kategori LIKE '%".$produk_kategori."%'";
+			};
+			if($kategori2_nama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " kategori2_nama = '".$kategori2_nama."'";
 			};
 			if($produk_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

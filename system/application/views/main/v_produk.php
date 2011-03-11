@@ -876,7 +876,7 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'kategori2_id'
 		},[
-			{name: 'produk_kontribusi_value', type: 'int', mapping: 'kategori2_id'},
+			{name: 'produk_kontribusi_value', type: 'string', mapping: 'kategori2_nama'},
 			{name: 'produk_kontribusi_display', type: 'string', mapping: 'kategori2_nama'}
 		]),
 		sortInfo:{field: 'produk_kontribusi_display', direction: "ASC"}
@@ -1113,7 +1113,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: '<div align="center">' + 'Harga Satuan Default (Rp)' + '</div>',
+			header: '<div align="center">' + 'Harga Sat Default (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_harga',
 			width: 100,	//150,
@@ -1786,7 +1786,7 @@ Ext.onReady(function(){
 	produk_hargaField= new Ext.form.TextField({
 		id: 'produk_hargaField',
 		name: 'produk_hargaField',
-		fieldLabel: 'Harga Satuan Default (Rp)',
+		fieldLabel: 'Harga Sat Default (Rp)',
 		valueRenderer: 'numberToCurrency',
 		itemCls: 'rmoney',
 		allowBlank: true,
@@ -2757,6 +2757,7 @@ Ext.onReady(function(){
 		if(produk_kodelamaSearchField.getValue()!==null){produk_kodelama_search=produk_kodelamaSearchField.getValue();}
 		if(produk_groupSearchField.getValue()!==null){produk_group_search=produk_groupSearchField.getValue();}
 		if(produk_kategoriSearchField.getValue()!==null){produk_kategori_search=produk_kategoriSearchField.getValue();}
+		if(produk_kategoriSearchField.getValue()!==null){produk_kategori_search=produk_kategoriSearchField.getValue();}
 		if(produk_jenisSearchField.getValue()!==null){produk_jenis_search=produk_jenisSearchField.getValue();}
 		if(produk_namaSearchField.getValue()!==null){produk_nama_search=produk_namaSearchField.getValue();}
 		if(produk_satuanSearchField.getValue()!==null){produk_satuan_search=produk_satuanSearchField.getValue();}
@@ -2786,7 +2787,7 @@ Ext.onReady(function(){
 			produk_du	:	produk_du_search, 
 			produk_dm	:	produk_dm_search, 
 			produk_point	:	produk_point_search, 
-			produk_kontribusi	:	produk_kontribusi_search,
+			kategori2_nama	:	produk_kontribusi_search,
 			produk_volume	:	produk_volume_search,
 			produk_harga	:	produk_harga_search, 
 			produk_keterangan	:	produk_keterangan_search, 
@@ -2971,7 +2972,7 @@ Ext.onReady(function(){
 	produk_hargaSearchField= new Ext.form.NumberField({
 		id: 'produk_hargaSearchField',
 		name: 'produk_hargaSearchField',
-		fieldLabel: 'Harga Satuan Default (Rp)',
+		fieldLabel: 'Harga Sat Default (Rp)',
 		width: 100,
 		maskRe: /([0-9]+)$/
 	});

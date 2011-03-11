@@ -462,6 +462,7 @@ class C_perawatan extends Controller {
 		$rawat_nama=str_replace("'", '"',$rawat_nama);
 		$rawat_group=trim(@$_POST["rawat_group"]);
 		$rawat_kategori=trim(@$_POST["rawat_kategori"]);
+		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$rawat_jenis=trim(@$_POST["rawat_jenis"]);
 		$rawat_keterangan=trim(@$_POST["rawat_keterangan"]);
 		$rawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_keterangan);
@@ -480,7 +481,7 @@ class C_perawatan extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_perawatan->perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end);
+		$result = $this->m_perawatan->perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end, $kategori2_nama);
 		echo $result;
 	}
 

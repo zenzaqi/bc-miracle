@@ -409,6 +409,7 @@ class C_produk extends Controller {
 		$produk_kodelama=str_replace("'", "''",$produk_kodelama);
 		$produk_group=trim(@$_POST["produk_group"]);
 		$produk_kategori=trim(@$_POST["produk_kategori"]);
+		$kategori2_nama=trim(@$_POST["kategori2_nama"]);
 		$produk_jenis=trim(@$_POST["produk_jenis"]);
 		$produk_nama=trim(@$_POST["produk_nama"]);
 		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
@@ -429,7 +430,7 @@ class C_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end);
+		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama);
 		echo $result;
 	}
 

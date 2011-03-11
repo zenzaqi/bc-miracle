@@ -796,7 +796,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for advanced search record
-		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end){
+		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end, $kategori2_nama){
 			//full query
 			/*if($rawat_aktif==""){
 				$rawat_aktif="Aktif";
@@ -826,6 +826,10 @@ class M_perawatan extends Model{
 			if($rawat_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " rawat_kategori = '".$rawat_kategori."'";
+			};
+			if($kategori2_nama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " kategori2_nama = '".$kategori2_nama."'";
 			};
 			if($rawat_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
