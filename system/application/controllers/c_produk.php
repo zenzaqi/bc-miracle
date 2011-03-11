@@ -41,6 +41,11 @@ class C_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_kategori_jenis_produk_list(){
+		$result=$this->m_public_function->get_kategori_jenis_produk_list();
+		echo $result;
+	}
+	
 	function get_kategori_produk_list(){
 		$result=$this->m_public_function->get_kategori_produk_list();
 		echo $result;

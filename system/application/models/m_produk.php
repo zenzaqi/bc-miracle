@@ -679,7 +679,7 @@ class M_produk extends Model{
 			};
 			if($produk_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_kategori LIKE '%".$produk_kategori."%'";
+				$query.= " kategori_id = '".$produk_kategori."'";
 			};
 			if($kategori2_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -837,11 +837,11 @@ class M_produk extends Model{
 							ifnull(produk_harga,'-') AS harga,
 							produk_aktif AS aktif
 
-					from 	vu_produk ";
+					from 	vu_produk";
 					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif LIKE '%".addslashes($filter)."%' )";
+				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif = '".addslashes($filter)."' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($produk_id!=''){
@@ -862,7 +862,7 @@ class M_produk extends Model{
 				};
 				if($produk_kategori!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " produk_kategori LIKE '%".$produk_kategori."%'";
+					$query.= " kategori_id LIKE '%".$produk_kategori."%'";
 				};
 				if($produk_jenis!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -900,10 +900,13 @@ class M_produk extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_keterangan LIKE '%".$produk_keterangan."%'";
 				};
-				// if($produk_aktif!=''){
-					// $query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					// $query.= " produk_aktif LIKE '%".$produk_aktif."%'";
-				// };
+				 if($produk_aktif!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_aktif = '".$produk_aktif."'";
+				}else{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_aktif = 'Aktif'";
+				};
 				$result = $this->db->query($query);
 			}
 			return $result;

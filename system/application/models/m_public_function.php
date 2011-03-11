@@ -1723,6 +1723,21 @@ class M_public_function extends Model{
 		}
 	}
 	
+	function get_kategori_jenis_produk_list(){
+		$sql="SELECT kategori_id, kategori_nama FROM kategori where kategori_jenis = 'produk' AND kategori_aktif='Aktif'";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
 	function get_group_perawatan_list(){
 		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='perawatan' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
