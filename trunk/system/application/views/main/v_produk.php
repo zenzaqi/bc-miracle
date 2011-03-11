@@ -845,6 +845,26 @@ Ext.onReady(function(){
 		sortInfo:{field: 'produk_group_display', direction: "ASC"}
 	});
 	
+	cbo_produk_kategori_jenisDataStore = new Ext.data.Store({
+		id: 'cbo_produk_kategori_jenisDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_produk&m=get_kategori_jenis_produk_list', 
+			method: 'POST'
+		}),
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kategori_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'produk_kategori_jenis_value', type: 'int', mapping: 'kategori_id'},
+			{name: 'produk_kategori_jenis_display', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_kategori_jenis', type: 'int', mapping: 'kategori_jenis'}
+		]),
+		sortInfo:{field: 'produk_kategori_jenis_display', direction: "ASC"}
+	});
+	
 //	cbo_produk_kategori_DataSore = new Ext.data.Store({
 //		id: 'cbo_produk_kategori_DataSore',
 //		proxy: new Ext.data.HttpProxy({
@@ -2757,7 +2777,6 @@ Ext.onReady(function(){
 		if(produk_kodelamaSearchField.getValue()!==null){produk_kodelama_search=produk_kodelamaSearchField.getValue();}
 		if(produk_groupSearchField.getValue()!==null){produk_group_search=produk_groupSearchField.getValue();}
 		if(produk_kategoriSearchField.getValue()!==null){produk_kategori_search=produk_kategoriSearchField.getValue();}
-		if(produk_kategoriSearchField.getValue()!==null){produk_kategori_search=produk_kategoriSearchField.getValue();}
 		if(produk_jenisSearchField.getValue()!==null){produk_jenis_search=produk_jenisSearchField.getValue();}
 		if(produk_namaSearchField.getValue()!==null){produk_nama_search=produk_namaSearchField.getValue();}
 		if(produk_satuanSearchField.getValue()!==null){produk_satuan_search=produk_satuanSearchField.getValue();}
@@ -2883,11 +2902,15 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
-	produk_kategoriSearchField= new Ext.form.TextField({
+	produk_kategoriSearchField= new Ext.form.ComboBox({
 		id: 'produk_kategoriSearchField',
 		fieldLabel: 'Jenis',
-		maxLength: 250,
-		anchor: '95%'
+		store: cbo_produk_kategori_jenisDataStore,
+		mode: 'remote',
+		displayField: 'produk_kategori_jenis_display',
+		valueField: 'produk_kategori_jenis_value',
+		anchor: '95%',
+		triggerAction: 'all'
 	});
 	/* Identify  produk_kategori Field */
 	produk_kontribusiSearchField= new Ext.form.ComboBox({
