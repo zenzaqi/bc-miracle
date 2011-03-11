@@ -401,6 +401,8 @@ Ext.onReady(function(){
 		rawat_kontribusiField.setValue(null);
 		rawat_kategoriField.reset();
 		rawat_kategoriField.setValue(null);
+		rawat_kontribusiField.reset();
+		rawat_kontribusiField.setValue(null);
 		rawat_keteranganField.reset();
 		rawat_keteranganField.setValue(null);
 		rawat_duField.reset();
@@ -851,7 +853,7 @@ Ext.onReady(function(){
 			id: 'kategori2_id'
 		},[
 		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'rawat_kontribusi_value', type: 'int', mapping: 'kategori2_id'},
+			{name: 'rawat_kontribusi_value', type: 'string', mapping: 'kategori2_nama'},
 			{name: 'rawat_kontribusi_display', type: 'string', mapping: 'kategori2_nama'}
 		]),
 		sortInfo:{field: 'rawat_kontribusi_display', direction: "ASC"}
@@ -2833,6 +2835,7 @@ Ext.onReady(function(){
 		var rawat_harga_search=null;
 		var rawat_gudang_search=null;
 		var rawat_aktif_search=null;
+		var kategori2_nama_search=null;
 
 		if(rawat_idSearchField.getValue()!==null){rawat_id_search=rawat_idSearchField.getValue();}
 		if(rawat_kodeSearchField.getValue()!==null){rawat_kode_search=rawat_kodeSearchField.getValue();}
@@ -2840,6 +2843,8 @@ Ext.onReady(function(){
 		if(rawat_namaSearchField.getValue()!==null){rawat_nama_search=rawat_namaSearchField.getValue();}
 		if(rawat_groupSearchField.getValue()!==null){rawat_group_search=rawat_groupSearchField.getValue();}
 		if(rawat_kategoriSearchField.getValue()!==null){rawat_kategori_search=rawat_kategoriSearchField.getValue();}
+		if(rawat_kontribusiSearchField.getValue()!==null){kategori2_nama_search=rawat_kontribusiSearchField.getValue();}
+		
 		if(rawat_jenisSearchField.getValue()!==null){rawat_jenis_search=rawat_jenisSearchField.getValue();}
 		if(rawat_keteranganSearchField.getValue()!==null){rawat_keterangan_search=rawat_keteranganSearchField.getValue();}
 		if(rawat_duSearchField.getValue()!==null){rawat_du_search=rawat_duSearchField.getValue();}
@@ -2864,6 +2869,7 @@ Ext.onReady(function(){
 			rawat_nama	:	rawat_nama_search, 
 			rawat_group	:	rawat_group_search, 
 			rawat_kategori	:	rawat_kategori_search, 
+			kategori2_nama : kategori2_nama_search,
 			rawat_jenis	:	rawat_jenis_search, 
 			rawat_keterangan	:	rawat_keterangan_search, 
 			rawat_du	:	rawat_du_search, 
@@ -2902,6 +2908,8 @@ Ext.onReady(function(){
 		rawat_groupSearchField.setValue(null);
 		rawat_kategoriSearchField.reset();
 		rawat_kategoriSearchField.setValue(null);
+		rawat_kontribusiSearchField.reset();
+		rawat_kontribusiSearchField.setValue(null);
 		rawat_jenisSearchField.reset();
 		rawat_jenisSearchField.setValue(null);
 		rawat_keteranganSearchField.reset();
