@@ -70,7 +70,7 @@ class M_stok_mutasi extends Model{
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
-			$this->firephp->log($limit);
+			//$this->firephp->log($limit);
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
