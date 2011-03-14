@@ -143,7 +143,7 @@ class M_kartu_stok extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND `mt`.`terima_gudang_id` ='".$gudang."'
 							AND terima_status<>'Batal' 
 							
 					UNION
@@ -943,7 +943,7 @@ class M_kartu_stok extends Model{
 				}
 			}
 			
-			$this->firephp->log('test '.$stok_awal);
+		//	$this->firephp->log('test '.$stok_awal);
 			return $stok_awal;
 					
 		}
@@ -1011,7 +1011,7 @@ class M_kartu_stok extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 							AND dterima_produk='".$produk_id."'
 							AND terima_status<>'Batal'
-							AND 1=".$gudang;
+							AND mt.terima_gudang_id=".$gudang;
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
 			
@@ -1037,7 +1037,7 @@ class M_kartu_stok extends Model{
 							AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 							AND dtbonus_produk='".$produk_id."'
 							AND terima_status<>'Batal'
-							AND 1=".$gudang;
+							AND mt.terima_gudang_id=".$gudang;
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
 			
@@ -1100,9 +1100,9 @@ class M_kartu_stok extends Model{
 						
 					SELECT `mt`.`mutasi_tanggal` AS `tanggal`, 
 						  	".$produk_id.", konversi_satuan, mt.mutasi_no as no_bukti,
-						   	concat('Mutasi ke ',`gd`.`gudang_nama`) AS keterangan,
-						   	dt.dmutasi_jumlah*konversi_nilai/".$current_konversi.",
-							0 as keluar,
+						   	concat('Mutasi ke ',`gd`.`gudang_nama`) AS keterangan,				
+							0 as masuk,
+							dt.dmutasi_jumlah*konversi_nilai/".$current_konversi.",
 							".$gudang." AS `gudang`,
 							date_format('".$tanggal_start."','%Y-%m-%d'),
 							date_format('".$tanggal_end."','%Y-%m-%d')

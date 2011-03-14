@@ -1,0 +1,1 @@
+vm_kartu_stok : penyesuaian dengan gudang pd PB

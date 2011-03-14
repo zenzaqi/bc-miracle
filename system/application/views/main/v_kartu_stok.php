@@ -751,12 +751,12 @@ Ext.onReady(function(){
 		kartu_stok_gudangSearchField.setValue(null);
 		kartu_stok_satuan_defaultField.setValue(true);
 		kartu_stok_produk_allField.setValue(true);
-		kartu_stok_produk_namaSearchField.reset();
-		kartu_stok_produk_namaSearchField.setValue(null);
+		//kartu_stok_produk_namaSearchField.reset();
+		//kartu_stok_produk_namaSearchField.setValue(null);
 		kartu_stok_tanggal_startSearchField.reset();
-		kartu_stok_tanggal_startSearchField.setValue(null);
+		kartu_stok_tanggal_startSearchField.setValue(firstday);
 		kartu_stok_tanggal_endSearchField.reset();
-		kartu_stok_tanggal_endSearchField.setValue(null);
+		kartu_stok_tanggal_endSearchField.setValue(today);
 	}
 	
   	/* Function for Displaying  Search Window Form */
