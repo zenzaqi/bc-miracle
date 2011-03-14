@@ -497,9 +497,12 @@ class M_tindakan_medis extends Model{
 								"dapaket_tgl_ambil"=>$dtrawat_tglapp,
 								"dapaket_referal"=>$dtrawat_dokter_awal
 							);
+							$this->db->query('LOCK TABLE detail_ambil_paket WRITE');
 							$this->db->insert('detail_ambil_paket', $dti_dapaket);
+							$rsi = $this->db->affected_rows();
+							$this->db->query('UNLOCK TABLES');
 							
-							if($this->db->affected_rows()){
+							if($rsi>0){
 								/* me-LOCKED db.appointment_detail ==> jika $dtrawat_dapp>0 */
 								if($dtrawat_dapp>0){
 									$dtu_dapp=array(
@@ -1201,8 +1204,11 @@ class M_tindakan_medis extends Model{
 		"dapaket_tgl_ambil"=>$date_now,
 		"dapaket_creator"=>@$_SESSION[SESSION_USERID]
 		);
+		$this->db->query('LOCK TABLE detail_ambil_paket WRITE');
 		$this->db->insert('detail_ambil_paket', $dti_dapaket);
-		if($this->db->affected_rows()){
+		$rsi = $this->db->affected_rows();
+		$this->db->query('UNLOCK TABLES');
+		if($rsi>0){
 			/* me-LOCKED db.appointment_detail ==> jika $dtrawat_dapp>0 */
 			if($dtrawat_dapp>0){
 				$dtu_dapp=array(
@@ -1366,15 +1372,13 @@ class M_tindakan_medis extends Model{
 			$dapaket_paket = $record['dapaket_paket'];
 		}
 		
-		//Delete db.detail_pakai_cabin
-		$this->db->where('cabin_dtrawat', $dtrawat_id);
-		$this->db->delete('detail_pakai_cabin');
-		
 		//Delete db.detail_ambil_paket + db.detail_pakai_cabin
+		$this->db->query('LOCK TABLE detail_ambil_paket WRITE');
 		$this->db->where('dapaket_dtrawat', $dtrawat_id);
 		$this->db->delete('detail_ambil_paket');
-		
-		if($this->db->affected_rows()){
+		$rsd = $this->db->affected_rows();
+		$this->db->query('UNLOCK TABLES');
+		if($rsd>0){
 			/* meng-UNLOCK db.appointment_detail */
 			if($dtrawat_dapp>0){
 				$dtu_dapp=array(
@@ -1385,6 +1389,8 @@ class M_tindakan_medis extends Model{
 			}
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
+			
+			$this->detail_pakai_cabin_delete($dtrawat_id);
 		}
 	}
 	/* eof detail_ambil_paket_delete */
@@ -1924,13 +1930,14 @@ class M_tindakan_medis extends Model{
 							}else{
 							return '0';
 							}
-						}
-						else if($sql_check_sisa_paket==-4){
-							/* Keluar Message bahwa Isi Paket Tidak Mencukupi*/
+						}else{
+							// Keluar Message bahwa Isi Paket Tidak Mencukupi. Ketika Pengambilan Paket di-centang itu berarti Customer ini memiliki paket/
 							return '-4';
-
 						}
-					
+						/*else if($sql_check_sisa_paket==-4){
+							// Keluar Message bahwa Isi Paket Tidak Mencukupi/
+							return '-4';
+						}*/
 						
 					}else if(($dtrawat_dpaket_id==0) && ($dpaket_id==0)){
 						//Default-nya adalah Mengambil Perawatan Satuan

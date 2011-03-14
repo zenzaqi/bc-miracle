@@ -1152,30 +1152,13 @@ class M_tindakan_nonmedis extends Model{
 			$dapaket_paket = $record['dapaket_paket'];
 		}
 		
-		//Delete db.detail_pakai_cabin
-		$this->db->where('cabin_dtrawat', $dtrawat_id);
-		$this->db->delete('detail_pakai_cabin');
-		
 		//Delete db.detail_ambil_paket + db.detail_pakai_cabin
+		$this->db->query('LOCK TABLE detail_ambil_paket WRITE');
 		$this->db->where('dapaket_dtrawat', $dtrawat_id);
 		$this->db->delete('detail_ambil_paket');
-		
-		if($this->db->affected_rows()){
-			/* meng-UNLOCK db.appointment_detail */
-			if($dtrawat_dapp>0){
-				$dtu_dapp=array(
-				"dapp_locked"=>0
-				);
-				$this->db->where('dapp_id', $dtrawat_dapp);
-				$this->db->update('appointment_detail', $dtu_dapp);
-			}
-			
-			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
-		}
-		
-		$this->db->where('dapaket_dtrawat', $dtrawat_id);
-		$this->db->delete('detail_ambil_paket');
-		if($this->db->affected_rows()){
+		$rsd = $this->db->affected_rows();
+		$this->db->query('UNLOCK TABLES');
+		if($rsd>0){
 			/* meng-UNLOCK db.appointment_detail */
 			$dtu_dapp=array(
 			"dapp_locked"=>0

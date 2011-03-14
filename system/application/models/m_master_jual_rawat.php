@@ -1104,46 +1104,6 @@ class M_master_jual_rawat extends Model{
 			return '0';
 		}
 	}
-	
-	function detail_ambil_paket_update($dapaket_id ){
-		//* Pengambilan Paket di-Batalkan /
-		$dpaket_id = 0;
-		$sql="SELECT dapaket_paket
-				,dapaket_dpaket
-				,dapaket_jpaket
-				,paket_jmlisi
-				,sum(dapaket_jumlah) AS total_pakai_paket
-			FROM detail_ambil_paket
-			LEFT JOIN paket ON(dapaket_paket=paket_id)
-			WHERE dapaket_id='$dapaket_id'
-			GROUP BY dapaket_dpaket";
-		$rs=$this->db->query($sql);
-		if($rs->num_rows()){
-			$record = $rs->row_array();
-			$dpaket_id = $record['dapaket_dpaket'];
-			$dpaket_master = $record['dapaket_jpaket'];
-			$dpaket_paket = $record['dapaket_paket'];
-			$paket_jmlisi = $record['paket_jmlisi'];
-		}
-		
-		//backup_20100607 ==> $sql="DELETE FROM detail_ambil_paket WHERE dapaket_id='$dapaket_id'";
-		$sql="UPDATE detail_ambil_paket SET dapaket_stat_dok='Batal' WHERE dapaket_id='$dapaket_id'";
-		$this->db->query($sql);
-		if($this->db->affected_rows()){
-			$sql = "UPDATE detail_jual_paket, vu_total_sisa_paket
-				SET detail_jual_paket.dpaket_sisa_paket = vu_total_sisa_paket.total_sisa_paket
-				WHERE detail_jual_paket.dpaket_id=vu_total_sisa_paket.dpaket_id
-					AND detail_jual_paket.dpaket_master=vu_total_sisa_paket.dpaket_master
-					AND detail_jual_paket.dpaket_paket=vu_total_sisa_paket.dpaket_paket
-					AND detail_jual_paket.dpaket_id='".$dpaket_id."'
-					AND detail_jual_paket.dpaket_master='".$dpaket_master."'
-					AND detail_jual_paket.dpaket_paket='".$dpaket_paket."'";
-			$this->db->query($sql);
-			return '1';
-		}else
-			return '0';
-
-	}
     
     function jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
                                 ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now

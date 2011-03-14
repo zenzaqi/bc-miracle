@@ -5459,41 +5459,6 @@ Ext.onReady(function(){
 	}
 	//eof
 	
-    function detail_ambil_paket_update(){
-	var count_detail=detail_ambil_paketDataStore.getCount();
-	for(i=0;i<detail_ambil_paketDataStore.getCount();i++){
-	    detail_ambil_paket_record=detail_ambil_paketDataStore.getAt(i);
-            Ext.Ajax.request({
-                waitMsg: 'Mohon tunggu...',
-                url: 'index.php?c=c_master_jual_rawat&m=detail_ambil_paket_update',
-                params:{
-                    dapaket_id	: detail_ambil_paket_record.data.dapaket_id
-                },
-                timeout: 60000,
-                success: function(response){							
-                    var result=eval(response.responseText);
-                    if(result==1){
-                        Ext.MessageBox.alert(' Updating Pengambilan Paket','Status Dokumen telah berhasil diupdate.');
-                        master_jual_rawat_DataStore.reload();
-                    }else if(result==0){
-                        Ext.MessageBox.alert(' Updating Pengambilan Paket','Tidak ada data yang diupdate.');
-                    }
-                },
-                failure: function(response){
-                    var result=response.responseText;
-                    Ext.MessageBox.show({
-                       title: 'Error',
-                       msg: 'Could not connect to the database. retry later.',
-                       buttons: Ext.MessageBox.OK,
-                       animEl: 'database',
-                       icon: Ext.MessageBox.ERROR
-                    });	
-                }		
-            });
-	}
-    }
-	
-	
 	function update_group_carabayar_jual_rawat(){
 		var value=jrawat_caraField.getValue();
 		master_jual_rawat_tunaiGroup.setVisible(false);
