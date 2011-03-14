@@ -450,12 +450,15 @@ class M_tindakan_medis extends Model{
 								$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
 								
 								return 1;
+								break;
 							}
 							else{
 								return 0;
+								break;
 							}
 						}
 						return -4;
+						break;
 						
 					}
 					else{
@@ -537,7 +540,7 @@ class M_tindakan_medis extends Model{
 				}
 				
 			}else{
-				return '1';
+				return 0;
 			}
 
 		}	
