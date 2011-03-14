@@ -241,11 +241,6 @@ class C_master_jual_rawat extends Controller {
 		echo $result;
 	}
 	//end of handler
-    function detail_ambil_paket_update(){
-        $dapaket_id=trim(@$_POST["dapaket_id"]);
-		
-		$result=$this->m_master_jual_rawat->detail_ambil_paket_update($dapaket_id );
-    }
 	
 	
 	//event handler action
