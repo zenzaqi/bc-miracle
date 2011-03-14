@@ -644,7 +644,7 @@ class M_cetak_kwitansi extends Model{
 				//"kwitansi_status"=>$kwitansi_status,
 				"kwitansi_cara"=>$kwitansi_cara,
 				"kwitansi_creator"=>$kwitansi_creator,
-				"kwitansi_date_create"=>$kwitansi_date_create
+				"kwitansi_date_create"=>$datetime_now
 			);
 			if($cetak==1)
 				$data['kwitansi_status'] = 'Tertutup';
@@ -956,7 +956,7 @@ class M_cetak_kwitansi extends Model{
 		
 		function print_paper($kwitansi_id){
 			
-			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_date_create,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan,kwitansi_cara FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
+			$sql="SELECT kwitansi_id,kwitansi_no,kwitansi_tanggal,cust_no,cust_nama,kwitansi_nilai,kwitansi_keterangan,kwitansi_cara FROM cetak_kwitansi,customer WHERE kwitansi_cust=cust_id AND kwitansi_id='".$kwitansi_id."'";
 			$result = $this->db->query($sql);
 			return $result;
 		}
