@@ -1,0 +1,1 @@
+vm_master_lunas_piutang : tambah field No Customer, hanya menampilkan faktur tgl 15-07-2010 ++

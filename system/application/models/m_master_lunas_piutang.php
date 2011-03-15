@@ -148,7 +148,7 @@ class M_master_lunas_piutang extends Model{
 			WHERE lpiutang_sisa<>0";
 		if($cust_id<>""){
 			$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
-			$sql.=" lpiutang_cust='".$cust_id."'";
+			$sql.=" lpiutang_cust='".$cust_id."'  AND lpiutang_faktur_tanggal > '2010-07-20'";
 		}
 		
 		/*if($query!==""){
