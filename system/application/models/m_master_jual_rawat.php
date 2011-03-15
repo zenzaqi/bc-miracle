@@ -1155,15 +1155,17 @@ class M_master_jual_rawat extends Model{
         
         if($cetak==1){
             /* UPDATE db.master_jual_rawat.jrawat_stat_dok = 'Tertutup' */
-            if($jrawat_tanggal<>$date_now){
+            /*
+			if($jrawat_tanggal<>$date_now){
                 $jrawat_date_update = $jrawat_tanggal;
             }else{
                 $jrawat_date_update = $datetime_now;
             }
+			*/
             
             $data["jrawat_stat_dok"] = 'Tertutup';
         }
-        
+        /*
         if($jrawat_tanggal<>$date_now){
             $data["jrawat_date_update"] = $jrawat_tanggal;
             $bayar_date_create = $jrawat_tanggal;
@@ -1171,6 +1173,7 @@ class M_master_jual_rawat extends Model{
             $data["jrawat_date_update"] = $datetime_now;
             $bayar_date_create = $datetime_now;
         }
+		*/
         if($jrawat_cara!=null){
             if(($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0)
                 || ($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0)
@@ -1685,6 +1688,7 @@ class M_master_jual_rawat extends Model{
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
 									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming){
 		$date_now = date('Y-m-d');
+		$datetime_now=date('Y-m-d H:i:s');
 		
 		$jenis_transaksi = 'jual_rawat';
 		
@@ -1710,9 +1714,13 @@ class M_master_jual_rawat extends Model{
 			"jrawat_stat_dok"=>$jrawat_stat_dok,
 			"jrawat_creator"=>$_SESSION[SESSION_USERID]
 		);
+		/* membuat date create ikut ke tanggal yg dipilih
 		if($jrawat_tanggal<>$date_now){
 			$data["jrawat_date_create"] = $jrawat_tanggal;
 		}
+		*/
+		$data["jrawat_date_create"] = $datetime_now;
+		
         if($jrawat_cara!=null){
             if(($jrawat_kwitansi_nilai<>'' && $jrawat_kwitansi_nilai<>0)
                 || ($jrawat_card_nilai<>'' && $jrawat_card_nilai<>0)
@@ -2543,16 +2551,18 @@ class M_master_jual_rawat extends Model{
 		if($rs->num_rows()){
 			$record = $rs->row_array();
 			$jrawat_tanggal = $record['jrawat_tanggal'];
+			/*
 			if($jrawat_tanggal<>$date_now){
 				$jrawat_date_update = $jrawat_tanggal;
 			}else{
 				$jrawat_date_update = $datetime_now;
 			}
+			*/
 			
 			$sql="UPDATE master_jual_rawat
 				SET jrawat_stat_dok='Tertutup'
 					,jrawat_update='".@$_SESSION[SESSION_USERID]."'
-					,jrawat_date_update='".$jrawat_date_update."'
+					,jrawat_date_update='".$datetime_now."'
 					,jrawat_revised=jrawat_revised+1
 				WHERE jrawat_id='$jrawat_id'";
 			$this->db->query('LOCK TABLE master_jual_rawat WRITE');
