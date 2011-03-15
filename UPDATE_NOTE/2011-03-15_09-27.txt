@@ -1,0 +1,1 @@
+vm_stok_mutasi : menambah adv search jumlah stok akhir, penyesuaian dgn gudang2 pd PB (smula di set pd gudang besar >> gudang_id = 1)

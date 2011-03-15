@@ -64,6 +64,17 @@ class M_stok_mutasi extends Model{
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
 			
+			if($mutasi_jumlah=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir = '0' ";
+			}elseif($mutasi_jumlah=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir < '0' ";
+			}elseif($mutasi_jumlah=='>'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir > '0' ";
+			}
+			
 			$sql.=" ORDER BY pr.produk_kode ";
 			
 			$result = $this->db->query($sql);
@@ -210,7 +221,7 @@ class M_stok_mutasi extends Model{
 						FROM (SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   `mt`.`terima_gudang_id` AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -236,14 +247,14 @@ class M_stok_mutasi extends Model{
 							AND konversi_produk = dt.dterima_produk
 							AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dterima_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND `mt`.`terima_gudang_id`='".$gudang."'
 							AND terima_status<>'Batal' 
 							
 					UNION
 					SELECT `mt`.`terima_tanggal` AS `tanggal`,
 						   `mt`.`terima_supplier` AS `asal`,
 						   1 AS `tujuan`,
-						   1 AS `gudang`,
+						   `mt`.`terima_gudang_id` AS `gudang`,
 						   `mt`.`terima_no` AS `no_bukti`,
 						   _UTF8 'PB' AS `jenis_transaksi`,
 						   `mt`.`terima_status` AS `status`,
@@ -269,7 +280,7 @@ class M_stok_mutasi extends Model{
 						   AND konversi_produk = db.dtbonus_produk
 						   AND date_format(terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 							AND dtbonus_produk='".$rowproduk->produk_id."'
-							AND 1='".$gudang."'
+							AND `mt`.`terima_gudang_id`='".$gudang."'
 							AND terima_status<>'Batal'
 					UNION
 					SELECT `mr`.`rbeli_tanggal` AS `tanggal`,
@@ -593,7 +604,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dterima_produk='".$rowproduk->produk_id."'
 								AND terima_status<>'Batal'
-								AND 1=".$gudang."
+								AND `mt`.`terima_gudang_id`=".$gudang."
 								AND M.produk_id=dt.dterima_produk),0)
 					WHERE produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
@@ -614,7 +625,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dtbonus_produk='".$rowproduk->produk_id."'
 								AND terima_status<>'Batal'
-								AND 1=".$gudang." 
+								AND `mt`.`terima_gudang_id`=".$gudang." 
 								AND M.produk_id=dt.dtbonus_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
@@ -635,7 +646,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(rbeli_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND drbeli_produk='".$rowproduk->produk_id."'
 								AND rbeli_status<>'Batal'
-								AND 1=".$gudang." 
+								AND 1 =".$gudang." 
 								AND M.produk_id=dt.drbeli_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
