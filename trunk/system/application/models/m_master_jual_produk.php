@@ -694,16 +694,18 @@ class M_master_jual_produk extends Model{
 		if($rs->num_rows()){
 			$record = $rs->row_array();
 			$jproduk_tanggal = $record['jproduk_tanggal'];
+			/*
 			if($jproduk_tanggal<>$date_now){
 				$jproduk_date_update = $jproduk_tanggal;
 			}else{
 				$jproduk_date_update = $datetime_now;
 			}
+			*/
 			
 			$sql="UPDATE master_jual_produk
 				SET jproduk_stat_dok='Tertutup'
 					,jproduk_update='".@$_SESSION[SESSION_USERID]."'
-					,jproduk_date_update='".$jproduk_date_update."'
+					,jproduk_date_update='".$datetime_now."'
 					,jproduk_revised=jproduk_revised+1
 				WHERE jproduk_id='".$jproduk_id."'";
 			$this->db->query($sql);
@@ -934,11 +936,14 @@ class M_master_jual_produk extends Model{
 			$data['jproduk_stat_dok'] = 'Terbuka';
 		}
 		
+		/* membuat date update ikut tanggal yang dipilih
 		if($jproduk_tanggal<>$date_now){
 			$data["jproduk_date_update"] = $jproduk_tanggal;
 		}else{
 			$data["jproduk_date_update"] = $datetime_now;
 		}
+		*/
+		$data["jproduk_date_update"] = $datetime_now;
 		
 		if($jproduk_cara2!=null){
 			if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)
@@ -1225,9 +1230,13 @@ class M_master_jual_produk extends Model{
 			$data['jproduk_stat_dok'] = 'Terbuka';
 		}
 		
+		/* membuat date create menjadi sesuai tanggal yg dipilih
 		if($jproduk_tanggal<>$date_now){
 			$data["jproduk_date_create"] = $jproduk_tanggal;
 		}
+		*/
+		
+		$data["jproduk_date_create"] = $datetime_now;
 		
 		if($jproduk_cara2!=null){
 			if(($jproduk_kwitansi_nilai2<>'' && $jproduk_kwitansi_nilai2<>0)

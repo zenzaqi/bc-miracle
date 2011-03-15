@@ -1,0 +1,4 @@
+m_tindakan_medis --> tanggal update 2011-03-15 _ 11:19AM
+
+ketika terjadi penambahan tindakan Non Medis di Medis, maka yang semula statusnya langnsung menjadi 'selesai', akan dirubah menjadi 'siap'..
+dan tidak ada auto insert / trigger ke kasir penjualan perawatan.. 

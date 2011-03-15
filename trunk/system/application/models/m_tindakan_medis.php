@@ -1585,19 +1585,20 @@ class M_tindakan_medis extends Model{
 			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
                 //* record baru yg belum ada di db.tindakan_detail /
 				
-				//* status langsung = 'selesai' /
+				//* status langsung = 'siap' /
 				$data = array(
 					"dtrawat_master"=>$dtrawat_master, 
 					"dtrawat_perawatan"=>$dtrawat_perawatan, 
 					"dtrawat_keterangan"=>$dtrawat_keterangan,
 					"dtrawat_petugas1"=>5,
 					"dtrawat_tglapp"=>$date_now,
-					"dtrawat_status"=>"selesai",
+					"dtrawat_status"=>"siap",
 					"dtrawat_kategori"=>'Medis',
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);
 				$this->db->insert('tindakan_detail', $data);
+				/*
 				if($this->db->affected_rows()){
 					if($i==$size_array){
 						$this->drawat_from_tmedis_nonmedis_list_insert($dtrawat_master);
@@ -1610,14 +1611,17 @@ class M_tindakan_medis extends Model{
 						return 1;
 					}
 				}
+				*/
 			}else{
 				// data sudah ada di db.tindakan_detail ==> mode Edit
 				if($dtrawat_status=='selesai'){
 					//return 1;
+					/*
 					if($i==$size_array){
 						$this->drawat_from_tmedis_nonmedis_list_insert($dtrawat_master);
 						return 1;
 					}
+					*/
 				}else{
 					$sql = "UPDATE tindakan_detail
 						SET dtrawat_keterangan='".$dtrawat_keterangan."'
@@ -1627,6 +1631,7 @@ class M_tindakan_medis extends Model{
 							,dtrawat_revised=(dtrawat_revised+1)
 						WHERE dtrawat_id='".$dtrawat_id."'";
 					$this->db->query($sql);
+					/*
 					if($this->db->affected_rows()>-1){
 						if($i==$size_array){
 							$this->drawat_from_tmedis_nonmedis_list_insert($dtrawat_master);
@@ -1638,6 +1643,7 @@ class M_tindakan_medis extends Model{
 							return 1;
 						}
 					}
+					*/
 				}
 				
 			}/*elseif(is_numeric($dtrawat_id)==true){
