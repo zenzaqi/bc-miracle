@@ -243,14 +243,14 @@ Ext.onReady(function(){
     
 		 
 	function reset_search_form(){
-		stok_mutasi_gudangSearchField.reset();
-		stok_mutasi_gudangSearchField.setValue(null);
+		//stok_mutasi_gudangSearchField.reset();
+		//stok_mutasi_gudangSearchField.setValue(null);
 		stok_mutasi_satuan_defaultField.setValue(true);
 		stok_mutasi_produk_allField.setValue(true);
-		stok_mutasi_produk_namaSearchField.reset();
-		stok_mutasi_produk_namaSearchField.setValue(null);
-		stok_mutasi_group1SearchField.reset();
-		stok_mutasi_group1SearchField.setValue(null);
+		//stok_mutasi_produk_namaSearchField.reset();
+		//stok_mutasi_produk_namaSearchField.setValue(null);
+		//stok_mutasi_group1SearchField.reset();
+		//stok_mutasi_group1SearchField.setValue(null);
 		stok_mutasi_jumlahSearchField.reset();
 		stok_mutasi_jumlahSearchField.setValue('Semua');
 	}
@@ -670,7 +670,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField/*,stok_mutasi_jumlah_opsiSearchField*/,stok_mutasi_satuan_opsiSearchField, stok_mutasi_tanggal_opsiSearchField] 
+				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField,stok_mutasi_jumlah_opsiSearchField,stok_mutasi_satuan_opsiSearchField, stok_mutasi_tanggal_opsiSearchField] 
 			}
 			]
 		}]
