@@ -547,6 +547,8 @@ Ext.onReady(function(){
 		fpiutang_sisaField.setValue(0);
 		fpiutang_sisa_cfField.reset();
 		fpiutang_sisa_cfField.setValue(0);
+		fpiutang_nocustField.reset();
+		fpiutang_nocustField.setValue(null);
 		
 		detail_fpiutang_bAdd.setDisabled(false);
 		detail_fpiutang_bDel.setDisabled(false);
@@ -623,6 +625,7 @@ Ext.onReady(function(){
 		fpiutang_idField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_id'));
 		fpiutang_nobuktiField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_nobukti'));
 		fpiutang_customerField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
+		fpiutang_nocustField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
 		fpiutang_tanggalField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_tanggal'));
 		fpiutang_keteranganField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_keterangan'));
 		fpiutang_stat_dokField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_stat_dok'));
@@ -1469,7 +1472,16 @@ Ext.onReady(function(){
 		if(cbo_fpiutang_customerDataStore.getCount()>0){
 			fpiutang_total_cfField.setValue(CurrencyFormatted(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_sisa));
 			fpiutang_totalField.setValue(cbo_fpiutang_customerDataStore.getAt(j).data.lpiutang_sisa);
+			fpiutang_nocustField.setValue(cbo_fpiutang_customerDataStore.getAt(j).data.cust_no)
 		}
+	});
+	
+	
+	fpiutang_nocustField= new Ext.form.TextField({
+		id: 'fpiutang_nocustField',
+		fieldLabel: 'No Customer',
+		emptyText : '(Auto)',
+		readOnly: true
 	});
 	
 	/* Identify  fpiutang_tanggal Field */
@@ -1526,7 +1538,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [fpiutang_nobuktiField, fpiutang_customerField, fpiutang_tanggalField] 
+				items: [fpiutang_nobuktiField, fpiutang_customerField, fpiutang_nocustField, fpiutang_tanggalField] 
 			},
 			{
 				columnWidth:0.5,
