@@ -163,6 +163,7 @@ var cust_umurstartSearchField;
 var cust_umurendSearchField;
 var cust_bulanSearchField;
 var cust_tglSearchField;
+var today=new Date().format('Y-m-d');
 
 var editor_cust_note;
 /* Function for get PK field */
@@ -473,16 +474,70 @@ var editor_cust_note;
 		cust_umurField.setValue(umur);
 	}
   
-	function crm_generator(){
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
-	}
-  
-	function crm_generator_button(btn){
-		if(btn=='yes'){
-			crm_generator_save();
-		}
+  function cust_crm_generator_save(){
+			var crm_generator_id_create_pk=null;
+			var crm_generator_cust_field = null;
+			var cust_tujuan_id_field = null;
+			var cust_point_field = null;
+			var crm_generator_date_create=today;
+			var joincustomer_keterangan_create=null;
+			
+			//if(crm_generator_idField.getValue()!== null){crm_generator_id_create_pk = crm_generator_idField.getValue();}
+			//if(joincustomer_customer_tujuan_Field.getValue()!==null){cust_tujuan_id_field=joincustomer_customer_tujuan_Field.getValue();}
+			//if(joincustomer_pointField.getValue()!==null){cust_point_field=joincustomer_pointField.getValue();}
+			//if(crm_generator_customerField.getValue()!==null){crm_generator_cust_field=crm_generator_customerField.getValue();}
+			//if(joincustomer_keteranganField.getValue()!== null){joincustomer_keterangan_create = joincustomer_keteranganField.getValue();}
+			//if(crm_generator_tanggalField.getValue()!== ""){crm_generator_date_create = crm_generator_tanggalField.getValue().format('Y-m-d');}				
+										
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_customer&m=get_action',
+				params: {
 	
-	}
+					task: 'CRMVAL',
+					crmvalue_id	: crm_generator_id_create_pk,		
+					crmvalue_cust	: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'),
+					//cust_tujuan_id	: cust_tujuan_id_field,
+					//cust_point		: cust_point_field,
+					crmvalue_date	: crm_generator_date_create				
+					//join_keterangan	: joincustomer_keterangan_create
+				}, 
+				success: function(response){             
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							Ext.MessageBox.alert('CRMVAL'+' OK','Generate nilai CRM berhasil dilakukan.');
+							//cust_crm_generator_DataStore.reload();
+							//cust_crm_generator_saveWindow.hide();
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'Generate nilai CRM tidak dapat dilakukan',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}        
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
+			
+		}
+ 	/* End of Function */
+  
+  
+	
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!customer_createWindow.isVisible()){
@@ -528,6 +583,34 @@ var editor_cust_note;
 	}
   	/* End of Function */
   
+  /* Function for generate crm Confirm */
+	function customer_confirm_crm(){
+		// only one customer is selected here
+		if(customerListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
+		} else if(customerListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
+			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Tidak ada yang dipilih untuk digenerate',
+//				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
+    
+	function crm_generator_button(btn){
+		if(btn=='yes'){
+			cust_crm_generator_save();
+		}
+	}
+	
 	/* Function for Update Confirm */
 	function customer_confirm_update(){
 		//Ext.getCmp('btn_saveclose').setDisabled(true);
@@ -1948,12 +2031,56 @@ Ext.onReady(function(){
 			{name: 'cust_tweeter2', type: 'int', mapping: 'cust_tweeter2'},
 			{name: 'crmvalue_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
 			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
-			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
 		]),
 		//sortInfo:{field: 'cust_id', direction: "ASC"}
 	});
 	/* End of Function */
     
+	
+	cust_crm_generator_DataStore = new Ext.data.Store({
+		id: 'cust_crm_generator_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "CRMVAL", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'crmvalue_id', type: 'int', mapping: 'crmvalue_id'},
+			{name: 'crmvalue_date', type: 'date',dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
+			{name: 'crmvalue_cust_no', type: 'string', mapping: 'crmvalue_cust_no'},
+			{name: 'crmvalue_cust', type: 'string', mapping: 'crmvalue_cust'},
+			{name: 'crmvalue_frequency', type: 'float', mapping: 'crmvalue_frequency'},
+			{name: 'crmvalue_recency', type: 'float', mapping: 'crmvalue_recency'},
+			{name: 'crmvalue_spending', type: 'float', mapping: 'crmvalue_spending'},
+			{name: 'crmvalue_highmargin', type: 'float', mapping: 'crmvalue_highmargin'},
+			{name: 'crmvalue_referal', type: 'float', mapping: 'crmvalue_referal'},
+			{name: 'crmvalue_kerewelan', type: 'float', mapping: 'crmvalue_kerewelan'},
+			{name: 'crmvalue_disiplin_batal', type: 'float', mapping: 'crmvalue_disiplin_batal'},
+			{name: 'crmvalue_disiplin_telat', type: 'float', mapping: 'crmvalue_disiplin_telat'},
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_frequency_real', type: 'int', mapping: 'crmvalue_frequency_real'},
+			{name: 'crmvalue_recency_real', type: 'float', mapping: 'crmvalue_recency_real'},
+			{name: 'crmvalue_spending_real_rp', type: 'float', mapping: 'crmvalue_spending_real_rp'},
+			{name: 'crmvalue_spending_real_kunj', type: 'float', mapping: 'crmvalue_spending_real_kunj'},
+			{name: 'crmvalue_highmargin_real', type: 'float', mapping: 'crmvalue_highmargin_real'},
+			{name: 'crmvalue_referal_real', type: 'float', mapping: 'crmvalue_referal_real'},
+			{name: 'crmvalue_kerewelan_real', type: 'string', mapping: 'crmvalue_kerewelan_real'},
+			{name: 'crmvalue_disiplin_batal_real', type: 'float', mapping: 'crmvalue_disiplin_batal_real'},
+			{name: 'crmvalue_disiplin_telat_real', type: 'float', mapping: 'crmvalue_disiplin_telat_real'},
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
+		]),
+		sortInfo:{field: 'crmvalue_id', direction: "ASC"}
+	});
+	/* End of Function */
+	
 	
 	//datastore of profesi
 	/*
@@ -2803,7 +2930,21 @@ Ext.onReady(function(){
 			iconCls:'',
 			//handler: tindakan_nonmedis_print  
 			handler: customer_print_label
+		}, '-',
+		{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: customer_print  
+		}, '-',
+		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+		{
+			text: 'CRM Value Generator',
+			//tooltip: 'Edit selected record',
+			//iconCls:'icon-update',
+			handler: customer_confirm_crm
 		}
+		<?php } ?>
 		]
 	});
 	customerListEditorGrid.render();
@@ -2871,12 +3012,11 @@ Ext.onReady(function(){
 			handler: customer_confirm_delete 
 		},
 		<?php } ?>
-		/*{ 
+		{ 
 			text: 'CRM Value Generator',
-			iconCls:'icon-update',
-			handler: customer_crm
+			//iconCls:'icon-update',
+			handler:customer_confirm_crm
 		},
-		'-',*/
 		<?php if(eregi('P',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{ 
 			text: 'Print',
@@ -4821,6 +4961,7 @@ Ext.onReady(function(){
          <div id="fp_cust_note"></div>
 		<div id="elwindow_customer_create"></div>
         <div id="elwindow_customer_search"></div>
+		<div id="fp_vu_crm_generator"></div>
     </div>
 </div>
 </body>

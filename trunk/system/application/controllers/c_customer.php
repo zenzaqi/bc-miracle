@@ -59,6 +59,9 @@ class C_customer extends Controller {
 			case "ADDGROUP":
 				$this->customer_addphonegroup();
 				break;
+			case "CRMVAL":
+				$this->customer_crm_generator_create();
+				break;
 			default:
 				echo "{failure:true}";
 				break;
@@ -132,6 +135,34 @@ class C_customer extends Controller {
 		$note_detail=str_replace("'",'"',$note_detail);
 		$result=$this->m_customer->cust_note_insert($note_cust, $note_detail);
 		echo $result;*/
+	}
+	
+	//function for update record
+	function customer_crm_generator_create(){
+		//POST variable here
+		$crmvalue_id=trim(@$_POST["crmvalue_id"]);
+		$crmvalue_id=str_replace("/(<\/?)(p)([^>]*>)", "",$crmvalue_id);
+		$crmvalue_id=str_replace("'", '"',$crmvalue_id);
+		$crmvalue_cust=trim(@$_POST["crmvalue_cust"]);
+		$crmvalue_date=trim(@$_POST["crmvalue_date"]);
+		$crmvalue_frequency=trim(@$_POST["crmvalue_frequency"]);
+		$crmvalue_recency=trim(@$_POST["crmvalue_recency"]);
+		$crmvalue_spending=trim(@$_POST["crmvalue_spending"]);
+		$crmvalue_highmargin=trim(@$_POST["crmvalue_highmargin"]);
+		$crmvalue_referal=trim(@$_POST["crmvalue_referal"]);
+		$crmvalue_kerewelan=trim(@$_POST["crmvalue_kerewelan"]);
+		$crmvalue_disiplin=trim(@$_POST["crmvalue_disiplin"]);
+		$crmvalue_treatment=trim(@$_POST["crmvalue_treatment"]);
+		
+		
+		$crmvalue_author=trim(@$_POST["crmvalue_author"]);
+		$crmvalue_author=str_replace("/(<\/?)(p)([^>]*>)", "",$crmvalue_author);
+		$crmvalue_author=str_replace("'", '"',$crmvalue_author);
+
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		
+		$result = $this->m_public_function->crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author);
+		echo $result;
 	}
 	
 	//function fot list record
