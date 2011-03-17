@@ -2931,12 +2931,6 @@ Ext.onReady(function(){
 			//handler: tindakan_nonmedis_print  
 			handler: customer_print_label
 		}, '-',
-		{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: customer_print  
-		}, '-',
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{
 			text: 'CRM Value Generator',
