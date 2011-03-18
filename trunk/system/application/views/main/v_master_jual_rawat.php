@@ -6081,7 +6081,8 @@ Ext.onReady(function(){
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapaket_jumlah', type: 'int', mapping: 'dapaket_jumlah'}, 
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_display', type: 'string', mapping: 'cust_display'}
 	]);
 	//eof
 	
@@ -6126,13 +6127,19 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Nama Paket' + '</div>',
 			dataIndex: 'paket_nama',
-			width: 280,
+			width: 250,
+			sortable: true
+		},
+		{
+			header: '<div align="center">' + 'Pemilik Paket' + '</div>',
+			dataIndex: 'cust_display',
+			width: 200,
 			sortable: true
 		},
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 300,	//100,
+			width: 250,	//100,
 			sortable: true
 		},
 		{
@@ -6143,7 +6150,7 @@ Ext.onReady(function(){
 		},
 		{
 			//align: 'Right',
-			header: '<div align="center">' + 'Customer' + '</div>',
+			header: '<div align="center">' + 'Pemakai' + '</div>',
 			dataIndex: 'cust_nama',
 			width: 200, //150,
 			sortable: true,

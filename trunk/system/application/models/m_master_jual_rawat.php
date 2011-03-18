@@ -311,11 +311,13 @@ class M_master_jual_rawat extends Model{
 				,paket_nama
 				,rawat_nama
 				,dapaket_jumlah
-				,cust_nama
+				,pemakai.cust_nama
+				,CONCAT(pemilik.cust_nama, ' (', pemilik.cust_no, ')') as cust_display
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
-			LEFT JOIN customer ON(dapaket_cust=cust_id)
+			LEFT JOIN customer as pemakai ON(detail_ambil_paket.dapaket_cust=pemakai.cust_id)
+			LEFT JOIN customer as pemilik ON(master_jual_paket.jpaket_cust=pemilik.cust_id)
 			LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 			WHERE date_format(dapaket_tgl_ambil,'%Y-%m-%d')='$tanggal'
 				AND dapaket_cust='$dapaket_cust'
