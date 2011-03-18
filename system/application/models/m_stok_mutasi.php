@@ -28,12 +28,14 @@ class M_stok_mutasi extends Model{
 						 satuan_kode LIKE '%".addslashes($filter)."%' OR
 						 satuan_nama LIKE '%".addslashes($filter)."%')";
 			}
-
+			$sql.=" order by produk_nama";
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
-
+			//$this->firephp->log($sql);
+			
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;

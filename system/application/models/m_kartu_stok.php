@@ -986,7 +986,8 @@ class M_kartu_stok extends Model{
 			//DELETE ALL REPORT
 			$sql="DELETE FROM kartu_stok WHERE produk_id=".$produk_id."
 					AND date_format(tanggal_awal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')";
+					AND date_format(tanggal_akhir,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+					AND gudang_id='".$gudang."'";
 			$result=$this->db->query($sql);
 			
 			/*PENERIMAAN BARANG PRODUK */
@@ -1272,7 +1273,8 @@ class M_kartu_stok extends Model{
 							AND konversi_produk = cabin_produk
 							AND date_format(cabin_date_create,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 							AND date_format(cabin_date_create,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
-							AND cabin_produk='".$produk_id."'";
+							AND cabin_produk='".$produk_id."'
+							AND cabin_gudang='".$gudang."'";
 							
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
