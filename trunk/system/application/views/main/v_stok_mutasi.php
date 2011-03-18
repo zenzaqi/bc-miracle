@@ -154,7 +154,7 @@ Ext.onReady(function(){
 			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
 		]),
-		sortInfo:{field: 'produk_id', direction: "DESC"}
+		sortInfo:{field: 'produk_kode', direction: "ASC"}
 	});	
 	/* End of Function */
 	
