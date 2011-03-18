@@ -1196,7 +1196,7 @@ Ext.onReady(function(){
 			align: 'center',
 			width: 50,
 			sortable: true,
-			hidden: true,
+			//hidden: true,
 			renderer: function(value, cell, record){
 				return '<span style="color:green;">' + value.substring(0,5) + '</span>';
 			}
@@ -1207,7 +1207,7 @@ Ext.onReady(function(){
 			align: 'center',
 			width: 50,
 			sortable: true,
-			hidden: true,
+			//hidden: true,
 			renderer: function(value, cell, record){
 				return '<span style="color:blue;">' + value.substring(0,5) + '</span>';
 			}
@@ -1218,7 +1218,7 @@ Ext.onReady(function(){
 			align: 'center',
 			width: 50,
 			sortable: true,
-			hidden: true,
+			//hidden: true,
 			renderer: function(value, cell, record){
 				return '<span style="color:blue;"><b>' + value.substring(0,5) + '</b></span>';
 			}
