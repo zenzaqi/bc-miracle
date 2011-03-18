@@ -20,9 +20,9 @@ class M_hpp extends Model{
 		
 		function get_produk_list($filter,$start,$end,$satuan){
 			if($satuan=='default')
-				$sql="select * from vu_produk_satuan_default WHERE produk_aktif='Aktif'";
+				$sql="select distinct * from vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 			else
-				$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
+				$sql="select distinct * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			//echo $sql;
 			
 			if($filter<>""){
@@ -33,10 +33,13 @@ class M_hpp extends Model{
 						 satuan_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
+			$sql.=" ORDER BY produk_kode ASC ";
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);   
+			
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
