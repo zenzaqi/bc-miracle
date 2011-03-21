@@ -1,0 +1,5 @@
+menambahkan di table permintaan_it :
+- permintaan_mengetahui_status --> status mengetahui orang 1 (disetujui, pending, ditolak)
+- permintaan_mengetahui_keterangan --> keterangan utk orang yg mengetahui pertama
+- permintaan_mengetahui_status2 --> status mengetahui orang 2 (disetujui, pending, ditolak)
+- permintaan_mengetahui_keterangan2 --> keterangan utk orang yg mengetahui kedua

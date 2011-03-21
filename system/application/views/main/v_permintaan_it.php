@@ -65,6 +65,8 @@ var permintaan_clientField;
 var user_loginField;
 var nama_loginField;
 var permintaan_cabang_idField;
+var permintaan_mengetahui_idField;
+var permintaan_mengetahui2_idField;
 var permintaan_cabangField;
 var permintaan_tanggalmasalahField;
 var permintaan_tipeField;
@@ -73,6 +75,10 @@ var permintaan_permintaanField;
 var permintaan_prioritasField;
 var permintaan_mengetahuiField;
 var permintaan_mengetahui2Field;
+var permintaan_mengetahuistatusField;
+var permintaan_mengetahuiketeranganField;
+var permintaan_mengetahuistatus2Field;
+var permintaan_mengetahuiketerangan2Field;
 var permintaan_penyelesaianField;
 var permintaan_tanggalselesaiField;
 var permintaan_statusField;
@@ -165,6 +171,11 @@ Ext.onReady(function(){
 		var permintaan_permintaan_create=null;
 		var permintaan_prioritas_create=null;
 		var permintaan_mengetahui_create=null;
+		var permintaan_mengetahui2_create=null;
+		var permintaan_mengetahuistatus_create=null;
+		var permintaan_mengetahuiketerangan_create=null;
+		var permintaan_mengetahuistatus2_create=null;
+		var permintaan_mengetahuiketerangan2_create=null;
 		var permintaan_penyelesaian_create=null;
 		var permintaan_tanggalselesai_create=null;
 		var permintaan_status_create=null;
@@ -181,6 +192,10 @@ Ext.onReady(function(){
 		if(permintaan_prioritasField.getValue()!== null){permintaan_prioritas_create = permintaan_prioritasField.getValue();}
 		if(permintaan_mengetahuiField.getValue()!== null){permintaan_mengetahui_create = permintaan_mengetahuiField.getValue();}
 		if(permintaan_mengetahui2Field.getValue()!== null){permintaan_mengetahui2_create = permintaan_mengetahui2Field.getValue();}
+		if(permintaan_mengetahuistatusField.getValue()!== null){permintaan_mengetahuistatus_create = permintaan_mengetahuistatusField.getValue();}
+		if(permintaan_mengetahuiketeranganField.getValue()!== null){permintaan_mengetahuiketerangan_create = permintaan_mengetahuiketeranganField.getValue();}
+		if(permintaan_mengetahuistatus2Field.getValue()!== null){permintaan_mengetahuistatus2_create = permintaan_mengetahuistatus2Field.getValue();}
+		if(permintaan_mengetahuiketerangan2Field.getValue()!== null){permintaan_mengetahuiketerangan2_create = permintaan_mengetahuiketerangan2Field.getValue();}
 		if(permintaan_penyelesaianField.getValue()!== null){permintaan_penyelesaian_create = permintaan_penyelesaianField.getValue();}
 		if(permintaan_statusField.getValue()!== null){permintaan_status_create = permintaan_statusField.getValue();}
 		if(permintaan_tanggalselesaiField.getValue()!== ""){permintaan_tanggalselesai_create = permintaan_tanggalselesaiField.getValue().format('Y-m-d');}
@@ -196,21 +211,25 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_permintaan_it&m=get_action',
 				params: {
 					task: post2db,
-					permintaan_id 				: permintaan_id_create_pk,
-					permintaan_client			: permintaan_client_create,
-					//permintaan_cabang_id		: permintaan_cabang_id_create,
-					permintaan_nama 			: permintaan_nama_create,
-					permintaan_cabang 			: permintaan_cabang_create,
-					permintaan_tanggalmasalah 	: permintaan_tanggalmasalah_create,
-					permintaan_tipe			 	: permintaan_tipe_create,
-					permintaan_judul 			: permintaan_judul_create,
-					permintaan_permintaan 		: permintaan_permintaan_create,
-					permintaan_prioritas 		: permintaan_prioritas_create,
-					permintaan_mengetahui 		: permintaan_mengetahui_create,
-					permintaan_mengetahui2 		: permintaan_mengetahui2_create,
-					permintaan_penyelesaian 	: permintaan_penyelesaian_create,
-					permintaan_status 			: permintaan_status_create,
-					permintaan_tanggalselesai 	: permintaan_tanggalselesai_create
+					permintaan_id 					: permintaan_id_create_pk,
+					permintaan_client				: permintaan_client_create,
+					//permintaan_cabang_id			: permintaan_cabang_id_create,
+					permintaan_nama 				: permintaan_nama_create,
+					permintaan_cabang 				: permintaan_cabang_create,
+					permintaan_tanggalmasalah 		: permintaan_tanggalmasalah_create,
+					permintaan_tipe			 		: permintaan_tipe_create,
+					permintaan_judul 				: permintaan_judul_create,
+					permintaan_permintaan 			: permintaan_permintaan_create,
+					permintaan_prioritas 			: permintaan_prioritas_create,
+					permintaan_mengetahui 			: permintaan_mengetahui_create,
+					permintaan_mengetahui2 			: permintaan_mengetahui2_create,
+					permintaan_mengetahuistatus 	: permintaan_mengetahuistatus_create,
+					permintaan_mengetahuiketerangan : permintaan_mengetahuiketerangan_create,
+					permintaan_mengetahuistatus2 	: permintaan_mengetahuistatus2_create,
+					permintaan_mengetahuiketerangan2: permintaan_mengetahuiketerangan2_create,
+					permintaan_penyelesaian 		: permintaan_penyelesaian_create,
+					permintaan_status 				: permintaan_status_create,
+					permintaan_tanggalselesai 		: permintaan_tanggalselesai_create
 					/*
 					gudang_id	: permintaan_id_create_pk,	
 					gudang_nama	: gudang_nama_create,	
@@ -293,6 +312,14 @@ Ext.onReady(function(){
 		permintaan_prioritasField.setValue(null);
 		permintaan_mengetahuiField.reset();
 		permintaan_mengetahuiField.setValue(null);
+		permintaan_mengetahuistatusField.reset();
+		permintaan_mengetahuistatusField.setValue(null);
+		permintaan_mengetahuiketeranganField.reset();
+		permintaan_mengetahuiketeranganField.setValue(null);
+		permintaan_mengetahuistatus2Field.reset();
+		permintaan_mengetahuistatus2Field.setValue(null);
+		permintaan_mengetahuiketerangan2Field.reset();
+		permintaan_mengetahuiketerangan2Field.setValue(null);
 		permintaan_mengetahui2Field.reset();
 		permintaan_mengetahui2Field.setValue(null);
 		permintaan_penyelesaianField.reset();
@@ -316,6 +343,14 @@ Ext.onReady(function(){
 		permintaan_permintaanField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('masalah'));
 		permintaan_prioritasField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('prioritas'));
 		permintaan_mengetahuiField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_nama'));
+		
+		permintaan_mengetahui_idField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui'));
+		permintaan_mengetahui2_idField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui2'));
+		
+		permintaan_mengetahuistatusField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_status'));
+		permintaan_mengetahuiketeranganField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_keterangan'));
+		permintaan_mengetahuistatus2Field.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_status2'));
+		permintaan_mengetahuiketerangan2Field.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_keterangan2'));
 		permintaan_mengetahui2Field.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('mengetahui_nama2'));
 		permintaan_penyelesaianField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('penyelesaian'));
 		permintaan_tanggalselesaiField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tanggal_selesai'));
@@ -338,7 +373,18 @@ Ext.onReady(function(){
 		permintaan_tipeField.setValue('Pilih Satu');
 		permintaan_prioritasField.setValue('Normal');
 		permintaan_mengetahuiField.setValue('Pilih Satu');
+		permintaan_mengetahuistatusField.setValue('Pilih Satu');
+		permintaan_mengetahuistatus2Field.setValue('Pilih Satu');
 		permintaan_mengetahui2Field.setValue('Pilih Satu');
+		// set disable status dan keterangan mengetahui
+		permintaan_mengetahuistatusField.setDisabled(true);
+		permintaan_mengetahuiketeranganField.setDisabled(true);
+		permintaan_mengetahuistatus2Field.setDisabled(true);
+		permintaan_mengetahuiketerangan2Field.setDisabled(true);
+		
+		permintaan_mengetahuiField.setDisabled(false);
+		permintaan_mengetahui2Field.setDisabled(false);
+		
 		if(!permintaan_createWindow.isVisible()){
 			//permintaan_reset_form();
 			if (user_loginField.getValue() != 2 || user_loginField.getValue() != 11 || user_loginField.getValue() !=66 || user_loginField.getValue() !=79){
@@ -387,6 +433,12 @@ Ext.onReady(function(){
 		//({params : {permintaan_id : eval(get_pk_id()), start:0, limit:pageS}});
 		if(permintaanEditorGrid.selModel.getCount() == 1) {
 			permintaan_set_form();
+			permintaan_mengetahuiField.setDisabled(true);
+			permintaan_mengetahui2Field.setDisabled(true);
+			permintaan_mengetahuistatusField.setDisabled(true);
+			permintaan_mengetahuiketeranganField.setDisabled(true);
+			permintaan_mengetahuistatus2Field.setDisabled(true);
+			permintaan_mengetahuiketerangan2Field.setDisabled(true);
 			if (user_loginField.getValue() == 2 || user_loginField.getValue() == 11 || user_loginField.getValue() ==66 || user_loginField.getValue() ==79){
 				permintaan_penyelesaianField.setDisabled(false);
 				permintaan_tanggalselesaiField.setDisabled(false);
@@ -397,6 +449,16 @@ Ext.onReady(function(){
 				permintaan_tanggalselesaiField.setDisabled(true);
 				permintaan_statusField.setDisabled(true);
 			}
+			
+			if (user_loginField.getValue() == permintaan_mengetahui_idField.getValue()){
+				permintaan_mengetahuistatusField.setDisabled(false);
+				permintaan_mengetahuiketeranganField.setDisabled(false);
+			}
+			if (user_loginField.getValue() == permintaan_mengetahui2_idField.getValue()){
+				permintaan_mengetahuistatus2Field.setDisabled(false);
+				permintaan_mengetahuiketerangan2Field.setDisabled(false);
+			}
+			
 			post2db='UPDATE';
 			msg='updated';
 			permintaan_createWindow.show();
@@ -488,6 +550,10 @@ Ext.onReady(function(){
 			{name: 'mengetahui_nama', type: 'string', mapping: 'mengetahui_nama'},
 			{name: 'mengetahui2', type: 'int', mapping: 'mengetahui2'},
 			{name: 'mengetahui_nama2', type: 'string', mapping: 'mengetahui_nama2'},
+			{name: 'mengetahui_status', type: 'string', mapping: 'mengetahui_status'},
+			{name: 'mengetahui_keterangan', type: 'string', mapping: 'mengetahui_keterangan'},
+			{name: 'mengetahui_status2', type: 'string', mapping: 'mengetahui_status2'},
+			{name: 'mengetahui_keterangan2', type: 'string', mapping: 'mengetahui_keterangan2'},
 			{name: 'status', type: 'string', mapping: 'status'}
 		]),
 		sortInfo:{field: 'tanggal_masalah', direction: "DESC"}
@@ -886,6 +952,14 @@ Ext.onReady(function(){
 		id: 'permintaan_cabang_idField',
 		allowBlank: false,
 	});
+	permintaan_mengetahui_idField= new Ext.form.TextField({
+		id: 'permintaan_mengetahui_idField',
+		allowBlank: false,
+	});
+	permintaan_mengetahui2_idField= new Ext.form.TextField({
+		id: 'permintaan_mengetahui2_idField',
+		allowBlank: false,
+	});
 	permintaan_nama_labelField=new Ext.form.Label({ html: '<span style="font-size: 12px">Nama Peminta :</span>'});
 	permintaan_namaField= new Ext.form.TextField({
 		id: 'permintaan_namaField',
@@ -976,6 +1050,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
 		emptyText: 'Pilih Satu',
         pageSize:10,
+		width: 350,
         hideTrigger:false,
         tpl: karyawan_permintaan_tpl,
         itemSelector: 'div.search-item',
@@ -997,6 +1072,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
 		emptyText: 'Pilih Satu',
         pageSize:10,
+		width: 350,
         hideTrigger:false,
         tpl: karyawan_permintaan_tpl,
         itemSelector: 'div.search-item',
@@ -1034,6 +1110,95 @@ Ext.onReady(function(){
 		width: 200,
 		triggerAction: 'all'	
 	});
+	permintaan_mengetahuistatusField= new Ext.form.ComboBox({
+		id: 'permintaan_mengetahuistatusField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['permintaan_mengetahuistatus_value', 'permintaan_engetahuistatus_display'],
+			data: [['Ditolak','Ditolak'],['Pending','Pending'],['Disetujui','Disetujui']]
+		}),
+		mode: 'local',
+		editable:false,
+		displayField: 'permintaan_engetahuistatus_display',
+		valueField: 'permintaan_mengetahuistatus_value',
+		emptyText: 'Open',
+		width: 75,
+		triggerAction: 'all'	
+	});
+	permintaan_mengetahuistatus2Field= new Ext.form.ComboBox({
+		id: 'permintaan_mengetahuistatus2Field',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['permintaan_mengetahuistatus2_value', 'permintaan_engetahuistatus2_display'],
+			data: [['Ditolak','Ditolak'],['Pending','Pending'],['Disetujui','Disetujui']]
+		}),
+		mode: 'local',
+		editable:false,
+		displayField: 'permintaan_engetahuistatus2_display',
+		valueField: 'permintaan_mengetahuistatus2_value',
+		emptyText: 'Open',
+		width: 75,
+		triggerAction: 'all'	
+	});
+	permintaan_mengetahuiketeranganField= new Ext.form.TextArea({
+		id: 'permintaan_mengetahuiketeranganField',
+		fieldLabel: 'Keterangan',
+		allowBlank: true,
+		maxLength: 1000,
+		anchor: '95%'
+	});
+	permintaan_mengetahuiketerangan2Field= new Ext.form.TextArea({
+		id: 'permintaan_mengetahuiketerangan2Field',
+		fieldLabel: 'Keterangan',
+		allowBlank: true,
+		maxLength: 1000,
+		anchor: '95%'
+	});
+	mengetahui_permintaanField=new Ext.form.FieldSet({
+		id:'mengetahui_permintaanField',
+		title: 'Mengetahui dan Persetujuan',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[{
+				layout: 'column',
+				border: false,
+				items:[{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 95,
+							bodyStyle:'padding:3px',
+							items:[permintaan_mengetahuiField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 50,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[permintaan_mengetahuistatusField]
+					   }]
+			},permintaan_mengetahuiketeranganField,{
+				layout: 'column',
+				border: false,
+				items:[{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 95,
+							bodyStyle:'padding:3px',
+							items:[permintaan_mengetahui2Field]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 50,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[permintaan_mengetahuistatus2Field]
+					   }]
+			}, permintaan_mengetahuiketerangan2Field]
+	});
+	
 	input_itField=new Ext.form.FieldSet({
 		id:'input_itField',
 		title: 'Diisi oleh IT Dept.',
@@ -1059,8 +1224,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [permintaan_namaField, permintaan_cabangField, permintaan_tanggalmasalahField,
-				permintaan_tipeField, permintaan_permintaanField, permintaan_prioritasField, permintaan_mengetahuiField,
-				permintaan_mengetahui2Field, input_itField] 
+				permintaan_tipeField, permintaan_permintaanField, permintaan_prioritasField, mengetahui_permintaanField, input_itField] 
 			}
 			]
 		}]

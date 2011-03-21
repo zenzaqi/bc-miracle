@@ -96,6 +96,10 @@ class m_permintaan_it extends Model{
 				permintaan_it.permintaan_masalah AS masalah,
 				permintaan_it.permintaan_prioritas AS prioritas,
 				permintaan_it.permintaan_mengetahui AS mengetahui,
+				permintaan_it.permintaan_mengetahui_status AS mengetahui_status,
+				permintaan_it.permintaan_mengetahui_keterangan AS mengetahui_keterangan,
+				permintaan_it.permintaan_mengetahui_status2 AS mengetahui_status2,
+				permintaan_it.permintaan_mengetahui_keterangan2 AS mengetahui_keterangan2,
 				permintaan_it.permintaan_mengetahui2 AS mengetahui2,
 				permintaan_it.permintaan_penyelesaian AS penyelesaian, 
 				permintaan_it.permintaan_tanggal_selesai AS tanggal_selesai, 
@@ -132,7 +136,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for update record
-		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -150,6 +154,10 @@ class m_permintaan_it extends Model{
 				"permintaan_masalah"=>$permintaan_permintaan,	
 				"permintaan_prioritas"=>$permintaan_prioritas,				
 				"permintaan_penyelesaian"=>$permintaan_penyelesaian,
+				"permintaan_mengetahui_status"=>$permintaan_mengetahuistatus,
+				"permintaan_mengetahui_keterangan"=>$permintaan_mengetahuiketerangan,
+				"permintaan_mengetahui_status2"=>$permintaan_mengetahuistatus2,
+				"permintaan_mengetahui_keterangan2"=>$permintaan_mengetahuiketerangan2,
 				"permintaan_status"=>$permintaan_status,
 				"permintaan_tanggal_selesai"=>$permintaan_tanggalselesai					
 			);
@@ -183,7 +191,7 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for create new record
-		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
 				$permintaan_tipe = "Miracle Information System";
 			if ($permintaan_prioritas=="")
@@ -194,6 +202,10 @@ class m_permintaan_it extends Model{
 				$permintaan_mengetahui = "Pilih Satu";
 			if ($permintaan_mengetahui2=="")
 				$permintaan_mengetahui2 = "Pilih Satu";
+			if ($permintaan_mengetahuistatus=="")
+				$permintaan_mengetahuistatus = "Pilih Satu";
+			if ($permintaan_mengetahuistatus2=="")
+				$permintaan_mengetahuistatus2 = "Pilih Satu";
 							
 			$username = $_SESSION[SESSION_USERID];
 			$sql_id_cust= "SELECT user_karyawan FROM users WHERE user_name ='".$username."'";
@@ -211,6 +223,10 @@ class m_permintaan_it extends Model{
 				"permintaan_prioritas"=>$permintaan_prioritas,	
 				"permintaan_mengetahui"=>$permintaan_mengetahui,
 				"permintaan_mengetahui2"=>$permintaan_mengetahui2,
+				"permintaan_mengetahui_status"=>$permintaan_mengetahuistatus,
+				"permintaan_mengetahui_keterangan"=>$permintaan_mengetahuiketerangan,
+				"permintaan_mengetahui_status2"=>$permintaan_mengetahuistatus2,
+				"permintaan_mengetahui_keterangan2"=>$permintaan_mengetahuiketerangan2,
 				"permintaan_penyelesaian"=>$permintaan_penyelesaian,
 				"permintaan_status"=>$permintaan_status,
 				"permintaan_tanggal_selesai"=>$permintaan_tanggalselesai			
@@ -234,13 +250,13 @@ class m_permintaan_it extends Model{
 				$sql_mengetahui= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui."'";
 				$query_mengetahui= $this->db->query($sql_mengetahui);
 				$data_mengetahui= $query_mengetahui->row();
-				$email_mengetahui= $data_mengetahui->karyawan_email;
+				$email_mengetahui= $data_mengetahui->karyawan_emiracle;
 			}
 			if ($permintaan_mengetahui2 <> 'Pilih Satu') {
 			$sql_mengetahui2= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui2."'";
 			$query_mengetahui2= $this->db->query($sql_mengetahui2);
 			$data_mengetahui2= $query_mengetahui2->row();
-			$email_mengetahui2= $data_mengetahui2->karyawan_email;
+			$email_mengetahui2= $data_mengetahui2->karyawan_emiracle;
 			}
 			
 			
