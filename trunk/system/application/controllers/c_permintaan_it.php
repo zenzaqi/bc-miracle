@@ -116,6 +116,20 @@ class c_permintaan_it extends Controller {
 		$permintaan_mengetahui=trim(@$_POST["permintaan_mengetahui"]);
 		$permintaan_mengetahui=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui);
 		$permintaan_mengetahui=str_replace("'", '"',$permintaan_mengetahui);
+		
+		$permintaan_mengetahuistatus=trim(@$_POST["permintaan_mengetahuistatus"]);
+		$permintaan_mengetahuistatus=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuistatus);
+		$permintaan_mengetahuistatus=str_replace("'", '"',$permintaan_mengetahuistatus);
+		$permintaan_mengetahuiketerangan=trim(@$_POST["permintaan_mengetahuiketerangan"]);
+		$permintaan_mengetahuiketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuiketerangan);
+		$permintaan_mengetahuiketerangan=str_replace("'", '"',$permintaan_mengetahuiketerangan);
+		$permintaan_mengetahuistatus2=trim(@$_POST["permintaan_mengetahuistatus2"]);
+		$permintaan_mengetahuistatus2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuistatus2);
+		$permintaan_mengetahuistatus2=str_replace("'", '"',$permintaan_mengetahuistatus2);
+		$permintaan_mengetahuiketerangan2=trim(@$_POST["permintaan_mengetahuiketerangan2"]);
+		$permintaan_mengetahuiketerangan2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuiketerangan2);
+		$permintaan_mengetahuiketerangan2=str_replace("'", '"',$permintaan_mengetahuiketerangan2);
+		
 		$permintaan_mengetahui2=trim(@$_POST["permintaan_mengetahui2"]);
 		$permintaan_mengetahui2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui2);
 		$permintaan_mengetahui2=str_replace("'", '"',$permintaan_mengetahui2);
@@ -127,33 +141,7 @@ class c_permintaan_it extends Controller {
 		$permintaan_status=str_replace("'", '"',$permintaan_status);
 		$permintaan_tanggalselesai=trim(@$_POST["permintaan_tanggalselesai"]);
 		
-		/*
-		$gudang_id=trim(@$_POST["gudang_id"]);
-		$gudang_nama=trim(@$_POST["gudang_nama"]);
-		$gudang_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_nama);
-		$gudang_nama=str_replace("'", '"',$gudang_nama);
-		$gudang_lokasi=trim(@$_POST["gudang_lokasi"]);
-		$gudang_lokasi=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_lokasi);
-		$gudang_lokasi=str_replace("'", '"',$gudang_lokasi);
-		$gudang_keterangan=trim(@$_POST["gudang_keterangan"]);
-		$gudang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_keterangan);
-		$gudang_keterangan=str_replace("'", '"',$gudang_keterangan);
-		$gudang_aktif=trim(@$_POST["gudang_aktif"]);
-		$gudang_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_aktif);
-		$gudang_aktif=str_replace("'", '"',$gudang_aktif);
-		$gudang_creator=trim(@$_POST["gudang_creator"]);
-		$gudang_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_creator);
-		$gudang_creator=str_replace("'", '"',$gudang_creator);
-		$gudang_date_create=trim(@$_POST["gudang_date_create"]);
-		$gudang_update=trim(@$_POST["gudang_update"]);
-		$gudang_update=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_update);
-		$gudang_update=str_replace("'", '"',$gudang_update);
-		$gudang_date_update=trim(@$_POST["gudang_date_update"]);
-		$gudang_revised=trim(@$_POST["gudang_revised"]);
-		
-		$result = $this->m_gudang->gudang_update($gudang_id ,$gudang_nama ,$gudang_lokasi ,$gudang_keterangan ,$gudang_aktif ,$gudang_creator ,$gudang_date_create ,$gudang_update ,$gudang_date_update ,$gudang_revised );
-		*/
-		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 	
@@ -183,6 +171,20 @@ class c_permintaan_it extends Controller {
 		$permintaan_mengetahui=trim(@$_POST["permintaan_mengetahui"]);
 		$permintaan_mengetahui=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui);
 		$permintaan_mengetahui=str_replace("'", '"',$permintaan_mengetahui);
+		
+		$permintaan_mengetahuistatus=trim(@$_POST["permintaan_mengetahuistatus"]);
+		$permintaan_mengetahuistatus=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuistatus);
+		$permintaan_mengetahuistatus=str_replace("'", '"',$permintaan_mengetahuistatus);
+		$permintaan_mengetahuiketerangan=trim(@$_POST["permintaan_mengetahuiketerangan"]);
+		$permintaan_mengetahuiketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuiketerangan);
+		$permintaan_mengetahuiketerangan=str_replace("'", '"',$permintaan_mengetahuiketerangan);
+		$permintaan_mengetahuistatus2=trim(@$_POST["permintaan_mengetahuistatus2"]);
+		$permintaan_mengetahuistatus2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuistatus2);
+		$permintaan_mengetahuistatus2=str_replace("'", '"',$permintaan_mengetahuistatus2);
+		$permintaan_mengetahuiketerangan2=trim(@$_POST["permintaan_mengetahuiketerangan2"]);
+		$permintaan_mengetahuiketerangan2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahuiketerangan2);
+		$permintaan_mengetahuiketerangan2=str_replace("'", '"',$permintaan_mengetahuiketerangan2);
+		
 		$permintaan_mengetahui2=trim(@$_POST["permintaan_mengetahui2"]);
 		$permintaan_mengetahui2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_mengetahui2);
 		$permintaan_mengetahui2=str_replace("'", '"',$permintaan_mengetahui2);
@@ -193,26 +195,8 @@ class c_permintaan_it extends Controller {
 		$permintaan_status=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_status);
 		$permintaan_status=str_replace("'", '"',$permintaan_status);
 		$permintaan_tanggalselesai=trim(@$_POST["permintaan_tanggalselesai"]);
-		/*
-		$gudang_lokasi=trim(@$_POST["gudang_lokasi"]);
-		$gudang_lokasi=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_lokasi);
-		$gudang_lokasi=str_replace("'", '"',$gudang_lokasi);
-		$gudang_keterangan=trim(@$_POST["gudang_keterangan"]);
-		$gudang_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_keterangan);
-		$gudang_keterangan=str_replace("'", '"',$gudang_keterangan);
-		$gudang_aktif=trim(@$_POST["gudang_aktif"]);
-		$gudang_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_aktif);
-		$gudang_aktif=str_replace("'", '"',$gudang_aktif);
-		$gudang_creator=trim(@$_POST["gudang_creator"]);
-		$gudang_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_creator);
-		$gudang_creator=str_replace("'", '"',$gudang_creator);
-		$gudang_date_create=trim(@$_POST["gudang_date_create"]);
-		$gudang_update=trim(@$_POST["gudang_update"]);
-		$gudang_update=str_replace("/(<\/?)(p)([^>]*>)", "",$gudang_update);
-		$gudang_update=str_replace("'", '"',$gudang_update);
-		$gudang_date_update=trim(@$_POST["gudang_date_update"]);
-		$gudang_revised=trim(@$_POST["gudang_revised"]);*/
-		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas ,$permintaan_mengetahui , $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+
+		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas , $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 
