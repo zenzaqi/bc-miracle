@@ -1,0 +1,1 @@
+ALTER TABLE `tindakan_detail` CHANGE `dtrawat_status` `dtrawat_status` ENUM( 'batal', 'selesai', 'datang', 'siap', 'tindakan' ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT 'datang'

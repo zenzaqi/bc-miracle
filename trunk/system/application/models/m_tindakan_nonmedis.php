@@ -1361,15 +1361,15 @@ class M_tindakan_nonmedis extends Model{
 			}
 			$query3.=" AND dtrawat_status='batal'";
 			
-			//$query4 = "SELECT trawat_id,trawat_cust,cust_nama,cust_no,trawat_keterangan,trawat_creator,trawat_date_create,trawat_update,trawat_date_update,trawat_revised,dtrawat_id,dtrawat_perawatan,rawat_nama,karyawan_nama,karyawan_no,dtrawat_jam,dtrawat_tglapp,dtrawat_status,karyawan_username,rawat_harga,rawat_du,rawat_dm,dtrawat_keterangan,dtrawat_dapp FROM tindakan INNER JOIN customer ON trawat_cust=cust_id INNER JOIN tindakan_detail ON dtrawat_master=trawat_id LEFT JOIN perawatan ON dtrawat_perawatan=rawat_id LEFT JOIN karyawan ON dtrawat_petugas2=karyawan_id LEFT JOIN kategori ON rawat_kategori=kategori_id WHERE kategori_nama='Non Medis' AND trawat_date_create='$date_now'";
-			/*$query4 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Non Medis' AND date_format(dtrawat_tglapp, '%Y-%m-%d')=date_format('$date_now', '%Y-%m-%d') AND dtrawat_dapp!='0'";
 			
-			// For simple search
+			$query4 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND kategori_nama='Non Medis' AND dtrawat_petugas2!='0'";		
+			// For simple search by Fred.. 
 			if ($filter<>""){
 				$query4 .=eregi("WHERE",$query4)? " AND ":" WHERE ";
 				$query4 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR terapis_username LIKE '%".addslashes($filter)."%' OR terapis_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 			}
-			$query4.=" AND dtrawat_status='batal'";*/
+			$query4.=" AND dtrawat_status='tindakan'";
+			
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -1381,10 +1381,13 @@ class M_tindakan_nonmedis extends Model{
 			$result3 = $this->db->query($query3);
 			$nbrows3 = $result3->num_rows();
 			
+			$result4 = $this->db->query($query4);
+			$nbrows4 = $result4->num_rows();
+			
 			/*$result4 = $this->db->query($query4);
 			$nbrows4 = $result4->num_rows();*/
 			
-			if($nbrows>0 || $nbrows2>0 || $nbrows3>0){
+			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
 				if($nbrows>0){
 					foreach($result->result() as $row){
 						$arr[] = $row;
@@ -1400,11 +1403,11 @@ class M_tindakan_nonmedis extends Model{
 						$arr[] = $row3;
 					}
 				}
-				/*if($nbrows4>0){
+				if($nbrows4>0){
 					foreach($result4->result() as $row4){
 						$arr[] = $row4;
 					}
-				}*/
+				}
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
@@ -1452,6 +1455,7 @@ class M_tindakan_nonmedis extends Model{
 				,dtrawat_petugas2
 				,dtrawat_jam
 				,dtrawat_jam_datang
+				,dtrawat_jam_siap
 				,dtrawat_jam_selesai
 				,dtrawat_jam_batal
 				,dtrawat_keterangan
@@ -1565,6 +1569,8 @@ class M_tindakan_nonmedis extends Model{
 						$data['dtrawat_jam_batal'] = $time_now;
 					}else if($dtrawat_status=='datang'){
 						$data['dtrawat_jam_datang'] = $time_now;
+					}else if($dtrawat_status=='tindakan'){
+						$data['dtrawat_jam_siap'] = $time_now;
 					}
 					
 				}

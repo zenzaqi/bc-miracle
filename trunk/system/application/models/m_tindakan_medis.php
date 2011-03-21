@@ -1585,14 +1585,14 @@ class M_tindakan_medis extends Model{
 			if(is_numeric($dtrawat_id)==false && is_numeric($dtrawat_perawatan)==true){
                 //* record baru yg belum ada di db.tindakan_detail /
 				
-				//* status langsung = 'siap' /
+				//* status langsung = 'tindakan' /
 				$data = array(
 					"dtrawat_master"=>$dtrawat_master, 
 					"dtrawat_perawatan"=>$dtrawat_perawatan, 
 					"dtrawat_keterangan"=>$dtrawat_keterangan,
 					"dtrawat_petugas1"=>5,
 					"dtrawat_tglapp"=>$date_now,
-					"dtrawat_status"=>"siap",
+					"dtrawat_status"=>"tindakan",
 					"dtrawat_kategori"=>'Medis',
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
@@ -1725,7 +1725,7 @@ class M_tindakan_medis extends Model{
 			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 			$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
 		}
-		$query.=" AND dtrawat_status='siap'";
+		$query.=" AND dtrawat_status='tindakan'";
 		
 		//$query2 = "SELECT * FROM vu_tindakan WHERE kategori_nama='Medis' AND dtrawat_tglapp='$date_now'"; //TAMPILAN MEDIS SAJA
 		//$query2 = "SELECT medis.* FROM vu_tindakan medis WHERE (medis.kategori_nama='Medis' OR medis.dtrawat_master IN(SELECT nonmedis.dtrawat_master FROM vu_tindakan nonmedis WHERE nonmedis.kategori_nama='Non Medis' AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND nonmedis.dtrawat_dapp='0')) AND date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
@@ -1760,6 +1760,17 @@ class M_tindakan_medis extends Model{
 		}
 		$query4.=" AND dtrawat_status='batal'";
 		
+		
+		$query5 = "SELECT * FROM vu_tindakan WHERE date_format(dtrawat_tglapp,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d') AND (kategori_nama='Medis' OR dtrawat_petugas2='0' OR kategori_nama ='Surgery')";
+		
+		// For simple search by Fred , utk tetep menampilkan status yang siap.. agar tidak hilang..
+		if ($filter<>""){
+			$query5 .=eregi("WHERE",$query5)? " AND ":" WHERE ";
+			$query5 .= " (cust_nama LIKE '%".addslashes($filter)."%' OR rawat_nama LIKE '%".addslashes($filter)."%' OR dokter_username LIKE '%".addslashes($filter)."%' OR dokter_nama LIKE '%".addslashes($filter)."%' OR dtrawat_status LIKE '%".addslashes($filter)."%')";
+		}
+		$query5.=" AND dtrawat_status='siap'";
+		
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		//$limit = $query." LIMIT ".$start.",".$end;		
@@ -1773,7 +1784,10 @@ class M_tindakan_medis extends Model{
 		$result4 = $this->db->query($query4);
 		$nbrows4 = $result4->num_rows();
 		
-		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
+		$result5 = $this->db->query($query5);
+		$nbrows5 = $result5->num_rows();
+		
+		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0 || $nbrows5>0){
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -1794,6 +1808,12 @@ class M_tindakan_medis extends Model{
 					$arr[] = $row4;
 				}
 			}
+			if($nbrows5>0){
+				foreach($result5->result() as $row5){
+					$arr[] = $row5;
+				}
+			}
+			
 			$jsonresult = json_encode($arr);
 			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 		} else {
@@ -1960,7 +1980,7 @@ class M_tindakan_medis extends Model{
 					
 					}
 				}else{
-					if($dtrawat_status=='siap'){
+					if($dtrawat_status=='tindakan'){
 						$data['dtrawat_jam_siap'] = $time_now;
 					}else if($dtrawat_status=='batal'){
 						$data['dtrawat_jam_batal'] = $time_now;

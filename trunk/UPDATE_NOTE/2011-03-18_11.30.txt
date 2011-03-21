@@ -1,0 +1,2 @@
+2011-03-18_11.30.sql ---> Menambah attribute pada field dtrawat_status di tabel tindakan_detail, ditambahi 'tindakan' utk kepentingan program.. 
+status 'siap' akan mulai tidak dipakai, diganti dengan status 'tindakan'
