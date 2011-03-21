@@ -445,7 +445,7 @@ Ext.onReady(function(){
 						}
 						
 						if(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_status==undefined){
-							dtrawat_nonmedis_status.push('selesai');
+							dtrawat_nonmedis_status.push('tindakan');
 						}else{
 							dtrawat_nonmedis_status.push(dtindakan_jual_nonmedisDataStore.getAt(i).data.dtrawat_status);
 						}
@@ -1178,7 +1178,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
+					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['tindakan','tindakan']]
 					}),
 				mode: 'local',
 				editable: false,
@@ -1191,7 +1191,7 @@ Ext.onReady(function(){
             
 		},
 		{
-			header: '<div align="center">' + 'Siap' + '</div>',
+			header: '<div align="center">' + 'Tind' + '</div>',
 			dataIndex: 'dtrawat_jam_siap',
 			align: 'center',
 			width: 50,
@@ -1346,7 +1346,7 @@ Ext.onReady(function(){
 	function ch_status(val){
 		if(val=="selesai"){
 			return '<span style="color:blue;"><b>' + val + '</b></span>';
-		}else if(val=="siap"){
+		}else if(val=="tindakan"){
 			return '<span style="color:green;"><b>' + val + '</b></span>';
 		}else if(val=="datang"){
 			return '<span style="color:red;"><b>' + val + '</b></span>';
@@ -2663,7 +2663,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store: new Ext.data.SimpleStore({
 			fields:['dtrawat_status_value', 'dtrawat_status_display'],
-			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['siap','siap']]
+			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['tindakan','tindakan']]
 			}),
 		mode: 'local',
 		displayField:'dtrawat_status_display',
