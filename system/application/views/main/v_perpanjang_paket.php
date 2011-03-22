@@ -204,7 +204,7 @@ Ext.onReady(function(){
 	
 	/* Function for Check if the form is valid */
 	function is_perpanjang_paket_form_valid(){
-		return (true &&  perpanjang_paket_paketField.isValid() && perpanjang_paket_keteranganField.isValid() && true);
+		return (true &&  perpanjang_paket_paketField.isValid() && perpanjang_paket_keteranganField.isValid() && perpanjangan_hari_Field.isValid() && true);
 	}
   	/* End of Function */
   
@@ -450,6 +450,7 @@ Ext.onReady(function(){
 		allowDecimals: false,
 		allowNegative: false,
 		blankText: '0',
+		allowBlank : false,
 		maxLength: 11,
 		maskRe: /([0-9]+)$/
 	});
