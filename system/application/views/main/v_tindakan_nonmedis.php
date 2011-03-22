@@ -1028,7 +1028,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['tindakan','tindakan']]
+					data: [['datang','datang'],['tindakan','tindakan'],['selesai','selesai'],['batal','batal']]
 					}),
 				mode: 'local',
 				editable: false,
@@ -1566,7 +1566,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['dtrawat_status_value', 'dtrawat_status_display'],
-					data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['tindakan','tindakan']]
+					data: [['datang','datang'],['tindakan','tindakan'],['selesai','selesai'],['batal','batal']]
 					}),
 				mode: 'local',
                	displayField: 'dtrawat_status_display',
@@ -2006,7 +2006,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store: new Ext.data.SimpleStore({
 			fields:['dtrawat_status_value', 'dtrawat_status_display'],
-			data: [['batal','batal'],['selesai','selesai'],['datang','datang'],['tindakan','tindakan']]
+			data: [['datang','datang'],['tindakan','tindakan'],['selesai','selesai'],['batal','batal']]
 			}),
 		mode: 'local',
 		displayField:'dtrawat_status_display',

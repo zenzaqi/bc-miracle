@@ -1075,6 +1075,7 @@ Ext.onReady(function(){
 				tpl: dapp_terapis_tpl,
 				displayField: 'terapis_username',
 				valueField: 'terapis_value',
+				minChars : 3,
 				loadingText: 'Searching...',
 				itemSelector: 'div.search-item',
 				triggerAction: 'all',
@@ -1580,11 +1581,12 @@ Ext.onReady(function(){
 			/*beforequery: function(qe){
 	            delete qe.combo.lastQuery;
 	        },*/
+			/*
 			specialkey: function(f,e){
 				if(e.getKey() == e.ENTER){
 					cbo_app_cutomerDataStore.load({params: {query:app_customerField.getValue()}});
 	            }
-			},
+			},*/
 			render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
 				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Telp Rumah<br>- No Telp Kantor<br>- No HP'});
@@ -1824,8 +1826,8 @@ Ext.onReady(function(){
 			lazyRender:true,
 			allowBlank: true,
 			listClass: 'x-combo-list-small',
-			anchor: '95%',
-            maskRe: /([^0-9]+)$/
+			anchor: '95%'
+            //maskRe: /([^0-9]+)$/
 
 	});
 	
@@ -2270,8 +2272,8 @@ Ext.onReady(function(){
 			triggerAction: 'all',
 			lazyRender:true,
 			listClass: 'x-combo-list-small',
-			anchor: '95%',
-            maskRe: /([^0-9]+)$/
+			anchor: '95%'
+            //maskRe: /([^0-9]+)$/
 	});
 	
 	var combo_dapp_terapis_nonmedis=new Ext.form.ComboBox({
@@ -2281,6 +2283,7 @@ Ext.onReady(function(){
 			displayField: 'terapis_username',
 			valueField: 'terapis_value',
 			loadingText: 'Searching...',
+			minChars : 3,
 			itemSelector: 'div.search-item',
 			triggerAction: 'all',
 			anchor: '95%'
@@ -2906,6 +2909,7 @@ Ext.onReady(function(){
 		mode: 'remote',
 		displayField:'terapis_display',
 		valueField: 'terapis_value',
+		minChars : 3,
         loadingText: 'Searching...',
         itemSelector: 'div.search-item',
         triggerAction: 'all',

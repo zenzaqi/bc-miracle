@@ -2610,9 +2610,6 @@ class M_master_jual_rawat extends Model{
 		$datetime_now = date('Y-m-d H:i:s');
 		$sqlu = "UPDATE tindakan_detail
 			SET dtrawat_locked=1
-				,dtrawat_update='".$_SESSION[SESSION_USERID]."'
-				,dtrawat_date_update='".$datetime_now."'
-				,dtrawat_revised=(dtrawat_revised+1)
 			WHERE dtrawat_id='".$dtrawat_id."'";
 		$this->db->query($sqlu);
 		if($this->db->affected_rows()>-1){
