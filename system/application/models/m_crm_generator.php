@@ -73,8 +73,8 @@ class M_crm_generator extends Model{
 		}
 		
 		
-		//function for generate value CRM
-		function crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author){
+		//function for generate value CRM. 2011-03-22 --> function ini sudah dipindahkan ke m_public_function
+/*		function crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author){
 			$datetime_now=date('Y-m-d H:i:s');
 			
 			//untuk mendapatkan parameter di crm_setup
@@ -859,7 +859,7 @@ class M_crm_generator extends Model{
 			$query_cust_priority	= $this->db->query($sql_cust_priority);
 			
 		}
-		
+*/		
 		
 }
 ?>
