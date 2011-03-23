@@ -1698,7 +1698,8 @@ Ext.onReady(function(){
 		id: 'karyawan_kodeposField',
 		fieldLabel: 'Kode Pos',
 		maxLength: 5,
-		width: 60
+		width: 60,
+		maskRe: /([0-9]+)$/
 	});
 	/* Identify  karyawan_email Field */
 	karyawan_emailField= new Ext.form.TextField({
@@ -1726,28 +1727,32 @@ Ext.onReady(function(){
 		id: 'karyawan_notelpField',
 		fieldLabel: 'No.Telp Rumah',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	/* Identify  karyawan_notelp2 Field */
 	karyawan_notelp2Field= new Ext.form.TextField({
 		id: 'karyawan_notelp2Field',
 		fieldLabel: 'Ponsel 1',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	/* Identify  karyawan_notelp3 Field */
 	karyawan_notelp3Field= new Ext.form.TextField({
 		id: 'karyawan_notelp3Field',
 		fieldLabel: 'Ponsel 2',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	/* Identify  karyawan_notelp4 Field */
 	karyawan_notelp4Field= new Ext.form.TextField({
 		id: 'karyawan_notelp4Field',
 		fieldLabel: 'Ponsel 3',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	/* Identify  karyawan_cabang Field */
 	karyawan_cabangField= new Ext.form.ComboBox({
@@ -2408,7 +2413,8 @@ Ext.onReady(function(){
 		id: 'karyawan_kodeposSearchField',
 		fieldLabel: 'Kode Pos',
 		maxLength: 5,
-		width: 60
+		width: 60,
+		maskRe: /([0-9]+)$/
 	
 	});
 	/* Identify  karyawan_email Search Field */
@@ -2440,7 +2446,8 @@ Ext.onReady(function(){
 		id: 'karyawan_notelpSearchField',
 		fieldLabel: 'Telp Rumah',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	
 	});
 	/* Identify  karyawan_notelp2 Search Field */
@@ -2448,7 +2455,8 @@ Ext.onReady(function(){
 		id: 'karyawan_notelp2SearchField',
 		fieldLabel: 'No Ponsel 1',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	
 	});
 	/* Identify  karyawan_notelp3 Search Field */
@@ -2456,7 +2464,8 @@ Ext.onReady(function(){
 		id: 'karyawan_notelp3SearchField',
 		fieldLabel: 'No Ponsel 2',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	
 	});
 	
@@ -2464,7 +2473,8 @@ Ext.onReady(function(){
 		id: 'karyawan_notelp4SearchField',
 		fieldLabel: 'No Ponsel 3',
 		maxLength: 25,
-		anchor: '95%'
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	
 	});
 	

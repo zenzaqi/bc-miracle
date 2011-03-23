@@ -126,6 +126,8 @@ Ext.onReady(function(){
 
   	/* Function for add data, open window create form */
 	function usergroups_create(){
+				usergroups_reset_form();
+
 		if(is_usergroups_form_valid()){
 
 		var group_id_create_pk=null;
@@ -913,6 +915,7 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					usergroups_reset_form();
 					usergroups_createWindow.hide();
 				}
 			}
