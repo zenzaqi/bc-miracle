@@ -2279,13 +2279,274 @@ class M_public_function extends Model{
 		}
 		
 	}
+
+	function customer_crm_generator_create_all($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author,$cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_tgldaftarend, $cust_referensilain, $setcrm_frequency_count, $setcrm_frequency_days, $setcrm_frequency_value_lessthan, $setcrm_frequency_value_equal, $setcrm_frequency_value_morethan, $setcrm_recency_days, $setcrm_recency_value_lessthan, $setcrm_recency_value_morethan,	$setcrm_spending_days, $setcrm_spending_value_lessthan, $setcrm_spending_value_equal, $setcrm_spending_value_morethan, $setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan, $setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan, $setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low, $setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_batal_value_morethan,$setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan, $setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan, $setcrm_result_nilai_atas, $setcrm_result_nilai_bawah){
 	
-	
-	//function for generate value CRM
-		function crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author){
-			$datetime_now=date('Y-m-d H:i:s');
+	$datetime_now=date('Y-m-d H:i:s');
+		
+	$query="select cust_id from vu_customer";
+
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%"./*addslashes($filter)."%' OR cust_hobi LIKE '%".*/addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_terdaftar LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%"./*addslashes($filter)."%' OR cust_priority LIKE '%".*/addslashes($filter)."%' OR cust_jmlanak LIKE '%".addslashes($filter)."%'  OR cust_unit LIKE '%".addslashes($filter)."%' OR cust_aktif LIKE '%".addslashes($filter)."%' OR cust_creator LIKE '%".addslashes($filter)."%' OR cust_date_create LIKE '%".addslashes($filter)."%' OR cust_update LIKE '%".addslashes($filter)."%' OR cust_date_update LIKE '%".addslashes($filter)."%' OR cust_revised LIKE '%".addslashes($filter)."%')";
+				//$result = $this->db->query($query);
+			} else if($option=='SEARCH'){
+			if($cust_id!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_id LIKE '%".$cust_id."%'";
+			};
+			if($cust_no!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_no LIKE '%".$cust_no."%'";
+			};
+			if($cust_no_awal!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+				};
+			if($cust_nama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_nama LIKE '%".$cust_nama."%'";
+			};
+			if($cust_kelamin!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
+			};
+			if($cust_alamat!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
+			};
+			if($cust_kota!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kota LIKE '%".$cust_kota."%'";
+			};
+			if($cust_kodepos!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
+			};
+			if($cust_propinsi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
+			};
+			if($cust_negara!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_negara LIKE '%".$cust_negara."%'";
+			};
+			if($cust_telprumah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
+			};
+			if($cust_bb!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_bb LIKE '%".$cust_bb."%'";
+			};
+			if($cust_email!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
+			};
+			if($cust_agama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_agama LIKE '%".$cust_agama."%'";
+			};
+			if($cust_pendidikan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
+			};
+			if($cust_profesi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
+			};
 			
-			//untuk mendapatkan parameter di crm_setup
+			/*if($cust_tgllahir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+			};	*/
+			
+			if($cust_tgllahir!='' or $cust_tgllahirend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_tgllahir!='' and $cust_tgllahirend!=''){
+					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+				}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
+					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
+				}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
+					$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+				}
+			};
+			
+			if($cust_tgl!='' and $cust_bulan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."'";
+			};
+			
+			if($cust_umurstart!='' or $cust_umurend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_umurstart!='' and $cust_umurend!=''){
+					$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
+				}else if ($cust_umurstart!='' and $cust_umurend==''){
+					$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
+				}else if ($cust_umurstart=='' and $cust_umurend!=''){
+					$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
+				}
+			};	
+			
+			if($cust_referensi!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
+			};
+			if($cust_referensilain!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
+			};
+			if($cust_keterangan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
+			};
+			if($cust_member!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_member LIKE '%".$cust_member."%'";
+			};
+			if($cust_member2!=''){
+				$date_now = date('Y-m-d');
+				if($cust_member2=='Semua'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member <> ''";
+				} 
+				else if($cust_member2=='Aktif'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_valid > '".$date_now."'";
+				}
+				else if($cust_member2=='Tidak Aktif'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " member_valid < '".$date_now."'";
+				}
+				else if($cust_member2=='Non Member'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member = ''";
+				}				
+			};
+			/*if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";						
+			};*/
+			
+			if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
+				}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
+				}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
+					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
+				}
+				
+			};
+						
+			if($cust_statusnikah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_statusnikah='".$cust_statusnikah."'";
+			};
+			if($cust_priority!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_priority='".$cust_priority."'";
+			};
+			if($cust_jmlanak!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
+			};
+			if($cust_unit!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_unit LIKE '%".$cust_unit."%'";
+			};
+			if($cust_aktif!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+			};
+			/*if($cust_fretfulness!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
+			};*/
+			if($sortby=='Nama'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_nama";
+			};
+			if($sortby=='No Cust'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_no";
+			};
+			if($sortby=='Alamat'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_alamat";
+			};
+			if($sortby=='Tgl Lahir'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_tgllahir";
+			};
+			if($sortby=='Telp Rmh'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_telprumah";
+			};
+			if($sortby=='Handphone'){
+				$query.=eregi("WHERE",$query)?" ":" WHERE ";
+				$query.= " ORDER BY cust_hp";
+			};
+			if($cust_creator!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_creator LIKE '%".$cust_creator."%'";
+			};
+			if($cust_date_create!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
+			};
+			if($cust_update!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_update LIKE '%".$cust_update."%'";
+			};
+			if($cust_date_update!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
+			};
+			if($cust_revised!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_revised LIKE '%".$cust_revised."%'";
+			};
+			
+			$query.= " order by cust_id desc ";
+			//$result = mysql_query($query);
+			
+			$rs = $this->db->query($query);
+			$datetime_now = date('Y-m-d H:i:s');
+			
+			$ret = 0;
+			$jum_baris = $rs->num_rows();
+			
+			
+			//looping dimulai disini
+			if ($jum_baris <= 100) {
+			for ($i = 0; $i < $jum_baris; $i++) {
+				$record = $rs->row($i);
+				$data_arr= $record->cust_id;				
+				
+				$this->customer_crm_generator_create($query, $crmvalue_id, $data_arr, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author, $setcrm_frequency_count, $setcrm_frequency_days, $setcrm_frequency_value_lessthan, $setcrm_frequency_value_equal, $setcrm_frequency_value_morethan, $setcrm_recency_days, $setcrm_recency_value_lessthan, $setcrm_recency_value_morethan,	$setcrm_spending_days, $setcrm_spending_value_lessthan, $setcrm_spending_value_equal, $setcrm_spending_value_morethan, $setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan, $setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan, $setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low, $setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_batal_value_morethan,$setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan, $setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan, $setcrm_result_nilai_atas, $setcrm_result_nilai_bawah);
+							
+			
+			}
+			
+			if ($ret == 1)
+				return '1';
+			else
+				return '0';
+		}
+		else
+			return 2;
+		}
+	}
+	
+	//function for CRM_setup
+		function CRM_setup(){
+		
+		//untuk mendapatkan parameter di crm_setup
 			$sql_parameter = 
 			   "select max(setcrm_id) as setcrm_id, 
 					c.setcrm_frequency_count, c.setcrm_frequency_days, 
@@ -2306,56 +2567,18 @@ class M_public_function extends Model{
 			$query_parameter				= $this->db->query($sql_parameter);
 			$data_parameter 				= $query_parameter->row();
 			
-			$setcrm_frequency_count			= $data_parameter->setcrm_frequency_count;
-			$setcrm_frequency_days 			= $data_parameter->setcrm_frequency_days;
-			$setcrm_frequency_value_lessthan= $data_parameter->setcrm_frequency_value_lessthan;
-			$setcrm_frequency_value_equal 	= $data_parameter->setcrm_frequency_value_equal;
-			$setcrm_frequency_value_morethan= $data_parameter->setcrm_frequency_value_morethan;
+			$hasil		= array($data_parameter->setcrm_frequency_count, $data_parameter->setcrm_frequency_days, $data_parameter->setcrm_frequency_value_lessthan, $data_parameter->setcrm_frequency_value_equal, $data_parameter->setcrm_frequency_value_morethan, $data_parameter->setcrm_recency_days, $data_parameter->setcrm_recency_value_lessthan, $data_parameter->setcrm_recency_value_morethan, $data_parameter->setcrm_spending_days, $data_parameter->setcrm_spending_value_lessthan, $data_parameter->setcrm_spending_value_equal, $data_parameter->setcrm_spending_value_morethan, $data_parameter->setcrm_highmargin_treatment, $data_parameter->setcrm_highmargin_days, $data_parameter->setcrm_highmargin_value_morethan, $data_parameter->setcrm_highmargin_value_equal, $data_parameter->setcrm_highmargin_value_lessthan, $data_parameter->setcrm_referal_person, $data_parameter->setcrm_referal_days, $data_parameter->setcrm_referal_morethan, $data_parameter->setcrm_referal_equal, $data_parameter->setcrm_referal_lessthan, $data_parameter->setcrm_kerewelan_high, $data_parameter->setcrm_kerewelan_normal, $data_parameter->setcrm_kerewelan_low, $data_parameter->setcrm_disiplin_days, $data_parameter->setcrm_disiplin_persentase_pembatalan, $data_parameter->setcrm_disiplin_batal_value_morethan, $data_parameter->setcrm_disiplin_batal_value_lessthan, $data_parameter->setcrm_disiplin_persentase_telat, $data_parameter->setcrm_disiplin_menit_telat, $data_parameter->setcrm_disiplin_telat_value_morethan, $data_parameter->setcrm_disiplin_telat_value_lessthan, $data_parameter->setcrm_treatment_days, $data_parameter->setcrm_treatment_nonmedis, $data_parameter->setcrm_treatment_medis, $data_parameter->setcrm_treatment_morethan, $data_parameter->setcrm_treatment_equal, $data_parameter->setcrm_treatment_lessthan, $data_parameter->setcrm_result_nilai_atas, $data_parameter->setcrm_result_nilai_bawah);
 			
-			$setcrm_recency_days 			= $data_parameter->setcrm_recency_days;
-			$setcrm_recency_value_lessthan 	= $data_parameter->setcrm_recency_value_lessthan;
-			$setcrm_recency_value_morethan 	= $data_parameter->setcrm_recency_value_morethan;
+			return array($hasil);		
+
+		}
+	
+	//function for generate value CRM
+		function customer_crm_generator_create($query, $crmvalue_id, $crmvalue_cust, $crmvalue_date, $crmvalue_frequency, $crmvalue_recency, $crmvalue_spending, $crmvalue_highmargin, $crmvalue_referal, $crmvalue_kerewelan, $crmvalue_disiplin, $crmvalue_treatment, $crmvalue_author, $setcrm_frequency_count, $setcrm_frequency_days, $setcrm_frequency_value_lessthan, $setcrm_frequency_value_equal, $setcrm_frequency_value_morethan, $setcrm_recency_days, $setcrm_recency_value_lessthan, $setcrm_recency_value_morethan,	$setcrm_spending_days, $setcrm_spending_value_lessthan, $setcrm_spending_value_equal, $setcrm_spending_value_morethan, $setcrm_highmargin_treatment, $setcrm_highmargin_days, $setcrm_highmargin_value_morethan, $setcrm_highmargin_value_equal, $setcrm_highmargin_value_lessthan, $setcrm_referal_person, $setcrm_referal_days, $setcrm_referal_morethan, $setcrm_referal_equal, $setcrm_referal_lessthan, $setcrm_kerewelan_high, $setcrm_kerewelan_normal, $setcrm_kerewelan_low, $setcrm_disiplin_days, $setcrm_disiplin_persentase_pembatalan, $setcrm_disiplin_batal_value_morethan,$setcrm_disiplin_batal_value_lessthan, $setcrm_disiplin_persentase_telat, $setcrm_disiplin_menit_telat, $setcrm_disiplin_telat_value_morethan, $setcrm_disiplin_telat_value_lessthan, $setcrm_treatment_days, $setcrm_treatment_nonmedis, $setcrm_treatment_medis, $setcrm_treatment_morethan, $setcrm_treatment_equal, $setcrm_treatment_lessthan, $setcrm_result_nilai_atas, $setcrm_result_nilai_bawah){
+			$datetime_now=date('Y-m-d H:i:s');
 			
-			$setcrm_spending_days			= $data_parameter->setcrm_spending_days;
-			$setcrm_spending_value_lessthan	= $data_parameter->setcrm_spending_value_lessthan;
-			$setcrm_spending_value_equal 	= $data_parameter->setcrm_spending_value_equal;
-			$setcrm_spending_value_morethan	= $data_parameter->setcrm_spending_value_morethan;
-			
-			$setcrm_highmargin_treatment		= $data_parameter->setcrm_highmargin_treatment;
-			$setcrm_highmargin_days				= $data_parameter->setcrm_highmargin_days;
-			$setcrm_highmargin_value_morethan	= $data_parameter->setcrm_highmargin_value_morethan;
-			$setcrm_highmargin_value_equal		= $data_parameter->setcrm_highmargin_value_equal;
-			$setcrm_highmargin_value_lessthan	= $data_parameter->setcrm_highmargin_value_lessthan;
-			
-			$setcrm_referal_person			= $data_parameter->setcrm_referal_person;
-			$setcrm_referal_days			= $data_parameter->setcrm_referal_days;
-			$setcrm_referal_morethan		= $data_parameter->setcrm_referal_morethan;
-			$setcrm_referal_equal			= $data_parameter->setcrm_referal_equal;
-			$setcrm_referal_lessthan		= $data_parameter->setcrm_referal_lessthan;
-			
-			$setcrm_kerewelan_high			= $data_parameter->setcrm_kerewelan_high;
-			$setcrm_kerewelan_normal		= $data_parameter->setcrm_kerewelan_normal;
-			$setcrm_kerewelan_low			= $data_parameter->setcrm_kerewelan_low;
-			
-			$setcrm_disiplin_days					= $data_parameter->setcrm_disiplin_days;
-			$setcrm_disiplin_persentase_pembatalan	= $data_parameter->setcrm_disiplin_persentase_pembatalan;
-			$setcrm_disiplin_batal_value_morethan	= $data_parameter->setcrm_disiplin_batal_value_morethan;
-			$setcrm_disiplin_batal_value_lessthan	= $data_parameter->setcrm_disiplin_batal_value_lessthan;
-			$setcrm_disiplin_persentase_telat		= $data_parameter->setcrm_disiplin_persentase_telat;
-			$setcrm_disiplin_menit_telat			= $data_parameter->setcrm_disiplin_menit_telat;
-			$setcrm_disiplin_telat_value_morethan	= $data_parameter->setcrm_disiplin_telat_value_morethan;
-			$setcrm_disiplin_telat_value_lessthan	= $data_parameter->setcrm_disiplin_telat_value_lessthan;
-			
-			$setcrm_treatment_days					= $data_parameter->setcrm_treatment_days; 
-			$setcrm_treatment_nonmedis				= $data_parameter->setcrm_treatment_nonmedis; 
-			$setcrm_treatment_medis					= $data_parameter->setcrm_treatment_medis;
-			$setcrm_treatment_morethan				= $data_parameter->setcrm_treatment_morethan; 
-			$setcrm_treatment_equal					= $data_parameter->setcrm_treatment_equal;
-			$setcrm_treatment_lessthan				= $data_parameter->setcrm_treatment_lessthan;
-			
-			$setcrm_result_nilai_atas		= $data_parameter->setcrm_result_nilai_atas;
-			$setcrm_result_nilai_bawah		= $data_parameter->setcrm_result_nilai_bawah;
-			
+			//parameter di crm_setup didapatkan dari function CRM_setup
+		
 	
 			//UNTUK MENGHITUNG FREQUENCY:
 			//selalu sesuaikan query dengan query di m_lap_kunjungan.php
@@ -3067,6 +3290,6 @@ class M_public_function extends Model{
 			$query_cust_priority	= $this->db->query($sql_cust_priority);
 			
 		}
+	
 }
-
 ?>

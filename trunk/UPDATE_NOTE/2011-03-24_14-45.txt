@@ -1,0 +1,2 @@
+2011-03-24_14-45.sql --> menambahkan field Total Harga Satuan untuk laporan Pengambilan paket.. 
+total harga satuan adalah harga satuan dikalikan dengan jumlah pengambilan paket..

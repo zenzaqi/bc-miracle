@@ -32,6 +32,7 @@
             <th width="320" scope='col'>Nama Paket</th>
             <th width="30" scope='col'>Jumlah</th>
 			<th width="100" scope='col'>Harga Satuan</th>
+			<th width="100" scope='col'>Total</th>
             <th width="150" scope='col'>Referal</th>
         </tr>
     </thead>
@@ -51,7 +52,30 @@
          </tr>
         <?
 				$i=0;
+				$tot_medis = 0;
+				$tot_non_medis = 0;
+				$tot_aa = 0;
+				$tot_surgery = 0;
+				$tot_all = 0;
+				$total = 0;
+				$jum_all = 0;
 		foreach($data_print as $print) { 
+		if ($print->kategori_nama == 'Medis') {
+			$tot_medis = $tot_medis+$print->dapaket_jumlah*$print->harga_satuan;
+		}
+		if ($print->kategori_nama == 'Non Medis') {
+			$tot_non_medis = $tot_non_medis+$print->dapaket_jumlah*$print->harga_satuan;
+		}
+		if ($print->kategori_nama == 'Anti Aging') {
+			$tot_aa = $tot_aa+$print->dapaket_jumlah*$print->harga_satuan;
+		}
+		if ($print->kategori_nama == 'Surgery') {
+			$tot_surgery = $tot_surgery+$print->dapaket_jumlah*$print->harga_satuan;
+		}
+		$tot_all = $tot_all + $print->harga_satuan;
+		$jum_all = $jum_all + $print->dapaket_jumlah;
+		$total = $total + $print->dapaket_jumlah*$print->harga_satuan;
+		
 				if($print->rawat_id==$printlist->rawat_id){ $i++;
 		?>
 		<tr>
@@ -63,14 +87,12 @@
             <td ><?php echo $print->paket_nama; ?></td>
             <td><?php echo $print->dapaket_jumlah; ?></td>
 			<td class="numeric"><?php echo number_format($print->harga_satuan,0,",",","); ?></td>
+			<td class="numeric"><?php echo number_format($print->dapaket_jumlah*$print->harga_satuan,0,",",","); ?></td>
             <td><?php echo $print->referal; ?></td>
        </tr>
 		<?php }
 		}
 		?>
-         <tr>
-                <td colspan="9">&nbsp;</td>
-         </tr>
         <?
 		}
 		$rawat=$printlist->rawat_id; 
@@ -81,7 +103,35 @@
     	<tr>
         	<td class="clear">&nbsp;</td>
         	<th scope='row'>Total</th>
-            <td colspan='7'><?php echo count($data_print); ?> data</td>
+            <td colspan='4'>&nbsp;</td> 
+			<td><?php echo $jum_all; ?></td>
+			<td> </td>
+			<td align="right" class="numeric_bayar"><?php echo number_format($total,0,",",","); ?></td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row'>Medis</th>
+			<td> </td>
+            <td colspan='8'><?php echo number_format($tot_medis,0,",",","); ?></td>
+        </tr>
+		<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row'>Non Medis</th>
+			<td> </td>
+            <td colspan='8'><?php echo number_format($tot_non_medis,0,",",","); ?></td>
+        </tr>
+				<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row'>Anti Aging</th>
+			<td> </td>
+            <td colspan='8'><?php echo number_format($tot_aa,0,",",","); ?></td>
+        </tr>
+				<tr>
+        	<td class="clear">&nbsp;</td>
+        	<th scope='row'>Surgery</th>
+			<td> </td>
+            <td colspan='8'><?php echo number_format($tot_surgery,0,",",","); ?></td>
         </tr>
     </tfoot>
 </table>
