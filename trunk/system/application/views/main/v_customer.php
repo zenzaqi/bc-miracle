@@ -3277,7 +3277,7 @@ Ext.onReady(function(){
 		},
 		<?php } ?>
 		{ 
-			text: 'Generate CRM Value',
+			text: 'Generate CRM Value (single data)',
 			//iconCls:'icon-update',
 			handler:customer_confirm_crm
 		},
