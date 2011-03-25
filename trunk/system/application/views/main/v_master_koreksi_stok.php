@@ -299,7 +299,7 @@ Ext.onReady(function(){
 		cbo_stok_produkDataStore.load();
 		detail_koreksi_stok_DataStore.setBaseParam('master_id', -1);		
 		detail_koreksi_stok_DataStore.load();
-		master_koreksi_stok_createForm.kstok_savePrint.enable();
+		koreksi_button_saveprintField.setDisabled(false);
 		check_gudang();
 	}
 	
@@ -362,7 +362,7 @@ Ext.onReady(function(){
 			koreksi_tanggalField.setDisabled(false);
 			koreksi_keteranganField.setDisabled(false);
 			koreksi_statusField.setDisabled(false);
-			master_koreksi_stok_createForm.kstok_savePrint.enable();
+			koreksi_button_saveprintField.setDisabled(false);
 		}
 		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Tertutup"){
 			koreksi_idField.setDisabled(true);
@@ -384,7 +384,7 @@ Ext.onReady(function(){
 			koreksi_tanggalField.setDisabled(true);
 			koreksi_keteranganField.setDisabled(true);
 			koreksi_statusField.setDisabled(true);
-			master_koreksi_stok_createForm.kstok_savePrint.disable();
+			koreksi_button_saveprintField.setDisabled(true);
 		}
 		
 		
@@ -430,7 +430,7 @@ Ext.onReady(function(){
         
        else if(status_awal =='Tertutup' && koreksi_statusField.getValue()=='Tertutup'){
             <?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
-			master_koreksi_stok_createForm.kstok_savePrint.enable();
+			koreksi_button_saveprintField.setDisabled(false);
 			<?php } ?>
         }
 		
@@ -445,7 +445,7 @@ Ext.onReady(function(){
 		{
 			koreksi_statusField.setValue('Batal');
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
-			master_koreksi_stok_createForm.kstok_savePrint.disable();
+			koreksi_button_saveprintField.setDisabled(true);
 			<?php } ?>
 		}  
 		else
