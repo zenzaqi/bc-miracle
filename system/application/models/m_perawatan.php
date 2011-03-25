@@ -95,7 +95,12 @@ class M_perawatan extends Model{
 			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%' or produk_kodelama like '%".$query."%') ";
+				$sql.=" (produk_kode like '%".$query."%' or 
+						 produk_nama like '%".$query."%' or 
+						 satuan_nama like '%".$query."%' or 
+						 kategori_nama like '%".$query."%' or 
+						 group_nama like '%".$query."%' or 
+						 produk_kodelama like '%".$query."%') ";
 			}else{
 				if($rs_rows){
 					$filter="";
@@ -294,7 +299,10 @@ class M_perawatan extends Model{
 		*/
 		
 		function get_kontribusi_rawat_list(){
-			$sql="SELECT kategori2_id,kategori2_nama FROM kategori2 LEFT JOIN kategori ON(kategori2.kategori2_jenis=kategori.kategori_id) WHERE kategori_jenis='perawatan' and kategori2_aktif='Aktif'";
+			$sql="SELECT kategori2_id,kategori2_nama 
+					FROM kategori2 
+					LEFT JOIN kategori ON(kategori2.kategori2_jenis=kategori.kategori_id) 
+					WHERE kategori_jenis='perawatan' and kategori2_aktif='Aktif'";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
 			if($nbrows>0){

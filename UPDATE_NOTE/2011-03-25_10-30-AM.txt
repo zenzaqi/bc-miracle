@@ -1,0 +1,7 @@
+<update by zaqi.smart@gmail.com>
+- Perbaikan Master Perawatan
+  o Detail standar bahan dibuat satuan terkecil
+- Perbaikan Stok Mutasi
+  o Koreksi perhitungan
+- Perbaikan Kartu Stok
+  o Koreksi perhitungan u/ sinkron dengan Stok Mutasi

@@ -387,6 +387,7 @@ Ext.onReady(function(){
 		Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_stok_mutasi&m=generate_stok_mutasi',
+				timeout: 3600000,
 				params:{ 
 					produk_id		:	produk_nama_search, 
 					group1_id		:	group1_search,
