@@ -252,7 +252,7 @@ var editor_cust_note;
 		cust_jmlanakField.setValue(true);
 		cust_unitField.setValue(true);
 		cust_aktifField.setValue(true);
-		cust_fretfulnessField.setValue(true);
+		cust_fretfulnessField.setValue('Medium');
 		cust_cpField.setValue(true);
 		cust_cptelpField.setValue(true);
 		cust_umurField.setValue(true);
