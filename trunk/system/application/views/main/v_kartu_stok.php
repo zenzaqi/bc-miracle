@@ -254,31 +254,24 @@ Ext.onReady(function(){
 	});
 	
 	
-	kartu_stok_awalField=new Ext.form.NumberField({
+	kartu_stok_awalField=new Ext.form.TextField({
 		id: 'kartu_stok_awalField',
 		name: 'kartu_stok_awalField',
 		fieldLabel: '<b>Stok Awal</b>',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
-		allowDecimals: true,
-		allowNegative: true,
-		blankText: '0',
-		maxLength: 11,
-		readOnly: true,
-		width: 60,
-		maskRe: /([0-9.]+)$/
+		width: 60
 	});
 	
-	kartu_stok_saldoField=new Ext.form.NumberField({
+	kartu_stok_saldoField=new Ext.form.TextField({
 		id: 'kartu_stok_saldoField',
 		name: 'kartu_stok_saldoField',
 		fieldLabel: '<b>Stok Akhir</b>',
-		allowDecimals: true,
-		allowNegative: true,
-		blankText: '0',
-		maxLength: 11,
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
 		readOnly: true,
-		width: 60,
-		maskRe: /([0-9.]+)$/
+		width: 60
 	});
 	
 	kartu_stok_masterField=new Ext.form.FieldSet({
@@ -438,6 +431,7 @@ Ext.onReady(function(){
 			
 			Ext.Ajax.request({
 				waitMsg: 'Mohon tunggu...',
+				timeout: 3600000,
 				url: 'index.php?c=c_kartu_stok&m=generate_kartu_stok',
 				params:{ 
 					produk_id		:	produk_nama_search, 
@@ -486,10 +480,10 @@ Ext.onReady(function(){
 												stok_masuk=rounding(data_resume.data.stok_masuk,2);
 												stok_keluar=rounding(data_resume.data.stok_keluar,2);
 												
-												kartu_stok_awalField.setValue(stok_awal);
+												kartu_stok_awalField.setValue(CurrencyFormatted(stok_awal));
 												stok_akhir=rounding((stok_awal+stok_masuk-stok_keluar),2);
 										
-												kartu_stok_saldoField.setValue(stok_akhir);
+												kartu_stok_saldoField.setValue(CurrencyFormatted(stok_akhir));
 												Ext.MessageBox.hide(); 
 												kartu_stok_searchWindow.hide();
 												
