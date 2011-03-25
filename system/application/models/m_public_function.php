@@ -2792,7 +2792,15 @@ class M_public_function extends Model{
 			$data_kunjungan_all		= $query_kunjungan_all->row();
 			$tot_kunjungan_all		= $data_kunjungan_all->tot_kunjungan_all;
 			
-			$spending_avg			= $tot_spending_all / $tot_kunjungan_all;
+			if (($tot_kunjungan_all == 0) or ($tot_kunjungan_all == null)) {
+				$tot_kunjungan_all	= 0;
+				$spending_avg 		= 0;
+			} 
+			else {
+				$spending_avg 		= $tot_spending_all / $tot_kunjungan_all;
+			}
+			
+			
 			
 			//menghitung Total Spending CUST ybs-->(selalu sesuaikan dg m_report_rekap_penjualan)
 			//Spending Produk:
