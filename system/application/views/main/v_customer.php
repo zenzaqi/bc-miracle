@@ -506,12 +506,12 @@ var editor_cust_note;
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate nilai CRM berhasil dilakukan.');
+							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate CRM Value berhasil dilakukan.');
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Generate nilai CRM tidak dapat dilakukan',
+							   msg: 'Generate CRM Value tidak dapat dilakukan.',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -713,15 +713,15 @@ else if(cust_bulan_opsiField.getValue()==true){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate nilai CRM berhasil dilakukan.');
+							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate CRM Value berhasil dilakukan.');
 							break;
 						case 2:
-							Ext.MessageBox.alert('WARNING'+' OK','Data customer tidak boleh lebih dari 100.');
+							Ext.MessageBox.alert('WARNING'+' OK','Untuk melakukan Generate CRM Value, data customer tidak boleh melebihi batas maksimum 100 data.');
 							break;
 						default:
 							Ext.MessageBox.show({
 							   title: 'Warning',
-							   msg: 'Generate nilai CRM tidak dapat dilakukan',
+							   msg: 'Generate CRM Value tidak dapat dilakukan',
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'save',
 							   icon: Ext.MessageBox.WARNING
@@ -793,10 +793,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 	function customer_confirm_crm(){
 		// only one customer is selected here
 		if(customerListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan Generate CRM Value pada customer ini?', crm_generator_button);
 			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else if(customerListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM pada customer ini?', crm_generator_button);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan Generate CRM Value pada customer ini?', crm_generator_button);
 			//Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', customer_delete);
 		} else {
 			Ext.MessageBox.show({
@@ -819,14 +819,14 @@ else if(cust_bulan_opsiField.getValue()==true){
 	
 	/* Function for generate crm Confirm */
 	function customer_confirm_crm2(){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM?', crm_generator_button2);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan Generate CRM Value?', crm_generator_button2);
 	}
   	/* End of Function */
     
 	function crm_generator_button2(btn2){
 		if(btn2=='yes'){
 			if(customer_DataStore.getCount() > 5){
-				Ext.MessageBox.confirm('Confirmation','Generate CRM Value untuk banyak data memerlukan proses cukup lama, anda setuju untuk melanjutkan?', crm_generator_button3);
+				Ext.MessageBox.confirm('Confirmation','Generate CRM Value untuk banyak data memerlukan waktu cukup lama. Anda yakin untuk melanjutkan?', crm_generator_button3);
 			}
 			else 
 				cust_crm_generator_save_all();

@@ -126,7 +126,7 @@ Ext.onReady(function(){
 
   	/* Function for add data, open window create form */
 	function usergroups_create(){
-				usergroups_reset_form();
+				//usergroups_reset_form();
 
 		if(is_usergroups_form_valid()){
 
@@ -199,15 +199,24 @@ Ext.onReady(function(){
 	/* Reset form before loading */
 	function usergroups_reset_form(){
 		group_nameField.reset();
+		group_nameField.setValue(null);
 		group_descField.reset();
-		group_activeField.setValue('Y');
+		group_descField.setValue(null);
+		group_activeField.reset();
+		group_activeField.setValue(null);
+		group_allprivField.reset();
 		group_allprivField.setValue(false);
+		group_allreadprivField.reset();
 		group_allreadprivField.setValue(false);
+		group_allcreateprivField.reset();
 		group_allcreateprivField.setValue(false);
+		group_allupdateprivField.reset();
 		group_allupdateprivField.setValue(false);
+		group_alldeleteprivField.reset();
 		group_alldeleteprivField.setValue(false);
+		group_allprintprivField.reset();
 		group_allprintprivField.setValue(false);
-		group_activeField.setValue('Aktif');
+		
 
 	}
  	/* End of Function */
