@@ -506,9 +506,7 @@ var editor_cust_note;
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert('CRMVAL'+' OK','Generate nilai CRM berhasil dilakukan.');
-							//cust_crm_generator_DataStore.reload();
-							//cust_crm_generator_saveWindow.hide();
+							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate nilai CRM berhasil dilakukan.');
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -536,7 +534,217 @@ var editor_cust_note;
 		}
  	/* End of Function */
   
-  
+  function cust_crm_generator_save_all(){
+			var crm_generator_id_create_pk=null;
+			var crm_generator_cust_field = null;
+			var cust_tujuan_id_field = null;
+			var cust_point_field = null;
+			var crm_generator_date_create=today;
+			var joincustomer_keterangan_create=null;
+			
+			var crmquery = "";
+			var cust_crm_no=null;
+			var cust_crm_nolama=null;
+			var cust_crm_no_awal=null;
+			var cust_crm_no_akhir=null;
+			var cust_crm_nama=null;
+			var cust_crm_kelamin=null;
+			var cust_crm_alamat=null;
+			var cust_crm_alamat2=null;
+			var cust_crm_kota=null;
+			var cust_crm_kodepos=null;
+			var cust_crm_propinsi=null;
+			var cust_crm_negara=null;
+			var cust_crm_telprumah=null;
+			var cust_crm_telprumah2=null;
+			var cust_crm_telpkantor=null;
+			var cust_crm_hp=null;
+			var cust_crm_hp2=null;
+			var cust_crm_hp3=null;
+			var cust_crm_email=null;
+			var cust_crm_agama=null;
+			var cust_crm_pendidikan=null;
+			var cust_crm_profesi=null;
+			var cust_crm_tgllahir_date="";
+			var cust_crm_tgllahir_dateEnd="";
+
+			//var cust_crm_hobi=null;
+			var cust_crm_referensi=null;
+			var cust_crm_keterangan=null;
+			var cust_crm_member=null;
+			var cust_crm_member2=null;
+			var cust_crm_terdaftar_date="";
+			var cust_crm_statusnikah=null;
+			var cust_crm_priority=null;
+			var cust_crm_jmlanak=null;
+			var cust_crm_unit=null;
+			var cust_crm_aktif=null;
+			var sortby_crm=null;
+			var cust_fretfulness_crm=null;
+			var cust_umurstart_crm=null;
+			var cust_umurend_crm=null;
+			var cust_tgl_crm=null;
+			var cust_bulan_crm=null;
+			var cust_bb_crm=null;
+
+			
+			
+			var win;              
+			// check if we do have some search data...
+			if(customer_DataStore.baseParams.query!==null){crmquery = customer_DataStore.baseParams.query;}
+			if(customer_DataStore.baseParams.cust_no!==null){cust_crm_no = customer_DataStore.baseParams.cust_no;}
+			if(customer_DataStore.baseParams.cust_nolama!==null){cust_crm_nolama = customer_DataStore.baseParams.cust_nolama;}
+			if(customer_DataStore.baseParams.cust_no_awal!==null){cust_crm_no_awal = customer_DataStore.baseParams.cust_no_awal;}
+			if(customer_DataStore.baseParams.cust_no_akhir!==null){cust_crm_no_akhir = customer_DataStore.baseParams.cust_no_akhir;}
+			if(customer_DataStore.baseParams.cust_nama!==null){cust_crm_nama = customer_DataStore.baseParams.cust_nama;}
+			if(customer_DataStore.baseParams.cust_kelamin!==null){cust_crm_kelamin = customer_DataStore.baseParams.cust_kelamin;}
+			if(customer_DataStore.baseParams.cust_alamat!==null){cust_crm_alamat = customer_DataStore.baseParams.cust_alamat;}
+			if(customer_DataStore.baseParams.cust_alamat2!==null){cust_crm_alamat2 = customer_DataStore.baseParams.cust_alamat2;}
+			if(customer_DataStore.baseParams.cust_kota!==null){cust_crm_kota = customer_DataStore.baseParams.cust_kota;}
+			if(customer_DataStore.baseParams.cust_kodepos!==null){cust_crm_kodepos = customer_DataStore.baseParams.cust_kodepos;}
+			if(customer_DataStore.baseParams.cust_propinsi!==null){cust_crm_propinsi = customer_DataStore.baseParams.cust_propinsi;}
+			if(customer_DataStore.baseParams.cust_negara!==null){cust_crm_negara = customer_DataStore.baseParams.cust_negara;}
+			if(customer_DataStore.baseParams.cust_telprumah!==null){cust_crm_telprumah = customer_DataStore.baseParams.cust_telprumah;}
+			if(customer_DataStore.baseParams.cust_telprumah2!==null){cust_crm_telprumah2 = customer_DataStore.baseParams.cust_telprumah2;}
+			if(customer_DataStore.baseParams.cust_telpkantor!==null){cust_crm_telpkantor = customer_DataStore.baseParams.cust_telpkantor;}
+			if(customer_DataStore.baseParams.cust_hp!==null){cust_crm_hp = customer_DataStore.baseParams.cust_hp;}
+			if(customer_DataStore.baseParams.cust_hp2!==null){cust_crm_hp2 = customer_DataStore.baseParams.cust_hp2;}
+			if(customer_DataStore.baseParams.cust_hp3!==null){cust_crm_hp3 = customer_DataStore.baseParams.cust_hp3;}
+			if(customer_DataStore.baseParams.cust_email!==null){cust_crm_email = customer_DataStore.baseParams.cust_email;}
+			if(customer_DataStore.baseParams.cust_agama!==null){cust_crm_agama = customer_DataStore.baseParams.cust_agama;}
+			if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_crm_pendidikan = customer_DataStore.baseParams.cust_pendidikan;}
+			if(customer_DataStore.baseParams.cust_profesi!==null){cust_crm_profesi = customer_DataStore.baseParams.cust_profesi;}
+			if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_crm_tgllahir_date = customer_DataStore.baseParams.cust_tgllahir;}
+			if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_crm_tgllahir_dateEnd = customer_DataStore.baseParams.cust_tgllahirend;}
+			//if(customer_DataStore.baseParams.cust_hobi!==null){cust_crm_hobi = customer_DataStore.baseParams.cust_hobi;}
+			if(customer_DataStore.baseParams.cust_referensi!==null){cust_crm_referensi = customer_DataStore.baseParams.cust_referensi;}
+			if(customer_DataStore.baseParams.cust_keterangan!==null){cust_crm_keterangan = customer_DataStore.baseParams.cust_keterangan;}
+			if(customer_DataStore.baseParams.cust_member!==null){cust_crm_member = customer_DataStore.baseParams.cust_member;}
+			if(customer_DataStore.baseParams.cust_member2!==null){cust_crm_member2 = customer_DataStore.baseParams.cust_member2;}
+			if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_crm_terdaftar_date = customer_DataStore.baseParams.cust_terdaftar;}
+			if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_crm_statusnikah = customer_DataStore.baseParams.cust_statusnikah;}
+			if(customer_DataStore.baseParams.cust_priority!==null){cust_crm_priority = customer_DataStore.baseParams.cust_priority;}
+			if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_crm_jmlanak = customer_DataStore.baseParams.cust_jmlanak;}
+			if(customer_DataStore.baseParams.cust_unit!==null){cust_crm_unit = customer_DataStore.baseParams.cust_unit;}
+			if(customer_DataStore.baseParams.cust_aktif!==null){cust_crm_aktif = customer_DataStore.baseParams.cust_aktif;}
+			if(sortby_SearchField.getValue()!==null){sortby=sortby_SearchField.getValue();}
+			
+			if(customer_DataStore.baseParams.cust_fretfulness!==null){cust_fretfulness_crm = customer_DataStore.baseParams.cust_fretfulness;}
+if(customer_DataStore.baseParams.cust_umurstart!==null){cust_umurstart_crm=customer_DataStore.baseParams.cust_umurstart;}
+if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_DataStore.baseParams.cust_umurend;}	
+
+if(cust_tgl_opsiField.getValue()==true){
+	if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_crm_tgllahir_date=customer_DataStore.baseParams.cust_tgllahir.format('Y-m-d');}
+	if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_crm_tgllahir_dateEnd=customer_DataStore.baseParams.cust_tgllahirend.format('Y-m-d');}
+}		
+else if(cust_bulan_opsiField.getValue()==true){
+	if(customer_DataStore.baseParams.cust_tgl!==null){cust_tgl_crm=customer_DataStore.baseParams.cust_tgl;}
+	if(customer_DataStore.baseParams.cust_bulan!==null){cust_bulan_crm=customer_DataStore.baseParams.cust_bulan;}
+}
+										
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_customer&m=get_action',
+				params: {
+	
+					task: 'CRMVAL2',
+					query: crmquery, 
+					
+					cust_no : cust_crm_no,
+					cust_nolama :cust_crm_nolama,
+					cust_no_awal: cust_crm_no_awal,
+					cust_no_akhir: cust_crm_no_akhir,
+					cust_nama:cust_crm_nama,
+					cust_kelamin:cust_crm_kelamin,
+					cust_alamat:cust_crm_alamat,
+					cust_alamat2:cust_crm_alamat2,
+					cust_kota:cust_crm_kota,
+					cust_kodepos:cust_crm_kodepos,
+					cust_propinsi:cust_crm_propinsi,
+					cust_negara: cust_crm_negara,
+					cust_telprumah :cust_crm_telprumah,
+					cust_telprumah2: cust_crm_telprumah2,
+					cust_telpkantor:cust_crm_telpkantor,
+					cust_hp:cust_crm_hp,
+					cust_hp2:cust_crm_hp2,
+					cust_hp3:cust_crm_hp3,
+					cust_email :cust_crm_email,
+					cust_agama: cust_crm_agama,
+					cust_pendidikan:cust_crm_pendidikan,
+					cust_profesi :cust_crm_profesi,
+					cust_tgllahir:cust_crm_tgllahir_date,
+					cust_tgllahirend:cust_crm_tgllahir_dateEnd,
+					// cust_hobi:
+					cust_referensi: cust_crm_referensi,
+					cust_keterangan: cust_crm_keterangan,
+					cust_member: cust_crm_member,
+					cust_member2: cust_crm_member2,
+					cust_terdaftar_date : cust_crm_terdaftar_date,
+					cust_statusnikah: cust_crm_statusnikah,
+					cust_priority: cust_crm_priority,
+					cust_jmlanak: cust_crm_jmlanak,
+					cust_unit: cust_crm_unit,
+					cust_aktif :cust_crm_aktif,
+					sortby		:	sortby_crm,
+					cust_fretfulness : cust_fretfulness_crm,
+					cust_umurstart : cust_umurstart_crm,
+					cust_umurend : cust_umurend_crm,
+					cust_tgl	: cust_tgl_crm,
+					cust_bulan	: cust_bulan_crm,
+					/*cust_hobi_baca : cust_hobi_bacacrm.getValue(),
+					cust_hobi_olah : cust_hobi_olahcrm.getValue(),
+					cust_hobi_masak : cust_hobi_masakcrm.getValue(),
+					cust_hobi_travel : cust_hobi_travelcrm.getValue(),
+					cust_hobi_foto : cust_hobi_fotocrm.getValue(),
+					cust_hobi_lukis : cust_hobi_lukiscrm.getValue(),
+					cust_hobi_nari : cust_hobi_naricrm.getValue(),
+					cust_hobi_lain : cust_hobi_laincrm.getValue(),*/
+					cust_bb		:	cust_bb_crm,
+					
+					crmvalue_id	: crm_generator_id_create_pk,		
+					//crmvalue_cust	: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'),
+					//cust_tujuan_id	: cust_tujuan_id_field,
+					//cust_point		: cust_point_field,
+					crmvalue_date	: crm_generator_date_create		,
+					currentlisting: customer_DataStore.baseParams.task					
+					//join_keterangan	: joincustomer_keterangan_create
+				}, 
+				success: function(response){             
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate nilai CRM berhasil dilakukan.');
+							//cust_crm_generator_DataStore.reload();
+							//cust_crm_generator_saveWindow.hide();
+							break;
+						case 2:
+							Ext.MessageBox.alert('WARNING'+' OK','Data customer tidak boleh lebih dari 100.');
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'Generate nilai CRM tidak dapat dilakukan',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}        
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Could not connect to the database. retry later.',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});	
+				}                      
+			});
+			
+		}
+ 	/* End of Function */
 	
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
@@ -608,6 +816,28 @@ var editor_cust_note;
 	function crm_generator_button(btn){
 		if(btn=='yes'){
 			cust_crm_generator_save();
+		}
+	}
+	
+	/* Function for generate crm Confirm */
+	function customer_confirm_crm2(){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan generate nilai CRM?', crm_generator_button2);
+	}
+  	/* End of Function */
+    
+	function crm_generator_button2(btn2){
+		if(btn2=='yes'){
+			if(customerListEditorGrid.selModel.getCount() > 5){
+				Ext.MessageBox.confirm('Confirmation','Generate CRM Value untuk banyak data memerlukan proses cukup lama, anda setuju untuk melanjutkan?', crm_generator_button3);
+			}
+			else 
+				cust_crm_generator_save_all();
+		}
+	}
+	
+	function crm_generator_button3(btn3){
+		if(btn3=='yes'){
+			cust_crm_generator_save_all();
 		}
 	}
 	
@@ -754,7 +984,6 @@ var editor_cust_note;
 		//var cust_hp_search=null;
 		//var cust_hp2_search=null;
 		//var cust_hp3_search=null;
-		var cust_bb_search=null;
 		var cust_email_search=null;
 		var cust_agama_search=null;
 		var cust_pendidikan_search=null;
@@ -2081,6 +2310,49 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
+	cust_crm_generator_DataStore2 = new Ext.data.Store({
+		id: 'cust_crm_generator_DataStore2',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "CRMVAL2", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert intohpp_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'crmvalue_id', type: 'int', mapping: 'crmvalue_id'},
+			{name: 'crmvalue_date', type: 'date',dateFormat: 'Y-m-d H:i:s', mapping: 'crmvalue_date'},
+			{name: 'crmvalue_cust_no', type: 'string', mapping: 'crmvalue_cust_no'},
+			{name: 'crmvalue_cust', type: 'string', mapping: 'crmvalue_cust'},
+			{name: 'crmvalue_frequency', type: 'float', mapping: 'crmvalue_frequency'},
+			{name: 'crmvalue_recency', type: 'float', mapping: 'crmvalue_recency'},
+			{name: 'crmvalue_spending', type: 'float', mapping: 'crmvalue_spending'},
+			{name: 'crmvalue_highmargin', type: 'float', mapping: 'crmvalue_highmargin'},
+			{name: 'crmvalue_referal', type: 'float', mapping: 'crmvalue_referal'},
+			{name: 'crmvalue_kerewelan', type: 'float', mapping: 'crmvalue_kerewelan'},
+			{name: 'crmvalue_disiplin_batal', type: 'float', mapping: 'crmvalue_disiplin_batal'},
+			{name: 'crmvalue_disiplin_telat', type: 'float', mapping: 'crmvalue_disiplin_telat'},
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_frequency_real', type: 'int', mapping: 'crmvalue_frequency_real'},
+			{name: 'crmvalue_recency_real', type: 'float', mapping: 'crmvalue_recency_real'},
+			{name: 'crmvalue_spending_real_rp', type: 'float', mapping: 'crmvalue_spending_real_rp'},
+			{name: 'crmvalue_spending_real_kunj', type: 'float', mapping: 'crmvalue_spending_real_kunj'},
+			{name: 'crmvalue_highmargin_real', type: 'float', mapping: 'crmvalue_highmargin_real'},
+			{name: 'crmvalue_referal_real', type: 'float', mapping: 'crmvalue_referal_real'},
+			{name: 'crmvalue_kerewelan_real', type: 'string', mapping: 'crmvalue_kerewelan_real'},
+			{name: 'crmvalue_disiplin_batal_real', type: 'float', mapping: 'crmvalue_disiplin_batal_real'},
+			{name: 'crmvalue_disiplin_telat_real', type: 'float', mapping: 'crmvalue_disiplin_telat_real'},
+			{name: 'crmvalue_treatment', type: 'float', mapping: 'crmvalue_treatment'},
+			{name: 'crmvalue_total', type: 'float', mapping: 'crmvalue_total'},
+			{name: 'crmvalue_priority', type: 'string', mapping: 'crmvalue_priority'}
+		]),
+		sortInfo:{field: 'crmvalue_id', direction: "ASC"}
+	});
+	/* End of Function */
+	
 	
 	//datastore of profesi
 	/*
@@ -2933,10 +3205,10 @@ Ext.onReady(function(){
 		}, '-',
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 		{
-			text: 'CRM Value Generator',
+			text: 'Generate CRM Value',
 			//tooltip: 'Edit selected record',
 			//iconCls:'icon-update',
-			handler: customer_confirm_crm
+			handler: customer_confirm_crm2
 		}
 		<?php } ?>
 		]
@@ -3007,7 +3279,7 @@ Ext.onReady(function(){
 		},
 		<?php } ?>
 		{ 
-			text: 'CRM Value Generator',
+			text: 'Generate CRM Value',
 			//iconCls:'icon-update',
 			handler:customer_confirm_crm
 		},
@@ -4955,7 +5227,7 @@ Ext.onReady(function(){
          <div id="fp_cust_note"></div>
 		<div id="elwindow_customer_create"></div>
         <div id="elwindow_customer_search"></div>
-		<div id="fp_vu_crm_generator"></div>
+	
     </div>
 </div>
 </body>
