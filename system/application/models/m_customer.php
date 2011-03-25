@@ -183,9 +183,8 @@ class M_customer extends Model{
 		//function for get list record
 		function customer_list($filter,$start,$end){
 			$query =   "SELECT 
-							v.*, crm.crmvalue_date as crmvalue_date, crm.crmvalue_total as crmvalue_total , crm.crmvalue_priority as crmvalue_priority
+							v.*
 						FROM vu_customer v
-						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value
 						WHERE cust_aktif = 'Aktif' ";
 			
 			// For simple search
@@ -277,6 +276,8 @@ class M_customer extends Model{
 			if($cust_terdaftar=='')
 			$cust_terdaftar=$date;
 			
+			if($cust_fretfulness=='')
+			$cust_fretfulness='Medium';
 			
 /*			if($cust_kota=="" || $cust_kota==NULL)
 				$cust_kota="Surabaya";
@@ -564,6 +565,8 @@ class M_customer extends Model{
 			if($cust_terdaftar=='')
 			$cust_terdaftar=$date;
 			
+			if($cust_fretfulness=='')
+			$cust_fretfulness='Medium';
 			
 			if($cust_hobi_baca=='true')
 			$baca="1";
@@ -748,11 +751,9 @@ class M_customer extends Model{
 				$cust_aktif = "Aktif";
 
 			$query =   "SELECT 
-							v.*, crm.crmvalue_date as crmvalue_date, crm.crmvalue_total as crmvalue_total , crm.crmvalue_priority as crmvalue_priority
-						FROM vu_customer v
-						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value";
-			
-						
+							v.*
+						FROM vu_customer v";
+												
 			if($cust_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_id LIKE '%".$cust_id."%'";
@@ -1276,9 +1277,8 @@ class M_customer extends Model{
 				$cust_aktif = "Aktif";
 			//full query
 			$query="SELECT 
-							v.*, crm.crmvalue_date as crmvalue_date, crm.crmvalue_total as crmvalue_total , crm.crmvalue_priority as crmvalue_priority
+							v.*
 						FROM vu_customer v
-						LEFT JOIN crm_value crm on crm.crmvalue_id = v.cust_crm_value
 						WHERE cust_aktif = 'Aktif' ";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
