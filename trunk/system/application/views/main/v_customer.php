@@ -714,8 +714,6 @@ else if(cust_bulan_opsiField.getValue()==true){
 					switch(result){
 						case 1:
 							Ext.MessageBox.alert('Generate CRM Value'+' OK','Generate nilai CRM berhasil dilakukan.');
-							//cust_crm_generator_DataStore.reload();
-							//cust_crm_generator_saveWindow.hide();
 							break;
 						case 2:
 							Ext.MessageBox.alert('WARNING'+' OK','Data customer tidak boleh lebih dari 100.');
@@ -827,7 +825,7 @@ else if(cust_bulan_opsiField.getValue()==true){
     
 	function crm_generator_button2(btn2){
 		if(btn2=='yes'){
-			if(customerListEditorGrid.selModel.getCount() > 5){
+			if(customer_DataStore.getCount() > 5){
 				Ext.MessageBox.confirm('Confirmation','Generate CRM Value untuk banyak data memerlukan proses cukup lama, anda setuju untuk melanjutkan?', crm_generator_button3);
 			}
 			else 
