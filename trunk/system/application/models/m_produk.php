@@ -118,7 +118,7 @@ class M_produk extends Model{
 		function get_produk_list($query,$start,$end){
 			$rs_rows=0;
 			if(is_numeric($query)==true){
-				$sql_dproduk="SELECT pracikan_produk FROM perawatan_konsumsi WHERE pracikan_master='$query'";
+				$sql_dproduk="SELECT pracikan_produk FROM produk_racikan WHERE pracikan_master='$query'";
 				$rs=$this->db->query($sql_dproduk);
 				$rs_rows=$rs->num_rows();
 			}
@@ -263,7 +263,7 @@ class M_produk extends Model{
 		}
 		
 		//function for update record
-		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta ){
+		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk ){
 		
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
@@ -367,7 +367,8 @@ class M_produk extends Model{
 				"produk_harga_mdn"=>$produk_harga_mdn,
 				"produk_harga_mnd"=>$produk_harga_mnd,
 				"produk_harga_ygk"=>$produk_harga_ygk,
-				"produk_harga_mta"=>$produk_harga_mta,	
+				"produk_harga_mta"=>$produk_harga_mta,
+				"produk_harga_lbk"=>$produk_harga_lbk,
 				"produk_du"=>$produk_du,
 				"produk_dm"=>$produk_dm,
 				"produk_keterangan"=>$produk_keterangan, 
@@ -457,7 +458,7 @@ class M_produk extends Model{
 		}
 		
 		//function for create new record
-		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta){
+		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
 			if($produk_harga=="")
@@ -565,7 +566,8 @@ class M_produk extends Model{
 				"produk_harga_mdn"=>$produk_harga_mdn,
 				"produk_harga_mnd"=>$produk_harga_mnd,
 				"produk_harga_ygk"=>$produk_harga_ygk,
-				"produk_harga_mta"=>$produk_harga_mta,				
+				"produk_harga_mta"=>$produk_harga_mta,	
+				"produk_harga_lbk"=>$produk_harga_lbk,
 				"produk_jenis"=>$produk_jenis,
 				"produk_keterangan"=>$produk_keterangan, 
 				"produk_aktif_cabang"=>$temp_aktif,
