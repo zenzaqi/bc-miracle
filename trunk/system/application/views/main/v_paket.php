@@ -208,6 +208,7 @@ Ext.onReady(function(){
 		var paket_harga_createki=null;
 		var paket_harga_createmta=null;
 		var paket_harga_createlbk=null;
+		var paket_harga_createhr=null;
 		var paket_harga_createmdn=null;
 		var paket_harga_createmnd=null;
 		var paket_harga_createygk=null;
@@ -231,6 +232,7 @@ Ext.onReady(function(){
 		if(paket_harga_mndField.getValue()!== null){paket_harga_createmnd = convertToNumber(paket_harga_mndField.getValue());}
 		if(paket_harga_mtaField.getValue()!== null){paket_harga_createmta = convertToNumber(paket_harga_mtaField.getValue());}
 		if(paket_harga_lbkField.getValue()!== null){paket_harga_createlbk = convertToNumber(paket_harga_lbkField.getValue());}
+		if(paket_harga_hrField.getValue()!== null){paket_harga_createhr = convertToNumber(paket_harga_hrField.getValue());}
 		if(paket_harga_ygkField.getValue()!== null){paket_harga_createygk = convertToNumber(paket_harga_ygkField.getValue());}
 		//if(paket_Field.getValue()!== null){paket_create = paket_Field.getValue();}
 
@@ -259,6 +261,7 @@ Ext.onReady(function(){
 				paket_harga_mnd : paket_harga_createmnd,
 				paket_harga_ygk : paket_harga_createygk,
 				paket_harga_lbk : paket_harga_createlbk,
+				paket_harga_hr	: paket_harga_createhr,
 				//paket : paket_create,
 				paket_aktif_th : paket_aktif_thField.getValue(),
 				paket_aktif_ki : paket_aktif_kiField.getValue(),
@@ -482,6 +485,7 @@ Ext.onReady(function(){
 		paket_harga_kiField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_ki')));
 		paket_harga_mtaField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mta')));
 		paket_harga_lbkField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_lbk')));
+		paket_harga_hrField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_hr')));
 		paket_harga_mdnField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mdn')));
 		paket_harga_mndField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mnd')));
 		paket_harga_ygkField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_ygk')));
@@ -727,7 +731,8 @@ Ext.onReady(function(){
 			{name: 'paket_harga_mdn', type: 'float', mapping: 'paket_harga_mdn'},
 			{name: 'paket_harga_ygk', type: 'float', mapping: 'paket_harga_ygk'},
 			{name: 'paket_harga_mta', type: 'float', mapping: 'paket_harga_mta'},
-			{name: 'paket_harga_lbk', type: 'float', mapping: 'paket_harga_lbk'}
+			{name: 'paket_harga_lbk', type: 'float', mapping: 'paket_harga_lbk'},
+			{name: 'paket_harga_hr', type: 'float', mapping: 'paket_harga_hr'}
 		]),
 		sortInfo:{field: 'paket_id', direction: "DESC"}
 	});
@@ -1571,7 +1576,7 @@ Ext.onReady(function(){
 	
 	paket_harga_lbkField=new Ext.form.TextField({
 		id : 'paket_harga_lbkField',
-		fieldLabel: 'LBK',
+		fieldLabel: 'Lombok',
 		maxLength: 20,
 		allowBlank: true,
 		itemCls: 'rmoney',
@@ -1661,7 +1666,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [paket_harga_thField, paket_harga_kiField,paket_harga_mdnField, paket_harga_mndField, paket_harga_ygkField, paket_harga_mtaField, paket_harga_lbkField]
+				items: [paket_harga_thField, paket_harga_kiField,paket_harga_mdnField, paket_harga_mndField, paket_harga_ygkField, paket_harga_mtaField, paket_harga_lbkField, paket_harga_hrField]
 			}
 		]
 	});
@@ -2905,6 +2910,8 @@ Ext.onReady(function(){
 	paket_harga_mtaField.on('blur',function(){ paket_harga_mtaField.setValue(CurrencyFormatted(paket_harga_mtaField.getValue())); });
 	paket_harga_lbkField.on('focus',function(){ paket_harga_lbkField.setValue(convertToNumber(paket_harga_lbkField.getValue())); });
 	paket_harga_lbkField.on('blur',function(){ paket_harga_lbkField.setValue(CurrencyFormatted(paket_harga_lbkField.getValue())); });
+	paket_harga_hrField.on('focus',function(){ paket_harga_hrField.setValue(convertToNumber(paket_harga_hrField.getValue())); });
+	paket_harga_hrField.on('blur',function(){ paket_harga_hrField.setValue(CurrencyFormatted(paket_harga_hrField.getValue())); });
 	
 
 });

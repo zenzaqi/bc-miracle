@@ -243,6 +243,7 @@ Ext.onReady(function(){
 		var produk_harga_createmnd=null;
 		var produk_harga_createygk=null;
 		var produk_harga_createlbk=null;
+		var produk_harga_createhr=null;
 		
 		if(produk_idField.getValue()!== null){produk_id_create_pk = produk_idField.getValue();}else{produk_id_create_pk=get_pk_id();} 
 		if(produk_kodeField.getValue()!== null){produk_kode_create = produk_kodeField.getValue();} 
@@ -263,6 +264,7 @@ Ext.onReady(function(){
 		if(produk_harga_mndField.getValue()!== null){produk_harga_createmnd = convertToNumber(produk_harga_mndField.getValue());}
 		if(produk_harga_mtaField.getValue()!== null){produk_harga_createmta = convertToNumber(produk_harga_mtaField.getValue());}
 		if(produk_harga_lbkField.getValue()!== null){produk_harga_createlbk = convertToNumber(produk_harga_lbkField.getValue());}
+		if(produk_harga_hrField.getValue()!== null){produk_harga_createhr = convertToNumber(produk_harga_hrField.getValue());}
 		if(produk_harga_ygkField.getValue()!== null){produk_harga_createygk = convertToNumber(produk_harga_ygkField.getValue());}
 		if(produk_keteranganField.getValue()!== null){produk_keterangan_create = produk_keteranganField.getValue();} 
 		if(produk_aktifField.getValue()!== null){produk_aktif_create = produk_aktifField.getValue();} 
@@ -297,6 +299,7 @@ Ext.onReady(function(){
 				produk_harga_mnd : produk_harga_createmnd,
 				produk_harga_ygk : produk_harga_createygk,
 				produk_harga_lbk : produk_harga_createlbk,
+				produk_harga_hr  : produk_harga_createhr,
 				produk_aktif_th : produk_aktif_thField.getValue(),
 				produk_aktif_ki : produk_aktif_kiField.getValue(),
 				produk_aktif_hr : produk_aktif_hrField.getValue(),
@@ -548,6 +551,7 @@ Ext.onReady(function(){
 		produk_harga_mndField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga_mnd')));
 		produk_harga_ygkField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga_ygk')));
 		produk_harga_lbkField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga_lbk')));
+		produk_harga_hrField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga_hr')));
 		
 		if(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif_cabang').charAt(0)=="1")	
 			produk_aktif_thField.setValue(true);	
@@ -821,7 +825,8 @@ Ext.onReady(function(){
 			{name: 'produk_harga_mdn', type: 'float', mapping: 'produk_harga_mdn'},
 			{name: 'produk_harga_ygk', type: 'float', mapping: 'produk_harga_ygk'},
 			{name: 'produk_harga_mta', type: 'float', mapping: 'produk_harga_mta'},
-			{name: 'produk_harga_lbk', type: 'float', mapping: 'produk_harga_lbk'}
+			{name: 'produk_harga_lbk', type: 'float', mapping: 'produk_harga_lbk'},
+			{name: 'produk_harga_hr', type: 'float', mapping: 'produk_harga_hr'}
 		]),
 		sortInfo:{field: 'produk_id', direction: "DESC"}
 	});
@@ -1575,7 +1580,7 @@ Ext.onReady(function(){
 	
 	produk_harga_lbkField=new Ext.form.TextField({
 		id : 'produk_harga_lbkField',
-		fieldLabel: 'LBK',
+		fieldLabel: 'Lombok',
 		maxLength: 20,
 		allowBlank: true,
 		itemCls: 'rmoney',
@@ -1665,7 +1670,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [produk_harga_thField, produk_harga_kiField,produk_harga_mdnField, produk_harga_mndField, produk_harga_ygkField, produk_harga_mtaField, produk_harga_lbkField]
+				items: [produk_harga_thField, produk_harga_kiField,produk_harga_mdnField, produk_harga_mndField, produk_harga_ygkField, produk_harga_mtaField, produk_harga_lbkField, produk_harga_hrField]
 			}
 		]
 	});
@@ -3343,6 +3348,9 @@ Ext.onReady(function(){
 	
 	produk_harga_lbkField.on('focus',function(){ produk_harga_lbkField.setValue(convertToNumber(produk_harga_lbkField.getValue())); });
 	produk_harga_lbkField.on('blur',function(){ produk_harga_lbkField.setValue(CurrencyFormatted(produk_harga_lbkField.getValue())); });
+	
+	produk_harga_hrField.on('focus',function(){ produk_harga_hrField.setValue(convertToNumber(produk_harga_hrField.getValue())); });
+	produk_harga_hrField.on('blur',function(){ produk_harga_hrField.setValue(CurrencyFormatted(produk_harga_hrField.getValue())); });
 	
 	produk_awal_jumlahField.on('focus',function(){ produk_awal_jumlahField.setValue(convertToNumber(produk_awal_jumlahField.getValue())); });
 	produk_awal_jumlahField.on('blur',function(){ produk_awal_jumlahField.setValue(CurrencyFormatted(produk_awal_jumlahField.getValue())); });
