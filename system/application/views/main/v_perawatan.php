@@ -91,6 +91,7 @@ var rawat_harga_mdnField;
 var rawat_harga_mndField;
 var rawat_harga_mtaField;
 var rawat_harga_ygkField;
+var rawat_harga_lbkField;
 var rawat_gudangField;
 var rawat_aktifField;
 var rawat_idSearchField;
@@ -236,6 +237,7 @@ Ext.onReady(function(){
 		var rawat_harga_createmdn=null;
 		var rawat_harga_createmnd=null;
 		var rawat_harga_createygk=null;
+		var rawat_harga_createlbk=null;
 		var rawat_gudang_create=null; 
 		var rawat_aktif_create=null; 
 
@@ -259,6 +261,7 @@ Ext.onReady(function(){
 		if(rawat_harga_mndField.getValue()!== null){rawat_harga_createmnd = convertToNumber(rawat_harga_mndField.getValue());}
 		if(rawat_harga_mtaField.getValue()!== null){rawat_harga_createmta = convertToNumber(rawat_harga_mtaField.getValue());}
 		if(rawat_harga_ygkField.getValue()!== null){rawat_harga_createygk = convertToNumber(rawat_harga_ygkField.getValue());}
+		if(rawat_harga_lbkField.getValue()!== null){rawat_harga_createlbk = convertToNumber(rawat_harga_lbkField.getValue());}
 		//if(rawat_jumlah_tindakanField.getValue()!== null){rawat_jumlah_tindakan_create = rawat_jumlah_tindakanField.getValue();} 
 		if(rawat_gudangField.getValue()!== null){rawat_gudang_create = rawat_gudangField.getValue();} 
 		if(rawat_aktifField.getValue()!== null){rawat_aktif_create = rawat_aktifField.getValue();} 
@@ -290,6 +293,7 @@ Ext.onReady(function(){
 				rawat_harga_mdn : rawat_harga_createmdn,
 				rawat_harga_mnd : rawat_harga_createmnd,
 				rawat_harga_ygk : rawat_harga_createygk,
+				rawat_harga_lbk : rawat_harga_createlbk,
 				rawat_gudang	: rawat_gudang_create, 
 				rawat_aktif	: rawat_aktif_create, 
 				rawat_aktif_th : rawat_aktif_thField.getValue(),
@@ -537,6 +541,7 @@ Ext.onReady(function(){
 		rawat_harga_thField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga')));		
 		rawat_harga_kiField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_ki')));
 		rawat_harga_mtaField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_mta')));
+		rawat_harga_lbkField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_lbk')));
 		rawat_harga_mdnField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_mdn')));
 		rawat_harga_mndField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_mnd')));
 		rawat_harga_ygkField.setValue(CurrencyFormatted(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_harga_ygk')));
@@ -789,7 +794,8 @@ Ext.onReady(function(){
 			{name: 'rawat_harga_mnd', type: 'float', mapping: 'rawat_harga_mnd'},
 			{name: 'rawat_harga_mdn', type: 'float', mapping: 'rawat_harga_mdn'},
 			{name: 'rawat_harga_ygk', type: 'float', mapping: 'rawat_harga_ygk'},
-			{name: 'rawat_harga_mta', type: 'float', mapping: 'rawat_harga_mta'}			
+			{name: 'rawat_harga_mta', type: 'float', mapping: 'rawat_harga_mta'},
+			{name: 'rawat_harga_lbk', type: 'float', mapping: 'rawat_harga_lbk'}				
 		]),
 		sortInfo:{field: 'rawat_id', direction: "DESC"}
 	});
@@ -2045,7 +2051,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [rawat_harga_thField, rawat_harga_kiField,rawat_harga_mdnField, rawat_harga_mndField, rawat_harga_ygkField, rawat_harga_mtaField]
+				items: [rawat_harga_thField, rawat_harga_kiField,rawat_harga_mdnField, rawat_harga_mndField, rawat_harga_ygkField, rawat_harga_mtaField, rawat_harga_lbkField]
 			}
 		]
 	});
@@ -3390,6 +3396,8 @@ Ext.onReady(function(){
 	rawat_harga_ygkField.on('blur',function(){ rawat_harga_ygkField.setValue(CurrencyFormatted(rawat_harga_ygkField.getValue())); });
 	rawat_harga_mtaField.on('focus',function(){ rawat_harga_mtaField.setValue(convertToNumber(rawat_harga_mtaField.getValue())); });
 	rawat_harga_mtaField.on('blur',function(){ rawat_harga_mtaField.setValue(CurrencyFormatted(rawat_harga_mtaField.getValue())); });
+	rawat_harga_lbkField.on('focus',function(){ rawat_harga_lbkField.setValue(convertToNumber(rawat_harga_lbkField.getValue())); });
+	rawat_harga_lbkField.on('blur',function(){ rawat_harga_lbkField.setValue(CurrencyFormatted(rawat_harga_lbkField.getValue())); });
 	
 });
 	</script>

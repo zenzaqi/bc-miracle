@@ -358,7 +358,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for update record
-		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta){
+		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 			if ($rawat_point=="")
@@ -466,6 +466,7 @@ class M_perawatan extends Model{
 				"rawat_harga_mnd"=>$rawat_harga_mnd,
 				"rawat_harga_ygk"=>$rawat_harga_ygk,
 				"rawat_harga_mta"=>$rawat_harga_mta,
+				"rawat_harga_lbk"=>$rawat_harga_lbk,
 //				"rawat_gudang"=>$rawat_gudang, 
 				"rawat_aktif"=>$rawat_aktif, 
 				"rawat_aktif_cabang"=>$temp_aktif,
@@ -608,7 +609,7 @@ class M_perawatan extends Model{
 		}
 		
 		//function for create new record
-		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta){
+		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 		if ($rawat_point=="")
@@ -714,7 +715,8 @@ class M_perawatan extends Model{
 				"rawat_harga_mdn"=>$rawat_harga_mdn,
 				"rawat_harga_mnd"=>$rawat_harga_mnd,
 				"rawat_harga_ygk"=>$rawat_harga_ygk,
-				"rawat_harga_mta"=>$rawat_harga_mta,	
+				"rawat_harga_mta"=>$rawat_harga_mta,
+				"rawat_harga_lbk"=>$rawat_harga_lbk,
 				"rawat_gudang"=>$rawat_gudang,
 				"rawat_kontribusi"=>$rawat_kontribusi,
 				"rawat_aktif"=>$rawat_aktif,

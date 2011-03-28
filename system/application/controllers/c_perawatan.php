@@ -274,6 +274,7 @@ class C_perawatan extends Controller {
 		$rawat_harga_mnd=trim(@$_POST["rawat_harga_mnd"]);
 		$rawat_harga_ygk=trim(@$_POST["rawat_harga_ygk"]);
 		$rawat_harga_mta=trim(@$_POST["rawat_harga_mta"]);
+		$rawat_harga_lbk=trim(@$_POST["rawat_harga_lbk"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
@@ -345,7 +346,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif_mlg=str_replace(",", ",",$rawat_aktif_mlg);
 		$rawat_aktif_mlg=str_replace("'", '"',$rawat_aktif_mlg);
 		
-		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta);
+		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk);
 		echo $result;
 	}
 	
@@ -382,6 +383,7 @@ class C_perawatan extends Controller {
 		$rawat_harga_mnd=trim(@$_POST["rawat_harga_mnd"]);
 		$rawat_harga_ygk=trim(@$_POST["rawat_harga_ygk"]);
 		$rawat_harga_mta=trim(@$_POST["rawat_harga_mta"]);
+		$rawat_harga_lbk=trim(@$_POST["rawat_harga_lbk"]);
 		$rawat_gudang=trim(@$_POST["rawat_gudang"]);
 		$rawat_aktif=trim(@$_POST["rawat_aktif"]);
 		$rawat_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif);
@@ -435,7 +437,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif_mlg=str_replace("/(<\/?)(p)([^>]*>)", "",$rawat_aktif_mlg);
 		$rawat_aktif_mlg=str_replace("'", '"',$rawat_aktif_mlg);
 		
-		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama , $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point, $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta, $rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg , $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta);
+		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama , $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point, $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta, $rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg , $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk);
 		echo $result;
 	}
 
