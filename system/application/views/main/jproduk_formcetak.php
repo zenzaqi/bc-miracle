@@ -151,6 +151,15 @@ function content_footer(){
 ?>
     </table></td>
   </tr>
+  
+  <tr>
+  <td height="30px">
+  <?=$iklantoday_keterangan;?>
+  </td>
+  </tr>
+  
+  
+  
 </table>
 <?php
 }
