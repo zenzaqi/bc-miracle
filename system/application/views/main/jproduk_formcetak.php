@@ -18,8 +18,9 @@ page-break-after: always;
 </head>
 <body onload="window.print();window.close();">
 <?php
-function myheader($jproduk_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$jproduk_nobukti, $jproduk_jam, $jproduk_karyawan, $jproduk_karyawan_no ){
+function myheader($jproduk_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$jproduk_nobukti, $jproduk_jam, $jproduk_karyawan, $jproduk_karyawan_no){
 ?>
+
 <table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
@@ -83,6 +84,7 @@ function content_header(){
   	  <?php
 		/* data header */
 		$f_jproduk_tanggal = $jproduk_tanggal;
+		$f_iklantoday_keterangan = $iklantoday_keterangan;
 		$f_cust_no = $cust_no;
 		$f_cust_nama = $cust_nama;
 		$f_cust_alamat = $cust_alamat;
@@ -139,7 +141,7 @@ function content_header(){
 				
 				content_footer();
 				myfooter($subtotal ,$total ,$f_cara_bayar1 ,$f_nilai_bayar1 ,$f_cara_bayar2 ,$f_nilai_bayar2 ,$f_cara_bayar3 ,$f_nilai_bayar3
-						 ,$total_voucher ,$total_diskon_tamb);
+						 ,$total_voucher ,$total_diskon_tamb, $f_iklantoday_keterangan);
 			}elseif(($i>1) && ($i%15==0)){
 				content_footer();
 				echo "<div class='pagebreak'></div>";
@@ -150,25 +152,19 @@ function content_header(){
 function content_footer(){
 ?>
     </table></td>
-  </tr>
-  
-  <tr>
-  <td height="30px">
-  <?=$iklantoday_keterangan;?>
-  </td>
-  </tr>
-  
-  
-  
+  </tr>  
 </table>
 <?php
 }
 ?>
 <?php
 function myfooter($subtotal ,$total ,$cara_bayar1 ,$nilai_bayar1 ,$cara_bayar2 ,$nilai_bayar2 ,$cara_bayar3 ,$nilai_bayar3
-				  ,$total_voucher ,$total_diskon_tamb){
+				  ,$total_voucher ,$total_diskon_tamb, $f_iklantoday_keterangan){
 ?>
 <table width="1240px" border="0" cellspacing="0" cellpadding="0">
+   <tr>
+    <td height="30px" colspan="5"><?=$f_iklantoday_keterangan;?></td>
+  </tr>
   <tr>
     <td width="160px">&nbsp;</td>
     <td width="280px"><?=$_SESSION[SESSION_USERID];?></td>
