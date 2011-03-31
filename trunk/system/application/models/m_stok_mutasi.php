@@ -54,8 +54,8 @@ class M_stok_mutasi extends Model{
 			$sql="select * from stok_mutasi sm,produk pr, satuan 
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
-					AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
 			
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
@@ -103,8 +103,8 @@ class M_stok_mutasi extends Model{
 			$sql="select * from stok_mutasi sm,produk pr, satuan 
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
-					AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
 			
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
@@ -129,8 +129,8 @@ class M_stok_mutasi extends Model{
 			
 			//DELETE ALL REPORT
 			$sql="DELETE FROM stok_mutasi
-					WHERE date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+					WHERE date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
 					
 			$result=$this->db->query($sql);
@@ -201,8 +201,8 @@ class M_stok_mutasi extends Model{
 				$row=$rsawal->row();
 				$sqlupdate="UPDATE stok_mutasi SET stok_awal='".$row->jumlah."'
 							WHERE produk_id='".$rowproduk->produk_id."'
-							AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+							AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 							AND gudang_id='".$gudang."'";
 				
 				//$this->firephp->log($sqlupdate);
@@ -613,8 +613,8 @@ class M_stok_mutasi extends Model{
 					$row=$rstawal->row();
 					$sqlupdate="UPDATE stok_mutasi SET stok_awal=stok_awal+'".$row->jumlah_awal."'
 								WHERE produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 					//$this->firephp->log($sql_stok_awal);
 					
@@ -639,8 +639,8 @@ class M_stok_mutasi extends Model{
 								AND mutasi_tujuan='".$gudang."' 
 								AND M.produk_id=dt.dmutasi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				//$this->firephp->log($sqlupdate);
@@ -662,8 +662,8 @@ class M_stok_mutasi extends Model{
 								AND mutasi_asal='".$gudang."'
 								AND M.produk_id=dt.dmutasi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-9 : ".$sqlupdate);
@@ -685,8 +685,8 @@ class M_stok_mutasi extends Model{
 								AND dt.dkoreksi_jmlkoreksi>0
 								AND M.produk_id=dt.dkoreksi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 				
 				//$this->firephp->log($sqlupdate);
@@ -709,8 +709,8 @@ class M_stok_mutasi extends Model{
 								AND dt.dkoreksi_jmlkoreksi<0
 								AND M.produk_id=dt.dkoreksi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				//$this->firephp->log($sqlupdate);
@@ -732,8 +732,8 @@ class M_stok_mutasi extends Model{
 								AND `mt`.`terima_gudang_id`=".$gudang."
 								AND M.produk_id=dt.dterima_produk),0)
 					WHERE produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$this->db->query($sqlupdate) or die("ERROR-5 : ".$sqlupdate);
@@ -753,8 +753,8 @@ class M_stok_mutasi extends Model{
 								AND `mt`.`terima_gudang_id`=".$gudang." 
 								AND M.produk_id=dt.dtbonus_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-6 : ".$sqlupdate);
@@ -774,8 +774,8 @@ class M_stok_mutasi extends Model{
 								AND 1 =".$gudang." 
 								AND M.produk_id=dt.drbeli_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-7 : ".$sqlupdate);
@@ -792,8 +792,8 @@ class M_stok_mutasi extends Model{
 								AND cabin_produk='".$rowproduk->produk_id."'
 								AND M.produk_id=cabin_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				//$this->firephp->log($sqlupdate);
@@ -813,8 +813,8 @@ class M_stok_mutasi extends Model{
 								AND jproduk_stat_dok<>'Batal'
 								AND M.produk_id=dt.dproduk_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				$this->firephp->log($sqlupdate);
@@ -834,8 +834,8 @@ class M_stok_mutasi extends Model{
 								AND rproduk_stat_dok<>'Batal'
 								AND M.produk_id=dt.drproduk_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				//$this->firephp->log($sqlupdate);
@@ -854,8 +854,8 @@ class M_stok_mutasi extends Model{
 								AND dpgrooming_produk='".$rowproduk->produk_id."'
 								AND M.produk_id=dt.dpgrooming_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
-								AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-								AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
 				//$this->firephp->log($sqlupdate);
@@ -865,8 +865,8 @@ class M_stok_mutasi extends Model{
 				
 				$sql_update="UPDATE stok_mutasi SET stok_akhir=stok_awal+stok_masuk-stok_keluar
 							WHERE 	produk_id='".$rowproduk->produk_id."'
-									AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-									AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+									AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+									AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 									AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				
