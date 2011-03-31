@@ -18,7 +18,7 @@ class M_phonegroup extends Model{
 			parent::Model();
 		}
 		
-		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah){
+		function sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah, $isms_crm){
 			$sql="";
 			/*if($isms_task=='draft'){
 				$sql="insert into draft(
@@ -228,6 +228,11 @@ class M_phonegroup extends Model{
 					if ($isms_jnsklm !== "") {
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 						$sql .=" cust_kelamin = '".$isms_jnsklm."'";
+					}
+					
+					if ($isms_crm !== "") {
+						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+						$sql .=" cust_priority = '".$isms_crm."'";
 					}
 					
 					if ($isms_ultah !== "") {

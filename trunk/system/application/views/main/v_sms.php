@@ -85,6 +85,7 @@ Ext.onReady(function(){
 			var sms_isi="";
 			var sms_jnsklm = "";
 			var sms_ultah = "";
+			var sms_crm = "";
 			
 			if(sms_detailField.getValue()!=="") sms_isi=sms_detailField.getValue();
 			if(sms_semua_radioField.getValue()==true){
@@ -120,8 +121,13 @@ Ext.onReady(function(){
 				if (sms_kelamin_checkField.getValue()==true) {
 					sms_jnsklm = sms_kelaminField.getValue();
 				}
+				
 				if (sms_ultah_checkField.getValue()==true) {
 					sms_ultah = sms_tglultah_startField.getValue().format('Y-m-d') + 's/d' + sms_tglultah_endField.getValue().format('Y-m-d');
+				}
+				
+				if (sms_crm_checkField.getValue()==true) {
+					sms_crm = sms_crmField.getValue();
 				}
 			}
 			
@@ -135,7 +141,8 @@ Ext.onReady(function(){
 					isms_isi	: sms_isi,
 					isms_task	: post2db,
 					isms_jnsklm	: sms_jnsklm,
-					isms_ultah	: sms_ultah
+					isms_ultah	: sms_ultah,
+					isms_crm	: sms_crm
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -362,6 +369,24 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small'
 	});
 	
+	var sms_crmField=new Ext.form.ComboBox({
+		id:	'sms_crmField',
+		name: 'sms_crmField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['crmvalue'],
+			data:[['Low'],['Medium'],['High']]
+		}),
+		mode: 'local',
+		width: 80,
+		//value : 'Semua',
+		value : 'Medium',
+		displayField: 'crmvalue',
+		valueField: 'crmvalue',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
 	
 	var sms_tglexp_startField=new Ext.form.DateField({
 		id:	'sms_tglexp_startField',
@@ -451,7 +476,7 @@ Ext.onReady(function(){
 	});
 	
 	function is_sms_form_valid(){
-		return (sms_destgroupField.isValid() && sms_destnumField.isValid() && sms_kelaminField.isValid() && sms_membershipField.isValid() && sms_detailField.isValid());
+		return (sms_destgroupField.isValid() && sms_destnumField.isValid() && sms_kelaminField.isValid() && sms_membershipField.isValid() && sms_detailField.isValid() && sms_crmField.isValid());
 	}
 	
 	
@@ -499,6 +524,21 @@ Ext.onReady(function(){
 			}
 			else {
 				sms_kelaminField.setDisabled(true);
+			}
+		}
+	});
+	
+	sms_crm_checkField=new Ext.form.Checkbox({
+		id: 'sms_crm_checkField',
+		boxLabel: 'Nilai CRM',
+		width: 100,
+		handler: function(node,checked){
+			if (checked) {
+				sms_crmField.setDisabled(false);
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				sms_crmField.setDisabled(true);
 			}
 		}
 	});
@@ -604,6 +644,12 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [sms_ultah_checkField,sms_ultah_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [sms_crm_checkField,sms_crmField]
 			   }]
 	});
 
@@ -705,16 +751,19 @@ Ext.onReady(function(){
 		sms_ultah_groupField.setDisabled(true);
 		sms_membershipField.setDisabled(true);
 		sms_member_expField.setDisabled(true);
+		sms_crmField.setDisabled(true);
 		
 		sms_destgroupField.allowBlank=true;
 		sms_destnumField.allowBlank=true;
 		sms_kelaminField.allowBlank=true;
 		sms_membershipField.allowBlank=true;
+		sms_crmField.allowBlank=true;
 		
 		sms_kelamin_checkField.setValue(false);
 		sms_ultah_checkField.setValue(false);
 		sms_kelamin_checkField.setDisabled(true);
 		sms_ultah_checkField.setDisabled(true);
+		sms_crm_checkField.setDisabled(true);
 	}
 	
 	setDisableAll();
@@ -768,6 +817,7 @@ Ext.onReady(function(){
 			sms_membershipField.allowBlank=false;
 			sms_kelamin_checkField.setDisabled(false);
 			sms_ultah_checkField.setDisabled(false);
+			sms_crm_checkField.setDisabled(false);
 		}
 	});
 	
