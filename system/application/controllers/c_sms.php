@@ -42,10 +42,11 @@ class C_sms extends Controller {
 		$isms_task 		= (isset($_POST['isms_task']) ? @$_POST['isms_task'] : @$_GET['isms_task']);
 		$isms_jnsklm 	= (isset($_POST['isms_jnsklm']) ? @$_POST['isms_jnsklm'] : @$_GET['isms_jnsklm']);
 		$isms_ultah 	= (isset($_POST['isms_ultah']) ? @$_POST['isms_ultah'] : @$_GET['isms_ultah']);
+		$isms_crm 	= (isset($_POST['isms_crm']) ? @$_POST['isms_crm'] : @$_GET['isms_crm']);
 		
 		$isms_isi=htmlspecialchars($isms_isi,ENT_QUOTES);
 		
-		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah);
+		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah, $isms_crm);
 		
 		echo $result;
 	}

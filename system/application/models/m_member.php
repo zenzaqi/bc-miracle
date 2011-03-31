@@ -55,7 +55,8 @@ class M_member extends Model{
 							m.*,
 							c.cust_nama, c.cust_no 
 						FROM member m
-						LEFT JOIN customer c on c.cust_id = m.member_cust";
+						LEFT JOIN customer c on c.cust_id = m.member_cust
+						ORDER BY member_register DESC";
 			
 			// For simple search
 			if ($filter<>""){
@@ -63,11 +64,11 @@ class M_member extends Model{
 				//$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
 				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
 			} 
-			else {
+			//else {
 //				$query .= "where member_cust=cust_id and member_status <> 'Serah Terima'";
 				//$query .= " WHERE member_status <> 'Serah Terima'";
-				$query .= " WHERE member_status = 'Daftar'";
-			}
+			//	$query .= " WHERE member_status = 'Daftar'";
+			//}
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
