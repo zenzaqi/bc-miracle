@@ -22,6 +22,7 @@ function myheader($jproduk_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$jproduk
 ?>
 
 <table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
+  <td height="50px" > </td>
   <tr>
     <td width="700px" align="bottom" valign="bottom">&nbsp;</td>
     <td width="540px" valign="bottom"><table width="540px" border="0" cellspacing="0" cellpadding="0">
