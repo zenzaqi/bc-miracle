@@ -817,7 +817,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 								
-				$this->firephp->log($sqlupdate);
+				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-12 : ".$sqlupdate);
 			
 				//RETUR PENJUALAN PRODUK
