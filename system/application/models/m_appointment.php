@@ -95,8 +95,14 @@ class M_appointment extends Model{
 				LEFT JOIN tindakan_adjust on 
 					(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 					 date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -123,8 +129,14 @@ class M_appointment extends Model{
 				LEFT JOIN tindakan_adjust on 
 					(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 					 date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql2 .=eregi("WHERE",$sql2)? " AND ":" WHERE ";
 			$sql2 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -142,8 +154,14 @@ class M_appointment extends Model{
 				INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) 
 				LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
 				LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql3 .=eregi("WHERE",$sql3)? " AND ":" WHERE ";
 			$sql3 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -156,8 +174,14 @@ class M_appointment extends Model{
 		$sql3.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
 		$sql4=" SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql4 .=eregi("WHERE",$sql4)? " AND ":" WHERE ";
 			$sql4 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -170,8 +194,14 @@ class M_appointment extends Model{
 		$sql4.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
 		$sql5= "SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='CT') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+						OR substring(karyawan_cabang2,
+						(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
 			$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -184,8 +214,14 @@ class M_appointment extends Model{
 		$sql5.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
 		$sql6= "SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='H') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
-					AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)";
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+						OR substring(karyawan_cabang2,
+						(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
 		if($query<>"" && is_numeric($query)==false){
 			$sql6 .=eregi("WHERE",$sql6)? " AND ":" WHERE ";
 			$sql6 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
@@ -234,9 +270,15 @@ class M_appointment extends Model{
 					LEFT JOIN tindakan_adjust on 
 						(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 						date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+					left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
 					WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' 
 						AND karyawan_aktif='Aktif' 
-						AND karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+						AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+						OR substring(karyawan_cabang2,
+						(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
 					ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 			/*if($query<>"" && is_numeric($query)==false){
 				$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
