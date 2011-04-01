@@ -222,10 +222,10 @@ class M_stok_mutasi extends Model{
 			 	$sql_stok_awal.="+ sum(jml_terima_barang*konversi_nilai/".$rowproduk->konversi_nilai.")
 							 	+ sum(jml_terima_bonus*konversi_nilai/".$rowproduk->konversi_nilai.") 
 								- sum(jml_retur_beli*konversi_nilai/".$rowproduk->konversi_nilai.")";
-			}elseif($gudang==2 || $gudang==3){
+			}elseif($gudang==4 || $gudang==3){
 				//GUDANG PERAWATAN
 				$sql_stok_awal.="- sum(jml_pakai_cabin*konversi_nilai/".$rowproduk->konversi_nilai.")";
-			}elseif($gudang==4){
+			}elseif($gudang==2){
 				//GUDANG RETAIL
 				$sql_stok_awal.="-sum(jml_jual_produk*konversi_nilai/".$rowproduk->konversi_nilai.")
 								-sum(jml_jual_grooming*konversi_nilai/".$rowproduk->konversi_nilai.")
