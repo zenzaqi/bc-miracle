@@ -1,0 +1,3 @@
+ALTER TABLE `sr_setup` CHANGE `setsr_jenis` `setsr_jenis` ENUM('Kunjungan','Kunjungan Pria','Kunjungan Wanita','Customer Lama','Customer Baru','Member Baru','Perawatan Medis (Rp)','Perawatan Medis (Qty)','Perawatan Non Medis (Rp)','Perawatan Non Medis (Qty)','Produk (Qty)','Produk (Rp)') CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL;
+
+INSERT INTO `miracledb_ygk`.`menus` (`menu_id`, `menu_kode`, `menu_parent`, `menu_position`, `menu_title`, `menu_link`, `menu_cat`, `menu_confirm`, `menu_leftpanel`, `menu_iconpanel`, `menu_iconmenu`) VALUES (NULL, NULL, '410', '4', 'Summary Report', '?c=c_summary_report', 'window', 'N', 'Y', NULL, NULL);
