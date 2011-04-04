@@ -1143,7 +1143,6 @@ class M_kartu_stok extends Model{
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
 			
-			if($gudang==1){
 			/*PENERIMAAN BARANG PRODUK */
 			$sql="INSERT INTO kartu_stok(tanggal, produk_id, satuan_id, no_bukti,
 										 keterangan, masuk, keluar, gudang_id, tanggal_awal,
@@ -1170,6 +1169,8 @@ class M_kartu_stok extends Model{
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
 			
+			
+			if($gudang==1){
 			//PENERIMAAN BARANG BONUS
 			$sql="INSERT INTO kartu_stok(tanggal, produk_id, satuan_id, no_bukti,
 										 keterangan, masuk, keluar, gudang_id, tanggal_awal,
