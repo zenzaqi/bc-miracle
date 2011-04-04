@@ -55,6 +55,7 @@ var customer_searchForm;
 var customer_searchWindow;
 var customer_SelectedRow;
 var customer_ContextMenu;
+var customer_phonegroup_saveForm;
 //declare konstant
 var post2db = '';
 var msg = '';
@@ -111,6 +112,7 @@ var cust_unitField;
 var cust_aktifField;
 var cust_fretfulnessField;
 var dt = new Date();
+var customer_phonegroup_namaField;
 
 var cust_idSearchField;
 var cust_nolamaSearchField;
@@ -336,6 +338,16 @@ var editor_cust_note;
 			}); 	
 	}
   
+  /* Reset form before loading */
+	function customer_phonegroup_reset_form(){
+		customer_phonegroup_namaField.reset();
+		customer_phonegroup_namaField.setValue(null);
+
+		//phonenumber_DataStore.removeAll();
+		//phonegrouped_DataStore.removeAll();
+	}
+ 	/* End of Function */
+  
 	/* setValue to EDIT */
 	function customer_set_form(){
 		cust_noField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
@@ -452,6 +464,211 @@ var editor_cust_note;
 		return (cust_namaField.isValid() && cust_noField.isValid() && cust_kelaminField.isValid());
 	}
   	/* End of Function */
+  
+  /* Function for add and edit data form, open window form */
+	function customer_phonegroup_save(){
+
+			var customer_phonegroup_id_field_pk=null;
+			var customer_phonegroup_nama_field=null;
+			
+			var phonegroupquery = "";
+			var cust_phonegroup_no=null;
+			var cust_phonegroup_nolama=null;
+			var cust_phonegroup_no_awal=null;
+			var cust_phonegroup_no_akhir=null;
+			var cust_phonegroup_nama=null;
+			var cust_phonegroup_kelamin=null;
+			var cust_phonegroup_alamat=null;
+			var cust_phonegroup_alamat2=null;
+			var cust_phonegroup_kota=null;
+			var cust_phonegroup_kodepos=null;
+			var cust_phonegroup_propinsi=null;
+			var cust_phonegroup_negara=null;
+			var cust_phonegroup_telprumah=null;
+			var cust_phonegroup_telprumah2=null;
+			var cust_phonegroup_telpkantor=null;
+			var cust_phonegroup_hp=null;
+			var cust_phonegroup_hp2=null;
+			var cust_phonegroup_hp3=null;
+			var cust_phonegroup_email=null;
+			var cust_phonegroup_agama=null;
+			var cust_phonegroup_pendidikan=null;
+			var cust_phonegroup_profesi=null;
+			var cust_phonegroup_tgllahir_date="";
+			var cust_phonegroup_tgllahir_dateEnd="";
+
+			//var cust_phonegroup_hobi=null;
+			var cust_phonegroup_referensi=null;
+			var cust_phonegroup_keterangan=null;
+			var cust_phonegroup_member=null;
+			var cust_phonegroup_member2=null;
+			var cust_phonegroup_terdaftar_date="";
+			var cust_phonegroup_statusnikah=null;
+			var cust_phonegroup_priority=null;
+			var cust_phonegroup_jmlanak=null;
+			var cust_phonegroup_unit=null;
+			var cust_phonegroup_aktif=null;
+			var sortby_phonegroup=null;
+			var cust_fretfulness_phonegroup=null;
+			var cust_umurstart_phonegroup=null;
+			var cust_umurend_phonegroup=null;
+			var cust_tgl_phonegroup=null;
+			var cust_bulan_phonegroup=null;
+			var cust_bb_phonegroup=null;
+			             
+			// check if we do have some search data...
+			if(customer_DataStore.baseParams.query!==null){phonegroupquery = customer_DataStore.baseParams.query;}
+			if(customer_DataStore.baseParams.cust_no!==null){cust_phonegroup_no = customer_DataStore.baseParams.cust_no;}
+			if(customer_DataStore.baseParams.cust_nolama!==null){cust_phonegroup_nolama = customer_DataStore.baseParams.cust_nolama;}
+			if(customer_DataStore.baseParams.cust_no_awal!==null){cust_phonegroup_no_awal = customer_DataStore.baseParams.cust_no_awal;}
+			if(customer_DataStore.baseParams.cust_no_akhir!==null){cust_phonegroup_no_akhir = customer_DataStore.baseParams.cust_no_akhir;}
+			if(customer_DataStore.baseParams.cust_nama!==null){cust_phonegroup_nama = customer_DataStore.baseParams.cust_nama;}
+			if(customer_DataStore.baseParams.cust_kelamin!==null){cust_phonegroup_kelamin = customer_DataStore.baseParams.cust_kelamin;}
+			if(customer_DataStore.baseParams.cust_alamat!==null){cust_phonegroup_alamat = customer_DataStore.baseParams.cust_alamat;}
+			if(customer_DataStore.baseParams.cust_alamat2!==null){cust_phonegroup_alamat2 = customer_DataStore.baseParams.cust_alamat2;}
+			if(customer_DataStore.baseParams.cust_kota!==null){cust_phonegroup_kota = customer_DataStore.baseParams.cust_kota;}
+			if(customer_DataStore.baseParams.cust_kodepos!==null){cust_phonegroup_kodepos = customer_DataStore.baseParams.cust_kodepos;}
+			if(customer_DataStore.baseParams.cust_propinsi!==null){cust_phonegroup_propinsi = customer_DataStore.baseParams.cust_propinsi;}
+			if(customer_DataStore.baseParams.cust_negara!==null){cust_phonegroup_negara = customer_DataStore.baseParams.cust_negara;}
+			if(customer_DataStore.baseParams.cust_telprumah!==null){cust_phonegroup_telprumah = customer_DataStore.baseParams.cust_telprumah;}
+			if(customer_DataStore.baseParams.cust_telprumah2!==null){cust_phonegroup_telprumah2 = customer_DataStore.baseParams.cust_telprumah2;}
+			if(customer_DataStore.baseParams.cust_telpkantor!==null){cust_phonegroup_telpkantor = customer_DataStore.baseParams.cust_telpkantor;}
+			if(customer_DataStore.baseParams.cust_hp!==null){cust_phonegroup_hp = customer_DataStore.baseParams.cust_hp;}
+			if(customer_DataStore.baseParams.cust_hp2!==null){cust_phonegroup_hp2 = customer_DataStore.baseParams.cust_hp2;}
+			if(customer_DataStore.baseParams.cust_hp3!==null){cust_phonegroup_hp3 = customer_DataStore.baseParams.cust_hp3;}
+			if(customer_DataStore.baseParams.cust_email!==null){cust_phonegroup_email = customer_DataStore.baseParams.cust_email;}
+			if(customer_DataStore.baseParams.cust_agama!==null){cust_phonegroup_agama = customer_DataStore.baseParams.cust_agama;}
+			if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_phonegroup_pendidikan = customer_DataStore.baseParams.cust_pendidikan;}
+			if(customer_DataStore.baseParams.cust_profesi!==null){cust_phonegroup_profesi = customer_DataStore.baseParams.cust_profesi;}
+			if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_phonegroup_tgllahir_date = customer_DataStore.baseParams.cust_tgllahir;}
+			if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_phonegroup_tgllahir_dateEnd = customer_DataStore.baseParams.cust_tgllahirend;}
+			//if(customer_DataStore.baseParams.cust_hobi!==null){cust_phonegroup_hobi = customer_DataStore.baseParams.cust_hobi;}
+			if(customer_DataStore.baseParams.cust_referensi!==null){cust_phonegroup_referensi = customer_DataStore.baseParams.cust_referensi;}
+			if(customer_DataStore.baseParams.cust_keterangan!==null){cust_phonegroup_keterangan = customer_DataStore.baseParams.cust_keterangan;}
+			if(customer_DataStore.baseParams.cust_member!==null){cust_phonegroup_member = customer_DataStore.baseParams.cust_member;}
+			if(customer_DataStore.baseParams.cust_member2!==null){cust_phonegroup_member2 = customer_DataStore.baseParams.cust_member2;}
+			if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_phonegroup_terdaftar_date = customer_DataStore.baseParams.cust_terdaftar;}
+			if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_phonegroup_statusnikah = customer_DataStore.baseParams.cust_statusnikah;}
+			if(customer_DataStore.baseParams.cust_priority!==null){cust_phonegroup_priority = customer_DataStore.baseParams.cust_priority;}
+			if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_phonegroup_jmlanak = customer_DataStore.baseParams.cust_jmlanak;}
+			if(customer_DataStore.baseParams.cust_unit!==null){cust_phonegroup_unit = customer_DataStore.baseParams.cust_unit;}
+			if(customer_DataStore.baseParams.cust_aktif!==null){cust_phonegroup_aktif = customer_DataStore.baseParams.cust_aktif;}
+			if(sortby_SearchField.getValue()!==null){sortby=sortby_SearchField.getValue();}
+			
+			if(customer_DataStore.baseParams.cust_fretfulness!==null){cust_fretfulness_phonegroup = customer_DataStore.baseParams.cust_fretfulness;}
+if(customer_DataStore.baseParams.cust_umurstart!==null){cust_umurstart_phonegroup=customer_DataStore.baseParams.cust_umurstart;}
+if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_phonegroup=customer_DataStore.baseParams.cust_umurend;}	
+
+if(cust_tgl_opsiField.getValue()==true){
+	if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_phonegroup_tgllahir_date=customer_DataStore.baseParams.cust_tgllahir.format('Y-m-d');}
+	if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_phonegroup_tgllahir_dateEnd=customer_DataStore.baseParams.cust_tgllahirend.format('Y-m-d');}
+}		
+else if(cust_bulan_opsiField.getValue()==true){
+	if(customer_DataStore.baseParams.cust_tgl!==null){cust_tgl_phonegroup=customer_DataStore.baseParams.cust_tgl;}
+	if(customer_DataStore.baseParams.cust_bulan!==null){cust_bulan_phonegroup=customer_DataStore.baseParams.cust_bulan;}
+}
+										
+			Ext.Ajax.request({  
+				waitMsg: 'Please wait...',
+				url: 'index.php?c=c_customer&m=get_action',
+				params: {
+	
+					task: 'PHONEGROUP',
+					query: phonegroupquery, 
+					
+					phonegroup_id : customer_phonegroup_namaField.getValue(),
+					cust_no : cust_phonegroup_no,
+					cust_nolama :cust_phonegroup_nolama,
+					cust_no_awal: cust_phonegroup_no_awal,
+					cust_no_akhir: cust_phonegroup_no_akhir,
+					cust_nama:cust_phonegroup_nama,
+					cust_kelamin:cust_phonegroup_kelamin,
+					cust_alamat:cust_phonegroup_alamat,
+					cust_alamat2:cust_phonegroup_alamat2,
+					cust_kota:cust_phonegroup_kota,
+					cust_kodepos:cust_phonegroup_kodepos,
+					cust_propinsi:cust_phonegroup_propinsi,
+					cust_negara: cust_phonegroup_negara,
+					cust_telprumah :cust_phonegroup_telprumah,
+					cust_telprumah2: cust_phonegroup_telprumah2,
+					cust_telpkantor:cust_phonegroup_telpkantor,
+					cust_hp:cust_phonegroup_hp,
+					cust_hp2:cust_phonegroup_hp2,
+					cust_hp3:cust_phonegroup_hp3,
+					cust_email :cust_phonegroup_email,
+					cust_agama: cust_phonegroup_agama,
+					cust_pendidikan:cust_phonegroup_pendidikan,
+					cust_profesi :cust_phonegroup_profesi,
+					cust_tgllahir:cust_phonegroup_tgllahir_date,
+					cust_tgllahirend:cust_phonegroup_tgllahir_dateEnd,
+					// cust_hobi:
+					cust_referensi: cust_phonegroup_referensi,
+					cust_keterangan: cust_phonegroup_keterangan,
+					cust_member: cust_phonegroup_member,
+					cust_member2: cust_phonegroup_member2,
+					cust_terdaftar_date : cust_phonegroup_terdaftar_date,
+					cust_statusnikah: cust_phonegroup_statusnikah,
+					cust_priority: cust_phonegroup_priority,
+					cust_jmlanak: cust_phonegroup_jmlanak,
+					cust_unit: cust_phonegroup_unit,
+					cust_aktif :cust_phonegroup_aktif,
+					sortby		:	sortby_phonegroup,
+					cust_fretfulness : cust_fretfulness_phonegroup,
+					cust_umurstart : cust_umurstart_phonegroup,
+					cust_umurend : cust_umurend_phonegroup,
+					cust_tgl	: cust_tgl_phonegroup,
+					cust_bulan	: cust_bulan_phonegroup,
+					/*cust_hobi_baca : cust_hobi_bacacrm.getValue(),
+					cust_hobi_olah : cust_hobi_olahcrm.getValue(),
+					cust_hobi_masak : cust_hobi_masakcrm.getValue(),
+					cust_hobi_travel : cust_hobi_travelcrm.getValue(),
+					cust_hobi_foto : cust_hobi_fotocrm.getValue(),
+					cust_hobi_lukis : cust_hobi_lukiscrm.getValue(),
+					cust_hobi_nari : cust_hobi_naricrm.getValue(),
+					cust_hobi_lain : cust_hobi_laincrm.getValue(),*/
+					cust_bb		:	cust_bb_phonegroup,
+					
+					//crmvalue_id	: crm_generator_id_create_pk,		
+					//crmvalue_cust	: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'),
+					//cust_tujuan_id	: cust_tujuan_id_field,
+					//cust_point		: cust_point_field,
+					//crmvalue_date	: crm_generator_date_create	,
+					currentlisting: customer_DataStore.baseParams.task,
+					task: post2db					
+					//join_keterangan	: joincustomer_keterangan_create
+				}, 
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:
+							Ext.MessageBox.alert(post2db+' OK','Data Phonegroup berhasil disimpan ');
+							//customer_phonegroup_DataStore.reload();
+							customer_phonegroup_saveWindow.hide();
+							break;
+						default:
+							Ext.MessageBox.show({
+							   title: 'Warning',
+							   msg: 'Data Phonegroup tidak bisa disimpan ',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+					});
+				}
+			});
+	}
+ 	/* End of Function */
   
   function get_umur(){
 		var datDate1=cust_tgllahirField.getValue();
@@ -872,6 +1089,21 @@ else if(cust_bulan_opsiField.getValue()==true){
 	}
   	/* End of Function */
 	
+	/* Function for Displaying  add to phonegroup Window Form */
+	function display_customer_phonegroup(){
+		if(!customer_phonegroup_saveWindow.isVisible()){
+
+			post2db='PHONEGROUP';
+			msg='createphonegroup';
+			customer_phonegroup_reset_form();
+
+			customer_phonegroup_saveWindow.show();
+		} else {
+			customer_phonegroup_saveWindow.toFront();
+		}
+	}
+  	/* End of Function */
+	
 	/* Function for Update Confirm */
 	function customer_confirm_view(){
 		Ext.getCmp('btn_saveclose').setVisible(false);
@@ -956,12 +1188,111 @@ else if(cust_bulan_opsiField.getValue()==true){
 		customer_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+		
 	/* function for editing row via context menu */
 	function customer_editContextMenu(){
       customerListEditorGrid.startEditing(customer_SelectedRow,1);
   	}
 	/* End of Function */
+	
+	
+	var cbo_phonegroup_DataStore = new Ext.data.Store({
+		id: 'cbo_phonegroup_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_customer&m=phonegroup_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'phonegroup_id'
+		},[
+			{name: 'phonegroup_id', type: 'string', mapping: 'phonegroup_id'},
+			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'},
+		]),
+		sortInfo:{field: 'phonegroup_id', direction: "ASC"}
+	});
+	
+	var customer_phonegroup_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{phonegroup_nama}</b></span>',
+        '</div></tpl>'
+    );
+	
+
+	/* Identify  phonegroup_nama Field */
+	customer_phonegroup_namaField= new Ext.form.ComboBox({
+		id: 'customer_phonegroup_namaField',
+		fieldLabel: 'Nama Group',
+		store: cbo_phonegroup_DataStore,
+		mode: 'remote',
+		editable: false,
+		displayField:'phonegroup_nama',
+		valueField: 'phonegroup_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_phonegroup_tpl,
+        //applyTo: 'search',
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		editable: true
+	});
+	
+	/* Function for retrieve create Window Panel*/
+	customer_phonegroup_saveForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 300,
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [customer_phonegroup_namaField]
+			}
+			],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			{
+				text: 'Save and Close',
+				handler: customer_phonegroup_save
+			}
+			,
+			<?php } ?>
+			{
+				text: 'Cancel',
+				handler: function(){
+					customer_phonegroup_saveWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
+	/* Function for retrieve create Window Form */
+	customer_phonegroup_saveWindow= new Ext.Window({
+		id: 'customer_phonegroup_saveWindow',
+		title: post2db+' Phone Group',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_customer_phonegroup_save',
+		items: customer_phonegroup_saveForm
+	});
+	/* End Window */
 	
 	function customer_list_search(){
 		// render according to a SQL date format.
@@ -2351,7 +2682,6 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
-	
 	//datastore of profesi
 	/*
 	cbo_cust_profesi_DataStore = new Ext.data.Store({
@@ -3207,8 +3537,14 @@ Ext.onReady(function(){
 			//tooltip: 'Edit selected record',
 			//iconCls:'icon-update',
 			handler: customer_confirm_crm2
-		}
+		}, '-',
 		<?php } ?>
+		{
+			text: 'Add to Phonegroup',
+			iconCls:'',
+			//handler: tindakan_nonmedis_print  
+			handler: display_customer_phonegroup
+		}
 		]
 	});
 	customerListEditorGrid.render();
@@ -5225,6 +5561,7 @@ Ext.onReady(function(){
          <div id="fp_cust_note"></div>
 		<div id="elwindow_customer_create"></div>
         <div id="elwindow_customer_search"></div>
+		<div id="elwindow_customer_phonegroup_save"></div>
 	
     </div>
 </div>
