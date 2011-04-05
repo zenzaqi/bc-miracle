@@ -124,6 +124,22 @@ class C_master_order_beli extends Controller {
 	}
 	//
 	
+	/*Function untuk melakukan Save Harga */
+	function detail_save_harga_insert(){
+		$dorder_id = $_POST['dorder_id']; // Get our array back and translate it :
+		$array_dorder_id = json_decode(stripslashes($dorder_id));
+		
+		$dorder_harga = $_POST['dorder_harga']; // Get our array back and translate it :
+		$array_dorder_harga = json_decode(stripslashes($dorder_harga));
+		
+		$result=$this->m_master_order_beli->detail_save_harga_insert($array_dorder_id, $array_dorder_harga);
+		echo $result;
+	}
+	
+	
+	
+	
+	
 	//get master id, note: not done yet
 	function get_supplier_list(){
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
