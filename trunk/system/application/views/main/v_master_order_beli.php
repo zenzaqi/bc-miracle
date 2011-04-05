@@ -575,14 +575,35 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	function check_acc(){
-		if(acc_group!==9){
-			order_harga_satuanField.setDisabled(true);
-			order_diskon_satuanField.setDisabled(true);
-		}else{
+		if(acc_group==9 || acc_group==1){
 			order_harga_satuanField.setDisabled(false);
 			order_diskon_satuanField.setDisabled(false);
+		}else{
+			order_harga_satuanField.setDisabled(true);
+			order_diskon_satuanField.setDisabled(true);
 		}
 	}
+	
+	
+	function op_print_only(){
+		if(order_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur OP tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
+			cetak_order=1;
+			master_order_beli_create('print');
+		}
+		
+		//jproduk_btn_cancel();	
+	}
+	
+	
+	
 	/* Function for Update Confirm */
 	function master_order_beli_confirm_update(){
 		/* only one record is selected here */
@@ -1563,8 +1584,8 @@ Ext.onReady(function(){
 		var edit_detail_order_beli= new detail_order_beliListEditorGrid.store.recordType({
 			dorder_id		:0,		
 			dorder_master	:'',		
-			dorder_produk	:0,		
-			dorder_satuan	:0,		
+			dorder_produk	:'',		
+			dorder_satuan	:'',		
 			dorder_jumlah	:0,		
 			dorder_harga	:0,		
 			dorder_diskon	:0		
@@ -1583,6 +1604,95 @@ Ext.onReady(function(){
 	}
 	//eof
 	
+		
+	//function for insert detail
+	function detail_save_harga_insert(){
+		var dorder_id=[];
+		var dorder_harga=[];
+		
+		var dcount = detail_order_beli_DataStore.getCount() - 1;
+		
+		if(detail_order_beli_DataStore.getCount()>0){
+			for(i=0; i<detail_order_beli_DataStore.getCount();i++){
+				if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_harga))
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==undefined
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==0){
+					if(detail_order_beli_DataStore.getAt(i).data.dorder_id==undefined){
+						dorder_id.push('');
+					}else{
+						dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
+					}
+					
+					if(detail_order_beli_DataStore.getAt(i).data.dorder_harga==undefined){
+						dorder_harga.push('');
+					}else{
+						dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
+					}
+					
+				}
+				
+				if(i==dcount){
+					var encoded_array_dorder_id = Ext.encode(dorder_id);
+					var encoded_array_dorder_harga = Ext.encode(dorder_harga);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_master_order_beli&m=detail_save_harga_insert',
+						params:{
+							dorder_id	: encoded_array_dorder_id,
+							//ppaket_master	: eval(get_pk_id()), 
+							dorder_harga	: encoded_array_dorder_harga
+						},
+						timeout: 60000,
+						success: function(response){							
+							var result=eval(response.responseText);
+						switch(result){
+						case 1 : 
+							master_order_beli_createWindow.hide();
+							Ext.MessageBox.show({
+							   title: 'INFO',
+							   msg: 'Save Harga telah diupdate.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'save',
+							   icon: Ext.MessageBox.INFO
+							});
+							master_order_beli_DataStore.reload();
+							break;
+						default : 
+							Ext.MessageBox.show({
+						   title: 'Warning',
+						   msg: 'Save Harga tidak dapat dilakukan',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+						}
+							//jpaket_btn_cancel();
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							//jpaket_btn_cancel();
+						}		
+					});
+					
+				}
+			}
+		}
+		
+	}
+	//eof
+	
+	
+	
+	
 	//function for insert detail
 	function detail_order_beli_insert(pkid,opsi){
         var dorder_id = [];
@@ -1600,7 +1710,7 @@ Ext.onReady(function(){
 				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==undefined
 				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==''
 				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==0
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_satuan!==0
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_satuan!==''
 				   && detail_order_beli_DataStore.getAt(i).data.dorder_jumlah>0){
                     
                   	dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
@@ -1688,7 +1798,7 @@ Ext.onReady(function(){
 		} 		
 	}
 	//eof
-	
+
 		
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -1700,7 +1810,21 @@ Ext.onReady(function(){
 		monitorValid: true,
 		items: [master_order_beli_masterGroup,detail_order_beliListEditorGrid,master_order_beli_bayarGroup],
 		buttons: [
+			{
+				text: 'Print Only',
+				handler: op_print_only
+			},
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_ORDER'))){ ?>
+			
+			{
+				//id: 'op_save_harga',
+				text: 'Save Harga',
+				handler: detail_save_harga_insert
+			},
+			{
+				xtype:'spacer',
+				width: 500
+			},
 			order_button_saveprintField
 			,order_button_saveField
 			,
