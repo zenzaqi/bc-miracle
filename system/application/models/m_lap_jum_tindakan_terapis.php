@@ -14,7 +14,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 	}
 
 	
-	function get_terapis_list($query="",$start=0,$end=100){
+	function get_terapis_list($query="",$start=0,$end=500){
 		$sql="select karyawan_id,karyawan_no,karyawan_nama,karyawan_username,jabatan_nama from karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif' and (karyawan_jabatan='7' or karyawan_jabatan='4')";
 		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
