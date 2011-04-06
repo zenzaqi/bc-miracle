@@ -17,7 +17,6 @@ class M_jadwal_terapis extends Model{
 		function M_jadwal_terapis() {
 			parent::Model();
 		}
-		
 		//function for get list record
 		function jadwal_terapis_list($filter,$start,$end,$tgl_app){
 			
@@ -43,7 +42,14 @@ class M_jadwal_terapis extends Model{
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
 						left join tindakan_adjust on (tindakan_adjust.karyawan_id = absensi.absensi_karyawan_id and date_format(absensi.absensi_tgl, '%Y-%m') = date_format(tindakan_adjust.adj_bln, '%Y-%m'))
 						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
+						left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
 					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'P'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
 		
 		$query2 = "select distinct
@@ -58,7 +64,14 @@ class M_jadwal_terapis extends Model{
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
 						left join tindakan_adjust on (tindakan_adjust.karyawan_id = absensi.absensi_karyawan_id and date_format(absensi.absensi_tgl, '%Y-%m') = date_format(tindakan_adjust.adj_bln, '%Y-%m'))
 						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
+						left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
 					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'S'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
 		
 		$query3 = "select distinct
@@ -73,7 +86,14 @@ class M_jadwal_terapis extends Model{
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
 						left join tindakan_adjust on (tindakan_adjust.karyawan_id = absensi.absensi_karyawan_id and date_format(absensi.absensi_tgl, '%Y-%m') = date_format(tindakan_adjust.adj_bln, '%Y-%m'))
 						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
+						left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
 					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'M'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
 	
 		$query4 = "select distinct
@@ -88,7 +108,14 @@ class M_jadwal_terapis extends Model{
 						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
 						left join tindakan_adjust on (tindakan_adjust.karyawan_id = absensi.absensi_karyawan_id and date_format(absensi.absensi_tgl, '%Y-%m') = date_format(tindakan_adjust.adj_bln, '%Y-%m'))
 						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
+						left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
 					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'OFF'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
 		
 		$nbrows = 0;
