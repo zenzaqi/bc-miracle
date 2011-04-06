@@ -95,7 +95,7 @@ class M_appointment extends Model{
 				LEFT JOIN tindakan_adjust on 
 					(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 					 date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 					OR substring(karyawan_cabang2,

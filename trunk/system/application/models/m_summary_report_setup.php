@@ -112,30 +112,50 @@ class M_summary_report_setup extends Model{
 				return '0';
 		}
 		
-		
-		
-		
-		//function for update record
-		function sr_setup_create($setsr_id, $setsr_cabang, $setsr_tahun, $setsr_jenis, $setsr_jan, $setsr_feb, $setsr_mar, $setsr_apr, $setsr_may, $setsr_jun, $setsr_jul, $setsr_aug, $setsr_sep, $setsr_oct, $setsr_nov, $setsr_dec, $setsr_author, $setsr_date_create, $setsr_update, $setsr_date_update, $setsr_revised){
+
+	//function for update record
+	function sr_setup_create($setsr_id, $setsr_cabang, $setsr_tahun, $setsr_jenis, $setsr_jan, $setsr_feb, $setsr_mar, $setsr_apr, $setsr_may, $setsr_jun, $setsr_jul, $setsr_aug, $setsr_sep, $setsr_oct, $setsr_nov, $setsr_dec, $setsr_author, $setsr_date_create, $setsr_update, $setsr_date_update, $setsr_revised){
 			
-			$datetime_now=date('Y-m-d H:i:s');
+		$datetime_now=date('Y-m-d H:i:s');
 	
-			$query = "SELECT setsr_tahun from sr_setup where setsr_tahun = '".$setsr_tahun."'";
-			$result = $this->db->query($query);
-			$nbrows = $result->num_rows();
-			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
-				}
-				$jsonresult = json_encode($arr);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} 
+		$query = "SELECT setsr_tahun from sr_setup where setsr_tahun = '".$setsr_tahun."'";
+		$result = $this->db->query($query);
+		$nbrows = $result->num_rows();
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} 
 			
-			else {
+		else {
 				
 				$data = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Kunjungan',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+		);
+		$this->db->insert('sr_setup', $data); 
+			
+		$data2 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
 				"setsr_jenis"=>'Kunjungan Pria',
 				"setsr_jan"=>$setsr_jan,
@@ -152,36 +172,14 @@ class M_summary_report_setup extends Model{
 				"setsr_dec"=>$setsr_dec,
 				"setsr_author"=>$_SESSION[SESSION_USERID],
 				"setsr_date_create"=>date('Y-m-d H:i:s')
-			);
-			$this->db->insert('sr_setup', $data); 
-			
-			$data2 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
-				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Kunjungan Wanita',
-				"setsr_jan"=>$setsr_jan,
-				"setsr_feb"=>$setsr_feb,
-				"setsr_mar"=>$setsr_mar,
-				"setsr_apr"=>$setsr_apr,
-				"setsr_may"=>$setsr_may,
-				"setsr_jun"=>$setsr_jun,
-				"setsr_jul"=>$setsr_jul,
-				"setsr_aug"=>$setsr_aug,
-				"setsr_sep"=>$setsr_sep,
-				"setsr_oct"=>$setsr_oct,
-				"setsr_nov"=>$setsr_nov,
-				"setsr_dec"=>$setsr_dec,
-				"setsr_author"=>$_SESSION[SESSION_USERID],
-				"setsr_date_create"=>date('Y-m-d H:i:s')
-			);
-			$this->db->insert('sr_setup', $data2); 
+		);
+		$this->db->insert('sr_setup', $data2); 
 			
 			$data3 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Customer Lama',
+				"setsr_jenis"=>'Kunjungan Wanita',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -200,10 +198,10 @@ class M_summary_report_setup extends Model{
 			$this->db->insert('sr_setup', $data3); 
 			
 			$data4 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Customer Baru',
+				"setsr_jenis"=>'Customer Lama',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -222,10 +220,10 @@ class M_summary_report_setup extends Model{
 			$this->db->insert('sr_setup', $data4); 
 				
 			$data5 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Member Baru',
+				"setsr_jenis"=>'Customer Baru',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -244,10 +242,10 @@ class M_summary_report_setup extends Model{
 			$this->db->insert('sr_setup', $data5); 
 			
 			$data6 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Perawatan Medis',
+				"setsr_jenis"=>'Member Baru',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -266,10 +264,10 @@ class M_summary_report_setup extends Model{
 			$this->db->insert('sr_setup', $data6); 
 		
 			$data7 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Perawatan Non Medis',
+				"setsr_jenis"=>'Perawatan Medis (Rp)',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -288,10 +286,10 @@ class M_summary_report_setup extends Model{
 			$this->db->insert('sr_setup', $data7);
 			
 			$data8 = array(
-				"setsr_id"=>$setsr_id,	
-				"setsr_cabang"=>$setsr_cabang,	
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Produk',
+				"setsr_jenis"=>'Perawatan Medis (Qty)',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,
@@ -308,6 +306,99 @@ class M_summary_report_setup extends Model{
 				"setsr_date_create"=>date('Y-m-d H:i:s')
 			);
 			$this->db->insert('sr_setup', $data8);
+				
+			$data9 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Perawatan Non Medis (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data9);
+
+
+			$data10 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Perawatan Non Medis (Qty)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data10);
+			
+			
+			$data11 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Produk (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data11);
+				
+				
+				
+			$data12 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Produk (Qty)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data12);
+				
 				
 			}
 			
