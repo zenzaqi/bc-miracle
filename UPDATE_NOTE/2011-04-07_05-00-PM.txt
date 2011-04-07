@@ -1,0 +1,4 @@
+<update by zaqi.smart@gmail.com>
+- Update Laporan Stok Mutasi
+- Update Laporan Kartu Stok
+- Update Master Akun, db - 2011-04-07_05-00-PM....sql
