@@ -1,5 +1,5 @@
-<? 
-/* 	
+<?
+/*
 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
     #songbee	mukhlisona@gmail.com
@@ -29,13 +29,13 @@ class M_stok_mutasi extends Model{
 						 satuan_nama LIKE '%".addslashes($filter)."%')";
 			}
 			$sql.=" order by produk_nama";
-			
+
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
 			//$this->firephp->log($sql);
-			
+
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -50,14 +50,14 @@ class M_stok_mutasi extends Model{
 
 		function stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 													   $tanggal_end,$query,$start,$end, $mutasi_jumlah){
-			
-			$sql="select * from stok_mutasi sm,produk pr, satuan 
+
+			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
 					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
-			
+
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_group='".$group1_id."' ";
@@ -65,7 +65,7 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
-			
+
 			if($mutasi_jumlah=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir = '0' ";
@@ -76,15 +76,15 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
 			}
-			
+
 			$sql.=" ORDER BY pr.produk_kode ";
-			
+
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			$limit = $sql." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
 			//$this->firephp->log($limit);
-			
+
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -94,19 +94,19 @@ class M_stok_mutasi extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
-			
+
 		}
-		
+
 		function stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 													   $tanggal_end,$query,$start,$end, $mutasi_jumlah){
-			
-			$sql="select * from stok_mutasi sm,produk pr, satuan 
+
+			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
 					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
-			
+
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_group='".$group1_id."' ";
@@ -115,26 +115,26 @@ class M_stok_mutasi extends Model{
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
 			$sql.=" ORDER BY pr.produk_kode ";
-			
+
 			$result = $this->db->query($sql);
 			if($result->num_rows())
 				return $result->result();
 			else
 				return NULL;
-			
+
 		}
-		
-		function generate_stok_mutasi($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start, 
+
+		function generate_stok_mutasi($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 									  $tanggal_end,  $mutasi_jumlah){
-			
+
 			//DELETE ALL REPORT
 			$sql="DELETE FROM stok_mutasi
 					WHERE date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
-					
+
 			$result=$this->db->query($sql);
-			
+
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
@@ -147,16 +147,16 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
 			}
-			
+
 			//$this->firephp->log($sql);
-			
+
 			$sql.=" GROUP BY produk_kode ASC";
 			$result=$this->db->query($sql) or die("ERROR-0 : ".$sql);;
-			
+
 
 			//INSERT KE TEMPORARY STOK_MUTASI
 			if($result->num_rows()){
-			
+
 				if($opsi_satuan=='terkecil'){
 					$sqlinsert="INSERT INTO stok_mutasi(produk_id,satuan_id,gudang_id,tanggal_awal,tanggal_akhir)
 								SELECT 	produk_id,satuan_id,".$gudang.",date_format('".$tanggal_start."','%Y-%m-%d'),
@@ -169,7 +169,7 @@ class M_stok_mutasi extends Model{
 								FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
 
 				}
-				
+
 				if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
 					$sqlinsert.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sqlinsert.="	produk_group='".$group1_id."' ";
@@ -177,17 +177,17 @@ class M_stok_mutasi extends Model{
 					$sqlinsert.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sqlinsert.="	produk_id='".$produk_id."' ";
 				}
-				
+
 				//$this->firephp->log($sqlinsert);
-				
+
 				$sqlinsert.=" GROUP BY produk_kode ASC";
 				$this->db->query($sqlinsert) or die("ERROR-1 : ".$sqlinsert);
-			
+
 			}
 
 
 			foreach($result->result() as $rowproduk){
-			
+
 			//Stok Awal
 			$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai/".$rowproduk->konversi_nilai." as jumlah
 						FROM 	produk, satuan_konversi
@@ -204,24 +204,24 @@ class M_stok_mutasi extends Model{
 							AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 							AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 							AND gudang_id='".$gudang."'";
-				
+
 				//$this->firephp->log($sqlupdate);
-				
+
 				$this->db->query($sqlupdate) or die("ERROR-2 : ".$sqlupdate);
 			}
-			
-			
+
+
 			//STOK AWAL
 			$sql_stok_awal="SELECT ifnull(
 							sum(jml_mutasi_masuk*konversi_nilai/".$rowproduk->konversi_nilai.")
 							+ sum(jml_koreksi_stok*konversi_nilai/".$rowproduk->konversi_nilai.")
-							- sum(jml_mutasi_keluar*konversi_nilai/".$rowproduk->konversi_nilai.")";
+							- sum(jml_mutasi_keluar*konversi_nilai/".$rowproduk->konversi_nilai.")
+							+ sum(jml_terima_barang*konversi_nilai/".$rowproduk->konversi_nilai.")
+							+ sum(jml_terima_bonus*konversi_nilai/".$rowproduk->konversi_nilai.")";
 
 			if($gudang==1){
 				//GUDANG UTAMA
-			 	$sql_stok_awal.="+ sum(jml_terima_barang*konversi_nilai/".$rowproduk->konversi_nilai.")
-							 	+ sum(jml_terima_bonus*konversi_nilai/".$rowproduk->konversi_nilai.") 
-								- sum(jml_retur_beli*konversi_nilai/".$rowproduk->konversi_nilai.")";
+			 	$sql_stok_awal.="- sum(jml_retur_beli*konversi_nilai/".$rowproduk->konversi_nilai.")";
 			}elseif($gudang==4 || $gudang==3){
 				//GUDANG PERAWATAN
 				$sql_stok_awal.="- sum(jml_pakai_cabin*konversi_nilai/".$rowproduk->konversi_nilai.")";
@@ -232,7 +232,7 @@ class M_stok_mutasi extends Model{
 								+sum(jml_retur_produk*konversi_nilai/".$rowproduk->konversi_nilai.")
 								+sum(jml_retur_paket*konversi_nilai/".$rowproduk->konversi_nilai.")";
 			}
-			
+
 			$sql_stok_awal.=" ,0) AS jumlah_awal
 							FROM (
 							  SELECT `mmm`.`mutasi_tanggal` AS `tanggal`,
@@ -265,7 +265,7 @@ class M_stok_mutasi extends Model{
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_tujuan='".$gudang."'
-									AND mutasi_status<>'Batal'
+									AND mutasi_status='Tertutup'
 							UNION
 							SELECT `mmk`.`mutasi_tanggal` AS `tanggal`,
 								   `mmk`.`mutasi_asal` AS `asal`,
@@ -297,7 +297,7 @@ class M_stok_mutasi extends Model{
 									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_asal='".$gudang."'
-									AND mutasi_status<>'Batal'
+									AND mutasi_status='Tertutup'
 							UNION
 							SELECT `mk`.`koreksi_tanggal` AS `tanggal`,
 								   `mk`.`koreksi_gudang` AS `asal`,
@@ -331,12 +331,8 @@ class M_stok_mutasi extends Model{
 									AND date_format(koreksi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 									AND dkoreksi_produk='".$rowproduk->produk_id."'
 									AND koreksi_gudang='".$gudang."'
-									AND koreksi_status<>'Batal'";
-					
-						
-				if($gudang==1){
-					//GUDANG UTAMA
-					$sql_stok_awal.=" UNION SELECT `mt`.`terima_tanggal` AS `tanggal`,
+									AND koreksi_status='Tertutup'
+							UNION SELECT `mt`.`terima_tanggal` AS `tanggal`,
 										   `mt`.`terima_supplier` AS `asal`,
 										   1 AS `tujuan`,
 										   `mt`.`terima_gudang_id` AS `gudang`,
@@ -366,8 +362,7 @@ class M_stok_mutasi extends Model{
 											AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 											AND dterima_produk='".$rowproduk->produk_id."'
 											AND `mt`.`terima_gudang_id`='".$gudang."'
-											AND terima_status<>'Batal' 
-											
+											AND terima_status='Tertutup'
 									UNION
 									SELECT `mt`.`terima_tanggal` AS `tanggal`,
 										   `mt`.`terima_supplier` AS `asal`,
@@ -399,7 +394,10 @@ class M_stok_mutasi extends Model{
 										   AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 											AND dtbonus_produk='".$rowproduk->produk_id."'
 											AND `mt`.`terima_gudang_id`='".$gudang."'
-											AND terima_status<>'Batal'
+											AND terima_status='Tertutup'";
+				if($gudang==1){
+					//GUDANG UTAMA
+					$sql_stok_awal.="
 									UNION
 									SELECT `mr`.`rbeli_tanggal` AS `tanggal`,
 										   `mr`.`rbeli_supplier` AS `asal`,
@@ -431,8 +429,8 @@ class M_stok_mutasi extends Model{
 											AND date_format(rbeli_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 											AND drbeli_produk='".$rowproduk->produk_id."'
 											AND 1='".$gudang."'
-											AND rbeli_status<>'Batal'";
-							
+											AND rbeli_status='Tertutup'";
+
 				}elseif($gudang==4 || $gudang==3){
 					//GUDANG PERAWATAN
 					$sql_stok_awal.=" UNION
@@ -460,7 +458,7 @@ class M_stok_mutasi extends Model{
 										   _UTF8 'pakai cabin' AS `keterangan`,
 										   `cb`.`cabin_dtrawat` AS `detail_id`
 									  FROM `detail_pakai_cabin` `cb`, satuan_konversi
-									 WHERE konversi_produk = cabin_produk 
+									 WHERE konversi_produk = cabin_produk
 											AND konversi_satuan = cabin_satuan
 											AND date_format(cabin_date_create,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 											AND cabin_produk='".$rowproduk->produk_id."'
@@ -498,8 +496,8 @@ class M_stok_mutasi extends Model{
 													AND date_format(jproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 													AND dproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
-													AND jproduk_stat_dok<>'Batal'
-													
+													AND jproduk_stat_dok='Tertutup'
+
 											UNION
 											SELECT `mjg`.`jpgrooming_tanggal` AS `tanggal`,
 												   2 AS `asal`,
@@ -566,7 +564,7 @@ class M_stok_mutasi extends Model{
 													AND date_format(rproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 													AND drproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
-													AND rproduk_stat_dok<>'Batal'
+													AND rproduk_stat_dok='Tertutup'
 											UNION
 											SELECT `mrp`.`rpaket_tanggal` AS `tanggal`,
 												   `mrp`.`rpaket_cust` AS `asal`,
@@ -600,14 +598,14 @@ class M_stok_mutasi extends Model{
 													AND date_format(rpaket_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
 													AND drpaket_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
-													AND rpaket_stat_dok<>'Batal'";
+													AND rpaket_stat_dok='Tertutup'";
 				}
-			
+
 				$sql_stok_awal.= ") as mutasi
 									GROUP BY mutasi.produk
-									ORDER BY mutasi.produk ";					
+									ORDER BY mutasi.produk ";
 				//$this->firephp->log($sql_stok_awal);
-				
+
 				$rstawal=$this->db->query($sql_stok_awal) or die("ERROR-3 : ".$sql_stok_awal);;
 				if($rstawal->num_rows()){
 					$row=$rstawal->row();
@@ -617,15 +615,15 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
 					//$this->firephp->log($sql_stok_awal);
-					
+
 					$this->db->query($sqlupdate) or die("ERROR-4 : ".$sql_stok_awal);
 				}
-				
+
 				//MUTASINYA DI SINI
-				
+
 				//MUTASI MASUK
 				$sqlupdate="UPDATE stok_mutasi M SET stok_masuk=stok_masuk+ifnull((
-							
+
 						SELECT 	sum(dt.dmutasi_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as masuk
 						  FROM `detail_mutasi` `dt`, `master_mutasi` `mt`, satuan_konversi, gudang gd
 						 WHERE  `dt`.`dmutasi_master` = `mt`.`mutasi_id`
@@ -635,20 +633,20 @@ class M_stok_mutasi extends Model{
 								AND date_format(mutasi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(mutasi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dmutasi_produk='".$rowproduk->produk_id."'
-								AND mutasi_status<>'Batal'
-								AND mutasi_tujuan='".$gudang."' 
+								AND mutasi_status='Tertutup'
+								AND mutasi_tujuan='".$gudang."'
 								AND M.produk_id=dt.dmutasi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-8 : ".$sqlupdate);
-			
+
 				//MUTASI KELUAR
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-							
+
 						SELECT 	sum(dt.dmutasi_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as keluar
 						  FROM `detail_mutasi` `dt`, `master_mutasi` `mt`, satuan_konversi, gudang gd
 						 WHERE  `dt`.`dmutasi_master` = `mt`.`mutasi_id`
@@ -658,7 +656,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(mutasi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(mutasi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dmutasi_produk='".$rowproduk->produk_id."'
-								AND mutasi_status<>'Batal'
+								AND mutasi_status='Tertutup'
 								AND mutasi_asal='".$gudang."'
 								AND M.produk_id=dt.dmutasi_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
@@ -667,10 +665,10 @@ class M_stok_mutasi extends Model{
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-9 : ".$sqlupdate);
-				
+
 				//KOREKSI MASUK
 				$sqlupdate="UPDATE stok_mutasi M SET stok_masuk=stok_masuk+ifnull((
-							
+
 						SELECT 	sum(dt.dkoreksi_jmlkoreksi*konversi_nilai/".$rowproduk->konversi_nilai.") as masuk
 						  FROM `detail_koreksi_stok` `dt`, `master_koreksi_stok` `mt`, satuan_konversi, gudang gd
 						 WHERE     `dt`.`dkoreksi_master` = `mt`.`koreksi_id`
@@ -680,7 +678,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(koreksi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(koreksi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dkoreksi_produk='".$rowproduk->produk_id."'
-								AND koreksi_status<>'Batal'
+								AND koreksi_status='Tertutup'
 								AND koreksi_gudang='".$gudang."'
 								AND dt.dkoreksi_jmlkoreksi>0
 								AND M.produk_id=dt.dkoreksi_produk),0)
@@ -688,13 +686,13 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-				
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-10 : ".$sqlupdate);
-			
+
 				//KOREKSI KELUAR
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-								
+
 						SELECT 	abs(sum(dt.dkoreksi_jmlkoreksi*konversi_nilai/".$rowproduk->konversi_nilai.")) as keluar
 						  FROM `detail_koreksi_stok` `dt`, `master_koreksi_stok` `mt`, satuan_konversi, gudang gd
 						 WHERE   `dt`.`dkoreksi_master` = `mt`.`koreksi_id`
@@ -704,7 +702,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(koreksi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(koreksi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dkoreksi_produk='".$rowproduk->produk_id."'
-								AND koreksi_status<>'Batal'
+								AND koreksi_status='Tertutup'
 								AND koreksi_gudang='".$gudang."'
 								AND dt.dkoreksi_jmlkoreksi<0
 								AND M.produk_id=dt.dkoreksi_produk),0)
@@ -712,14 +710,13 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-11 : ".$sqlupdate);
-				
-		if($gudang==1){
+
 				//PENERIMAAN BARANG
 				$sqlupdate="UPDATE stok_mutasi M SET stok_masuk=stok_masuk+ifnull((
-							
+
 						SELECT 	sum(dt.dterima_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as masuk
 						  FROM `detail_terima_beli` `dt`, `master_terima_beli` `mt`, satuan_konversi
 						 WHERE     `dt`.`dterima_master` = `mt`.`terima_id`
@@ -728,7 +725,7 @@ class M_stok_mutasi extends Model{
 								AND date_format(terima_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dterima_produk='".$rowproduk->produk_id."'
-								AND terima_status<>'Batal'
+								AND terima_status='Tertutup'
 								AND `mt`.`terima_gudang_id`=".$gudang."
 								AND M.produk_id=dt.dterima_produk),0)
 					WHERE produk_id='".$rowproduk->produk_id."'
@@ -737,10 +734,10 @@ class M_stok_mutasi extends Model{
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$this->db->query($sqlupdate) or die("ERROR-5 : ".$sqlupdate);
-				
+
 				//PENERIMAAN BARANG BONUS
 				$sqlupdate="UPDATE stok_mutasi M SET stok_masuk=stok_masuk+ifnull((
-							
+
 						SELECT 	sum(dt.dtbonus_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as masuk
 						  FROM `detail_terima_bonus` `dt`, `master_terima_beli` `mt`, satuan_konversi
 						 WHERE  `dt`.`dtbonus_master` = `mt`.`terima_id`
@@ -749,8 +746,8 @@ class M_stok_mutasi extends Model{
 								AND date_format(terima_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dtbonus_produk='".$rowproduk->produk_id."'
-								AND terima_status<>'Batal'
-								AND `mt`.`terima_gudang_id`=".$gudang." 
+								AND terima_status='Tertutup'
+								AND `mt`.`terima_gudang_id`=".$gudang."
 								AND M.produk_id=dt.dtbonus_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
@@ -758,10 +755,13 @@ class M_stok_mutasi extends Model{
 								AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-6 : ".$sqlupdate);
-				
-				//RETUR PEMBELIAN 
+
+		if($gudang==1){
+
+
+				//RETUR PEMBELIAN
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-							
+
 						SELECT 	sum(dt.drbeli_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as keluar
 						  FROM `detail_retur_beli` `dt`, `master_retur_beli` `mt`, satuan_konversi
 						 WHERE  `dt`.`drbeli_master` = `mt`.`rbeli_id`
@@ -770,8 +770,8 @@ class M_stok_mutasi extends Model{
 								AND date_format(rbeli_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(rbeli_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND drbeli_produk='".$rowproduk->produk_id."'
-								AND rbeli_status<>'Batal'
-								AND 1 =".$gudang." 
+								AND rbeli_status='Tertutup'
+								AND 1 =".$gudang."
 								AND M.produk_id=dt.drbeli_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
@@ -782,7 +782,7 @@ class M_stok_mutasi extends Model{
 		}elseif($gudang==4 || $gudang==3){
 				//PAKAI CABIN
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-									
+
 								SELECT 	sum(cabin_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as keluar
 						  FROM  detail_pakai_cabin, satuan_konversi
 						 WHERE  konversi_satuan = cabin_satuan
@@ -795,13 +795,13 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-15 : ".$sqlupdate);
 		}elseif($gudang==2){
 				//PENJUALAN PRODUK
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-								
+
 						 SELECT sum(dt.dproduk_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as keluar
 						  FROM `detail_jual_produk` `dt`, `master_jual_produk` `mt`, satuan_konversi
 						 WHERE  `dt`.`dproduk_master` = `mt`.`jproduk_id`
@@ -810,19 +810,19 @@ class M_stok_mutasi extends Model{
 								AND date_format(jproduk_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(jproduk_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND dproduk_produk='".$rowproduk->produk_id."'
-								AND jproduk_stat_dok<>'Batal'
+								AND jproduk_stat_dok='Tertutup'
 								AND M.produk_id=dt.dproduk_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-12 : ".$sqlupdate);
-			
+
 				//RETUR PENJUALAN PRODUK
 				$sqlupdate="UPDATE stok_mutasi M SET stok_masuk=stok_masuk+ifnull((
-									
+
 								SELECT 	sum(dt.drproduk_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as masuk
 						  FROM `detail_retur_jual_produk` `dt`, `master_retur_jual_produk` `mt`, satuan_konversi
 						 WHERE  `dt`.`drproduk_master` = `mt`.`rproduk_id`
@@ -831,19 +831,19 @@ class M_stok_mutasi extends Model{
 								AND date_format(rproduk_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
 								AND date_format(rproduk_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
 								AND drproduk_produk='".$rowproduk->produk_id."'
-								AND rproduk_stat_dok<>'Batal'
+								AND rproduk_stat_dok='Tertutup'
 								AND M.produk_id=dt.drproduk_produk),0)
 						WHERE 	produk_id='".$rowproduk->produk_id."'
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-13 : ".$sqlupdate);
-				
+
 				//PENJUALAN PRODUK GROOMING
 				$sqlupdate="UPDATE stok_mutasi M SET stok_keluar=stok_keluar+ifnull((
-									
+
 								SELECT 	sum(dt.dpgrooming_jumlah*konversi_nilai/".$rowproduk->konversi_nilai.") as keluar
 						  FROM `detail_jualproduk_grooming` `dt`, `master_jualproduk_grooming` `mt`, satuan_konversi
 						 WHERE  `dt`.`dpgrooming_master` = `mt`.`jpgrooming_id`
@@ -857,25 +857,25 @@ class M_stok_mutasi extends Model{
 								AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 								AND gudang_id='".$gudang."'";
-								
+
 				//$this->firephp->log($sqlupdate);
 				$result=$this->db->query($sqlupdate) or die("ERROR-14 : ".$sqlupdate);
 		}
-				
-				
+
+
 				$sql_update="UPDATE stok_mutasi SET stok_akhir=stok_awal+stok_masuk-stok_keluar
 							WHERE 	produk_id='".$rowproduk->produk_id."'
 									AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 									AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 									AND gudang_id='".$gudang."'";
 				//$this->firephp->log($sqlupdate);
-				
+
 				$result=$this->db->query($sql_update) or die("ERROR-16 : ".$sql_update);
-			
+
 			}
-			
-			
-			
+
+
+
 			return '1';
 		}
 

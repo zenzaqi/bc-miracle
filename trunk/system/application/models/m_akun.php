@@ -21,11 +21,13 @@ class M_akun extends Model{
 		//function for get list record
 		function akun_list($filter,$start,$end){
 			$query = "SELECT test.*
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama, D.*
+						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama,
+										D.departemen_id,D.departemen_nama
 							FROM akun A
 							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test		
+						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
 						WHERE test.akun_aktif='Aktif'  ";
+
 
 			// For simple search
 			if ($filter<>"" && $query !=""){
@@ -40,6 +42,7 @@ class M_akun extends Model{
 			if($end=="") $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
+			$this->firephp->log($limit);
 
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -94,7 +97,7 @@ class M_akun extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
-		
+
 		//function for create new record
 		function akun_create($akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,$akun_aktif ,
 							 $akun_creator ,$akun_date_create, $akun_departemen ){
@@ -102,17 +105,26 @@ class M_akun extends Model{
 				"akun_kode"=>$akun_kode,
 				"akun_jenis"=>$akun_jenis,
 				"akun_parent"=>$akun_parent,
-				"akun_level"=>$akun_level,
 				"akun_nama"=>$akun_nama,
 				"akun_debet"=>$akun_debet,
 				"akun_kredit"=>$akun_kredit,
 				"akun_saldo"=>$akun_saldo,
 				"akun_aktif"=>$akun_aktif,
 				"akun_creator"=>$akun_creator,
-				"akun_date_create"=>$akun_date_create,
-				"akun_departemen"=>$akun_departemen	
+				"akun_date_create"=>$akun_date_create
 			);
-
+			
+			
+			if($akun_departemen!==""){
+				$sql="SELECT departemen_id FROM departemen WHERE departemen_id='".$akun_departemen."' LIMIT 1";
+				$result=$this->db->query($sql);
+				if($result->num_rows()){
+					$data["akun_departemen"]=$akun_departemen;
+				}
+			}else{
+				$data["akun_departemen"]=0;
+			}
+			
 			if($akun_parent!==""){
 				$sql="SELECT akun_kode,akun_level FROM akun WHERE akun_id='".$akun_parent."'";
 				$result=$this->db->query($sql);
@@ -147,7 +159,17 @@ class M_akun extends Model{
 				"akun_update"=>$akun_update,
 				"akun_date_update"=>$akun_date_update
 			);
-
+			
+			if($akun_departemen!==""){
+				$sql="SELECT departemen_id FROM departemen WHERE departemen_id='".$akun_departemen."' LIMIT 1";
+				$result=$this->db->query($sql);
+				if($result->num_rows()){
+					$data["akun_departemen"]=$akun_departemen;
+				}
+			}else{
+				$data["akun_departemen"]=0;
+			}
+			
 			if($akun_parent!==""){
 				$sql="SELECT akun_kode,akun_level, akun_jenis FROM akun WHERE akun_id='".$akun_parent."'";
 				$result=$this->db->query($sql);
@@ -159,12 +181,12 @@ class M_akun extends Model{
 					$data["akun_jenis"]=$row->akun_jenis;
 				}
 			}
-			
+
 			$sql="SELECT departemen_id FROM departemen WHERE departemen_id='".$akun_departemen."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["akun_departemen"]=$akun_departemen;
-				
+
 			$this->db->where('akun_id', $akun_id);
 			$this->db->update('akun', $data);
 			$sql="UPDATE akun SET akun_revised=(akun_revised+1) WHERE akun_id='".$akun_id."'";
