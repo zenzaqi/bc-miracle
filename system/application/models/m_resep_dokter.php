@@ -567,29 +567,31 @@ class M_resep_dokter extends Model{
 		
 		//function for get list record
 		function resep_dokter_list($filter,$start,$end){
-			$date_now=date('d-m-Y');
+			$date_now=date('Y-m-d');
 
 			$query = "select resep_dokter.*,customer.cust_no, customer.cust_nama, karyawan.karyawan_username, karyawan.karyawan_id, karyawan.karyawan_nama, karyawan.karyawan_sip
 from resep_dokter
 left join customer on (customer.cust_id=resep_dokter.resep_custid)
-left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
+left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)
+where resep_tanggal = '".$date_now."'
+";
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (resep_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%')";
 			}
 
+			//$query .= " WHERE date_format(resep_dokter.resep_tanggal,'%Y-%m-%d') = date_format('$date_now','%Y-%m-%d')";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
-			//$limit = $query." LIMIT ".$start.",".$end;		
-			//$result = $this->db->query($limit);  
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
 			
-			if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
-				if($nbrows>0){
+			if($nbrows>0){
 					foreach($result->result() as $row){
 						$arr[] = $row;
 					}
-				}
+			
 				
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
@@ -709,36 +711,33 @@ left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 		
 		
 		//function for advanced search record
-		function resep_dokter_search($trawat_id ,$card_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end){
+		function resep_dokter_search($resep_cust_id ,$resep_dokter_tgl_start ,$resep_dokter_tgl_end ,$resep_dokter_id , $resep_no, $start,$end){
 			//full query
-			$query = "SELECT * FROM vu_tindakan WHERE (kategori_nama='Medis' OR dtrawat_petugas2='0')";
+			$query = "select resep_dokter.*,customer.cust_no, customer.cust_nama, karyawan.karyawan_username, karyawan.karyawan_id, karyawan.karyawan_nama, karyawan.karyawan_sip
+from resep_dokter
+left join customer on (customer.cust_id=resep_dokter.resep_custid)
+left join karyawan on (karyawan.karyawan_id = resep_dokter.resep_dokterid)";
 			
-			if($trawat_id!=''){
+	
+			if($resep_cust_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " trawat_id LIKE '%".$trawat_id."%'";
+				$query.= " resep_custid = '".$resep_cust_id."'";
 			};
-			if($card_cust!=''){
+			if($resep_dokter_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " card_cust LIKE '%".$card_cust."%'";
+				$query.= " resep_dokterid = '".$resep_dokter_id."'";
 			};
-			if($trawat_rawat!=''){
+			if($resep_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_perawatan LIKE '%".$trawat_rawat."%'";
+				$query.= " resep_no LIKE '%".$resep_no."%'";
 			};
-			if($trawat_dokter!=''){
+
+			if($resep_dokter_tgl_start!='' && $resep_dokter_tgl_end!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_petugas1 LIKE '%".$trawat_dokter."%'";
-			};
-			if($trawat_status!=''){
+				$query.= " resep_tanggal BETWEEN '".$resep_dokter_tgl_start."' AND '".$resep_dokter_tgl_end."'";
+			}else if($resep_dokter_tgl_start!='' && $resep_dokter_tgl_end==''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_status LIKE '%".$trawat_status."%'";
-			};
-			if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."'";
-			}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " dtrawat_tglapp='".$trawat_tglapp_start."'";
+				$query.= " resep_tanggal='".$resep_dokter_tgl_start."'";
 			}
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
