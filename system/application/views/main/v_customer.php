@@ -315,10 +315,9 @@ var editor_cust_note;
  	/* End of Function */
 	
 	function customer_set_defaultForm(){
-		cust_kotaField.setValue('Surabaya');
-		cust_propinsiField.setValue('Jawa Timur');
-		cust_negaraField.setValue('Indonesia');
-		cust_priorityField.setValue('Reguler');
+		
+	
+	
 		
 		//cust_unitField.setValue('Miracle Thamrin');
 		cust_aktifField.setValue('Aktif');
@@ -332,6 +331,91 @@ var editor_cust_note;
 							cust_unitField.setValue(info_auto_cabang.cust_cabang_display);
 							//info_alamatField.setValue(info_auto_nama.cabang_alamat);
 							//info_id_cabangField.setValue(info_auto_nama.cabang_id);
+							if(cust_unitField.getValue()=='Miracle Thamrin' || cust_unitField.getValue()=='Miracle HR Muhammad' || cust_unitField.getValue()=='Miracle Kertajaya Indah' || cust_unitField.getValue()=='Miracle Tunjungan Plaza')
+							{
+							cust_kotaField.setValue('Surabaya');
+							cust_propinsiField.setValue('Jawa Timur');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Malang')
+							{
+							cust_kotaField.setValue('Malang');
+							cust_propinsiField.setValue('Jawa Timur');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Malang')
+							{
+							cust_kotaField.setValue('Malang');
+							cust_propinsiField.setValue('Jawa Timur');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Denpasar'|| cust_unitField.getValue()=='Miracle Kuta')
+							{
+							cust_kotaField.setValue('Denpasar');
+							cust_propinsiField.setValue('Bali');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Jakarta'|| cust_unitField.getValue()=='Mall Taman Anggrek')
+							{
+							cust_kotaField.setValue('Jakarta');
+							cust_propinsiField.setValue('DKI Jakarta');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Makassar')
+							{
+							cust_kotaField.setValue('Makassar');
+							cust_propinsiField.setValue('Sulawesi Selatan');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Balikpapan')
+							{
+							cust_kotaField.setValue('Balikpapan');
+							cust_propinsiField.setValue('Kalimantan Timur');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Batam')
+							{
+							cust_kotaField.setValue('Batam');
+							cust_propinsiField.setValue('Kep. Riau');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Medan')
+							{
+							cust_kotaField.setValue('Medan');
+							cust_propinsiField.setValue('Sumatera Utara');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Lombok')
+							{
+							cust_kotaField.setValue('Mataram');
+							cust_propinsiField.setValue('NTB');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Manado')
+							{
+							cust_kotaField.setValue('Manado');
+							cust_propinsiField.setValue('Sulawesi Utara');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							else if(cust_unitField.getValue()=='Miracle Yogyakarta')
+							{
+							cust_kotaField.setValue('Yogyakarta');
+							cust_propinsiField.setValue('DI Yogyakarta');
+							cust_negaraField.setValue('Indonesia');
+							cust_priorityField.setValue('Reguler');
+							}
+							
 						}
 					}
 				}

@@ -559,12 +559,18 @@ Ext.onReady(function(){
 		draft_kelamin_checkField.reset();
 		draft_ultah_checkField.reset();
 		draft_member_radioField.reset();
-		
+		draft_crm_checkField.reset();
+		draft_crmField.reset();
+		//draft_number_radioField.setValue();
+		draft_kelamin_checkField.setValue(false);
+		draft_ultah_checkField.setValue(false);
+		//draft_member_radioField.setValue(false);
+		draft_crm_checkField.setValue(false);
+		draft_crmField.setValue('Medium');
 	}
 	
 	
 	function draft_save(post2db){
-	
 		if(is_draft_form_valid()){
 			var draft_pk="";
 			var draft_opsi="";
@@ -572,6 +578,7 @@ Ext.onReady(function(){
 			var draft_isi="";
 			var draft_jnsklm = "";
 			var draft_ultah = "";
+			var draft_crm = "";
 			
 			if(draft_detailField.getValue()!=="") draft_isi=draft_detailField.getValue();
 
@@ -611,6 +618,10 @@ Ext.onReady(function(){
 				if (draft_ultah_checkField.getValue()==true) {
 					draft_ultah = draft_tglultah_startField.getValue().format('Y-m-d') + 's/d' + draft_tglultah_endField.getValue().format('Y-m-d');
 				}
+				
+				if (draft_crm_checkField.getValue()==true) {
+					draft_crm = draft_crmField.getValue();
+				}
 			}
 			
 			Ext.Ajax.request({  
@@ -624,7 +635,8 @@ Ext.onReady(function(){
 					idraft_isi	: draft_isi,
 					idraft_task	: post2db,
 					idraft_jnsklm	: draft_jnsklm,
-					idraft_ultah	: draft_ultah
+					idraft_ultah	: draft_ultah,
+					idraft_crm	: draft_crm
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
@@ -632,9 +644,11 @@ Ext.onReady(function(){
 						case 1:
 							if (post2db=='send') {
 								Ext.MessageBox.alert(post2db+' OK','Send SMS sukses. Cek di Outbox untuk status pengiriman');
+								draft_reset_form();
 							}
 							else {
 								Ext.MessageBox.alert(post2db+' OK','Draft SMS berhasil disimpan');
+								draft_reset_form();
 							}
 							draft_saveWindow.hide();
 							draft_DataStore.reload();
@@ -850,6 +864,25 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small'
 	});
 	
+	var draft_crmField=new Ext.form.ComboBox({
+		id:	'draft_crmField',
+		name: 'draft_crmField',
+		typeAhead: true,
+		triggerAction: 'all',
+		store: new Ext.data.SimpleStore({
+			fields:['crmvalue'],
+			data:[['Low'],['Medium'],['High']]
+		}),
+		mode: 'local',
+		width: 80,
+		//value : 'Semua',
+		value : 'Medium',
+		displayField: 'crmvalue',
+		valueField: 'crmvalue',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
+	});
+	
 	var draft_tglexp_startField=new Ext.form.DateField({
 		id:	'draft_tglexp_startField',
 		name: 'draft_tglexp_startField',
@@ -939,7 +972,7 @@ Ext.onReady(function(){
 	});
 	
 	function is_draft_form_valid(){
-		return (draft_destgroupField.isValid() && draft_destnumField.isValid() && draft_kelaminField.isValid() && draft_membershipField.isValid() && draft_detailField.isValid());
+		return (draft_destgroupField.isValid() && draft_destnumField.isValid() && draft_kelaminField.isValid() && draft_membershipField.isValid() && draft_detailField.isValid() && draft_crmField.isValid());
 	}
 	
 	
@@ -991,6 +1024,21 @@ Ext.onReady(function(){
 		}
 	});
 
+	
+	draft_crm_checkField=new Ext.form.Checkbox({
+		id: 'draft_crm_checkField',
+		boxLabel: 'Nilai CRM',
+		width: 100,
+		handler: function(node,checked){
+			if (checked) {
+				draft_crmField.setDisabled(false);
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				draft_crmField.setDisabled(true);
+			}
+		}
+	});
 /*	var draft_ultah_radioField=new Ext.form.Radio({
 		id:'draft_ultah_radioField',
 		name:'draft_opsiField',
@@ -1092,6 +1140,12 @@ Ext.onReady(function(){
 					border: false,
 					bodyStyle:'padding:5px',
 					items: [draft_ultah_checkField, draft_ultah_groupField]
+			   },{
+				   	layout: 'column',
+					frame: false,
+					border: false,
+					bodyStyle:'padding:5px',
+					items: [draft_crm_checkField,draft_crmField]
 			   }]
 	});
 	
@@ -1151,10 +1205,12 @@ Ext.onReady(function(){
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_DRAFT'))){ ?>
 			{
 				text: 'Send',
-				handler: function(){ draft_save('send'); }
+				handler: function(){ 			
+					draft_save('send'); }
 			},{
 				text: 'Save',
-				handler: function(){ draft_save('draft'); }
+				handler: function(){ 
+					draft_save('draft'); }
 			}
 			,
 			<?php } ?>
@@ -1194,16 +1250,19 @@ Ext.onReady(function(){
 		draft_ultah_groupField.setDisabled(true);
 		draft_membershipField.setDisabled(true);
 		draft_member_expField.setDisabled(true);
+		draft_crmField.setDisabled(true);
 		
 		draft_destgroupField.allowBlank=true;
 		draft_destnumField.allowBlank=true;
 		draft_kelaminField.allowBlank=true;
 		draft_membershipField.allowBlank=true;
+		draft_crmField.allowBlank=true;
 		
 		draft_kelamin_checkField.setValue(false);
 		draft_ultah_checkField.setValue(false);
 		draft_kelamin_checkField.setDisabled(true);
 		draft_ultah_checkField.setDisabled(true);
+		draft_crm_checkField.setDisabled(true);
 	}	
 		
 	draft_membershipField.on("select",function(){
@@ -1252,6 +1311,7 @@ Ext.onReady(function(){
 			draft_membershipField.allowBlank=false;
 			draft_kelamin_checkField.setDisabled(false);
 			draft_ultah_checkField.setDisabled(false);
+			draft_crm_checkField.setDisabled(false);
 		}
 	});
 	
