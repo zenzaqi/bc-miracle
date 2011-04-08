@@ -122,7 +122,7 @@ var editor_detail_reseptambahan;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+var pageS=5;
 var cetak_resepdokter=0;
 var dt = new Date();
 
@@ -367,9 +367,7 @@ Ext.onReady(function(){
 		resep_sipField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_sip'));
 		resep_noField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_no'));
 		resep_nofakturField.setValue(resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_nofaktur'));
-		//cbo_resep_satuan_DataStore.setBaseParam('task','detail');
-		//cbo_resep_satuan_DataStore.setBaseParam('master_id',get_pk_id());
-		//cbo_resep_satuan_DataStore.load();
+
 	}
 	/* End setValue to EDIT*/
 
@@ -457,7 +455,6 @@ Ext.onReady(function(){
 		cbo_resepdokter_racikanDataStore.load();
 		
 		if(resep_dokterListEditorGrid.selModel.getCount() == 1) {
-
 			//cbo_resepdokter_produkDataStore.setBaseParam('query',resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_id'));
 			cbo_resepdokter_produkDataStore.load({
 			params:{query:resep_dokterListEditorGrid.getSelectionModel().getSelected().get('resep_id')},
@@ -760,7 +757,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		store: resep_dokterDataStore, // DataStore
 		cm: resep_dokterColumnModel, // Nama-nama Columns
-		enableColLock:true,
+		enableColLock:false,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
@@ -787,13 +784,23 @@ Ext.onReady(function(){
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: resepdokter_confirm_update   // Confirm before updating
-		}, '-',{
+		}, '-',
+		{
+			text: 'Adv Search',
+			tooltip: 'Pencarian detail',
+			iconCls:'icon-search',
+			handler : display_form_search_window
+		},
+		/*
+		{
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
 			disabled : true,
 			handler: resepdokter_confirm_delete   // Confirm before deleting
-		}, '-', 
+		},
+		*/
+		'-', 
 			new Ext.app.SearchField({
 			store: resep_dokterDataStore,
 			params: {task: 'LIST',start: 0, limit: pageS},
@@ -841,13 +848,6 @@ Ext.onReady(function(){
 			text: 'Edit', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
 			handler: resepdokter_editContextMenu 
-		},
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
-			iconCls:'icon-delete',
-			disabled : true,
-			handler: resepdokter_confirm_delete 
 		},
 		'-',
 		{ 
@@ -1026,26 +1026,7 @@ Ext.onReady(function(){
 			]
 	});
 		
-	/*master_history_resepkombinasi_itemGroup = new Ext.form.FieldSet({
-		title: '-',
-		autoHeight: true,
-		collapsible: true,
-		layout:'column',
-		labelSeparator : ':',
-		//width: 50,
-		anchor: '100%',
-		items:[
-			{
-				columnWidth:1,
-				layout: 'form',
-				labelAlign: 'left',
-				border:false,
-				labelWidth: 400,
-				items: history_detail_resep_kombinasiListGrid
-			}
-			]
-	
-	});*/
+
 		
 	//function for editor of detail
 	var editor_resepdokter_detail= new Ext.ux.grid.RowEditor({
@@ -1576,6 +1557,7 @@ Ext.onReady(function(){
 		height: 200,
 		width: 800,
 		autoScroll: true,
+		disabled : true,
 		store: resep_dokter_detail_tambahanDataStore, // DataStore
 		colModel: resep_dokter_detail_tambahanColumnModel, // Nama-nama Columns
 		enableColLock:false,
@@ -1607,7 +1589,6 @@ Ext.onReady(function(){
 		]
 	});
 	
-
 	master_resep_kombinasiColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
@@ -1721,19 +1702,7 @@ Ext.onReady(function(){
 		editor_detail_resepkombinasi.startEditing(0);
 	}
 	
-	// function for resepdokter detail kombinasi add
-	/*function resepdokter_detail_kombinasi_add(){
-		var edit_detail_kombinasi_resepdokter= new master_resep_kombinasiListGrid.store.recordType({
-			dresepk_id	:'',		
-			dresepk_master	:'',		
-			dresepk_paket	:''
-		});
-		editor_detail_resepkombinasi.stopEditing();
-		resep_dokter_detail_kombinasiDataStore.insert(0, edit_detail_kombinasi_resepdokter);
-		master_resep_kombinasiListGrid.getView().refresh();
-		master_resep_kombinasiListGrid.getSelectionModel().selectRow(0);
-		editor_detail_resepkombinasi.startEditing(0);
-	}*/
+
 
 	// function for resepdokter detail tambahan  add
 	function resepdokter_detail_tambahan_add(){
@@ -1908,69 +1877,7 @@ Ext.onReady(function(){
 		}
 	}
 	
-	/*
-	function resepdokter_detail_kombinasi_insert(pkid, opsi){
-		
-		var dresepk_id = [];
-        var dresepk_produk = [];
-        var dresepk_satuan = [];
-        var dresepk_jumlah = [];
-  
-		resep_dokter_detail_kombinasiDataStore.getCount();
-       // if(resep_dokter_detail_kombinasiDataStore.getCount()){
-            for(i=0; i<resep_dokter_detail_kombinasiDataStore.getCount();i++){
-                //if((/^\d+$/.test(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_produk!==null))
-				   //&& resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_produk!==undefined
-				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_produk!=='')
-				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_produk!==0
-				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_satuan!==0
-				  // && resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_jumlah>0)
-				   //{
-					//if(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id==undefined ||
-					   //resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id==''){
-						//resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id=0;
-					//}
-					
-                  	dresepk_id.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_id);
-					dresepk_produk.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_produk);
-                   	dresepk_satuan.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_satuan);
-					dresepk_jumlah.push(resep_dokter_detail_kombinasiDataStore.getAt(i).data.dresepk_jumlah);
-                //}
-            }	
-			var encoded_array_dresepk_id = Ext.encode(dresepk_id);
-			var encoded_array_dresepk_produk = Ext.encode(dresepk_produk);
-			var encoded_array_dresepk_satuan = Ext.encode(dresepk_satuan);
-			var encoded_array_dresepk_jumlah = Ext.encode(dresepk_jumlah);	
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_resep_dokter&m=resepdokter_detail_kombinasi_insert',
-				params:{
-					dresepk_id		: encoded_array_dresepk_id,
-					dresepk_master	: combo_resep.getValue(),
-					dresepk_resepmaster : eval(get_pk_id()), 
-					dresepk_produk	: encoded_array_dresepk_produk,
-					dresepk_satuan	: encoded_array_dresepk_satuan,
-					dresepk_jumlah	: encoded_array_dresepk_jumlah
-				},
-				success:function(response){
-					var result=eval(response.responseText);
-					//detail_terima_bonus_insert(pkid, opsi)
-					resep_dokterDataStore.reload();
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});	
-				}
-			});		
-        //}
-	}*/
+
 	
 	function resepdokter_detail_kombinasi_insert(){
 		var count_detail_kombinasi=resep_dokter_detail_kombinasiDataStore.getCount();
@@ -2156,20 +2063,7 @@ Ext.onReady(function(){
 	}
 	
 	
-	/*
-	function detail_resepdokter_kombinasi_purge(){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_resep_dokter&m=detail_resepdokter_kombinasi_purge',
-			params:{ master_id: eval(resep_idField.getValue()) },
-			callback: function(opts, success, response){
-				if(success){
-					resepdokter_detail_kombinasi_insert();
-				}
-			}
-		});
-	}*/
-	
+
 	function detail_resepdokter_tambahan_purge(){
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
@@ -2221,24 +2115,6 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
-	
-	/*function resepdokter_detail_kombinasi_confirm_delete(){
-		// only one record is selected here
-		if(master_resep_kombinasiListGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete this record?', resepdokter_detail_kombinasi_delete);
-		} else if(master_resep_kombinasiListGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Are you sure to delete these records?', resepdokter_detail_kombinasi_delete);
-		} else {
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'You can\'t really delete something you haven\'t selected?',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-		}
-	}*/
-
 
 	/* Function for Delete Confirm of detail lepasan */
 	function resepdokter_detail_tambahan_confirm_delete(){
@@ -2326,20 +2202,7 @@ Ext.onReady(function(){
 		
 	}
 	
-	
-	
-	
-	/*function resepdokter_detail_kombinasi_delete(btn){
-		if(btn=='yes'){
-			var s = master_resep_kombinasiListGrid.getSelectionModel().getSelections();
-			for(var i = 0, r; r = s[i]; i++){
-				resep_dokter_detail_kombinasiDataStore.remove(r);
-			}
-		}  
-	}*/
-	
 
-	
 	//function for Delete of detail tambahan
 	function resepdokter_detail_tambahan_delete(btn){
 		if(btn=='yes'){
@@ -2382,28 +2245,7 @@ Ext.onReady(function(){
 		plain:true,
 		activeTab: 0,
 		autoHeight: true,
-		items: [detail_resep_kombinasiListEditorGrid, detail_resep_lepasanListEditorGrid, detail_resep_tambahanListEditorGrid
-		/*{
-					title:'Detail Resep Kombinasi',
-					layout:'form',
-					border: false,
-					frame: true,
-					defaults: {width: 400},
-					autoHeight: true,
-					defaultType: 'textfield',
-					items: [detail_resep_kombinasiListEditorGrid]
-				},
-				{
-					title:'Detail Resep Lepasan',
-					layout:'form',
-					border: false,
-					frame: true,
-					defaults: {width: 400},
-					autoHeight: true,
-					defaultType: 'textfield',
-					items: [detail_resep_lepasanListEditorGrid]
-				}*/
-		]
+		items: [detail_resep_kombinasiListEditorGrid, detail_resep_lepasanListEditorGrid, detail_resep_tambahanListEditorGrid]
 	});
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -2453,33 +2295,37 @@ Ext.onReady(function(){
 	});
 	/* End Window */
 	
+	
 	/* Function for action list search */
 	function resep_dokter_search(){
 		// render according to a SQL date format.
 		var resep_id_search=null;
 		var resep_cust_search=null;
-		var trawat_tgl_start_app_search=null;
-		var trawat_tgl_end_app_search=null;
+		var resep_dokter_tgl_start_search=null;
+		var resep_dokter_tgl_end_search=null;
 		var trawat_rawat_search=null;
 		var resep_dokter_search=null;
+		var resep_no_search=null;
 		var trawat_status_search=null;
 
-		if(resepdokter_idSearchField.getValue()!==null){resep_id_search=resepdokter_idSearchField.getValue();}
+		//if(resepdokter_idSearchField.getValue()!==null){resep_id_search=resepdokter_idSearchField.getValue();}
 		if(resepdokter_custSearchField.getValue()!==null){resep_cust_search=resepdokter_custSearchField.getValue();}
-		if(Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue()!==null){trawat_tgl_start_app_search=Ext.getCmp('trawat_medis_tglStartAppSearchField').getValue();}
-		if(Ext.getCmp('trawat_medis_tglEndAppSearchField').getValue()!==null){trawat_tgl_end_app_search=Ext.getCmp('trawat_medis_tglEndAppSearchField').getValue();}
-		if(trawat_medis_rawatSearchField.getValue()!==null){trawat_rawat_search=trawat_medis_rawatSearchField.getValue();}
+		if(Ext.getCmp('resep_dokter_tglStartSearchField').getValue()!==null){resep_dokter_tgl_start_search=Ext.getCmp('resep_dokter_tglStartSearchField').getValue();}
+		if(Ext.getCmp('resep_dokter_tglEndSearchField').getValue()!==null){resep_dokter_tgl_end_search=Ext.getCmp('resep_dokter_tglEndSearchField').getValue();}
+		//if(trawat_medis_rawatSearchField.getValue()!==null){trawat_rawat_search=trawat_medis_rawatSearchField.getValue();}
 		if(resepdokter_dokterSearchField.getValue()!==null){resep_dokter_search=resepdokter_dokterSearchField.getValue();}
+		if(resep_noSearchField.getValue()!==null){resep_no_search=resep_noSearchField.getValue();}
 		// change the store parameters
 		resep_dokterDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			trawat_id	:	resep_id_search, 
-			card_cust	:	resep_cust_search, 
-			trawat_tglapp_start	: 	trawat_tgl_start_app_search,
-			trawat_tglapp_end	: 	trawat_tgl_end_app_search,
-			trawat_rawat	:	trawat_rawat_search,
-			trawat_dokter	:	resep_dokter_search
+			//resep_id	:	eval(get_pk_id()), 
+			resep_cust_id	:	resep_cust_search, 
+			resep_dokter_tgl_start	: 	resep_dokter_tgl_start_search,
+			resep_dokter_tgl_end	: 	resep_dokter_tgl_end_search,
+			resep_no		:	resep_no_search,
+			//trawat_rawat	:	trawat_rawat_search,
+			resep_dokter_id	:	resep_dokter_search
 		};
 		// Cause the datastore to do another query : 
 		resep_dokterDataStore.reload({params: {start: 0, limit: pageS}});
@@ -2526,26 +2372,9 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		anchor: '95%'
+		anchor: '60%'
 	});
-	trawat_medis_rawatSearchField= new Ext.form.ComboBox({
-		fieldLabel: 'Perawatan',
-		//store: rekomendasi_perawatan_medisDataStore,
-		mode: 'remote',
-		displayField:'perawatan_display',
-		valueField: 'perawatan_value',
-        typeAhead: false,
-        loadingText: 'Searching...',
-        pageSize:10,
-        hideTrigger:false,
-        //applyTo: 'search',
-        itemSelector: 'div.search-item',
-		triggerAction: 'all',
-		lazyRender:true,
-		listClass: 'x-combo-list-small',
-		allowBlank: true,
-		width: 214
-	});
+	
 	resepdokter_dokterSearchField= new Ext.form.ComboBox({
 		fieldLabel: 'Dokter',
 		store: cbo_resepdokterDataStore,
@@ -2563,9 +2392,18 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: true,
-		width: 214
+		anchor : '60%',
 	});
- 
+	/*resep No SearchField */
+	resep_noSearchField= new Ext.form.TextField({
+		id: 'resep_noSearchField',
+		fieldLabel: 'No Resep',
+		//emptyText: '(No Resep Auto)',
+		maxLength: 50,
+		anchor : '50%'
+		//readOnly : true
+	});
+	
 	/* Function for retrieve search Form Panel */
 	resep_dokter_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -2580,14 +2418,51 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [resepdokter_custSearchField,
-						trawat_medis_rawatSearchField,resepdokter_dokterSearchField] 
+				items: [
+				        {
+						layout:'column',
+						border:false,
+						items:[
+				        {
+							columnWidth:0.33,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [
+							    {
+									fieldLabel: 'Tanggal',
+							        name: 'resep_dokter_tglStartSearchField',
+							        id: 'resep_dokter_tglStartSearchField',
+									vtype: 'daterange',
+									allowBlank: true,
+									format: 'd-m-Y',
+							        endDateField: 'resep_dokter_tglEndSearchField' // id of the end date field Ext.getCmp('resep_dokter_tglStartSearchField').isValid()
+							    }] 
+						},
+						{
+							columnWidth:0.30,
+							layout: 'form',
+							labelWidth:20,
+							border:false,
+							defaultType: 'datefield',
+							items: [
+						      	{
+									fieldLabel: 's/d',
+							        name: 'resep_dokter_tglEndSearchField',
+							        id: 'resep_dokter_tglEndSearchField',
+							        vtype: 'daterange',
+									allowBlank: true,
+									format: 'd-m-Y',
+							        startDateField: 'resep_dokter_tglStartSearchField' // id of the end date field
+							    }] 
+						}]},
+						resep_noSearchField, resepdokter_custSearchField, resepdokter_dokterSearchField] 
 			}
 			]
 		}]
 		,
 		buttons: [{
-				text: 'Search',
+				text: 'Adv Search',
 				handler: resep_dokter_search
 			},{
 				text: 'Close',
@@ -2599,17 +2474,21 @@ Ext.onReady(function(){
 	});
     /* End of Function */ 
 
+	
 	function resep_dokter_reset_formSearch(){
-		resepdokter_idSearchField.reset();
-		resepdokter_idSearchField.setValue(null);
+		resepdokter_dokterSearchField.reset();
+		resepdokter_dokterSearchField.setValue(null);
 		resepdokter_custSearchField.reset();
 		resepdokter_custSearchField.setValue(null);
-		Ext.getCmp('trawat_medis_tglStartAppSearchField').reset();
-		Ext.getCmp('trawat_medis_tglStartAppSearchField').setValue(null);
-		Ext.getCmp('trawat_medis_tglEndAppSearchField').reset();
-		Ext.getCmp('trawat_medis_tglEndAppSearchField').setValue(null);
+		resep_noSearchField.reset();
+		resep_noSearchField.setValue(null);
+		Ext.getCmp('resep_dokter_tglStartSearchField').reset();
+		Ext.getCmp('resep_dokter_tglStartSearchField').setValue(null);
+		Ext.getCmp('resep_dokter_tglEndSearchField').reset();
+		Ext.getCmp('resep_dokter_tglEndSearchField').setValue(null);
 	}
-	 
+	
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	resep_dokter_searchWindow = new Ext.Window({
 		title: 'Resep Dokter Search',
@@ -2626,7 +2505,7 @@ Ext.onReady(function(){
 		items: resep_dokter_searchForm
 	});
     /* End of Function */ 
-	 
+	
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!resep_dokter_searchWindow.isVisible()){
@@ -2835,43 +2714,7 @@ Ext.onReady(function(){
 		});
 		resep_dokter_detail_kombinasiDataStore.commitChanges();
 	});
-	
-	/*
-	terima_orderField.on("select",function(){
-		var j=cbo_tbeli_orderbeli_DataSore.find('tbeli_orderbeli_value',terima_orderField.getValue());
 		
-		if(cbo_tbeli_orderbeli_DataSore.getCount()){
-			terima_supplierField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier);
-			terima_supplier_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_supplier_id);
-			terima_order_idField.setValue(cbo_tbeli_orderbeli_DataSore.getAt(j).data.tbeli_orderbeli_value);
-		}							   
-		tbeli_orderbeli_detail_DataStore.load({
-			params:{orderid: terima_orderField.getValue()},
-			callback: function(r,opt,success){
-				if(success==true){
-					cbo_produk_detailDataStore.setBaseParam('task','order');
-					cbo_produk_detailDataStore.setBaseParam('order_id',terima_orderField.getValue());
-					cbo_produk_detailDataStore.load({
-						callback: function(r,opt,success){
-							if(success==true){
-								detail_terima_beli_DataStore.removeAll();
-								for(i=0;i<tbeli_orderbeli_detail_DataStore.getCount();i++){
-										var detail_order_record=tbeli_orderbeli_detail_DataStore.getAt(i);
-										detail_terima_beli_DataStore.insert(i,detail_order_record);
-								}
-							}
-						}
-					});
-				}
-			}
-		});
-		detail_terima_beli_DataStore.commitChanges();
-		detail_terima_beli_total();
-	});
-	*/
-	
-	
-	
 });
 	</script>
 <body>
