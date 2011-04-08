@@ -362,23 +362,24 @@ class C_resep_dokter extends Controller {
 	//function for advanced search
 	function resep_dokter_search(){
 		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
-		$card_cust=trim(@$_POST["card_cust"]);
-		if(trim(@$_POST["trawat_tglapp_start"])!="")
-			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		//$resep_id=trim(@$_POST["resep_id"]);
+		$resep_cust_id=trim(@$_POST["resep_cust_id"]);
+		if(trim(@$_POST["resep_dokter_tgl_start"])!="")
+			$resep_dokter_tgl_start=date('Y-m-d', strtotime(trim(@$_POST["resep_dokter_tgl_start"])));
 		else
-			$trawat_tglapp_start="";
-		if(trim(@$_POST["trawat_tglapp_end"])!="")
-			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+			$resep_dokter_tgl_start="";
+		if(trim(@$_POST["resep_dokter_tgl_end"])!="")
+			$resep_dokter_tgl_end=date('Y-m-d', strtotime(trim(@$_POST["resep_dokter_tgl_end"])));
 		else
-			$trawat_tglapp_end="";
-		$trawat_rawat=trim(@$_POST["trawat_rawat"]);
-		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
-		$trawat_status=trim(@$_POST["trawat_status"]);
+			$resep_dokter_tgl_end="";
+		//$trawat_rawat=trim(@$_POST["trawat_rawat"]);
+		$resep_dokter_id=trim(@$_POST["resep_dokter_id"]);
+		$resep_no=trim(@$_POST["resep_no"]);
+		//$trawat_status=trim(@$_POST["trawat_status"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_resep_dokter->resep_dokter_search($trawat_id ,$card_cust ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_rawat ,$trawat_dokter ,$trawat_status ,$start,$end);
+		$result = $this->m_resep_dokter->resep_dokter_search($resep_cust_id ,$resep_dokter_tgl_start ,$resep_dokter_tgl_end ,$resep_dokter_id , $resep_no, $start,$end);
 		echo $result;
 	}
 
