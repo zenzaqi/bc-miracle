@@ -649,6 +649,32 @@ Ext.onReady(function(){
 	}
  	/* End of Function */
   
+	function load_catatan_customer(){
+		var cust_id=0;
+		if(app_post2db=="CREATE"){
+			cust_id=app_customerField.getValue();
+		}else if(app_post2db=="UPDATE"){
+			cust_id=app_customer_idField.getValue();
+		}
+	
+		if(cust_id!=''){
+			app_catatan_customerDataStore.load({
+					params : { note_customer : cust_id},
+					callback: function(opts, success, response)  {
+						 if (success) {
+							if(app_catatan_customerDataStore.getCount()){
+								app_auto_note_cust=app_catatan_customerDataStore.getAt(0).data;
+								app_catatan_customerField.setValue(app_auto_note_cust.note_detail);
+							}
+						}
+					}
+			}); 
+		}
+	}
+  
+  
+  
+  
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(app_post2db=='UPDATE'){
@@ -671,6 +697,8 @@ Ext.onReady(function(){
 		app_caraField.setValue(null);
 		app_keteranganField.reset();
 		app_keteranganField.setValue(null);
+		app_catatan_customerField.reset();
+		app_catatan_customerField.setValue(null);
 		
 		app_customerField.setDisabled(false);
 		app_tanggalField.setDisabled(false);
@@ -697,6 +725,7 @@ Ext.onReady(function(){
 		app_tanggalField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_tanggal'));
 		app_caraField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_cara'));
 		app_keteranganField.setValue(appointmentListEditorGrid.getSelectionModel().getSelected().get('app_keterangan'));
+		load_catatan_customer();
 		if(app_post2db=='UPDATE'){
 			app_customerField.setDisabled(true);
 			app_tanggalField.setDisabled(true);
@@ -842,6 +871,7 @@ Ext.onReady(function(){
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'app_customer', type: 'string', mapping: 'app_customer'},
 			{name: 'rawat_id', type: 'int', mapping: 'rawat_id'}, 
 			{name: 'rawat_nama', type: 'string', mapping: 'rawat_nama'}, 
 			{name: 'dapp_jamreservasi', type: 'string', mapping: 'dapp_jamreservasi'},
@@ -1555,6 +1585,10 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
+	
+	/*Identify app_cust_id Field */
+	app_cust_idField= new Ext.form.NumberField();
+	
 	/* Identify  app_customer Field */
 	app_customerField= new Ext.form.ComboBox({
 		//id: 'app_customerField',
@@ -1622,6 +1656,16 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
+	
+	/* Identify  app_catatan_customer Field */
+	app_catatan_customerField= new Ext.form.TextArea({
+		id: 'app_catatan_customerField',
+		fieldLabel: 'Catatan Customer',
+		disabled : true,
+		maxLength: 250,
+		anchor: '95%'
+	});
+	
   	/*Fieldset Master*/
 	appointment_masterGroup = new Ext.form.FieldSet({
 		title: 'Master',
@@ -1639,7 +1683,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [app_keteranganField, app_idField] 
+				items: [app_keteranganField, app_catatan_customerField, app_idField] 
 			}
 			]
 	
@@ -1696,6 +1740,30 @@ Ext.onReady(function(){
 			} ]
 	
 	});
+	
+	app_catatan_customerDataStore = new Ext.data.Store({
+		id: 'app_catatan_customerDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_appointment&m=get_auto_catatan_customer', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'note_id'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'note_id', type: 'int', mapping: 'note_id'},
+			{name: 'note_customer', type: 'int', mapping: 'note_customer'},
+			{name: 'note_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'note_tanggal'}, 
+			{name: 'note_detail' , type: 'string', mapping: 'note_detail'},
+			{name: 'note_aktif' , type: 'string', mapping: 'note_aktif'}
+			
+		]),
+		sortInfo:{field: 'note_id', direction: "ASC"}
+	});
+	
+	
 	
 	cbo_dapp_rawat_medisDataStore = new Ext.data.Store({
 		id: 'cbo_dapp_rawat_medisDataStore',
@@ -3298,6 +3366,15 @@ Ext.onReady(function(){
 	Ext.QuickTips.init();
 	
 	column_set_editable();
+	
+	
+	app_customerField.on("select",function(){
+		load_catatan_customer();
+
+	});
+	
+		
+	
 	
 });
 	</script>

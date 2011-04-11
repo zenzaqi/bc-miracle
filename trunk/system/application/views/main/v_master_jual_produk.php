@@ -348,7 +348,7 @@ Ext.onReady(function(){
 			   && jproduk_stat_dokField.getValue()=='Terbuka'){
 				var jproduk_id_create_pk=null; 
 				var jproduk_nobukti_create=null; 
-				var jproduk_grooming_create=null; 
+				var jproduk_grooming_create=0; 
 				var jproduk_cust_create=null; 
 				var jproduk_tanggal_create_date=""; 
 				var jproduk_diskon_create=null; 
@@ -854,6 +854,13 @@ Ext.onReady(function(){
 		jproduk_lunasLabel.setText('');
 	}
 	
+	function save_button(){
+		cetak_jproduk=0;
+		pengecekan_dokumen();
+		//jproduk_pesanLabel.setText('');
+		//jproduk_lunasLabel.setText('');
+	}
+	
 	//function ini untuk melakukan print saja, tanpa perlu melakukan proses pengecekan dokumen.. 
 	function print_only(){
 		if(jproduk_idField.getValue()==''){
@@ -1275,6 +1282,7 @@ Ext.onReady(function(){
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
 		jproduk_karyawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
+		jproduk_karyawan_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_id'));
 		jproduk_nikkaryawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
 		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust'));
 		jproduk_cust_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust_id'));
@@ -1935,7 +1943,7 @@ Ext.onReady(function(){
 		if(jproduk_post2db=="CREATE"){
 			karyawan_id=jproduk_karyawanField.getValue();
 		}else if(jproduk_post2db=="UPDATE"){
-			karyawan_id=jproduk_cust_idField.getValue();
+			karyawan_id=jproduk_karyawan_idField.getValue();
 		}
 		
 		if(jproduk_karyawanField.getValue()!=''){
@@ -1995,6 +2003,7 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function master_jual_produk_confirm_update(){
 		master_jual_produk_reset_form();
+		jproduk_karyawanDataStore.load();
 		/* only one record is selected here */
 		if(master_jual_produkListEditorGrid.selModel.getCount() == 1) {
 			cbo_dproduk_produkDataStore.load({
@@ -2104,7 +2113,8 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_produk_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jproduk_id', type: 'int', mapping: 'jproduk_id'}, 
 			{name: 'jproduk_nobukti', type: 'string', mapping: 'jproduk_nobukti'}, 
-			{name: 'jproduk_grooming', type: 'string', mapping: 'jproduk_grooming'},
+			{name: 'jproduk_grooming', type: 'int', mapping: 'jproduk_grooming'},
+			{name: 'jproduk_grooming_id', type: 'int', mapping: 'jproduk_grooming'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'jproduk_cust', type: 'string', mapping: 'cust_nama'}, 
@@ -2197,7 +2207,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
-			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
@@ -2758,6 +2768,8 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jproduk_cust_idField= new Ext.form.NumberField();
+	
+	jproduk_karyawan_idField = new Ext.form.NumberField();
 	
 	jproduk_cust_nomemberField= new Ext.form.TextField({
 		id: 'jproduk_cust_nomemberField',
@@ -4550,16 +4562,16 @@ Ext.onReady(function(){
 			root: 'results',
 			totalProperty: 'total'
 		},[
-			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_username'},
+			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
-			{name: 'nama_karyawan', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
 		]),
 		sortInfo:{field: 'karyawan_no', direction: "ASC"}
 	});
 	var reveral_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
-            '<span><b>{nama_karyawan}</b> | {karyawan_display}</span>',
+            '<span><b>{karyawan_display}</b> | {karyawan_no}</span>',
         '</div></tpl>'
     );
 	
@@ -6270,7 +6282,7 @@ Ext.onReady(function(){
 			},
 			{
 				text: 'Save',
-				handler: pengecekan_dokumen
+				handler: save_button
 			},
 			{
 				text: 'Cancel',

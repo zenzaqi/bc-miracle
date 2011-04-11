@@ -737,6 +737,25 @@ class M_public_function extends Model{
 		}
 	}
 	
+	/*Auto Catatan Customer */
+	function get_auto_catatan_customer($note_customer){
+
+		$sql = "select * from customer_note where note_customer = ".$note_customer." and note_aktif ='Aktif' order by note_tanggal desc limit 1";
+	                      
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	
 	function get_auto_karyawan_sip($karyawan_id){
 		$sql = "SELECT karyawan_sip, karyawan_no from karyawan where karyawan_id='".$karyawan_id."' and karyawan_aktif!='Tidak Aktif' order by karyawan_id desc limit 1";
 		$query = $this->db->query($sql);

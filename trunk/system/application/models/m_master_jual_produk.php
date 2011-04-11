@@ -848,7 +848,9 @@ class M_master_jual_produk extends Model{
 		
 		$query .= " ORDER BY jproduk_nobukti DESC";
 		
-		$query_nbrows="SELECT jproduk_id FROM master_jual_produk LEFT JOIN customer ON(jproduk_cust=cust_id)";
+		$query_nbrows="SELECT jproduk_id, karyawan_no, karyawan_nama FROM master_jual_produk 
+						LEFT JOIN customer ON(jproduk_cust=cust_id)
+						LEFT JOIN karyawan ON(karyawan.karyawan_id = master_jual_produk .jproduk_grooming)";
 		// For simple search
 		if ($filter<>""){
 			$query_nbrows .=eregi("WHERE",$query_nbrows)? " AND ":" WHERE ";
@@ -916,7 +918,7 @@ class M_master_jual_produk extends Model{
 		
 		$data = array(
 			"jproduk_nobukti"=>$jproduk_nobukti, 
-			"jproduk_grooming"=>$jproduk_grooming,
+			//"jproduk_grooming"=>$jproduk_grooming,
 			"jproduk_tanggal"=>$jproduk_tanggal, 
 			"jproduk_diskon"=>$jproduk_diskon,
 			"jproduk_cashback"=>$jproduk_cashback,
@@ -1559,6 +1561,8 @@ class M_master_jual_produk extends Model{
 				,cust_member
 				,member_no
 				,member_valid
+				,karyawan.karyawan_no
+				,karyawan.karyawan_nama
 				,jproduk_cust
 				,jproduk_tanggal
 				,jproduk_diskon
@@ -1577,7 +1581,8 @@ class M_master_jual_produk extends Model{
 				,jproduk_revised
 				,jproduk_stat_dok
 			FROM vu_jproduk
-			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)";
+			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)
+			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jproduk.jproduk_grooming)";
 		
 		if($jproduk_nobukti!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
