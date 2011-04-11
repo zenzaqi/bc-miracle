@@ -1466,7 +1466,7 @@ class M_master_jual_rawat extends Model{
 													,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
 													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
-													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales);
+													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $jrawat_grooming);
 					if($rs_jrawat=='0'){
 						/*$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 													,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
@@ -1524,7 +1524,7 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                                             ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
-                                                            ,$jenis_transaksi ,$cetak);
+                                                            ,$jenis_transaksi ,$cetak, $jrawat_grooming);
                 
                 if($jrawat_drawat_u==1){
                     if($cetak==1){
@@ -1589,7 +1589,7 @@ class M_master_jual_rawat extends Model{
                                 ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                 ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
-                                ,$jenis_transaksi ,$cetak);
+                                ,$jenis_transaksi ,$cetak, $jrawat_grooming);
 				return '-7';
 			}else if(($dcount_drawat_id<1) && ($drawat_count==0) && ($rs_rows==0)){
 				/*
@@ -1641,7 +1641,7 @@ class M_master_jual_rawat extends Model{
                                                             ,$jrawat_voucher_no3 ,$jrawat_voucher_cashback3
                                                             ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
                                                             ,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales
-                                                            ,$jenis_transaksi ,$cetak);
+                                                            ,$jenis_transaksi ,$cetak, $jrawat_grooming);
                 
                 if($jrawat_drawat_u==1){
                     if($cetak==1){
@@ -1875,6 +1875,8 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pr.jrawat_id,
 				vu_jrawat_pr.jrawat_nobukti,
 				vu_jrawat_pr.cust_nama,
+				karyawan.karyawan_no,
+				karyawan.karyawan_nama,
 				vu_jrawat_pr.jrawat_cust,
 				vu_jrawat_pr.cust_no,
 				vu_jrawat_pr.member_no,
@@ -1896,7 +1898,9 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pr.keterangan_paket,
 				0 AS dpaket_id
 			FROM vu_jrawat_pr
-			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)";
+			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
+			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)";
+
 			
 		if($jrawat_nobukti!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1933,6 +1937,8 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pk.jrawat_id,
 				vu_jrawat_pk.jrawat_nobukti,
 				vu_jrawat_pk.cust_nama,
+				'temp' as temp,
+				'temp2' as temp2,
 				vu_jrawat_pk.jrawat_cust,
 				vu_jrawat_pk.cust_no,
 				vu_jrawat_pk.member_no,
@@ -1953,7 +1959,7 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pk.jrawat_revised,
 				vu_jrawat_pk.keterangan_paket,
 				vu_jrawat_pk.dpaket_id
-			FROM vu_jrawat_pk ";
+			FROM vu_jrawat_pk";
 			
 		if($jrawat_nobukti!=''){
 			//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

@@ -525,7 +525,7 @@ Ext.onReady(function(){
                     var jrawat_keterangan_create=''; 
                     var jrawat_ket_disk_create=''; 
                     var jrawat_stat_dok_create='';
-                    var jrawat_grooming_create='';
+                    var jrawat_grooming_create=0;
                     //tunai
                     //var jrawat_tunai_nilai_create=0;
                     //tunai-2
@@ -1383,6 +1383,8 @@ Ext.onReady(function(){
 		jrawat_idField.setValue(null);
 		jrawat_karyawanField.reset();
 		jrawat_karyawanField.setValue(null);
+		jrawat_karyawan_idField.reset();
+		jrawat_karyawan_idField.setValue(null);
 		jrawat_nikkaryawanField.reset();
 		jrawat_nikkaryawanField.setValue(null);
 		jrawat_nobuktiField.reset();
@@ -1538,6 +1540,7 @@ Ext.onReady(function(){
 		dpaket_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('dpaket_id'));
 		jrawat_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_id'));
 		jrawat_karyawanField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
+		jrawat_karyawan_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('karyawan_id'));
 		jrawat_nikkaryawanField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
 		if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=='paket'){
 			jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
@@ -2190,7 +2193,7 @@ Ext.onReady(function(){
 		if(jrawat_post2db=="CREATE"){
 			karyawan_id=jrawat_karyawanField.getValue();
 		}else if(jrawat_post2db=="UPDATE"){
-			karyawan_id=jrawat_cust_idField.getValue();
+			karyawan_id=jrawat_karyawan_idField.getValue();
 		}
 		
 		if(jrawat_karyawanField.getValue()!=''){
@@ -2240,10 +2243,12 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function master_jual_rawat_confirm_update(){
 		master_jual_rawat_reset_form();
+		jrawat_karyawanDataStore.load();
 		/* only one record is selected here */
 		if(master_jual_rawatListEditorGrid.selModel.getCount() == 1) {
 			cbo_kwitansi_jual_rawat_DataStore.load();
 			cbo_referalKasirDataStore.load();
+			
 			master_cara_bayarTabPanel.setActiveTab(0);
 			jrawat_post2db='UPDATE';
 			
@@ -2347,7 +2352,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomaster_jual_rawat_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'jrawat_id', type: 'int', mapping: 'jrawat_id'}, 
 			{name: 'jrawat_nobukti', type: 'string', mapping: 'jrawat_nobukti'}, 
-			{name: 'jrawat_grooming', type: 'string', mapping: 'jrawat_grooming'},
+			{name: 'jrawat_grooming', type: 'int', mapping: 'jrawat_grooming'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'jrawat_cust', type: 'string', mapping: 'cust_nama'}, 
@@ -2390,7 +2395,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'karyawan_display', type: 'string', mapping: 'karyawan_nama'},
-			//{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
+			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
 			{name: 'karyawan_value', type: 'int', mapping: 'karyawan_id'}
@@ -3068,6 +3073,8 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	jrawat_cust_idField= new Ext.form.NumberField();
+	
+	jrawat_karyawan_idField = new Ext.form.NumberField();
 	
 	jrawat_cust_nomemberField= new Ext.form.TextField({
 		id: 'jrawat_cust_nomemberField',

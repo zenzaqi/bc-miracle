@@ -68,6 +68,13 @@ class C_appointment extends Controller {
 		$result=$this->m_appointment->get_terapis_list($query,$tgl_app,"Therapist");
 		echo $result;
 	}
+
+	function get_auto_catatan_customer(){
+		$note_customer = (integer) (isset($_POST['note_customer']) ? $_POST['note_customer'] : $_GET['note_customer']);
+		$result=$this->m_public_function->get_auto_catatan_customer($note_customer);
+		echo $result;
+	}
+	
 	
 	//for detail action
 	//list detail medis handler action
