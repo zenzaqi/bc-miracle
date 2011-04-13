@@ -1438,9 +1438,9 @@ Ext.onReady(function(){
 	});
 	
 	var order_harga_satuanField=new Ext.form.NumberField({
-		allowDecimals: true,
+		allowDecimals: false,
 		allowNegative: false,
-		blankText: '0',
+		//blankText: '0',
 		maxLength: 22,
 		maskRe: /([0-9]+)$/
 	});
@@ -1502,9 +1502,7 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			editor:  order_harga_satuanField,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
+			renderer: Ext.util.Format.numberRenderer('0,000')
 			
 		},
 		{

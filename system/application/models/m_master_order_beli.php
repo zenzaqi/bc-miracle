@@ -270,10 +270,16 @@ class M_master_order_beli extends Model{
 				 * ==> Jika Customer itu belum pernah ambil paket, maka boleh di-GANTI itu Customer
 				*/
 				
-				$sql = "SELECT dorder_id FROM detail_order_beli WHERE dorder_harga='".$dorder_harga."'";
+				$sql = "SELECT dorder_id FROM detail_order_beli WHERE dorder_id='".$dorder_id."'";
 				$rs = $this->db->query($sql);
 				if($rs->num_rows()){
 					if($i==$size_array){
+					$dtu_ppaket = array(
+						"dorder_harga"=>$dorder_harga
+						);
+						$this->db->where('dorder_id' ,$dorder_id);
+						$this->db->update('detail_order_beli' ,$dtu_ppaket);
+					
 						return '1';
 					}
 				}else{
@@ -283,7 +289,7 @@ class M_master_order_beli extends Model{
 					 
 						"dorder_harga"=>$dorder_harga
 						);
-						$sql="SELECT dorder_id FROM detail_order_beli WHERE dorder_harga='$dorder_harga'";
+						$sql="SELECT dorder_idasdqwdq FROM detail_order_beli WHERE dorder_id='$dorder_id'";
 						$rs=$this->db->query($sql);
 						if(!$rs->num_rows()){
 							//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /

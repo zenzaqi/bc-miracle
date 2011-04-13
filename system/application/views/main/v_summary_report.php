@@ -243,7 +243,7 @@ Ext.onReady(function(){
 		[
 		{
 			align : 'Left',
-			header: '<div align="center">' + 'Jenis' + '</div>',
+			header: '<div align="center">' + 'Tujuan' + '</div>',
 			dataIndex: 'summary_jenis',
 			width: 80,	//55,
 			sortable: true
@@ -257,63 +257,63 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Nilai Target' + '</div>',
-			dataIndex: 'summary_nilai_target',
-			width: 80,	//55,
-			sortable: true
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Rata-rata Per Hari' + '</div>',
+			header: '<div align="center">' + 'Avg' + '</div>',
 			dataIndex: 'summary_rata_rata',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Pencapaian Target (%)' + '</div>',
+			header: '<div align="center">' + 'Target' + '</div>',
+			dataIndex: 'summary_nilai_target',
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Pencapaian (%)' + '</div>',
 			dataIndex: 'summary_pencapaian',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Nilai Pembanding Bulan 1' + '</div>',
+			header: '<div align="center">' + 'Pembanding 1' + '</div>',
 			dataIndex: 'summary_pembanding1',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun Bulan 1 (%)' + '</div>',
+			header: '<div align="center">' + 'Naik/Turun 1' + '</div>',
 			dataIndex: 'summary_naikturun1',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Prosentase Bulan 1 (%)' + '</div>',
+			header: '<div align="center">' + 'Naik/Turun 1 (%)' + '</div>',
 			dataIndex: 'summary_prosentase1',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Nilai Pembanding Bulan 2' + '</div>',
+			header: '<div align="center">' + 'Pembanding 2' + '</div>',
 			dataIndex: 'summary_pembanding2',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun Bulan 2 (%)' + '</div>',
+			header: '<div align="center">' + 'Naik/Turun 2' + '</div>',
 			dataIndex: 'summary_naikturun2',
 			width: 80,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Prosentase Bulan 2 (%)' + '</div>',
+			header: '<div align="center">' + 'Naik/Turun 2 (%)' + '</div>',
 			dataIndex: 'summary_prosentase2',
 			width: 80,	//55,
 			sortable: true
