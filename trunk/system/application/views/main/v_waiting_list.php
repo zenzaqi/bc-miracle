@@ -880,14 +880,14 @@ Ext.onReady(function(){
 		'-', 
 		
 			new Ext.app.SearchField({
-			id: 'simpleSearch',
+			id: 'wl_simpleSearch',
 			store: waiting_list_DataStore,
 			params: {task: 'LIST',start: 0, limit: pageS},
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){			
-						waiting_list_DataStore.setBaseParam('jenis_rawat','');
-						waiting_list_DataStore.setBaseParam('tgl_app','');
+						waiting_list_DataStore.setBaseParam('wl_jenis_rawat','');
+						waiting_list_DataStore.setBaseParam('wl_tgl_app','');
 						waiting_list_DataStore.setBaseParam('karyawan_id','');
 						waiting_list_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
 						waiting_list_DataStore.groupBy('karyawan_username');
@@ -908,7 +908,7 @@ Ext.onReady(function(){
 			iconCls:'icon-refresh'
 		},'-',tbar_wl_tglField, '-',tbar_dokter_wl_Field, '-',{
 			xtype: 'combo',
-			id: 'cbo_dokter',
+			id: 'wl_cbo_dokter',
 			text: 'Pilihan Dokter',
 			emptyText: 'Pilihan Dokter',
 			width: 200,
@@ -987,24 +987,24 @@ Ext.onReady(function(){
 	});
 	
 	
-	Ext.getCmp('cbo_dokter').on('select', function(){
-		waiting_list_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
+	Ext.getCmp('wl_cbo_dokter').on('select', function(){
+		waiting_list_DataStore.setBaseParam('query',Ext.getCmp('wl_cbo_dokter').getValue());
 		waiting_list_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
 			limit: pageS,
 			query: '',
-			karyawan_id: Ext.getCmp('cbo_dokter').getValue(),
-			tgl_app: tbar_dokter_wl_Field.getValue()
+			karyawan_id: Ext.getCmp('wl_cbo_dokter').getValue(),
+			wl_tgl_app: tbar_dokter_wl_Field.getValue()
 		}});
 	});
 	
 	tbar_dokter_wl_Field.on('select',function(){
-		//waiting_list_DataStore.setBaseParam('query',Ext.getCmp('cbo_dokter').getValue());
-		Ext.getCmp('simpleSearch').reset();
-		Ext.getCmp('cbo_dokter').reset();
+		//waiting_list_DataStore.setBaseParam('query',Ext.getCmp('wl_cbo_dokter').getValue());
+		Ext.getCmp('wl_simpleSearch').reset();
+		Ext.getCmp('wl_cbo_dokter').reset();
 		waiting_list_DataStore.setBaseParam('query','');
-		waiting_list_DataStore.setBaseParam('tgl_app',tbar_dokter_wl_Field.getValue());
+		waiting_list_DataStore.setBaseParam('wl_tgl_app',tbar_dokter_wl_Field.getValue());
 		waiting_list_DataStore.setBaseParam('karyawan_id','');
 		waiting_list_DataStore.load({params: {
 			task: 'LIST',
@@ -1014,10 +1014,10 @@ Ext.onReady(function(){
 	});
 	
 	tbar_wl_tglField.on('select',function(){
-		Ext.getCmp('simpleSearch').reset();
-		Ext.getCmp('cbo_dokter').reset();
+		Ext.getCmp('wl_simpleSearch').reset();
+		Ext.getCmp('wl_cbo_dokter').reset();
 		waiting_list_DataStore.setBaseParam('query','');
-		waiting_list_DataStore.setBaseParam('tgl_app',tbar_wl_tglField.getValue());
+		waiting_list_DataStore.setBaseParam('wl_tgl_app',tbar_wl_tglField.getValue());
 		waiting_list_DataStore.setBaseParam('karyawan_id','');
 		waiting_list_DataStore.load({params: {
 			task: 'LIST',
@@ -1308,7 +1308,7 @@ Ext.onReady(function(){
 		
 	/* Function for reset search result */
 	function wl_reset_search(){
-		Ext.getCmp('cbo_dokter').reset();
+		Ext.getCmp('wl_cbo_dokter').reset();
 		tbar_dokter_wl_Field.reset();
 		// reset the store parameters
 		waiting_list_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
@@ -1452,7 +1452,7 @@ Ext.onReady(function(){
 		if(waiting_list_DataStore.baseParams.query!==null){searchquery = waiting_list_DataStore.baseParams.query;}
 		if(waiting_list_DataStore.baseParams.app_customer!==null){app_customer_print = waiting_list_DataStore.baseParams.app_customer;}
 		if(waiting_list_DataStore.baseParams.app_cara!==null){app_cara_print = waiting_list_DataStore.baseParams.app_cara;}
-		if(waiting_list_DataStore.baseParams.jenis_rawat!==null){app_kategori_print = waiting_list_DataStore.baseParams.jenis_rawat;}
+		if(waiting_list_DataStore.baseParams.wl_jenis_rawat!==null){app_kategori_print = waiting_list_DataStore.baseParams.wl_jenis_rawat;}
 		if(waiting_list_DataStore.baseParams.app_dokter!==null){app_dokter_print = waiting_list_DataStore.baseParams.app_dokter;}
 		if(waiting_list_DataStore.baseParams.app_terapis!==null){app_terapis_print = waiting_list_DataStore.baseParams.app_terapis;}
 		if(waiting_list_DataStore.baseParams.app_rawat_medis!==null){app_rawat_medis_print = waiting_list_DataStore.baseParams.app_rawat_medis;}
@@ -1472,14 +1472,14 @@ Ext.onReady(function(){
 			app_rawat_medis	: app_rawat_medis_print,
 			app_rawat_nonmedis	: app_rawat_nonmedis_print,
 			app_cara	:	app_cara_print,
-			jenis_rawat	:	app_kategori_print,
+			wl_jenis_rawat	:	app_kategori_print,
 			app_dokter	:	app_dokter_print,
 			app_terapis	:	app_terapis_print,
 			app_tgl_start_reservasi	: app_tgl_start_reservasi_print,
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_print,
 			app_tgl_start_app	: app_tgl_start_app_print,
 			app_tgl_end_app	: app_tgl_end_app_print,
-			tgl_app		: waiting_list_DataStore.baseParams.tgl_app,
+			wl_tgl_app		: waiting_list_DataStore.baseParams.wl_tgl_app,
 		  	currentlisting: waiting_list_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -1534,7 +1534,7 @@ Ext.onReady(function(){
 		if(waiting_list_DataStore.baseParams.query!==null){searchquery = waiting_list_DataStore.baseParams.query;}
 		if(waiting_list_DataStore.baseParams.app_customer!==null){app_customer_2excel = waiting_list_DataStore.baseParams.app_customer;}
 		if(waiting_list_DataStore.baseParams.app_cara!==null){app_cara_2excel = waiting_list_DataStore.baseParams.app_cara;}
-		if(waiting_list_DataStore.baseParams.jenis_rawat!==null){app_kategori_2excel = waiting_list_DataStore.baseParams.jenis_rawat;}
+		if(waiting_list_DataStore.baseParams.wl_jenis_rawat!==null){app_kategori_2excel = waiting_list_DataStore.baseParams.wl_jenis_rawat;}
 		if(waiting_list_DataStore.baseParams.app_dokter!==null){app_dokter_2excel = waiting_list_DataStore.baseParams.app_dokter;}
 		if(waiting_list_DataStore.baseParams.app_terapis!==null){app_terapis_2excel = waiting_list_DataStore.baseParams.app_terapis;}
 		if(waiting_list_DataStore.baseParams.app_rawat_medis!==null){app_rawat_medis_2excel = waiting_list_DataStore.baseParams.app_rawat_medis;}
@@ -1555,14 +1555,14 @@ Ext.onReady(function(){
 			app_rawat_medis	: app_rawat_medis_2excel,
 			app_rawat_nonmedis	: app_rawat_nonmedis_2excel,
 			app_cara	:	app_cara_2excel,
-			jenis_rawat	:	app_kategori_2excel,
+			wl_jenis_rawat	:	app_kategori_2excel,
 			app_dokter	:	app_dokter_2excel,
 			app_terapis	:	app_terapis_2excel,
 			app_tgl_start_reservasi	: app_tgl_start_reservasi_2excel,
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_2excel,
 			app_tgl_start_app	: app_tgl_start_app_2excel,
 			app_tgl_end_app	: app_tgl_end_app_2excel,
-			tgl_app		: waiting_list_DataStore.baseParams.tgl_app,
+			wl_tgl_app		: waiting_list_DataStore.baseParams.wl_tgl_app,
 		  	currentlisting: waiting_list_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
