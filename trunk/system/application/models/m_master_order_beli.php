@@ -247,75 +247,37 @@ class M_master_order_beli extends Model{
 		
 		
 		/*Function untuk melakukan Save Harga saja */
-		function detail_save_harga_insert($array_dorder_id, $array_dorder_harga){
-			$datetime_now = date('Y-m-d H:i:s');
-			//if master id not capture from view then capture it from max pk from master table
-			/*
-			if($ppaket_master=="" || $ppaket_master==NULL || $ppaket_master==0){
-				$ppaket_master=$this->get_master_id();
-			}
-			*/
-			
-			$size_array = sizeof($array_dorder_id) - 1;
-			
-			for($i = 0; $i < sizeof($array_dorder_id); $i++){
-				$dorder_id = $array_dorder_id[$i];
-				$dorder_harga = $array_dorder_harga[$i];
-				
-				/*
-				 * JIKA $dorder_id==0 <== berarti penambahan pemakai baru
-				 * JIKA $dorder_id<>0 <== berarti sudah ada sebagai pengguna paket, sehingga masuk mode EDIT
-				 * ==> di mode EDIT, ada pengecheckan apakah Customer itu sudah pernah mengambil paket untuk Faktur yang dimaksud atau belum???
-				 * ==> Jika Customer itu sudah pernah ambil paket, maka tidak boleh di-EDIT
-				 * ==> Jika Customer itu belum pernah ambil paket, maka boleh di-GANTI itu Customer
-				*/
-				
-				$sql = "SELECT dorder_id FROM detail_order_beli WHERE dorder_id='".$dorder_id."'";
-				$rs = $this->db->query($sql);
-				if($rs->num_rows()){
-					if($i==$size_array){
-					$dtu_ppaket = array(
-						"dorder_harga"=>$dorder_harga
-						);
-						$this->db->where('dorder_id' ,$dorder_id);
-						$this->db->update('detail_order_beli' ,$dtu_ppaket);
+		function detail_save_harga_insert($array_dorder_id, $array_dorder_harga, $array_dorder_produk){
+			$query="";
+		   	for($i = 0; $i < sizeof($array_dorder_produk); $i++){
+
+				$data = array(
+					"dorder_harga"=>$array_dorder_harga[$i] 
+				);
 					
-						return '1';
-					}
+				if($array_dorder_id[$i]==0){
+					$this->db->insert('detail_order_beli', $data); 
+					
+					$query = $query.$this->db->insert_id();
+					if($i<sizeof($array_dorder_id)-1){
+						$query = $query . ",";
+					} 
+					
 				}else{
-					if($dorder_id==0){
-						//penambahan pemakai baru
-						$dti_ppaket = array(
-					 
-						"dorder_harga"=>$dorder_harga
-						);
-						$sql="SELECT dorder_idasdqwdq FROM detail_order_beli WHERE dorder_id='$dorder_id'";
-						$rs=$this->db->query($sql);
-						if(!$rs->num_rows()){
-							//* Customer ini belum masuk ke dalam Daftar Pemakai Paket dari Faktur ppaket_master /
-							$this->db->insert('detail_order_beli', $dti_ppaket); 
-						}
-						if($i==$size_array){
-							return '1';
-						}
-					}else{
-						//mode EDIT pemakai paket
-						$dtu_ppaket = array(
-						"dorder_harga"=>$dorder_harga
-						);
-						$this->db->where('dorder_id' ,$dorder_id);
-						$this->db->update('detail_order_beli' ,$dtu_ppaket);
-						if($i==$size_array){
-							return '1';
-						}
-					}
+					$query = $query.$array_dorder_id[$i];
+					if($i<sizeof($array_dorder_id)-1){
+						$query = $query . ",";
+					} 
+					$this->db->where('dorder_id', $array_dorder_id[$i]);
+					$this->db->update('detail_order_beli', $data);
 				}
 			}
+				
+			return '1';
 			
 		}
 		
-		
-		
+
 		//insert detail record
 		function detail_detail_order_beli_insert($array_dorder_id
                                                  ,$dorder_master

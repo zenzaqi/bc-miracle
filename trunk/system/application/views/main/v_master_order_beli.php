@@ -1438,7 +1438,7 @@ Ext.onReady(function(){
 	});
 	
 	var order_harga_satuanField=new Ext.form.NumberField({
-		allowDecimals: false,
+		allowDecimals: true,
 		allowNegative: false,
 		//blankText: '0',
 		maxLength: 22,
@@ -1502,7 +1502,9 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			editor:  order_harga_satuanField,
-			renderer: Ext.util.Format.numberRenderer('0,000')
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 			
 		},
 		{
@@ -1605,33 +1607,36 @@ Ext.onReady(function(){
 		
 	//function for insert detail
 	function detail_save_harga_insert(){
-		var dorder_id=[];
-		var dorder_harga=[];
+		var dorder_id = [];
+        var dorder_produk = [];
+        var dorder_satuan = [];
+        var dorder_jumlah = [];
+        var dorder_harga = [];
+        var dorder_diskon = [];
 		
 		var dcount = detail_order_beli_DataStore.getCount() - 1;
 		
 		if(detail_order_beli_DataStore.getCount()>0){
-			for(i=0; i<detail_order_beli_DataStore.getCount();i++){
-				if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_harga))
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==undefined
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==''
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_harga!==0){
-					if(detail_order_beli_DataStore.getAt(i).data.dorder_id==undefined){
-						dorder_id.push('');
-					}else{
-						dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
-					}
-					
-					if(detail_order_beli_DataStore.getAt(i).data.dorder_harga==undefined){
-						dorder_harga.push('');
-					}else{
-						dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
-					}
-					
-				}
+			 for(i=0; i<detail_order_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==undefined
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==0
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_satuan!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_jumlah>0){
+                    
+                  	dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
+					dorder_produk.push(detail_order_beli_DataStore.getAt(i).data.dorder_produk);
+                   	dorder_satuan.push(detail_order_beli_DataStore.getAt(i).data.dorder_satuan);
+					dorder_jumlah.push(detail_order_beli_DataStore.getAt(i).data.dorder_jumlah);
+					dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
+					dorder_diskon.push(detail_order_beli_DataStore.getAt(i).data.dorder_diskon);
+                }
+            }
 				
-				if(i==dcount){
+		
 					var encoded_array_dorder_id = Ext.encode(dorder_id);
+					var encoded_array_dorder_produk = Ext.encode(dorder_produk);
 					var encoded_array_dorder_harga = Ext.encode(dorder_harga);
 					
 					Ext.Ajax.request({
@@ -1639,7 +1644,7 @@ Ext.onReady(function(){
 						url: 'index.php?c=c_master_order_beli&m=detail_save_harga_insert',
 						params:{
 							dorder_id	: encoded_array_dorder_id,
-							//ppaket_master	: eval(get_pk_id()), 
+							dorder_produk : encoded_array_dorder_produk,
 							dorder_harga	: encoded_array_dorder_harga
 						},
 						timeout: 60000,
@@ -1681,8 +1686,7 @@ Ext.onReady(function(){
 						}		
 					});
 					
-				}
-			}
+		
 		}
 		
 	}
