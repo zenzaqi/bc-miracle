@@ -63,6 +63,8 @@ var ambil_paket_isi_perawatan_writer;
 var ambil_paket_isi_perawatan_reader;
 var editor_ambil_paket_isi_perawatan;
 
+//var today=new Date().format('Y-m-d');
+
 //declare konstant
 var apaket_post2db = '';
 var msg = '';
@@ -860,6 +862,7 @@ Ext.onReady(function(){
 			text: 'Ambil Paket',
 			tooltip: 'Pengambilan Isi Paket',
 			iconCls:'icon-update',
+			ref : '../ambil_paket_button',
 			handler: ambil_paket_confirm_update   // Confirm before updating
 		}, '-', 
 		<?php } ?>
@@ -907,6 +910,7 @@ Ext.onReady(function(){
 	
 	ambil_paketListEditorGrid.on('rowclick', function (ambil_paketListEditorGrid, rowIndex, eventObj) {
         var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
+		var today=new Date().format('Y-m-d');
 		dapaket_dpaket_idField.setValue(recordMaster.get("dpaket_id"));
 		dapaket_tgl_ambilField.setValue(recordMaster.get("tgl_ambil"));
 		dpaket_master_idField.setValue(recordMaster.get("dpaket_master"));
@@ -914,6 +918,16 @@ Ext.onReady(function(){
 		detail_ambil_paketStore.load({params : {dapaket_dpaket : recordMaster.get("dpaket_id"), tgl_ambil : recordMaster.get("tgl_ambil")}});
 		detail_pemakai_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master")}});
 		//ambil_paket_DataStore.reload();
+		if(recordMaster.get("tanggal_hangus").format('Y-m-d') > today){
+			ambil_paketListEditorGrid.ambil_paket_button.enable();
+			//ambil_paket_ContextMenu.ambil_paket_button_cm.enable();
+		}
+		else if(recordMaster.get("tanggal_hangus").format('Y-m-d') < today){
+			ambil_paketListEditorGrid.ambil_paket_button.disable();
+			//ambil_paket_ContextMenu.ambil_paket_button_cm.disable();
+		}
+		
+		
     });
      
 	/* Create Context Menu */
@@ -924,7 +938,24 @@ Ext.onReady(function(){
 		{ 
 			text: 'Ambil Paket', tooltip: 'Edit selected record', 
 			iconCls:'icon-update',
-			handler: ambil_paket_editContextMenu 
+			ref : '../ambil_paket_button_cm',
+			handler: function(){
+					var recordMaster = ambil_paketListEditorGrid.getSelectionModel().getSelected();
+					var today=new Date().format('Y-m-d');
+					if(recordMaster.get("tanggal_hangus").format('Y-m-d') > today){
+							ambil_paket_editContextMenu();
+					}
+					else if(recordMaster.get("tanggal_hangus").format('Y-m-d') < today){
+							Ext.MessageBox.show({
+							title: 'WARNING',
+							msg: 'Paket tidak bisa diambil karena melebihi batas tanggal hangus',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+							});
+					}
+				}
+					
 		},
 		<?php } ?>
 		{ 

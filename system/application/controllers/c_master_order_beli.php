@@ -124,21 +124,7 @@ class C_master_order_beli extends Controller {
 	}
 	//
 	
-	/*Function untuk melakukan Save Harga */
-	function detail_save_harga_insert(){
-		$dorder_id = $_POST['dorder_id']; // Get our array back and translate it :
-		$array_dorder_id = json_decode(stripslashes($dorder_id));
-		
-		$dorder_harga = $_POST['dorder_harga']; // Get our array back and translate it :
-		$array_dorder_harga = json_decode(stripslashes($dorder_harga));
-		
-		$result=$this->m_master_order_beli->detail_save_harga_insert($array_dorder_id, $array_dorder_harga);
-		echo $result;
-	}
-	
-	
-	
-	
+
 	
 	//get master id, note: not done yet
 	function get_supplier_list(){
@@ -180,6 +166,21 @@ class C_master_order_beli extends Controller {
 		elseif($task=='selected')
 			$result=$this->m_master_order_beli->get_satuan_selected_list($selected_id);
 			
+		echo $result;
+	}
+	
+	/*Function untuk melakukan Save Harga */
+	function detail_save_harga_insert(){
+		$dorder_id = $_POST['dorder_id']; // Get our array back and translate it :
+		$array_dorder_id = json_decode(stripslashes($dorder_id));
+		
+		$dorder_harga = $_POST['dorder_harga']; // Get our array back and translate it :
+		$array_dorder_harga = json_decode(stripslashes($dorder_harga));
+		
+		$dorder_produk = $_POST['dorder_produk']; 
+		$array_dorder_produk = json_decode(stripslashes($dorder_produk));
+		
+		$result=$this->m_master_order_beli->detail_save_harga_insert($array_dorder_id, $array_dorder_harga, $array_dorder_produk);
 		echo $result;
 	}
 	
