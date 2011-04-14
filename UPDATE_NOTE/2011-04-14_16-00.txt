@@ -1,0 +1,3 @@
+2011-04-14_16-00.txt
+--> Utk semua laporan stok, status yang awalnya <> 'Batal' menjadi = 'Tertutup'
+note : Lap Kartu Stok, Lap Stok Mutasi, Lap Stok Akhir, Lap Mutasi Barang, Lap Penyesuaian Stok --> semua laporan ini sekarang menghitung dari status yang hanya 'Tertutup'

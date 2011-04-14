@@ -32,22 +32,22 @@ class M_master_mutasi extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT distinct * FROM  vu_trans_mutasi WHERE mutasi_status<>'Batal' ".$order_by;
+					$sql="SELECT distinct * FROM  vu_trans_mutasi WHERE mutasi_status='Tertutup' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status<>'Batal' 
+					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status='Tertutup' 
 							AND date_format(mutasi_tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status<>'Batal' 
+					$sql="SELECT distinct * FROM vu_trans_mutasi WHERE mutasi_status='Tertutup'
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' ".$order_by;
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status='Tertutup' ".$order_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' 
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status='Tertutup'
 							AND date_format(mutasi_tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status<>'Batal' 
+					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status='Tertutup' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='faktur'){

@@ -30,19 +30,19 @@ class M_master_koreksi_stok extends Model{
 			
 			if($opsi=='rekap'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' ".$koreksi_by;
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status='Tertutup' ".$koreksi_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+					$sql="SELECT * FROM vu_trans_koreksi WHERE koreksi_status='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$koreksi_by;
 			}else if($opsi=='detail'){
 				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_koreksi koreksi_status<>'Batal' AND  ".$koreksi_by;
+					$sql="SELECT * FROM vu_detail_koreksi koreksi_status='Tertutup' AND  ".$koreksi_by;
 				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
+					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$koreksi_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+					$sql="SELECT * FROM vu_detail_koreksi WHERE koreksi_status='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
 							AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$koreksi_by;
 			}else if($opsi=='faktur'){
 				$sql="SELECT * FROM vu_detail_koreksi WHERE dkoreksi_master='".$faktur."'";
@@ -82,7 +82,7 @@ class M_master_koreksi_stok extends Model{
 								FROM	vu_stok_new_produk
 								WHERE   produk_id='".$produk_id."'
 										AND gudang='".$gudang."'
-										AND status<>'Batal'
+										AND status='Tertutup'
 								GROUP BY produk_id";
 			//echo $sql;
 			
