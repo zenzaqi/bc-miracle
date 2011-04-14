@@ -48,7 +48,7 @@ class M_vu_stok_all_saldo extends Model{
 								FROM	vu_stok_new_produk
 								WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 										AND produk_id='".$produk_id."'
-										AND status<>'Batal'
+										AND status='Tertutup'
 								GROUP BY produk_id";
 						
 				$q_stokawal=$this->db->query($sql_stok_awal);
@@ -119,7 +119,7 @@ class M_vu_stok_all_saldo extends Model{
 									WHERE   date_format(tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 											AND produk_id='".$rowproduk->produk_id."'
 											AND gudang='".$row->gudang_id."'
-											AND status<>'Batal'
+											AND status='Tertutup'
 									GROUP BY produk_id";
 								
 					$q_stokawal=$this->db->query($sql_stok_awal);
@@ -148,7 +148,7 @@ class M_vu_stok_all_saldo extends Model{
 										AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 										AND produk_id='".$rowproduk->produk_id."'
 										AND gudang='".$row->gudang_id."'
-										AND status<>'Batal'
+										AND status='Tertutup'
 								GROUP BY produk_id";
 					//echo $sql_stok_mutasi;
 /*					$this->firephp->log($sql_stok_mutasi);
@@ -417,7 +417,7 @@ class M_vu_stok_all_saldo extends Model{
 							WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
 									AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
 									AND produk_id='".$rowproduk->produk_id."' 
-									AND status<>'Batal'
+									AND status='Tertutup'
 							GROUP BY produk_id";
 				$rsdata=$this->db->query($sql_stok);
 				if($rsdata->num_rows()){
