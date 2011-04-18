@@ -42,7 +42,7 @@ class M_akun extends Model{
 			if($end=="") $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
-			$this->firephp->log($limit);
+			//$this->firephp->log($limit);
 
 			if($nbrows>0){
 				foreach($result->result() as $row){
