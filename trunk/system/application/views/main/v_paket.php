@@ -1398,7 +1398,7 @@ Ext.onReady(function(){
 					columnWidth: 0.5,
 					labelWidth: 80,
 					labelAlign: 'left',
-					items:[paket_aktif_kutaField, paket_aktif_btmField, paket_aktif_mksField, paket_aktif_mdnField, paket_aktif_lbkField, paket_aktif_mndField, paket_aktif_ygkField, paket_aktif_checkField]
+					items:[paket_aktif_kutaField, paket_aktif_btmField, paket_aktif_mksField, paket_aktif_mdnField, paket_aktif_lbkField, paket_aktif_mndField, paket_aktif_ygkField]
 			   }
 		]
 	});

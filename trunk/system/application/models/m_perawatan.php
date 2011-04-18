@@ -366,85 +366,85 @@ class M_perawatan extends Model{
 				
 			if($rawat_aktif_th=='true')
 				$th="1";
-			if($rawat_aktif_th=='false')
+			else if($rawat_aktif_th=='false')
 				$th="0";	
 				
 			if($rawat_aktif_ki=='true')
 				$ki="1";
-			if($rawat_aktif_ki=='false')
+			else if($rawat_aktif_ki=='false')
 				$ki="0";			
 
 			if($rawat_aktif_hr=='true')
 				$hr="1";
-			if($rawat_aktif_hr=='false')
+			else if($rawat_aktif_hr=='false')
 				$hr="0";	
 				
 			if($rawat_aktif_tp=='true')
 				$tp="1";
-			if($rawat_aktif_tp=='false')
+			else if($rawat_aktif_tp=='false')
 				$tp="0";	
 				
 			if($rawat_aktif_dps=='true')
 				$dps="1";
-			if($rawat_aktif_dps=='false')
+			else if($rawat_aktif_dps=='false')
 				$dps="0";	
 				
 			if($rawat_aktif_jkt=='true')
 				$jkt="1";
-			if($rawat_aktif_jkt=='false')
+			else if($rawat_aktif_jkt=='false')
 				$jkt="0";	
 				
 			if($rawat_aktif_mta=='true')
 				$mta="1";
-			if($rawat_aktif_mta=='false')
+			else if($rawat_aktif_mta=='false')
 				$mta="0";	
 				
 			if($rawat_aktif_blpn=='true')
 				$blpn="1";
-			if($rawat_aktif_blpn=='false')
+			else if($rawat_aktif_blpn=='false')
 				$blpn="0";	
 				
 			if($rawat_aktif_kuta=='true')
 				$kuta="1";
-			if($rawat_aktif_kuta=='false')
+			else if($rawat_aktif_kuta=='false')
 				$kuta="0";	
 				
 			if($rawat_aktif_btm=='true')
 				$btm="1";
-			if($rawat_aktif_btm=='false')
+			else if($rawat_aktif_btm=='false')
 				$btm="0";	
 				
 			if($rawat_aktif_mks=='true')
 				$mks="1";
-			if($rawat_aktif_mks=='false')
+			else if($rawat_aktif_mks=='false')
 				$mks="0";	
 				
 			if($rawat_aktif_mdn=='true')
 				$mdn="1";
-			if($rawat_aktif_mdn=='false')
+			else if($rawat_aktif_mdn=='false')
 				$mdn="0";	
 				
 			if($rawat_aktif_lbk=='true')
 				$lbk="1";
-			if($rawat_aktif_lbk=='false')
+			else if($rawat_aktif_lbk=='false')
 				$lbk="0";	
 				
 			if($rawat_aktif_mnd=='true')
 				$mnd="1";
-			if($rawat_aktif_mnd=='false')
+			else if($rawat_aktif_mnd=='false')
 				$mnd="0";	
 				
 			if($rawat_aktif_ygk=='true')
 				$ygk="1";
-			if($rawat_aktif_ygk=='false')
+			else if($rawat_aktif_ygk=='false')
 				$ygk="0";	
 				
 			if($rawat_aktif_mlg=='true')
 				$mlg="1";
-			if($rawat_aktif_mlg=='false')
+			else if($rawat_aktif_mlg=='false')
 				$mlg="0";	
 				
-			$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg;
+			$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';
 			
 			$data = array(
 				"rawat_id"=>$rawat_id, 
@@ -618,83 +618,83 @@ class M_perawatan extends Model{
 
 		if($rawat_aktif_th=='true')
 			$th="1";
-		if($rawat_aktif_th=='false')
+		else if($rawat_aktif_th=='false')
 			$th="0";	
 			
 		if($rawat_aktif_ki=='true')
 			$ki="1";
-		if($rawat_aktif_ki=='false')
+		else if($rawat_aktif_ki=='false')
 			$ki="0";			
 
 		if($rawat_aktif_hr=='true')
 			$hr="1";
-		if($rawat_aktif_hr=='false')
+		else if($rawat_aktif_hr=='false')
 			$hr="0";	
 			
 		if($rawat_aktif_tp=='true')
 			$tp="1";
-		if($rawat_aktif_tp=='false')
+		else if($rawat_aktif_tp=='false')
 			$tp="0";	
 			
 		if($rawat_aktif_dps=='true')
 			$dps="1";
-		if($rawat_aktif_dps=='false')
+		else if($rawat_aktif_dps=='false')
 			$dps="0";	
 			
 		if($rawat_aktif_jkt=='true')
 			$jkt="1";
-		if($rawat_aktif_jkt=='false')
+		else if($rawat_aktif_jkt=='false')
 			$jkt="0";	
-		
+			
 		if($rawat_aktif_mta=='true')
 			$mta="1";
-		if($rawat_aktif_mta=='false')
-			$mta="0";
+		else if($rawat_aktif_mta=='false')
+			$mta="0";	
 			
 		if($rawat_aktif_blpn=='true')
 			$blpn="1";
-		if($rawat_aktif_blpn=='false')
+		else if($rawat_aktif_blpn=='false')
 			$blpn="0";	
 			
 		if($rawat_aktif_kuta=='true')
 			$kuta="1";
-		if($rawat_aktif_kuta=='false')
+		else if($rawat_aktif_kuta=='false')
 			$kuta="0";	
 			
 		if($rawat_aktif_btm=='true')
 			$btm="1";
-		if($rawat_aktif_btm=='false')
+		else if($rawat_aktif_btm=='false')
 			$btm="0";	
 			
 		if($rawat_aktif_mks=='true')
 			$mks="1";
-		if($rawat_aktif_mks=='false')
+		else if($rawat_aktif_mks=='false')
 			$mks="0";	
 			
 		if($rawat_aktif_mdn=='true')
 			$mdn="1";
-		if($rawat_aktif_mdn=='false')
+		else if($rawat_aktif_mdn=='false')
 			$mdn="0";	
 			
 		if($rawat_aktif_lbk=='true')
 			$lbk="1";
-		if($rawat_aktif_lbk=='false')
+		else if($rawat_aktif_lbk=='false')
 			$lbk="0";	
 			
 		if($rawat_aktif_mnd=='true')
 			$mnd="1";
-		if($rawat_aktif_mnd=='false')
+		else if($rawat_aktif_mnd=='false')
 			$mnd="0";	
 			
 		if($rawat_aktif_ygk=='true')
 			$ygk="1";
-		if($rawat_aktif_ygk=='false')
+		else if($rawat_aktif_ygk=='false')
 			$ygk="0";	
 			
 		if($rawat_aktif_mlg=='true')
 			$mlg="1";
-		if($rawat_aktif_mlg=='false')
-			$mlg="0";
+		else if($rawat_aktif_mlg=='false')
+			$mlg="0";	
 			
 		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';				
 

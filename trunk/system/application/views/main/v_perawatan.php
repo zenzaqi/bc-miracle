@@ -656,13 +656,14 @@ Ext.onReady(function(){
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		perawatan_konsumsi_DataStore.load({params:{master_id:0}});
+		
 		if(!perawatan_createWindow.isVisible()){
 			post2db='CREATE';
 			msg='created';
 			perawatan_reset_form();
 			perawatan_createWindow.show();
 		} else {
+			perawatan_konsumsi_DataStore.load({params:{master_id:0}});
 			perawatan_createWindow.toFront();
 		}
 	}
@@ -1717,13 +1718,6 @@ Ext.onReady(function(){
 		name: 'rawat_aktif_mlg'
 	});
 	
-	rawat_checkallField= new Ext.form.Checkbox({
-		id: 'rawat_checkallField',
-		fieldLabel: 'Check All',
-		maxLength: 250,
-		anchor: '95%'
-	});
-	
 	rawat_aktif_checkField=new Ext.form.Checkbox({
 		id : '',
 		boxLabel: 'Check All',
@@ -1788,7 +1782,7 @@ Ext.onReady(function(){
 					columnWidth: 0.5,
 					labelWidth: 80,
 					labelAlign: 'left',
-					items:[rawat_aktif_kutaField, rawat_aktif_btmField, rawat_aktif_mksField, rawat_aktif_mdnField, rawat_aktif_lbkField, rawat_aktif_mndField, rawat_aktif_ygkField, rawat_aktif_checkField]
+					items:[rawat_aktif_kutaField, rawat_aktif_btmField, rawat_aktif_mksField, rawat_aktif_mdnField, rawat_aktif_lbkField, rawat_aktif_mndField, rawat_aktif_ygkField]
 			   }
 		]
 	});	

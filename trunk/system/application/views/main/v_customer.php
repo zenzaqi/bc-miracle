@@ -2900,7 +2900,7 @@ Ext.onReady(function(){
 		},*/
 		{
 //			header: 'No Customer',
-			header: '<div align="center">' + 'No Cust' + '</div>',
+			header: '<div align="center">' + 'Client Card' + '</div>',
 			dataIndex: 'cust_no',
 			width: 50,	//90,
 			sortable: true
@@ -3584,7 +3584,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Simple search:'});
-				Ext.get(this.id).set({qtip:'- (Aktif only)<br>- No Cust<br>- Nama Customer<br>- No Telp dan HP<br>- No Member'});
+				Ext.get(this.id).set({qtip:'- (Aktif only)<br>- Client Card<br>- Nama Customer<br>- No Telp dan HP<br>- No Member'});
 				}
 			},
 			width: 120
@@ -3794,7 +3794,7 @@ Ext.onReady(function(){
 	/* Identify  cust_no Field */
 	cust_noField= new Ext.form.TextField({
 		id: 'cust_noField',
-		fieldLabel: 'No Customer',
+		fieldLabel: 'Client Card',
 		maxLength: 50,
 		readOnly : true,
 		emptyText : '(Auto)',
@@ -4742,19 +4742,19 @@ Ext.onReady(function(){
 	/* Identify  cust_no Field */
 	cust_noSearchField= new Ext.form.TextField({
 		id: 'cust_noSearchField',
-		fieldLabel: 'No Customer',
+		fieldLabel: 'Client Card',
 		maxLength: 50,
 		anchor: '50%'
 	});
 	cust_no_awalSearchField= new Ext.form.TextField({
 		id: 'cust_no_awalSearchField',
-		fieldLabel: 'No Customer Awal',
+		fieldLabel: 'Client Card Awal',
 		maxLength: 50,
 		anchor: '50%'
 	});
 	cust_no_akhirSearchField= new Ext.form.TextField({
 		id: 'cust_no_akhirSearchField',
-		fieldLabel: 'No Customer Akhir',
+		fieldLabel: 'Client Card Akhir',
 		maxLength: 50,
 		anchor: '50%'
 	});
@@ -4764,7 +4764,7 @@ Ext.onReady(function(){
 	
 	cust_nocust_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_nocust_opsiSearchField',
-		title: 'Nomor Customer (6 digit)',
+		title: 'Client Card (6 digit)',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		//border : false,
