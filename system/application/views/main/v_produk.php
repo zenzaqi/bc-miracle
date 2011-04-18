@@ -2043,7 +2043,7 @@ Ext.onReady(function(){
 					columnWidth: 0.5,
 					labelWidth: 80,
 					labelAlign: 'left',
-					items:[produk_aktif_kutaField, produk_aktif_btmField, produk_aktif_mksField, produk_aktif_mdnField, produk_aktif_lbkField, produk_aktif_mndField, produk_aktif_ygkField, produk_aktif_checkField]
+					items:[produk_aktif_kutaField, produk_aktif_btmField, produk_aktif_mksField, produk_aktif_mdnField, produk_aktif_lbkField, produk_aktif_mndField, produk_aktif_ygkField]
 			   }
 		]
 	});

@@ -243,80 +243,110 @@ Ext.onReady(function(){
 		[
 		{
 			align : 'Left',
-			header: '<div align="center">' + 'Tujuan' + '</div>',
+			header: '<div align="center">' + 'Target' + '</div>',
 			dataIndex: 'summary_jenis',
-			width: 80,	//55,
+			width: 100,	//55,
 			sortable: true
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Nilai Tujuan' + '</div>',
-			dataIndex: 'summary_nilai_tujuan',
-			width: 80,	//55,
-			sortable: true
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Avg' + '</div>',
-			dataIndex: 'summary_rata_rata',
-			width: 80,	//55,
-			sortable: true
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Target' + '</div>',
+			header: '<div align="center">' + 'Nilai Target' + '</div>',
 			dataIndex: 'summary_nilai_target',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Pencapaian (%)' + '</div>',
+			header: '<div align="center">' + 'Mar 2011' + '</div>', //'<div align="center">' + 'Nilai Tujuan' + '</div>',
+			dataIndex: 'summary_nilai_tujuan',
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Rata-rata' + '</div>', //'<div align="center">' + 'Rata-rata Tujuan' + '</div>',
+			dataIndex: 'summary_rata_rata',
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Penc. Trgt (%)' + '</div>',
 			dataIndex: 'summary_pencapaian',
-			width: 80,	//55,
-			sortable: true
+			width: 50,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Pembanding 1' + '</div>',
+			header: '<div align="center">' + 'Nilai Pemb. 1' + '</div>',
 			dataIndex: 'summary_pembanding1',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun 1' + '</div>',
+			header: '<div align="center">' + 'Selisih Pemb. 1' + '</div>',
 			dataIndex: 'summary_naikturun1',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun 1 (%)' + '</div>',
+			header: '<div align="center">' + 'Slsh. Pemb. 1 (%)' + '</div>',
 			dataIndex: 'summary_prosentase1',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Pembanding 2' + '</div>',
+			header: '<div align="center">' + 'Nilai Pemb. 2' + '</div>',
 			dataIndex: 'summary_pembanding2',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun 2' + '</div>',
+			header: '<div align="center">' + 'Selisih Pemb. 2' + '</div>',
 			dataIndex: 'summary_naikturun2',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Naik/Turun 2 (%)' + '</div>',
+			header: '<div align="center">' + 'Slsh. Pemb. 2 (%)' + '</div>',
 			dataIndex: 'summary_prosentase2',
-			width: 80,	//55,
-			sortable: true
+			width: 60,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+			}
 		}
 		/*
 		{	
@@ -469,7 +499,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1400, //940,//1200,	//970,
+	  	width: 1220, //940,//1200,	//970,
 		/*
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,

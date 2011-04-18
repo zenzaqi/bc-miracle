@@ -592,7 +592,7 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_cabang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " substr(karyawan_cabang2, ".$karyawan_cabang." ,1) = '1'" ;
+				$query.= " karyawan_cabang = '".$karyawan_cabang."'";
 			};
 			if($karyawan_jabatan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

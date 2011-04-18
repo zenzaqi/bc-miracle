@@ -272,85 +272,85 @@ class M_produk extends Model{
 
 		if($produk_aktif_th=='true')
 			$th="1";
-		if($produk_aktif_th=='false')
+		else if($produk_aktif_th=='false')
 			$th="0";	
 			
 		if($produk_aktif_ki=='true')
 			$ki="1";
-		if($produk_aktif_ki=='false')
+		else if($produk_aktif_ki=='false')
 			$ki="0";			
 
 		if($produk_aktif_hr=='true')
 			$hr="1";
-		if($produk_aktif_hr=='false')
+		else if($produk_aktif_hr=='false')
 			$hr="0";	
 			
 		if($produk_aktif_tp=='true')
 			$tp="1";
-		if($produk_aktif_tp=='false')
+		else if($produk_aktif_tp=='false')
 			$tp="0";	
 			
 		if($produk_aktif_dps=='true')
 			$dps="1";
-		if($produk_aktif_dps=='false')
+		else if($produk_aktif_dps=='false')
 			$dps="0";	
 			
 		if($produk_aktif_jkt=='true')
 			$jkt="1";
-		if($produk_aktif_jkt=='false')
+		else if($produk_aktif_jkt=='false')
 			$jkt="0";	
 			
 		if($produk_aktif_mta=='true')
 			$mta="1";
-		if($produk_aktif_mta=='false')
+		else if($produk_aktif_mta=='false')
 			$mta="0";	
 			
 		if($produk_aktif_blpn=='true')
 			$blpn="1";
-		if($produk_aktif_blpn=='false')
+		else if($produk_aktif_blpn=='false')
 			$blpn="0";	
 			
 		if($produk_aktif_kuta=='true')
 			$kuta="1";
-		if($produk_aktif_kuta=='false')
+		else if($produk_aktif_kuta=='false')
 			$kuta="0";	
 			
 		if($produk_aktif_btm=='true')
 			$btm="1";
-		if($produk_aktif_btm=='false')
+		else if($produk_aktif_btm=='false')
 			$btm="0";	
 			
 		if($produk_aktif_mks=='true')
 			$mks="1";
-		if($produk_aktif_mks=='false')
+		else if($produk_aktif_mks=='false')
 			$mks="0";	
 			
 		if($produk_aktif_mdn=='true')
 			$mdn="1";
-		if($produk_aktif_mdn=='false')
+		else if($produk_aktif_mdn=='false')
 			$mdn="0";	
 			
 		if($produk_aktif_lbk=='true')
 			$lbk="1";
-		if($produk_aktif_lbk=='false')
+		else if($produk_aktif_lbk=='false')
 			$lbk="0";	
 			
 		if($produk_aktif_mnd=='true')
 			$mnd="1";
-		if($produk_aktif_mnd=='false')
+		else if($produk_aktif_mnd=='false')
 			$mnd="0";	
 			
 		if($produk_aktif_ygk=='true')
 			$ygk="1";
-		if($produk_aktif_ygk=='false')
+		else if($produk_aktif_ygk=='false')
 			$ygk="0";	
 			
 		if($produk_aktif_mlg=='true')
 			$mlg="1";
-		if($produk_aktif_mlg=='false')
+		else if($produk_aktif_mlg=='false')
 			$mlg="0";	
 			
-		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg;
+		$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';
 		
 			if ($produk_aktif=="")
 				$produk_aktif = "Aktif";
@@ -462,90 +462,90 @@ class M_produk extends Model{
 		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr){
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
-			if($produk_harga=="")
-				$produk_harga=0;
-			if($produk_point=="")
-				$produk_point=1;
+		if($produk_harga=="")
+			$produk_harga=0;
+		if($produk_point=="")
+			$produk_point=1;
 				
-			if($produk_aktif_th=='true')
-				$th="1";
-			if($produk_aktif_th=='false')
-				$th="0";	
-				
-			if($produk_aktif_ki=='true')
-				$ki="1";
-			if($produk_aktif_ki=='false')
-				$ki="0";			
-
-			if($produk_aktif_hr=='true')
-				$hr="1";
-			if($produk_aktif_hr=='false')
-				$hr="0";	
-				
-			if($produk_aktif_tp=='true')
-				$tp="1";
-			if($produk_aktif_tp=='false')
-				$tp="0";	
-				
-			if($produk_aktif_dps=='true')
-				$dps="1";
-			if($produk_aktif_dps=='false')
-				$dps="0";	
-				
-			if($produk_aktif_jkt=='true')
-				$jkt="1";
-			if($produk_aktif_jkt=='false')
-				$jkt="0";	
+		if($produk_aktif_th=='true')
+			$th="1";
+		else if($produk_aktif_th=='false')
+			$th="0";	
 			
-			if($produk_aktif_mta=='true')
-				$mta="1";
-			if($produk_aktif_mta=='false')
-				$mta="0";
-				
-			if($produk_aktif_blpn=='true')
-				$blpn="1";
-			if($produk_aktif_blpn=='false')
-				$blpn="0";	
-				
-			if($produk_aktif_kuta=='true')
-				$kuta="1";
-			if($produk_aktif_kuta=='false')
-				$kuta="0";	
-				
-			if($produk_aktif_btm=='true')
-				$btm="1";
-			if($produk_aktif_btm=='false')
-				$btm="0";	
-				
-			if($produk_aktif_mks=='true')
-				$mks="1";
-			if($produk_aktif_mks=='false')
-				$mks="0";	
-				
-			if($produk_aktif_mdn=='true')
-				$mdn="1";
-			if($produk_aktif_mdn=='false')
-				$mdn="0";	
-				
-			if($produk_aktif_lbk=='true')
-				$lbk="1";
-			if($produk_aktif_lbk=='false')
-				$lbk="0";	
-				
-			if($produk_aktif_mnd=='true')
-				$mnd="1";
-			if($produk_aktif_mnd=='false')
-				$mnd="0";	
-				
-			if($produk_aktif_ygk=='true')
-				$ygk="1";
-			if($produk_aktif_ygk=='false')
-				$ygk="0";	
-				
-			if($produk_aktif_mlg=='true')
-				$mlg="1";
-			if($produk_aktif_mlg=='false')
-				$mlg="0";
+		if($produk_aktif_ki=='true')
+			$ki="1";
+		else if($produk_aktif_ki=='false')
+			$ki="0";			
+
+		if($produk_aktif_hr=='true')
+			$hr="1";
+		else if($produk_aktif_hr=='false')
+			$hr="0";	
+			
+		if($produk_aktif_tp=='true')
+			$tp="1";
+		else if($produk_aktif_tp=='false')
+			$tp="0";	
+			
+		if($produk_aktif_dps=='true')
+			$dps="1";
+		else if($produk_aktif_dps=='false')
+			$dps="0";	
+			
+		if($produk_aktif_jkt=='true')
+			$jkt="1";
+		else if($produk_aktif_jkt=='false')
+			$jkt="0";	
+			
+		if($produk_aktif_mta=='true')
+			$mta="1";
+		else if($produk_aktif_mta=='false')
+			$mta="0";	
+			
+		if($produk_aktif_blpn=='true')
+			$blpn="1";
+		else if($produk_aktif_blpn=='false')
+			$blpn="0";	
+			
+		if($produk_aktif_kuta=='true')
+			$kuta="1";
+		else if($produk_aktif_kuta=='false')
+			$kuta="0";	
+			
+		if($produk_aktif_btm=='true')
+			$btm="1";
+		else if($produk_aktif_btm=='false')
+			$btm="0";	
+			
+		if($produk_aktif_mks=='true')
+			$mks="1";
+		else if($produk_aktif_mks=='false')
+			$mks="0";	
+			
+		if($produk_aktif_mdn=='true')
+			$mdn="1";
+		else if($produk_aktif_mdn=='false')
+			$mdn="0";	
+			
+		if($produk_aktif_lbk=='true')
+			$lbk="1";
+		else if($produk_aktif_lbk=='false')
+			$lbk="0";	
+			
+		if($produk_aktif_mnd=='true')
+			$mnd="1";
+		else if($produk_aktif_mnd=='false')
+			$mnd="0";	
+			
+		if($produk_aktif_ygk=='true')
+			$ygk="1";
+		else if($produk_aktif_ygk=='false')
+			$ygk="0";	
+			
+		if($produk_aktif_mlg=='true')
+			$mlg="1";
+		else if($produk_aktif_mlg=='false')
+			$mlg="0";	
 				
 			$temp_aktif=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.'000';						
 				

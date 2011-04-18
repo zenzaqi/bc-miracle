@@ -328,14 +328,14 @@ Ext.onReady(function(){
 			
 		}, */
 		{
-			header: '<div align="center">Jenis Target</div>',
+			header: '<div align="center">Target</div>',
 			dataIndex: 'setsr_jenis',
-			width: 80,
+			width: 100,
 			sortable: true
 		
 		}, 
 		{
-			header: '<div align="r">Jan</div>',
+			header: '<div align="center">Jan</div>',
 			dataIndex: 'setsr_jan',
 			width: 50,
 			align: 'right',
@@ -346,8 +346,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}
 		}, 
 		
 		{
@@ -362,8 +364,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Mar</div>',
@@ -377,8 +381,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Apr</div>',
@@ -392,8 +398,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">May</div>',
@@ -407,8 +415,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Jun</div>',
@@ -422,8 +432,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Jul</div>',
@@ -437,8 +449,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Aug</div>',
@@ -452,8 +466,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Sep</div>',
@@ -467,8 +483,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Oct</div>',
@@ -482,8 +500,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Nov</div>',
@@ -497,8 +517,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}, 
 		{
 			header: '<div align="center">Dec</div>',
@@ -512,8 +534,10 @@ Ext.onReady(function(){
 				blankText: '0',
 				maxLength: 11,
 				maskRe: /([0-9]+)$/
-			})
-		
+			}),
+			renderer: function(val){
+					return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				}		
 		}
 		]
 	);
@@ -531,7 +555,7 @@ Ext.onReady(function(){
 		frame: true,
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1220,
 		autoHeight: true,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
