@@ -392,6 +392,10 @@ class M_produk extends Model{
 				$produk_jenis_awal = $record_produk_awal['produk_jenis'];
 			}
 			
+			
+			
+			
+			
 			if(is_numeric($produk_group) || is_numeric($produk_jenis)){
 				$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
 				$rs_g=$this->db->query($sql_g);
@@ -407,7 +411,7 @@ class M_produk extends Model{
 						$group_kode=$rs_sql_g->group_kode;
 					}
 				}
-				
+							
 				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$produk_jenis."'";
 				$rs_j=$this->db->query($sql_j);
 				if($rs_j->num_rows()){
@@ -422,7 +426,7 @@ class M_produk extends Model{
 						$jenis_kode=$rs_sql_j->jenis_kode;
 					}
 				}
-				$pattern=$jenis_kode;
+				$pattern=$group_kode.$jenis_kode;
 				$produk_kode=$this->get_kode($pattern);
 				if($produk_kode!=="" && strlen($produk_kode)==7){
 					$data["produk_kode"]=$produk_kode;
@@ -606,6 +610,10 @@ class M_produk extends Model{
 			
 			//generate produk kode
 			//get group kode
+			
+			$group_kode="";
+			$jenis_kode="";
+			
 			$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$produk_group."'";
 			$rs_g=$this->db->query($sql_g);
 			if($rs_g->num_rows()){
@@ -621,7 +629,7 @@ class M_produk extends Model{
 				$jenis_kode=$rs_sql_g->jenis_kode;
 				$data["produk_jenis"]=$produk_jenis;
 			}
-			$pattern=$jenis_kode;
+			$pattern=$group_kode.$jenis_kode;
 			$produk_kode=$this->get_kode($pattern);
 			if($produk_kode!=="" && strlen($produk_kode)==7)
 				$data["produk_kode"]=$produk_kode;
