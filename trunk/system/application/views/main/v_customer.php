@@ -1812,6 +1812,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_tgllahir_print_date="";
 		var cust_hobi_print=null;
 		var cust_referensi_print=null;
+		var cust_referensilain_print=null;
 		var cust_keterangan_print=null;
 		var cust_member_print=null;
 		var cust_member2_print=null;
@@ -1849,6 +1850,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_print_date = customer_DataStore.baseParams.cust_tgllahir;}
 		if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
+		if(customer_DataStore.baseParams.cust_referensilain!==null){cust_referensilain_print = customer_DataStore.baseParams.cust_referensilain;}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
@@ -1890,6 +1892,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		  	cust_tgllahir : cust_tgllahir_print_date, 
 			cust_hobi : cust_hobi_print,
 			cust_referensi : cust_referensi_print,
+			cust_referensilain : cust_referensilain_print,
 			cust_keterangan : cust_keterangan_print,
 			cust_member : cust_member_print,
 			cust_member2 : cust_member2_print,

@@ -1261,14 +1261,14 @@ class M_customer extends Model{
 		}
 		
 		//function for search label
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
 			$query="SELECT * FROM vu_customer";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_referensilain LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 			
@@ -1369,10 +1369,12 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
 			};
+			
 			if($cust_referensilain!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
 			};
+			
 			if($cust_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
