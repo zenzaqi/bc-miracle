@@ -17,11 +17,11 @@ class M_jadwal_terapis extends Model{
 		function M_jadwal_terapis() {
 			parent::Model();
 		}
+		
+		
 		//function for get list record
 		function jadwal_terapis_list($filter,$start,$end,$tgl_app){
 			
-			//$query = "SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
-			//$dt=date('Y-m-d');
 			$month=date('Y-m');
 			
 			if($tgl_app<>''){
@@ -29,7 +29,7 @@ class M_jadwal_terapis extends Model{
 			}else{
 				$dt=date('Y-m-d');
 			}
-			
+			/* Utk absensi shift "PAGI"*/
 			$query = "select distinct
 						karyawan.karyawan_username,
 						(ifnull(vu_report_tindakan_terapis.terapis_count,0)+tindakan_adjust.adj_count) as terapis_count,
@@ -51,7 +51,8 @@ class M_jadwal_terapis extends Model{
 						left join info on (cabang.cabang_id = info.info_cabang)
 						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
-		
+					
+		/*Utk absensi shift "SIANG"*/
 		$query2 = "select distinct
 						karyawan.karyawan_username,
 						(ifnull(vu_report_tindakan_terapis.terapis_count,0)+tindakan_adjust.adj_count) as terapis_count,
@@ -73,7 +74,8 @@ class M_jadwal_terapis extends Model{
 						left join info on (cabang.cabang_id = info.info_cabang)
 						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
-		
+					
+		/*Utk absensi shift "MALAM"*/
 		$query3 = "select distinct
 						karyawan.karyawan_username,
 						(ifnull(vu_report_tindakan_terapis.terapis_count,0)+tindakan_adjust.adj_count) as terapis_count,
@@ -95,7 +97,8 @@ class M_jadwal_terapis extends Model{
 						left join info on (cabang.cabang_id = info.info_cabang)
 						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
-	
+					
+		/*Utk absensi shift "OFF"*/
 		$query4 = "select distinct
 						karyawan.karyawan_username,
 						(ifnull(vu_report_tindakan_terapis.terapis_count,0)+tindakan_adjust.adj_count) as terapis_count,
@@ -118,10 +121,35 @@ class M_jadwal_terapis extends Model{
 						where info.info_cabang = cabang.cabang_id),1) = '1')
 					order by terapis_count_day desc";
 		
+		/*Utk absensi shift "CUTI"*/
+		$query5 = "select distinct
+						karyawan.karyawan_username,
+						(ifnull(vu_report_tindakan_terapis.terapis_count,0)+tindakan_adjust.adj_count) as terapis_count,
+						absensi.absensi_shift,
+						absensi.absensi_tgl,
+						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day,
+						absensi.absensi_keterangan
+					from absensi
+						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
+						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
+						left join tindakan_adjust on (tindakan_adjust.karyawan_id = absensi.absensi_karyawan_id and date_format(absensi.absensi_tgl, '%Y-%m') = date_format(tindakan_adjust.adj_bln, '%Y-%m'))
+						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
+						left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
+					where absensi.absensi_tgl = '$dt' and absensi.absensi_shift = 'CT'
+					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')
+					order by terapis_count_day desc";
+		
+		
 		$nbrows = 0;
 		$nbrows2 = 0;
 		$nbrows3 = 0;
 		$nbrows4 = 0;
+		$nbrows5 = 0;
 		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
@@ -136,9 +164,12 @@ class M_jadwal_terapis extends Model{
 		$result4 = $this->db->query($query4);
 		$nbrows4 = $result4->num_rows();
 		
-		$nbrows = $nbrows + $nbrows2 + $nbrows3 + $nbrows4;
+		$result5 = $this->db->query($query5);
+		$nbrows5 = $result5->num_rows();
 		
-		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0){
+		$nbrows = $nbrows + $nbrows2 + $nbrows3 + $nbrows4 + $nbrows5;
+		
+		if($nbrows>0 || $nbrows2>0 || $nbrows3>0 || $nbrows4>0 || $nbrows5>0){
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -159,81 +190,20 @@ class M_jadwal_terapis extends Model{
 					$arr[] = $row4;
 				}
 			}
+			if($nbrows5>0){
+				foreach($result5->result() as $row5){
+					$arr[] = $row5;
+				}
+			}
 			$jsonresult = json_encode($arr);
 			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 		} else {
 			return '({"total":"0", "results":""})';
 		}
 	}
-			/*$query="select distinct
-						karyawan.karyawan_username,
-						ifnull(vu_report_tindakan_terapis.terapis_count,0) as terapis_count,
-						absensi.absensi_shift,
-						absensi.absensi_tgl,
-						ifnull(vu_jterapis.terapis_count_day,0) as terapis_count_day
-					from absensi
-						left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id and vu_report_tindakan_terapis.terapis_bulan = '$month')
-						left join karyawan on (absensi.absensi_karyawan_id = karyawan.karyawan_id)
-						left join vu_jterapis on (absensi.absensi_karyawan_id = vu_jterapis.terapis_id and vu_jterapis.terapis_bulan = '$dt')
-					where absensi.absensi_tgl = '$dt'
-					group by karyawan.karyawan_username";
-			// For simple search
-			/*if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (user_id LIKE '%".addslashes($filter)."%' OR user_name LIKE '%".addslashes($filter)."%' OR user_passwd LIKE '%".addslashes($filter)."%' OR user_karyawan LIKE '%".addslashes($filter)."%' OR user_log LIKE '%".addslashes($filter)."%' OR user_groups LIKE '%".addslashes($filter)."%' OR user_aktif LIKE '%".addslashes($filter)."%' )";
-			}
-			
-				if ($filter<>"" && is_numeric($filter)==true){
-				if($tgl_app!=""){
-					$dt=date('Y-m-d', strtotime($tgl_app));
-					$query="select distinct
-	karyawan.karyawan_username,
-	vu_report_tindakan_terapis.*,
-	absensi.absensi_shift,
-	absensi.absensi_tgl,
-	vu_jterapis.terapis_count_day
-from vu_report_tindakan_terapis
-left join absensi on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id)
-left join karyawan on (vu_report_tindakan_terapis.terapis_id = karyawan.karyawan_id)
-left join vu_jterapis on (vu_report_tindakan_terapis.terapis_id = vu_jterapis.terapis_id)
-where vu_report_tindakan_terapis.terapis_bulan = date_format('$tgl_app','%Y-%m') and absensi.absensi_tgl = '$tgl_app' and vu_jterapis.terapis_bulan = '$tgl_app'
-group by karyawan.karyawan_username";
-				}else{
-					$query="select distinct
-	karyawan.karyawan_username,
-	vu_report_tindakan_terapis.*,
-	absensi.absensi_shift,
-	absensi.absensi_tgl,
-	vu_jterapis.terapis_count_day
-from vu_report_tindakan_terapis
-left join absensi on (vu_report_tindakan_terapis.terapis_id=absensi.absensi_karyawan_id)
-left join karyawan on (vu_report_tindakan_terapis.terapis_id = karyawan.karyawan_id)
-left join vu_jterapis on (vu_report_tindakan_terapis.terapis_id = vu_jterapis.terapis_id)
-where vu_report_tindakan_terapis.terapis_bulan = date_format('$tgl_app','%Y-%m') and absensi.absensi_tgl = '$tgl_app' and vu_jterapis.terapis_bulan = '$tgl_app'
-group by karyawan.karyawan_username";
-				}
-				
-			}
-			
-			
-			$result = $this->db->query($query);
-			$nbrows = $result->num_rows();
-			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);  
-			
-			if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
-				}
-				$jsonresult = json_encode($arr);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
-		}*/
 		
 		
-			function jadwal_terapis_search($lap_kunjungan_id ,$trawat_tglapp_start, $start,$end){
+		function jadwal_terapis_search($lap_kunjungan_id ,$trawat_tglapp_start, $start,$end){
 			//full query
 			$dt=date('Y-m-d');
 			$month=date('Y-m');

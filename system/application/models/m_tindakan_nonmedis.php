@@ -1259,6 +1259,7 @@ class M_tindakan_nonmedis extends Model{
 						"dtrawat_perawatan"=>$dtrawat_perawatan,
 						"dtrawat_petugas2"=>$dtrawat_petugas2,
 						"dtrawat_kategori"=>'Non Medis',
+						"dtrawat_status"=>'tindakan',
 						"dtrawat_tglapp"=>$date_now,
 						"dtrawat_jam"=>$dtrawat_jam,
 						"dtrawat_keterangan"=>$dtrawat_keterangan,
