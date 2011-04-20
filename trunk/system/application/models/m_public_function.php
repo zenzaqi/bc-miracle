@@ -935,6 +935,12 @@ class M_public_function extends Model{
 		$len_pattern=strlen($pattern);
 		$len_lpad=$length-$len_pattern;
 		$sql="select concat(left(max(substring(".$field.",-6)),".$len_pattern."),LPAD((right(max(substring(".$field.",-6)),".$len_lpad.")+1),".$len_lpad.",0)) as max_key from ".$table." where ".$field." is not null and ".$field."<>'' and cust_aktif='Aktif'";
+		/*hasilnya akan spt ini: 
+		select 
+			concat(left(max(substring(c.cust_no,-6)),0),LPAD((right(max(substring(c.cust_no,-6)),6)+1),6,0)) as max_key 
+			from customer c
+			where c.cust_no is not null and c.cust_no <>'' and cust_aktif='Aktif'
+		*/
 		
 		$query=$this->db->query($sql);
 		if($query->num_rows()){

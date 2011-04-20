@@ -1,0 +1,4 @@
+2011-04-20_10.30.sql
+
+--> membetulkan perhitungan stok.. ada kesalahan di 'gudan'.. dan stok ini masih menghitung dari Gudang Besar.. 
+skr sudah diperbaiki menghitung dari Gudang yang dipilih.. 
