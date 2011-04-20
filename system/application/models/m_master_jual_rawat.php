@@ -1278,7 +1278,8 @@ class M_master_jual_rawat extends Model{
 				jrawat_cara,
 				jrawat_cara2,
 				jrawat_cara3,
-				IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,
+				/*IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,*/
+                vu_jrawat_totalbiaya.jrawat_totalbiaya AS jrawat_totalbiaya,
 				jrawat_bayar,
 				jrawat_keterangan,
 				jrawat_ket_disk,
@@ -1564,6 +1565,7 @@ class M_master_jual_rawat extends Model{
 				 * Tidak ada penambahan detail di View Kasir Penjualan Perawatan, tapi ada penambahan detail dari Tindakan
 				 * maka keluarkan peringatan "untuk mengcancel terlebih dahulu, kemudian dibuka lagi"
 				*/
+                $cetak = 0;
                 $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
                                 ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
                                 ,$jrawat_cara
@@ -1886,7 +1888,8 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pr.jrawat_cara,
 				vu_jrawat_pr.jrawat_cara2,
 				vu_jrawat_pr.jrawat_cara3,
-				IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,
+				/*IF(vu_jrawat_pr.jrawat_totalbiaya!=0, vu_jrawat_pr.jrawat_totalbiaya, vu_jrawat_totalbiaya.jrawat_totalbiaya) AS jrawat_totalbiaya,*/
+                vu_jrawat_totalbiaya.jrawat_totalbiaya AS jrawat_totalbiaya,
 				vu_jrawat_pr.jrawat_bayar,
 				vu_jrawat_pr.jrawat_keterangan,
 				vu_jrawat_pr.jrawat_stat_dok,
