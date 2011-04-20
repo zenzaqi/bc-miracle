@@ -95,11 +95,11 @@ class C_inbox extends Controller {
 		$inbox_pengirim 	= (isset($_POST['inbox_pengirim']) ? @$_POST['inbox_pengirim'] : @$_GET['inbox_pengirim']);
 		$inbox_isi 		= (isset($_POST['inbox_isi']) ? @$_POST['inbox_isi'] : @$_GET['inbox_isi']);
 		$inbox_task 	= (isset($_POST['inbox_task']) ? @$_POST['inbox_task'] : @$_GET['inbox_task']);
-		$inbox_id=trim(@$_POST["inbox_id"]);
+		$ID=trim(@$_POST["ID"]);
 		
 		$inbox_isi=htmlspecialchars($inbox_isi,ENT_QUOTES);
 		
-		$result=$this->m_inbox->inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$inbox_id);
+		$result=$this->m_inbox->inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$ID);
 		
 		echo $result;
 	}
@@ -107,7 +107,7 @@ class C_inbox extends Controller {
 	//function for update record
 	function inbox_update(){
 		//POST variable here
-		$inbox_id=trim(@$_POST["inbox_id"]);
+		$ID=trim(@$_POST["ID"]);
 		$inbox_sender=trim(@$_POST["inbox_sender"]);
 		$inbox_sender=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_sender);
 		$inbox_sender=str_replace("'", "''",$inbox_sender);
@@ -123,7 +123,7 @@ class C_inbox extends Controller {
 		$inbox_update=@$_SESSION[SESSION_USERID];
 		$inbox_date_update=date('m/d/Y');
 		//$inbox_revised="(revised+1)";
-		$result = $this->m_inbox->inbox_update($inbox_id,$inbox_sender,$inbox_message,$inbox_date,$inbox_update,$inbox_date_update,$inbox_status);
+		$result = $this->m_inbox->inbox_update($ID,$inbox_sender,$inbox_message,$inbox_date,$inbox_update,$inbox_date_update,$inbox_status);
 		echo $result;
 	}
 	
@@ -138,7 +138,7 @@ class C_inbox extends Controller {
 	//function for advanced search
 	function inbox_search(){
 		//POST varibale here
-		$inbox_id=trim(@$_POST["inbox_id"]);
+		$ID=trim(@$_POST["ID"]);
 		$inbox_sender=trim(@$_POST["inbox_sender"]);
 		$inbox_sender=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_sender);
 		$inbox_sender=str_replace("'", "''",$inbox_sender);
@@ -158,7 +158,7 @@ class C_inbox extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_inbox->inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+		$result = $this->m_inbox->inbox_search($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
 											   $inbox_update ,$inbox_date_update ,$inbox_revised ,$start,$end);
 		echo $result;
 	}
@@ -166,7 +166,7 @@ class C_inbox extends Controller {
 
 	function inbox_print(){
   		//POST varibale here
-		$inbox_id=trim(@$_POST["inbox_id"]);
+		$ID=trim(@$_POST["ID"]);
 		$inbox_sender=trim(@$_POST["inbox_sender"]);
 		$inbox_sender=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_sender);
 		$inbox_sender=str_replace("'", "'",$inbox_sender);
@@ -186,7 +186,7 @@ class C_inbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_inbox->inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+		$data["data_print"] = $this->m_inbox->inbox_print($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
 														  $inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
 		$print_view=$this->load->view("main/p_inbox.php",$data,TRUE);
 		if(!file_exists("print")){
@@ -201,7 +201,7 @@ class C_inbox extends Controller {
 	/* Function to Export Excel document */
 	function inbox_export_excel(){
 		//POST varibale here
-		$inbox_id=trim(@$_POST["inbox_id"]);
+		$ID=trim(@$_POST["ID"]);
 		$inbox_sender=trim(@$_POST["inbox_sender"]);
 		$inbox_sender=str_replace("/(<\/?)(p)([^>]*>)", "",$inbox_sender);
 		$inbox_sender=str_replace("'", "''",$inbox_sender);
@@ -221,7 +221,7 @@ class C_inbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_inbox->inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
+		$query = $this->m_inbox->inbox_export_excel($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,
 													$inbox_update ,$inbox_date_update ,$inbox_revised ,$option,$filter);
 		
 		$this->load->plugin('to_excel');

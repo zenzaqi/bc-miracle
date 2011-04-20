@@ -1,0 +1,2 @@
+vcm_outbox-phonegroup,  vc_inbox : penyesuaian sms
+2011-04-20_09-30.sql : creatae tabel u/ sms

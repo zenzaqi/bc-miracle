@@ -65,7 +65,10 @@ class M_phonegroup extends Model{
 								outbox_date,
 								outbox_status,
 								outbox_creator,
-								outbox_date_create)
+								outbox_date_create,
+								DestinationNumber,
+								TextDecoded,
+								CreatorID)
 							values(
 								'".$row->cust_id."',
 								'".$row->cust_hp."',
@@ -73,7 +76,11 @@ class M_phonegroup extends Model{
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
 								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
+								'".date('Y/m/d H:i:s')."',
+								'".$row->cust_hp."',
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'Program')";
 							//echo $sql;
 						$this->db->query($sql);
 						$sql="";
@@ -87,14 +94,20 @@ class M_phonegroup extends Model{
 								outbox_date,
 								outbox_status,
 								outbox_creator,
-								outbox_date_create)
+								outbox_date_create,
+								DestinationNumber,
+								TextDecoded,
+								CreatorID)
 							values(
 								'".$value."',
 								'".$isms_isi."',
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
 								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
+								'".date('Y/m/d H:i:s')."',
+								'".$value."',
+								'".$isms_isi."',
+								'Program')";
 						$this->db->query($sql);
 						$sql="";
 					}
@@ -112,7 +125,10 @@ class M_phonegroup extends Model{
 								outbox_date,
 								outbox_status,
 								outbox_creator,
-								outbox_date_create)
+								outbox_date_create,
+								DestinationNumber,
+								TextDecoded,
+								CreatorID)
 							values(
 								'".$row->cust_hp."',
 								'".$row->cust_id."',
@@ -120,7 +136,11 @@ class M_phonegroup extends Model{
 								'".date('Y/m/d H:i:s')."',
 								'unsent',
 								'".$_SESSION[SESSION_USERID]."',
-								'".date('Y/m/d H:i:s')."')";
+								'".date('Y/m/d H:i:s')."',
+								'".$row->cust_hp."',
+								'".$isms_isi."',
+								'Program'
+								)";
 							//echo $sql;
 						$this->db->query($sql_sms);
 					}
@@ -472,6 +492,35 @@ class M_phonegroup extends Model{
 			}
 		}
 		
+		//function for get list record
+		function phonegrouped_list($phonegroup_id,$filter,$start,$end){
+			$query = "SELECT cust_nama, cust_no, cust_alamat, cust_kota FROM phonegrouped 
+					LEFT JOIN customer ON (phonegrouped_cust = cust_id)
+					WHERE phonegrouped_group='".$phonegroup_id."'";
+			
+			if ($filter<>""){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR 
+							 cust_alamat LIKE '%".addslashes($filter)."%' OR 
+							 cust_no LIKE '%".addslashes($filter)."%')";
+			}
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
 		//function for create new record
 		function phonegroup_create($phonegroup_nama ,$phonegroup_detail ,$phonegroup_creator ,$phonegroup_date_create, $phonegroup_data ){
 			$data = array(
@@ -529,6 +578,28 @@ class M_phonegroup extends Model{
 				}
 			}
 			return '1';
+		}
+		
+		function get_detail_phonegroup($phonegrouped_group,$start,$end){
+			$query = "SELECT phonegrouped_cust
+						FROM phonegrouped
+						WHERE phonegrouped_group='$phonegrouped_group'
+						ORDER BY phonegrouped_cust DESC";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
 		}
 		
 		//fcuntion for delete record
