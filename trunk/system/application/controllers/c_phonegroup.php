@@ -50,6 +50,9 @@ class C_phonegroup extends Controller {
 			case "CREATE":
 				$this->phonegroup_create();
 				break;
+			case "LIST2":
+				$this->phonegrouped_list();
+				break;
 			case "DELETE":
 				$this->phonegroup_delete();
 				break;
@@ -120,6 +123,20 @@ class C_phonegroup extends Controller {
 		echo $result;
 	}
 	
+	//function fot list record
+	function phonegrouped_list(){
+		
+		//$query = isset($_POST['phonegrouped_group']) ? @$_POST['phonegrouped_group'] : "";
+		$phonegroup_id=trim(@$_POST["phonegroup_id"]);
+		$phonegroup_id=str_replace("/(<\/?)(p)([^>]*>)", "",$phonegroup_id);
+		$phonegroup_id=str_replace("'", "''",$phonegroup_id);
+		$query = isset($_POST['query']) ? @$_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+		$result=$this->m_phonegroup->phonegrouped_list($phonegroup_id,$query,$start,$end);
+		echo $result;
+	}
+	
 	//function for create new record
 	function phonegroup_create(){
 		//POST varible here
@@ -141,6 +158,14 @@ class C_phonegroup extends Controller {
 		echo $result;
 	}
 	
+	function get_detail_phonegroup(){
+
+		$phonegrouped_group = isset($_POST['phonegrouped_group']) ? $_POST['phonegrouped_group'] : 0;
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_phonegroup->get_detail_phonegroup($phonegrouped_group,$start,$end);
+		echo $result;
+	}
 	
 	//function for update record
 	function phonegroup_update(){

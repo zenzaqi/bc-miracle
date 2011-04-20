@@ -38,7 +38,7 @@ class M_master_retur_jual_produk extends Model{
 				,produk_nama
 				,satuan_id
 				,satuan_kode
-				,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)-jproduk_cashback) AS retur_produk_harga
+				,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)) AS retur_produk_harga
 				,dproduk_jumlah
 			FROM detail_jual_produk
 			LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
@@ -391,6 +391,8 @@ class M_master_retur_jual_produk extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (rproduk_nobukti LIKE '%".addslashes($filter)."%' OR jproduk_nobukti LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' )";
 			}
+			
+			$query.=" ORDER BY rproduk_tanggal desc";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
