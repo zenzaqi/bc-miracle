@@ -26,11 +26,11 @@ class M_inbox extends Model{
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (SenderNumber LIKE '%".addslashes($filter)."%' OR 
-							 TextDecoded LIKE '%".addslashes($filter)."%' )";
+				$query .= " (inbox_sender LIKE '%".addslashes($filter)."%' OR 
+							 inbox_message LIKE '%".addslashes($filter)."%' )";
 			}
 			
-			$query .= " ORDER BY receivingDateTime DESC ";
+			$query .= " ORDER BY inbox_date DESC ";
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -48,7 +48,7 @@ class M_inbox extends Model{
 			}
 		}
 		
-		function inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$ID){
+		function inbox_save($inbox_pengirim,$inbox_isi,$inbox_task,$inbox_id){
 			$sql="";
 			//yg disimpan cukup message & tanggalnya aja. by hendri 2010-06-16
 			if($inbox_task=='draft'){
@@ -72,21 +72,16 @@ class M_inbox extends Model{
 						outbox_date,
 						outbox_status,
 						outbox_creator,
-						outbox_date_create,
-						DestinationNumber,
-						TextDecoded)
+						outbox_date_create)
 					values(
 						'".$inbox_pengirim."',
 						'".$inbox_isi."',
 						'".date('Y/m/d H:i:s')."',
 						'unsent',
 						'".$_SESSION[SESSION_USERID]."',
-						'".date('Y/m/d H:i:s')."',
-						'".$inbox_pengirim."',
-						'".$inbox_isi."'
-						)";
+						'".date('Y/m/d H:i:s')."')";
 				
-				$sql2="update inbox set inbox_status='Replied' where ID='".$ID."'";
+				$sql2="update inbox set inbox_status='Replied' where inbox_id='".$inbox_id."'";
 				$this->db->query($sql);
 				$this->db->query($sql2);
 				$sql="";				
@@ -102,12 +97,12 @@ class M_inbox extends Model{
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "UPDATE inbox SET inbox_status='Hide' WHERE ID = ".$pkid[0];
+				$query = "UPDATE inbox SET inbox_status='Hide' WHERE inbox_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
 				$query = "UPDATE inbox SET inbox_status='Hide' WHERE ";
 				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "ID= ".$pkid[$i];
+					$query = $query . "inbox_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
 					}     
@@ -121,7 +116,7 @@ class M_inbox extends Model{
 		}
 		
 		//function for advanced search record
-		function inbox_search($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+		function inbox_search($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
 							  $inbox_date_update ,$inbox_revised ,$start,$end){
 			//full query
 			$query="select * from inbox";
@@ -157,7 +152,7 @@ class M_inbox extends Model{
 		}
 		
 		//function for print record
-		function inbox_print($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+		function inbox_print($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
 							 $inbox_date_update ,$inbox_revised ,$option,$filter){
 			//full query
 			$sql="select * from inbox";
@@ -186,7 +181,7 @@ class M_inbox extends Model{
 		}
 		
 		//function  for export to excel
-		function inbox_export_excel($ID ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
+		function inbox_export_excel($inbox_id ,$inbox_sender ,$inbox_message ,$inbox_date ,$inbox_creator ,$inbox_date_create ,$inbox_update ,
 									$inbox_date_update ,$inbox_revised ,$option,$filter){
 			//full query
 			$sql="select inbox_date as Tanggal,inbox_sender as Pengirim, inbox_message as 'Isi Pesan' from inbox";
