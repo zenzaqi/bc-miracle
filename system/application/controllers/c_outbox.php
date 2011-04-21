@@ -121,7 +121,7 @@ class C_outbox extends Controller {
 	//function for advanced search
 	function outbox_search(){
 		//POST varibale here
-		$ID=trim(@$_POST["ID"]);
+		$outbox_id=trim(@$_POST["outbox_id"]);
 		$outbox_destination=trim(@$_POST["outbox_destination"]);
 		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
 		$outbox_destination=str_replace("'", "''",$outbox_destination);
@@ -139,7 +139,7 @@ class C_outbox extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_outbox->outbox_search($ID ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, $outbox_creator ,
+		$result = $this->m_outbox->outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, $outbox_creator ,
 												 $outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$start,$end);
 		echo $result;
 	}
@@ -147,7 +147,7 @@ class C_outbox extends Controller {
 
 	function outbox_print(){
   		//POST varibale here
-		$ID=trim(@$_POST["ID"]);
+		$outbox_id=trim(@$_POST["outbox_id"]);
 		$outbox_destination=trim(@$_POST["outbox_destination"]);
 		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
 		$outbox_destination=str_replace("'", "''",$outbox_destination);
@@ -165,7 +165,7 @@ class C_outbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$data["data_print"] = $this->m_outbox->outbox_print($ID ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_status,
+		$data["data_print"] = $this->m_outbox->outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date ,$outbox_status,
 															$outbox_creator , $outbox_date_create ,$outbox_update ,$outbox_date_update ,
 															$outbox_revised ,$option, $filter);
 		$print_view=$this->load->view("main/p_outbox.php",$data,TRUE);
@@ -181,7 +181,7 @@ class C_outbox extends Controller {
 	/* Function to Export Excel document */
 	function outbox_export_excel(){
 		//POST varibale here
-		$ID=trim(@$_POST["ID"]);
+		$outbox_id=trim(@$_POST["outbox_id"]);
 		$outbox_destination=trim(@$_POST["outbox_destination"]);
 		$outbox_destination=str_replace("/(<\/?)(p)([^>]*>)", "",$outbox_destination);
 		$outbox_destination=str_replace("'", "''",$outbox_destination);
@@ -199,7 +199,7 @@ class C_outbox extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_outbox->outbox_export_excel($ID ,$outbox_destination ,$outbox_message ,$outbox_date,$outbox_status,$outbox_creator ,
+		$query = $this->m_outbox->outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date,$outbox_status,$outbox_creator ,
 													  $outbox_date_create ,$outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter);
 		
 		$this->load->plugin('to_excel');

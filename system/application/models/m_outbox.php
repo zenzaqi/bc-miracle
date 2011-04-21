@@ -149,12 +149,12 @@ class M_outbox extends Model{
 			if(sizeof($pkid)<1){
 				return '0';
 			} else if (sizeof($pkid) == 1){
-				$query = "DELETE FROM outbox WHERE ID = ".$pkid[0];
+				$query = "DELETE FROM outbox WHERE outbox_id = ".$pkid[0];
 				$this->db->query($query);
 			} else {
 				$query = "DELETE FROM outbox WHERE ";
 				for($i = 0; $i < sizeof($pkid); $i++){
-					$query = $query . "ID= ".$pkid[$i];
+					$query = $query . "outbox_id= ".$pkid[$i];
 					if($i<sizeof($pkid)-1){
 						$query = $query . " OR ";
 					}     
@@ -181,7 +181,7 @@ class M_outbox extends Model{
 		}
 		
 		//function for advanced search record
-		function outbox_search($ID ,$outbox_destination ,$outbox_message ,$outbox_date, $outbox_status ,$outbox_creator ,$outbox_date_create, 
+		function outbox_search($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date, $outbox_status ,$outbox_creator ,$outbox_date_create, 
 							   $outbox_update , $outbox_date_update ,$outbox_revised ,$start,$end){
 			//full query
 			$query =   "SELECT 
@@ -227,7 +227,7 @@ class M_outbox extends Model{
 		}
 		
 		//function for print record
-		function outbox_print($ID ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
+		function outbox_print($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
 							  $outbox_creator ,$outbox_date_create ,$outbox_update ,
 							  $outbox_date_update ,$outbox_revised ,$option,$filter){
 			//full query
@@ -267,7 +267,7 @@ class M_outbox extends Model{
 		}
 		
 		//function  for export to excel
-		function outbox_export_excel($ID ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
+		function outbox_export_excel($outbox_id ,$outbox_destination ,$outbox_message ,$outbox_date , $outbox_status, 
 									 $outbox_creator ,$outbox_date_create ,
 									 $outbox_update ,$outbox_date_update ,$outbox_revised ,$option,$filter){
 			//full query

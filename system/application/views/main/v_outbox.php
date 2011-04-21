@@ -80,7 +80,7 @@ Ext.onReady(function(){
 		var outbox_message_update=null;
 		var outbox_date_update_date="";
 
-		outbox_id_update_pk = oGrid_event.record.data.ID;
+		outbox_id_update_pk = oGrid_event.record.data.outbox_id;
 		if(oGrid_event.record.data.outbox_destination!== null){outbox_destination_update = oGrid_event.record.data.outbox_destination;}
 		if(oGrid_event.record.data.outbox_message!== null){outbox_message_update = oGrid_event.record.data.outbox_message;}
 	 	if(oGrid_event.record.data.outbox_date!== ""){outbox_date_update_date =oGrid_event.record.data.outbox_date.format('Y-m-d');}
@@ -89,7 +89,7 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_outbox&m=get_action',
 			params: {
-				ID	: outbox_id_update_pk, 
+				outbox_id	: outbox_id_update_pk, 
 				outbox_destination	:outbox_destination_update,
 				outbox_message	:outbox_message_update,
 				outbox_date	: outbox_date_update_date, 
@@ -145,7 +145,7 @@ Ext.onReady(function(){
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_outbox&m=get_action',
 				params: {
-					ID	: outbox_id_field_pk, 
+					outbox_id	: outbox_id_field_pk, 
 					outbox_destination	: outbox_destination_field, 
 					outbox_message	: outbox_message_field, 
 					outbox_date	: outbox_date_field_date, 
@@ -197,7 +197,7 @@ Ext.onReady(function(){
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
-			return outboxListEditorGrid.getSelectionModel().getSelected().get('ID');
+			return outboxListEditorGrid.getSelectionModel().getSelected().get('outbox_id');
 		else 
 			return 0;
 	}
@@ -291,7 +291,7 @@ Ext.onReady(function(){
 			var selections = outboxListEditorGrid.selModel.getSelections();
 			var prez = [];
 			for(i = 0; i< outboxListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.ID);
+				prez.push(selections[i].json.outbox_id);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -408,10 +408,10 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'ID'
+			id: 'outbox_id'
 		},[
 		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'ID', type: 'int', mapping: 'ID'}, 
+			{name: 'outbox_id', type: 'int', mapping: 'outbox_id'}, 
 			{name: 'outbox_cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'outbox_cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'outbox_destination', type: 'string', mapping: 'outbox_destination'}, 
@@ -424,7 +424,7 @@ Ext.onReady(function(){
 			{name: 'outbox_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date_update'}, 
 			{name: 'outbox_revised', type: 'int', mapping: 'outbox_revised'} 
 		]),
-//		sortInfo:{field: 'ID', direction: "DESC"}
+//		sortInfo:{field: 'outbox_id', direction: "DESC"}
 	});
 	
 	/* Function for Retrieve DataStore */
@@ -441,7 +441,7 @@ Ext.onReady(function(){
 			id: ''
 		},[
 		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
-			//{name: 'ID', type: 'int', mapping: 'ID'}, 
+			//{name: 'outbox_id', type: 'int', mapping: 'outbox_id'}, 
 			{name: 'status_sent', type: 'int', mapping: 'status_sent'}
 		])
 	});
@@ -489,7 +489,7 @@ Ext.onReady(function(){
 		[{
 			header: '#',
 			readOnly: true,
-			dataIndex: 'ID',
+			dataIndex: 'outbox_id',
 			width: 40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
@@ -826,7 +826,7 @@ Ext.onReady(function(){
 		outbox_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			ID	:	outbox_id_search, 
+			outbox_id	:	outbox_id_search, 
 			outbox_destination	:	outbox_destination_search, 
 			outbox_message	:	outbox_message_search, 
 			outbox_date	:	outbox_date_search_date

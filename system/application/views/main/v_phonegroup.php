@@ -45,7 +45,6 @@
 <script>
 /* declare function */
 var phonegroup_DataStore;
-var phonegroup_detail_DataStore;
 var phonegroup_ColumnModel;
 var phonegroupListEditorGrid;
 var phonegroup_saveForm;
@@ -143,7 +142,7 @@ Ext.onReady(function(){
 					phonegroup_id		: phonegroup_id_field_pk,
 					phonegroup_nama		: phonegroup_nama_field,
 					phonegroup_detail	: phonegroup_detail_field,
-					//phonegroup_data 	: phonegroup_saveForm.getForm().findField('itemselector').getValue(),
+					phonegroup_data 	: phonegroup_saveForm.getForm().findField('itemselector').getValue(),
 					task: post2db
 				},
 				success: function(response){
@@ -349,30 +348,6 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 
-	/* Function for Retrieve DataStore */
-	phonegroup_detail_DataStore = new Ext.data.GroupingStore({
-		id: 'phonegroup_detail_DataStore',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_phonegroup&m=get_action',
-			method: 'POST'
-		}),
-		baseParams:{task: "LIST2", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
-		reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'phonegrouped_group'
-		},[
-			{name: 'phonegrouped_group', type: 'int', mapping: 'phonegrouped_group'},
-			{name: 'phonegrouped_cust', type: 'string', mapping: 'phonegroup_cust'},
-			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
-			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
-			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
-			{name: 'cust_kota', type: 'string', mapping: 'cust_kota'}
-		]),
-		sortInfo:{field: 'phonegrouped_group', direction: "DESC"}
-	});
-	/* End of Function */
-	
   	/* Function for Identify of Window Column Model */
 	phonegroup_ColumnModel = new Ext.grid.ColumnModel(
 		[{
@@ -454,71 +429,6 @@ Ext.onReady(function(){
 	phonegroup_ColumnModel.defaultSortable= true;
 	/* End of Function */
 
-	  	/* Function for Identify of Window Column Model */
-	phonegroup_detail_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: '#',
-			readOnly: true,
-			dataIndex: 'phonegrouped_group',
-			width: 40,
-			renderer: function(value, cell){
-				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
-				return value;
-				},
-			hidden: true
-		},
-		{
-			header: 'Client Card',
-			dataIndex: 'cust_no',
-			width: 80,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-			,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-			<?php } ?>
-		},
-		{
-			header: 'Nama',
-			dataIndex: 'cust_nama',
-			width: 150,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-			,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-			<?php } ?>
-		},
-		{
-			header: 'Alamat',
-			dataIndex: 'cust_alamat',
-			width: 200,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-			,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-			<?php } ?>
-		},
-		{
-			header: 'Kota',
-			dataIndex: 'cust_kota',
-			width: 100,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-			,
-			editor: new Ext.form.TextField({
-				maxLength: 250
-          	})
-			<?php } ?>
-		}]);
-
-	phonegroup_detail_ColumnModel.defaultSortable= true;
-	/* End of Function */
-	
 	/* Declare DataStore and  show datagrid list */
 	phonegroupListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'phonegroupListEditorGrid',
@@ -595,105 +505,7 @@ Ext.onReady(function(){
 	});
 	phonegroupListEditorGrid.render();
 	/* End of DataStore */
-	
-	
-	phonegroupListEditorGrid.on('rowclick', function (phonegroupListEditorGrid, rowIndex, eventObj) {
-        var recordMaster = phonegroupListEditorGrid.getSelectionModel().getSelected();
-		phonegroup_namaField.setValue(recordMaster.get("phonegrouped_id"));
-		//dapaket_tgl_ambilField.setValue(recordMaster.get("tgl_ambil"));
-		//dpaket_master_idField.setValue(recordMaster.get("dpaket_master"));
-        //detail_ambil_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master"), dpaket_paket : recordMaster.get("dpaket_paket")}});
-		phonegroup_detail_DataStore.load({params : {phonegroup_id : recordMaster.get("phonegroup_id")}});
-		//detail_pemakai_paketStore.load({params : {dpaket_master : recordMaster.get("dpaket_master")}});
-		//ambil_paket_DataStore.reload();
-    });
 
-	/* Declare DataStore and  show datagrid list */
-	phonegroupdetailEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'phonegroupdetailEditorGrid',
-		el: 'fp_detailphonegroup',
-		title: 'Detail Phone Group',
-		autoHeight: true,
-		store: phonegroup_detail_DataStore, // DataStore
-		cm: phonegroup_detail_ColumnModel, // Nama-nama Columns
-		
-		view: new Ext.grid.GroupingView({
-            forceFit:true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        }),
-        stripeRows: true,
-        autoExpandColumn: 'company',
-		
-		enableColLock:false,
-		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
-		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
-		viewConfig: { forceFit:true },
-	  	width: 700,
-		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
-			store: phonegroup_detail_DataStore,
-			displayInfo: true
-		}),
-		/* Add Control on ToolBar */
-		tbar: [/*
-		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: display_form_window
-		}, '-',
-		<?php }?>
-		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Edit',
-			tooltip: 'Edit selected record',
-			iconCls:'icon-update',
-			handler: phonegroup_confirm_update   // Confirm before updating
-		}, '-',
-		<?php } ?>
-		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: phonegroup_confirm_delete   // Confirm before deleting
-		}, '-',
-		<?php } ?>
-		{
-			text: 'Adv Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
-			handler: display_form_search_window
-		}, '-',*/
-			new Ext.app.SearchField({
-			store: phonegroup_detail_DataStore,
-			params: {start: 0, limit: pageS},			
-			width: 120
-		})/*,'-',{
-			text: 'Refresh',
-			tooltip: 'Refresh datagrid',
-			handler: phonegroup_reset_search,
-			iconCls:'icon-refresh'
-		}*/, '-', 
-		'<span style="color:white;"> Info : <b>Untuk menambah detail phonegroup, dapat dilakukan pada Master Customer.</b></span>'
-		/*,'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: phonegroup_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: phonegroup_print
-		}*/
-		]
-	});
-	phonegroupdetailEditorGrid.render();
-	
 	/* Create Context Menu */
 	phonegroup_ContextMenu = new Ext.menu.Menu({
 		id: 'phonegroup_ListEditorGridContextMenu',
@@ -828,6 +640,7 @@ Ext.onReady(function(){
 		maxLength: 500,
 		anchor: '95%'
 	});
+
 
 	//datastore of profesi
 	cbo_pgcust_profesi_DataStore = new Ext.data.Store({
@@ -1279,6 +1092,59 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [phonegroup_namaField, phonegroup_detailField]
+			},{
+				labelAlign: 'top',
+				bodyStyle:'padding:5px',
+				layout: 'form',
+				items:[
+					{
+						xtype: 'itemselector',
+						name: 'itemselector',
+						fieldLabel: 'Customer',
+						imagePath: './assets/images/',
+						multiselects: [{
+							width: 350,
+							height: 200,
+							store: phonenumber_DataStore,
+							displayField: 'phonenumber_nama',
+							valueField: 'phonenumber_id',
+							tpl: cust_tpl,
+							tbar:[new Ext.PagingToolbar({
+								pageSize: 15,
+								store: phonenumber_DataStore,
+								displayInfo: false
+							}),{
+								text: 'Adv Search',
+								tooltip: 'Advanced Search u/ Customer',
+								iconCls:'icon-search',
+								handler: display_cust_phonegroup_form_search_window
+							}
+							]
+						},{
+							width: 350,
+							height: 200,
+							store: phonegrouped_DataStore,
+							displayField: 'phonenumber_nama',
+							valueField: 'phonenumber_id',
+							tbar:[new Ext.PagingToolbar({
+								pageSize: 15,
+								store: phonegrouped_DataStore,
+								displayInfo: false,
+								listeners:{
+									render:function(){
+										phonegrouped_DataStore.setBaseParam({id:get_pk_id()});
+									}
+								}
+								}),{
+								text: 'Clear',
+								xtype: 'button',
+								handler:function(){
+									phonegroup_saveForm.getForm().findField('itemselector').reset();
+								}
+								}]
+						}]
+					}
+					]
 			}
 			],
 		buttons: [
@@ -1345,16 +1211,6 @@ Ext.onReady(function(){
 		phonegroup_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		// Cause the datastore to do another query :
 		phonegroup_DataStore.reload({params: {start: 0, limit: pageS}});
-		phonegroup_searchWindow.close();
-	};
-	/* End of Fuction */
-	
-	/* Function for reset search result */
-	function phonegrouped_reset_search(){
-		// reset the store parameters
-		phonegroup_detail_DataStore.baseParams = { task: 'LIST2', start: 0, limit: pageS };
-		// Cause the datastore to do another query :
-		phonegroup_detail_DataStore.reload({params: {start: 0, limit: pageS}});
 		phonegroup_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -1565,7 +1421,6 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_phonegroup"></div>
-		<div id="fp_detailphonegroup"></div>
 		<div id="elwindow_phonegroup_save"></div>
         <div id="elwindow_phonegroup_search"></div>
         <div id="elwindow_phonegroup_cust_search"></div>
