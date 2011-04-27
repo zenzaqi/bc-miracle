@@ -145,7 +145,7 @@ class M_master_lunas_piutang extends Model{
 				,lpiutang_sisa
 				,lpiutang_stat_dok
 			FROM master_lunas_piutang
-			WHERE lpiutang_sisa<>0 and lpiutang_stat_dok='Tertutup'";
+			WHERE lpiutang_sisa<>0 and lpiutang_stat_dok='Terbuka'";
 		if($cust_id<>""){
 			$sql.=(eregi("WHERE",$sql)?" AND ":" WHERE ");
 			$sql.=" lpiutang_cust='".$cust_id."'  AND lpiutang_faktur_tanggal > '2010-07-20'";

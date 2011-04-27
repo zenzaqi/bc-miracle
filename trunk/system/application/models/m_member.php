@@ -56,13 +56,13 @@ class M_member extends Model{
 							c.cust_nama, c.cust_no 
 						FROM member m
 						LEFT JOIN customer c on c.cust_id = m.member_cust
-						ORDER BY member_register DESC";
+						WHERE (member_status = 'Daftar' OR member_status = 'Cetak') ";
 			
 			// For simple search
 			if ($filter<>""){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query.=eregi("WHERE",$query)? " AND ":" WHERE ";
 				//$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%' OR member_register LIKE '%".addslashes($filter)."%' OR member_valid LIKE '%".addslashes($filter)."%' OR member_nota_ref LIKE '%".addslashes($filter)."%' OR member_point LIKE '%".addslashes($filter)."%' OR member_jenis LIKE '%".addslashes($filter)."%' OR member_status LIKE '%".addslashes($filter)."%' OR member_tglserahterima LIKE '%".addslashes($filter)."%' )";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				$query.= " (cust_nama LIKE '%".addslashes($filter)."%' OR member_cust LIKE '%".addslashes($filter)."%')";
 			} 
 			//else {
 //				$query .= "where member_cust=cust_id and member_status <> 'Serah Terima'";
@@ -70,6 +70,7 @@ class M_member extends Model{
 			//	$query .= " WHERE member_status = 'Daftar'";
 			//}
 			
+			$query.=" ORDER BY member_register DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -387,8 +388,8 @@ class M_member extends Model{
 			
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " member_status = 'Daftar' AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
-				$result = $this->db->query($query);
+				$query .= " (member_status = 'Daftar' OR member_status = 'Cetak') AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				//$result = $this->db->query($query);
 			}else if($option=='SEARCH'){
 				if($member_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -435,10 +436,21 @@ class M_member extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
 				};
-*/				$result = $this->db->query($query);
+*/				//$result = $this->db->query($query);
 			}
-			return $result;
-		}
-		
+				$rs = $this->db->query($query);
+				
+				$jum_baris = $rs->num_rows();
+				
+				//looping dimulai disini
+				for ($i = 0; $i < $jum_baris; $i++) {
+					$record = $rs->row($i);
+					$data_arr= $record->member_kodecust;				
+				
+					$query2 = "PDATE member SET member_status = 'Cetak' WHERE member_kodecust = '$data_arr'";
+					$rs2 = $this->db->query($query2);
+				}
+				$result = $this->db->query($query2);
+}
 }
 ?>
