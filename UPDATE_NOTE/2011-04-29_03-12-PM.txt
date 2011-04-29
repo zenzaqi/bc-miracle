@@ -1,0 +1,11 @@
+<update by zaqi.smart@gmail.com>
+- UPDATE transaksi Inventori
+  o Order Beli, Penerimaan, Invoice, Retur,
+    Mutasi dan Koreksi
+  o Pencegahan proses load detail yang belum selesai
+    ditampilkan progressbar u/ menghindari proses
+    error pada proses edit
+  o CATATAN TAMBAHAN : proses simpan harga yang
+    ditambahkan pihak miracle menyebabkan error
+    pada data detail, silakan diperbaiki atau
+    hilangkan saja

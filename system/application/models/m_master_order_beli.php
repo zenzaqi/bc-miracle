@@ -287,6 +287,9 @@ class M_master_order_beli extends Model{
                                                  ,$array_dorder_harga
                                                  ,$array_dorder_diskon ){
             
+          if($dorder_master==0){
+          	 return '0';
+          }else{
             $query="";
 		   	for($i = 0; $i < sizeof($array_dorder_produk); $i++){
 
@@ -325,7 +328,7 @@ class M_master_order_beli extends Model{
 			}
 			
 			return '1';
-            
+          }
 		}
 		//end of function
 		

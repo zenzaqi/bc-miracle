@@ -279,6 +279,7 @@ Ext.onReady(function(){
 						callback: function(opts, response, success){
 							if(success==true){
 								get_total_invoice();
+								Ext.MessageBox.hide();
 							}
 						}
 					});
@@ -332,9 +333,15 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_invoiceListEditorGrid.selModel.getCount() == 1) {
 			post2db='UPDATE';
-			master_invoice_set_form();
 			msg='updated';
+			master_invoice_set_form();
 			master_invoice_createWindow.show();
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',

@@ -244,6 +244,7 @@ Ext.onReady(function(){
 							if(success==true){
 								rbeli_button_saveField.setDisabled(false);
 								rbeli_button_saveprintField.setDisabled(false);
+								Ext.MessageBox.hide();
 							}
 						}
 					});
@@ -301,6 +302,12 @@ Ext.onReady(function(){
 			msg='updated';
 			master_retur_beli_set_form();
 			master_retur_beli_createWindow.show();
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',

@@ -354,6 +354,7 @@ Ext.onReady(function(){
 					detail_mutasi_DataStore.load({
 						callback: function(r,opt,success){
 							if(success==true){
+								Ext.MessageBox.hide();
 								mutasi_button_saveField.setDisabled(false);
 								mutasi_button_saveprintField.setDisabled(false);
 							}
@@ -512,6 +513,12 @@ Ext.onReady(function(){
 			msg='updated';
 			master_mutasi_set_form();
 			master_mutasi_createWindow.show();
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',

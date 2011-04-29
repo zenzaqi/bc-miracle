@@ -343,6 +343,7 @@ Ext.onReady(function(){
 					detail_koreksi_stok_DataStore.load({
 						callback: function(r,opt,success){
 							if(success==true){
+								Ext.MessageBox.hide();
 								koreksi_button_saveField.setDisabled(false);
 								koreksi_button_saveprintField.setDisabled(false);
 							}
@@ -499,6 +500,12 @@ Ext.onReady(function(){
 			msg='updated';
 			master_koreksi_stok_set_form();
 			master_koreksi_stok_createWindow.show();
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',

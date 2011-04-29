@@ -404,6 +404,7 @@ Ext.onReady(function(){
 					detail_order_beli_DataStore.load({
 						callback: function(r,opt,success){
 							if(success==true){
+								Ext.MessageBox.hide();
 								order_button_saveField.setDisabled(false);
 								order_button_saveprintField.setDisabled(false);
 							}
@@ -548,6 +549,8 @@ Ext.onReady(function(){
 			msg='created';
 			master_order_beli_reset_form();
 			master_order_beli_createWindow.show();
+			
+			
 		} else {
 			master_order_beli_createWindow.toFront();
 		}
@@ -612,6 +615,14 @@ Ext.onReady(function(){
 			msg='updated';
 			master_order_beli_set_form();
 			master_order_beli_createWindow.show();
+
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -1745,10 +1756,22 @@ Ext.onReady(function(){
 				},
 				success:function(response){
 					var result=eval(response.responseText);
-					if(opsi=='print'){
-						master_order_beli_cetak_faktur(pkid);
+					if(result!='0'){
+						if(opsi=='print'){
+							master_order_beli_cetak_faktur(pkid);
+						}
+						master_order_beli_DataStore.reload()
+					}else{
+						Ext.MessageBox.hide();
+						var result=response.responseText;
+						Ext.MessageBox.show({
+						   title: 'Error',
+						   msg: 'Tidak bisa terhubung dengan database server',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'database',
+						   icon: Ext.MessageBox.ERROR
+						});	
 					}
-					master_order_beli_DataStore.reload()
 				},
 				failure: function(response){
 					Ext.MessageBox.hide();
