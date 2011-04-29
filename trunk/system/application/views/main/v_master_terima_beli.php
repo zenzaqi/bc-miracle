@@ -356,6 +356,8 @@ Ext.onReady(function(){
 
 	/* setValue to EDIT */
 	function master_terima_beli_set_form(){
+		var loadAll=0;
+		
 		terima_idField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_id'));
 		terima_noField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_no'));
 		terima_orderField.setValue(master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_order'));
@@ -372,6 +374,8 @@ Ext.onReady(function(){
 		//cbo_terima_gudang_DataStore.load();
 		
 		//LOAD DETAIL
+		
+		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_satuan_produkDataStore.load();
@@ -389,8 +393,12 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								detail_terima_beli_total();
-								terima_button_saveField.setDisabled(false);
-								terima_button_saveprintField.setDisabled(false);
+								loadAll++;
+								if(loadAll==2){
+									Ext.MessageBox.hide();
+									terima_button_saveField.setDisabled(false);
+									terima_button_saveprintField.setDisabled(false);
+								}
 							}
 						}
 					});
@@ -408,6 +416,12 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								detail_terima_beli_total();
+								loadAll++;
+								if(loadAll==2){
+									Ext.MessageBox.hide();
+									terima_button_saveField.setDisabled(false);
+									terima_button_saveprintField.setDisabled(false);
+								}
 							}
 						}
 					});
@@ -580,6 +594,13 @@ Ext.onReady(function(){
 			master_terima_beli_set_form();
 			cbo_terima_gudang_DataStore.load();
 			master_terima_beli_createWindow.show();
+			Ext.MessageBox.show({
+			   msg: 'Sedang memuat data, mohon tunggu...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
