@@ -362,7 +362,7 @@ class M_master_lunas_piutang extends Model{
 										,$cetak_lp){
 		$date_now=date('Y-m-d');
 		
-		$jenis_transaksi = 'jual_piutang';
+		$jenis_transaksi = 'jual_lunas';
 		
 		$data = array(
 			"fpiutang_tanggal"=>$fpiutang_tanggal,
@@ -477,7 +477,7 @@ class M_master_lunas_piutang extends Model{
 										,$cetak_lp){
 		$date_now=date('Y-m-d');
 		
-		$jenis_transaksi = 'jual_piutang';
+		$jenis_transaksi = 'jual_lunas';
 		
 		$pattern="LP/".date("ym")."-";
 		$fpiutang_no=$this->m_public_function->get_kode_1('master_faktur_lunas_piutang','fpiutang_nobukti',$pattern,12);
