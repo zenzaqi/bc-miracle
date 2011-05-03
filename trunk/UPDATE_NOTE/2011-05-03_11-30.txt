@@ -1,2 +1,5 @@
 2011-05-04_11-30.sql 
 --> menambahkan field cabin_dapaket_id --> untuk keperluan Trigger standart_bahan_ambil_paket
+--> Mengnonaktifkan cabin_dtrawat menjadi auto_increment.. karena tidak dipakai lagi.. 
+
+NB : Pengurangan detail_standart_bahan sekarang diinsert ketika terjadi proses Save and Print (Status menjadi Tertutup) pada faktur perawatan..
