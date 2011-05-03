@@ -1705,6 +1705,7 @@ class M_customer extends Model{
 						if(cust_kota='','-',ifnull(cust_kota,'-')) AS kota,
 						/*if(cust_telprumah='','-',ifnull(cust_telprumah,'-')) AS telp_rumah,
 						if(cust_hp='','-',ifnull(cust_hp,'-')) AS no_ponsel,*/
+						if(cust_email='','-',ifnull(cust_email,'-')) AS email,
 						if(cust_tgllahir='','-',ifnull(cust_tgllahir,'-')) AS tgl_lahir,
 						if(cust_statusnikah='','-',ifnull(cust_statusnikah,'-')) AS status_nikah,
 						/*if(cust_priority='','-',ifnull(cust_priority,'-')) AS priority,*/
