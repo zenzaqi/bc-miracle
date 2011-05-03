@@ -1,0 +1,1 @@
+ALTER TABLE `detail_pakai_cabin` ADD `cabin_dapaket_id` INT( 11 ) NULL DEFAULT NULL AFTER `cabin_bukti`;

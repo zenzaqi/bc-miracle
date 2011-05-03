@@ -61,12 +61,12 @@
 				{
 					if ($k!=5)
 						{ 
-							print "<tr><td height=10 colspan=6></td></tr>"; 
+							print "<tr><td height=11 colspan=6></td></tr>"; 
 							$k++;
 						}
 					else 
 						{
-							print "<tr><td height=10 colspan=6></td></tr>";
+							print "<tr><td height=11 colspan=6></td></tr>";
 							$k=1;
 						}
 					print "</tr>";  

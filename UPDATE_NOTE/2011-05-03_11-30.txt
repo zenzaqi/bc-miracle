@@ -1,0 +1,2 @@
+2011-05-04_11-30.sql 
+--> menambahkan field cabin_dapaket_id --> untuk keperluan Trigger standart_bahan_ambil_paket
