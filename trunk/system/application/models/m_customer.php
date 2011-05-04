@@ -253,7 +253,7 @@ class M_customer extends Model{
 					};
 					if($cust_aktif!=''){
 						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-						$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+						$query.= " cust_aktif = '".$cust_aktif."'";
 					};
 					/*if($cust_fretfulness!=''){
 						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1190,7 +1190,7 @@ class M_customer extends Model{
 			};
 			if($cust_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+				$query.= " cust_aktif = '".$cust_aktif."'";
 			};
 			if($cust_fretfulness!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1261,14 +1261,14 @@ class M_customer extends Model{
 		}
 		
 		//function for search label
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter,  $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
 			$query="SELECT * FROM vu_customer";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_id LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_kelamin LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_kota LIKE '%".addslashes($filter)."%' OR cust_kodepos LIKE '%".addslashes($filter)."%' OR cust_propinsi LIKE '%".addslashes($filter)."%' OR cust_negara LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_email LIKE '%".addslashes($filter)."%' OR cust_agama LIKE '%".addslashes($filter)."%' OR cust_pendidikan LIKE '%".addslashes($filter)."%' OR cust_profesi LIKE '%".addslashes($filter)."%' OR cust_tgllahir LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%' OR cust_referensi LIKE '%".addslashes($filter)."%' OR cust_referensilain LIKE '%".addslashes($filter)."%' OR cust_keterangan LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' OR cust_statusnikah LIKE '%".addslashes($filter)."%' OR cust_hobi_baca LIKE '%".addslashes($filter)."%' OR cust_hobi_olah LIKE '%".addslashes($filter)."%' OR cust_hobi_masak LIKE '%".addslashes($filter)."%' OR cust_hobi_foto LIKE '%".addslashes($filter)."%' OR cust_hobi_nari LIKE '%".addslashes($filter)."%' OR cust_hobi_travel LIKE '%".addslashes($filter)."%' OR cust_hobi_lukis LIKE '%".addslashes($filter)."%' OR cust_hobi_lain LIKE '%".addslashes($filter)."%' OR cust_hobi LIKE '%".addslashes($filter)."%')";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 			
@@ -1369,12 +1369,10 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
 			};
-			
 			if($cust_referensilain!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
 			};
-			
 			if($cust_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
@@ -1425,7 +1423,7 @@ class M_customer extends Model{
 			};
 			if($cust_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+				$query.= " cust_aktif = '".$cust_aktif."'";
 			};
 			/*
 			if($sortby=='Nama'){
@@ -1663,7 +1661,7 @@ class M_customer extends Model{
 				};
 				if($cust_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+					$query.= " cust_aktif = '".$cust_aktif."'";
 				};
 				if($cust_creator!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1692,8 +1690,8 @@ class M_customer extends Model{
 		
 		//function  for export to excel
 		function customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
-			if ($cust_fretfulness=="")
-				$cust_fretfulness = "Undefined";
+			//if ($cust_fretfulness=="")
+			//	$cust_fretfulness = "Undefined";
 			//full query
 			$query="select
 						if(cust_no='','-',ifnull(cust_no,'-')) AS no_cust,
@@ -1703,8 +1701,8 @@ class M_customer extends Model{
 						if(cust_kelamin='','-',ifnull(cust_kelamin,'-')) AS 'L/P',
 						if(cust_alamat='','-',ifnull(cust_alamat,'-')) AS alamat,
 						if(cust_kota='','-',ifnull(cust_kota,'-')) AS kota,
-						/*if(cust_telprumah='','-',ifnull(cust_telprumah,'-')) AS telp_rumah,
-						if(cust_hp='','-',ifnull(cust_hp,'-')) AS no_ponsel,*/
+						/*if(cust_telprumah='','-',ifnull(cust_telprumah,'-')) AS telp_rumah,*/
+						if(cust_hp='','-',ifnull(cust_hp,'-')) AS no_ponsel,
 						if(cust_email='','-',ifnull(cust_email,'-')) AS email,
 						if(cust_tgllahir='','-',ifnull(cust_tgllahir,'-')) AS tgl_lahir,
 						if(cust_statusnikah='','-',ifnull(cust_statusnikah,'-')) AS status_nikah,
@@ -1863,7 +1861,7 @@ class M_customer extends Model{
 			};
 			if($cust_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif LIKE '%".$cust_aktif."%'";
+				$query.= " cust_aktif = '".$cust_aktif."'";
 			};
 			if($cust_fretfulness!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
