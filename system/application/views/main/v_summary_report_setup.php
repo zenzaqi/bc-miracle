@@ -52,7 +52,7 @@ var sr_setup_tahunField;
 //declare konstant
 var post2db = 'CREATE';
 var msg = '';
-var pageS=12;
+var pageS=17;
 
 /* declare variable here for Field*/
 

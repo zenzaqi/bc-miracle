@@ -2280,7 +2280,9 @@ class M_public_function extends Model{
 				,(sum(lpiutang_total)) - ifnull(sum(vu_piutang_total_lunas.total_pelunasan),0) AS lpiutang_sisa
 			FROM master_lunas_piutang
 				LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
-				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)";
+				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)
+				WHERE master_lunas_piutang.lpiutang_stat_dok <> 'Batal'
+				";
 		
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
