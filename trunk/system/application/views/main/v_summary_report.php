@@ -97,13 +97,15 @@ var summary_reportDataStore;
 var lap_kunjunganColumnModel;
 //var lap_totalkunjungan_nonColumnModel;
 //var lap_averageColumnModel;
-var lap_kunjunganListEditorGrid;
+var summary_reportListEditorGrid;
 //var lap_kunjunganListEditorGrid2;
 var lap_kunjungan_averageListEditorGrid;
-var lap_kunjungan_searchForm;
+var summary_report_searchForm;
+var summary_report_GenerateForm;
 var summary_report_searchWindow;
+var summary_report_GenerateWindow;
 var lap_kunjunganSelectedRow;
-var lap_kunjunganContextMenu;
+var summary_reportContextMenu;
 //for detail data
 var lap_kunjungan_detail_DataStore;
 var lap_kunjungan_detail_proxy;
@@ -142,6 +144,12 @@ Ext.onReady(function(){
 		return (summary_report_bulantujuanField.isValid()) && (summary_report_tahuntujuanField.isValid()
 		&& summary_report_bulanpembanding1Field.isValid()) && (summary_report_tahunpembanding1Field.isValid());
 	}
+	
+	function is_summary_report_generateForm_valid(){
+		//return (lap_kunjungan_tglStartSearchField.isValid()) && (lap_kunjungan_tglEndSearchField.isValid());
+		return (summary_report_bulantujuanGenerateField.isValid()) && (summary_report_tahuntujuanGenerateField.isValid()
+		&& summary_report_bulanpembanding1GenerateField.isValid()) && (summary_report_tahunpembanding1GenerateField.isValid());
+	}
 
 	Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
@@ -166,12 +174,22 @@ Ext.onReady(function(){
 			{name: 'summary_jenis', type: 'string', mapping: 'jenis'},
 			{name: 'summary_nilai_tujuan', type: 'int', mapping: 'nilai_tujuan'},
 			{name: 'summary_nilai_target', type: 'int', mapping: 'target'},
-			{name: 'summary_rata_rata', type: 'int', mapping: 'rata_rata'},
+			{name: 'summary_rata_rata', type: 'float', mapping: 'rata_rata'},
 			{name: 'summary_pencapaian', type: 'float', mapping: 'pencapaian_target'},
 			{name: 'summary_pembanding1', type: 'int', mapping: 'nilai_pembanding1'},
+			{name: 'summary_pencapaian_pembanding1', type: 'float', mapping: 'pencapaian_pembanding1'},
+			{name: 'summary_naik_turun_pencapaian_pembanding1', type: 'float', mapping: 'naik_turun_pencapaian_pembanding1'},
+			{name: 'summary_rata_rata1', type: 'float', mapping: 'rata2_pembanding1'},
+			{name: 'summary_naikturun_rata2_1', type: 'float', mapping: 'naik_turun_rata2_1'},
+			{name: 'summary_naikturun_rata2_persen_1', type: 'float', mapping: 'naik_turun_rata2_persen_1'},
 			{name: 'summary_naikturun1', type: 'int', mapping: 'naik_turun1'},
 			{name: 'summary_prosentase1', type: 'float', mapping: 'prosentase_naik_turun1'},
 			{name: 'summary_pembanding2', type: 'int', mapping: 'nilai_pembanding2'},
+			{name: 'summary_pencapaian_pembanding2', type: 'int', mapping: 'pencapaian_pembanding2'},
+			{name: 'summary_naik_turun_pencapaian_pembanding2', type: 'float', mapping: 'naik_turun_pencapaian_pembanding2'},
+			{name: 'summary_rata_rata2', type: 'float', mapping: 'rata2_pembanding2'},
+			{name: 'summary_naikturun_rata2_2', type: 'float', mapping: 'naik_turun_rata2_2'},
+			{name: 'summary_naikturun_rata2_persen_2', type: 'float', mapping: 'naik_turun_rata2_persen_2'},
 			{name: 'summary_naikturun2', type: 'int', mapping: 'naik_turun2'},
 			{name: 'summary_prosentase2', type: 'float', mapping: 'prosentase_naik_turun2'}
 		])
@@ -245,34 +263,34 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Target' + '</div>',
 			dataIndex: 'summary_jenis',
-			width: 100,	//55,
+			width: 80,	//55,
 			sortable: true
 		}, 
 		{	
 			align : 'Right',
+			header: '<div align="center">' + 'Nilai Tujuan' + '</div>',
+			dataIndex: 'summary_nilai_tujuan',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Rata-rata' + '</div>',
+			dataIndex: 'summary_rata_rata',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
 			header: '<div align="center">' + 'Nilai Target' + '</div>',
 			dataIndex: 'summary_nilai_target',
-			width: 60,	//55,
-			sortable: true,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Mar 2011' + '</div>', //'<div align="center">' + 'Nilai Tujuan' + '</div>',
-			dataIndex: 'summary_nilai_tujuan',
-			width: 60,	//55,
-			sortable: true,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Rata-rata' + '</div>', //'<div align="center">' + 'Rata-rata Tujuan' + '</div>',
-			dataIndex: 'summary_rata_rata',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -282,17 +300,17 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Penc. Trgt (%)' + '</div>',
 			dataIndex: 'summary_pencapaian',
-			width: 50,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 		},
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Nilai Pemb. 1' + '</div>',
 			dataIndex: 'summary_pembanding1',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -302,7 +320,7 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Selisih Pemb. 1' + '</div>',
 			dataIndex: 'summary_naikturun1',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -310,19 +328,69 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Slsh. Pemb. 1 (%)' + '</div>',
+			header: '<div align="center">' + 'Selisih Pemb. 1 (%)' + '</div>',
 			dataIndex: 'summary_prosentase1',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Penc. Pemb. 1 (%)' + '</div>',
+			dataIndex: 'summary_pencapaian_pembanding1',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Penc. 1 (%)' + '</div>',
+			dataIndex: 'summary_naik_turun_pencapaian_pembanding1',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Rata-rata Pemb. 1' + '</div>',
+			dataIndex: 'summary_rata_rata1',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Rata-rata 1' + '</div>',
+			dataIndex: 'summary_naikturun_rata2_1',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Rata-rata 1 (%)' + '</div>',
+			dataIndex: 'summary_naikturun_rata2_persen_1',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 		},
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Nilai Pemb. 2' + '</div>',
 			dataIndex: 'summary_pembanding2',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -332,7 +400,7 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Selisih Pemb. 2' + '</div>',
 			dataIndex: 'summary_naikturun2',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -340,14 +408,65 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Slsh. Pemb. 2 (%)' + '</div>',
+			header: '<div align="center">' + 'Selisih Pemb. 2 (%)' + '</div>',
 			dataIndex: 'summary_prosentase2',
-			width: 60,	//55,
+			width: 80,	//55,
 			sortable: true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Penc. Pemb. 2 (%)' + '</div>',
+			dataIndex: 'summary_pencapaian_pembanding2',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Penc. 2 (%)' + '</div>',
+			dataIndex: 'summary_naik_turun_pencapaian_pembanding2',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},	
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Rata-rata Pemb. 2' + '</div>',
+			dataIndex: 'summary_rata_rata2',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Rata-rata 2' + '</div>',
+			dataIndex: 'summary_naikturun_rata2_2',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Selisih Rata-rata 2 (%)' + '</div>',
+			dataIndex: 'summary_naikturun_rata2_persen_2',
+			width: 80,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 		}
+
 		/*
 		{	
 			align : 'Right',
@@ -487,8 +606,8 @@ Ext.onReady(function(){
 	/* End of Function */
 
 	/* Declare DataStore and  show datagrid list */
-	lap_kunjunganListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'lap_kunjunganListEditorGrid',
+	summary_reportListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'summary_reportListEditorGrid',
 		el: 'fp_lap_kunjungan',
 		title: 'Summary Report',
 		autoHeight: true,
@@ -499,7 +618,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220, //940,//1200,	//970,
+	  	width: 2400, //940,//1200,	//970,
 		/*
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,
@@ -521,7 +640,7 @@ Ext.onReady(function(){
 			tooltip: 'Tombol untuk menampilkan Summary Report',
 			//iconCls:'icon-xls',
 			//disabled : true,
-			handler: lap_lunjungan_export_excel
+			handler: display_form_generate
 		}, '-', 
 			{
 			text: 'Export Excel',
@@ -531,14 +650,14 @@ Ext.onReady(function(){
 			handler: lap_lunjungan_export_excel
 		}, '-',{
 			text: 'Print',
-			tooltip: 'Print Document',
+			tooltip: 'Print Summary Report',
 			iconCls:'icon-print',
-			disabled : true,
-			handler: lap_kunjungan_print  
+			disabled : false,
+			handler: summary_report_print  
 		}
 		]
 	});
-	lap_kunjunganListEditorGrid.render();
+	summary_reportListEditorGrid.render();
 	/* End of DataStore */
 	
 	/*
@@ -581,14 +700,14 @@ Ext.onReady(function(){
 	
 	
 	/* Create Context Menu */
-	lap_kunjunganContextMenu = new Ext.menu.Menu({
+	summary_reportContextMenu = new Ext.menu.Menu({
 		id: '',
 		items: [
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: lap_kunjungan_print 
+			handler: summary_report_print 
 		},
 		{ 
 			text: 'Export Excel', 
@@ -604,18 +723,18 @@ Ext.onReady(function(){
 	function onlap_kunjungan_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		lap_kunjunganContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		summary_reportContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
 		lap_kunjunganSelectedRow=rowIndex;
-		lap_kunjunganContextMenu.showAt([coords[0], coords[1]]);
+		summary_reportContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 		
-	lap_kunjunganListEditorGrid.addListener('rowcontextmenu', onlap_kunjungan_ListEditGridContextMenu);
+	summary_reportListEditorGrid.addListener('rowcontextmenu', onlap_kunjungan_ListEditGridContextMenu);
 	summary_reportDataStore.load({params: {start: 0, limit: 31}});
 	//lap_totalkunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
 	//lap_average_kunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
-	//lap_kunjunganListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
+	//summary_reportListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
 	/* Function for Retrieve DataStore of detail*/
@@ -637,18 +756,6 @@ Ext.onReady(function(){
 		
 		if(is_summary_report_searchForm_valid())
 		{
-		/*
-		var lap_kunjungan_id_search=null;
-		var lap_kunjungan_tgl_start_search=null;
-		var lap_kunjungan_tgl_end_search=null;
-		var lap_kunjungan_kelamin_search=null;
-		var lap_kunjungan_member_search=null;
-		var lap_kunjungan_cust_search=null;
-		var lap_kunjungan_umurstart_search=null;
-		var lap_kunjungan_umurend_search=null;
-		var lap_kunjungan_tgllahir_search_date="";
-		var lap_kunjungan_tgllahir_search_dateEnd="";
-		*/
 		var summary_report_bulantujuan_search=null;
 		var summary_report_tahuntujuan_search=null;
 		var summary_report_bulanpembanding1_search=null;
@@ -656,28 +763,16 @@ Ext.onReady(function(){
 		var summary_report_bulanpembanding2_search=null;
 		var summary_report_tahunpembanding2_search=null;
 		
-		//var report_tindakan_dokter_search=null;
-		//if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_search=lap_kunjungan_memberSearchField.getValue();}
-		//if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_search=lap_kunjungan_custSearchField.getValue();}
-		//if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_search=lap_kunjungan_idSearchField.getValue();}
-		//if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_search=lap_kunjungan_kelaminSearchField.getValue();}
-		//if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_search=lap_kunjungan_tglStartSearchField.getValue();}
 		if(summary_report_bulantujuanField.getValue()!==null){summary_report_bulantujuan_search=summary_report_bulantujuanField.getValue();}
 		if(summary_report_tahuntujuanField.getValue()!==null){summary_report_tahuntujuan_search=summary_report_tahuntujuanField.getValue();}
 		if(summary_report_bulanpembanding1Field.getValue()!==null){summary_report_bulanpembanding1_search=summary_report_bulanpembanding1Field.getValue();}
 		if(summary_report_tahunpembanding1Field.getValue()!==null){summary_report_tahunpembanding1_search=summary_report_tahunpembanding1Field.getValue();}
 		if(summary_report_bulanpembanding2Field.getValue()!==null){summary_report_bulanpembanding2_search=summary_report_bulanpembanding2Field.getValue();}
 		if(summary_report_tahunpembanding2Field.getValue()!==null){summary_report_tahunpembanding2_search=summary_report_tahunpembanding2Field.getValue();}
-		
-		//if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_search=lap_kunjungan_tglEndSearchField.getValue();}
-		//if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_search=lap_kunjungan_umurstartSearchField.getValue();}
-		//if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_search=lap_kunjungan_umurendSearchField.getValue();}	
-		//if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_search_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
-		//if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_search_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
 
 		// change the store parameters
 		summary_reportDataStore.baseParams = {
-			task: 'SEARCH',
+			task: 'INPUT',
 			//variable here
 			summary_report_bulantujuan 		: summary_report_bulantujuan_search,
 			summary_report_tahuntujuan		: summary_report_tahuntujuan_search,
@@ -685,19 +780,6 @@ Ext.onReady(function(){
 			summary_report_tahunpembanding1	: summary_report_tahunpembanding1_search,
 			summary_report_bulanpembanding2	: summary_report_bulanpembanding2_search,
 			summary_report_tahunpembanding2	: summary_report_tahunpembanding2_search,
-			/*
-			lap_kunjungan_id	:	lap_kunjungan_id_search, 
-			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_search,
-			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_search,
-			lap_kunjungan_kelamin : lap_kunjungan_kelamin_search,
-			lap_kunjungan_member : lap_kunjungan_member_search,
-			lap_kunjungan_cust : lap_kunjungan_cust_search,
-			lap_kunjungan_umurstart : lap_kunjungan_umurstart_search,
-			lap_kunjungan_umurend : lap_kunjungan_umurend_search,
-			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_search_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd 
-			//trawat_dokter	:	report_tindakan_dokter_search,
-			*/
 		}
 		/*
 		lap_totalkunjungan_DataStore.baseParams = {
@@ -747,6 +829,54 @@ Ext.onReady(function(){
 			});
 		}
 	}
+	
+	/* Function for action list generate */
+	function summary_report_generate(){
+		// render according to a SQL date format.
+		
+		if(is_summary_report_generateForm_valid())
+		{
+		var summary_report_bulantujuan_Generate=null;
+		var summary_report_tahuntujuan_Generate=null;
+		var summary_report_bulanpembanding1_Generate=null;
+		var summary_report_tahunpembanding1_Generate=null;
+		var summary_report_bulanpembanding2_Generate=null;
+		var summary_report_tahunpembanding2_Generate=null;
+		
+		if(summary_report_bulantujuanGenerateField.getValue()!==null){summary_report_bulantujuan_Generate=summary_report_bulantujuanGenerateField.getValue();}
+		if(summary_report_tahuntujuanGenerateField.getValue()!==null){summary_report_tahuntujuan_Generate=summary_report_tahuntujuanGenerateField.getValue();}
+		if(summary_report_bulanpembanding1GenerateField.getValue()!==null){summary_report_bulanpembanding1_Generate=summary_report_bulanpembanding1GenerateField.getValue();}
+		if(summary_report_tahunpembanding1GenerateField.getValue()!==null){summary_report_tahunpembanding1_Generate=summary_report_tahunpembanding1GenerateField.getValue();}
+		if(summary_report_bulanpembanding2GenerateField.getValue()!==null){summary_report_bulanpembanding2_Generate=summary_report_bulanpembanding2GenerateField.getValue();}
+		if(summary_report_tahunpembanding2GenerateField.getValue()!==null){summary_report_tahunpembanding2_Generate=summary_report_tahunpembanding2GenerateField.getValue();}
+
+		// change the store parameters
+		summary_reportDataStore.baseParams = {
+			task: 'SEARCH',
+			//variable here
+			summary_report_bulantujuan 		: summary_report_bulantujuan_Generate,
+			summary_report_tahuntujuan		: summary_report_tahuntujuan_Generate,
+			summary_report_bulanpembanding1	: summary_report_bulanpembanding1_Generate,
+			summary_report_tahunpembanding1	: summary_report_tahunpembanding1_Generate,
+			summary_report_bulanpembanding2	: summary_report_bulanpembanding2_Generate,
+			summary_report_tahunpembanding2	: summary_report_tahunpembanding2_Generate,
+		}
+		
+		// Cause the datastore to do another query : 
+		summary_reportDataStore.reload({params: {start: 0, limit: 31}});
+		//lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: 31}});
+		//lap_average_kunjungan_DataStore.reload({params: {start: 0, limit: 31}});
+		}
+		else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Tanggal belum diisi',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
 		
 	/* Field for search */
 	/* Identify  lap_kunjungan_id Search Field */
@@ -765,151 +895,7 @@ Ext.onReady(function(){
 
 	var dt = new Date(); 
 	
-	/* Identify  lap_kunjungan_kelamin Field */
-	/*
-	lap_kunjungan_kelaminSearchField= new Ext.form.ComboBox({
-		id: 'lap_kunjungan_kelaminSearchField',
-		fieldLabel: 'Jenis Kelamin',
-		store:new Ext.data.SimpleStore({
-			fields:['lap_kunjungan_kelamin_value', 'lap_kunjungan_kelamin_display'],
-			data:[['L','Laki-laki'],['P','Perempuan'],['S','Semua']]
-		}),
-		mode: 'local',
-		blankText:'Semua',
-		displayField: 'lap_kunjungan_kelamin_display',
-		valueField: 'lap_kunjungan_kelamin_value',
-		anchor: '95%',
-		triggerAction: 'all'	
-	});
-	*/
-	
-	/* Identify  lap_kunjungan_member Field */
-	/*
-	lap_kunjungan_memberSearchField= new Ext.form.ComboBox({
-		id: 'lap_kunjungan_memberSearchField',
-		fieldLabel: 'Member',
-		maxLength: 50,
-		store:new Ext.data.SimpleStore({
-			fields:['lap_kunjungan_member_value', 'lap_kunjungan_member_display'],
-			data: [['Lama','Lama'],['Baru','Baru'],['Non Member','Non Member'],['Semua','Semua']]
-		}),
-		mode: 'local',
-		displayField: 'lap_kunjungan_member_display',
-		valueField: 'lap_kunjungan_member_value',
-		anchor: '95%',
-		triggerAction: 'all'
-	});
-	*/
-	
-	/*
-	lap_kunjungan_tgllahirSearchField= new Ext.form.DateField({
-		id: 'lap_kunjungan_tgllahirSearchField',
-		fieldLabel : 'Antara Tanggal',
-		format: 'd-m-Y'
-	});
-	
-	lap_kunjungan_tgllahirSearchFieldEnd= new Ext.form.DateField({
-		fieldLabel: 's/d',
-		id: 'lap_kunjungan_tgllahirSearchFieldEnd',
-		format: 'd-m-Y'
-	});
-	*/
-	
-	/*
-	lap_kunjungan_tanggal_opsiSearchField=new Ext.form.FieldSet({
-		id:'lap_kunjungan_tanggal_opsiSearchField',
-		title: 'Tanggal Lahir',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		anchor: '95%',
-		items:[{
-				layout: 'column',
-				border: false,
-				items:[{
-					   		layout: 'form',
-							border: false,
-							bodyStyle:'padding:3px',
-							items:[lap_kunjungan_tgllahirSearchField]
-					   },{
-					   		layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
-							items:[lap_kunjungan_tgllahirSearchFieldEnd]
-					   }]
-			}]
-	});
-	*/
-	
-	/* Identify  umur Field */
-	/*
-	lap_kunjungan_umurstartSearchField= new Ext.form.TextField({
-		id: 'lap_kunjungan_umurstartSearchField',
-		fieldLabel: 'Umur',
-		maxLength: 10,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	});
-	*/
-	/* Identify  batas umur Field */
-	/*
-	lap_kunjungan_umurendSearchField= new Ext.form.TextField({
-		id: 'lap_kunjungan_umurendSearchField',
-		//fieldLabel: 'Telp. Rumah 2',
-		hideLabel:true,
-		maxLength: 10,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	});
-	*/
-	/*
-	lap_kunjungan_label_umurSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
-	lap_kunjungan_label_thncustSearchField=new Ext.form.Label({ html: ' &nbsp; tahun'});
-	lap_kunjungan_umur_groupSearch = new Ext.form.FieldSet({
-		title: 'Umur',
-		labelWidth: 100,
-		anchor: '95%',
-		layout:'column',
-		items: [lap_kunjungan_umurstartSearchField, lap_kunjungan_label_umurSearchField, lap_kunjungan_umurendSearchField,lap_kunjungan_label_thncustSearchField]
-
-	});
-	*/
-	
-	/* Identify  lap_kunjungan_cust Field */
-	/*
-	lap_kunjungan_custSearchField= new Ext.form.ComboBox({
-		id: 'lap_kunjungan_custSearchField',
-		fieldLabel: 'Customer',
-		maxLength: 50,
-		store:new Ext.data.SimpleStore({
-			fields:['lap_kunjungan_cust_value', 'lap_kunjungan_cust_display'],
-			data: [['Lama','Lama'],['Baru','Baru'],['Semua','Semua']]
-		}),
-		mode: 'local',
-		displayField: 'lap_kunjungan_cust_display',
-		valueField: 'lap_kunjungan_cust_value',
-		anchor: '95%',
-		triggerAction: 'all'
-	});
-	*/
-	
-	////
-	/*
-	lap_kunjungan_tglStartSearchField= new Ext.form.DateField({
-		id: 'lap_kunjungan_tglStartSearchField',
-		fieldLabel : 'Antara Tanggal',
-		format: 'd-m-Y'
-	});
-	*/
-	/*
-	lap_kunjungan_tglEndSearchField= new Ext.form.DateField({
-		fieldLabel: 's/d',
-		id: 'lap_kunjungan_tglEndSearchField',
-		format: 'd-m-Y'
-	});
-	*/
-	
+	// Field2 Input Data
 	summary_report_bulantujuanField=new Ext.form.ComboBox({
 		id:'summary_report_bulantujuanField',
 		fieldLabel:'Bulan Tujuan',
@@ -998,7 +984,100 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'
 	});
+	// End of Field2 Input Data
 	
+	// Field2 Generate Data
+	summary_report_bulantujuanGenerateField=new Ext.form.ComboBox({
+		id:'summary_report_bulantujuanGenerateField',
+		fieldLabel:'Bulan Tujuan',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	summary_report_tahuntujuanGenerateField=new Ext.form.ComboBox({
+		id:'summary_report_tahuntujuanGenerateField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	summary_report_bulanpembanding1GenerateField=new Ext.form.ComboBox({
+		id:'summary_report_bulanpembanding1GenerateField',
+		fieldLabel:'Bulan Pembanding 1',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	summary_report_tahunpembanding1GenerateField=new Ext.form.ComboBox({
+		id:'summary_report_tahunpembanding1GenerateField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	summary_report_bulanpembanding2GenerateField=new Ext.form.ComboBox({
+		id:'summary_report_bulanpembanding2GenerateField',
+		fieldLabel:'Bulan Pembanding 2',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	summary_report_tahunpembanding2GenerateField=new Ext.form.ComboBox({
+		id:'summary_report_tahunpembanding2GenerateField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	// End of Field2 Generate Data
+	
+	// FieldSet Input Data
 	summary_report_bulanSearchField=new Ext.form.FieldSet({
 		id:'summary_report_bulanSearchField',
 		title: 'Bulan Summary Report',
@@ -1056,44 +1135,76 @@ Ext.onReady(function(){
 							labelSeparator: ' ', 
 							items:[summary_report_tahunpembanding2Field]
 					   }]
-				}
-				/*
-				layout: 'form',
+				}			   
+			]
+	});
+	// End of FieldSet Input Data 
+	
+	// FieldSer Generate
+	summary_report_bulanGenerateField=new Ext.form.FieldSet({
+		id:'summary_report_bulanGenerateField',
+		title: 'Bulan Summary Report',
+		layout: 'form',
+		boduStyle: 'padding: 5px;',
+		anchor: '100%',
+		items:[{
+				layout: 'column',
 				border: false,
-				items:[ summary_report_bulantujuanField, summary_report_tahuntujuanField, summary_report_bulanpembanding1Field, summary_report_bulanpembanding2Field
-					   
-							layout: 'form',
-							border: false,
-							//labelWidth: 15,
-							bodyStyle:'padding:3px',
-							//items:[lap_kunjungan_tglStartSearchField summary_report_bulantujuanField]
-							items:[summary_report_bulantujuanField, summary_report_bulanpembanding1Field]
-					   }
-					   ,{
+				items:[{
 					   		layout: 'form',
 							border: false,
-							labelWidth: 15,
+							labelWidth: 90,
 							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
-							//items:[lap_kunjungan_tglEndSearchField summary_report_bulanpembanding1Field]
-							items:[summary_report_bulanpembanding1Field]
+							items:[summary_report_bulantujuanGenerateField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
-							//items:[lap_kunjungan_tglEndSearchField summary_report_bulanpembanding2Field]
-							items:[summary_report_bulanpembanding2Field]
-					   }*/
-					   
+							items:[summary_report_tahuntujuanGenerateField]
+					   }]
+				},{
+				layout: 'column',
+				border: false,
+				items:[{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 90,
+							bodyStyle:'padding:3px',
+							items:[summary_report_bulanpembanding1GenerateField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[summary_report_tahunpembanding1GenerateField]
+					   }]
+				},{
+				layout: 'column',
+				border: false,
+				items:[{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 90,
+							bodyStyle:'padding:3px',
+							items:[summary_report_bulanpembanding2GenerateField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[summary_report_tahunpembanding2GenerateField]
+					   }]
+				}			   
 			]
 	});
 	
-	//////
 	
 	/* Function for retrieve search Form Panel */
-	lap_kunjungan_searchForm = new Ext.FormPanel({
+	summary_report_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -1126,7 +1237,7 @@ Ext.onReady(function(){
 		}]
 		,
 		buttons: [{
-				text: 'Search',
+				text: 'Input',
 				handler: summary_report_search
 			},{
 				text: 'Close',
@@ -1137,18 +1248,54 @@ Ext.onReady(function(){
 		]
 	});
     /* End of Function */ 
+	
+	/* Function for retrieve search Form Panel */
+	summary_report_GenerateForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 450,        
+		items: [{
+			layout:'column',
+			border:false,
+			items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [
+				        {
+						layout:'column',
+						border:false,
+						items:[
+				        {
+							columnWidth:1,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [summary_report_bulanGenerateField]
+							/*lap_kunjungan_kelaminSearchField,lap_kunjungan_memberSearchField,lap_kunjungan_custSearchField, lap_kunjungan_tanggal_opsiSearchField,lap_kunjungan_umur_groupSearch] 
+							*/
+						}]}
+						] 
+			}
+			]
+		}]
+		,
+		buttons: [{
+				text: 'Generate',
+				handler: summary_report_generate
+			},{
+				text: 'Close',
+				handler: function(){
+					summary_report_GenerateWindow.hide();
+				}
+			}
+		]
+	});
+    /* End of Function */ 
     
 	function summary_report_reset_formSearch(){
-		//lap_kunjungan_idSearchField.reset();
-		//lap_kunjungan_kelaminSearchField.reset();
-		//lap_kunjungan_kelaminSearchField.setValue('S');
-		//lap_kunjungan_memberSearchField.reset();
-		//lap_kunjungan_memberSearchField.setValue('Semua');
-		//lap_kunjungan_custSearchField.reset();
-		//lap_kunjungan_custSearchField.setValue('Semua');
-		//lap_kunjungan_idSearchField.setValue(null);
-		//lap_kunjungan_tglStartSearchField.reset();
-		//lap_kunjungan_tglStartSearchField.setValue(null);
 		summary_report_bulantujuanField.reset();
 		summary_report_bulantujuanField.setValue(null);
 		summary_report_tahuntujuanField.reset();
@@ -1163,13 +1310,23 @@ Ext.onReady(function(){
 		summary_report_bulanpembanding2Field.setValue(null);
 		summary_report_bulanpembanding2Field.reset();
 		summary_report_bulanpembanding2Field.setValue(null);
+	}
+	
+	function summary_report_reset_formGenerate(){
+		summary_report_bulantujuanGenerateField.reset();
+		summary_report_bulantujuanGenerateField.setValue(null);
+		summary_report_tahuntujuanGenerateField.reset();
+		summary_report_tahuntujuanGenerateField.setValue(null);
 		
-		//lap_kunjungan_tglEndSearchField.reset();
-		//lap_kunjungan_tglEndSearchField.setValue(today);
-		//lap_kunjungan_umurstartSearchField.reset();
-		//lap_kunjungan_umurendSearchField.reset();
-		//lap_kunjungan_tgllahirSearchField.reset();
-		//lap_kunjungan_tgllahirSearchFieldEnd.reset();
+		summary_report_bulanpembanding1GenerateField.reset();
+		summary_report_bulanpembanding1GenerateField.setValue(null);
+		summary_report_bulanpembanding1GenerateField.reset();
+		summary_report_bulanpembanding1GenerateField.setValue(null);
+		
+		summary_report_bulanpembanding2GenerateField.reset();
+		summary_report_bulanpembanding2GenerateField.setValue(null);
+		summary_report_bulanpembanding2GenerateField.reset();
+		summary_report_bulanpembanding2GenerateField.setValue(null);
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
@@ -1185,9 +1342,26 @@ Ext.onReady(function(){
 		y: 0,
 		modal: true,
 		renderTo: 'elwindow_summary_report_search',
-		items: lap_kunjungan_searchForm
+		items: summary_report_searchForm
 	});
     /* End of Function */ 
+	
+	/* Function for retrieve Generate Summary Report */
+	summary_report_GenerateWindow = new Ext.Window({
+		title: 'Generate Summary Report',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		plain:true,
+		layout: 'fit',
+		x: 0,
+		y: 0,
+		modal: true,
+		renderTo: 'elwindow_summary_report_generate',
+		items: summary_report_GenerateForm
+	});
+    /* End of Function */
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
@@ -1206,17 +1380,42 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	/* Function for Displaying  Search Window Form */
+	function display_form_generate(){
+		if(!summary_report_GenerateWindow.isVisible()){
+			summary_report_reset_formGenerate();
+			summary_report_bulantujuanGenerateField.setValue(thismonth);
+			summary_report_tahuntujuanGenerateField.setValue(thisyear);
+			summary_report_bulanpembanding1GenerateField.setValue(bulanlalu);
+			summary_report_tahunpembanding1GenerateField.setValue(thisyear);
+			summary_report_bulanpembanding2GenerateField.setValue(thismonth);
+			summary_report_tahunpembanding2GenerateField.setValue(tahunlalu);
+			summary_report_GenerateWindow.show();
+		} else {
+			summary_report_GenerateWindow.toFront();
+		}
+	}
+  	/* End Function */
+	
 	/* Function for print List Grid */
-	function lap_kunjungan_print(){
+	function summary_report_print(){
 		var searchquery = "";
-		var trawat_cust_print=null;
-		var trawat_keterangan_print=null;
+		var summary_report_bulantujuan_print=null;
+		var summary_report_tahuntujuan_print=null;
+		var summary_report_bulanpembanding1_print=null;
+		var summary_report_tahunpembanding1_print=null;
+		var summary_report_bulanpembanding2_print=null;
+		var summary_report_tahunpembanding2_print=null;
 		var win;              
 		// check if we do have some search data...
-		if(summary_reportDataStore.baseParams.query!==null){searchquery = summary_reportDataStore.baseParams.query;}
-		if(summary_reportDataStore.baseParams.trawat_cust!==null){trawat_cust_print = summary_reportDataStore.baseParams.trawat_cust;}
-		if(summary_reportDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = summary_reportDataStore.baseParams.trawat_keterangan;}
 
+		if(summary_reportDataStore.baseParams.query!==null){searchquery = summary_reportDataStore.baseParams.query;}
+		if(summary_reportDataStore.baseParams.summary_report_bulantujuan!==null){summary_report_bulantujuan_print = summary_reportDataStore.baseParams.summary_report_bulantujuan;}
+		if(summary_reportDataStore.baseParams.summary_report_tahuntujuan!==null){summary_report_tahuntujuan_print = summary_reportDataStore.baseParams.summary_report_tahuntujuan;}
+		if(summary_reportDataStore.baseParams.summary_report_bulanpembanding1!==null){summary_report_bulanpembanding1_print = summary_reportDataStore.baseParams.summary_report_bulanpembanding1;}
+		if(summary_reportDataStore.baseParams.summary_report_tahunpembanding1!==null){summary_report_tahunpembanding1_print = summary_reportDataStore.baseParams.summary_report_tahunpembanding1;}
+		if(summary_reportDataStore.baseParams.summary_report_bulanpembanding2!==null){summary_report_bulanpembanding2_print = summary_reportDataStore.baseParams.summary_report_bulanpembanding2;}
+		if(summary_reportDataStore.baseParams.summary_report_tahunpembanding2!==null){summary_report_tahunpembanding2_print = summary_reportDataStore.baseParams.summary_report_tahunpembanding2;}
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_summary_report&m=get_action',
@@ -1224,8 +1423,12 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			summary_report_bulantujuan 		: summary_report_bulantujuan_print,
+			summary_report_tahuntujuan		: summary_report_tahuntujuan_print,
+			summary_report_bulanpembanding1	: summary_report_bulanpembanding1_print,
+			summary_report_tahunpembanding1	: summary_report_tahunpembanding1_print,
+			summary_report_bulanpembanding2	: summary_report_bulanpembanding2_print,
+			summary_report_tahunpembanding2	: summary_report_tahunpembanding2_print,
 		  	currentlisting: summary_reportDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -1324,6 +1527,7 @@ Ext.onReady(function(){
 		 <div id="fp_dlap_kunjungan"></div>
 		<div id="elwindow_lap_kunjungan_create"></div>
         <div id="elwindow_summary_report_search"></div>
+		<div id="elwindow_summary_report_generate"></div>
     </div>
 </div>
 </body>

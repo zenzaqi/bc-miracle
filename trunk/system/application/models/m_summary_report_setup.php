@@ -398,6 +398,116 @@ class M_summary_report_setup extends Model{
 				"setsr_date_create"=>date('Y-m-d H:i:s')
 			);
 			$this->db->insert('sr_setup', $data12);
+			
+			$data13 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Jum Hari',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data13);
+			
+			$data14 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'NS Bulan (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data14);
+			
+			$data15 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'NS Periode (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data15);
+			
+			$data16 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'NS Tahun (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data16);
+			
+			$data17 = array(
+				"setsr_id"=>$setsr_id,
+				"setsr_cabang"=>$setsr_cabang,
+				"setsr_tahun"=>$setsr_tahun,
+				"setsr_jenis"=>'Spending (Rp)',
+				"setsr_jan"=>$setsr_jan,
+				"setsr_feb"=>$setsr_feb,
+				"setsr_mar"=>$setsr_mar,
+				"setsr_apr"=>$setsr_apr,
+				"setsr_may"=>$setsr_may,
+				"setsr_jun"=>$setsr_jun,
+				"setsr_jul"=>$setsr_jul,
+				"setsr_aug"=>$setsr_aug,
+				"setsr_sep"=>$setsr_sep,
+				"setsr_oct"=>$setsr_oct,
+				"setsr_nov"=>$setsr_nov,
+				"setsr_dec"=>$setsr_dec,
+				"setsr_author"=>$_SESSION[SESSION_USERID],
+				"setsr_date_create"=>date('Y-m-d H:i:s')
+			);
+			$this->db->insert('sr_setup', $data17);
 				
 				
 			}

@@ -3,11 +3,11 @@
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
 	
-	+ Module  		: outbox View
+	+ Module  		: sent_item View
 	+ Description	: For record view
-	+ Filename 		: v_outbox.php
- 	+ creator  		: 
- 	+ Created on 01/Feb/2010 14:30:05
+	+ Filename 		: v_sent_item.php
+ 	+ creator  		: Natalie
+ 	+ Created on 20/Apr/2011 14:17
 	
 */
 ?>
@@ -44,15 +44,15 @@
     </style>
 <script>
 /* declare function */		
-var outbox_DataStore;
-var outbox_ColumnModel;
-var outboxListEditorGrid;
-var outbox_saveForm;
-var outbox_saveWindow;
-var outbox_searchForm;
-var outbox_searchWindow;
-var outbox_SelectedRow;
-var outbox_ContextMenu;
+var sent_item_DataStore;
+var sent_item_ColumnModel;
+var sent_itemListEditorGrid;
+var sent_item_saveForm;
+var sent_item_saveWindow;
+var sent_item_searchForm;
+var sent_item_searchWindow;
+var sent_item_SelectedRow;
+var sent_item_ContextMenu;
 
 //declare konstant
 var post2db = '';
@@ -60,47 +60,47 @@ var msg = '';
 var pageS=15;
 
 /* declare variable here for Field*/
-var outbox_idField;
-var outbox_destinationField;
-var outbox_messageField;
-var outbox_dateField;
-var outbox_idSearchField;
-var outbox_destinationSearchField;
-var outbox_messageSearchField;
-var outbox_dateSearchField;
+var sent_item_idField;
+var sent_item_destinationField;
+var sent_item_messageField;
+var sent_item_dateField;
+var sent_item_idSearchField;
+var sent_item_destinationSearchField;
+var sent_item_messageSearchField;
+var sent_item_dateSearchField;
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
   
   	/* Function for Saving inLine Editing */
-	function outbox_inline_update(oGrid_event){
-		var outbox_id_update_pk="";
-		var outbox_destination_update=null;
-		var outbox_message_update=null;
-		var outbox_date_update_date="";
+	/*function sent_item_inline_update(oGrid_event){
+		var sent_item_id_update_pk="";
+		var sent_item_destination_update=null;
+		var sent_item_message_update=null;
+		var sent_item_date_update_date="";
 
-		outbox_id_update_pk = oGrid_event.record.data.ID;
-		if(oGrid_event.record.data.outbox_destination!== null){outbox_destination_update = oGrid_event.record.data.outbox_destination;}
-		if(oGrid_event.record.data.outbox_message!== null){outbox_message_update = oGrid_event.record.data.outbox_message;}
-	 	if(oGrid_event.record.data.outbox_date!== ""){outbox_date_update_date =oGrid_event.record.data.outbox_date.format('Y-m-d');}
+		sent_item_id_update_pk = oGrid_event.record.data.ID;
+		if(oGrid_event.record.data.DestinationNumber!== null){sent_item_destination_update = oGrid_event.record.data.DestinationNumber;}
+		if(oGrid_event.record.data.TextDecoded!== null){sent_item_message_update = oGrid_event.record.data.TextDecoded;}
+	 	if(oGrid_event.record.data.SendingDateTime!== ""){sent_item_date_update_date =oGrid_event.record.data.SendingDateTime.format('Y-m-d H:i:s');}
 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_outbox&m=get_action',
+			url: 'index.php?c=c_sent_item&m=get_action',
 			params: {
-				ID	: outbox_id_update_pk, 
-				outbox_destination	:outbox_destination_update,
-				outbox_message	:outbox_message_update,
-				outbox_date	: outbox_date_update_date, 
+				ID	: sent_item_id_update_pk, 
+				DestinationNumber	:sent_item_destination_update,
+				TextDecoded	:sent_item_message_update,
+				SendingDateTime	: sent_item_date_update_date, 
 				task: "UPDATE"
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						outbox_DataStore.commitChanges();
-						outbox_DataStore.reload();
+						sent_item_DataStore.commitChanges();
+						sent_item_DataStore.reload();
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -124,31 +124,31 @@ Ext.onReady(function(){
 				});	
 			}									    
 		});   
-	}
+	}*/
   	/* End of Function */
   
   	/* Function for add and edit data form, open window form */
-	function outbox_save(){
+	function sent_item_save(){
 	
-		if(is_outbox_form_valid()){	
-			var outbox_id_field_pk=null; 
-			var outbox_destination_field=null; 
-			var outbox_message_field=null; 
-			var outbox_date_field_date=""; 
+		if(is_sent_item_form_valid()){	
+			var sent_item_id_field_pk=null; 
+			var sent_item_destination_field=null; 
+			var sent_item_message_field=null; 
+			var sent_item_date_field_date=""; 
 
-			outbox_id_field_pk=get_pk_id();
-			if(outbox_destinationField.getValue()!== null){outbox_destination_field = outbox_destinationField.getValue();} 
-			if(outbox_messageField.getValue()!== null){outbox_message_field = outbox_messageField.getValue();} 
-			if(outbox_dateField.getValue()!== ""){outbox_date_field_date = outbox_dateField.getValue().format('Y-m-d');} 
+			sent_item_id_field_pk=get_pk_id();
+			if(sent_item_destinationField.getValue()!== null){sent_item_destination_field = sent_item_destinationField.getValue();} 
+			if(sent_item_messageField.getValue()!== null){sent_item_message_field = sent_item_messageField.getValue();} 
+			if(sent_item_dateField.getValue()!== ""){sent_item_date_field_date = sent_item_dateField.getValue().format('Y-m-d H:i:s');} 
 
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_outbox&m=get_action',
+				url: 'index.php?c=c_sent_item&m=get_action',
 				params: {
-					ID	: outbox_id_field_pk, 
-					outbox_destination	: outbox_destination_field, 
-					outbox_message	: outbox_message_field, 
-					outbox_date	: outbox_date_field_date, 
+					ID	: sent_item_id_field_pk, 
+					DestinationNumber	: sent_item_destination_field, 
+					TextDecoded	: sent_item_message_field, 
+					SendingDateTime	: sent_item_date_field_date, 
 					task: post2db
 				}, 
 				success: function(response){             
@@ -156,8 +156,8 @@ Ext.onReady(function(){
 					switch(result){
 						case 1:
 							Ext.MessageBox.alert(post2db+' OK','The Outbox was '+post2db+' successfully.');
-							outbox_DataStore.reload();
-							outbox_saveWindow.hide();
+							sent_item_DataStore.reload();
+							sent_item_saveWindow.hide();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -197,57 +197,57 @@ Ext.onReady(function(){
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
-			return outboxListEditorGrid.getSelectionModel().getSelected().get('ID');
+			return sent_itemListEditorGrid.getSelectionModel().getSelected().get('ID');
 		else 
 			return 0;
 	}
 	/* End of Function  */
 	
 	/* Reset form before loading */
-	function outbox_reset_form(){
-		outbox_destinationField.reset();
-		outbox_destinationField.setValue(null);
-		outbox_messageField.reset();
-		outbox_messageField.setValue(null);
-		outbox_dateField.reset();
-		outbox_dateField.setValue(null);
+	function sent_item_reset_form(){
+		sent_item_destinationField.reset();
+		sent_item_destinationField.setValue(null);
+		sent_item_messageField.reset();
+		sent_item_messageField.setValue(null);
+		sent_item_dateField.reset();
+		sent_item_dateField.setValue(null);
 	}
  	/* End of Function */
   
 	/* setValue to EDIT */
-	function outbox_set_form(){
-		outbox_destinationField.setValue(outboxListEditorGrid.getSelectionModel().getSelected().get('outbox_destination'));
-		outbox_messageField.setValue(outboxListEditorGrid.getSelectionModel().getSelected().get('outbox_message'));
-		outbox_dateField.setValue(outboxListEditorGrid.getSelectionModel().getSelected().get('outbox_date'));
+	function sent_item_set_form(){
+		sent_item_destinationField.setValue(sent_itemListEditorGrid.getSelectionModel().getSelected().get('DestinationNumber'));
+		sent_item_messageField.setValue(sent_itemListEditorGrid.getSelectionModel().getSelected().get('TextDecoded'));
+		sent_item_dateField.setValue(sent_itemListEditorGrid.getSelectionModel().getSelected().get('SendingDateTime'));
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
-	function is_outbox_form_valid(){
+	function is_sent_item_form_valid(){
 		return (true );
 	}
   	/* End of Function */
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
-		if(!outbox_saveWindow.isVisible()){
-			outbox_reset_form();
+		if(!sent_item_saveWindow.isVisible()){
+			sent_item_reset_form();
 			post2db='CREATE';
 			msg='created';
-			outbox_saveWindow.show();
+			sent_item_saveWindow.show();
 		} else {
-			outbox_saveWindow.toFront();
+			sent_item_saveWindow.toFront();
 		}
 	}
   	/* End of Function */
  
   	/* Function for Delete Confirm */
-	function outbox_confirm_delete(){
-		// only one outbox is selected here
-		if(outboxListEditorGrid.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', outbox_delete);
-		} else if(outboxListEditorGrid.selModel.getCount() > 1){
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', outbox_delete);
+	function sent_item_confirm_delete(){
+		// only one sent_item is selected here
+		if(sent_itemListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', sent_item_delete);
+		} else if(sent_itemListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', sent_item_delete);
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -259,20 +259,20 @@ Ext.onReady(function(){
 		}
 	}
 
-	function outbox_confirm_delete_all(){
-		// only one outbox is selected here
-			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus semua data?', outbox_delete_all);
+	function sent_item_confirm_delete_all(){
+		// only one sent_item is selected here
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus semua data?', sent_item_delete_all);
 	}
   	/* End of Function */
   
 	/* Function for Update Confirm */
-	function outbox_confirm_update(){
+	function sent_item_confirm_update(){
 		/* only one record is selected here */
-		if(outboxListEditorGrid.selModel.getCount() == 1) {
-			outbox_set_form();
+		if(sent_itemListEditorGrid.selModel.getCount() == 1) {
+			sent_item_set_form();
 			post2db='UPDATE';
 			msg='updated';
-			outbox_saveWindow.show();
+			sent_item_saveWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -286,23 +286,23 @@ Ext.onReady(function(){
   	/* End of Function */
   
   	/* Function for Delete Record */
-	function outbox_delete(btn){
+	function sent_item_delete(btn){
 		if(btn=='yes'){
-			var selections = outboxListEditorGrid.selModel.getSelections();
+			var selections = sent_itemListEditorGrid.selModel.getSelections();
 			var prez = [];
-			for(i = 0; i< outboxListEditorGrid.selModel.getCount(); i++){
+			for(i = 0; i< sent_itemListEditorGrid.selModel.getCount(); i++){
 				prez.push(selections[i].json.ID);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
 				waitMsg: 'Mohon tunggu',
-				url: 'index.php?c=c_outbox&m=get_action', 
+				url: 'index.php?c=c_sent_item&m=get_action', 
 				params: { task: "DELETE", ids:  encoded_array }, 
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:  // Success : simply reload
-							outbox_DataStore.reload();
+							sent_item_DataStore.reload();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -329,17 +329,17 @@ Ext.onReady(function(){
 		}  
 	}
 
-	function outbox_delete_all(btn){
+	function sent_item_delete_all(btn){
 		if(btn=='yes'){
 			Ext.Ajax.request({ 
 				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_outbox&m=get_action', 
+				url: 'index.php?c=c_sent_item&m=get_action', 
 				params: { task: "DELETE ALL" }, 
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:  // Success : simply reload
-							outbox_DataStore.reload();
+							sent_item_DataStore.reload();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -369,39 +369,38 @@ Ext.onReady(function(){
   	/* End of Function */
   
   /* Identify status unsent*/
-	outbox_status_unsentField=new Ext.form.TextField({
-		id: 'outbox_status_unsentField',
-		name: 'outbox_status_unsentField',
+	/*sent_item_status_unsentField=new Ext.form.TextField({
+		id: 'sent_item_status_unsentField',
+		name: 'sent_item_status_unsentField',
 		fieldLabel: '<b>Unsent</b>',
 		width: 60,
 		readOnly: true
-	});
+	});*/
 	
 	/* Identify status sent*/
-	outbox_status_sentField=new Ext.form.TextField({
-		id: 'outbox_status_sentField',
-		//name: 'outbox_status_sentField',
+/*	sent_item_status_sentField=new Ext.form.TextField({
+		id: 'sent_item_status_sentField',
+		//name: 'sent_item_status_sentField',
 		fieldLabel: '<b>Sent</b>',
 		width: 60,
 		readOnly: true
-	});
+	});*/
 	
 	/* Identify status failed*/
-	outbox_status_failedField=new Ext.form.TextField({
-		id: 'outbox_status_failedField',
-		name: 'outbox_status_failedField',
+/*	sent_item_status_failedField=new Ext.form.TextField({
+		id: 'sent_item_status_failedField',
+		name: 'sent_item_status_failedField',
 		fieldLabel: '<b>Failed</b>',
 		width: 60,
 		readOnly: true
-	});
-  
+	});*/
   
 
 /* Function for Retrieve DataStore */
-	outbox_DataStore = new Ext.data.Store({
-		id: 'outbox_DataStore',
+	sent_item_DataStore = new Ext.data.Store({
+		id: 'sent_item_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_outbox&m=get_action', 
+			url: 'index.php?c=c_sent_item&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "LIST", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
@@ -410,28 +409,29 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'ID'
 		},[
-		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+		/* dataIndex => insert intosent_item_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'ID', type: 'int', mapping: 'ID'}, 
-			{name: 'outbox_cust_no', type: 'string', mapping: 'cust_no'},
-			{name: 'outbox_cust_nama', type: 'string', mapping: 'cust_nama'},
-			{name: 'outbox_destination', type: 'string', mapping: 'outbox_destination'}, 
-			{name: 'outbox_message', type: 'string', mapping: 'outbox_message'}, 
-			{name: 'outbox_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date'}, 
-			{name: 'outbox_status', type: 'string', mapping: 'outbox_status'}, 
-			{name: 'outbox_creator', type: 'string', mapping: 'outbox_creator'}, 
-			{name: 'outbox_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date_create'}, 
-			{name: 'outbox_update', type: 'string', mapping: 'outbox_update'}, 
-			{name: 'outbox_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'outbox_date_update'}, 
-			{name: 'outbox_revised', type: 'int', mapping: 'outbox_revised'} 
+			{name: 'sent_item_cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'sent_item_cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'DestinationNumber', type: 'string', mapping: 'DestinationNumber'}, 
+			{name: 'TextDecoded', type: 'string', mapping: 'TextDecoded'}, 
+			{name: 'SendingDateTime', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'SendingDateTime'},
+			{name: 'sent_item_status', type: 'string', mapping: 'sent_item_status'}, 
+			{name: 'sent_item_creator', type: 'string', mapping: 'sent_item_creator'}, 
+			{name: 'sent_item_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'sent_item_date_create'}, 
+			{name: 'sent_item_update', type: 'string', mapping: 'sent_item_update'}, 
+			{name: 'sent_item_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'sent_item_date_update'}, 
+			{name: 'sent_item_revised', type: 'int', mapping: 'sent_item_revised'},
+			{name: 'Status', type: 'string', mapping: 'Status'}
 		]),
-//		sortInfo:{field: 'ID', direction: "DESC"}
+		sortInfo:{field: 'SendingDateTime', direction: "DESC"}
 	});
 	
 	/* Function for Retrieve DataStore */
-	outbox_status_sentDataStore = new Ext.data.Store({
-		id: 'outbox_status_sentDataStore',
+	sent_item_status_sentDataStore = new Ext.data.Store({
+		id: 'sent_item_status_sentDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_outbox&m=get_action', 
+			url: 'index.php?c=c_sent_item&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "STATUS_SENT", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
@@ -440,7 +440,7 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: ''
 		},[
-		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+		/* dataIndex => insert intosent_item_ColumnModel, Mapping => for initiate table column */ 
 			//{name: 'ID', type: 'int', mapping: 'ID'}, 
 			{name: 'status_sent', type: 'int', mapping: 'status_sent'}
 		])
@@ -448,10 +448,10 @@ Ext.onReady(function(){
 	
 	
 	/* Function for Retrieve DataStore */
-	outbox_status_unsentDataStore = new Ext.data.Store({
-		id: 'outbox_status_unsentDataStore',
+	sent_item_status_unsentDataStore = new Ext.data.Store({
+		id: 'sent_item_status_unsentDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_outbox&m=get_action', 
+			url: 'index.php?c=c_sent_item&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "STATUS_UNSENT", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
@@ -460,17 +460,17 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: ''
 		},[
-		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+		/* dataIndex => insert intosent_item_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'status_unsent', type: 'int', mapping: 'status_unsent'}
 		])
 	});
 	
 	
 	/* Function for Retrieve DataStore */
-	outbox_status_failedDataStore = new Ext.data.Store({
-		id: 'outbox_status_failedDataStore',
+	sent_item_status_failedDataStore = new Ext.data.Store({
+		id: 'sent_item_status_failedDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_outbox&m=get_action', 
+			url: 'index.php?c=c_sent_item&m=get_action', 
 			method: 'POST'
 		}),
 		baseParams:{task: "STATUS_FAILED", start:0, limit:pageS}, // parameter yang di $_POST ke Controller
@@ -479,13 +479,13 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: ''
 		},[
-		/* dataIndex => insert intooutbox_ColumnModel, Mapping => for initiate table column */ 
+		/* dataIndex => insert intosent_item_ColumnModel, Mapping => for initiate table column */ 
 			{name: 'status_failed', type: 'int', mapping: 'status_failed'}
 		])
 	});
 	
   	/* Function for Identify of Window Column Model */
-	outbox_ColumnModel = new Ext.grid.ColumnModel(
+	sent_item_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
 			readOnly: true,
@@ -499,58 +499,51 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">Tanggal Kirim</div>',
-			dataIndex: 'outbox_date',
+			dataIndex: 'SendingDateTime',
 			width: 60,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
 			readOnly: true
 		},
 		{
 			header: '<div align="center">Isi Pesan</div>',
-			dataIndex: 'outbox_message',
+			dataIndex: 'TextDecoded',
 			width: 300,
 			sortable: true,
 			readOnly: true
 		}, 
-		{
+	/*	{
 			header: '<div align="center">No Cust</div>',
-			dataIndex: 'outbox_cust_no',
+			dataIndex: 'sent_item_cust_no',
 			width: 60,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Customer</div>',
-			dataIndex: 'outbox_cust_nama',
+			dataIndex: 'sent_item_cust_nama',
 			width: 160,
 			sortable: true,
 			readOnly: true
-		}, 
+		}*/ 
 		{
 			header: '<div align="center">No HP</div>',
-			dataIndex: 'outbox_destination',
+			dataIndex: 'DestinationNumber',
 			width: 60,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">Status</div>',
-			dataIndex: 'outbox_status',
-			width: 60,
+			header: 'Status',
+			dataIndex: 'Status',
+			width: 50,
 			sortable: true,
+			//hidden: true,
 			readOnly: true
-		}, 
-		{
-			header: 'Creator',
-			dataIndex: 'outbox_creator',
-			width: 150,
-			sortable: true,
-			hidden: true,
-			readOnly: true
-		}, 
+		} /*,
 		{
 			header: 'Create on',
-			dataIndex: 'outbox_date_create',
+			dataIndex: 'sent_item_date_create',
 			width: 150,
 			sortable: true,
 			hidden: true,
@@ -558,7 +551,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Last Update by',
-			dataIndex: 'outbox_update',
+			dataIndex: 'sent_item_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
@@ -566,7 +559,7 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Last Update on',
-			dataIndex: 'outbox_date_update',
+			dataIndex: 'sent_item_date_update',
 			width: 150,
 			sortable: true,
 			hidden: true,
@@ -574,24 +567,24 @@ Ext.onReady(function(){
 		}, 
 		{
 			header: 'Revised',
-			dataIndex: 'outbox_revised',
+			dataIndex: 'sent_item_revised',
 			width: 150,
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}	]);
+		}	*/]);
 	
-	outbox_ColumnModel.defaultSortable= true;
+	sent_item_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
-	outboxListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'outboxListEditorGrid',
-		el: 'fp_outbox',
-		title: 'Outbox',
+	sent_itemListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'sent_itemListEditorGrid',
+		el: 'fp_sent_item',
+		title: 'Sent Item',
 		autoHeight: true,
-		store: outbox_DataStore, // DataStore
-		cm: outbox_ColumnModel, // Nama-nama Columns
+		store: sent_item_DataStore, // DataStore
+		cm: sent_item_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
@@ -600,7 +593,7 @@ Ext.onReady(function(){
 	  	width: 1220,	//700,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
-			store: outbox_DataStore,
+			store: sent_item_DataStore,
 			//handler : load_status_all(),
 			displayInfo: true
 		}),
@@ -610,12 +603,12 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			handler: outbox_confirm_delete   // Confirm before deleting
+			handler: sent_item_confirm_delete   // Confirm before deleting
 		}, '-', {
 			text: 'Delete All',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			handler: outbox_confirm_delete_all   // Confirm before deleting
+			handler: sent_item_confirm_delete_all   // Confirm before deleting
 		}, '-', {
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
@@ -623,149 +616,149 @@ Ext.onReady(function(){
 			handler: display_form_search_window 
 		}, '-', 
 			new Ext.app.SearchField({
-			store: outbox_DataStore,
+			store: sent_item_DataStore,
 			params: {start: 0, limit: pageS},
 			width: 120
 		}),'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
-			handler: outbox_reset_search,
+			handler: sent_item_reset_search,
 			iconCls:'icon-refresh'
 		},'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: outbox_export_excel
+			handler: sent_item_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: outbox_print  
-		},
+			handler: sent_item_print  
+		}/*,
 		'','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',
 		{
 			'text':'Unsent : '
 		},
-		outbox_status_unsentField,
+		sent_item_status_unsentField,
 		{
 			'text':'Sent : '
 		},
-		outbox_status_sentField,
+		sent_item_status_sentField,
 		{
 			'text':'Failed : '
 		},
-		outbox_status_failedField		
+		sent_item_status_failedField	*/	
 		]
 	});
-	outboxListEditorGrid.render();
+	sent_itemListEditorGrid.render();
 	/* End of DataStore */
      
 	/* Create Context Menu */
-	outbox_ContextMenu = new Ext.menu.Menu({
-		id: 'outbox_ListEditorGridContextMenu',
+	sent_item_ContextMenu = new Ext.menu.Menu({
+		id: 'sent_item_ListEditorGridContextMenu',
 		items: [
 		{ 
 			text: 'Delete', 
 			tooltip: 'Delete selected record', 
 			iconCls:'icon-delete',
-			handler: outbox_confirm_delete 
+			handler: sent_item_confirm_delete 
 		},
 		'-',
 		{ 
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: outbox_print 
+			handler: sent_item_print 
 		},
 		{ 
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: outbox_export_excel 
+			handler: sent_item_export_excel 
 		}
 		]
 	}); 
 	/* End of Declaration */
 	
 	/* Event while selected row via context menu */
-	function onoutbox_ListEditGridContextMenu(grid, rowIndex, e) {
+	function onsent_item_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		outbox_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		sent_item_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
-		outbox_SelectedRow=rowIndex;
-		outbox_ContextMenu.showAt([coords[0], coords[1]]);
+		sent_item_SelectedRow=rowIndex;
+		sent_item_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
 	
 	/* function for editing row via context menu */
-	function outbox_editContextMenu(){
-		//outboxListEditorGrid.startEditing(outbox_SelectedRow,1);
-		outbox_confirm_update();
+	function sent_item_editContextMenu(){
+		//sent_itemListEditorGrid.startEditing(sent_item_SelectedRow,1);
+		sent_item_confirm_update();
   	}
 	/* End of Function */
   	
-	outboxListEditorGrid.addListener('rowcontextmenu', onoutbox_ListEditGridContextMenu);
-	outbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	sent_itemListEditorGrid.addListener('rowcontextmenu', onsent_item_ListEditGridContextMenu);
+	sent_item_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	//load_status_all();
-	outbox_status_sentDataStore.load({
+	/*sent_item_status_sentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
-						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+						auto_status_sent =sent_item_status_sentDataStore.getAt(0).data;
+						sent_item_status_sentField.setValue(auto_status_sent.status_sent);
 				}
 			}
 	});
 	
-	outbox_status_unsentDataStore.load({
+	sent_item_status_unsentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
-						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+						auto_status_unsent =sent_item_status_unsentDataStore.getAt(0).data;
+						sent_item_status_unsentField.setValue(auto_status_unsent.status_unsent);
 				}
 			}
 	});
 	
-	outbox_status_failedDataStore.load({
+	sent_item_status_failedDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
-						outbox_status_failedField.setValue(auto_status_failed.status_failed);
+						auto_status_failed =sent_item_status_failedDataStore.getAt(0).data;
+						sent_item_status_failedField.setValue(auto_status_failed.status_failed);
 				}
 			}
-	});
+	});*/
 					
-	outboxListEditorGrid.on('afteredit', outbox_inline_update); // inLine Editing Record
+	//sent_itemListEditorGrid.on('afteredit', sent_item_inline_update); // inLine Editing Record
 	
-	/* Identify  outbox_destination Field */
-	outbox_destinationField= new Ext.form.TextField({
-		id: 'outbox_destinationField',
-		fieldLabel: 'Destination',
+	/* Identify  sent_item_destination Field */
+	sent_item_destinationField= new Ext.form.TextField({
+		id: 'sent_item_destinationField',
+		fieldLabel: 'No HP',
 		maxLength: 500,
 		anchor: '95%'
 	});
-	/* Identify  outbox_message Field */
-	outbox_messageField= new Ext.form.TextArea({
-		id: 'outbox_messageField',
-		fieldLabel: 'Message',
+	/* Identify  sent_item_message Field */
+	sent_item_messageField= new Ext.form.TextArea({
+		id: 'sent_item_messageField',
+		fieldLabel: 'Isi Pesan',
 		height: 60,
 		grow: false,
 		anchor: '95%'
 	});
-	/* Identify  outbox_date Field */
-	outbox_dateField= new Ext.form.DateField({
-		id: 'outbox_dateField',
-		fieldLabel: 'Date',
-		format : 'Y-m-d'
+	/* Identify  sent_item_date Field */
+	sent_item_dateField= new Ext.form.DateField({
+		id: 'sent_item_dateField',
+		fieldLabel: 'Tanggal Kirim',
+		format : 'Y-m-d H:i:s'
 	});
 	
 	
 
 	/* Function for retrieve create Window Panel*/ 
-	outbox_saveForm = new Ext.FormPanel({
+	sent_item_saveForm = new Ext.FormPanel({
 		labelAlign: 'top',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -775,17 +768,17 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [outbox_destinationField, outbox_messageField, outbox_dateField] 
+				items: [sent_item_destinationField, sent_item_messageField, sent_item_dateField] 
 			}
 			],
 		buttons: [{
 				text: 'Save and Close',
-				handler: outbox_save
+				handler: sent_item_save
 			}
 			,{
 				text: 'Cancel',
 				handler: function(){
-					outbox_saveWindow.hide();
+					sent_item_saveWindow.hide();
 				}
 			}
 		]
@@ -793,9 +786,9 @@ Ext.onReady(function(){
 	/* End  of Function*/
 	
 	/* Function for retrieve create Window Form */
-	outbox_saveWindow= new Ext.Window({
-		id: 'outbox_saveWindow',
-		title: post2db+'Outbox',
+	sent_item_saveWindow= new Ext.Window({
+		id: 'sent_item_saveWindow',
+		title: post2db+'Sent Item',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -805,80 +798,80 @@ Ext.onReady(function(){
 		plain:true,
 		layout: 'fit',
 		modal: true,
-		renderTo: 'elwindow_outbox_save',
-		items: outbox_saveForm
+		renderTo: 'elwindow_sent_item_save',
+		items: sent_item_saveForm
 	});
 	/* End Window */
 	
 	/* Function for action list search */
-	function outbox_list_search(){
+	function sent_item_list_search(){
 		// render according to a SQL date format.
-		var outbox_id_search=null;
-		var outbox_destination_search=null;
-		var outbox_message_search=null;
-		var outbox_date_search_date="";
+		var sent_item_id_search=null;
+		var sent_item_destination_search=null;
+		var sent_item_message_search=null;
+		var sent_item_date_search_date="";
 
-		if(outbox_idSearchField.getValue()!==null){outbox_id_search=outbox_idSearchField.getValue();}
-		if(outbox_destinationSearchField.getValue()!==null){outbox_destination_search=outbox_destinationSearchField.getValue();}
-		if(outbox_messageSearchField.getValue()!==null){outbox_message_search=outbox_messageSearchField.getValue();}
-		if(outbox_dateSearchField.getValue()!==""){outbox_date_search_date=outbox_dateSearchField.getValue().format('Y-m-d');}
+		if(sent_item_idSearchField.getValue()!==null){sent_item_id_search=sent_item_idSearchField.getValue();}
+		if(sent_item_destinationSearchField.getValue()!==null){sent_item_destination_search=sent_item_destinationSearchField.getValue();}
+		if(sent_item_messageSearchField.getValue()!==null){sent_item_message_search=sent_item_messageSearchField.getValue();}
+		if(sent_item_dateSearchField.getValue()!==""){sent_item_date_search_date=sent_item_dateSearchField.getValue().format('Y-m-d');}
 		// change the store parameters
-		outbox_DataStore.baseParams = {
+		sent_item_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			ID	:	outbox_id_search, 
-			outbox_destination	:	outbox_destination_search, 
-			outbox_message	:	outbox_message_search, 
-			outbox_date	:	outbox_date_search_date
+			ID	:	sent_item_id_search, 
+			DestinationNumber	:	sent_item_destination_search, 
+			TextDecoded	:	sent_item_message_search, 
+			SendingDateTime	:	sent_item_date_search_date
 		};
 		// Cause the datastore to do another query : 
-		outbox_DataStore.reload({params: {start: 0, limit: pageS}});
+		sent_item_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
 		
 	/* Function for reset search result */
-	function outbox_reset_search(){
+	function sent_item_reset_search(){
 		// reset the store parameters
-		outbox_DataStore.baseParams = { task: 'LIST' };
+		sent_item_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
-		outbox_DataStore.reload({params: {start: 0, limit: pageS}});
-		outbox_status_sentDataStore.load({
+		sent_item_DataStore.reload({params: {start: 0, limit: pageS}});
+	/*	sent_item_status_sentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
-						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+						auto_status_sent =sent_item_status_sentDataStore.getAt(0).data;
+						sent_item_status_sentField.setValue(auto_status_sent.status_sent);
+				}
+			}
+	})*/;
+	
+	/*sent_item_status_unsentDataStore.load({
+		params : {start: 0, limit: pageS},
+			callback: function(opts, success, response){
+				if (success) {
+						auto_status_unsent =sent_item_status_unsentDataStore.getAt(0).data;
+						sent_item_status_unsentField.setValue(auto_status_unsent.status_unsent);
 				}
 			}
 	});
 	
-	outbox_status_unsentDataStore.load({
+	sent_item_status_failedDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
-						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+						auto_status_failed =sent_item_status_failedDataStore.getAt(0).data;
+						sent_item_status_failedField.setValue(auto_status_failed.status_failed);
 				}
 			}
-	});
-	
-	outbox_status_failedDataStore.load({
-		params : {start: 0, limit: pageS},
-			callback: function(opts, success, response){
-				if (success) {
-						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
-						outbox_status_failedField.setValue(auto_status_failed.status_failed);
-				}
-			}
-	});
+	});*/
 		
-		outbox_searchWindow.close();
+		sent_item_searchWindow.close();
 	};
 	/* End of Fuction */
 	
 	/* Field for search */
-	/* Identify  outbox_id Search Field */
-	outbox_idSearchField= new Ext.form.NumberField({
-		id: 'outbox_idSearchField',
+	/* Identify  sent_item_id Search Field */
+	sent_item_idSearchField= new Ext.form.NumberField({
+		id: 'sent_item_idSearchField',
 		fieldLabel: 'Id',
 		allowNegatife : false,
 		blankText: '0',
@@ -887,32 +880,32 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  outbox_destination Search Field */
-	outbox_destinationSearchField= new Ext.form.TextField({
-		id: 'outbox_destinationSearchField',
-		fieldLabel: 'Destination',
+	/* Identify  sent_item_destination Search Field */
+	sent_item_destinationSearchField= new Ext.form.TextField({
+		id: 'sent_item_destinationSearchField',
+		fieldLabel: 'No HP',
 		maxLength: 500,
 		anchor: '95%'
 	
 	});
-	/* Identify  outbox_message Search Field */
-	outbox_messageSearchField= new Ext.form.TextField({
-		id: 'outbox_messageSearchField',
-		fieldLabel: 'Message',
+	/* Identify  sent_item_message Search Field */
+	sent_item_messageSearchField= new Ext.form.TextField({
+		id: 'sent_item_messageSearchField',
+		fieldLabel: 'Isi Pesan',
 		maxLength: 250,
 		anchor: '95%'
 	
 	});
-	/* Identify  outbox_date Search Field */
-	outbox_dateSearchField= new Ext.form.DateField({
-		id: 'outbox_dateSearchField',
-		fieldLabel: 'Date',
-		format : 'Y-m-d',
+	/* Identify  sent_item_date Search Field */
+	sent_item_dateSearchField= new Ext.form.DateField({
+		id: 'sent_item_dateSearchField',
+		fieldLabel: 'Tanggal Kirim',
+		format : 'Y-m-d H:i:s',
 	
 	});
     
 	/* Function for retrieve search Form Panel */
-	outbox_searchForm = new Ext.FormPanel({
+	sent_item_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
@@ -925,18 +918,18 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [outbox_destinationSearchField, outbox_messageSearchField, outbox_dateSearchField] 
+				items: [sent_item_destinationSearchField, sent_item_messageSearchField, sent_item_dateSearchField] 
 			}
 			]
 		}]
 		,
 		buttons: [{
 				text: 'Search',
-				handler: outbox_list_search
+				handler: sent_item_list_search
 			},{
 				text: 'Close',
 				handler: function(){
-					outbox_searchWindow.hide();
+					sent_item_searchWindow.hide();
 				}
 			}
 		]
@@ -944,8 +937,8 @@ Ext.onReady(function(){
     /* End of Function */ 
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
-	outbox_searchWindow = new Ext.Window({
-		title: 'Outbox Search',
+	sent_item_searchWindow = new Ext.Window({
+		title: 'Sent Item Search',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -955,51 +948,51 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_outbox_search',
-		items: outbox_searchForm
+		renderTo: 'elwindow_sent_item_search',
+		items: sent_item_searchForm
 	});
     /* End of Function */ 
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
-		if(!outbox_searchWindow.isVisible()){
-			outbox_searchWindow.show();
+		if(!sent_item_searchWindow.isVisible()){
+			sent_item_searchWindow.show();
 		} else {
-			outbox_searchWindow.toFront();
+			sent_item_searchWindow.toFront();
 		}
 	}
   	/* End Function */
 	
 	/* Function for print List Grid */
-	function outbox_print(){
+	function sent_item_print(){
 		var searchquery = "";
-		var outbox_destination_print=null;
-		var outbox_message_print=null;
-		var outbox_date_print_date="";
+		var sent_item_destination_print=null;
+		var sent_item_message_print=null;
+		var sent_item_date_print_date="";
 		var win;              
 		// check if we do have some search data...
-		if(outbox_DataStore.baseParams.query!==null){searchquery = outbox_DataStore.baseParams.query;}
-		if(outbox_DataStore.baseParams.outbox_destination!==null){outbox_destination_print = outbox_DataStore.baseParams.outbox_destination;}
-		if(outbox_DataStore.baseParams.outbox_message!==null){outbox_message_print = outbox_DataStore.baseParams.outbox_message;}
-		if(outbox_DataStore.baseParams.outbox_date!==""){outbox_date_print_date = outbox_DataStore.baseParams.outbox_date;}
+		if(sent_item_DataStore.baseParams.query!==null){searchquery = sent_item_DataStore.baseParams.query;}
+		if(sent_item_DataStore.baseParams.DestinationNumber!==null){sent_item_destination_print = sent_item_DataStore.baseParams.DestinationNumber;}
+		if(sent_item_DataStore.baseParams.TextDecoded!==null){sent_item_message_print = sent_item_DataStore.baseParams.TextDecoded;}
+		if(sent_item_DataStore.baseParams.SendingDateTime!==""){sent_item_date_print_date = sent_item_DataStore.baseParams.SendingDateTime;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_outbox&m=get_action',
+		url: 'index.php?c=c_sent_item&m=get_action',
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			outbox_destination : outbox_destination_print,
-			outbox_message : outbox_message_print,
-		  	outbox_date : outbox_date_print_date, 
-		  	currentlisting: outbox_DataStore.baseParams.task // this tells us if we are searching or not
+			DestinationNumber : sent_item_destination_print,
+			TextDecoded : sent_item_message_print,
+		  	SendingDateTime : sent_item_date_print_date, 
+		  	currentlisting: sent_item_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./print/outbox_printlist.html','outboxlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./print/sent_item_printlist.html','sent_itemlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				win.print();
 				break;
 		  	default:
@@ -1028,29 +1021,29 @@ Ext.onReady(function(){
 	/* Enf Function */
 	
 	/* Function for print Export to Excel Grid */
-	function outbox_export_excel(){
+	function sent_item_export_excel(){
 		var searchquery = "";
-		var outbox_destination_2excel=null;
-		var outbox_message_2excel=null;
-		var outbox_date_2excel_date="";
+		var sent_item_destination_2excel=null;
+		var sent_item_message_2excel=null;
+		var sent_item_date_2excel_date="";
 		var win;              
 		// check if we do have some search data...
-		if(outbox_DataStore.baseParams.query!==null){searchquery = outbox_DataStore.baseParams.query;}
-		if(outbox_DataStore.baseParams.outbox_destination!==null){outbox_destination_2excel = outbox_DataStore.baseParams.outbox_destination;}
-		if(outbox_DataStore.baseParams.outbox_message!==null){outbox_message_2excel = outbox_DataStore.baseParams.outbox_message;}
-		if(outbox_DataStore.baseParams.outbox_date!==""){outbox_date_2excel_date = outbox_DataStore.baseParams.outbox_date;}
+		if(sent_item_DataStore.baseParams.query!==null){searchquery = sent_item_DataStore.baseParams.query;}
+		if(sent_item_DataStore.baseParams.DestinationNumber!==null){sent_item_destination_2excel = sent_item_DataStore.baseParams.DestinationNumber;}
+		if(sent_item_DataStore.baseParams.TextDecoded!==null){sent_item_message_2excel = sent_item_DataStore.baseParams.TextDecoded;}
+		if(sent_item_DataStore.baseParams.SendingDateTime!==""){sent_item_date_2excel_date = sent_item_DataStore.baseParams.SendingDateTime;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
-		url: 'index.php?c=c_outbox&m=get_action',
+		url: 'index.php?c=c_sent_item&m=get_action',
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			outbox_destination : outbox_destination_2excel,
-			outbox_message : outbox_message_2excel,
-		  	outbox_date : outbox_date_2excel_date, 
-		  	currentlisting: outbox_DataStore.baseParams.task // this tells us if we are searching or not
+			DestinationNumber : sent_item_destination_2excel,
+			TextDecoded : sent_item_message_2excel,
+		  	SendingDateTime : sent_item_date_2excel_date, 
+		  	currentlisting: sent_item_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1087,33 +1080,33 @@ Ext.onReady(function(){
 	
 	/*
 	function load_status_all(){
-	outbox_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
-	outbox_status_sentDataStore.load({
+	sent_item_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	sent_item_status_sentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_sent =outbox_status_sentDataStore.getAt(0).data;
-						outbox_status_sentField.setValue(auto_status_sent.status_sent);
+						auto_status_sent =sent_item_status_sentDataStore.getAt(0).data;
+						sent_item_status_sentField.setValue(auto_status_sent.status_sent);
 				}
 			}
 	});
 	
-	outbox_status_unsentDataStore.load({
+	sent_item_status_unsentDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_unsent =outbox_status_unsentDataStore.getAt(0).data;
-						outbox_status_unsentField.setValue(auto_status_unsent.status_unsent);
+						auto_status_unsent =sent_item_status_unsentDataStore.getAt(0).data;
+						sent_item_status_unsentField.setValue(auto_status_unsent.status_unsent);
 				}
 			}
 	});
 	
-	outbox_status_failedDataStore.load({
+	sent_item_status_failedDataStore.load({
 		params : {start: 0, limit: pageS},
 			callback: function(opts, success, response){
 				if (success) {
-						auto_status_failed =outbox_status_failedDataStore.getAt(0).data;
-						outbox_status_failedField.setValue(auto_status_failed.status_failed);
+						auto_status_failed =sent_item_status_failedDataStore.getAt(0).data;
+						sent_item_status_failedField.setValue(auto_status_failed.status_failed);
 				}
 			}
 	});
@@ -1126,9 +1119,9 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
-        <div id="fp_outbox"></div>
-		<div id="elwindow_outbox_save"></div>
-        <div id="elwindow_outbox_search"></div>
+        <div id="fp_sent_item"></div>
+		<div id="elwindow_sent_item_save"></div>
+        <div id="elwindow_sent_item_search"></div>
     </div>
 </div>
 </body>

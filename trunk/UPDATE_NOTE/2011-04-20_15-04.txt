@@ -1,2 +1,10 @@
 vcm_outbox-phonegroup,  vc_inbox : penyesuaian sms
-2011-04-20_09-30.sql : creatae tabel u/ sms
+2011-04-20_09-30.sql : create tabel u/ sms
+
+
+README
+1. drop table inbox
+2. drop table outbox
+3. jalanin "2011-04-20_09-30.sql"
+4. jalanin lg "2011-04-20_09-30.sql" bagian "create table inbox"
+4. jalanin lg "2011-04-20_09-30.sql" bagian "create table outbox"
