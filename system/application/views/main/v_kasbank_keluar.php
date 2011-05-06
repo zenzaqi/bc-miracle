@@ -130,7 +130,7 @@ Ext.onReady(function(){
 				if(kasbank_keluar_nobuktiField.getValue()!== null){kasbank_keluar_nobukti_field = kasbank_keluar_nobuktiField.getValue();} 
 				if(kasbank_keluar_akunField.getValue()!== null){kasbank_keluar_akun_field = kasbank_keluar_akunField.getValue();} 
 				if(kasbank_keluar_terimauntukField.getValue()!== null){kasbank_keluar_terimauntuk_field = kasbank_keluar_terimauntukField.getValue();} 
-				if(kasbank_keluar_jenisField.getValue()!== null){kasbank_keluar_jenis_field = 'keluar';} 
+				if(kasbank_keluar_jenisField.getValue()!== null){kasbank_keluar_jenis_field = kasbank_keluar_jenisField.getValue();} 
 				if(kasbank_keluar_norefField.getValue()!== null){kasbank_keluar_noref_field = kasbank_keluar_norefField.getValue();} 
 				if(kasbank_keluar_keteranganField.getValue()!== null){kasbank_keluar_keterangan_field = kasbank_keluar_keteranganField.getValue();}  
 				
@@ -206,7 +206,7 @@ Ext.onReady(function(){
 		kasbank_keluar_tanggalField.reset();
 		kasbank_keluar_tanggalField.setValue(today);
 		kasbank_keluar_nobuktiField.reset();
-		kasbank_keluar_nobuktiField.setValue(null);
+		kasbank_keluar_nobuktiField.setValue('(auto)');
 		kasbank_keluar_akunField.reset();
 		kasbank_keluar_akunField.setValue(null);
 		kasbank_keluar_terimauntukField.reset();
@@ -217,6 +217,7 @@ Ext.onReady(function(){
 		kasbank_keluar_keteranganField.setValue(null);
 		kasbank_keluar_kodeakunField.reset();
 		kasbank_keluar_kodeakunField.setValue(null);
+		kasbank_keluar_jenisField.setValue('Kas');
 		
 		kasbank_keluar_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_keluar_detail_DataStore.load();
@@ -238,9 +239,15 @@ Ext.onReady(function(){
 		kasbank_keluar_akunField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_akun'));
 		kasbank_keluar_kodeakunField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_kode'));
 		kasbank_keluar_terimauntukField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_terimauntuk'));
-		kasbank_keluar_jenisField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_jenis'));
 		kasbank_keluar_norefField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_noref'));
 		kasbank_keluar_keteranganField.setValue(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_keterangan'));
+
+		if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_nobukti').substring(0,1)=='K'){
+			jenis_kb='Kas';
+ 		}else{
+			jenis_kb='Bank';
+ 	 	}
+		kasbank_keluar_jenisField.setValue(jenis_kb);
 		
 		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('task','detail');
 		cbo_akun_dkasbank_keluar_renderDataStore.setBaseParam('master_id',get_pk_id());
@@ -602,7 +609,7 @@ Ext.onReady(function(){
             }
 		}, 
 		{
-			header: 'Nama Rekening',
+			header: 'Nama Akun',
 			dataIndex: 'kasbank_keluar_akun',
 			width: 350,
 			sortable: true,
@@ -829,8 +836,17 @@ Ext.onReady(function(){
 		fieldLabel: 'No Jurnal',
 		maxLength: 50,
 		allowBlank: false,
-		anchor: '95%'
+		anchor: '95%',
+		value: '(auto)',
+		readOnly: true
 	});
+
+	var akun_kasbank_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>[{akun_kode}] {akun_nama}</b></span>',
+        '</div></tpl>'
+    );
+    
 	/* Identify  kasbank_keluar_akun Field */
 	kasbank_keluar_akunField= new Ext.form.ComboBox({
 		id: 'kasbank_keluar_akunField',
@@ -845,6 +861,8 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		anchor: '95%',
 		hideTrigger: false,
 		allowBlank: false
@@ -853,7 +871,7 @@ Ext.onReady(function(){
 
 	kasbank_keluar_kodeakunField= new Ext.form.TextField({
 		id: 'kasbank_keluar_kodeakunField',
-		fieldLabel: 'Kode Rekening',
+		fieldLabel: 'Kode Akun',
 		maxLength: 250,
 		anchor: '50%',
 		readOnly: true
@@ -868,14 +886,18 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	/* Identify  kasbank_keluar_jenis Field */
-	kasbank_keluar_jenisField= new Ext.form.TextField({
-		id: 'kasbank_keluar_jenisField',
+	kasbank_keluar_jenisField= new Ext.form.ComboBox({
 		fieldLabel: 'Jenis',
-		readOnly : true,
-		hidden : true,
-		hideLabel : true,
-		value: 'keluar',
+		store:new Ext.data.SimpleStore({
+			fields:['jenis_value', 'jenis_display'],
+			data: [	['Kas','Kas'],
+					['Bank','Bank']
+				]
+			}),
+		mode: 'local',
 		anchor: '95%',
+		displayField: 'jenis_display',
+		valueField: 'jenis_value',
 		triggerAction: 'all'	
 	});
 	/* Identify  kasbank_keluar_noref Field */
@@ -966,6 +988,9 @@ Ext.onReady(function(){
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
+
+	
+    
 	// variable combo akun
 	var combo_akun_kasbank_detail_keluar_render=new Ext.form.ComboBox({
 		store: cbo_akun_dkasbank_keluar_renderDataStore,
@@ -978,6 +1003,8 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		anchor: '80%',
 		hideTrigger: true
 	});
@@ -993,6 +1020,8 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender: false,
 		listClass: 'x-combo-list-small',
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		anchor: '80%',
 		hideTrigger: false
 	});
@@ -1009,6 +1038,8 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender: false,
 		listClass: 'x-combo-list-small',
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		anchor: '80%',
 		allowBlank: false,
 		hideTrigger: false
@@ -1025,7 +1056,7 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: 'Nama Rekening',
+			header: 'Nama Akun',
 			dataIndex: 'dkasbank_keluar_akun',
 			width: 350,
 			sortable: false,
@@ -1390,6 +1421,8 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		anchor: '95%',
 		hideTrigger: false
 	

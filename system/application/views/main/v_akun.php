@@ -943,8 +943,8 @@ Ext.onReady(function(){
 		store:new Ext.data.SimpleStore({
 			fields:['akun_jenisSearch_value', 'akun_jenisSearch_display'],
 			data: [
-					['Neraca','Neraca'],
-					['R/L','R/L']
+					['BS','BS'],
+					['RL','RL']
 				]
 			}),
 		mode: 'local',
@@ -1027,12 +1027,11 @@ Ext.onReady(function(){
 	akun_saldoSearchField= new Ext.form.ComboBox({
 		id: 'akun_saldoSearchField',
 		fieldLabel: 'Saldo',
-		fieldLabel: 'Jenis',
 		store:new Ext.data.SimpleStore({
 			fields:['akun_saldoSearch_value', 'akun_saldoSearch_display'],
 			data: [
-					['Neraca','Neraca'],
-					['R/L','R/L']
+					['Debet','Debet'],
+					['Kredit','Kredit']
 				]
 			}),
 		mode: 'local',
@@ -1072,8 +1071,8 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [akun_kodeSearchField, akun_jenisSearchField, akun_parentSearchField, akun_levelSearchField,
-						akun_namaSearchField, akun_debetSearchField, akun_kreditSearchField, akun_saldoSearchField, akun_aktifSearchField]
+				items: [akun_kodeSearchField, akun_jenisSearchField, akun_parentSearchField, 
+						akun_namaSearchField, akun_saldoSearchField, akun_aktifSearchField]
 			}
 			]
 		}]

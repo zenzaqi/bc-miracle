@@ -1,0 +1,10 @@
+<update by zaqi.smart@gmail.com>
+- Modul Akuntansi
+  o Perbaikan Master Akun
+    + Search Adv fixed
+    + Add Indexes
+    + SQL : 2011-05-06_09-15-AM.sql
+  o Perbaikan Jurnal Kas/Bank Masuk
+    + Auto No Jurnal fixed
+  o Perbaikan Jurnal Kas/Bank Keluar
+    + Auto No Jurnal Fixed
