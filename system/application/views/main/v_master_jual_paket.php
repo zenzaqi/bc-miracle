@@ -491,7 +491,11 @@ Ext.onReady(function(){
 				
 				if(jpaket_idField.getValue()!== null){jpaket_id_create_pk = jpaket_idField.getValue();}else{jpaket_id_create_pk=get_pk_id();} 
 				if(jpaket_nobuktiField.getValue()!== null){jpaket_nobukti_create = jpaket_nobuktiField.getValue();} 
-				if(jpaket_custField.getValue()!== null){jpaket_cust_create = jpaket_custField.getValue();} 
+				if((jpaket_post2db=="CREATE") && (jpaket_custField.getValue()!== null)){
+					jpaket_cust_create = jpaket_custField.getValue();
+				}else if(jpaket_post2db=="UPDATE"){
+					jpaket_cust_create = jpaket_cust_idField.getValue();
+				}
 				if(jpaket_tanggalField.getValue()!== ""){jpaket_tanggal_create_date = jpaket_tanggalField.getValue().format('Y-m-d');} 
 				if(jpaket_diskonField.getValue()!== null){jpaket_diskon_create = jpaket_diskonField.getValue();} 
 				if(jpaket_caraField.getValue()!== null){jpaket_cara_create = jpaket_caraField.getValue();} 
