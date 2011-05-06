@@ -34,7 +34,8 @@ class M_akun extends Model{
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
 							 test.akun_jenis LIKE '%".addslashes($filter)."%' OR
-							 test.akun_nama LIKE '%".addslashes($filter)."%')";
+							 test.akun_nama LIKE '%".addslashes($filter)."%' OR
+							 test.akun_saldo LIKE '%".addslashes($filter)."%' )";
 				$limit = $query;
 			}
 			$result = $this->db->query($query);
@@ -237,8 +238,10 @@ class M_akun extends Model{
 							 $akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$start,$end){
 			//full query
 			$query = "SELECT test.*
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
+						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama,
+										D.departemen_id,D.departemen_nama
 							FROM akun A
+							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
 						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
 						WHERE test.akun_aktif='Aktif'  ";
 
@@ -289,12 +292,14 @@ class M_akun extends Model{
 		function akun_print($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,
 							$akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
 			//full query
-			$query = "SELECT test.*
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
+			$sql = "SELECT test.*
+						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama,
+										D.departemen_id,D.departemen_nama
 							FROM akun A
+							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
 						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
 						WHERE test.akun_aktif='Aktif'  ";
-
+								
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
@@ -339,11 +344,11 @@ class M_akun extends Model{
 		function akun_export_excel($akun_id ,$akun_kode ,$akun_jenis ,$akun_parent ,$akun_level ,$akun_nama ,$akun_debet ,$akun_kredit ,$akun_saldo ,
 								   $akun_aktif ,$akun_creator ,$akun_date_create ,$akun_update ,$akun_date_update ,$akun_revised ,$option,$filter){
 			//full query
-			$sql = "SELECT test.akun_kode as Kode, test.akun_parent_kode as 'Kode Parent',
-							test.akun_nama as 'Nama Rekening', test.akun_jenis as Jenis,
-							test.akun_debet as Debet, test.akun_kredit as Kredit, test.akun_saldo as Saldo
-						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama
+			$sql = "SELECT test.*
+						FROM  (SELECT A.*,B.akun_id as akun_parent_id, B.akun_kode as akun_parent_kode2, B.akun_nama as akun_parent_nama,
+										D.departemen_id,D.departemen_nama
 							FROM akun A
+							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
 						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
 						WHERE test.akun_aktif='Aktif'  ";
 
@@ -351,8 +356,6 @@ class M_akun extends Model{
 					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
 						   test.akun_jenis LIKE '%".addslashes($filter)."%' OR
-						   test.akun_parent LIKE '%".addslashes($filter)."%' OR
-						   test.akun_level LIKE '%".addslashes($filter)."%' OR
 						   test.akun_nama LIKE '%".addslashes($filter)."%' )";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){

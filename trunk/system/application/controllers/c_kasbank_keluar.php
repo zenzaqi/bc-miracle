@@ -152,7 +152,7 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis="keluar";
+		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
@@ -167,7 +167,7 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		//$kasbank_keluar_revised=0;
 		$result=$this->m_kasbank->kasbank_create($kasbank_keluar_tanggal ,$kasbank_keluar_nobukti ,$kasbank_keluar_akun ,
-												 $kasbank_keluar_terimauntuk ,$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
+												 $kasbank_keluar_terimauntuk ,"keluar",$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
 												 $kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,
 												 $kasbank_keluar_post, $kasbank_keluar_date_post );
 		echo $result;
@@ -184,7 +184,7 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_akun=trim(@$_POST["kasbank_keluar_akun"]);
 		$kasbank_keluar_terimauntuk=trim(@$_POST["kasbank_keluar_terimauntuk"]);
 		$kasbank_keluar_terimauntuk=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_terimauntuk);
-		$kasbank_keluar_jenis="keluar";
+		$kasbank_keluar_jenis=trim(@$_POST["kasbank_keluar_jenis"]);
 		$kasbank_keluar_noref=trim(@$_POST["kasbank_keluar_noref"]);
 		$kasbank_keluar_noref=str_replace("/(<\/?)(p)([^>]*>)", "",$kasbank_keluar_noref);
 		$kasbank_keluar_keterangan=trim(@$_POST["kasbank_keluar_keterangan"]);
@@ -198,7 +198,7 @@ class C_kasbank_keluar extends Controller {
 		$kasbank_keluar_date_post=trim(@$_POST["kasbank_keluar_date_post"]);
 		//$kasbank_keluar_revised="(revised+1)";
 		$result = $this->m_kasbank->kasbank_update($kasbank_keluar_id,$kasbank_keluar_tanggal,$kasbank_keluar_nobukti,$kasbank_keluar_akun,
-												   $kasbank_keluar_terimauntuk,$kasbank_keluar_jenis,$kasbank_keluar_noref,
+												   $kasbank_keluar_terimauntuk,"keluar",$kasbank_keluar_jenis,$kasbank_keluar_noref,
 												   $kasbank_keluar_keterangan,$kasbank_keluar_update,$kasbank_keluar_date_update,
 												   $kasbank_keluar_post,$kasbank_keluar_date_post);
 		echo $result;

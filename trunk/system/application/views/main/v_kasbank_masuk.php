@@ -1,4 +1,4 @@
-<?
+<?php 
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
@@ -130,7 +130,7 @@ Ext.onReady(function(){
 				if(kasbank_masuk_nobuktiField.getValue()!== null){kasbank_masuk_nobukti_field = kasbank_masuk_nobuktiField.getValue();} 
 				if(kasbank_masuk_akunField.getValue()!== null){kasbank_masuk_akun_field = kasbank_masuk_akunField.getValue();} 
 				if(kasbank_masuk_terimauntukField.getValue()!== null){kasbank_masuk_terimauntuk_field = kasbank_masuk_terimauntukField.getValue();} 
-				if(kasbank_masuk_jenisField.getValue()!== null){kasbank_masuk_jenis_field = 'masuk';} 
+				if(kasbank_masuk_jenisField.getValue()!== null){kasbank_masuk_jenis_field = kasbank_masuk_jenisField.getValue();} 
 				if(kasbank_masuk_norefField.getValue()!== null){kasbank_masuk_noref_field = kasbank_masuk_norefField.getValue();} 
 				if(kasbank_masuk_keteranganField.getValue()!== null){kasbank_masuk_keterangan_field = kasbank_masuk_keteranganField.getValue();} 
 	
@@ -207,7 +207,7 @@ Ext.onReady(function(){
 		kasbank_masuk_tanggalField.reset();
 		kasbank_masuk_tanggalField.setValue(today);
 		kasbank_masuk_nobuktiField.reset();
-		kasbank_masuk_nobuktiField.setValue(null);
+		kasbank_masuk_nobuktiField.setValue('(auto)');
 		kasbank_masuk_akunField.reset();
 		kasbank_masuk_akunField.setValue(null);
 		kasbank_masuk_terimauntukField.reset();
@@ -218,6 +218,8 @@ Ext.onReady(function(){
 		kasbank_masuk_keteranganField.setValue(null);
 		kasbank_masuk_kodeakunField.reset();
 		kasbank_masuk_kodeakunField.setValue(null);
+		kasbank_masuk_jenisField.reset();
+		kasbank_masuk_jenisField.setValue('Kas');
 		
 		kasbank_masuk_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_masuk_detail_DataStore.load();
@@ -232,15 +234,22 @@ Ext.onReady(function(){
   
 	/* setValue to EDIT */
 	function kasbank_masuk_set_form(){
-		
+
+		var jenis_kb='Kas';
 		kasbank_masuk_tanggalField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal'));
 		kasbank_masuk_nobuktiField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_nobukti'));
 		kasbank_masuk_akunField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_akun'));
 		kasbank_masuk_kodeakunField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_kode'));
 		kasbank_masuk_terimauntukField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_terimauntuk'));
-		//kasbank_masuk_jenisField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_jenis'));
 		kasbank_masuk_norefField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_noref'));
 		kasbank_masuk_keteranganField.setValue(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_keterangan'));
+		
+		if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_nobukti').substring(0,1)=='K'){
+			jenis_kb='Kas';
+ 		}else{
+			jenis_kb='Bank';
+ 	 	}
+		kasbank_masuk_jenisField.setValue(jenis_kb);
 		
 		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('task','detail');
 		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('master_id',get_pk_id());
@@ -512,7 +521,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_kasbank_masuk&m=get_akun_kasbank', 
 			method: 'POST'
 		}),
-		baseParams:{start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -844,9 +853,16 @@ Ext.onReady(function(){
 		fieldLabel: 'No Jurnal',
 		maxLength: 50,
 		anchor: '95%',
-		allowBlank: false
+		allowBlank: false,
+		value: '(auto)',
+		readOnly: true
 	});
-	
+
+	var akun_kasbank_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>[{akun_kode}] {akun_nama}</b></span>',
+        '</div></tpl>'
+    );
 	
 	/* Identify  kasbank_masuk_akun Field */
 	kasbank_masuk_akunField= new Ext.form.ComboBox({
@@ -861,14 +877,13 @@ Ext.onReady(function(){
 		pageSize: pageS,
 		triggerAction: 'all',
 		lazyRender:true,
+		itemSelector: 'div.search-item',
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
+		tpl: akun_kasbank_tpl,
 		hideTrigger: false,
 		allowBlank: false
-	
 	});
-	
-	
 	
 	/* Identify  kasbank_masuk_kodeakun Field */
 	kasbank_masuk_kodeakunField= new Ext.form.TextField({
@@ -885,17 +900,24 @@ Ext.onReady(function(){
 		maxLength: 250,
 		anchor: '95%'
 	});
-	/* Identify  kasbank_masuk_jenis Field */
-	kasbank_masuk_jenisField= new Ext.form.TextField({
+
+	/* Identify  kasbank_masuk_terimauntuk Field */
+	kasbank_masuk_jenisField= new Ext.form.ComboBox({
 		id: 'kasbank_masuk_jenisField',
 		fieldLabel: 'Jenis',
-		readOnly : true,
-		hidden : true,
-		hideLabel : true,
-		value: 'masuk',
+		store:new Ext.data.SimpleStore({
+			fields:['jenis_value', 'jenis_display'],
+			data: [	['Kas','Kas'],
+					['Bank','Bank']
+				]
+			}),
+		mode: 'local',
 		anchor: '95%',
-		triggerAction: 'all'	
+		displayField: 'jenis_display',
+		valueField: 'jenis_value',
+		triggerAction: 'all'
 	});
+	
 	/* Identify  kasbank_masuk_noref Field */
 	kasbank_masuk_norefField= new Ext.form.TextField({
 		id: 'kasbank_masuk_norefField',
@@ -983,6 +1005,7 @@ Ext.onReady(function(){
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
+
 	
 
 	// variable combo akun
@@ -997,9 +1020,12 @@ Ext.onReady(function(){
 		pageSize: pageS,
 		triggerAction: 'all',
 		lazyRender:true,
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
-		hideTrigger: true
+		hideTrigger: false,
+		allowBlank: false
 	});
 	//eof
 	
@@ -1016,7 +1042,12 @@ Ext.onReady(function(){
 		lazyRender: false,
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
-		hideTrigger: false
+		tpl: akun_kasbank_tpl,
+		itemSelector: 'div.search-item',
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		hideTrigger: false,
+		allowBlank: false
 	});
 	
 	var combo_akun_kasbank_detail_masuk_kode=new Ext.form.ComboBox({
@@ -1539,9 +1570,9 @@ Ext.onReady(function(){
 	kasbank_masuk_akunField.on('select',function(){
 		var j=cbo_akun_DataStore.findExact('akun_id',kasbank_masuk_akunField.getValue());
 		if(j>-1){
-			var thismonth=new Date().format('y-m');
+			//var thismonth=new Date().format('y-m');
 			var record_akun=cbo_akun_DataStore.getAt(j);
-			var kode=kasbank_masuk_kodeakunField.getValue().substring(0,3);
+			//var kode=kasbank_masuk_kodeakunField.getValue().substring(0,3);
 			kasbank_masuk_kodeakunField.setValue(record_akun.data.akun_kode);
 		}
 	});

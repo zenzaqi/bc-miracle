@@ -1,4 +1,4 @@
-<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
+<?php /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
     #songbee	mukhlisona@gmail.com
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
@@ -42,12 +42,18 @@ class M_Kasbank extends Model{
 		
 		
 		function get_detail_akun($task,$master_id,$selected_id,$filter,$start,$end){
-			$sql = "SELECT A.* from akun A,akun_map M
-					WHERE A.akun_kode not in (
-					SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)";
+			$sql = "SELECT A.akun_id,A.akun_kode,A.akun_nama,A.akun_jenis FROM akun A
+					WHERE A.akun_kode NOT IN (
+					SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL) AND A.akun_aktif='Aktif'";
+			
 			if($task=='detail'){
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				/*$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .=" A.akun_id IN (SELECT dkasbank_akun FROM kasbank_detail WHERE dkasbank_master='".$master_id."')";
+				*/
+				
+				$sql="SELECT B.* FROM kasbank_detail A,(".$sql.") as B
+						WHERE A.dkasbank_akun=B.akun_id
+						AND A.dkasbank_master='".$master_id."'";
 				
 				$result = $this->db->query($sql);
 				$nbrows = $result->num_rows();
@@ -110,22 +116,38 @@ class M_Kasbank extends Model{
 			
 		}
 		
-		function get_akun_kasbank($filter,$start,$limit){
+		function get_akun_kasbank($filter,$start,$end){
 			
-			$sql="select A.* from akun A,akun_map M
-				WHERE A.akun_kode not in (
-				SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)
-				AND A.akun_kode LIKE concat('%', M.map_akun_kode,'%')";
-			if($filter!==""){
-				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .=" (A,akun_kode like '%".$filter."%' OR  A.akun_nama like '%".$filter."%')";
+			$sql="SELECT * FROM akun_map WHERE map_kategori='Kas/Bank' AND map_jenis='Master' LIMIT 1";
+			$rst=$this->db->query($sql);
+			if($rst->num_rows()){
+				$sql="SELECT A.* FROM akun A,akun_map M
+					WHERE M.map_kategori='Kas/Bank' AND M.map_jenis='Master' AND A.akun_kode not in (
+					SELECT B.akun_parent_kode FROM akun B WHERE B.akun_parent_kode is NOT NULL)
+					AND replace(A.akun_kode,'.','') LIKE concat('%', replace(M.map_akun_kode,'.',''),'%') AND A.akun_aktif='Y'";			
+			}else{
+				$sql="SELECT A.* FROM akun A
+						WHERE A.akun_kode not in (
+									SELECT B.akun_parent_kode FROM akun B 
+									WHERE B.akun_parent_kode is NOT NULL AND B.akun_aktif='Aktif')
+						AND A.akun_aktif='Aktif'";
 			}
-			$sql.=" ORDER By A.akun_kode ASC ";
+			
+			
+			if ($filter<>""){
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+					$sql .= " (A.akun_kode LIKE '%".addslashes($filter)."%' OR
+							   A.akun_nama LIKE '%".addslashes($filter)."%' OR
+							   A.akun_jenis LIKE '%".addslashes($filter)."%')";
+			}
+			
+			//$this->firephp->log($sql);
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
-			$limit = $sql." LIMIT ".$start.",".$limit;			
-			$result = $this->db->query($limit);  
-			
+			$limit = $sql." LIMIT ".$start.",".$end;
+			$result = $this->db->query($limit);
+
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -135,6 +157,7 @@ class M_Kasbank extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
+
 			
 		}
 		
@@ -225,7 +248,7 @@ class M_Kasbank extends Model{
 			$limit = $query." LIMIT ".$start.",".$end;		
 			$result = $this->db->query($limit);  
 			
-			$this->firephp->log($limit);
+			//$this->firephp->log($limit);
 			if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
@@ -239,7 +262,7 @@ class M_Kasbank extends Model{
 		
 		//function for create new record
 		function kasbank_create($kasbank_tanggal ,$kasbank_nobukti ,$kasbank_akun ,
-									  $kasbank_terimauntuk ,$kasbank_jenis ,$kasbank_noref ,
+									  $kasbank_terimauntuk ,$kasbank_jenis,$kasbank_kategori, $kasbank_noref ,
 									  $kasbank_keterangan ,$kasbank_author ,$kasbank_date_create ,
 									  $kasbank_post, $kasbank_date_post ){
 			$data = array(
@@ -254,7 +277,25 @@ class M_Kasbank extends Model{
 				"kasbank_date_create"=>$kasbank_date_create
 			);
 			
+			//$this->firephp->log($kasbank_jenis);
+			//$this->firephp->log($kasbank_kategori);
 			
+			$kasbank_kategori=$kasbank_kategori==""?"Kas":$kasbank_kategori;
+			
+			$pattern="";
+			$kasbank_tanggal=strtotime($kasbank_tanggal);
+			if($kasbank_kategori=="Bank" && $kasbank_jenis=="masuk"){
+				$pattern="BM/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Bank" && $kasbank_jenis=="keluar"){
+				$pattern="BK/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Kas" && $kasbank_jenis=="masuk"){
+				$pattern="KM/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Kas" && $kasbank_jenis=="keluar"){
+				$pattern="KK/".date("ym",$kasbank_tanggal)."-";
+			}
+			//$this->firephp->log($pattern."-".$kasbank_kategori."-".$kasbank_jenis);
+			$kasbank_nobukti=$this->m_public_function->get_kode_1('kasbank','kasbank_nobukti',$pattern,12);
+			$data["kasbank_nobukti"]=$kasbank_nobukti;
 			
 			$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."'";
 			$rs=$this->db->query($sql);
@@ -273,7 +314,7 @@ class M_Kasbank extends Model{
 		
 		//function for update record
 		function kasbank_update($kasbank_id,$kasbank_tanggal,$kasbank_nobukti,$kasbank_akun,$kasbank_terimauntuk,
-									  $kasbank_jenis,$kasbank_noref,$kasbank_keterangan,$kasbank_update,$kasbank_date_update,
+									  $kasbank_jenis, $kasbank_kategori,  $kasbank_noref,$kasbank_keterangan,$kasbank_update,$kasbank_date_update,
 									  $kasbank_post,$kasbank_date_post){
 			$data = array(
 				"kasbank_tanggal"=>$kasbank_tanggal, 
@@ -285,6 +326,27 @@ class M_Kasbank extends Model{
 				"kasbank_update"=>$kasbank_update, 
 				"kasbank_date_update"=>$kasbank_date_update
 			);
+			
+			//$this->firephp->log($kasbank_jenis);
+			//$this->firephp->log($kasbank_kategori);
+			
+			$kasbank_kategori=$kasbank_kategori==""?"Kas":$kasbank_kategori;
+			$pattern="";
+			
+			$kasbank_tanggal=strtotime($kasbank_tanggal);
+			if($kasbank_kategori=="Bank" && $kasbank_jenis=="masuk"){
+				$pattern="BM/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Bank" && $kasbank_jenis=="keluar"){
+				$pattern="BK/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Kas" && $kasbank_jenis=="keluar"){
+				$pattern="KK/".date("ym",$kasbank_tanggal)."-";
+			}elseif($kasbank_kategori=="Kas" && $kasbank_jenis=="keluar"){
+				$pattern="KM/".date("ym",$kasbank_tanggal)."-";
+			}
+			//$this->firephp->log($pattern);
+			
+			$kasbank_nobukti=$this->m_public_function->get_kode_1('kasbank','kasbank_nobukti',$pattern,12);
+			$data["kasbank_nobukti"]=$kasbank_nobukti;
 			
 						
 			$sql="SELECT akun_id FROM akun where akun_id='".$kasbank_akun."'";
