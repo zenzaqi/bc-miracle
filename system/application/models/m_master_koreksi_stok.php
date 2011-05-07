@@ -374,7 +374,8 @@ class M_master_koreksi_stok extends Model{
 		
 		//function for get list record
 		function master_koreksi_stok_list($filter,$start,$end){
-			$query = "SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id order by koreksi_tanggal desc";
+			$query = "SELECT distinct * FROM master_koreksi_stok
+						LEFT JOIN gudang on(master_koreksi_stok.koreksi_gudang=gudang.gudang_id)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -383,7 +384,7 @@ class M_master_koreksi_stok extends Model{
 							gudang_nama LIKE '%".addslashes($filter)."%' OR 
 							koreksi_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
-			
+			$query .= " order by koreksi_tanggal desc";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
@@ -494,7 +495,8 @@ class M_master_koreksi_stok extends Model{
 		function master_koreksi_stok_search($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tgl_awal, $koreksi_tgl_akhir ,$koreksi_keterangan,
 											$koreksi_status, $start,$end){
 			//full query
-			$query="SELECT distinct * FROM master_koreksi_stok,gudang WHERE koreksi_gudang=gudang_id order by koreksi_tanggal desc";
+			$query="SELECT distinct * FROM master_koreksi_stok
+					LEFT JOIN gudang on(master_koreksi_stok.koreksi_gudang=gudang.gudang_id)";
 			
 			if($koreksi_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -521,6 +523,8 @@ class M_master_koreksi_stok extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " koreksi_status LIKE '%".$koreksi_status."%'";
 			};
+			
+			$query.= " order by koreksi_tanggal desc";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
