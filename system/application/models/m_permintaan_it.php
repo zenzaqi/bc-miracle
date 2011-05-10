@@ -1,13 +1,11 @@
 <? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-    #songbee	mukhlisona@gmail.com
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+
 	
-	+ Module  		: gudang Model
+	+ Module  		: Permintaan IT Model
 	+ Description	: For record model process back-end
-	+ Filename 		: c_gudang.php
- 	+ Author  		: Zainal, Mukhlison
- 	+ Created on 11/Jul/2009 06:46:58
+	+ Filename 		: m_permintaan_it.php
+ 	+ Author  		: Isaac
+ 	+ Created on 
 	
 */
 
@@ -144,6 +142,7 @@ class m_permintaan_it extends Model{
 			if ($permintaan_status=="")
 				$permintaan_status = "Open";
 			
+			$username = $_SESSION[SESSION_USERID];
 			$data = array(
 				"permintaan_id"=>$permintaan_id,
 				"permintaan_client"=>$permintaan_client,
@@ -163,6 +162,15 @@ class m_permintaan_it extends Model{
 			);
 			
 			
+			$sql_karyawan="SELECT karyawan_nama FROM karyawan WHERE karyawan_id='".$permintaan_client."'";
+			$rs_karyawan=$this->db->query($sql_karyawan);
+			if($rs_karyawan->num_rows()) {
+				$data_karyawan = $rs_karyawan->row();
+				$karyawan_nama= $data_karyawan->karyawan_nama;
+			} else {
+				$karyawan_nama = '';
+			}
+			
 			$sql="SELECT cabang_id FROM cabang WHERE cabang_id='".$permintaan_cabang."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
@@ -181,11 +189,107 @@ class m_permintaan_it extends Model{
 			$this->db->where('permintaan_id', $permintaan_id);
 			$this->db->update('permintaan_it', $data);
 			
-	
-			//if($this->db->affected_rows()){
-			//	$sql="UPDATE gudang set gudang_revised=(gudang_revised+1) WHERE gudang_id='".$gudang_id."'";
-			//	$this->db->query($sql);
-			//}
+			// UPDATE KIRIM EMAIL KE IT DAN ORANG YG BERSANGKUTAN
+			// untuk kirim email
+			if ($permintaan_cabang <> 'Pilih Satu') {
+				$sql_cabang= "SELECT cabang_nama FROM cabang WHERE cabang_id ='".$permintaan_cabang."'";
+				$query_cabang= $this->db->query($sql_cabang);
+				if($query_cabang->num_rows()){
+					$data_cabang= $query_cabang->row();
+					$cabang_nama= $data_cabang->cabang_nama;
+				} else {
+					$cabang_nama = $permintaan_cabang;
+				}
+			}
+			else {
+				$cabang_nama = "";
+			}
+			// ambil email mengetahui
+			if ($permintaan_mengetahui <> 'Pilih Satu' && $permintaan_mengetahui <> '') {
+				$sql_mengetahui= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_nama ='".$permintaan_mengetahui."'";
+				$query_mengetahui= $this->db->query($sql_mengetahui);
+				if($query_mengetahui->num_rows()){
+					$data_mengetahui= $query_mengetahui->row();
+					$email_mengetahui= $data_mengetahui->karyawan_emiracle;
+				} else {
+					$email_mengetahui = '';
+				}
+			}
+			else {
+				$email_mengetahui = '';
+			}
+			if ($permintaan_mengetahui2 <> 'Pilih Satu' && $permintaan_mengetahui2 <> '') {
+				$sql_mengetahui2= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_nama ='".$permintaan_mengetahui2."'";
+				$query_mengetahui2= $this->db->query($sql_mengetahui2);
+				if($query_mengetahui2->num_rows()){
+					$data_mengetahui2= $query_mengetahui2->row();
+					$email_mengetahui2= $data_mengetahui2->karyawan_emiracle;
+				} else {
+					$email_mengetahui2 = '';
+				}
+			} else {
+				$email_mengetahui2 = '';
+			}
+			if ($permintaan_client <> '') {
+				$sql_client= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_client."'";
+				$query_client= $this->db->query($sql_client);
+				if($query_client->num_rows()){
+					$data_client= $query_client->row();
+					$email_client= $data_client->karyawan_emiracle;
+				} else {
+					$email_client = '';
+				}
+			} else {
+				$email_client = '';
+			}
+			
+			
+			$config = Array(
+				'protocol' => 'smtp',
+				'smtp_host' => 'mail.miracle-clinic.com',
+				'smtp_port' => 25,
+				'smtp_user' => 'admin@miracle-clinic.com',
+				'smtp_pass' => 'serve3LOVE',
+			);
+			$this->load->library('email', $config);
+			$this->email->set_newline("\r\n");
+			
+			$this->email->from('admin@miracle-clinic.com', 'Miracle Information System');
+			
+			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','
+			.'isaac@miracle-clinic.com, 
+			hendri@miracle-clinic.com, 
+			freddy@miracle-clinic.com, 
+			sindarto@miracle-clinic.com,
+			natalie@miracle-clinic.com,
+			windra@miracle-clinic.com,
+			it@miracle-clinic.com';
+			
+			//$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.$email_client.','.'isaac@miracle-clinic.com';
+			//$this->email->to('isaac@miracle-clinic.com');
+			$this->email->to($email_kirim);
+			
+			$judul_email = 'Permintaan IT dari '.$karyawan_nama;
+			$isi_email = 
+				'Dear : '.$karyawan_nama.''
+				."\n\n".
+				'Cabang			: '.$cabang_nama 
+				."\n".	
+				'Tanggal		: '.$permintaan_tanggalmasalah
+				."\n".
+				'Prioritas		: '.$permintaan_prioritas
+				."\n".
+				'Permintaan		: '.$permintaan_permintaan 
+				."\n".
+				'Tgl. Selesai	: '.$permintaan_tanggalselesai
+				."\n".
+				'Penyelesaian	: '.$permintaan_penyelesaian
+				."\n". 
+				'Pemohon		: '.$karyawan_nama;
+			$this->email->subject($judul_email);
+			$this->email->message($isi_email);
+			$this->email->send();
+
 			return '1';
 
 		}
@@ -249,14 +353,27 @@ class m_permintaan_it extends Model{
 			if ($permintaan_mengetahui <> 'Pilih Satu') {
 				$sql_mengetahui= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui."'";
 				$query_mengetahui= $this->db->query($sql_mengetahui);
-				$data_mengetahui= $query_mengetahui->row();
-				$email_mengetahui= $data_mengetahui->karyawan_emiracle;
+				if($query_mengetahui->num_rows()){
+					$data_mengetahui= $query_mengetahui->row();
+					$email_mengetahui= $data_mengetahui->karyawan_emiracle;
+				} else {
+					$email_mengetahui= '';
+				}
+			} else {
+				$email_mengetahui = '';
 			}
+			
 			if ($permintaan_mengetahui2 <> 'Pilih Satu') {
-			$sql_mengetahui2= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui2."'";
-			$query_mengetahui2= $this->db->query($sql_mengetahui2);
-			$data_mengetahui2= $query_mengetahui2->row();
-			$email_mengetahui2= $data_mengetahui2->karyawan_emiracle;
+				$sql_mengetahui2= "SELECT karyawan_emiracle FROM karyawan WHERE karyawan_id ='".$permintaan_mengetahui2."'";
+				$query_mengetahui2= $this->db->query($sql_mengetahui2);
+				if($query_mengetahui2->num_rows()){
+					$data_mengetahui2= $query_mengetahui2->row();
+					$email_mengetahui2= $data_mengetahui2->karyawan_emiracle;
+				} else {
+					$email_mengetahui2= '';
+				}
+			} else {
+				$email_mengetahui2 = '';
 			}
 			
 			
@@ -271,15 +388,17 @@ class m_permintaan_it extends Model{
 			$this->email->set_newline("\r\n");
 			
 			$this->email->from('admin@miracle-clinic.com', 'Miracle Information System');
-			
+		
 			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','
 			.'isaac@miracle-clinic.com, 
 			hendri@miracle-clinic.com, 
 			freddy@miracle-clinic.com, 
 			sindarto@miracle-clinic.com,
 			natalie@miracle-clinic.com,
+			windra@miracle-clinic.com,
 			it@miracle-clinic.com';
 			
+			//$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.'isaac@miracle-clinic.com';
 			//$this->email->to('isaac@miracle-clinic.com');
 			$this->email->to($email_kirim);
 			
