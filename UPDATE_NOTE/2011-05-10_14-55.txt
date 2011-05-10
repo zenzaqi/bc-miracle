@@ -1,0 +1,3 @@
+mengganti 
+vu_trans_kuitansi : field total_sisa ambil lgsg dr tabel cetak_kuitansi
+vu_total_kuitansi_group : menambah where statdok <> batal
