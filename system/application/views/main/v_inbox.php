@@ -164,8 +164,8 @@ Ext.onReady(function(){
  	/* End of Function */  
   
 	function inboxreply_set_form(){
-		inbox_pengirimField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_sender'));	
-		inbox_idField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('inbox_id'));
+		inbox_pengirimField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('SenderNumber'));	
+		inbox_idField.setValue(inboxListEditorGrid.getSelectionModel().getSelected().get('ID'));
 		inbox_detailField.reset();
 		inbox_count_isiField.reset();
 	}  
@@ -223,7 +223,7 @@ Ext.onReady(function(){
 			var selections = inboxListEditorGrid.selModel.getSelections();
 			var prez = [];
 			for(i = 0; i< inboxListEditorGrid.selModel.getCount(); i++){
-				prez.push(selections[i].json.inbox_id);
+				prez.push(selections[i].json.ID);
 			}
 			var encoded_array = Ext.encode(prez);
 			Ext.Ajax.request({ 
@@ -273,12 +273,12 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'inbox_id'
+			id: 'ID'
 		},[
-			{name: 'inbox_id', type: 'int', mapping: 'inbox_id'}, 
-			{name: 'inbox_sender', type: 'string', mapping: 'inbox_sender'}, 
-			{name: 'inbox_message', type: 'string', mapping: 'inbox_message'}, 
-			{name: 'inbox_date', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'inbox_date'}, 
+			{name: 'ID', type: 'int', mapping: 'ID'}, 
+			{name: 'SenderNumber', type: 'string', mapping: 'SenderNumber'}, 
+			{name: 'TextDecoded', type: 'string', mapping: 'TextDecoded'}, 
+			{name: 'ReceivingDateTime', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'ReceivingDateTime'}, 
 			{name: 'inbox_creator', type: 'string', mapping: 'inbox_creator'}, 
 			{name: 'inbox_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'inbox_date_create'}, 
 			{name: 'inbox_update', type: 'string', mapping: 'inbox_update'}, 
@@ -286,7 +286,7 @@ Ext.onReady(function(){
 			{name: 'inbox_revised', type: 'int', mapping: 'inbox_revised'},
 			{name: 'inbox_status', type: 'string', mapping: 'inbox_status'},
 		]),
-		sortInfo:{field: 'inbox_id', direction: "DESC"}
+		sortInfo:{field: 'ID', direction: "DESC"}
 	});
 	/* End of Function */
     
@@ -295,7 +295,7 @@ Ext.onReady(function(){
 		[{
 			header: '#',
 			readOnly: true,
-			dataIndex: 'inbox_id',
+			dataIndex: 'ID',
 			width: 40,
 			renderer: function(value, cell){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS 
@@ -305,22 +305,22 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">Tanggal</div>',
-			dataIndex: 'inbox_date',
+			dataIndex: 'ReceivingDateTime',
 			width: 20,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('m/d/Y H:i:s'),
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Pengirim</div>',
-			dataIndex: 'inbox_sender',
+			dataIndex: 'SenderNumber',
 			width: 30,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Isi Pesan</div>',
-			dataIndex: 'inbox_message',
+			dataIndex: 'TextDecoded',
 			width: 210,
 			sortable: true,
 			readOnly: true
@@ -513,9 +513,9 @@ Ext.onReady(function(){
 		// change the store parameters
 		inbox_DataStore.baseParams = {
 			task: 'SEARCH',
-			inbox_id	:	inbox_id_search, 
-			inbox_sender	:	inbox_sender_search, 
-			inbox_message	:	inbox_message_search, 
+			ID	:	inbox_id_search, 
+			SenderNumber	:	inbox_sender_search, 
+			TextDecoded	:	inbox_message_search, 
 			inbox_date	:	inbox_date_search_date
 		};
 		// Cause the datastore to do another query : 
@@ -766,8 +766,8 @@ Ext.onReady(function(){
 		var win;              
 		// check if we do have some search data...
 		if(inbox_DataStore.baseParams.query!==null){searchquery = inbox_DataStore.baseParams.query;}
-		if(inbox_DataStore.baseParams.inbox_sender!==null){inbox_sender_print = inbox_DataStore.baseParams.inbox_sender;}
-		if(inbox_DataStore.baseParams.inbox_message!==null){inbox_message_print = inbox_DataStore.baseParams.inbox_message;}
+		if(inbox_DataStore.baseParams.SenderNumber!==null){inbox_sender_print = inbox_DataStore.baseParams.SenderNumber;}
+		if(inbox_DataStore.baseParams.TextDecoded!==null){inbox_message_print = inbox_DataStore.baseParams.TextDecoded;}
 		if(inbox_DataStore.baseParams.inbox_date!==""){inbox_date_print_date = inbox_DataStore.baseParams.inbox_date;}
 
 		Ext.Ajax.request({   
@@ -776,8 +776,8 @@ Ext.onReady(function(){
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		
-			inbox_sender : inbox_sender_print,
-			inbox_message : inbox_message_print,
+			SenderNumber : inbox_sender_print,
+			TextDecoded : inbox_message_print,
 		  	inbox_date : inbox_date_print_date, 
 		  	currentlisting: inbox_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
@@ -822,8 +822,8 @@ Ext.onReady(function(){
 		var win;              
 		// check if we do have some search data...
 		if(inbox_DataStore.baseParams.query!==null){searchquery = inbox_DataStore.baseParams.query;}
-		if(inbox_DataStore.baseParams.inbox_sender!==null){inbox_sender_2excel = inbox_DataStore.baseParams.inbox_sender;}
-		if(inbox_DataStore.baseParams.inbox_message!==null){inbox_message_2excel = inbox_DataStore.baseParams.inbox_message;}
+		if(inbox_DataStore.baseParams.SenderNumber!==null){inbox_sender_2excel = inbox_DataStore.baseParams.SenderNumber;}
+		if(inbox_DataStore.baseParams.TextDecoded!==null){inbox_message_2excel = inbox_DataStore.baseParams.TextDecoded;}
 		if(inbox_DataStore.baseParams.inbox_date!==""){inbox_date_2excel_date = inbox_DataStore.baseParams.inbox_date;}
 
 		Ext.Ajax.request({   
@@ -832,8 +832,8 @@ Ext.onReady(function(){
 		params: {
 			task: "EXCEL",
 		  	query: searchquery,                    		
-			inbox_sender : inbox_sender_2excel,
-			inbox_message : inbox_message_2excel,
+			SenderNumber : inbox_sender_2excel,
+			TextDecoded : inbox_message_2excel,
 		  	inbox_date : inbox_date_2excel_date, 
 		  	currentlisting: inbox_DataStore.baseParams.task // this tells us if we are searching or not
 		},
