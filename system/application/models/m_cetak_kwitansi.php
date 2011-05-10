@@ -809,7 +809,8 @@ class M_cetak_kwitansi extends Model{
 					,kwitansi_update
 					,kwitansi_date_update
 					,kwitansi_revised
-					,(kwitansi_nilai-IF(sum(jkwitansi_nilai)!='null',sum(jkwitansi_nilai),0)) AS total_sisa
+					,kwitansi_sisa AS total_sisa
+					/*,(kwitansi_nilai-IF(sum(jkwitansi_nilai)!='null',sum(jkwitansi_nilai),0)) AS total_sisa*/
 				FROM cetak_kwitansi
 				LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id)
 				LEFT JOIN customer ON(kwitansi_cust=cust_id)";
