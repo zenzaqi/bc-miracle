@@ -1,0 +1,25 @@
+<update by zaqi.smart@gmail.com>
+- Fix date_helper
+  o Fix add date
+
+- Update Master Akun
+  o Optimize select
+  o Index akun_departemen
+  o Fix Search
+
+- Update Kasbank Masuk
+  o Add Range tanggal search
+  o Add Print List
+  o Add Print Faktur
+  o Fix search
+  o Fix pembatasan
+
+- Update Kasbank Keluar
+  o Add Range tanggal search
+  o Add Print List
+  o Add Print Faktur
+  o Fix search
+  o Fix pembatasan
+
+- Update SQL 2011-05-10_04-45-PM.sql
+
