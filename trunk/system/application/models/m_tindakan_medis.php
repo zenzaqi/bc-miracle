@@ -447,7 +447,7 @@ class M_tindakan_medis extends Model{
 								}
 								//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
 								$this->total_sisa_paket_update($dtrawat_dpaket_id_awal ,$jpaket_id ,$dpaket_paket);
-								$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
+								//$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
 								
 								return 1;
 								break;
@@ -517,7 +517,7 @@ class M_tindakan_medis extends Model{
 								
 								//* UPDATE db.detail_jual_paket.dpaket_sisa_paket ==> sisa paket dari paket yang dibeli akan diupdate akibat dari pengambilan paket /
 								$dpaket_sisa_update = $this->total_sisa_paket_update($dtrawat_dpaket_id_awal ,$jpaket_id ,$dpaket_paket);
-								$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
+								//$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan_awal, $jpaket_nobukti ,$trawat_cust);
 								if($dpaket_sisa_update==1){
 									return 1;
 									break;
@@ -646,8 +646,8 @@ class M_tindakan_medis extends Model{
 		}
 		
 		//Delete db.detail_pakai_cabin
-		$this->db->where('cabin_dtrawat', $dtrawat_id);
-		$this->db->delete('detail_pakai_cabin');
+		//$this->db->where('cabin_dtrawat', $dtrawat_id);
+		//$this->db->delete('detail_pakai_cabin');
 		
 		//Delete db.detail_jual_rawat + db.detail_pakai_cabin
 		$this->db->where('drawat_dtrawat', $dtrawat_id);
@@ -767,7 +767,7 @@ class M_tindakan_medis extends Model{
 					$this->db->update('appointment_detail', $dtu_dapp);
 				}
 				
-				$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
+				//$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
 				return 1;
 			}else{
 				return 0;
@@ -818,7 +818,7 @@ class M_tindakan_medis extends Model{
 							$this->db->update('appointment_detail', $dtu_dapp);
 						}
 						
-						$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
+						//$this->detail_pakai_cabin_insert($dtrawat_id, $dtrawat_perawatan, $jrawat_nobukti ,$cust_id);
 						return 1;
 					
 					}else{
@@ -1150,7 +1150,7 @@ class M_tindakan_medis extends Model{
 		$this->db->where('drawat_dtrawat', $dtrawat_id);
 		$this->db->update('detail_jual_rawat', $dtu_drawat);*/
 		if($this->db->affected_rows()){
-			$this->detail_pakai_cabin_update($dtrawat_id, $dtrawat_perawatan);
+			//$this->detail_pakai_cabin_update($dtrawat_id, $dtrawat_perawatan);
 		}
 	}
 	/* eof detail_jual_rawat_update */
@@ -1223,7 +1223,7 @@ class M_tindakan_medis extends Model{
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
-			$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item, $jpaket_nobukti ,$trawat_cust_id);
+			//$this->detail_pakai_cabin_insert($dtrawat_id, $dapaket_item, $jpaket_nobukti ,$trawat_cust_id);
 			return 1;
 			
 		}else{
@@ -1265,6 +1265,7 @@ class M_tindakan_medis extends Model{
 	}
 	
 	/* INSERT db.detail_pakai_cabin */
+	/*
 	function detail_pakai_cabin_insert($cabin_dtrawat ,$cabin_rawat ,$cabin_bukti ,$cabin_cust){
 		//* Mencatat pemakaian Standard Bahan dari perawatan($cabin_rawat) yang terpakai /
 		$sql="SELECT krawat_produk
@@ -1294,8 +1295,10 @@ class M_tindakan_medis extends Model{
 			return '1';
 		}
 	}
+	*/
 	
 	/* DELETE db.detail_pakai_cabin */
+	/*
 	function detail_pakai_cabin_delete($cabin_dtrawat){
 		$this->db->where('cabin_dtrawat', $cabin_dtrawat);
 		$this->db->delete('detail_pakai_cabin');
@@ -1305,8 +1308,10 @@ class M_tindakan_medis extends Model{
 			return '0';
 		}
 	}
+	*/
 	
 	/* UPDATE db.detail_pakai_cabin */
+	/*
 	function detail_pakai_cabin_update($cabin_dtrawat, $cabin_rawat){
 		$this->db->where('cabin_dtrawat', $cabin_dtrawat);
 		$this->db->delete('detail_pakai_cabin');
@@ -1352,6 +1357,7 @@ class M_tindakan_medis extends Model{
 			}
 		}
 	}
+	*/
 	
 	/* INSERT ke db.detail_ambil_paket */
 	function detail_ambil_paket_delete($dtrawat_id){
@@ -1393,7 +1399,7 @@ class M_tindakan_medis extends Model{
 			
 			$this->total_sisa_paket_update($dapaket_dpaket, $dapaket_jpaket, $dapaket_paket);
 			
-			$this->detail_pakai_cabin_delete($dtrawat_id);
+			//$this->detail_pakai_cabin_delete($dtrawat_id);
 		}
 	}
 	/* eof detail_ambil_paket_delete */
