@@ -25,8 +25,8 @@ class M_akun extends Model{
 										D.departemen_id,D.departemen_nama
 							FROM akun A
 							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Aktif'  ";
+						  	LEFT JOIN akun B ON (A.akun_parent=B.akun_id)) as test
+						WHERE test.akun_aktif='Aktif'";
 
 
 			// For simple search
@@ -114,8 +114,8 @@ class M_akun extends Model{
 				"akun_creator"=>$akun_creator,
 				"akun_date_create"=>$akun_date_create
 			);
-			
-			
+
+
 			if($akun_departemen!==""){
 				$sql="SELECT departemen_id FROM departemen WHERE departemen_id='".$akun_departemen."' LIMIT 1";
 				$result=$this->db->query($sql);
@@ -125,7 +125,7 @@ class M_akun extends Model{
 			}else{
 				$data["akun_departemen"]=0;
 			}
-			
+
 			if($akun_parent!==""){
 				$sql="SELECT akun_kode,akun_level FROM akun WHERE akun_id='".$akun_parent."'";
 				$result=$this->db->query($sql);
@@ -160,7 +160,7 @@ class M_akun extends Model{
 				"akun_update"=>$akun_update,
 				"akun_date_update"=>$akun_date_update
 			);
-			
+
 			if($akun_departemen!==""){
 				$sql="SELECT departemen_id FROM departemen WHERE departemen_id='".$akun_departemen."' LIMIT 1";
 				$result=$this->db->query($sql);
@@ -170,7 +170,7 @@ class M_akun extends Model{
 			}else{
 				$data["akun_departemen"]=0;
 			}
-			
+
 			if($akun_parent!==""){
 				$sql="SELECT akun_kode,akun_level, akun_jenis FROM akun WHERE akun_id='".$akun_parent."'";
 				$result=$this->db->query($sql);
@@ -242,11 +242,10 @@ class M_akun extends Model{
 										D.departemen_id,D.departemen_nama
 							FROM akun A
 							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Aktif'  ";
+						  	LEFT JOIN akun B ON (A.akun_parent=B.akun_id)) as test ";
 
 			if($akun_kode!=''){
-				$query.=" AND ";
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " test.akun_kode LIKE '%".$akun_kode."%'";
 			};
 			if($akun_jenis!=''){
@@ -254,20 +253,24 @@ class M_akun extends Model{
 				$query.= " test.akun_jenis = '".$akun_jenis."'";
 			};
 			if($akun_parent!=''){
-				$query.=" AND ";
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " test.akun_parent = '".$akun_parent."'";
 			};
 			if($akun_level!=''){
-				$query.=" AND ";
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " test.akun_level = '".$akun_level."'";
 			};
 			if($akun_nama!=''){
-				$query.=" AND ";
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " test.akun_nama LIKE '%".$akun_nama."%'";
 			};
 			if($akun_saldo!=''){
-				$query.=" AND ";
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+			};
+			if($akun_aktif!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " test.akun_aktif LIKE '%".$akun_aktif."%'";
 			};
 
 			//$this->firephp->log($query);
@@ -297,9 +300,8 @@ class M_akun extends Model{
 										D.departemen_id,D.departemen_nama
 							FROM akun A
 							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Aktif'  ";
-								
+						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test ";
+
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
@@ -307,35 +309,39 @@ class M_akun extends Model{
 						   test.akun_parent LIKE '%".addslashes($filter)."%' OR
 						   test.akun_level LIKE '%".addslashes($filter)."%' OR
 						   test.akun_nama LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
+
 			} else if($option=='SEARCH'){
 				if($akun_kode!=''){
-					$query.=" AND ";
-					$query.= " test.akun_kode LIKE '%".$akun_kode."%'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_kode LIKE '%".$akun_kode."%'";
 				};
 				if($akun_jenis!=''){
-					$query.=" AND ";
-					$query.= " test.akun_jenis = '".$akun_jenis."'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_jenis = '".$akun_jenis."'";
 				};
 				if($akun_parent!=''){
-					$query.=" AND ";
-					$query.= " test.akun_parent = '".$akun_parent."'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_parent = '".$akun_parent."'";
 				};
 				if($akun_level!=''){
-					$query.=" AND ";
-					$query.= " test.akun_level = '".$akun_level."'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_level = '".$akun_level."'";
 				};
 				if($akun_nama!=''){
-					$query.=" AND ";
-					$query.= " test.akun_nama LIKE '%".$akun_nama."%'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_nama LIKE '%".$akun_nama."%'";
 				};
 				if($akun_saldo!=''){
-					$query.=" AND ";
-					$query.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
+				};
+				if($akun_aktif!=''){
+					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+					$sql.= " test.akun_aktif LIKE '%".$akun_aktif."%'";
 				};
 
-				$query = $this->db->query($sql);
 			}
+			$query = $this->db->query($sql);
 			return $query->result();
 
 		}
@@ -349,43 +355,47 @@ class M_akun extends Model{
 										D.departemen_id,D.departemen_nama
 							FROM akun A
 							LEFT JOIN departemen D ON (A.akun_departemen = D.departemen_id)
-						  	LEFT JOIN akun B ON (A.akun_parent_kode=B.akun_kode OR A.akun_parent=B.akun_id)) as test
-						WHERE test.akun_aktif='Aktif'  ";
+						  	LEFT JOIN akun B ON (A.akun_parent=B.akun_id)) as test";
 
 			if($option=='LIST'){
 					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
-				$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
+					$sql .= " (test.akun_kode LIKE '%".addslashes($filter)."%' OR
 						   test.akun_jenis LIKE '%".addslashes($filter)."%' OR
 						   test.akun_nama LIKE '%".addslashes($filter)."%' )";
-				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($akun_kode!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_kode LIKE '%".$akun_kode."%'";
 				};
 				if($akun_jenis!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_jenis = '".$akun_jenis."'";
 				};
 				if($akun_parent!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_parent ='".$akun_parent."'";
 				};
 				if($akun_level!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_level = '".$akun_level."'";
 				};
 				if($akun_nama!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_nama LIKE '%".$akun_nama."%'";
 				};
 				if($akun_saldo!=''){
-					$sql.=" AND ";
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 					$sql.= " test.akun_saldo LIKE '%".$akun_saldo."%'";
 				};
 
-				$query = $this->db->query($sql);
+				if($akun_aktif!=''){
+					$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
+					$query.= " test.akun_aktif LIKE '%".$akun_aktif."%'";
+				};
+
 			}
+
+			$query = $this->db->query($sql);
 			return $query;
 		}
 
