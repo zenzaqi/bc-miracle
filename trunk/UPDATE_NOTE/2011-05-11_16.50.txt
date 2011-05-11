@@ -1,0 +1,3 @@
+Update Order Pembelian..
+
+mengenai Input Harga OP terakhir, berdasarkan tanggal faktur yang terakhir diinput (di master fakturnya) dan berdasarkan supplier yang sama (supplier yang dipilih)

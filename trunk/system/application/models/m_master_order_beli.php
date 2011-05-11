@@ -144,6 +144,30 @@ class M_master_order_beli extends Model{
 			}
 		}
 		
+		
+		function get_op_last_price($supplier_id){
+			$sql="SELECT dorder_harga 
+					FROM detail_order_beli 
+					LEFT JOIN master_order_beli ON (master_order_beli.order_id = detail_order_beli.dorder_master)
+					WHERE master_order_beli.order_supplier = '".$supplier_id."'
+				ORDER BY order_tanggal DESC,dorder_id DESC LIMIT 0,5";
+				
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		
+		
+		
 		function get_satuan_produk_list($selected_id){
 			
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama,konversi_default FROM vu_satuan_konversi WHERE produk_aktif='Aktif'";
