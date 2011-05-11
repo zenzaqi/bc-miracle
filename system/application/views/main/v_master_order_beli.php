@@ -308,6 +308,16 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 
+	/*Function utk mengecek, jika Field Supplier blom diisikan, maka Detail Item akan di disabled */
+	function check_supplier(){
+		if(order_supplierField.getValue()=="" || order_supplierField.getValue()==null){
+			detail_order_beliListEditorGrid.setDisabled(true);
+		}else{
+			detail_order_beliListEditorGrid.setDisabled(false);
+		}
+	}
+	
+	
 	/* Reset form before loading */
 	function master_order_beli_reset_form(){
 		order_idField.reset();
@@ -364,6 +374,7 @@ Ext.onReady(function(){
 			}
 		});*/
 		check_acc();
+		check_supplier();
 	}
  	/* End of Function */
 
@@ -372,6 +383,7 @@ Ext.onReady(function(){
 		order_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_id'));
 		order_noField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_no'));
 		order_supplierField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier'));
+		order_supplier_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier_id'));
 		order_tanggalField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_tanggal'));
 		order_carabayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_carabayar'));
 
@@ -417,6 +429,7 @@ Ext.onReady(function(){
 
 
 		check_acc();
+		check_supplier();
 
 		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
 			order_idField.setDisabled(false);
@@ -696,6 +709,7 @@ Ext.onReady(function(){
 			{name: 'order_id', type: 'int', mapping: 'order_id'},
 			{name: 'order_no', type: 'string', mapping: 'no_bukti'},
 			{name: 'order_supplier', type: 'string', mapping: 'supplier_nama'},
+			{name: 'order_supplier_id', type: 'int', mapping: 'supplier_id'},
 			{name: 'order_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'},
 			{name: 'order_carabayar', type: 'string', mapping: 'order_carabayar'},
 			{name: 'order_diskon', type: 'float', mapping: 'order_diskon'},
@@ -735,6 +749,7 @@ Ext.onReady(function(){
 			{name: 'order_produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'order_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'order_produk_satuan', type: 'string', mapping: 'satuan_id'},
+			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}
 		]),
 		sortInfo:{field: 'order_produk_nama', direction: "ASC"}
 	});
@@ -1079,7 +1094,9 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
 
-
+	/* Identify  supplier id*/
+	order_supplier_idField= new Ext.form.NumberField();
+	
 	/* Identify  order_id Field */
 	order_idField= new Ext.form.NumberField({
 		id: 'order_idField',
@@ -1413,6 +1430,28 @@ Ext.onReady(function(){
 		sortInfo:{field: 'order_satuan_display', direction: "ASC"}
 	});
 
+	
+	
+	cbo_dorder_produk_hargaDataStore = new Ext.data.Store({
+		id: 'cbo_dorder_produk_hargaDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_order_beli&m=get_op_last_price', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 5},
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'dorder_id'
+		},[
+			{name: 'dorder_id', type: 'int', mapping: 'dorder_id'},
+			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}
+		]),
+		sortInfo:{field: 'dorder_id', direction: "DESC"}
+	});
+	
+	
+	
+	
 	Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
@@ -2441,20 +2480,42 @@ Ext.onReady(function(){
 	combo_order_produk.on("select",function(){
 		cbo_order_satuanDataStore.setBaseParam('task','produk');
 		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
+		cbo_dorder_produk_hargaDataStore.setBaseParam('task','op_last_price');
+		cbo_dorder_produk_hargaDataStore.setBaseParam('supplier_id',order_supplier_idField.getValue());
 		cbo_order_satuanDataStore.load({
 			callback: function(r,opt,success){
+				cbo_dorder_produk_hargaDataStore.load({
+					callback: function(r,opt,success){
 				if(success==true){
-					console.log(cbo_order_satuanDataStore.getCount());
+					//console.log(cbo_order_satuanDataStore.getCount());
+					//console.log(cbo_dorder_produk_hargaDataStore.getCount());
 					if(cbo_order_satuanDataStore.getCount()>0){
 						var j=cbo_order_satuanDataStore.findExact('order_satuan_default','true');
+						//var k=cbo_order_produk_DataStore.findExact('order_produk_value',combo_order_produk.getValue(),0);
 						if(j>-1){
 							var sat_default=cbo_order_satuanDataStore.getAt(j);
-							//combo_order_satuan.select(sat_default.data.order_satuan_id);
+							var last_price_op = cbo_dorder_produk_hargaDataStore.getAt(0);
 							combo_order_satuan.setValue(sat_default.data.order_satuan_value);
+							order_harga_satuanField.setValue(last_price_op.data.dorder_harga);
+								
 						}
+					
+						
 					}
-
+						/*
+							if(cbo_dorder_produk_hargaDataStore.getCount()>0){
+								var k=cbo_dorder_produk_hargaDataStore.findExact('dorder_harga',0);
+								if(k>-1){
+								var last_price_op = cbo_dorder_produk_hargaDataStore.getAt(k);
+								order_harga_satuanField.setValue(last_price_op.data.dorder_harga);
+								}
+							}	
+							*/
+					
+					
 				}
+			}
+			});	
 			}
 
 		});
@@ -2498,6 +2559,13 @@ Ext.onReady(function(){
 
 	});
 
+	order_supplierField.on("select",function(){
+		//cbo_stok_produkDataStore.setBaseParam('gudang',get_gudang_id());
+		//cbo_stok_produkDataStore.setBaseParam('task','list');
+		check_supplier();
+	
+	});
+	
 	/*master_order_paging_toolbar.on("change", function(){
 			console.log('aktive page :');
 	});*/
