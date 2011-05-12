@@ -270,7 +270,7 @@ class M_akun extends Model{
 			};
 			if($akun_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " test.akun_aktif LIKE '%".$akun_aktif."%'";
+				$query.= " test.akun_aktif = '".$akun_aktif."'";
 			};
 
 			//$this->firephp->log($query);
