@@ -314,6 +314,8 @@ Ext.onReady(function(){
 			detail_order_beliListEditorGrid.setDisabled(true);
 		}else{
 			detail_order_beliListEditorGrid.setDisabled(false);
+			order_supplier_idField.setValue(order_supplierField.getValue());
+			
 		}
 	}
 	
@@ -1444,6 +1446,7 @@ Ext.onReady(function(){
 			id: 'dorder_id'
 		},[
 			{name: 'dorder_id', type: 'int', mapping: 'dorder_id'},
+			{name: 'dorder_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}
 		]),
 		sortInfo:{field: 'dorder_id', direction: "DESC"}
@@ -1622,7 +1625,9 @@ Ext.onReady(function(){
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
 			handler: detail_order_beli_confirm_delete
-		}
+		},
+		'-',
+		'<span style="color:white;">Info: <b>Pilih Supplier dahulu utk mengaktifkan list detail item yang ingin diinput</b></span>'
 		]
 		<?php } ?>
 	});
@@ -2482,6 +2487,7 @@ Ext.onReady(function(){
 		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
 		cbo_dorder_produk_hargaDataStore.setBaseParam('task','op_last_price');
 		cbo_dorder_produk_hargaDataStore.setBaseParam('supplier_id',order_supplier_idField.getValue());
+		cbo_dorder_produk_hargaDataStore.setBaseParam('produk_id',combo_order_produk.getValue());
 		cbo_order_satuanDataStore.load({
 			callback: function(r,opt,success){
 				cbo_dorder_produk_hargaDataStore.load({
@@ -2491,28 +2497,19 @@ Ext.onReady(function(){
 					//console.log(cbo_dorder_produk_hargaDataStore.getCount());
 					if(cbo_order_satuanDataStore.getCount()>0){
 						var j=cbo_order_satuanDataStore.findExact('order_satuan_default','true');
-						//var k=cbo_order_produk_DataStore.findExact('order_produk_value',combo_order_produk.getValue(),0);
+						//var k=cbo_dorder_produk_hargaDataStore.findExact('dorder_produk',combo_order_produk.getValue(),0);
 						if(j>-1){
 							var sat_default=cbo_order_satuanDataStore.getAt(j);
-							var last_price_op = cbo_dorder_produk_hargaDataStore.getAt(0);
+							
 							combo_order_satuan.setValue(sat_default.data.order_satuan_value);
-							order_harga_satuanField.setValue(last_price_op.data.dorder_harga);
-								
-						}
+							
+						}	
+					}	
 					
-						
+					if(cbo_dorder_produk_hargaDataStore.getCount()>0){
+					var last_price_op=cbo_dorder_produk_hargaDataStore.getAt(0);
+					order_harga_satuanField.setValue(last_price_op.data.dorder_harga);	
 					}
-						/*
-							if(cbo_dorder_produk_hargaDataStore.getCount()>0){
-								var k=cbo_dorder_produk_hargaDataStore.findExact('dorder_harga',0);
-								if(k>-1){
-								var last_price_op = cbo_dorder_produk_hargaDataStore.getAt(k);
-								order_harga_satuanField.setValue(last_price_op.data.dorder_harga);
-								}
-							}	
-							*/
-					
-					
 				}
 			}
 			});	
