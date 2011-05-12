@@ -919,7 +919,7 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
@@ -1565,7 +1565,7 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
@@ -2212,7 +2212,7 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
