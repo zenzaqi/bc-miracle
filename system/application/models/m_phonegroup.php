@@ -78,7 +78,6 @@ class M_phonegroup extends Model{
 								'".$_SESSION[SESSION_USERID]."',
 								'".date('Y/m/d H:i:s')."',
 								'".$row->cust_hp."',
-								'".$row->cust_hp."',
 								'".$isms_isi."',
 								'Program')";
 							//echo $sql;
