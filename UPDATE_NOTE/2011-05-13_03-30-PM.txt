@@ -1,0 +1,8 @@
+<update by zaqi.smart@gmail.com>
+- Jurnal Umum
+   o Perbaikan pembatasan unposting
+   o Perbaikan pembatasan tanggal
+   o Perbaikan search
+   o Penambahan Print List
+   o Penambahan Print Faktur
+- SQL : 2011-05-13_03-30-PM.sql 
