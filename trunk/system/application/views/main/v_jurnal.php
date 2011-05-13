@@ -1,14 +1,14 @@
 <?php
 /* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: jurnal View
 	+ Description	: For record view
 	+ Filename 		: v_jurnal.php
- 	+ creator  		: 
+ 	+ creator  		:
  	+ Created on 01/Apr/2010 12:13:56
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +32,7 @@
 			font-weight:bold;
 			color:#222;
 		}
-		
+
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
@@ -43,7 +43,7 @@
 		}
     </style>
 <script>
-/* declare function */		
+/* declare function */
 var jurnal_DataStore;
 var jurnal_ColumnModel;
 var jurnalListEditorGrid;
@@ -60,6 +60,10 @@ var msg = '';
 var pageS=16;
 var today=new Date().format('Y-m-d');
 var thismonth=new Date().format('Y-m');
+var MIN_CREATE_DATE="<?php echo add_date(date('Y-m-d'),-90,'day'); ?>";
+var MAX_CREATE_DATE="<?php echo date('Y-m-d'); ?>";
+var MAX_UNPOSTING="<?php echo add_date(date('Y-m-d'),-37,'day') ?>";
+
 /* declare variable here for Field*/
 var jurnal_idField;
 var jurnal_tanggalField;
@@ -85,12 +89,12 @@ Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 
   	/* Function for add and edit data form, open window form */
-	function jurnal_save(){
-	
-		if(is_jurnal_form_valid()){	
-		
+	function jurnal_save(opsi){
+
+		if(is_jurnal_form_valid()){
+
 			if(detail_jurnal_DataStore.getCount()<2){
-				
+
 				Ext.MessageBox.show({
 					title: 'Warning',
 					msg: 'Maaf, data transaksi minimal ada 2 (dua) dengan nilai seimbang.',
@@ -99,41 +103,39 @@ Ext.onReady(function(){
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
 				});
-				
+
 			}else{
-				
+
 				if(jurnal_totaldebetField.getValue()==jurnal_totalkreditField.getValue()) {
-					
-				var jurnal_id_field_pk=null; 
-				var jurnal_tanggal_field_date=""; 
-				var jurnal_keterangan_field=null; 
-				//var jurnal_noref_field=null; 
-				var jurnal_unit_field=null; 
+
+				var jurnal_id_field_pk=null;
+				var jurnal_tanggal_field_date="";
+				var jurnal_keterangan_field=null;
+				//var jurnal_noref_field=null;
+				var jurnal_unit_field=null;
 				var jurnal_no_field=null;
-	
+
 				jurnal_id_field_pk=get_pk_id();
-				if(jurnal_tanggalField.getValue()!== ""){jurnal_tanggal_field_date = jurnal_tanggalField.getValue().format('Y-m-d');} 
-				if(jurnal_keteranganField.getValue()!== null){jurnal_keterangan_field = jurnal_keteranganField.getValue();} 
-				if(jurnal_noField.getValue()!== null){jurnal_no_field = jurnal_noField.getValue();} 
-	
-				Ext.Ajax.request({  
+				if(jurnal_tanggalField.getValue()!== ""){jurnal_tanggal_field_date = jurnal_tanggalField.getValue().format('Y-m-d');}
+				if(jurnal_keteranganField.getValue()!== null){jurnal_keterangan_field = jurnal_keteranganField.getValue();}
+				if(jurnal_noField.getValue()!== null){jurnal_no_field = jurnal_noField.getValue();}
+
+				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_jurnal&m=get_action',
 					params: {
-						jurnal_id			: jurnal_id_field_pk, 
-						jurnal_tanggal		: jurnal_tanggal_field_date, 
-						jurnal_keterangan	: jurnal_keterangan_field, 
+						jurnal_id			: jurnal_id_field_pk,
+						jurnal_tanggal		: jurnal_tanggal_field_date,
+						jurnal_keterangan	: jurnal_keterangan_field,
 						jurnal_no			: jurnal_no_field,
 						task				: post2db
-					}, 
-					success: function(response){             
+					},
+					success: function(response){
 						var result=response.responseText;
 						var rsp_kode=result.substring(0,2);
 						var rsp_msg=result.replace(rsp_kode+':','');
 						if(rsp_kode=='OK'){
-								detail_jurnal_purge(eval(rsp_msg));
-								Ext.MessageBox.alert(post2db+' OK','Jurnal Umum sukses disimpan.');
-								jurnal_saveWindow.hide();
+								detail_jurnal_insert(eval(rsp_msg),opsi);
 						}else{
 								Ext.MessageBox.show({
 								   title: 'Warning',
@@ -142,7 +144,7 @@ Ext.onReady(function(){
 								   animEl: 'save',
 								   icon: Ext.MessageBox.WARNING
 								});
-						} 
+						}
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -152,12 +154,12 @@ Ext.onReady(function(){
 							   buttons: Ext.MessageBox.OK,
 							   animEl: 'database',
 							   icon: Ext.MessageBox.ERROR
-						});	
-					}                      
+						});
+					}
 				});
-				
+
 				}else{
-				
+
 					Ext.MessageBox.show({
 						title: 'Warning',
 						msg: 'Maaf, data debet-kredit belum seimbang.',
@@ -166,7 +168,7 @@ Ext.onReady(function(){
 						animEl: 'save',
 						icon: Ext.MessageBox.WARNING
 					});
-					
+
 				}
 			}
 		} else {
@@ -181,16 +183,16 @@ Ext.onReady(function(){
 		}
 	}
  	/* End of Function */
-  
+
   	/* Function for get PK field */
 	function get_pk_id(){
 		if(post2db=='UPDATE')
 			return jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_id');
-		else 
+		else
 			return 0;
 	}
 	/* End of Function  */
-	
+
 	/* Reset form before loading */
 	function jurnal_reset_form(){
 		jurnal_tanggalField.reset();
@@ -200,10 +202,10 @@ Ext.onReady(function(){
 		jurnal_norefField.reset();
 		jurnal_norefField.setValue(null);
 		jurnal_noField.reset();
-		jurnal_noField.setValue(null);
+		jurnal_noField.setValue('(auto)');
 		jurnal_totaldebetField.setValue(0);
 		jurnal_totalkreditField.setValue(0);
-		
+
 		cbo_akun_renderDataStore.setBaseParam('task','all');
 		cbo_akun_renderDataStore.setBaseParam('master_id', -1);
 		cbo_akun_renderDataStore.load({
@@ -216,14 +218,14 @@ Ext.onReady(function(){
 		});
 	}
  	/* End of Function */
-  
+
 	/* setValue to EDIT */
 	function jurnal_set_form(){
 		jurnal_tanggalField.setValue(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_tanggal'));
 		jurnal_keteranganField.setValue(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_keterangan'));
 		jurnal_norefField.setValue(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_noref'));
 		jurnal_noField.setValue(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_no'));
-		
+
 		cbo_akun_renderDataStore.setBaseParam('task','detail');
 		cbo_akun_renderDataStore.setBaseParam('master_id', get_pk_id());
 		cbo_akun_renderDataStore.load({
@@ -234,23 +236,24 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								set_balance();
+								Ext.MessageBox.hide();
 							}
 						}
 					});
-					
+
 				}
 			}
 		});
-		
+
 	}
 	/* End setValue to EDIT*/
-  
+
 	/* Function for Check if the form is valid */
 	function is_jurnal_form_valid(){
 		return (jurnal_tanggalField.isValid() && jurnal_noField.isValid());
 	}
   	/* End of Function */
-  
+
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!jurnal_saveWindow.isVisible()){
@@ -263,7 +266,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
- 
+
   	/* Function for Delete Confirm */
 	function jurnal_confirm_delete(){
 		// only one jurnal is selected here
@@ -299,7 +302,7 @@ Ext.onReady(function(){
 			}else{
 				Ext.MessageBox.confirm('Perhatian !','Apakah anda benar-benar akan menghapus data ini?', jurnal_delete);
 			}
-			
+
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
@@ -311,12 +314,12 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
 	/* Function for Update Confirm */
 	function jurnal_confirm_update(){
 		/* only one record is selected here */
 		if(jurnalListEditorGrid.selModel.getCount() == 1) {
-			
+
 			if(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_post')=='Y'){
 				Ext.MessageBox.show({
 					title: 'Warning',
@@ -331,6 +334,13 @@ Ext.onReady(function(){
 				msg='updated';
 				jurnal_set_form();
 				jurnal_saveWindow.show();
+
+				Ext.MessageBox.show({
+				   msg: 'Sedang memuat data, mohon tunggu...',
+				   progressText: 'proses...',
+				   width:350,
+				   wait:true
+				});
 			}
 		} else {
 			Ext.MessageBox.show({
@@ -344,7 +354,7 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
-  
+
   	/* Function for Delete Record */
 	function jurnal_delete(btn){
 		if(btn=='yes'){
@@ -354,10 +364,10 @@ Ext.onReady(function(){
 				prez.push(selections[i].json.jurnal_id);
 			}
 			var encoded_array = Ext.encode(prez);
-			Ext.Ajax.request({ 
+			Ext.Ajax.request({
 				waitMsg: 'Please Wait',
-				url: 'index.php?c=c_jurnal&m=get_action', 
-				params: { task: "DELETE", ids:  encoded_array }, 
+				url: 'index.php?c=c_jurnal&m=get_action',
+				params: { task: "DELETE", ids:  encoded_array },
 				success: function(response){
 					var result=eval(response.responseText);
 					switch(result){
@@ -383,24 +393,24 @@ Ext.onReady(function(){
 					   buttons: Ext.MessageBox.OK,
 					   animEl: 'database',
 					   icon: Ext.MessageBox.ERROR
-					});	
+					});
 				}
 			});
-		}  
+		}
 	}
   	/* End of Function */
-  
+
   		/* Function for Update Confirm */
 	function jurnal_confirm_reopen(){
 		if(jurnalListEditorGrid.selModel.getCount() == 1) {
 				var id="";
 				var tanggal=null;
-				
-			if(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_post')=='Y' && 
-			   jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_tanggal').format('Y-m')==thismonth){
-				
+
+			if(jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_post')=='Y' &&
+			   jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_tanggal').format('Y-m-d')>=MAX_UNPOSTING){
+
 				id = jurnalListEditorGrid.getSelectionModel().getSelected().get('jurnal_id');
-				
+
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_jurnal&m=jurnal_reopen',
@@ -427,11 +437,11 @@ Ext.onReady(function(){
 						});
 					}
 				});
-				
+
 			}else{
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Hanya data yang sudah terposting pada bulan berjalan yang dapat dibuka',
+					msg: 'Data yang sudah terposting tidak dapat dibuka karena telah melewati batas pembukaan',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -447,12 +457,12 @@ Ext.onReady(function(){
 			});
 		}
 	}
-	
+
 	/* Function for Retrieve DataStore */
 	jurnal_DataStore = new Ext.data.GroupingStore({
 		id: 'jurnal_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_jurnal&m=get_action', 
+			url: 'index.php?c=c_jurnal&m=get_action',
 			method: 'POST'
 		}),
 		groupField:'jurnal_id',
@@ -464,32 +474,32 @@ Ext.onReady(function(){
 		},[
 			{name: 'jurnal_id', type: 'int', mapping: 'jurnal_id'},
 			{name: 'jurnal_no', type: 'string', mapping: 'jurnal_no'},
-			{name: 'jurnal_detalid', type: 'int', mapping: 'djurnal_id'}, 
-			{name: 'jurnal_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jurnal_tanggal'}, 
-			{name: 'jurnal_akun', type: 'string', mapping: 'akun_kode'}, 
-			{name: 'jurnal_akun_nama', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'jurnal_keterangan', type: 'string', mapping: 'djurnal_detail'}, 
-			{name: 'jurnal_noref', type: 'string', mapping: 'jurnal_noref'}, 
-			{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
-			{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}, 
-			{name: 'jurnal_saldo', type: 'float'}, 
-			{name: 'jurnal_unit', type: 'int', mapping: 'jurnal_unit'}, 
-			{name: 'jurnal_author', type: 'string', mapping: 'jurnal_author'}, 
-			{name: 'jurnal_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_create'}, 
-			{name: 'jurnal_update', type: 'string', mapping: 'jurnal_update'}, 
-			{name: 'jurnal_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_update'}, 
-			{name: 'jurnal_post', type: 'string', mapping: 'jurnal_post'}, 
-			{name: 'jurnal_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_post'}, 
-			{name: 'jurnal_revised', type: 'int', mapping: 'jurnal_revised'} 
+			{name: 'jurnal_detalid', type: 'int', mapping: 'djurnal_id'},
+			{name: 'jurnal_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jurnal_tanggal'},
+			{name: 'jurnal_akun', type: 'string', mapping: 'akun_kode'},
+			{name: 'jurnal_akun_nama', type: 'string', mapping: 'akun_nama'},
+			{name: 'jurnal_keterangan', type: 'string', mapping: 'djurnal_detail'},
+			{name: 'jurnal_noref', type: 'string', mapping: 'jurnal_noref'},
+			{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'},
+			{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'},
+			{name: 'jurnal_saldo', type: 'float'},
+			{name: 'jurnal_unit', type: 'int', mapping: 'jurnal_unit'},
+			{name: 'jurnal_author', type: 'string', mapping: 'jurnal_author'},
+			{name: 'jurnal_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_create'},
+			{name: 'jurnal_update', type: 'string', mapping: 'jurnal_update'},
+			{name: 'jurnal_date_update', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_update'},
+			{name: 'jurnal_post', type: 'string', mapping: 'jurnal_post'},
+			{name: 'jurnal_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_post'},
+			{name: 'jurnal_revised', type: 'int', mapping: 'jurnal_revised'}
 		]),
 		sortInfo:{field: 'jurnal_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
-    
+
 	Ext.ux.grid.GroupSummary.Calculations['totalSaldo'] = function(v, record, field){
         return v + (record.data.jurnal_debet-record.data.jurnal_kredit);
     };
-	
+
   	/* Function for Identify of Window Column Model */
 	jurnal_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -513,17 +523,17 @@ Ext.onReady(function(){
 					jurnal_no='<b><font color=RED>'+record.data.jurnal_no+'</font></b>';
 				else
 					jurnal_no='<b>'+record.data.jurnal_no+'</b>';
-					
+
                 return '<span>' + jurnal_no+ '</span>';
             }
-		}, 
+		},
 		{
 			header: 'Nama Rekening',
 			dataIndex: 'jurnal_akun_nama',
 			width: 200,
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Kode',
 			dataIndex: 'jurnal_akun',
@@ -535,16 +545,16 @@ Ext.onReady(function(){
 				summaryRenderer: function(v, params, data){
 					return ((v === 0 || v > 1) ? '(' + v +' data transaksi)' : '(1 data transaksi)');
 			}
-		}, 
+		},
 		{
 			header: 'Keterangan',
 			dataIndex: 'jurnal_keterangan',
 			width: 200,
 			sortable: true,
 			editor: new Ext.form.TextField({
-				maxLength: 50			
+				maxLength: 50
 			})
-		}, 
+		},
 		{
 			header: 'Nilai Debet (Rp)',
 			dataIndex: 'jurnal_debet',
@@ -554,7 +564,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Nilai Kredit (Rp)',
 			dataIndex: 'jurnal_kredit',
@@ -564,7 +574,7 @@ Ext.onReady(function(){
 			summaryType: 'sum',
 			sortable: true,
 			readOnly: true
-		}, 
+		},
 		{
 			header: 'Unit',
 			dataIndex: 'jurnal_unit',
@@ -572,7 +582,7 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true,
 			hidden: true
-		}, 
+		},
 		{
 			header: 'Author',
 			dataIndex: 'jurnal_author',
@@ -580,9 +590,9 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}	
+		}
 		]);
-	
+
 	jurnal_ColumnModel.defaultSortable= true;
 	/* End of Function */
     var summary = new Ext.ux.grid.GroupSummary();
@@ -643,8 +653,8 @@ Ext.onReady(function(){
 			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
-		}, '-', 
+			handler: display_form_search_window
+		}, '-',
 			new Ext.app.SearchField({
 			store: jurnal_DataStore,
 			params: {start: 0, limit: pageS},
@@ -663,28 +673,34 @@ Ext.onReady(function(){
 			handler: jurnal_confirm_reopen   // Confirm before updating
 		}
 		<?php } ?>
+		,'-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: jurnal_print
+		}
 		]
 	});
 	jurnalListEditorGrid.render();
 	/* End of DataStore */
-     
+
 	/* Create Context Menu */
 	jurnal_ContextMenu = new Ext.menu.Menu({
 		id: 'jurnal_ListEditorGridContextMenu',
 		items: [
 		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
-		{ 
-			text: 'Edit', tooltip: 'Edit selected record', 
+		{
+			text: 'Edit', tooltip: 'Edit selected record',
 			iconCls:'icon-update',
-			handler: jurnal_editContextMenu 
+			handler: jurnal_editContextMenu
 		},
 		<?php } ?>
 		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
-		{ 
-			text: 'Delete', 
-			tooltip: 'Delete selected record', 
+		{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			handler: jurnal_confirm_delete 
+			handler: jurnal_confirm_delete
 		},
 		<?php } ?>
 		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
@@ -696,10 +712,16 @@ Ext.onReady(function(){
 			handler: jurnal_confirm_reopen   // Confirm before updating
 		}
 		<?php } ?>
+		,'-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: jurnal_print
+		}
 		]
-	}); 
+	});
 	/* End of Declaration */
-	
+
 	/* Event while selected row via context menu */
 	function onjurnal_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -710,35 +732,37 @@ Ext.onReady(function(){
 		jurnal_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+
 	/* function for editing row via context menu */
 	function jurnal_editContextMenu(){
 		//jurnalListEditorGrid.startEditing(jurnal_SelectedRow,1);
 		jurnal_confirm_update();
   	}
 	/* End of Function */
-  	
+
 	jurnalListEditorGrid.addListener('rowcontextmenu', onjurnal_ListEditGridContextMenu);
 	jurnal_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 
-	
+
 	/* Identify  jurnal_tanggal Field */
 	jurnal_tanggalField= new Ext.form.DateField({
 		id: 'jurnal_tanggalField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
 		value: today,
-		allowBlank: false
+		allowBlank: false,
+		minValue: MIN_CREATE_DATE,
+		maxValue: MAX_CREATE_DATE
 	});
-	
+
 	jurnal_noField=new Ext.form.TextField({
 		id: 'jurnal_noField',
 		fieldLabel: 'No Jurnal',
 		anchor: '95%',
-		readOnly: false,
+		readOnly: true,
 		allowBlank: false
 	});
-	
+
 	/* Identify  jurnal_akun Field */
 	jurnal_akunField= new Ext.form.TextField({
 		id: 'jurnal_akunField',
@@ -780,7 +804,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});
-	
+
 	jurnal_totaldebetField= new Ext.form.TextField({
 		id: 'jurnal_totaldebetField',
 		fieldLabel: 'Total Debet',
@@ -800,7 +824,7 @@ Ext.onReady(function(){
 		itemCls: 'rmoney',
 		maskRe: /([0-9]+)$/
 	});
-	
+
 	balance_Group = new Ext.form.FieldSet({
 		title: 'Balance',
 		autoHeight: true,
@@ -813,18 +837,18 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [jurnal_totaldebetField] 
+				items: [jurnal_totaldebetField]
 			},{
 				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [jurnal_totalkreditField] 
+				items: [jurnal_totalkreditField]
 			}
 			]
-	
+
 	});
-	
+
 	master_Group = new Ext.form.FieldSet({
 		title: 'Master',
 		autoHeight: true,
@@ -837,45 +861,45 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [jurnal_tanggalField, jurnal_noField] 
+				items: [jurnal_tanggalField, jurnal_noField]
 			},{
 				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [jurnal_keteranganField] 
+				items: [jurnal_keteranganField]
 			}
 			]
-	
-	});
-	
 
-	
+	});
+
+
+
 	//DETAIL DECLARATION
 	var jurnal_detail_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
 		id: 'jurnal_id'
 	},[
-		{name: 'jurnal_id', type: 'int', mapping: 'djurnal_id'}, 
-		{name: 'jurnal_akun', type: 'int', mapping: 'djurnal_akun'}, 
-		{name: 'jurnal_akun_kode', type: 'string', mapping: 'akun_kode'}, 
+		{name: 'jurnal_id', type: 'int', mapping: 'djurnal_id'},
+		{name: 'jurnal_akun', type: 'int', mapping: 'djurnal_akun'},
+		{name: 'jurnal_akun_kode', type: 'string', mapping: 'akun_kode'},
 		{name: 'jurnal_detail', type: 'string', mapping: 'djurnal_detail'},
-		{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'}, 
-		{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}			
+		{name: 'jurnal_debet', type: 'float', mapping: 'djurnal_debet'},
+		{name: 'jurnal_kredit', type: 'float', mapping: 'djurnal_kredit'}
 	]);
 	//eof
-	
+
 	//function for json writer of detail
 	var detail_jurnal_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
-	
+
 	detail_jurnal_DataStore = new Ext.data.Store({
 		id: 'detail_jurnal_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_jurnal&m=get_detail_jurnal_list', 
+			url: 'index.php?c=c_jurnal&m=get_detail_jurnal_list',
 			method: 'POST'
 		}),
 		reader: jurnal_detail_reader,
@@ -883,17 +907,17 @@ Ext.onReady(function(){
 		sortInfo:{field: 'jurnal_id', direction: 'DESC'}
 	});
 	/* End of Function */
-	
-	
+
+
 	//function for editor of detail
 	var editor_detail_jurnal= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
     });
-	
+
 	cbo_akunDataStore = new Ext.data.Store({
 		id: 'cbo_akunDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_jurnal&m=get_akun_list', 
+			url: 'index.php?c=c_jurnal&m=get_akun_list',
 			method: 'POST'
 		}),
 		baseParams:{start:0,limit:pageS,task:'detail'},
@@ -908,11 +932,11 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'akun_kode', direction: "ASC"}
 	});
-	
+
 	cbo_akun_renderDataStore = new Ext.data.Store({
 		id: 'cbo_akun_renderDataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_jurnal&m=get_akun_list', 
+			url: 'index.php?c=c_jurnal&m=get_akun_list',
 			method: 'POST'
 		}),
 		baseParams:{start:0,limit:pageS,task:'detail'},
@@ -927,21 +951,21 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'akun_kode', direction: "ASC"}
 	});
-	
-	
+
+
 	Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
-	
+
 	var akun_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>[{akun_kode}] - {akun_nama}</b></span>',
         '</div></tpl>'
     );
-	
+
 	var combo_akun_jurnal_umum=new Ext.form.ComboBox({
 		store: cbo_akunDataStore,
 		mode: 'remote',
@@ -958,7 +982,7 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
-	
+
 	var combo_akun_jurnal_umum_reader=new Ext.form.ComboBox({
 		store: cbo_akun_renderDataStore,
 		mode: 'remote',
@@ -975,8 +999,8 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
-	
-	
+
+
 	detail_jurnal_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		 {
@@ -1016,13 +1040,13 @@ Ext.onReady(function(){
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: jurnal_kreditField
-			
+
 		}
 		]
 	);
 	detail_jurnal_ColumnModel.defaultSortable= true;
-	
-	
+
+
 	//declaration of detail list editor grid
 	detail_jurnalListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'detail_jurnalListEditorGrid',
@@ -1059,14 +1083,14 @@ Ext.onReady(function(){
 		<?php } ?>
 	});
 	//eof
-	
+
 	//function of detail add
 	function detail_jurnal_add(){
 		var edit_detail_jurnal= new detail_jurnalListEditorGrid.store.recordType({
-			jurnal_akun			:null,		
-			jurnal_detail		:null,		
-			jurnal_debet		:0,		
-			jurnal_kredit		:0	
+			jurnal_akun			:null,
+			jurnal_detail		:null,
+			jurnal_debet		:0,
+			jurnal_kredit		:0
 		});
 		editor_detail_jurnal.stopEditing();
 		detail_jurnal_DataStore.insert(0, edit_detail_jurnal);
@@ -1074,53 +1098,119 @@ Ext.onReady(function(){
 		detail_jurnalListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jurnal.startEditing(0);
 	}
-	
+
 	//function for refresh detail
 	function refresh_detail_jurnal(){
 		detail_jurnal_DataStore.commitChanges();
 		detail_jurnalListEditorGrid.getView().refresh();
 	}
 	//eof
-	
+
+	function jurnal_cetak_faktur(pkid){
+
+		Ext.Ajax.request({
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_jurnal&m=print_faktur',
+		params: {
+			faktur	: pkid
+		},
+		success: function(response){
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/jurnal_faktur.html','jurnal_faktur','height=400,width=720,resizable=1,scrollbars=1, menubar=1');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});
+		}
+		});
+	}
+
 	//function for insert detail
-	function detail_jurnal_insert(pkid){
-		var total_jurnal=0;
-		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
-			detail_jurnal_record=detail_jurnal_DataStore.getAt(i);
+	function detail_jurnal_insert(pkid,opsi){
+		var jurnal_id = [];
+        var jurnal_akun = [];
+        var jurnal_detail = [];
+		var jurnal_debet = [];
+        var jurnal_kredit = [];
+
+
+        if(detail_jurnal_DataStore.getCount()>0){
+            for(i=0; i<detail_jurnal_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_jurnal_DataStore.getAt(i).data.jurnal_akun))
+				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==undefined
+				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==''
+				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==0){
+
+                  	jurnal_id.push(detail_jurnal_DataStore.getAt(i).data.jurnal_id);
+					jurnal_akun.push(detail_jurnal_DataStore.getAt(i).data.jurnal_akun);
+                   	jurnal_detail.push(detail_jurnal_DataStore.getAt(i).data.jurnal_detail);
+					jurnal_debet.push(detail_jurnal_DataStore.getAt(i).data.jurnal_debet);
+					jurnal_kredit.push(detail_jurnal_DataStore.getAt(i).data.jurnal_kredit);
+                }
+            }
+
+			var encoded_array_jurnal_id = Ext.encode(jurnal_id);
+			var encoded_array_jurnal_akun = Ext.encode(jurnal_akun);
+			var encoded_array_jurnal_detail = Ext.encode(jurnal_detail);
+			var encoded_array_jurnal_debet = Ext.encode(jurnal_debet);
+			var encoded_array_jurnal_kredit = Ext.encode(jurnal_kredit);
+
 			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
+				waitMsg: 'Mohon tunggu...',
 				url: 'index.php?c=c_jurnal&m=detail_jurnal_insert',
 				params:{
-				jurnal_master	: pkid, 
-				jurnal_akun		: detail_jurnal_record.data.jurnal_akun, 
-				jurnal_detail	: detail_jurnal_record.data.jurnal_detail, 
-				jurnal_debet	: detail_jurnal_record.data.jurnal_debet, 
-				jurnal_kredit	: detail_jurnal_record.data.jurnal_kredit
-				
+					jurnal_id		: encoded_array_jurnal_id,
+					jurnal_master	: pkid,
+					jurnal_akun		: encoded_array_jurnal_akun,
+					jurnal_detail	: encoded_array_jurnal_detail,
+					jurnal_debet	: encoded_array_jurnal_debet,
+					jurnal_kredit	: encoded_array_jurnal_kredit
 				},
 				success:function(response){
-					total_jurnal++;
-					if(total_jurnal==detail_jurnal_DataStore.getCount()) jurnal_DataStore.reload();	
+					if(opsi=='print'){
+						jurnal_cetak_faktur(pkid);
+					}
+					Ext.MessageBox.alert(post2db+' OK','Data Jurnal Umum berhasil disimpan.');
+					jurnal_saveWindow.hide();
+					jurnal_DataStore.reload();
+				},
+				failure: function(response){
+					Ext.MessageBox.hide();
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Could not connect to the database. retry later.',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});
 				}
 			});
-		}	
+
+        }
 	}
 	//eof
-	
-	//function for purge detail
-	function detail_jurnal_purge(pkid){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_jurnal&m=detail_jurnal_purge',
-			params:{ jurnal_master: pkid },
-			success:function(response){
-				detail_jurnal_insert(pkid);
-			}
-		});
-		jurnal_DataStore.reload();
-	}
-	//eof
-	
+
+
 	/* Function for Delete Confirm of detail */
 	function detail_jurnal_confirm_delete(){
 		// only one record is selected here
@@ -1139,7 +1229,7 @@ Ext.onReady(function(){
 		}
 	}
 	//eof
-	
+
 	//function for Delete of detail
 	function detail_jurnal_delete(btn){
 		if(btn=='yes'){
@@ -1147,31 +1237,36 @@ Ext.onReady(function(){
 			for(var i = 0, r; r = s[i]; i++){
 				detail_jurnal_DataStore.remove(r);
 			}
-		} 
+		}
 		detail_jurnal_DataStore.commitChanges();
 	}
 	//eof
-	
-	/* Function for retrieve create Window Panel*/ 
+
+	/* Function for retrieve create Window Panel*/
 	jurnal_saveForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 800,        
+		width: 800,
 		items:[
 			{
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [master_Group, detail_jurnalListEditorGrid, balance_Group ] 
+				items: [master_Group, detail_jurnalListEditorGrid, balance_Group ]
 			}
 			],
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JURNALUMUM'))){ ?>
 			{
-				text: 'Save and Close',
+				text: 'Save and Print',
 				formBind: true,
-				handler: jurnal_save
+				handler: function(){ jurnal_save("print"); }
+			},
+			{
+				text: 'Save',
+				formBind: true,
+				handler: function(){ jurnal_save("save"); }
 			}
 			,
 			<?php } ?>
@@ -1184,7 +1279,7 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	
+
 	/* Function for retrieve create Window Form */
 	jurnal_saveWindow= new Ext.Window({
 		id: 'jurnal_saveWindow',
@@ -1202,7 +1297,7 @@ Ext.onReady(function(){
 		items: jurnal_saveForm
 	});
 	/* End Window */
-	
+
 	/* Function for action list search */
 	function jurnal_list_search(){
 		// render according to a SQL date format.
@@ -1216,15 +1311,15 @@ Ext.onReady(function(){
 
 		// change the store parameters
 		jurnal_DataStore.baseParams = {
-			task				: 'SEARCH',
-			jurnal_tgl_awal		:	jurnal_tanggal_mulai_search_date, 
-			jurnal_tgl_akhir	:	jurnal_tanggal_akhir_search_date, 
+			task				: 	'SEARCH',
+			jurnal_tgl_awal		:	jurnal_tanggal_mulai_search_date,
+			jurnal_tgl_akhir	:	jurnal_tanggal_akhir_search_date,
 			jurnal_no			:	jurnal_no_search
 		};
-		// Cause the datastore to do another query : 
+		// Cause the datastore to do another query :
 		jurnal_DataStore.reload({params: {start: 0, limit: pageS}});
 	}
-		
+
 	/* Function for reset search result */
 	function jurnal_reset_search(){
 		// reset the store parameters
@@ -1233,13 +1328,13 @@ Ext.onReady(function(){
 		jurnal_searchWindow.close();
 	};
 	/* End of Fuction */
-	
+
 	/* Identify  jurnal_tanggal Search Field */
 	jurnal_tanggal_mulaiSearchField= new Ext.form.DateField({
 		id: 'jurnal_tanggal_mulaiSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d'
-	
+
 	});
 
 		/* Identify  jurnal_tanggal Search Field */
@@ -1247,23 +1342,23 @@ Ext.onReady(function(){
 		id: 'jurnal_tanggal_akhirSearchField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d'
-	
+
 	});
-	
+
 	/* Identify  jurnal_akun Search Field */
 	jurnal_noSearchField= new Ext.form.TextField({
 		id: 'jurnal_noSearchField',
 		fieldLabel: 'No Jurnal',
 		anchor: '95%'
 	});
-	
-    
+
+
 	/* Function for retrieve search Form Panel */
 	jurnal_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 500,        
+		width: 500,
 		items: [{
 			layout:'column',
 			border:false,
@@ -1290,11 +1385,11 @@ Ext.onReady(function(){
 							labelWidth:20,
 							defaultType: 'datefield',
 							items: [jurnal_tanggal_akhirSearchField]
-						}						
-								
+						}
+
 				        ]
 						},jurnal_noSearchField
-						] 
+						]
 			}
 			]
 		}]
@@ -1310,9 +1405,9 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	 
-	
+    /* End of Function */
+
+
 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	jurnal_searchWindow = new Ext.Window({
@@ -1329,8 +1424,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_jurnal_search',
 		items: jurnal_searchForm
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!jurnal_searchWindow.isVisible()){
@@ -1340,11 +1435,11 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function jurnal_print(){
 		var searchquery = "";
-		
+
 		var jurnal_no_print=null;
 		var jurnal_tanggal_mulai_print_date="";
 		var jurnal_tanggal_akhir_print_date="";
@@ -1354,19 +1449,19 @@ Ext.onReady(function(){
 		if(jurnal_DataStore.baseParams.jurnal_no!==null){jurnal_no_print = jurnal_DataStore.baseParams.jurnal_no;}
 		if(jurnal_DataStore.baseParams.jurnal_tgl_awal!==null){ jurnal_tgl_awal_print = jurnal_DataStore.baseParams.jurnal_tgl_awal; }
 		if(jurnal_DataStore.baseParams.jurnal_tgl_akhir!==null){ jurnal_tgl_akhir_print = jurnal_DataStore.baseParams.jurnal_tgl_akhir; }
-	
-		Ext.Ajax.request({   
+
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_jurnal&m=get_action',
 		params: {
 			task				: "PRINT",
-		  	query				: searchquery,                    		
+		  	query				: searchquery,
 			jurnal_no			: jurnal_no_print,
 			jurnal_tgl_awal 	: jurnal_tgl_awal_print,
 			jurnal_tgl_akhir	: jurnal_tgl_akhir_print,
 		  	currentlisting		: jurnal_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -1381,7 +1476,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1391,16 +1486,16 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
+			});
+		}
 		});
 	}
 	/* Enf Function */
-	
+
 	/* Function for print Export to Excel Grid */
 	function jurnal_export_excel(){
 		var searchquery = "";
-		
+
 		var jurnal_no_print=null;
 		var jurnal_tanggal_mulai_print_date="";
 		var jurnal_tanggal_akhir_print_date="";
@@ -1410,20 +1505,20 @@ Ext.onReady(function(){
 		if(jurnal_DataStore.baseParams.jurnal_no!==null){jurnal_no_excel = jurnal_DataStore.baseParams.jurnal_no;}
 		if(jurnal_DataStore.baseParams.jurnal_tgl_awal!==null){ jurnal_tgl_awal_excel = jurnal_DataStore.baseParams.jurnal_tgl_awal; }
 		if(jurnal_DataStore.baseParams.jurnal_tgl_akhir!==null){ jurnal_tgl_akhir_excel = jurnal_DataStore.baseParams.jurnal_tgl_akhir; }
-	
 
-		Ext.Ajax.request({   
+
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_jurnal&m=get_action',
 		params: {
 			task				: "PRINT",
-		  	query				: searchquery,                    		
+		  	query				: searchquery,
 			jurnal_no			: jurnal_no_excel,
 			jurnal_tgl_awal 	: jurnal_tgl_awal_excel,
 			jurnal_tgl_akhir	: jurnal_tgl_akhir_excel,
 		  	currentlisting		: jurnal_DataStore.baseParams.task
 		},
-		success: function(response){              
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -1438,7 +1533,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -1448,22 +1543,22 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
+			});
+		}
 		});
 	}
 	/*End of Function */
-	
+
 
 	//EVENTS
-	
+
 	function set_balance(){
 		var total_debet=0;
 		var total_kredit=0;
 		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
 			var data_balance=detail_jurnal_DataStore.getAt(i);
 			total_debet=total_debet+data_balance.data.jurnal_debet;
-			total_kredit=total_kredit+data_balance.data.jurnal_kredit;	
+			total_kredit=total_kredit+data_balance.data.jurnal_kredit;
 		}
 		jurnal_totaldebetField.setValue(CurrencyFormatted(total_debet));
 		jurnal_totalkreditField.setValue(CurrencyFormatted(total_kredit));
@@ -1472,21 +1567,21 @@ Ext.onReady(function(){
 	jurnal_kreditField.on('keyup',function(){
 		set_balance();
 	});
-	
 
-	
+
+
 	jurnal_debetField.on('keyup',function(){
 		set_balance();
 	});
-	
+
 	jurnal_kreditField.on('keyup',function(){
 		set_balance();
 	});
-	
-	
+
+
 	detail_jurnal_DataStore.on("update",function(){
 		detail_jurnal_DataStore.commitChanges();
-		var query_selected="";									   
+		var query_selected="";
 		cbo_akun_renderDataStore.lastQuery=null;
 		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
 			detail_record=detail_jurnal_DataStore.getAt(i);
@@ -1502,19 +1597,19 @@ Ext.onReady(function(){
 				}
 			}
 		});
-		
-		
+
+
 		set_balance();
-		
+
 	});
 	/*End of Function */
-	
+
 	combo_akun_jurnal_umum.on("focus",function(){
 		cbo_akunDataStore.setBaseParam('task','all');
-		cbo_akunDataStore.load({params:{start:0, limit: pageS}});	
+		cbo_akunDataStore.load({params:{start:0, limit: pageS}});
 	});
-	
-	
+
+
 	combo_akun_jurnal_umum.on('select',function(){
 		var j=cbo_akunDataStore.findExact('akun_id',combo_akun_jurnal_umum.getValue());
 		if(j>-1){
