@@ -1261,7 +1261,7 @@ class M_customer extends Model{
 		}
 		
 		//function for search label
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter , $cust_terdaftar_start, $cust_tgldaftar_end){
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -1403,9 +1403,23 @@ class M_customer extends Model{
 				}
 				
 			};
+			/*
 			if($cust_terdaftar!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_terdaftar LIKE '%".$cust_terdaftar."%'";
+			};
+			*/
+			if($cust_terdaftar_start!='' or $cust_tgldaftar_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($cust_terdaftar_start!='' and $cust_tgldaftar_end!=''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar_start."' AND '".$cust_tgldaftar_end."'";
+				}else if ($cust_terdaftar_start!='' and $cust_tgldaftar_end==''){
+					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar_start."' AND now()";
+				}else if ($cust_terdaftar_start=='' and $cust_tgldaftar_end!=''){
+					$query.= " cust_terdaftar < '".$cust_tgldaftar_end."'";
+				}
+				
 			};
 			if($cust_statusnikah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

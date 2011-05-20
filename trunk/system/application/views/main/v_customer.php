@@ -1822,6 +1822,8 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_jmlanak_print=null;
 		var cust_unit_print=null;
 		var cust_aktif_print=null;
+		var cust_terdaftar_search_date="";
+		var cust_tgldaftar_search_dateEnd="";
 		var win;              
 		
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
@@ -1855,6 +1857,8 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
 		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_print_date = customer_DataStore.baseParams.cust_terdaftar;}
+		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_search_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_search_dateEnd=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
 		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_print = customer_DataStore.baseParams.cust_jmlanak;}
@@ -1902,6 +1906,8 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_jmlanak : cust_jmlanak_print,
 			cust_unit : cust_unit_print,
 			cust_aktif : cust_aktif_print,
+			cust_terdaftar_start : cust_terdaftar_search_date,
+			cust_tgldaftar_end : cust_tgldaftar_search_dateEnd,
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
