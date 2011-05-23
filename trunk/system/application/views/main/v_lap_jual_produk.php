@@ -51,6 +51,7 @@ var rpt_jproduk_tglawalField;
 var rpt_jproduk_tglakhirField;
 var rpt_jproduk_rekapField;
 var rpt_jproduk_detailField;
+var rpt_jproduk_groomingField;
 var rpt_jproduk_bulanField;
 var rpt_jproduk_tahunField;
 var rpt_jproduk_opsitglField;
@@ -110,6 +111,12 @@ Ext.onReady(function(){
 			id: 'group_detail_Store',
 			fields:['group'],
 			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon']]
+	});
+	
+	var group_grooming_Store= new Ext.data.SimpleStore({
+			id: 'group_grooming_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Karyawan']]
 	});
 	
 	var rpt_jproduk_groupField=new Ext.form.ComboBox({
@@ -214,6 +221,12 @@ Ext.onReady(function(){
 		name: 'jproduk_opsi'
 	});
 	
+	rpt_jproduk_groomingField=new Ext.form.Radio({
+		id: 'rpt_jproduk_groomingField',
+		boxLabel: 'Grooming',
+		name: 'jproduk_opsi'
+	});
+	
 	var rpt_jproduk_periodeField=new Ext.form.FieldSet({
 		id:'rpt_jproduk_periodeField',
 		title : 'Periode',
@@ -268,7 +281,7 @@ Ext.onReady(function(){
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_jproduk_rekapField ,rpt_jproduk_detailField]
+		items: [rpt_jproduk_rekapField ,rpt_jproduk_detailField,rpt_jproduk_groomingField]
 	});
 	
 	var	rpt_jproduk_groupbyField=new Ext.form.FieldSet({
@@ -321,8 +334,10 @@ Ext.onReady(function(){
 		}
 		if(rpt_jproduk_groupField.getValue()!==""){jproduk_group=rpt_jproduk_groupField.getValue(); }
 		
-		if(rpt_jproduk_rekapField.getValue()==true){jproduk_opsi='rekap';}else{jproduk_opsi='detail';}
-		
+		if(rpt_jproduk_rekapField.getValue()==true){jproduk_opsi='rekap';}
+		if(rpt_jproduk_detailField.getValue()==true){jproduk_opsi='detail';}
+		if(rpt_jproduk_groomingField.getValue()==true){jproduk_opsi='grooming';}
+
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
@@ -457,6 +472,18 @@ Ext.onReady(function(){
 		}
 		
 	});
+	
+	rpt_jproduk_groomingField.on("check", function(){
+		rpt_jproduk_groupField.setValue('No faktur');
+		if(rpt_jproduk_groomingField.getValue()==true){
+			rpt_jproduk_groupField.bindStore(group_grooming_Store);
+		}else if(rpt_jproduk_detailField.getValue()==true)
+		{
+			rpt_jproduk_groupField.bindStore(group_detail_Store);
+		}
+	});
+
+	
 	
 });
 	</script>
