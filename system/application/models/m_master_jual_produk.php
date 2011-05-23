@@ -44,6 +44,7 @@ class M_master_jual_produk extends Model{
 		switch($group){
 			case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
 			case "Customer": $order_by=" ORDER BY cust_nama ASC";break;
+			case "Karyawan": $order_by=" ORDER BY cust_nama ASC";break;
 			case "No Faktur": $order_by=" ORDER BY no_bukti ASC";break;
 			case "Produk": $order_by=" ORDER BY produk_id,satuan_nama ASC";break;
 			case "Sales": $order_by=" ORDER BY sales ASC";break;
@@ -65,6 +66,14 @@ class M_master_jual_produk extends Model{
 				$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 			else if($periode=='tanggal')
 				$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+		}
+		else if($opsi=='grooming'){
+			if($periode=='all')
+				$sql="SELECT * FROM vu_detail_jual_produk_grooming WHERE jproduk_stat_dok='Tertutup' AND jproduk_grooming <> 0 ".$order_by;
+			else if($periode=='bulan')
+				$sql="SELECT * FROM vu_detail_jual_produk_grooming WHERE jproduk_stat_dok='Tertutup' AND jproduk_grooming <> 0 AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+			else if($periode=='tanggal')
+				$sql="SELECT * FROM vu_detail_jual_produk_grooming WHERE jproduk_stat_dok='Tertutup' AND jproduk_grooming <> 0 AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		}
 		//echo $sql;
 		

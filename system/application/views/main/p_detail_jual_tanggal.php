@@ -74,7 +74,7 @@
 				<td class="numeric"><?php echo number_format($print_list->subtotal,0,",",","); ?></td> 
 			</tr> <?php } ?> <?php } ?> 
 			<tr> 
-				<td align="right" colspan="7"><b>Total</td> 
+				<td align="right" colspan="8"><b>Total</td> 
 				<td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",",","); ?></b></td> 
 				<td align="right" class="numeric">&nbsp;</td> 
 				<td align="right" class="numeric">&nbsp;</td> 
