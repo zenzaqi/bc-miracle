@@ -688,6 +688,7 @@ Ext.onReady(function(){
 			{name: 'terima_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'},
 			{name: 'terima_keterangan', type: 'string', mapping: 'terima_keterangan'},
 			{name: 'terima_status', type: 'string', mapping: 'terima_status'},
+			{name: 'terima_gudang_nama', type: 'string', mapping: 'terima_gudang_nama'},
 			{name: 'terima_creator', type: 'string', mapping: 'terima_creator'},
 			{name: 'terima_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'terima_date_create'},
 			{name: 'terima_update', type: 'string', mapping: 'terima_update'},
@@ -880,6 +881,13 @@ Ext.onReady(function(){
 //			header: 'No.Surat Jalan',
 			header: '<div align="center">' + 'No Surat Jalan' + '</div>',
 			dataIndex: 'terima_surat_jalan',
+			width: 100,	//150,
+			sortable: true,
+			readOnly: true
+		},
+		{
+			header: '<div align="center">' + 'Gudang' + '</div>',
+			dataIndex: 'terima_gudang_nama',
 			width: 100,	//150,
 			sortable: true,
 			readOnly: true
