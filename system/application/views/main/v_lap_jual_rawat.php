@@ -52,6 +52,7 @@ var rpt_jrawat_tglawalField;
 var rpt_jrawat_tglakhirField;
 var rpt_jrawat_rekapField;
 var rpt_jrawat_detailField;
+var rpt_jrawat_groomingField;
 var rpt_jrawat_bulanField;
 var rpt_jrawat_tahunField;
 var rpt_jrawat_opsitglField;
@@ -111,6 +112,12 @@ Ext.onReady(function(){
 			id: 'group_detail_Store',
 			fields:['group'],
 			data:[['No Faktur'],['Tanggal'],['Customer'],['Perawatan Semua'],['Perawatan Medis'],['Perawatan Non Medis'],['Perawatan Anti Aging'],['Perawatan Surgery'],['Perawatan Lain-Lain'],['Referal'],['Jenis Diskon']]
+	});
+	
+	var group_grooming_Store= new Ext.data.SimpleStore({
+			id: 'group_grooming_Store',
+			fields:['group'],
+			data:[['No Faktur'],['Tanggal'],['Karyawan']]
 	});
 	
 	var rpt_jrawat_groupField=new Ext.form.ComboBox({
@@ -215,6 +222,12 @@ Ext.onReady(function(){
 		name: 'jrawat_opsi'
 	});
 	
+	rpt_jrawat_groomingField=new Ext.form.Radio({
+		id: 'rpt_jrawat_groomingField',
+		boxLabel: 'Grooming',
+		name: 'jrawat_opsi'
+	});
+	
 	var rpt_jrawat_periodeField=new Ext.form.FieldSet({
 		id:'rpt_jrawat_periodeField',
 		title : 'Periode',
@@ -269,7 +282,7 @@ Ext.onReady(function(){
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
-		items: [rpt_jrawat_rekapField ,rpt_jrawat_detailField]
+		items: [rpt_jrawat_rekapField ,rpt_jrawat_detailField, rpt_jrawat_groomingField]
 	});
 	
 	var	rpt_jrawat_groupbyField=new Ext.form.FieldSet({
@@ -320,7 +333,10 @@ Ext.onReady(function(){
 			jrawat_periode='all';
 		}
 		if(rpt_jrawat_groupField.getValue()!==""){jrawat_group=rpt_jrawat_groupField.getValue(); }
-		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}else{jrawat_opsi='detail';}
+		
+		if(rpt_jrawat_rekapField.getValue()==true){jrawat_opsi='rekap';}
+		if(rpt_jrawat_detailField.getValue()==true){jrawat_opsi='detail';}
+		if(rpt_jrawat_groomingField.getValue()==true){jrawat_opsi='grooming';}
 		
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
@@ -443,6 +459,16 @@ Ext.onReady(function(){
 		}else
 		{
 			rpt_jrawat_groupField.bindStore(group_master_Store);
+		}
+	});
+	
+	rpt_jrawat_groomingField.on("check", function(){
+		rpt_jrawat_groupField.setValue('No Faktur');
+		if(rpt_jrawat_groomingField.getValue()==true){
+			rpt_jrawat_groupField.bindStore(group_grooming_Store);
+		}else if(rpt_jrawat_detailField.getValue()==true)
+		{
+			rpt_jrawat_groupField.bindStore(group_detail_Store);
 		}
 	});
 	

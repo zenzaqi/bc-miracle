@@ -58,7 +58,7 @@ class C_master_jual_rawat extends Controller {
 				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);break;
 			}
-		}else{
+		}else if($opsi=='detail'){
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
@@ -73,6 +73,15 @@ class C_master_jual_rawat extends Controller {
 				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
 			}
 		}
+		else if($opsi=='grooming'){
+			switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
+				case "Karyawan": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
+			}
+		}
+		
+		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
