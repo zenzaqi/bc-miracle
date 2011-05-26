@@ -1,0 +1,16 @@
+<update by zaqi.smart@gmail.com>
+- Bug Fix Master Akun
+  * set akun_type='R/L' jika akun_type='RL'
+- Bug Fix Jurnal Umum
+  * view tabel,lihat sql
+- Bug Fix Jurnal Kasbank
+  * view tabel, lihat sql 
+- Bug Fix Jurnal Harian
+  * view tabel, lihat sql
+- Bug Fix Posting
+  * perbaikan salah post url-nya
+- Bug Fix Buku Besar
+- Bug Fix Laporan R/L
+  * perbikan model prosesnya
+- Bug Fix Laporan Neraca
+  * perbikan model prosesnya
