@@ -903,7 +903,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: jurnal_detail_reader,
-		baseParams:{start:0, limit:pageS, task: 'detail', master_id: 0},
+		baseParams:{start:0, limit: pageS, task: 'detail', master_id: 0},
 		sortInfo:{field: 'jurnal_id', direction: 'DESC'}
 	});
 	/* End of Function */
