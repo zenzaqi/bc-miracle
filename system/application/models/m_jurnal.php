@@ -169,6 +169,8 @@ class M_jurnal extends Model{
 			$query.=" ORDER by jurnal_id,jurnal_tanggal DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
+			if($start=="") $start=0;
+			if($end=="") $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
 
@@ -345,6 +347,8 @@ class M_jurnal extends Model{
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
+			if($start=="") $start=0;
+			if($end=="") $end=15;
 			$limit = $query." LIMIT ".$start.",".$end;
 			$result = $this->db->query($limit);
 
