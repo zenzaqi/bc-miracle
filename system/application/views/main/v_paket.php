@@ -1382,7 +1382,7 @@ Ext.onReady(function(){
 		layout:'column',
 		autoHeight: true,
 		width:360,
-		collapsed: true,
+		collapsed: false,
 		collapsible: true,
 		items:[
 			{

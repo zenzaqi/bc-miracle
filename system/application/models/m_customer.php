@@ -976,14 +976,60 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
+			
+			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+			if(($cust_transaksi_start!='' and $cust_transaksi_end!='') or ($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''))
+			{
+			$sql = "SELECT distinct(cust_id)
+					FROM
+					((((
+						SELECT distinct(jrawat_cust) as cust_id,
+						'rawat' as status
+						FROM master_jual_rawat
+						WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
+					)
+					union
+					(
+						SELECT distinct(jpaket_cust) as cust_id,
+						'paket' as status
+						FROM master_jual_paket
+						WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(jproduk_cust) as cust_id,
+						'produk' as status
+						FROM master_jual_produk
+						WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(dapaket_cust) as cust_id,
+						'ambil_paket' as status
+						FROM detail_ambil_paket
+						WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					))))
+					as table_union
+					order by cust_id";
+			$result_sql = $this->db->query($sql);
+			$string = '0';
+			foreach($result_sql->result() as $row){
+				$string_cust=$row->cust_id;
+				$string = $string.','.$string_cust;
+			}
+			}
+			
+		
+			
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
-			$query =   "SELECT 
-							v.*
+			$query = "SELECT v.*
 						FROM vu_customer v";
-												
+				
+		
+				
 			if($cust_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_id LIKE '%".$cust_id."%'";
@@ -1240,6 +1286,17 @@ class M_customer extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_revised LIKE '%".$cust_revised."%'";
 			};
+			
+			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+			{
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_id IN($string)";
+			}
+			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+			{
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " cust_id NOT IN($string)";
+			}
 			
 			$query.= " order by cust_id desc ";
 			

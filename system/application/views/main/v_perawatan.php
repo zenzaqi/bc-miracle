@@ -1766,7 +1766,7 @@ Ext.onReady(function(){
 		title: 'Rawat Aktif',
 		layout:'column',
 		autoHeight: true,
-		collapsed: true,
+		collapsed: false,
 		collapsible: true,
 		items:[
 			{
