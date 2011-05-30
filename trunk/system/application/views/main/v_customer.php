@@ -1410,6 +1410,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member_search=null;
 		var cust_terdaftar_search_date="";
 		var cust_tgldaftar_search_dateEnd="";
+		var cust_tgl_transaksi_search_date="";
+		var cust_tgl_transaksi_search_dateEnd="";
+		var cust_tidak_tgl_transaksi_search_date="";
+		var cust_tidak_tgl_transaksi_search_dateEnd="";
 		var cust_statusnikah_search=null;
 		var cust_priority_search=null;
 		var cust_jmlanak_search=null;
@@ -1467,6 +1471,17 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_search=cust_umurstartSearchField.getValue();}
 		if(cust_umurendSearchField.getValue()!==null){cust_umurend_search=cust_umurendSearchField.getValue();}	
 		
+		
+		if(cust_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_search_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_search_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
+		else if(cust_tidak_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_search_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_search_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
+	
+		
 		if(cust_tgl_opsiField.getValue()==true){
 			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
 			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
@@ -1482,60 +1497,63 @@ else if(cust_bulan_opsiField.getValue()==true){
 			start: 0,
 			limit: pageS,
 			//variable here
-			//cust_id	:	cust_id_search, 
-			cust_no	:	cust_no_search,
-			cust_no_awal	:	cust_no_awal_search,
-			cust_no_akhir	:	cust_no_akhir_search,
-			cust_nolama	:	cust_nolama_search, 
-			cust_nama	:	cust_nama_search, 
-			cust_kelamin	:	cust_kelamin_search, 
-			cust_alamat	:	cust_alamat_search, 
-			//cust_alamat2	:	cust_alamat2_search, 
-			cust_kota	:	cust_kota_search, 
-			cust_kodepos	:	cust_kodepos_search, 
-			cust_propinsi	:	cust_propinsi_search, 
-			cust_negara	:	cust_negara_search, 
-			cust_telprumah	:	cust_telprumah_search, 
-			//cust_telprumah2	:	cust_telprumah2_search, 
-			//cust_telpkantor	:	cust_telpkantor_search, 
-			//cust_hp			:	cust_hp_search, 
-			//cust_hp2		:	cust_hp2_search, 
-			//cust_hp3		:	cust_hp3_search, 
-			cust_bb		:	cust_bb_search, 
-			cust_email		:	cust_email_search, 
-			cust_agama		:	cust_agama_search, 
-			cust_pendidikan	:	cust_pendidikan_search, 
-			cust_profesi	:	cust_profesi_search, 
-			cust_tgllahir	:	cust_tgllahir_search_date, 
-			cust_tgllahirend	:	cust_tgllahir_search_dateEnd, 
-			//cust_hobi		:	cust_hobi_search, 
-			cust_hobi_baca : cust_hobi_bacaSearchField.getValue(),
-			cust_hobi_olah : cust_hobi_olahSearchField.getValue(),
-			cust_hobi_masak : cust_hobi_masakSearchField.getValue(),
-			cust_hobi_travel : cust_hobi_travelSearchField.getValue(),
-			cust_hobi_foto : cust_hobi_fotoSearchField.getValue(),
-			cust_hobi_lukis : cust_hobi_lukisSearchField.getValue(),
-			cust_hobi_nari : cust_hobi_nariSearchField.getValue(),
-			cust_hobi_lain : cust_hobi_lainSearchField.getValue(),
-				
-			cust_referensi	:	cust_referensi_search, 
-			cust_referensilain	:	cust_referensilain_search, 
-			cust_keterangan	:	cust_keterangan_search, 
-			cust_member		:	cust_member_search, 
-			cust_member2	:	cust_member2_search, 
-			cust_terdaftar	:	cust_terdaftar_search_date, 
-			cust_tgldaftarend	:	cust_tgldaftar_search_dateEnd, 
-			cust_statusnikah	:	cust_statusnikah_search,
-			cust_priority	:	cust_priority_search,
-			cust_jmlanak	:	cust_jmlanak_search, 
-			cust_unit	:	cust_unit_search, 
-			cust_aktif	:	cust_aktif_search,
-			sortby		:	sortby_search,
-			cust_fretfulness : fretfulness_search,
-			cust_umurstart : cust_umurstart_search,
-			cust_umurend : cust_umurend_search,
-			cust_tgl	: cust_tgl_search,
-			cust_bulan	: cust_bulan_search,
+			//cust_id					:	cust_id_search, 
+			cust_no					:	cust_no_search,
+			cust_no_awal			:	cust_no_awal_search,
+			cust_no_akhir			:	cust_no_akhir_search,
+			cust_nolama				:	cust_nolama_search, 
+			cust_nama				:	cust_nama_search, 
+			cust_kelamin			:	cust_kelamin_search, 
+			cust_alamat				:	cust_alamat_search, 
+			//cust_alamat2				:	cust_alamat2_search, 
+			cust_kota				:	cust_kota_search, 
+			cust_kodepos			:	cust_kodepos_search, 
+			cust_propinsi			:	cust_propinsi_search, 
+			cust_negara				:	cust_negara_search, 
+			cust_telprumah			:	cust_telprumah_search, 
+			//cust_telprumah2			:	cust_telprumah2_search, 
+			//cust_telpkantor				:	cust_telpkantor_search, 
+			//cust_hp					:	cust_hp_search, 
+			//cust_hp2					:	cust_hp2_search, 
+			//cust_hp3					:	cust_hp3_search, 
+			cust_bb					:	cust_bb_search, 
+			cust_email				:	cust_email_search, 
+			cust_agama				:	cust_agama_search, 
+			cust_pendidikan			:	cust_pendidikan_search, 
+			cust_profesi			:	cust_profesi_search, 
+			cust_tgllahir			:	cust_tgllahir_search_date, 
+			cust_tgllahirend		:	cust_tgllahir_search_dateEnd, 
+			//cust_hobi				:	cust_hobi_search, 
+			cust_hobi_baca 			: cust_hobi_bacaSearchField.getValue(),
+			cust_hobi_olah 			: cust_hobi_olahSearchField.getValue(),
+			cust_hobi_masak 		: cust_hobi_masakSearchField.getValue(),
+			cust_hobi_travel 		: cust_hobi_travelSearchField.getValue(),
+			cust_hobi_foto 			: cust_hobi_fotoSearchField.getValue(),
+			cust_hobi_lukis 		: cust_hobi_lukisSearchField.getValue(),
+			cust_hobi_nari 			: cust_hobi_nariSearchField.getValue(),
+			cust_hobi_lain 			: cust_hobi_lainSearchField.getValue(),
+			cust_referensi			:	cust_referensi_search, 
+			cust_referensilain		:	cust_referensilain_search, 
+			cust_keterangan			:	cust_keterangan_search, 
+			cust_member				:	cust_member_search, 
+			cust_member2			:	cust_member2_search, 
+			cust_terdaftar			:	cust_terdaftar_search_date, 
+			cust_tgldaftarend		:	cust_tgldaftar_search_dateEnd, 
+			cust_statusnikah		:	cust_statusnikah_search,
+			cust_priority			:	cust_priority_search,
+			cust_jmlanak			:	cust_jmlanak_search, 
+			cust_unit				:	cust_unit_search, 
+			cust_aktif				:	cust_aktif_search,
+			sortby					:	sortby_search,
+			cust_fretfulness 		: fretfulness_search,
+			cust_umurstart 			: cust_umurstart_search,
+			cust_umurend 			: cust_umurend_search,
+			cust_tgl				: cust_tgl_search,
+			cust_bulan				: cust_bulan_search,
+			cust_transaksi_end 		: cust_tgl_transaksi_search_dateEnd,
+			cust_transaksi_start   	: cust_tgl_transaksi_search_date,
+			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_search_date,
+			cust_tidak_transaksi_end	: cust_tidak_tgl_transaksi_search_dateEnd,
 		};
 		// Cause the datastore to do another query : 
 		//customer_DataStore.load({params: {start: 0, limit: pageS}});
@@ -1611,6 +1629,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		cust_umurendSearchField.reset();
 		cust_tglSearchField.reset();
 		cust_bulanSearchField.reset();
+		cust_tidak_tgl_transaksiSearchFieldStart.reset();
+		cust_tidak_tgl_transaksiSearchFieldEnd.reset();
+		cust_tgl_transaksiSearchFieldStart.reset();
+		cust_tgl_transaksiSearchFieldEnd.reset();
 	}
 
 	
@@ -5411,6 +5433,106 @@ Ext.onReady(function(){
 		items:[cust_terdaftarSearchField, cust_label_tgldaftarSearchField, cust_tgldaftarSearchFieldEnd]
 	});
 		
+	/*Identify radio button utk tanggal transaksi */	
+	cust_tgltransaksi_opsiField=new Ext.form.Radio({
+		id:'cust_tgltransaksi_opsiField',
+		boxLabel:'IN',
+		width:100,
+		name: 'filter_transaksi',
+		checked: true
+	});
+	
+	cust_tidak_tgltransaksi_opsiField=new Ext.form.Radio({
+		id:'cust_tidak_tgltransaksi_opsiField',
+		boxLabel:'NOT IN',
+		width:100,
+		name: 'filter_transaksi'
+	});	
+		
+		
+	/* Identify  cust_tgl_transaksiField */
+	cust_tgl_transaksiSearchFieldStart= new Ext.form.DateField({
+		//fieldLabel: 'Tanggal Transaksi',
+		id: 'cust_tgl_transaksiSearchFieldStart',
+		format: 'd-m-Y'
+	});
+	
+	cust_tgl_transaksiSearchFieldEnd= new Ext.form.DateField({
+		fieldLabel: 's/d',
+		id: 'cust_tgl_transaksiSearchFieldEnd',
+		format: 'd-m-Y'
+	});
+	
+	cust_tidak_tgl_transaksiSearchFieldStart= new Ext.form.DateField({
+		//fieldLabel: 'Tanggal Transaksi',
+		id: 'cust_tidak_tgl_transaksiSearchFieldStart',
+		format: 'd-m-Y'
+	});
+	
+	cust_tidak_tgl_transaksiSearchFieldEnd= new Ext.form.DateField({
+		fieldLabel: 's/d',
+		id: 'cust_tidak_tgl_transaksiSearchFieldEnd',
+		format: 'd-m-Y'
+	});
+	
+	cust_label_tgl_transaksiSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	/*
+	cust_tanggaltransaksi_opsiSearchField=new Ext.form.FieldSet({
+		id:'cust_tanggaltransaksi_opsiSearchField',
+		title: 'Tanggal Transaksi',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		anchor: '95%',
+		collapsed: true,
+		collapsible: true,
+		items:[cust_tgl_transaksiSearchFieldStart, cust_label_tgl_transaksiSearchField, cust_tgl_transaksiSearchFieldEnd]
+	});	
+	*/
+	cust_tanggaltransaksi_opsiSearchField=new Ext.form.FieldSet({
+		id:'cust_tanggaltransaksi_opsiSearchField',
+		title: 'Melakukan Transaksi',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		collapsed: false,
+		collapsible: true,
+		anchor: '95%',
+		items:[{
+				layout: 'column',
+				border: false,
+				items:[cust_tgltransaksi_opsiField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[cust_tgl_transaksiSearchFieldStart]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[cust_tgl_transaksiSearchFieldEnd]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[cust_tidak_tgltransaksi_opsiField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[cust_tidak_tgl_transaksiSearchFieldStart]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[cust_tidak_tgl_transaksiSearchFieldEnd]
+					   }]
+			}]
+	});
+		
 	/* Identify  cust_statusnikah Field */
 	cust_statusnikahSearchField= new Ext.form.ComboBox({
 		id: 'cust_statusnikahSearchField',
@@ -5592,7 +5714,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_kontak_groupSearch, cust_hobiSearchField,cust_kelaminSearchField, cust_agamaSearchField, cust_pendidikanSearchField] 
+				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_kontak_groupSearch, cust_hobiSearchField,cust_kelaminSearchField, cust_agamaSearchField, cust_pendidikanSearchField, cust_tanggaltransaksi_opsiSearchField] 
 			}
 			,{
 				columnWidth:0.5,

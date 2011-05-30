@@ -662,6 +662,10 @@ class M_waiting_list extends Model{
 	//function for create new record
 	function waiting_list_create($wl_customer , $karyawan_id, $rawat_id, $wl_tanggal ,$wl_keterangan ,$wl_user){
 		
+		if($wl_customer==''){
+			$wl_customer=-1;
+		}
+		
 		$date_now = date('Y-m-d H:i:s');
 		$temp = 1;
 		$wl_priority_temp = 0;

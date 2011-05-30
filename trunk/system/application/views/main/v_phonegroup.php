@@ -296,6 +296,7 @@ Ext.onReady(function(){
 					switch(result){
 						case 1:  // Success : simply reload
 							phonegroup_DataStore.reload();
+							phonegroup_detail_DataStore.load();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -561,7 +562,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			//disabled: true,
 			handler: phonegroup_confirm_delete   // Confirm before deleting
 		}, '-',
 		<?php } ?>
@@ -710,7 +711,7 @@ Ext.onReady(function(){
 			text: 'Delete',
 			tooltip: 'Delete selected record',
 			iconCls:'icon-delete',
-			disabled: true,
+			//disabled: true,
 			handler: phonegroup_confirm_delete
 		},
 		<?php } ?>

@@ -105,7 +105,7 @@ class C_waiting_list extends Controller {
 	//function fot list record
 	function waiting_list_list(){
 		$jenis_rawat = isset($_POST['jenis_rawat']) ? $_POST['jenis_rawat'] : "";
-		$tgl_app = isset($_POST['tgl_app']) ? $_POST['tgl_app'] : "";
+		$tgl_app = isset($_POST['wl_tgl_app']) ? $_POST['wl_tgl_app'] : "";
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);

@@ -816,6 +816,7 @@ Ext.onReady(function(){
 		ref: '../appDokterTgl'
 	});
 	
+	/*
 	tbar_wl_tglField= new Ext.form.DateField({
 		id: 'tbar_wl_tglField',
 		fieldLabel: 'Tgl Waiting List',
@@ -824,6 +825,7 @@ Ext.onReady(function(){
 		hidden:true,
 		ref: '../appNonMedisTgl'
 	});
+	*/
     
 	/* Declare DataStore and  show datagrid list */
 	waiting_list_ListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -906,7 +908,7 @@ Ext.onReady(function(){
 			tooltip: 'Refresh datagrid',
 			handler: wl_reset_search,
 			iconCls:'icon-refresh'
-		},'-',tbar_wl_tglField, '-',tbar_dokter_wl_Field, '-',{
+		},'-', '-',tbar_dokter_wl_Field, '-',{
 			xtype: 'combo',
 			id: 'wl_cbo_dokter',
 			text: 'Pilihan Dokter',
@@ -1013,6 +1015,7 @@ Ext.onReady(function(){
 		}});
 	});
 	
+	/*
 	tbar_wl_tglField.on('select',function(){
 		Ext.getCmp('wl_simpleSearch').reset();
 		Ext.getCmp('wl_cbo_dokter').reset();
@@ -1025,6 +1028,7 @@ Ext.onReady(function(){
 			limit: pageS
 		}});
 	});
+	*/
      
 	/* Create Context Menu */
 	waiting_list_ContextMenu = new Ext.menu.Menu({

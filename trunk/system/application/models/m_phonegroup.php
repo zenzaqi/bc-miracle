@@ -617,6 +617,9 @@ class M_phonegroup extends Model{
 			} else if (sizeof($pkid) == 1){
 				$query = "DELETE FROM phonegroup WHERE phonegroup_id = ".$pkid[0];
 				$this->db->query($query);
+				
+				$query2 = "delete from phonegrouped where phonegrouped_group = ".$pkid[0];
+				$this->db->query($query2);
 			} else {
 				$query = "DELETE FROM phonegroup WHERE ";
 				for($i = 0; $i < sizeof($pkid); $i++){
@@ -626,6 +629,9 @@ class M_phonegroup extends Model{
 					}     
 				}
 				$this->db->query($query);
+				
+				$query2 = "delete from phonegrouped where phonegrouped_group = ".$pkid[0];
+				$this->db->query($query2);
 			}
 			if($this->db->affected_rows()>0)
 				return '1';

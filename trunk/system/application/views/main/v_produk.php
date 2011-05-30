@@ -2026,7 +2026,7 @@ Ext.onReady(function(){
 		title: 'Produk Aktif',
 		layout:'column',
 		autoHeight: true,
-		collapsed: true,
+		collapsed: false,
 		mode: 'remote',
 		collapsible: true,
 		items:[
