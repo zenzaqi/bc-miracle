@@ -482,10 +482,12 @@ class M_master_terima_beli extends Model{
 			if($is_done==true){
 				$sql="UPDATE master_order_beli SET order_status='Tertutup' WHERE order_id='".$no_order."'";
 				$this->db->query($sql);
-			}else{
+			}
+			/*else{
 				$sql="UPDATE master_order_beli SET order_status='Terbuka' WHERE order_id='".$no_order."'";
 				$this->db->query($sql);
 			}
+			*/
 
 		}
 

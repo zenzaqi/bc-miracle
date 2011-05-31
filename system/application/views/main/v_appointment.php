@@ -265,7 +265,7 @@ Ext.onReady(function(){
 					 * maka keluar message: 'Untuk mengubah status, Tanggal Reservasi harus sama dengan hari ini.'
 					 * jika status sebelumnya 'datang' dan sudah hari kemarin maka di tindakan boleh dipastikan sudah selesai
 					*/
-					if(dapp_tglreservasi_update_date==date_now && dapp_terapis_update!==''){
+					if(dapp_tglreservasi_update_date==date_now && (dapp_terapis_update!=='' || dapp_dokter_update!=='')){
 						Ext.Ajax.request({
 							waitMsg: 'Mohon tunggu...',
 							url: 'index.php?c=c_appointment&m=get_action',

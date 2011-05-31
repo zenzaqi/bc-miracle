@@ -1,0 +1,3 @@
+m_master_terima_beli:
+
+perubahan status dok dari sebelumnya untuk status PB (barang sudah habis diambil PB), sekarang diubah menjadi status sudah diprint spt dokumen2 yg lain
