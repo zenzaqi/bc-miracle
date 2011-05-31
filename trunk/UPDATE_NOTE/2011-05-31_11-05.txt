@@ -1,0 +1,2 @@
+2011-05-31_11-05.txt
+--> Membenahi bug appointment , ketika customer baru , dan ketika mengganti status menjadi datang (padaal field terapis blom diisi).. 

@@ -13,7 +13,7 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
   <td height="10px" > </td>
 	<tr>
