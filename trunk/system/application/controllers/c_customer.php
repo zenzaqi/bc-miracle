@@ -1632,10 +1632,15 @@ class C_customer extends Controller {
 		$cust_update=str_replace("'", '"',$cust_update);
 		$cust_date_update=trim(@$_POST["cust_date_update"]);
 		$cust_revised=trim(@$_POST["cust_revised"]);
+		$cust_transaksi_start=trim(@$_POST["cust_transaksi_start"]);
+		$cust_transaksi_end=trim(@$_POST["cust_transaksi_end"]);
+		$cust_tidak_transaksi_start=trim(@$_POST["cust_tidak_transaksi_start"]);
+		$cust_tidak_transaksi_end=trim(@$_POST["cust_tidak_transaksi_end"]);
+
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter);
+		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised , $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start,$cust_tidak_transaksi_end, $option,$filter);
 		
 		to_excel($query,"customer"); 
 		echo '1';
