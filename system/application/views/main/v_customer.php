@@ -2002,6 +2002,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_aktif_2excel=null;
 		var sortby_2excel=null;
 		var fretfulness_2excel=null;
+		var cust_tgl_transaksi_excel_date="";
+		var cust_tgl_transaksi_excel_dateEnd="";
+		var cust_tidak_tgl_transaksi_excel_date="";
+		var cust_tidak_tgl_transaksi_excel_dateEnd="";
 		var win;              
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
@@ -2041,6 +2045,15 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_2excel = customer_DataStore.baseParams.cust_aktif;}
 		if(sortby_SearchField.getValue()!==null){sortby_2excel=sortby_SearchField.getValue();}
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_2excel=fretfulness_SearchField.getValue();}
+		
+		if(cust_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_excel_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_excel_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
+		else if(cust_tidak_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_excel_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_excel_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
 		
 
 		Ext.Ajax.request({   
@@ -2086,6 +2099,11 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_aktif : cust_aktif_2excel,
 			sortby		:	sortby_2excel,
 			cust_fretfulness : fretfulness_2excel,
+			cust_transaksi_start : cust_tgl_transaksi_excel_date,
+			cust_transaksi_end : cust_tgl_transaksi_excel_dateEnd,
+			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_excel_date,
+			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_excel_dateEnd,
+			
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -5436,7 +5454,7 @@ Ext.onReady(function(){
 	/*Identify radio button utk tanggal transaksi */	
 	cust_tgltransaksi_opsiField=new Ext.form.Radio({
 		id:'cust_tgltransaksi_opsiField',
-		boxLabel:'IN',
+		boxLabel:'Yang melakukan transaksi',
 		width:100,
 		name: 'filter_transaksi',
 		checked: true
@@ -5444,7 +5462,7 @@ Ext.onReady(function(){
 	
 	cust_tidak_tgltransaksi_opsiField=new Ext.form.Radio({
 		id:'cust_tidak_tgltransaksi_opsiField',
-		boxLabel:'NOT IN',
+		boxLabel:'Yang tidak melakukan transaksi',
 		width:100,
 		name: 'filter_transaksi'
 	});	
@@ -5490,7 +5508,7 @@ Ext.onReady(function(){
 	*/
 	cust_tanggaltransaksi_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_tanggaltransaksi_opsiSearchField',
-		title: 'Melakukan Transaksi',
+		title: 'Tanggal Transaksi',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		collapsed: false,
