@@ -265,7 +265,7 @@ Ext.onReady(function(){
 					 * maka keluar message: 'Untuk mengubah status, Tanggal Reservasi harus sama dengan hari ini.'
 					 * jika status sebelumnya 'datang' dan sudah hari kemarin maka di tindakan boleh dipastikan sudah selesai
 					*/
-					if(dapp_tglreservasi_update_date==date_now){
+					if(dapp_tglreservasi_update_date==date_now && dapp_terapis_update!==''){
 						Ext.Ajax.request({
 							waitMsg: 'Mohon tunggu...',
 							url: 'index.php?c=c_appointment&m=get_action',
@@ -326,7 +326,7 @@ Ext.onReady(function(){
 						Ext.MessageBox.show({
 							title: 'Warning',
 							width: 330,
-							msg: 'Tanggal Reservasi tidak sama dengan Tanggal Hari ini.',
+							msg: 'Tanggal Reservasi tidak sama dengan Tanggal Hari ini. <br>Dan nama Terapis harus diisi.',
 							buttons: Ext.MessageBox.OK,
 							animEl: 'save',
 							icon: Ext.MessageBox.WARNING
@@ -520,7 +520,7 @@ Ext.onReady(function(){
 		if(is_appointment_form_valid()
            && ((app_customerField.getValue()!==null
                 && /^\d+$/.test(app_customerField.getValue())
-                || app_id_create_pk!=="") || app_cust_namaBaruField.getValue()!==null)
+                || app_id_create_pk!=="") && (app_cust_namaBaruField.getValue()!=='' && app_cust_telpBaruField.getValue()!=='' && app_cust_hpBaruField.getValue()!==''))
            && (dmedis_record=='ada' || dnonmedis_record=='ada')){
             var app_id_create_pk=null; 
             var app_customer_create=""; 
@@ -627,7 +627,7 @@ Ext.onReady(function(){
 				appointment_createWindow.setDisabled(false);
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Customer harus dipilih, <br>bukan isian',
+					msg: 'Customer harus dipilih, bukan isian. <br> Jika Customer Baru, Telp rumah dan HP wajib diisi',
 					buttons: Ext.MessageBox.OK,
 					minWidth: 250,
 					animEl: 'save',
@@ -1699,6 +1699,7 @@ Ext.onReady(function(){
 	app_cust_telpBaruField=new Ext.form.TextField({
 		id: 'app_cust_telpBaruField',
 		fieldLabel: 'Telp Rumah',
+		allowBlank : false,
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1708,6 +1709,7 @@ Ext.onReady(function(){
 		id: 'app_cust_hpBaruField',
 		fieldLabel: 'HP',
 		maxLength: 30,
+		allowBlank : false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});

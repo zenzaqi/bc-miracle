@@ -84,7 +84,7 @@ class M_master_ambil_paket extends Model{
 						karyawan_id,karyawan_nama,karyawan_username
 					FROM karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
-					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff')";
+					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff' OR jabatan_nama='Supervisor')";
 			if($query<>"" && is_numeric($query)==false){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_username LIKE '%".addslashes($query)."%')";
