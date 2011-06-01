@@ -520,7 +520,13 @@ class M_karyawan extends Model{
 			//full query
 			if($karyawan_aktif=="")
 				$karyawan_aktif="Aktif";
-			$query="select * from karyawan";
+			$query="select karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, golongan.*
+				from karyawan
+				left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
+				left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
+				left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
+				left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)
+			";
 			
 			if($karyawan_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -596,7 +602,7 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_jabatan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_jabatan LIKE '%".$karyawan_jabatan."%'";
+				$query.= " karyawan_jabatan = '".$karyawan_jabatan."'";
 			};
 			if($karyawan_departemen!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

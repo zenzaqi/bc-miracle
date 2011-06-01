@@ -2033,7 +2033,7 @@ Ext.onReady(function(){
 		autoHeight: true,
 		store:cbo_karyawan_cabang_DataStore,
 		mode: 'remote',
-		collapsed: true,
+		collapsed: false,
 		collapsible: true,
 		items:[
 			{
@@ -2041,7 +2041,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [ karyawan_cab_corpField, karyawan_cab_thField, karyawan_cab_kiField, karyawan_cab_hrField, karyawan_cab_tpField,  karyawan_cab_mlgField, karyawan_cab_dpsField, karyawan_cab_jktField, karyawan_cab_mtaField, karyawan_cab_blpnField, karyawan_cab_maaField, karyawan_cab_mgField, karyawan_cab_checkField]
+				items: [ karyawan_cab_corpField, karyawan_cab_thField, karyawan_cab_kiField, karyawan_cab_hrField, karyawan_cab_tpField,  karyawan_cab_mlgField, karyawan_cab_dpsField, karyawan_cab_jktField, karyawan_cab_mtaField, karyawan_cab_blpnField, karyawan_cab_mgField]
 			},
 			 {
 				   	layout: 'form',
