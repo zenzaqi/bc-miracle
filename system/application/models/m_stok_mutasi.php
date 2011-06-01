@@ -49,7 +49,7 @@ class M_stok_mutasi extends Model{
 		}
 
 		function stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-													   $tanggal_end,$query,$start,$end, $mutasi_jumlah){
+													   $tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir,$stok_awal,$stok_masuk,$stok_keluar){
 
 			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
@@ -66,7 +66,7 @@ class M_stok_mutasi extends Model{
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
 
-			if($mutasi_jumlah=='='){
+			/*if($mutasi_jumlah=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir = '0' ";
 			}elseif($mutasi_jumlah=='<'){
@@ -75,6 +75,50 @@ class M_stok_mutasi extends Model{
 			}elseif($mutasi_jumlah=='>'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
+			}*/
+			
+			if($stok_akhir=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir = '0' ";
+			}elseif($stok_akhir=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir < '0' ";
+			}elseif($stok_akhir=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir > '0' ";
+			}
+			
+			if($stok_awal=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal = '0' ";
+			}elseif($stok_awal=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal < '0' ";
+			}elseif($stok_awal=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal > '0' ";
+			}
+			
+			if($stok_masuk=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk = '0' ";
+			}elseif($stok_masuk=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk < '0' ";
+			}elseif($stok_masuk=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk > '0' ";
+			}
+			
+			if($stok_keluar=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar = '0' ";
+			}elseif($stok_keluar=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar < '0' ";
+			}elseif($stok_keluar=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar > '0' ";
 			}
 
 			$sql.=" ORDER BY pr.produk_kode ";
@@ -98,7 +142,7 @@ class M_stok_mutasi extends Model{
 		}
 
 		function stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-													   $tanggal_end,$query,$start,$end, $mutasi_jumlah){
+													   $tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar){
 
 			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
@@ -115,7 +159,7 @@ class M_stok_mutasi extends Model{
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
 			
-			if($mutasi_jumlah=='='){
+		/*	if($mutasi_jumlah=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir = '0' ";
 			}elseif($mutasi_jumlah=='<'){
@@ -124,6 +168,50 @@ class M_stok_mutasi extends Model{
 			}elseif($mutasi_jumlah=='>'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
+			}*/
+			
+			if($stok_akhir=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir = '0' ";
+			}elseif($stok_akhir=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir < '0' ";
+			}elseif($stok_akhir=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir > '0' ";
+			}
+			
+			if($stok_awal=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal = '0' ";
+			}elseif($stok_awal=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal < '0' ";
+			}elseif($stok_awal=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_awal > '0' ";
+			}
+			
+			if($stok_masuk=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk = '0' ";
+			}elseif($stok_masuk=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk < '0' ";
+			}elseif($stok_masuk=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_masuk > '0' ";
+			}
+			
+			if($stok_keluar=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar = '0' ";
+			}elseif($stok_keluar=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar < '0' ";
+			}elseif($stok_keluar=='> 0'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_keluar > '0' ";
 			}
 			
 			$sql.=" ORDER BY pr.produk_kode ";
@@ -137,7 +225,7 @@ class M_stok_mutasi extends Model{
 		}
 
 		function generate_stok_mutasi($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-									  $tanggal_end,  $mutasi_jumlah){
+									  $tanggal_end,  $mutasi_jumlah,  $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar){
 
 			//DELETE ALL REPORT
 			$sql="DELETE FROM stok_mutasi

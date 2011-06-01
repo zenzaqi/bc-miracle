@@ -557,7 +557,7 @@ class M_master_retur_jual_paket extends Model{
 						,'".$drpaket_cust."'
 						,'RETUR'
 						,'".$drpaket_tanggal."'
-						,'Tertutup'
+						,'Adj'
 						)";
 				$this->db->query($sqli);
 				if($this->db->affected_rows()){

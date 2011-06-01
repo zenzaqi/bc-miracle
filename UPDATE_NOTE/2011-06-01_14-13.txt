@@ -1,0 +1,1 @@
+menambah opsi : stok akhir, awal, masuk, dan kluar

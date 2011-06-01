@@ -1061,17 +1061,14 @@ class M_customer extends Model{
 			}
 			}
 			
-			
-		
-			
+	
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
 			$query = "SELECT v.*
 						FROM vu_customer v";
 				
-		
-				
+	
 			if($cust_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " cust_id LIKE '%".$cust_id."%'";
@@ -1614,12 +1611,92 @@ class M_customer extends Model{
 		$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,
 		$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,
 		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
-		$cust_date_update,$cust_revised,$option,$filter)
+		$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end,$option,$filter)
 		{
-			/*
-			if ($cust_fretfulness=="")
-				$cust_fretfulness = "Medium";
-				*/
+			
+		/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+			{
+			$sql = "SELECT distinct(cust_id)
+					FROM
+					((((
+						SELECT distinct(jrawat_cust) as cust_id,
+						'rawat' as status
+						FROM master_jual_rawat
+						WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
+					)
+					union
+					(
+						SELECT distinct(jpaket_cust) as cust_id,
+						'paket' as status
+						FROM master_jual_paket
+						WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(jproduk_cust) as cust_id,
+						'produk' as status
+						FROM master_jual_produk
+						WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(dapaket_cust) as cust_id,
+						'ambil_paket' as status
+						FROM detail_ambil_paket
+						WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+					))))
+					as table_union
+					order by cust_id";
+			$result_sql = $this->db->query($sql);
+			$string = '0';
+			foreach($result_sql->result() as $row){
+				$string_cust=$row->cust_id;
+				$string = $string.','.$string_cust;
+			}
+			}
+			
+			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+			{
+			$sql = "SELECT distinct(cust_id)
+					FROM
+					((((
+						SELECT distinct(jrawat_cust) as cust_id,
+						'rawat' as status
+						FROM master_jual_rawat
+						WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
+					)
+					union
+					(
+						SELECT distinct(jpaket_cust) as cust_id,
+						'paket' as status
+						FROM master_jual_paket
+						WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(jproduk_cust) as cust_id,
+						'produk' as status
+						FROM master_jual_produk
+						WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+					)
+					union
+					(
+						SELECT distinct(dapaket_cust) as cust_id,
+						'ambil_paket' as status
+						FROM detail_ambil_paket
+						WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+					))))
+					as table_union
+					order by cust_id";
+			$result_sql = $this->db->query($sql);
+			$string_not = '0';
+			foreach($result_sql->result() as $row){
+				$string_cust=$row->cust_id;
+				$string_not = $string_not.','.$string_cust;
+			}
+			}
+		
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 			//full query
@@ -1800,6 +1877,19 @@ class M_customer extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " cust_revised LIKE '%".$cust_revised."%'";
 				};
+				
+				if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id IN($string)";
+				}
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id NOT IN($string_not)";
+				}
+				
+				
 				$result = $this->db->query($query);
 			}
 			return $result;
@@ -2134,4 +2224,3 @@ class M_customer extends Model{
 			return $result;
 		}
 }
-?>
