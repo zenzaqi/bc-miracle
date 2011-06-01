@@ -114,6 +114,18 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
+			
+			if($mutasi_jumlah=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir = '0' ";
+			}elseif($mutasi_jumlah=='<'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir < '0' ";
+			}elseif($mutasi_jumlah=='>'){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir > '0' ";
+			}
+			
 			$sql.=" ORDER BY pr.produk_kode ";
 
 			$result = $this->db->query($sql);
