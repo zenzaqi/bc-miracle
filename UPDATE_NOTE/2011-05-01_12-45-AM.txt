@@ -1,0 +1,4 @@
+<update by zaqi.smart@gmail.com>
+- Perbaikan Jurnal Umum
+- Menu Baru 'Neraca Percobaan' 
+  url : ?c=c_trial_balance

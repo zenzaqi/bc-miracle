@@ -1087,10 +1087,11 @@ Ext.onReady(function(){
 	//function of detail add
 	function detail_jurnal_add(){
 		var edit_detail_jurnal= new detail_jurnalListEditorGrid.store.recordType({
-			jurnal_akun			:null,
-			jurnal_detail		:null,
-			jurnal_debet		:0,
-			jurnal_kredit		:0
+			jurnal_id			: 0,
+			jurnal_akun			: 0,
+			jurnal_detail		: null,
+			jurnal_debet		: 0,
+			jurnal_kredit		: 0
 		});
 		editor_detail_jurnal.stopEditing();
 		detail_jurnal_DataStore.insert(0, edit_detail_jurnal);

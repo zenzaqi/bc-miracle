@@ -229,7 +229,7 @@ class M_jurnal extends Model{
 			}
 
 			if($query<>""){
-				$sql="DELETE FROM jurnal_detail WHERE  djurnal_master='".$djurnal_master."' AND
+				$sql="DELETE FROM jurnal_detail WHERE  djurnal_master='".$jurnal_master."' AND
 						djurnal_id NOT IN (".$query.")";
 				$this->db->query($sql);
 			}
