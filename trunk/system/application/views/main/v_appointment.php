@@ -2355,6 +2355,7 @@ Ext.onReady(function(){
 			loadingText: 'Searching...',
 			minChars : 3,
 			itemSelector: 'div.search-item',
+			allowBlank : false,
 			triggerAction: 'all',
 			anchor: '95%'
 	});
