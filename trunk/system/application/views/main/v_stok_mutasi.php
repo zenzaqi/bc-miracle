@@ -741,7 +741,7 @@ Ext.onReady(function(){
 		items:[{
 			   		layout	: 'form',
 					border: false,
-					items	: [/*stok_mutasi_jumlahSearchField,*/stok_mutasi_stok_awalSearchField, stok_mutasi_stok_akhirSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField]
+					items	: [stok_mutasi_jumlahSearchField/*,stok_mutasi_stok_awalSearchField, stok_mutasi_stok_akhirSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField*/]
 			   }
 		]
 	});
