@@ -1224,6 +1224,11 @@ class C_customer extends Controller {
 		$cust_update=str_replace("'", '"',$cust_update);
 		$cust_date_update=trim(@$_POST["cust_date_update"]);
 		$cust_revised=trim(@$_POST["cust_revised"]);
+		$cust_transaksi_start=trim(@$_POST["cust_transaksi_start"]);
+		$cust_transaksi_end=trim(@$_POST["cust_transaksi_end"]);
+		$cust_tidak_transaksi_start=trim(@$_POST["cust_tidak_transaksi_start"]);
+		$cust_tidak_transaksi_end=trim(@$_POST["cust_tidak_transaksi_end"]);
+	
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
@@ -1234,7 +1239,7 @@ class C_customer extends Controller {
 		$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,
 		$cust_member, $cust_member2, $cust_terdaftar,$cust_statusnikah,$cust_priority,$cust_jmlanak,
 		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
-		$cust_date_update,$cust_revised,$option,$filter)->result();
+		$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end,$option,$filter)->result();
 		
 		$print_view=$this->load->view("main/p_customer.php",$data,TRUE);
 		if(!file_exists("print")){

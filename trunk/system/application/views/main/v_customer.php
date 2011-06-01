@@ -1688,6 +1688,12 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_aktif_print=null;
 		var sortby_print=null;
 		var fretfulness_print=null;
+		
+		var cust_tgl_transaksi_print_date="";
+		var cust_tgl_transaksi_print_dateEnd="";
+		var cust_tidak_tgl_transaksi_print_date="";
+		var cust_tidak_tgl_transaksi_print_dateEnd="";
+		
 		var win;              
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
@@ -1727,6 +1733,15 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_print = customer_DataStore.baseParams.cust_aktif;}
 		if(sortby_SearchField.getValue()!==null){sortby_print=sortby_SearchField.getValue();}
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_print=fretfulness_SearchField.getValue();}
+		
+		if(cust_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_print_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_print_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
+		else if(cust_tidak_tgltransaksi_opsiField.getValue()==true){
+			if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_print_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+			if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_print_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		}
 		
 
 		Ext.Ajax.request({   
@@ -1772,6 +1787,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_aktif : cust_aktif_print,
 			sortby		:	sortby_print,
 			cust_fretfulness : fretfulness_print,
+			cust_transaksi_start : cust_tgl_transaksi_print_date,
+			cust_transaksi_end : cust_tgl_transaksi_print_dateEnd,
+			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_print_date,
+			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_print_dateEnd,
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -2086,7 +2105,6 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_pendidikan : cust_pendidikan_2excel,
 			cust_profesi : cust_profesi_2excel,
 		  	cust_tgllahir : cust_tgllahir_2excel_date, 
-			//cust_hobi : cust_hobi_2excel,
 			cust_referensi : cust_referensi_2excel,
 			cust_keterangan : cust_keterangan_2excel,
 			cust_member : cust_member_2excel,
@@ -2103,7 +2121,6 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_transaksi_end : cust_tgl_transaksi_excel_dateEnd,
 			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_excel_date,
 			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_excel_dateEnd,
-			
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

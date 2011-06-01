@@ -254,9 +254,9 @@ Ext.onReady(function(){
 		stok_mutasi_jumlahSearchField.reset();
 		stok_mutasi_jumlahSearchField.setValue('Semua');
 		stok_mutasi_keluarSearchField.reset();
-		stok_mutasi_keluarSearchField.setValue('Semua');
+		stok_mutasi_keluarSearchField.setValue('> 0');
 		stok_mutasi_masukSearchField.reset();
-		stok_mutasi_masukSearchField.setValue('Semua');
+		stok_mutasi_masukSearchField.setValue('> 0');
 		stok_mutasi_stok_awalSearchField.reset();
 		stok_mutasi_stok_awalSearchField.setValue('Semua');
 		stok_mutasi_stok_akhirSearchField.reset();
@@ -390,6 +390,10 @@ Ext.onReady(function(){
 			opsi_satuan		: 	opsi_satuan_search,
 			gudang			: 	gudang_search,
 			mutasi_jumlah	: 	stok_mutasi_jumlah_search,
+			stok_akhir		: 	stok_mutasi_stok_akhir_search,
+			stok_awal 		:	stok_mutasi_stok_awal_search,
+			stok_masuk 			:	stok_mutasi_masuk_search,
+			stok_keluar 			: 	stok_mutasi_keluar_search,
 			opsi_produk		: 	opsi_produk_search
 		};
 		// Cause the datastore to do another query : 
@@ -413,6 +417,10 @@ Ext.onReady(function(){
 					opsi_satuan		: 	opsi_satuan_search,
 					gudang			: 	gudang_search,
 					mutasi_jumlah	: 	stok_mutasi_jumlah_search,
+					stok_akhir		: stok_mutasi_stok_akhir_search,
+					stok_awal 		: stok_mutasi_stok_awal_search,
+					stok_masuk 			: stok_mutasi_masuk_search,
+					stok_keluar 			: stok_mutasi_keluar_search,
 					opsi_produk		: 	opsi_produk_search
 				},
 				success:function(response){
@@ -610,13 +618,13 @@ Ext.onReady(function(){
 		fieldLabel: 'Stok Awal',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
-			fields:['stok_mutasi_jumlah_value', 'stok_mutasi_jumlah_display'],
-			data: [['S','Semua'],['<','< 0'],['=','= 0'],['>','> 0']]
+			fields:['stok_awal_value', 'stok_awal_display'],
+			data: [['S','Semua'],['<','< 0'],['=','= 0'],['> 0','> 0']]
 		}),
 		mode: 'local',
 		editable: false,
-		displayField: 'stok_mutasi_jumlah_display',
-		valueField: 'stok_mutasi_jumlah_value',
+		displayField: 'stok_awal_display',
+		valueField: 'stok_awal_value',
 		anchor: '50%',
 		//allowBlank: false,
 		triggerAction: 'all'	
@@ -628,13 +636,13 @@ Ext.onReady(function(){
 		fieldLabel: 'Stok Akhir',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
-			fields:['stok_mutasi_jumlah_value', 'stok_mutasi_jumlah_display'],
-			data: [['S','Semua'],['<','< 0'],['=','= 0'],['>','> 0']]
+			fields:['stok_akhir_value', 'stok_akhir_display'],
+			data: [['S','Semua'],['<','< 0'],['=','= 0'],['> 0','> 0']]
 		}),
 		mode: 'local',
 		editable: false,
-		displayField: 'stok_mutasi_jumlah_display',
-		valueField: 'stok_mutasi_jumlah_value',
+		displayField: 'stok_akhir_display',
+		valueField: 'stok_akhir_value',
 		anchor: '50%',
 		//allowBlank: false,
 		triggerAction: 'all'	
@@ -646,13 +654,13 @@ Ext.onReady(function(){
 		fieldLabel: 'Masuk',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
-			fields:['stok_mutasi_jumlah_value', 'stok_mutasi_jumlah_display'],
-			data: [['S','Semua'],['=','= 0'],['>','> 0']]
+			fields:['stok_masuk_value', 'stok_masuk_display'],
+			data: [['S','Semua'],['=','= 0'],['> 0','> 0']]
 		}),
 		mode: 'local',
 		editable: false,
-		displayField: 'stok_mutasi_jumlah_display',
-		valueField: 'stok_mutasi_jumlah_value',
+		displayField: 'stok_masuk_display',
+		valueField: 'stok_masuk_value',
 		anchor: '50%',
 		//allowBlank: false,
 		triggerAction: 'all'	
@@ -664,13 +672,13 @@ Ext.onReady(function(){
 		fieldLabel: 'Keluar',
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
-			fields:['stok_mutasi_jumlah_value', 'stok_mutasi_jumlah_display'],
-			data: [['S','Semua'],['=','= 0'],['>','> 0']]
+			fields:['stok_keluar_value', 'stok_keluar_display'],
+			data: [['S','Semua'],['=','= 0'],['> 0','> 0']]
 		}),
 		mode: 'local',
 		editable: false,
-		displayField: 'stok_mutasi_jumlah_display',
-		valueField: 'stok_mutasi_jumlah_value',
+		displayField: 'stok_keluar_display',
+		valueField: 'stok_keluar_value',
 		anchor: '50%',
 		//allowBlank: false,
 		triggerAction: 'all'	
@@ -741,7 +749,7 @@ Ext.onReady(function(){
 		items:[{
 			   		layout	: 'form',
 					border: false,
-					items	: [stok_mutasi_jumlahSearchField/*,stok_mutasi_stok_awalSearchField, stok_mutasi_stok_akhirSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField*/]
+					items	: [/*stok_mutasi_jumlahSearchField,*/stok_mutasi_stok_awalSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField, stok_mutasi_stok_akhirSearchField]
 			   }
 		]
 	});
@@ -805,6 +813,11 @@ Ext.onReady(function(){
 		var opsi_satuan_print=null;
 		var opsi_produk_print=null;
 		var gudang_print=null;
+		var stok_mutasi_jumlah_print=null;	
+		var stok_mutasi_stok_akhir_print=null;	
+		var stok_mutasi_stok_awal_print=null;	
+		var stok_mutasi_masuk_print=null;	
+		var stok_mutasi_keluar_print=null;	
 		var win;    
 		var stok_mutasi_jumlah_print=null;			
 
@@ -819,7 +832,10 @@ Ext.onReady(function(){
 		if(stok_mutasi_DataStore.baseParams.gudang!==null){gudang_print = stok_mutasi_DataStore.baseParams.gudang;}
 		
 		if(stok_mutasi_DataStore.baseParams.mutasi_jumlah!==null){stok_mutasi_jumlah_print=stok_mutasi_DataStore.baseParams.mutasi_jumlah;}
-		
+		if(stok_mutasi_DataStore.baseParams.stok_akhir!==null){stok_mutasi_stok_akhir_print=stok_mutasi_DataStore.baseParams.stok_akhir;}
+		if(stok_mutasi_DataStore.baseParams.stok_awal!==null){stok_mutasi_stok_awal_print=stok_mutasi_DataStore.baseParams.stok_awal;}
+		if(stok_mutasi_DataStore.baseParams.stok_masuk!==null){stok_mutasi_masuk_print=stok_mutasi_DataStore.baseParams.stok_masuk;}
+		if(stok_mutasi_DataStore.baseParams.stok_keluar!==null){stok_mutasi_keluar_print=stok_mutasi_DataStore.baseParams.stok_keluar;}
 		
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
@@ -843,6 +859,10 @@ Ext.onReady(function(){
 			gudang			: gudang_print,
 			opsi_produk		: opsi_produk_print,
 			mutasi_jumlah	: 	stok_mutasi_jumlah_print,
+			stok_akhir	: stok_mutasi_stok_akhir_print,
+			stok_awal : stok_mutasi_stok_awal_print,
+			stok_masuk : stok_mutasi_masuk_print,
+			stok_keluar : stok_mutasi_keluar_print,
 		  	currentlisting	: stok_mutasi_DataStore.baseParams.task 
 		}, 
 		success: function(response){              
@@ -956,9 +976,9 @@ Ext.onReady(function(){
 	stok_mutasi_jumlahSearchField.setValue('Semua');
 	
 	stok_mutasi_keluarSearchField.reset();
-	stok_mutasi_keluarSearchField.setValue('Semua');
+	stok_mutasi_keluarSearchField.setValue('> 0');
 	stok_mutasi_masukSearchField.reset();
-	stok_mutasi_masukSearchField.setValue('Semua');
+	stok_mutasi_masukSearchField.setValue('> 0');
 	stok_mutasi_stok_awalSearchField.reset();
 	stok_mutasi_stok_awalSearchField.setValue('Semua');
 	stok_mutasi_stok_akhirSearchField.reset();
@@ -976,4 +996,4 @@ Ext.onReady(function(){
     </div>
 </div>
 </body>
-</html
+</html>

@@ -377,6 +377,7 @@ class M_member extends Model{
 									 ,$filter){
 			$query = "SELECT cust_no AS no_cust
 					,cust_nama AS customer
+					,member_no
 					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS no_member
 					,member_register AS tgl_daftar
 					,member_valid AS tgl_valid
@@ -445,12 +446,14 @@ class M_member extends Model{
 				//looping dimulai disini
 				for ($i = 0; $i < $jum_baris; $i++) {
 					$record = $rs->row($i);
-					$data_arr= $record->member_kodecust;				
+					$data_arr= $record->member_no;				
 				
-					$query2 = "PDATE member SET member_status = 'Cetak' WHERE member_kodecust = '$data_arr'";
+					$query2 = "UPDATE member SET member_status = 'Cetak' WHERE member_no = '$data_arr'";
 					$rs2 = $this->db->query($query2);
 				}
-				$result = $this->db->query($query2);
+				
+				$result = $this->db->query($query);
+				return $result;
 }
 }
 ?>
