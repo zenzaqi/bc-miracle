@@ -1,13 +1,9 @@
-<? /* 	These code was generated using phpCIGen v 0.1.a (21/04/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
-    #songbee	mukhlisona@gmail.com
-	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
+<? /* 	
 	
-	+ Module  		: users Model
+	+ Module  		: Penyesuaian Tindakan
 	+ Description	: For record model process back-end
-	+ Filename 		: c_users.php
- 	+ Author  		: zainal, mukhlison
- 	+ Created on 16/Jul/2009 15:35:27
+	+ Filename 		: m_penyesuaian_tindakan.php
+ 	+ Author  		: Fred
 	
 */
 
@@ -20,11 +16,13 @@ class M_penyesuaian_tindakan extends Model{
 		
 		//function for get list record
 		function penyesuaian_list($filter,$start,$end){
-			//$query = "SELECT * FROM users,karyawan,usergroups WHERE user_karyawan=karyawan_id AND user_groups=group_id";
+
+		$bln_now = date('Y-m');
+		
 			$query="select tindakan_adjust.adj_id, date_format(tindakan_adjust.adj_bln,'%Y-%m'), karyawan.karyawan_username, adj_count, vu_report_tindakan_terapis.terapis_count, (vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count) as new_count
 from tindakan_adjust 
 left join vu_report_tindakan_terapis on (vu_report_tindakan_terapis.terapis_id=tindakan_adjust.karyawan_id) and vu_report_tindakan_terapis.terapis_bulan=date_format(tindakan_adjust.adj_bln,'%Y-%m')
-left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where tindakan_adjust.adj_bln = '2011-05-15'";
+left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where date_format(tindakan_adjust.adj_bln, '%Y-%m') = '$bln_now'";
 			// For simple search
 			/*if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -52,7 +50,7 @@ left join karyawan on karyawan.karyawan_id=tindakan_adjust.karyawan_id where tin
 	
 		$sql="select * from tindakan_adjust where adj_id = '$adj_id'";
 	
-	$rs=$this->db->query($sql);
+		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 		$data = array(
 		
