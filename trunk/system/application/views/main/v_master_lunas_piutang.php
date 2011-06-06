@@ -245,7 +245,7 @@ Ext.onReady(function(){
 		if(fpiutang_customerField.getValue()==0){
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Customer tidak ada',
+				msg: 'Customer belum diisi',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -1065,7 +1065,7 @@ Ext.onReady(function(){
 	var cbo_fjual_piutang_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{lpiutang_faktur}, Tgl: {lpiutang_faktur_tanggal}</b><br /></span>',
-            'Jumlah Piutang: {lpiutang_total} | Sisa Piutang: {lpiutang_sisa}',
+            'Jumlah Piutang: {lpiutang_total} | Sisa Piutang: Rp. {lpiutang_sisa}',
         '</div></tpl>'
     );
 	
@@ -1096,7 +1096,7 @@ Ext.onReady(function(){
     var fpiutang_customer_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
-            'Sisa Piutang: {lpiutang_sisa}',
+            'Sisa Piutang: Rp. {lpiutang_sisa}',
         '</div></tpl>'
     );
 	
@@ -1225,25 +1225,31 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'No.LP' + '</div>',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'fpiutang_tanggal',
+			width: 60,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: true
+		},
+		{
+			header: '<div align="center">' + 'No LP' + '</div>',
 			dataIndex: 'fpiutang_nobukti',
 			width: 80,
 			sortable: true,
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Tanggal' + '</div>',
-			dataIndex: 'fpiutang_tanggal',
-			width: 70,
-			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			readOnly: true
+			header: '<div align="center">' + 'Client Card' + '</div>',
+			dataIndex: 'cust_no',
+			width: 60,
+			sortable: false,
+			readOnly: true,
 		},
 		{
 			header: '<div align="center">' + 'Customer' + '</div>',
-			align: 'right',
 			dataIndex: 'cust_nama',
-			width: 60,
+			width: 150,
 			sortable: false,
 			readOnly: true,
 		},
@@ -1256,10 +1262,10 @@ Ext.onReady(function(){
 			readOnly: true,
 		},
 		{
-			header: '<div align="center">' + 'Total Bayar (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Bayar (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'fpiutang_bayar',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1269,7 +1275,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Keterangan' + '</div>',
 			dataIndex: 'fpiutang_keterangan',
-			width: 150,
+			width: 200,
 			sortable: false,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1306,7 +1312,7 @@ Ext.onReady(function(){
 		tbar: [
 		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
 		{
-			text: 'Bayar',
+			text: 'Add',
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: display_form_window
@@ -1347,7 +1353,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By (aktif only)'});
-				Ext.get(this.id).set({qtip:'- No.LP<br>- Customer'});
+				Ext.get(this.id).set({qtip:'- No LP<br>- Customer'});
 				}
 			},
 			width: 120
@@ -1432,7 +1438,7 @@ Ext.onReady(function(){
 	fpiutang_nobuktiField= new Ext.form.TextField({
 		id: 'fpiutang_nobuktiField',
 		//fieldLabel: 'No Order',
-		fieldLabel: 'No.LP',
+		fieldLabel: 'No LP',
 		emptyText: '(Auto)',
 		readOnly: true,
 		maxLength: 50,
@@ -1450,7 +1456,7 @@ Ext.onReady(function(){
         loadingText: 'Searching...',
         pageSize:10,
         hideTrigger:false,
-		allowBlank: false,
+		//allowBlank: false,
         tpl: fpiutang_customer_tpl,
 		forceSelection: true,
         //applyTo: 'search',
@@ -1459,7 +1465,13 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		enableKeyEvents: true,
-		anchor: '95%'
+		anchor: '95%',
+		listeners:{
+			render: function(c){
+				Ext.get(this.id).set({qtitle:'Field ini memunculkan daftar Customer yang memiliki piutang saja'});
+				Ext.get(this.id).set({qtip:'(Search by: Client Card, Nama Cust)'});
+			}
+		}
 	});
 	fpiutang_customerField.on('select', function(){
 		var j=cbo_fpiutang_customerDataStore.findExact('lpiutang_cust',fpiutang_customerField.getValue(),0);
@@ -1479,7 +1491,7 @@ Ext.onReady(function(){
 	
 	fpiutang_nocustField= new Ext.form.TextField({
 		id: 'fpiutang_nocustField',
-		fieldLabel: 'No Customer',
+		fieldLabel: 'Client Card',
 		emptyText : '(Auto)',
 		readOnly: true
 	});
@@ -2149,6 +2161,7 @@ Ext.onReady(function(){
 		if(cbo_fjual_piutangDataStore.getCount()>0){
 			dlpiutang_tgl_fakturField.setValue(cbo_fjual_piutangDataStore.getAt(j).data.lpiutang_faktur_tanggal);
 			dfpiutang_sisaField.setValue(cbo_fjual_piutangDataStore.getAt(j).data.lpiutang_sisa);
+			dfpiutang_lpiutang_idField.setValue(cbo_fjual_piutangDataStore.getAt(j).data.lpiutang_id);
 		}
 	});
 	
@@ -2176,6 +2189,11 @@ Ext.onReady(function(){
 		readOnly: false,
 		maxLength: 250
 	});
+	var dfpiutang_lpiutang_idField= new Ext.form.NumberField({
+		id: 'dfpiutang_lpiutang_idField',
+		readOnly: true
+	});
+	
 	
 	//declaration of detail coloumn model
 	detail_fpiutang_ColumnModel = new Ext.grid.ColumnModel(
@@ -2188,27 +2206,27 @@ Ext.onReady(function(){
 			sortable: false
 		},
 		{
-			header: '<div align="center">' + 'Faktur Jual' + '</div>',
-			dataIndex: 'lpiutang_id',
-			width: 160,
+			header: '<div align="center">' + 'No Faktur' + '</div>',
+			dataIndex: 'lpiutang_faktur',
+			width: 100,
 			sortable: true,
-			editor: dcbo_fjual_piutang,
-			renderer: Ext.util.Format.comboRenderer(dcbo_fjual_piutang)
+			editor: dcbo_fjual_piutang
+			//renderer: Ext.util.Format.comboRenderer(dcbo_fjual_piutang)
 		},
 		{
-			header: '<div align="center">' + 'Total Piutang' + '</div>',
+			header: '<div align="center">' + 'Piutang (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'lpiutang_total',
-			width: 60,
+			width: 100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: dfpiutang_sisaField
 		},
 		{
-			header: '<div align="center">' + 'Total Dilunasi (Rp)' + '</div>',
+			header: '<div align="center">' + 'Dilunasi (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'dpiutang_nilai',
-			width: 60,
+			width: 100,
 			editor:  dfpiutang_bayarField,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -2221,7 +2239,17 @@ Ext.onReady(function(){
 			width: 200,
 			sortable: true,
 			editor: dfpiutang_ketField
-		}
+		},
+		//lpiutang_id sengaja dimunculkan, karena dipakai utk pengecekan
+		{
+			header: '<div align="center">' + 'lpiutang_id' + '</div>',
+			dataIndex: 'lpiutang_id',
+			hidden: false,
+			width: 60,
+			sortable: false,
+			readonly: true,
+			editor: dfpiutang_lpiutang_idField
+		},
 		]
 	);
 	detail_fpiutang_ColumnModel.defaultSortable= true;

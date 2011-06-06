@@ -2281,14 +2281,13 @@ class M_public_function extends Model{
 			FROM master_lunas_piutang
 				LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
 				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)
-				WHERE master_lunas_piutang.lpiutang_stat_dok <> 'Batal'
-				";
+				WHERE master_lunas_piutang.lpiutang_stat_dok <> 'Batal' AND lpiutang_faktur_tanggal > '2010-07-20' ";
 		
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (cust_nama LIKE '%".addslashes($query)."%' OR cust_no LIKE '%".addslashes($query)."%' )";
 		}
-		$sql.=" GROUP BY lpiutang_cust";
+		$sql.=" GROUP BY lpiutang_cust HAVING lpiutang_sisa > 0 ";
 		
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
