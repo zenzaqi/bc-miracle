@@ -109,7 +109,7 @@ class M_master_lunas_piutang extends Model{
 		}
 	}
 			
-	function get_faktur_piutang_all_list($cust_id,$query,$start,$end){
+	/*function get_faktur_piutang_all_list($cust_id,$query,$start,$end){
 		
 		$sql="SELECT lpiutang_id
 				,lpiutang_faktur
@@ -133,7 +133,7 @@ class M_master_lunas_piutang extends Model{
 		} else {
 			return '({"total":"0", "results":""})';
 		}
-	}
+	}*/
 	
 		
 	function get_faktur_piutang_detail_list($cust_id,$query,$start,$end){
@@ -259,7 +259,6 @@ class M_master_lunas_piutang extends Model{
 				$this->db->update('detail_lunas_piutang', $dtu);
 				$this->db->query('UNLOCK TABLES');
 			}
-			
 			if($cetak_lp==1 && $i==$size_array){
 				/*update db.master_lunas_piutang.lpiutang_sisa*/
 				$sql = "SELECT * FROM vu_piutang_total_lunas WHERE vu_piutang_total_lunas.fpiutang_cust='".$fpiutang_cust."'";
@@ -271,6 +270,13 @@ class M_master_lunas_piutang extends Model{
 							WHERE lpiutang_id=".$row->dpiutang_master;
 						$this->db->query('LOCK TABLE master_lunas_piutang WRITE');
 						$this->db->query($sqlu);
+						$this->db->query('UNLOCK TABLES');
+						
+						$sqlu_status = "UPDATE master_lunas_piutang
+							SET lpiutang_status = 'lunas', lpiutang_stat_dok = 'Tertutup'
+							WHERE lpiutang_sisa=0 AND lpiutang_id=".$row->dpiutang_master;
+						$this->db->query('LOCK TABLE master_lunas_piutang WRITE');
+						$this->db->query($sqlu_status);
 						$this->db->query('UNLOCK TABLES');
 					}
 				}
@@ -296,6 +302,13 @@ class M_master_lunas_piutang extends Model{
 							WHERE lpiutang_id=".$row->dpiutang_master;
 						$this->db->query('LOCK TABLE master_lunas_piutang WRITE');
 						$this->db->query($sqlu);
+						$this->db->query('UNLOCK TABLES');
+						
+						$sqlu_status = "UPDATE master_lunas_piutang
+							SET lpiutang_status = 'lunas', lpiutang_stat_dok = 'Tertutup'
+							WHERE lpiutang_sisa=0 AND lpiutang_id=".$row->dpiutang_master;
+						$this->db->query('LOCK TABLE master_lunas_piutang WRITE');
+						$this->db->query($sqlu_status);
 						$this->db->query('UNLOCK TABLES');
 					}
 				}

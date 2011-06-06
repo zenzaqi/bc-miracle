@@ -127,8 +127,8 @@ class C_master_lunas_piutang extends Controller {
 		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
 		if($task=='detail')
 			$result=$this->m_master_lunas_piutang->get_faktur_piutang_detail_list($cust_id,$query,$start,$end);
-		elseif($task=='list')
-			$result=$this->m_master_lunas_piutang->get_faktur_piutang_all_list($cust_id,$query,$start,$end);
+		/*elseif($task=='list')
+			$result=$this->m_master_lunas_piutang->get_faktur_piutang_all_list($cust_id,$query,$start,$end);*/
 		elseif($task=='selected')
 			$result=$this->m_master_lunas_piutang->get_faktur_piutang_selected_list($fpiutang_id,$query,$start,$end);
 		echo $result;
