@@ -2281,7 +2281,7 @@ class M_public_function extends Model{
 			FROM master_lunas_piutang
 				LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
 				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)
-				WHERE master_lunas_piutang.lpiutang_stat_dok <> 'Batal' AND lpiutang_faktur_tanggal > '2010-07-20' ";
+				WHERE master_lunas_piutang.lpiutang_stat_dok = 'Terbuka' AND lpiutang_faktur_tanggal > '2010-07-20' ";
 		
 		if($query<>""){
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";

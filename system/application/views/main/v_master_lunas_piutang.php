@@ -295,7 +295,11 @@ Ext.onReady(function(){
 				
 				if((fpiutang_idField.getValue()!==null) && (fpiutang_idField.getValue()!==0) && (fpiutang_idField.getValue()!=='')){fpiutang_id_create_pk = fpiutang_idField.getValue();}else{fpiutang_id_create_pk=get_pk_id();} 
 				if((fpiutang_nobuktiField.getValue()!==null) && (fpiutang_nobuktiField.getValue()!=='')){fpiutang_no_create = fpiutang_nobuktiField.getValue();}
-				if((fpiutang_customerField.getValue()!==null) && (fpiutang_customerField.getValue()!=='')){fpiutang_cust_create = fpiutang_customerField.getValue();}
+				if((fpiutang_customerField.getValue()!==null) && (fpiutang_customerField.getValue()!=='') && (fpiutang_post2db=="CREATE")){
+					fpiutang_cust_create = fpiutang_customerField.getValue();
+				}else if(fpiutang_post2db=="UPDATE"){
+					fpiutang_cust_create = fpiutang_customer_idField.getValue();
+				}
 				if((fpiutang_tanggalField.getValue()!==null) && (fpiutang_tanggalField.getValue()!=='')){fpiutang_tanggal_create_date = fpiutang_tanggalField.getValue().format('Y-m-d');} 
 				if((fpiutang_keteranganField.getValue()!==null) && (fpiutang_keteranganField.getValue()!=='')){fpiutang_keterangan_create = fpiutang_keteranganField.getValue();} 
 				if((fpiutang_stat_dokField.getValue()!==null) && (fpiutang_stat_dokField.getValue()!=='')){fpiutang_status_create = fpiutang_stat_dokField.getValue();}
@@ -573,6 +577,11 @@ Ext.onReady(function(){
 		fpiutang_stat_dokField.setDisabled(false);
 		detail_fpiutang_bylp_DataStore.load({params: {fpiutang_nobukti:-1}});
 		master_lunas_piutang_createForm.fpiutang_savePrint.enable();
+		
+		dcbo_fjual_piutang.setDisabled(false);
+		dfpiutang_sisaField.setDisabled(false);
+		dfpiutang_bayarField.setDisabled(false);
+		dfpiutang_ketField.setDisabled(false);
 	}
  	/* End of Function */
 	
@@ -625,6 +634,7 @@ Ext.onReady(function(){
 		fpiutang_idField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_id'));
 		fpiutang_nobuktiField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_nobukti'));
 		fpiutang_customerField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
+		fpiutang_customer_idField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_cust'));
 		fpiutang_nocustField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
 		fpiutang_tanggalField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_tanggal'));
 		fpiutang_keteranganField.setValue(master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_keterangan'));
@@ -663,7 +673,7 @@ Ext.onReady(function(){
 			if(cetak_lp==1){
 				cetak_lp=0;
 			}
-			
+			master_lunas_piutang_createForm.fpiutang_savePrint.disable();
 		}
 		if(fpiutang_post2db=="UPDATE" && master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_stat_dok')=="Batal"){
 			fpiutang_idField.setDisabled(true);
@@ -847,6 +857,11 @@ Ext.onReady(function(){
 			//Enable Add detail
 			detail_fpiutang_bAdd.setDisabled(false);
 			detail_fpiutang_bDel.setDisabled(false);
+			
+			dcbo_fjual_piutang.setDisabled(false);
+			dfpiutang_sisaField.setDisabled(false);
+			dfpiutang_bayarField.setDisabled(false);
+			dfpiutang_ketField.setDisabled(false);
 		}
 		if(fpiutang_post2db=="UPDATE" && master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_stat_dok')=="Tertutup"){
 			fpiutang_customerField.setDisabled(true);
@@ -863,6 +878,11 @@ Ext.onReady(function(){
 			//Disable Add detail
 			detail_fpiutang_bAdd.setDisabled(true);
 			detail_fpiutang_bDel.setDisabled(true);
+			
+			dcbo_fjual_piutang.setDisabled(true);
+			dfpiutang_sisaField.setDisabled(true);
+			dfpiutang_bayarField.setDisabled(true);
+			dfpiutang_ketField.setDisabled(true);
 		}
 		if(fpiutang_post2db=="UPDATE" && master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_stat_dok')=="Batal"){
 			fpiutang_customerField.setDisabled(true);
@@ -879,6 +899,11 @@ Ext.onReady(function(){
 			//Disable Add detail
 			detail_fpiutang_bAdd.setDisabled(true);
 			detail_fpiutang_bDel.setDisabled(true);
+			
+			dcbo_fjual_piutang.setDisabled(true);
+			dfpiutang_sisaField.setDisabled(true);
+			dfpiutang_bayarField.setDisabled(true);
+			dfpiutang_ketField.setDisabled(true);
 			
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_LUNASPIUTANG'))){ ?>
 			master_lunas_piutang_createForm.fpiutang_savePrint.disable();
@@ -932,8 +957,8 @@ Ext.onReady(function(){
 		if(master_lunas_piutangListEditorGrid.selModel.getCount() == 1) {
 			fpiutang_post2db='UPDATE';
 			msg='updated';
-			cbo_fjual_piutangDataStore.setBaseParam('cust_id',master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_cust'));
-			cbo_fjual_piutangDataStore.setBaseParam('task','list');
+			cbo_fjual_piutangDataStore.setBaseParam('fpiutang_id',master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_id'));
+			cbo_fjual_piutangDataStore.setBaseParam('task','selected');
 			cbo_fjual_piutangDataStore.load({
 				callback: function(opts, success, response){
 					if(success){
@@ -1445,6 +1470,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	/* Identify  fpiutang_customer Field */
+	fpiutang_customer_idField= new Ext.form.NumberField();
 	fpiutang_customerField= new Ext.form.ComboBox({
 		id: 'fpiutang_customerField',
 		fieldLabel: 'Customer',
@@ -2164,6 +2190,27 @@ Ext.onReady(function(){
 			dfpiutang_lpiutang_idField.setValue(cbo_fjual_piutangDataStore.getAt(j).data.lpiutang_id);
 		}
 	});
+	dcbo_fjual_piutang.on("focus",function(){
+		if(fpiutang_stat_dokField.getValue()=='Terbuka' && fpiutang_post2db=='UPDATE'){
+			cbo_fjual_piutangDataStore.load({
+				params:{
+					cust_id: master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_cust'),
+					task: 'detail'
+				}
+			});
+		}else if((fpiutang_stat_dokField.getValue()!=='Terbuka') && (fpiutang_post2db=='UPDATE')){
+			cbo_fjual_piutangDataStore.load({
+				params:{
+					fpiutang_id: master_lunas_piutangListEditorGrid.getSelectionModel().getSelected().get('fpiutang_id'),
+					task: 'selected'
+				}
+			});
+		}else{
+			cbo_fjual_piutangDataStore.setBaseParam('cust_id', fpiutang_customerField.getValue());
+			cbo_fjual_piutangDataStore.setBaseParam('task', 'detail');
+			cbo_fjual_piutangDataStore.load();
+		}
+	});
 	
 	var dfpiutang_bayarField=new Ext.form.NumberField({
 		allowDecimals: true,
@@ -2207,11 +2254,11 @@ Ext.onReady(function(){
 		},
 		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
-			dataIndex: 'lpiutang_faktur',
+			dataIndex: 'lpiutang_id',
 			width: 100,
 			sortable: true,
-			editor: dcbo_fjual_piutang
-			//renderer: Ext.util.Format.comboRenderer(dcbo_fjual_piutang)
+			editor: dcbo_fjual_piutang,
+			renderer: Ext.util.Format.comboRenderer(dcbo_fjual_piutang)
 		},
 		{
 			header: '<div align="center">' + 'Piutang (Rp)' + '</div>',
