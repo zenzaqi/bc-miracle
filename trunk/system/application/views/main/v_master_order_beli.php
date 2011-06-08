@@ -1431,7 +1431,7 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'order_satuan_display', direction: "ASC"}
 	});
-
+	
 	
 	
 	cbo_dorder_produk_hargaDataStore = new Ext.data.Store({
@@ -2488,6 +2488,7 @@ Ext.onReady(function(){
 		cbo_dorder_produk_hargaDataStore.setBaseParam('task','op_last_price');
 		cbo_dorder_produk_hargaDataStore.setBaseParam('supplier_id',order_supplier_idField.getValue());
 		cbo_dorder_produk_hargaDataStore.setBaseParam('produk_id',combo_order_produk.getValue());
+		cbo_dorder_produk_hargaDataStore.setBaseParam('order_tanggal',order_tanggalField.getValue().format('Y-m-d'));
 		cbo_order_satuanDataStore.load({
 			callback: function(r,opt,success){
 				cbo_dorder_produk_hargaDataStore.load({
