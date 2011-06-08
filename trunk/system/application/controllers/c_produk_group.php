@@ -102,6 +102,12 @@ class C_produk_group extends Controller {
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
+		$group_dultah=trim(@$_POST["group_dultah"]);
+		$group_dcard=trim(@$_POST["group_dcard"]);
+		$group_dkolega=trim(@$_POST["group_dkolega"]);
+		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
+		$group_downer=trim(@$_POST["group_downer"]);
+		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -112,7 +118,8 @@ class C_produk_group extends Controller {
 		
 		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat,
 															 $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-															 $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
+															 $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+															 $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 															 $group_revised, $group_opsi );
 		echo $result;
 	}
@@ -141,6 +148,12 @@ class C_produk_group extends Controller {
 		$group_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$group_keterangan);
 		$group_keterangan=str_replace("'", '"',$group_keterangan);
 		$group_aktif=trim(@$_POST["group_aktif"]);
+		$group_dultah=trim(@$_POST["group_dultah"]);
+		$group_dcard=trim(@$_POST["group_dcard"]);
+		$group_dkolega=trim(@$_POST["group_dkolega"]);
+		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
+		$group_downer=trim(@$_POST["group_downer"]);
+		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -150,8 +163,9 @@ class C_produk_group extends Controller {
 		
 		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,
 														   $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-														   $group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,
-														   $group_revised, $group_opsi );
+														   $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+														   $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
+														   $group_revised, $group_opsi);
 		echo $result;
 	}
 
@@ -186,6 +200,12 @@ class C_produk_group extends Controller {
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
+		$group_dultah=trim(@$_POST["group_dultah"]);
+		$group_dcard=trim(@$_POST["group_dcard"]);
+		$group_dkolega=trim(@$_POST["group_dkolega"]);
+		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
+		$group_downer=trim(@$_POST["group_downer"]);
+		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -198,7 +218,9 @@ class C_produk_group extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
+		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,
+															$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+															$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -224,6 +246,12 @@ class C_produk_group extends Controller {
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
+		$group_dultah=trim(@$_POST["group_dultah"]);
+		$group_dcard=trim(@$_POST["group_dcard"]);
+		$group_dkolega=trim(@$_POST["group_dkolega"]);
+		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
+		$group_downer=trim(@$_POST["group_downer"]);
+		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -236,7 +264,9 @@ class C_produk_group extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_produk_group->produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
+		$result = $this->m_produk_group->produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,
+															$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+															$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=15;
    		/* We now have our array, let's build our HTML file */
@@ -270,6 +300,18 @@ class C_produk_group extends Controller {
 				fwrite($file, $data['group_dupaket']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_dmpaket']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dultah']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dcard']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dkolega']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dkeluarga']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_downer']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dgrooming']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_keterangan']);
 				fwrite($file,"</td><td>");
@@ -305,6 +347,12 @@ class C_produk_group extends Controller {
 		$group_aktif=trim(@$_POST["group_aktif"]);
 		$group_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$group_aktif);
 		$group_aktif=str_replace("'", '"',$group_aktif);
+		$group_dultah=trim(@$_POST["group_dultah"]);
+		$group_dcard=trim(@$_POST["group_dcard"]);
+		$group_dkolega=trim(@$_POST["group_dkolega"]);
+		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
+		$group_downer=trim(@$_POST["group_downer"]);
+		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -317,7 +365,9 @@ class C_produk_group extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_produk_group->produk_group_export_excel($group_id, $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
+		$query = $this->m_produk_group->produk_group_export_excel($group_id, $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,
+																	$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+																	$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
 		
 		to_excel($query,"produk_group"); 
 		echo '1';
