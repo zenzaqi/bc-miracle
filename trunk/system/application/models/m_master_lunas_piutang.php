@@ -790,7 +790,7 @@ class M_master_lunas_piutang extends Model{
 				foreach($rs->result() as $row){
 					$sqlu = "UPDATE master_lunas_piutang
 							LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
-						SET lpiutang_sisa = (lpiutang_total-(ifnull(vu_piutang_total_lunas.total_pelunasan,0)))
+						SET lpiutang_sisa = (lpiutang_total-(ifnull(vu_piutang_total_lunas.total_pelunasan,0))), lpiutang_stat_dok = 'Terbuka', lpiutang_status = 'piutang'
 						WHERE lpiutang_id=".$row->dpiutang_master;
 					$this->db->query('LOCK TABLE master_lunas_piutang WRITE, vu_piutang_total_lunas WRITE');
 					$this->db->query($sqlu);
