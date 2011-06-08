@@ -72,6 +72,12 @@ var group_dmpaketField;
 var group_kelompokField;
 var group_keteranganField;
 var group_aktifField;
+var group_dultahField;
+var group_dcardField;
+var group_dkolegaField;
+var group_dkeluargaField;
+var group_downerField;
+var group_dgroomingField;
 
 var group_kodeSearchField;
 var group_namaSearchField;
@@ -83,6 +89,12 @@ var group_dupaketSearchField;
 var group_dmpaketSearchField;
 var group_keteranganSearchField;
 var group_aktifSearchField;
+var group_dultahSearchField;
+var group_dcardSearchField;
+var group_dkolegaSearchField;
+var group_dkeluargaSearchField;
+var group_downerSearchField;
+var group_dgroomingSearchField;
 
 
 /* on ready fuction */
@@ -185,6 +197,13 @@ Ext.onReady(function(){
 		var group_kelompok_create=null;
 		var group_keterangan_create=null;
 		var group_aktif_create=null;
+		var group_dultah_create=null;
+		var group_dcard_create=null;
+		var group_dkolega_create=null;
+		var group_dkeluarga_create=null;
+		var group_downer_create=null;
+		var group_dgrooming_create=null;
+		
 
 		group_id_create_pk=get_pk_id();
 		if(group_kodeField.getValue()!== null){group_kode_create = group_kodeField.getValue();}
@@ -198,6 +217,12 @@ Ext.onReady(function(){
 		if(group_kelompokField.getValue()!== null){group_kelompok_create = group_kelompokField.getValue();}
 		if(group_keteranganField.getValue()!== null){group_keterangan_create = group_keteranganField.getValue();}
 		if(group_aktifField.getValue()!== null){group_aktif_create = group_aktifField.getValue();}
+		if(group_dultahField.getValue()!== null){group_dultah_create = group_dultahField.getValue();}
+		if(group_dcardField.getValue()!== null){group_dcard_create = group_dcardField.getValue();}
+		if(group_dkolegaField.getValue()!== null){group_dkolega_create = group_dkolegaField.getValue();}
+		if(group_dkeluargaField.getValue()!== null){group_dkeluarga_create = group_dkeluargaField.getValue();}
+		if(group_downerField.getValue()!== null){group_downer_create = group_downerField.getValue();}
+		if(group_dgroomingField.getValue()!== null){group_dgrooming_create = group_dgroomingField.getValue();}
 		
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
@@ -217,6 +242,12 @@ Ext.onReady(function(){
 					group_kelompok	: group_kelompok_create,	
 					group_keterangan	: group_keterangan_create,	
 					group_aktif	: group_aktif_create,
+					group_dultah	: group_dultah_create,
+					group_dcard		: group_dcard_create,
+					group_dkolega	: group_dkolega_create,
+					group_dkeluarga	: group_dkeluarga_create,
+					group_downer	: group_downer_create,
+					group_dgrooming	: group_dgrooming_create,
 					group_opsi	: btn
 				}, 
 				success: function(response){             
@@ -296,6 +327,19 @@ Ext.onReady(function(){
 		group_keteranganField.setValue(null);
 		group_aktifField.reset();
 		group_aktifField.setValue(null);
+		group_dultahField.reset();
+		group_dultahField.setValue(null);
+		group_dcardField.reset();
+		group_dcardField.setValue(null);
+		group_dkolegaField.reset();
+		group_dkolegaField.setValue(null);
+		group_dkeluargaField.reset();
+		group_dkeluargaField.setValue(null);
+		group_downerField.reset();
+		group_downerField.setValue(null);
+		group_dgroomingField.reset();
+		group_dgroomingField.setValue(null);
+		
 	}
  	/* End of Function */
   
@@ -313,6 +357,12 @@ Ext.onReady(function(){
 		group_kelompokField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_kelompok'));
 		group_keteranganField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_keterangan'));
 		group_aktifField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_aktif'));
+		group_dultahField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dultah'));
+		group_dcardField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dcard'));
+		group_dkolegaField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dkolega'));
+		group_dkeluargaField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dkeluarga'));
+		group_downerField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_downer'));
+		group_dgroomingField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dgrooming'));
 	}
 	/* End setValue to EDIT*/
   
@@ -445,6 +495,12 @@ Ext.onReady(function(){
 			{name: 'group_kelompok', type: 'string', mapping: 'kategori_nama'},
 			{name: 'group_keterangan', type: 'string', mapping: 'group_keterangan'},
 			{name: 'group_aktif', type: 'string', mapping: 'group_aktif'},
+			{name: 'group_dultah', type: 'int', mapping: 'group_dultah'},
+			{name: 'group_dcard', type: 'int', mapping: 'group_dcard'},
+			{name: 'group_dkolega', type: 'int', mapping: 'group_dkolega'},
+			{name: 'group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
+			{name: 'group_downer', type: 'int', mapping: 'group_downer'},
+			{name: 'group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
 			{name: 'group_creator', type: 'string', mapping: 'group_creator'},
 			{name: 'group_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'group_date_create'},
 			{name: 'group_update', type: 'string', mapping: 'group_update'},
@@ -497,7 +553,7 @@ Ext.onReady(function(){
 		{
 			header: 'Kode',
 			dataIndex: 'group_kode',
-			width: 150,
+			width: 100,
 			sortable: true,
 			readOnly: true
 		},
@@ -562,9 +618,69 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
+			header: 'Ultah',
+			dataIndex: 'group_dultah',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Card',
+			dataIndex: 'group_dcard',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Kolega',
+			dataIndex: 'group_dkolega',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Keluarga',
+			dataIndex: 'group_dkeluarga',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Owner',
+			dataIndex: 'group_downer',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Grooming',
+			dataIndex: 'group_dgrooming',
+			width: 100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
 			header: 'Jenis',
 			dataIndex: 'group_kelompok',
-			width: 150,
+			width: 125,
 			sortable: true
 			<? if(eregi('u',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
 			,
@@ -587,6 +703,7 @@ Ext.onReady(function(){
 			})
 			<? }?>
 		},
+		/*
 		{
 			header: 'Keterangan',
 			dataIndex: 'group_keterangan',
@@ -599,10 +716,11 @@ Ext.onReady(function(){
           	})
 			<? } ?>
 		},
+		*/
 		{
 			header: 'Status',
 			dataIndex: 'group_aktif',
-			width: 150,
+			width: 125,
 			sortable: true
 			<? if(eregi('u',$this->m_security->get_access_group_by_kode('MENU_GROUP1'))){ ?>
 			,
@@ -821,7 +939,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Nama <span style="color: #ec0000">*</span>',
 		allowBlank: false,
 		maxLength: 250,
-		anchor: '95%'
+		anchor: '50%'
 	});
 	
 	
@@ -916,14 +1034,14 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		anchor: '50%'
 	});
 	/* Identify  group_keterangan Field */
 	group_keteranganField= new Ext.form.TextArea({
 		id: 'group_keteranganField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
-		anchor: '95%'
+		anchor: '50%'
 	});
 	/* Identify  group_aktif Field */
 	group_aktifField= new Ext.form.ComboBox({
@@ -940,6 +1058,84 @@ Ext.onReady(function(){
 		valueField: 'group_aktif_value',
 		width: 80,
 		triggerAction: 'all'	
+	});
+	
+	/* Identify group_dultah Field*/
+	group_dultahField= new Ext.form.NumberField({
+		id: 'group_dultahField',
+		fieldLabel: 'Ultah',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dcard Field*/
+	group_dcardField= new Ext.form.NumberField({
+		id: 'group_dcardField',
+		fieldLabel: 'Credit Card',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dkolega Field*/
+	group_dkolegaField= new Ext.form.NumberField({
+		id: 'group_dkolegaField',
+		fieldLabel: 'Kolega',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dkeluarga Field*/
+	group_dkeluargaField= new Ext.form.NumberField({
+		id: 'group_dkeluargaField',
+		fieldLabel: 'Keluarga',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_downer Field*/
+	group_downerField= new Ext.form.NumberField({
+		id: 'group_downerField',
+		fieldLabel: 'Owner',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dgrooming Field*/
+	group_dgroomingField= new Ext.form.NumberField({
+		id: 'group_dgroomingField',
+		fieldLabel: 'Grooming',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
 	
 	group_diskon_umumFielSet = new Ext.form.FieldSet({
@@ -976,12 +1172,121 @@ Ext.onReady(function(){
 			]
 	});
 	
+	/* Group utk Diskon Ultah */
+	group_diskon_ultahFieldset = new Ext.form.FieldSet({
+		title: 'Ultah (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dultahField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Credit Card */
+	group_diskon_cardFieldset = new Ext.form.FieldSet({
+		title: 'Credit Card (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dcardField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Kolega */
+	group_diskon_kolegaFieldset = new Ext.form.FieldSet({
+		title: 'Kolega (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dkolegaField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Keluarga */
+	group_diskon_keluargaFieldset = new Ext.form.FieldSet({
+		title: 'Keluarga (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dkeluargaField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Owner */
+	group_diskon_ownerFieldset = new Ext.form.FieldSet({
+		title: 'Owner (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_downerField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Grooming */
+	group_diskon_groomingFieldset = new Ext.form.FieldSet({
+		title: 'Grooming (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dgroomingField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+
+	
 	/* Function for retrieve create Window Panel*/ 
 	produk_group_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,        
+		width: 800,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -996,16 +1301,52 @@ Ext.onReady(function(){
 							border:false,
 							items:[
 								   {
-									   columnWidth:0.5,
+									   columnWidth:0.25,
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_umumFielSet]
 								   },
 								   {
-									   columnWidth:0.5,
+									   columnWidth:0.25,
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_memberFielSet]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_ultahFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_cardFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_kolegaFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_keluargaFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_ownerFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_groomingFieldset]
 								   }
 								   ]
 						}
@@ -1028,6 +1369,7 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					produk_group_DataStore.reload();
 					produk_group_createWindow.hide();
 				}
 			}
@@ -1068,6 +1410,12 @@ Ext.onReady(function(){
 		var group_dmpaket_search=null;
 		var group_keterangan_search=null;
 		var group_aktif_search=null;
+		var group_dultah_search=null;
+		var group_dcard_search=null;
+		var group_dkolega_search=null;
+		var group_dkeluarga_search=null;
+		var group_downer_search=null;
+		var group_dgrooming_search=null;
 		var group_kelompok_search=null;
 
 
@@ -1082,6 +1430,12 @@ Ext.onReady(function(){
 		if(group_dmpaketSearchField.getValue()!==null){group_dmpaket_search=group_dmpaketSearchField.getValue();}
 		if(group_keteranganSearchField.getValue()!==null){group_keterangan_search=group_keteranganSearchField.getValue();}
 		if(group_aktifSearchField.getValue()!==null){group_aktif_search=group_aktifSearchField.getValue();}
+		if(group_dultahSearchField.getValue()!==null){group_dultah_search=group_dultahSearchField.getValue();}
+		if(group_dcardSearchField.getValue()!==null){group_dcard_search=group_dcardSearchField.getValue();}
+		if(group_dkolegaSearchField.getValue()!==null){group_dkolega_search=group_dkolegaSearchField.getValue();}
+		if(group_dkeluargaSearchField.getValue()!==null){group_dkeluarga_search=group_dkeluargaSearchField.getValue();}
+		if(group_downerSearchField.getValue()!==null){group_downer_search=group_downerSearchField.getValue();}
+		if(group_dgroomingSearchField.getValue()!==null){group_kelompok_search=group_dgroomingSearchField.getValue();}
 		if(group_kelompokSearchField.getValue()!==null){group_kelompok_search=group_kelompokSearchField.getValue();}
 		// change the store parameters
 		produk_group_DataStore.baseParams = {
@@ -1100,6 +1454,12 @@ Ext.onReady(function(){
 			group_dmpaket	:	group_dmpaket_search, 
 			group_keterangan	:	group_keterangan_search, 
 			group_aktif	:	group_aktif_search,
+			group_dultah	: group_dultah_search,
+			group_dcard		: group_dcard_search,
+			group_dkolega	: group_dkolega_search,
+			group_dkeluarga	: group_dkeluarga_search,
+			group_downer	: group_downer_search,
+			group_dgrooming	: group_dgrooming_search,
 			group_kelompok	:	group_kelompok_search
 		};
 		// Cause the datastore to do another query : 
@@ -1232,14 +1592,14 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		anchor: '95%'
+		anchor: '50%'
 	});
 	/* Identify  group_keterangan Field */
 	group_keteranganSearchField= new Ext.form.TextArea({
 		id: 'group_keteranganSearchField',
 		fieldLabel: 'Keterangan',
 		maxLength: 250,
-		anchor: '95%'
+		anchor: '50%'
 	});
 	/* Identify  group_aktif Field */
 	group_aktifSearchField= new Ext.form.ComboBox({
@@ -1256,6 +1616,88 @@ Ext.onReady(function(){
 		width: 90,
 		triggerAction: 'all'	
 	});
+	
+	/* Identify group_dultah Search Field*/
+	group_dultahSearchField= new Ext.form.NumberField({
+		id: 'group_dultahSearchField',
+		fieldLabel: 'Ultah',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dcardSearchField Field*/
+	group_dcardSearchField= new Ext.form.NumberField({
+		id: 'group_dcardSearchField',
+		fieldLabel: 'Credit Card',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dkolegaSearchField Field*/
+	group_dkolegaSearchField= new Ext.form.NumberField({
+		id: 'group_dkolegaSearchField',
+		fieldLabel: 'Kolega',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dkeluargaSearchField Field*/
+	group_dkeluargaSearchField= new Ext.form.NumberField({
+		id: 'group_dkeluargaSearchField',
+		fieldLabel: 'Keluarga',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_downerSearchField Field*/
+	group_downerSearchField= new Ext.form.NumberField({
+		id: 'group_downerSearchField',
+		fieldLabel: 'Owner',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dgroomingSearchField Field*/
+	group_dgroomingSearchField= new Ext.form.NumberField({
+		id: 'group_dgroomingSearchField',
+		fieldLabel: 'Grooming',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
+	
+	
 	
 	group_diskon_umumSearchFielSet = new Ext.form.FieldSet({
 		title: 'Diskon Umum (%)',
@@ -1291,12 +1733,122 @@ Ext.onReady(function(){
 			]
 	});
 	
+	
+	/* Group utk Diskon Ultah Search */
+	group_diskon_ultahSearchFieldset = new Ext.form.FieldSet({
+		title: 'Ultah (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dultahSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Credit Card Search*/
+	group_diskon_cardSearchFieldset = new Ext.form.FieldSet({
+		title: 'Credit Card (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dcardSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Kolega */
+	group_diskon_kolegaSearchFieldset = new Ext.form.FieldSet({
+		title: 'Kolega (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dkolegaSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Keluarga Search */
+	group_diskon_keluargaSearchFieldset = new Ext.form.FieldSet({
+		title: 'Keluarga (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dkeluargaSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Owner Search */
+	group_diskon_ownerSearchFieldset = new Ext.form.FieldSet({
+		title: 'Owner (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_downerSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Grooming Search */
+	group_diskon_groomingSearchFieldset = new Ext.form.FieldSet({
+		title: 'Grooming (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dgroomingSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+
+
 	/* Function for retrieve search Form Panel */
 	produk_group_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,        
+		width: 800,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1311,16 +1863,52 @@ Ext.onReady(function(){
 							border:false,
 							items:[
 								   {
-									   columnWidth:0.5,
+									   columnWidth:0.25,
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_umumSearchFielSet]
 								   },
 								   {
-									   columnWidth:0.5,
+									   columnWidth:0.25,
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_memberSearchFielSet]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_ultahSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_cardSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_kolegaSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_keluargaSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_ownerSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_groomingSearchFieldset]
 								   }
 								   ]
 						}
@@ -1384,6 +1972,12 @@ Ext.onReady(function(){
 		var group_dmpaket_print=null;
 		var group_keterangan_print=null;
 		var group_aktif_print=null;
+		var group_dultah_print=null;
+		var group_dcard_print=null;
+		var group_dkolega_print=null;
+		var group_dkeluarga_print=null;
+		var group_downer_print=null;
+		var group_dgrooming_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(produk_group_DataStore.baseParams.query!==null){searchquery = produk_group_DataStore.baseParams.query;}
@@ -1397,6 +1991,13 @@ Ext.onReady(function(){
 		if(produk_group_DataStore.baseParams.group_dmpaket!==null){group_dmpaket_print = produk_group_DataStore.baseParams.group_dmpaket;}
 		if(produk_group_DataStore.baseParams.group_keterangan!==null){group_keterangan_print = produk_group_DataStore.baseParams.group_keterangan;}
 		if(produk_group_DataStore.baseParams.group_aktif!==null){group_aktif_print = produk_group_DataStore.baseParams.group_aktif;}
+		if(produk_group_DataStore.baseParams.group_dultah!==null){group_dultah_print = produk_group_DataStore.baseParams.group_dultah;}
+		if(produk_group_DataStore.baseParams.group_dcard!==null){group_dcard_print = produk_group_DataStore.baseParams.group_dcard;}
+		if(produk_group_DataStore.baseParams.group_dkolega!==null){group_dkolega_print = produk_group_DataStore.baseParams.group_dkolega;}
+		if(produk_group_DataStore.baseParams.group_dkeluarga!==null){group_dkeluarga_print = produk_group_DataStore.baseParams.group_dkeluarga;}
+		if(produk_group_DataStore.baseParams.group_downer!==null){group_downer_print = produk_group_DataStore.baseParams.group_downer;}
+		if(produk_group_DataStore.baseParams.group_dgrooming!==null){group_dgrooming_print = produk_group_DataStore.baseParams.group_dgrooming;}
+		
 	
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1404,17 +2005,23 @@ Ext.onReady(function(){
 		params: {
 			task: "PRINT",
 		  	query: searchquery,                    		
-			group_kode : group_kode_print,
-			group_nama : group_nama_print,
-			group_duproduk : group_duproduk_print,
-			group_dmproduk : group_dmproduk_print,
-			group_durawat : group_durawat_print,
-			group_dmrawat : group_dmrawat_print,
-			group_dupaket : group_dupaket_print,
-			group_dmpaket : group_dmpaket_print,
-			group_keterangan : group_keterangan_print,
-			group_aktif : group_aktif_print,
-		  	currentlisting: produk_group_DataStore.baseParams.task // this tells us if we are searching or not
+			group_kode 		: group_kode_print,
+			group_nama 		: group_nama_print,
+			group_duproduk 	: group_duproduk_print,
+			group_dmproduk 	: group_dmproduk_print,
+			group_durawat 	: group_durawat_print,
+			group_dmrawat 	: group_dmrawat_print,
+			group_dupaket 	: group_dupaket_print,
+			group_dmpaket 	: group_dmpaket_print,
+			group_keterangan: group_keterangan_print,
+			group_aktif 	: group_aktif_print,
+			group_dultah	: group_dultah_print,
+			group_dcard		: group_dcard_print,
+			group_dkolega	: group_dkolega_print,
+			group_dkeluarga	: group_dkeluarga_print,
+			group_downer	: group_downer_print,
+			group_dgrooming	: group_dgrooming_print,
+		  	currentlisting	: produk_group_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1460,6 +2067,12 @@ Ext.onReady(function(){
 		var group_dmpaket_2excel=null;
 		var group_keterangan_2excel=null;
 		var group_aktif_2excel=null;
+		var group_dultah_2excel=null;
+		var group_dcard_2excel=null;
+		var group_dkolega_2excel=null;
+		var group_dkeluarga_2excel=null;
+		var group_downer_2excel=null;
+		var group_dgrooming_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(produk_group_DataStore.baseParams.query!==null){searchquery = produk_group_DataStore.baseParams.query;}
@@ -1472,7 +2085,14 @@ Ext.onReady(function(){
 		if(produk_group_DataStore.baseParams.group_dupaket!==null){group_dupaket_2excel = produk_group_DataStore.baseParams.group_dupaket;}
 		if(produk_group_DataStore.baseParams.group_dmpaket!==null){group_dmpaket_2excel = produk_group_DataStore.baseParams.group_dmpaket;}
 		if(produk_group_DataStore.baseParams.group_keterangan!==null){group_keterangan_2excel = produk_group_DataStore.baseParams.group_keterangan;}
-		if(produk_group_DataStore.baseParams.group_aktif!==null){group_aktif_2excel = produk_group_DataStore.baseParams.group_aktif;}
+		if(produk_group_DataStore.baseParams.group_aktif!==null){group_aktif_2excel = produk_group_DataStore.baseParams.group_aktif;}		
+		if(produk_group_DataStore.baseParams.group_dultah!==null){group_dultah_2excel = produk_group_DataStore.baseParams.group_dultah;}
+		if(produk_group_DataStore.baseParams.group_dcard!==null){group_dcard_2excel = produk_group_DataStore.baseParams.group_dcard;}
+		if(produk_group_DataStore.baseParams.group_dkolega!==null){group_dkolega_2excel = produk_group_DataStore.baseParams.group_dkolega;}
+		if(produk_group_DataStore.baseParams.group_dkeluarga!==null){group_dkeluarga_2excel = produk_group_DataStore.baseParams.group_dkeluarga;}
+		if(produk_group_DataStore.baseParams.group_downer!==null){group_downer_2excel = produk_group_DataStore.baseParams.group_downer;}
+		if(produk_group_DataStore.baseParams.group_dgrooming!==null){group_dgrooming_2excel = produk_group_DataStore.baseParams.group_dgrooming;}
+	
 	
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1491,6 +2111,12 @@ Ext.onReady(function(){
 			group_dmpaket : group_dmpaket_2excel,
 			group_keterangan : group_keterangan_2excel,
 			group_aktif : group_aktif_2excel,
+			group_dultah	: group_dultah_2excel,
+			group_dcard		: group_dcard_2excel,
+			group_dkolega	: group_dkolega_2excel,
+			group_dkeluarga	: group_dkeluarga_2excel,
+			group_downer	: group_downer_2excel,
+			group_dgrooming : group_dgrooming_2excel,
 		  	currentlisting: produk_group_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -1523,6 +2149,38 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	/* EVENTS by fred */
+	group_dultahField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dcardField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dkolegaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dkeluargaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_downerField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
 	
 });
 	</script>

@@ -1,0 +1,4 @@
+2011-06-07_11-00.sql
+--> menambahkan field diskon utk Ultah, Credit, Kolega, Keluarga , Owner dan Grooming ke tabel produk_group.. 
+Dengan adanya penambahan diskon ini, maka semua pengaturan nominal diskon di atur di menu Master Data - Group 1.. 
+sehingga kedepannya kasir tdk bisa menginputkan jumlah(nominal) utk diskon, kecuali kartu kredit (dgn range input 0-25%).. 
