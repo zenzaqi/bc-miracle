@@ -346,7 +346,7 @@ class M_master_lunas_piutang extends Model{
 							 cust_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
-			//$query.=" ORDER BY order_id DESC";
+			$query.=" ORDER BY fpiutang_tanggal DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
