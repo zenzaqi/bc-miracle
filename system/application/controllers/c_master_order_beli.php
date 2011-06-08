@@ -167,10 +167,11 @@ class C_master_order_beli extends Controller {
 		$selected_id = isset($_POST['selected_id']) ? @$_POST['selected_id'] : @$_GET['selected_id'];
 		$supplier_id = isset($_POST['supplier_id']) ? @$_POST['supplier_id'] : @$_GET['supplier_id'];
 		$produk_id = isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id'];
+		$order_tanggal = isset($_POST['order_tanggal']) ? @$_POST['order_tanggal'] : @$_GET['order_tanggal'];
 		if($task=='detail')
 			$result=$this->m_master_order_beli->get_produk_detail_list($master_id,$query,$start,$end);
 		elseif($task=='op_last_price')
-			$result=$this->m_master_order_beli->get_op_last_price($supplier_id, $produk_id);
+			$result=$this->m_master_order_beli->get_op_last_price($supplier_id, $produk_id, $order_tanggal);
 		echo $result;
 	}
 	//

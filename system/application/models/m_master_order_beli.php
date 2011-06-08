@@ -145,12 +145,12 @@ class M_master_order_beli extends Model{
 		}
 		
 		/*Function utk mengambil harga terakhir dari pemesanan barang OP berdasarkan Tanggal terbaru yg melekat di faktur dan produk yang sama */
-		function get_op_last_price($supplier_id, $produk_id){
+		function get_op_last_price($supplier_id, $produk_id, $order_tanggal){
 			$sql="SELECT dorder_harga 
 					FROM detail_order_beli 
 					LEFT JOIN master_order_beli ON (master_order_beli.order_id = detail_order_beli.dorder_master)
-					WHERE detail_order_beli.dorder_produk = '".$produk_id."'
-				ORDER BY order_tanggal DESC,dorder_id DESC LIMIT 0,5";
+					WHERE detail_order_beli.dorder_produk = '".$produk_id."' AND master_order_beli.order_tanggal <= '".$order_tanggal."'
+				ORDER BY order_tanggal DESC, order_id DESC LIMIT 0,5";
 				
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
