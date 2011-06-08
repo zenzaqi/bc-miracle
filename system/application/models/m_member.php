@@ -293,9 +293,11 @@ class M_member extends Model{
 							  ,$filter){
 			//full query
 			//$query="select * from member";
+			$date_now=date('Y-m-d');
 			$query = "SELECT cust_no
 					,cust_nama
-					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS member_no
+					,member_no
+					,INSERT(INSERT(member_no,7,0,'-'),14,0,'-') AS no_member
 					,member_register
 					,member_valid
 					,member_jenis
@@ -305,9 +307,9 @@ class M_member extends Model{
 				LEFT JOIN customer on customer.cust_id = member.member_cust";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
-				$query .= " ORDER BY member_jenis";
-				$result = $this->db->query($query);
+				$query .= " (member_status = 'Daftar' OR member_status = 'Cetak') AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				//$query .= " ORDER BY member_jenis";
+				//$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($member_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -354,9 +356,23 @@ class M_member extends Model{
 					$query.= " member_tglserahterima LIKE '%".$member_tglserahterima."%'";
 				};
 */				//$query .= " ORDER BY member_jenis";
-				$result = $this->db->query($query);
+				//$result = $this->db->query($query);
 			}
-			return $result->result();
+				$rs = $this->db->query($query);
+				
+				$jum_baris = $rs->num_rows();
+				
+				//looping dimulai disini
+				for ($i = 0; $i < $jum_baris; $i++) {
+					$record = $rs->row($i);
+					$data_arr= $record->member_no;				
+				
+					$query2 = "UPDATE member SET member_status = 'Cetak', member_tglcetak='$date_now' WHERE member_no = '$data_arr' AND member_status = 'Daftar'";
+					$rs2 = $this->db->query($query2);
+				}
+				
+				$result = $this->db->query($query);
+				return $result->result();
 		}
 		
 		//function  for export to excel
@@ -375,6 +391,7 @@ class M_member extends Model{
 									 ,$member_tglcetak_end
 									 ,/*$member_tglserahterima ,*/ $option
 									 ,$filter){
+			$date_now=date('Y-m-d');
 			$query = "SELECT cust_no AS no_cust
 					,cust_nama AS customer
 					,member_no
@@ -448,7 +465,7 @@ class M_member extends Model{
 					$record = $rs->row($i);
 					$data_arr= $record->member_no;				
 				
-					$query2 = "UPDATE member SET member_status = 'Cetak' WHERE member_no = '$data_arr'";
+					$query2 = "UPDATE member SET member_status = 'Cetak', member_tglcetak='$date_now' WHERE member_no = '$data_arr'  AND member_status = 'Daftar'";
 					$rs2 = $this->db->query($query2);
 				}
 				

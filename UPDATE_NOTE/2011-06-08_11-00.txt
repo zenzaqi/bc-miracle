@@ -1,0 +1,1 @@
+vm_member : menyamakan fungsi 'print' dgn fungsi 'export excel', menghide fungsi 'print status daftar'

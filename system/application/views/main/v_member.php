@@ -794,15 +794,16 @@ Ext.onReady(function(){
 			iconCls:'icon-xls',
 			handler: member_export_excel
 		},
-		'-', 
+		/*'-', 
 		{
 			text: 'Print: Status Daftar',
 			//tooltip: 'Aktifkan Member yang teregister dan set status masa pencetakan',
 			tooltip: 'Cetak khusus yang masih berstatus Daftar',
 			iconCls:'icon-print',
 			//iconCls:'icon-aktivasi ',
+			hidden : true,
 			handler: member_cetak_kartu
-		},
+		},*/
 		'-',
 		{
 			text: 'Print',
