@@ -492,7 +492,7 @@ Ext.onReady(function(){
 			{name: 'jurnal_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jurnal_date_post'},
 			{name: 'jurnal_revised', type: 'int', mapping: 'jurnal_revised'}
 		]),
-		sortInfo:{field: 'jurnal_tanggal', direction: "DESC"}
+		sortInfo:{field: 'jurnal_no', direction: "ASC"}
 	});
 	/* End of Function */
 

@@ -54,7 +54,7 @@ class M_jurnal extends Model{
 				       jurnal_detail
 				 WHERE jurnal_detail.djurnal_akun = A.akun_id
 				       AND jurnal.jurnal_id = jurnal_detail.djurnal_master AND
-				 	   jurnal_id='".$faktur."'";
+				 	   jurnal_id='".$faktur."' ORDER BY djurnal_id DESC";
 
 				$result = $this->db->query($sql);
 				return $result;
@@ -166,7 +166,7 @@ class M_jurnal extends Model{
 				$query .= " jurnal_tanggal LIKE '%".addslashes($filter)."%' OR
 							jurnal_no LIKE '%".addslashes($filter)."%' ";
 			}
-			$query.=" ORDER by jurnal_id,jurnal_tanggal DESC";
+			$query.=" ORDER by jurnal_no DESC, djurnal_id DESC";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			if($start=="") $start=0;
@@ -373,6 +373,7 @@ class M_jurnal extends Model{
 			if($option=='LIST'){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (jurnal_no LIKE '%".addslashes($filter)."%' OR jurnal_tanggal LIKE '%".addslashes($filter)."%')";
+				$sql .=" ORDER by jurnal_no DESC, djurnal_id DESC";
 				$query = $this->db->query($sql);
 			} else if($option=='SEARCH'){
 				if($jurnal_tgl_awal!=''){
@@ -387,6 +388,7 @@ class M_jurnal extends Model{
 					$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 					$sql.= " jurnal_no LIKE '%".$jurnal_no."%'";
 				};
+				$sql .=" ORDER by jurnal_no DESC, djurnal_id DESC";
 				$query = $this->db->query($sql);
 			}
 			return $query->result();
