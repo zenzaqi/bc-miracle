@@ -1,0 +1,2 @@
+v & m_jurnal:
+	update tampilan & print2an saja, supaya urut db penginputannya
