@@ -8,10 +8,10 @@
 <body onload="window.print();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
-    <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <td height="60" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><center><br/><h2>SURAT <br/>
-          PENERIMAAN BARANG <br><?=$info_nama;?><br/></h2></p></center></td>
+        <td width="55%" align="center"><font size="4"><center><b>SURAT <br/>
+          PENERIMAAN BARANG </font></b><br><font size="3"><b><?=$info_nama;?></p></center></font></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
@@ -42,7 +42,7 @@
           </tr>
 		  </tr>
            <tr class="clear">
-            <td align="right" class="clear"><strong>No. Order Pembelian</strong></td>
+            <td align="right" class="clear"><strong>No. OP</strong></td>
             <td align="right" class="clear">:</td>
             <td class="clear"><?=$order_no; ?></td>
           </tr>
@@ -89,7 +89,7 @@
           <tr>
             <td width="50%" align="center" class="clear"><center><p><strong>Accounting</strong></p></center>
               <p>&nbsp;</p>
-              <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;)</p></td>
+              <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;)</p></td>
             <td width="50%" align="center"  class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
               <p>&nbsp;</p>
               <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;)</p></center></td>

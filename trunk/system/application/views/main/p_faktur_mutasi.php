@@ -5,13 +5,13 @@
 <title>Surat Mutasi Barang</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle_nocolor.css'/>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
-    <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <td height="60" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><center><p><h2>SURAT <br/>
-          MUTASI BARANG<br><?=$info_nama;?><br/></h2></p></center></td>
+        <td width="55%" align="center"><font size="4"><center><p><b>SURAT <br/>
+          MUTASI BARANG<br><font size="3"><b><?=$info_nama;?></p></center></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
