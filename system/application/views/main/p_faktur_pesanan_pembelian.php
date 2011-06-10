@@ -5,13 +5,14 @@
 <title>Surat Pesanan Pembelian</title>
 <link rel='stylesheet' type='text/css' href='../assets/modules/main/css/printstyle_nocolor.css'/>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print()">
+<?//window.close();">?>
 <table width="700" border="1" cellspacing="0" cellpadding="0">
   <tr>
-    <td height="120" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <td height="10" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><center><br/><h2>SURAT <br/>
-          PESANAN PEMBELIAN <br><?=$info_nama;?><br/></h2></p></center></td>
+        <td width="55%" align="center"><font size="4"><center><b>SURAT <br>
+          PESANAN PEMBELIAN </b></font><br><font size="3"><b><?=$info_nama;?></font></center></td>
         <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
@@ -23,7 +24,7 @@
           <tr class="clear">
             <td width="31%" align="right" class="clear"><strong>No.</strong></td>
             <td width="3%" align="right" class="clear">:</td>
-            <td width="66%" class="clear"><?=$no_bukti; ?></td>
+            <td width="66%" class="clear" ><?=$no_bukti; ?></td>
           </tr>
           <tr class="clear">
             <td align="right" class="clear"><strong>Tanggal</strong></td>
@@ -76,7 +77,7 @@
           <tr>
             <td width="50%" align="center" class="clear"><center><p><strong>Accounting</strong></p></center>
               <p>&nbsp;</p>
-              <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   )</p></td>
+              <p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;   )</p></td>
             <td width="50%" align="center"  class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
               <p>&nbsp;</p>
               <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;)</p></center></td>
