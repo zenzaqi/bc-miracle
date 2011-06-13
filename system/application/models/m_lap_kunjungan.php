@@ -896,6 +896,354 @@ from
 			}
 		}		
 			
+			
+		function get_daftar_customer($tgl_tindakan,$start,$end){
+			$query =
+			   "select 
+					date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
+					cust_id, cust_no, cust_nama
+				from
+				(
+				(
+					/* MEDIS */
+					select 
+					cust_id, 
+					cust_no,
+					cust_nama,
+					count(distinct temp_jum_cust_medis) as jum_cust_medis,
+					jum_cust_surgery,
+					jum_cust_antiaging,
+					jum_cust_nonmedis,
+					jum_cust_produk,
+					jum_total,
+					tgl_tindakan
+					from
+						((
+							select
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							master_jual_rawat.jrawat_cust as temp_jum_cust_medis,
+							
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							master_jual_rawat.jrawat_tanggal as tgl_tindakan
+							from detail_jual_rawat
+							left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+
+							left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+							left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$tgl_tindakan'
+						)
+						union
+						(
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							detail_ambil_paket.dapaket_cust as temp_jum_cust_medis,
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+							from detail_ambil_paket
+								left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+								left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$tgl_tindakan'
+						)) as table_sum_medis
+					group by cust_nama
+				)
+				
+				/* SURGERY */
+				union
+				(
+					select 
+					cust_id,
+					cust_no,
+					cust_nama,
+					jum_cust_medis,
+					count(distinct temp_jum_cust_surgery) as jum_cust_surgery,
+					jum_cust_antiaging,
+					jum_cust_nonmedis,
+					jum_cust_produk,
+					jum_total,
+					tgl_tindakan
+					from
+						((
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							master_jual_rawat.jrawat_cust as temp_jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							master_jual_rawat.jrawat_tanggal as tgl_tindakan
+							from detail_jual_rawat
+								left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+								left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+								left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$tgl_tindakan'
+
+						)
+						union
+						(
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							detail_ambil_paket.dapaket_cust as temp_jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+							from detail_ambil_paket
+								left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+								left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil ='$tgl_tindakan'
+						)) as table_sum_surgery
+					group by cust_nama
+
+				)
+
+				/* ANTI AGING */
+				union
+				(
+					select 
+					cust_id,
+					cust_no,
+					cust_nama,
+					jum_cust_medis,
+					jum_cust_surgery,
+					count(distinct temp_jum_cust_antiaging) as jum_cust_antiaging,
+					jum_cust_nonmedis,
+					jum_cust_produk,
+					jum_total,
+					tgl_tindakan
+					from
+						((
+							select
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama, 
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							master_jual_rawat.jrawat_cust as temp_jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							master_jual_rawat.jrawat_tanggal as tgl_tindakan
+							from detail_jual_rawat
+							left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+							left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
+							left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+							where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$tgl_tindakan'
+
+						)
+						union
+						(
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							detail_ambil_paket.dapaket_cust as temp_jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+							from detail_ambil_paket
+							left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+							left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil = '$tgl_tindakan'
+						)) as table_sum_antiaging 
+					group by cust_nama
+
+				)
+
+				
+				/*  NON-MEDIS */
+				union
+				(
+					select 
+					cust_id,
+					cust_no,
+					cust_nama,
+					jum_cust_medis,
+					jum_cust_surgery,
+					jum_cust_antiaging,
+					count(distinct temp_jum_cust_nonmedis) as jum_cust_nonmedis,
+					jum_cust_produk,
+					jum_total,
+					tgl_tindakan
+					from
+						((
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							master_jual_rawat.jrawat_cust as temp_jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							master_jual_rawat.jrawat_tanggal as tgl_tindakan
+							from detail_jual_rawat
+							left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+							left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+							left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal = '$tgl_tindakan'
+
+						)
+						union
+						(
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							detail_ambil_paket.dapaket_cust as temp_jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							0 as jum_total,
+							detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+							from detail_ambil_paket
+							left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+							left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
+							where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil ='$tgl_tindakan'
+						)) as table_sum_nonmedis
+					group by cust_nama
+				)
+
+				/* PRODUK*/
+				union
+				(
+					select 
+					vu_customer.cust_id,
+					vu_customer.cust_no,
+					vu_customer.cust_nama,
+					0 as jum_cust_medis,
+					0 as jum_cust_surgery,
+					0 as jum_cust_antiaging,
+					0 as jum_cust_nonmedis,
+					count(distinct master_jual_produk.jproduk_cust) as jum_cust_produk,
+					0 as jum_total,
+					master_jual_produk.jproduk_tanggal as tgl_tindakan
+					from master_jual_produk
+					left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
+					where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal = '$tgl_tindakan'
+					group by cust_nama
+				)
+
+				/* TOTAL*/
+				union
+				(
+					select 
+					cust_id,
+					cust_no,
+					cust_nama,
+					jum_cust_medis,
+					jum_cust_surgery,
+					jum_cust_antiaging,
+					jum_cust_nonmedis,
+					jum_cust_produk,
+					count(distinct cust) as jum_total,
+					tgl_tindakan
+					from
+						((	
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							master_jual_rawat.jrawat_cust as cust,
+							master_jual_rawat.jrawat_tanggal as tgl_tindakan
+							from detail_jual_rawat
+							left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
+							left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
+							left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
+							where master_jual_rawat.jrawat_stat_dok ='Tertutup'
+							and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal = '$tgl_tindakan'
+						)
+						union
+						(
+							select 
+							vu_customer.cust_id,
+							vu_customer.cust_no,
+							vu_customer.cust_nama,
+							0 as jum_cust_medis,
+							0 as jum_cust_surgery,
+							0 as jum_cust_antiaging,
+							0 as jum_cust_nonmedis,
+							0 as jum_cust_produk,
+							master_jual_produk.jproduk_cust as cust,
+							master_jual_produk.jproduk_tanggal as tgl_tindakan
+							from master_jual_produk
+							left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
+							where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal ='$tgl_tindakan'
+						)
+						
+						union
+						(
+						select 
+						vu_customer.cust_id,
+						vu_customer.cust_no,
+						vu_customer.cust_nama,
+						0 as jum_cust_medis,
+						0 as jum_cust_surgery,
+						0 as jum_cust_antiaging,
+						0 as jum_cust_nonmedis,
+						0 as jum_cust_produk,
+						detail_ambil_paket.dapaket_cust as cust,
+						detail_ambil_paket.dapaket_tgl_ambil as tgl_tindakan
+						from detail_ambil_paket
+							left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
+							left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
+						where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil ='$tgl_tindakan'
+						)
+						
+						)as table_union2
+					group by cust_nama
+				)
+
+			) as table_union
+			group by cust_nama";
+			
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			//$limit = $query." LIMIT ".$start.",".$end;			
+			//$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}	
+			
+			
+			
+			
 	//function for advanced search record
 	function lap_kunjungan_search($lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
 			//full query

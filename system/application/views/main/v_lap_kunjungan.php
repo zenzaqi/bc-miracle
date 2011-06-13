@@ -446,6 +446,97 @@ Ext.onReady(function(){
 	lap_kunjunganListEditorGrid.render();
 	/* End of DataStore */
 	
+	/*ColumnModel utk daftar customer */ 
+	detail_customer_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '<div align="center">' + 'Cust ID' + '</div>',
+			dataIndex: 'cust_id',
+			hidden : true,
+			width: 10
+		},
+		{
+			align : 'right',
+			header: '<div align="center">' + 'No' + '</div>',
+			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
+			width: 4
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Client Card' + '</div>',
+			dataIndex: 'cust_no',
+			width: 10
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Nama Customer' + '</div>',
+			dataIndex: 'cust_nama',
+			width: 30
+		}
+		]
+    );
+    detail_customer_ColumnModel.defaultSortable= true;
+	
+		
+	/* START Daftar customer */
+	detail_customerStore = new Ext.data.GroupingStore({
+		id: 'detail_customerStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_kunjungan&m=get_daftar_customer', 
+			method: 'POST'
+		}),
+		baseParams:{task: "GET",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'//,
+			//id: 'app_id'
+		},[
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'}
+		])
+		//, sortInfo:{field: 'no_urut', direction: "ASC"}
+	});
+	
+	////////////////////////////////
+	
+	lap_kunjunganListEditorGrid.on('rowclick', function (lap_kunjunganListEditorGrid, rowIndex, eventObj) {
+        var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
+		var today=new Date().format('Y-m-d');
+		detail_customerStore.reload({params : {tgl_tindakan : recordMaster.get("tgl_tindakan").format('Y-m-d')}});
+    });
+	
+	////////////////////////
+	
+	
+	
+	//////////////////////iniiii yg nggarai error
+	/*Grid Panel utk daftar customer */
+	var daftar_pengunjung_Panel = new Ext.grid.GridPanel({
+		id: 'daftar_pengunjung_Panel',
+		title: 'Detail Pengunjung',
+		el: 'fp_lap_kunjungan_detail',
+        store: detail_customerStore,
+        cm: detail_customer_ColumnModel,
+		view: new Ext.grid.GroupingView({
+            forceFit:true,
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
+        }),
+        stripeRows: true,
+        autoExpandColumn: 'company',
+        autoHeight: true,
+		style: 'margin-top: 10px',
+        width: 600,//940	//800
+		/*bbar: new Ext.PagingToolbar({
+			//pageSize: 5,
+			disabled:true,
+			store: detail_customerStore,
+			displayInfo: true
+		})*/
+    });
+    daftar_pengunjung_Panel.render();
+	
 	lap_kunjunganListEditorGrid2 =  new Ext.grid.EditorGridPanel({
 		id: 'lap_kunjunganListEditorGrid2',
 		el: 'fp_lap_kunjungan2',
@@ -518,6 +609,7 @@ Ext.onReady(function(){
 	lap_kunjunganDataStore.load({params: {start: 0, limit: 31}});
 	lap_totalkunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
 	lap_average_kunjungan_DataStore.load({params: {start: 0, limit: 31}});	// load DataStore
+//	detail_customerStore.load({params: {start: 0, limit: 31}});
 	//lap_kunjunganListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
@@ -537,7 +629,7 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function lap_kunjungan_search(){
 		// render according to a SQL date format.
-		
+		lap_kunjungan_searchWindow.hide();
 		if(is_lap_kunjungan_searchForm_valid())
 		{
 		var lap_kunjungan_id_search=null;
@@ -616,6 +708,8 @@ Ext.onReady(function(){
 		lap_kunjunganDataStore.reload({params: {start: 0, limit: 31}});
 		lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: 31}});
 		lap_average_kunjungan_DataStore.reload({params: {start: 0, limit: 31}});
+		//detail_customerStore.load({params: {start: 0, limit: 31}});
+		
 		}
 		else {
 			Ext.MessageBox.show({
