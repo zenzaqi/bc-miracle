@@ -38,6 +38,9 @@ class C_lap_kunjungan extends Controller {
 			case "LIST3":
 				$this->lap_average_list();
 				break;
+			case "GET":
+				$this->get_daftar_customer();
+				break;
 			/*case "UPDATE":
 				$this->report_tindakan_update();
 				break;
@@ -139,6 +142,16 @@ class C_lap_kunjungan extends Controller {
 		echo $result;
 	}
 
+	function get_daftar_customer(){
+		$tgl_tindakan=trim(@$_POST["tgl_tindakan"]);
+		//$dpaket_paket = isset($_POST['dpaket_paket']) ? $_POST['dpaket_paket'] : 0;*/
+		//$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result = $this->m_lap_kunjungan->get_daftar_customer($tgl_tindakan,$start,$end);
+		echo $result;
+	}
+	
 	function lap_kunjungan_search2(){
 		//POST varibale here
 		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
