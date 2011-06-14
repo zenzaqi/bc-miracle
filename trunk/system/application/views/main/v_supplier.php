@@ -543,6 +543,7 @@ Ext.onReady(function(){
 				},
 			hidden: true
 		},
+		/* //utk saat ini kategori tidak dipakai
 		{
 			header: 'Kategori',
 			dataIndex: 'supplier_kategori',
@@ -554,11 +555,11 @@ Ext.onReady(function(){
 				maxLength: 150
           	})
 			<?php } ?>
-		},
+		},*/
 		{
-			header: 'Nama',
+			header: '<div align="center"> Nama </div>',
 			dataIndex: 'supplier_nama',
-			width: 250,
+			width: 150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
@@ -568,7 +569,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Alamat',
+			header: '<div align="center"> Alamat </div>',
 			dataIndex: 'supplier_alamat',
 			width: 250,
 			sortable: true
@@ -580,19 +581,19 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Kota',
+			header: '<div align="center"> Kota </div>',
 			dataIndex: 'supplier_kota',
-			width: 150,
+			width: 80,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
 			editor: new Ext.form.TextField({
-				maxLength: 250
+				maxLength: 100
           	})
 			<?php } ?>
 		},
 		{
-			header: ' Kode Pos',
+			header: '<div align="center"> Kode Pos </div>',
 			dataIndex: 'supplier_kodepos',
 			width: 100,
 			sortable: true,
@@ -605,7 +606,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Propinsi',
+			header: '<div align="center"> Propinsi </div>',
 			dataIndex: 'supplier_propinsi',
 			width: 150,
 			sortable: true,
@@ -618,7 +619,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Negara',
+			header: '<div align="center"> Negara </div>',
 			dataIndex: 'supplier_negara',
 			width: 150,
 			sortable: true,
@@ -631,9 +632,9 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'No. Telp',
+			header: '<div align="center"> No Telp </div>',
 			dataIndex: 'supplier_notelp',
-			width: 120,
+			width: 80,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
@@ -643,11 +644,10 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'No. Telp Lain',
+			header: '<div align="center"> No Telp Lain </div>',
 			dataIndex: 'supplier_notelp2',
-			width: 120,
-			sortable: true,
-			hidden: true
+			width: 80,
+			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
 			editor: new Ext.form.TextField({
@@ -656,11 +656,10 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'No. Fax',
+			header: '<div align="center"> No Fax </div>',
 			dataIndex: 'supplier_nofax',
-			width: 150,
-			sortable: true,
-			hidden: true
+			width: 80,
+			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
 			editor: new Ext.form.TextField({
@@ -669,7 +668,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Email',
+			header: '<div align="center"> Email </div>',
 			dataIndex: 'supplier_email',
 			width: 150,
 			sortable: true,
@@ -682,7 +681,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Website',
+			header: '<div align="center"> Website </div>',
 			dataIndex: 'supplier_website',
 			width: 150,
 			sortable: true,
@@ -695,7 +694,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Contact Person',
+			header: '<div align="center"> Contact Person </div>',
 			dataIndex: 'supplier_cp',
 			width: 150,
 			sortable: true
@@ -707,9 +706,9 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Telp. CP',
+			header: '<div align="center"> Telp CP </div>',
 			dataIndex: 'supplier_contact_cp',
-			width: 150,
+			width: 80,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
@@ -719,9 +718,9 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		{
-			header: 'Status',
+			header: '<div align="center"> Status </div>',
 			dataIndex: 'supplier_aktif',
-			width: 150,
+			width: 60,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_SUPPLIER'))){ ?>
 			,
@@ -842,7 +841,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Kategori<br>- Nama<br>- No.Telp<br>- Contact Person<br>- Telp.CP'});
+				Ext.get(this.id).set({qtip:'- Nama<br>- No Telp<br>- Contact Person<br>- Telp CP'});
 				}
 			},
 			width: 120
@@ -922,7 +921,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	supplierListEditorGrid.addListener('rowcontextmenu', onsupplier_ListEditGridContextMenu);
-	//supplier_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	supplier_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	supplierListEditorGrid.on('afteredit', supplier_update); // inLine Editing Record
 	
 	//cbo_supplier_kategoriDataStore.load();
@@ -1087,7 +1086,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [supplier_kategoriField, supplier_kategoritxtField, supplier_namaField, supplier_alamatField, supplier_kotaField,
+				items: [/*supplier_kategoriField, supplier_kategoritxtField, */supplier_namaField, supplier_alamatField, supplier_kotaField,
 						supplier_kodeposField, supplier_propinsiField, supplier_negaraField, supplier_websiteField] 
 			}
 			,{

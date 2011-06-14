@@ -426,6 +426,12 @@ class C_produk extends Controller {
 		$produk_satuan=trim(@$_POST["produk_satuan"]);
 		$produk_du=trim(@$_POST["produk_du"]);
 		$produk_dm=trim(@$_POST["produk_dm"]);
+		$produk_dultah=trim(@$_POST["produk_dultah"]);
+		$produk_dcard=trim(@$_POST["produk_dcard"]);
+		$produk_dkolega=trim(@$_POST["produk_dkolega"]);
+		$produk_dkeluarga=trim(@$_POST["produk_dkeluarga"]);
+		$produk_downer=trim(@$_POST["produk_downer"]);
+		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
@@ -439,7 +445,9 @@ class C_produk extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama);
+		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+												$produk_du ,$produk_dm, $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+												$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama);
 		echo $result;
 	}
 
@@ -462,6 +470,12 @@ class C_produk extends Controller {
 		$produk_satuan=trim(@$_POST["produk_satuan"]);
 		$produk_du=trim(@$_POST["produk_du"]);
 		$produk_dm=trim(@$_POST["produk_dm"]);
+		$produk_dultah=trim(@$_POST["produk_dultah"]);
+		$produk_dcard=trim(@$_POST["produk_dcard"]);
+		$produk_dkolega=trim(@$_POST["produk_dkolega"]);
+		$produk_dkeluarga=trim(@$_POST["produk_dkeluarga"]);
+		$produk_downer=trim(@$_POST["produk_downer"]);
+		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
@@ -474,7 +488,9 @@ class C_produk extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_produk->produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
+		$result = $this->m_produk->produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+												$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+												$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=16;
    		/* We now have our array, let's build our HTML file */
@@ -512,6 +528,18 @@ class C_produk extends Controller {
 				fwrite($file, $data['produk_du']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_dm']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dultah']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dcard']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dkolega']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dkeluarga']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_downer']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dgrooming']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_point']);
 				fwrite($file,"</td><td>");
@@ -560,6 +588,12 @@ class C_produk extends Controller {
 		$produk_satuan=trim(@$_POST["produk_satuan"]);
 		$produk_du=trim(@$_POST["produk_du"]);
 		$produk_dm=trim(@$_POST["produk_dm"]);
+		$produk_dultah=trim(@$_POST["produk_dultah"]);
+		$produk_dcard=trim(@$_POST["produk_dcard"]);
+		$produk_dkolega=trim(@$_POST["produk_dkolega"]);
+		$produk_dkeluarga=trim(@$_POST["produk_dkeluarga"]);
+		$produk_downer=trim(@$_POST["produk_downer"]);
+		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
@@ -572,7 +606,9 @@ class C_produk extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_produk->produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
+		$query = $this->m_produk->produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+													$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+													$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
 		$this->load->plugin('to_excel');
 		to_excel($query,"produk"); 
 		echo '1';

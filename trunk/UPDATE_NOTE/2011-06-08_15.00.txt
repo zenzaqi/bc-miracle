@@ -1,0 +1,3 @@
+2011-06-08_15.00.sql
+-> menambahkan field dultah, dcard, dkolega, dkeluarga, downer dan dgrooming ke 3 tabel(Produk, Perawatan, Paket), utk kepentingan Diskon
+-> serta mereplace view utk kepentingan Diskon yg sudah fix juga.. 

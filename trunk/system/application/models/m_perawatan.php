@@ -358,7 +358,9 @@ class M_perawatan extends Model{
 		}
 		
 		//function for update record
-		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
+		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
+									$rawat_du ,$rawat_dm ,$rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 			if ($rawat_point=="")
@@ -480,13 +482,19 @@ class M_perawatan extends Model{
 				$data["rawat_highmargin"]=0;
 			
 			
-			$sql="SELECT group_id,group_durawat,group_dmrawat,group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
+			$sql="SELECT group_id,group_durawat,group_dmrawat,group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming, group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$data["rawat_group"]=$rawat_group;
 				$rs_sql=$rs->row();
 				$data["rawat_du"]=$rs_sql->group_durawat;
 				$data["rawat_dm"]=$rs_sql->group_dmrawat;
+				$data["rawat_dultah"]=$rs_sql->group_dultah;
+				$data["rawat_dcard"]=$rs_sql->group_dcard;
+				$data["rawat_dkolega"]=$rs_sql->group_dkolega;
+				$data["rawat_dkeluarga"]=$rs_sql->group_dkeluarga;
+				$data["rawat_downer"]=$rs_sql->group_downer;
+				$data["rawat_dgrooming"]=$rs_sql->group_dgrooming;
 				$data["rawat_kategori"]=$rs_sql->group_kelompok;
 			}
 			
@@ -546,42 +554,7 @@ class M_perawatan extends Model{
 				}
 			}
 			
-			/*$pattern=$group_kode.$jenis_kode;
-			$rawat_kode=$this->get_kode($pattern);
-			if($rawat_kode!=="" && strlen($rawat_kode)==6){
-				$data["rawat_kode"]=$rawat_kode;
-			}*/
-			
 			if(is_numeric($rawat_group) || is_numeric($rawat_jenis)){
-				/*$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$rawat_group."'";
-				$rs_g=$this->db->query($sql_g);
-				if($rs_g->num_rows()){
-					$rs_sql_g=$rs_g->row();
-					$group_kode=$rs_sql_g->group_kode;
-					$data["rawat_group"]=$rawat_group;
-				}else{
-					$sql_g="SELECT group_kode FROM produk,produk_group WHERE produk_group=group_id AND produk_id='".$rawat_id."'";
-					$rs_g=$this->db->query($sql_g);
-					if($rs_g->num_rows()){
-						$rs_sql_g=$rs_g->row();
-						$group_kode=$rs_sql_g->group_kode;
-					}
-				}
-				
-				$sql_j="SELECT jenis_id,jenis_kode FROM jenis WHERE jenis_id='".$rawat_jenis."'";
-				$rs_j=$this->db->query($sql_j);
-				if($rs_j->num_rows()){
-					$rs_sql_j=$rs_j->row();
-					$jenis_kode=$rs_sql_j->jenis_kode;
-					$data["rawat_jenis"]=$rawat_jenis;
-				}else{
-					$sql_j="SELECT jenis_kode FROM produk,jenis WHERE produk_jenis=jenis_id AND produk_id='".$rawat_id."'";
-					$rs_j=$this->db->query($sql_j);
-					if($rs_j->num_rows()){
-						$rs_sql_j=$rs_j->row();
-						$jenis_kode=$rs_sql_j->jenis_kode;
-					}
-				}*/
 				$pattern=$group_kode.$jenis_kode;
 				$rawat_kode=$this->get_kode($pattern);
 				if($rawat_kode!=="" && strlen($rawat_kode)==6){
@@ -599,6 +572,36 @@ class M_perawatan extends Model{
 			if($rs->num_rows())
 				$data["rawat_dm"]=$rawat_dm;
 			
+			$sql="SELECT rawat_dultah FROM perawatan WHERE rawat_dultah!='".$rawat_dultah."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dultah"]=$rawat_dultah;
+				
+			$sql="SELECT rawat_dcard FROM perawatan WHERE rawat_dcard!='".$rawat_dcard."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dcard"]=$rawat_dcard;
+				
+			$sql="SELECT rawat_dkolega FROM perawatan WHERE rawat_dkolega!='".$rawat_dkolega."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dkolega"]=$rawat_dkolega;	
+			
+			$sql="SELECT rawat_dkeluarga FROM perawatan WHERE rawat_dkeluarga!='".$rawat_dkeluarga."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dkeluarga"]=$rawat_dkeluarga;
+			
+			$sql="SELECT rawat_downer FROM perawatan WHERE rawat_downer!='".$rawat_downer."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_downer"]=$rawat_downer;
+			
+			$sql="SELECT rawat_dgrooming FROM perawatan WHERE rawat_dgrooming!='".$rawat_dgrooming."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dgrooming"]=$rawat_dgrooming;
+			
 			$this->db->where('rawat_id', $rawat_id);
 			$this->db->update('perawatan', $data);
 			
@@ -610,7 +613,9 @@ class M_perawatan extends Model{
 		}
 		
 		//function for create new record
-		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
+		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
+									$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
 		if ($rawat_point=="")
@@ -706,7 +711,13 @@ class M_perawatan extends Model{
 				"rawat_jenis"=>$rawat_jenis, 
 				"rawat_keterangan"=>$rawat_keterangan, 
 				"rawat_du"=>$rawat_du, 
-				"rawat_dm"=>$rawat_dm, 
+				"rawat_dm"=>$rawat_dm,
+				"rawat_dultah"=>$rawat_dultah,
+				"rawat_dcard"=>$rawat_dcard,
+				"rawat_dkolega"=>$rawat_dkolega,
+				"rawat_dkeluarga"=>$rawat_dkeluarga,
+				"rawat_downer"=>$rawat_downer,
+				"rawat_dgrooming"=>$rawat_dgrooming,
 				"rawat_point"=>$rawat_point,
 				"rawat_durasi"=>$rawat_durasi,
 				"rawat_kredit"=>$rawat_kredit,
@@ -808,7 +819,9 @@ class M_perawatan extends Model{
 		}
 		
 		//function for advanced search record
-		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,$rawat_du ,$rawat_dm ,$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end, $kategori2_nama){
+		function perawatan_search($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama ,$rawat_group ,$rawat_kategori ,$rawat_jenis ,$rawat_keterangan ,
+									$rawat_du ,$rawat_dm , $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$start,$end, $kategori2_nama){
 			//full query
 			/*if($rawat_aktif==""){
 				$rawat_aktif="Aktif";
@@ -853,11 +866,35 @@ class M_perawatan extends Model{
 			};
 			if($rawat_du!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_du LIKE '%".$rawat_du."%'";
+				$query.= " rawat_du = '".$rawat_du."'";
 			};
 			if($rawat_dm!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_dm LIKE '%".$rawat_dm."%'";
+				$query.= " rawat_dm = '".$rawat_dm."'";
+			};
+			if($rawat_dultah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_dultah = '".$rawat_dultah."'";
+			};
+			if($rawat_dcard!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_dcard = '".$rawat_dcard."'";
+			};
+			if($rawat_dkolega!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_dkolega = '".$rawat_dkolega."'";
+			};
+			if($rawat_dkeluarga!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_dkeluarga = '".$rawat_dkeluarga."'";
+			};
+			if($rawat_downer!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_downer = '".$rawat_downer."'";
+			};
+			if($rawat_dgrooming!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " rawat_dgrooming = '".$rawat_dgrooming."'";
 			};
 			if($rawat_point!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -869,11 +906,11 @@ class M_perawatan extends Model{
 			};
 			if($rawat_harga!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_harga LIKE '%".$rawat_harga."%'";
+				$query.= " rawat_harga = '".$rawat_harga."'";
 			};
 			if($rawat_gudang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " rawat_gudang LIKE '%".$rawat_gudang."%'";
+				$query.= " rawat_gudang = '".$rawat_gudang."'";
 			};
 			if($rawat_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -910,6 +947,12 @@ class M_perawatan extends Model{
 								,$rawat_keterangan 
 								,$rawat_du 
 								,$rawat_dm 
+								,$rawat_dultah
+								,$rawat_dcard
+								,$rawat_dkolega
+								,$rawat_dkeluarga
+								,$rawat_downer
+								,$rawat_dgrooming
 								,$rawat_point 
 								,$rawat_durasi
 								,$rawat_kredit
@@ -954,7 +997,7 @@ class M_perawatan extends Model{
 				};
 				if($rawat_group!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_group LIKE '%".$rawat_group."%'";
+					$query.= " rawat_group = '".$rawat_group."'";
 				};
 				if($rawat_kategori!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -962,7 +1005,7 @@ class M_perawatan extends Model{
 				};
 				if($rawat_jenis!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_jenis LIKE '%".$rawat_jenis."%'";
+					$query.= " rawat_jenis = '".$rawat_jenis."'";
 				};
 				if($rawat_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -970,34 +1013,58 @@ class M_perawatan extends Model{
 				};
 				if($rawat_du!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_du LIKE '%".$rawat_du."%'";
+					$query.= " rawat_du = '".$rawat_du."'";
 				};
 				if($rawat_dm!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_dm LIKE '%".$rawat_dm."%'";
+					$query.= " rawat_dm = '".$rawat_dm."'";
 				};
+				if($rawat_dultah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dultah = '".$rawat_dultah."'";
+				};
+				if($rawat_dcard!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dcard = '".$rawat_dcard."'";
+				};
+				if($rawat_dkolega!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dkolega = '".$rawat_dkolega."'";
+				};
+				if($rawat_dkeluarga!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dkeluarga = '".$rawat_dkeluarga."'";
+				};
+				if($rawat_downer!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_downer = '".$rawat_downer."'";
+				};
+				if($rawat_dgrooming!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dgrooming = '".$rawat_dgrooming."'";
+				};
+	
 				if($rawat_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_point LIKE '%".$rawat_point."%'";
+					$query.= " rawat_point = '".$rawat_point."'";
 				};
 				if($rawat_durasi!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_durasi LIKE '%".$rawat_durasi."%'";
+					$query.= " rawat_durasi = '".$rawat_durasi."'";
 				};
 				if($rawat_harga!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_harga LIKE '%".$rawat_harga."%'";
+					$query.= " rawat_harga = '".$rawat_harga."'";
 				};
 				if($rawat_gudang!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_gudang LIKE '%".$rawat_gudang."%'";
+					$query.= " rawat_gudang = '".$rawat_gudang."'";
 				};
 				if($rawat_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_aktif LIKE '%".$rawat_aktif."%'";
+					$query.= " rawat_aktif = '".$rawat_aktif."'";
 				};
-				
-				
+	
 			}
 			
 			$query.=" ORDER BY rawat_id DESC";
@@ -1019,6 +1086,12 @@ class M_perawatan extends Model{
 			$rawat_keterangan,
 			$rawat_du,
 			$rawat_dm,
+			$rawat_dultah,
+			$rawat_dcard,
+			$rawat_dkolega,
+			$rawat_dkeluarga,
+			$rawat_downer,
+			$rawat_dgrooming,
 			$rawat_point,
 			$rawat_durasi,
 			$rawat_kredit, 
@@ -1039,6 +1112,12 @@ class M_perawatan extends Model{
 						ifnull(kategori_nama,'-') AS Jenis,
 						ifnull(rawat_du,'-') AS 'DU(%)',
 						ifnull(rawat_dm,'-') AS 'DM(%)',
+						ifnull(rawat_dultah,'-') AS 'Ultah(%)',
+						ifnull(rawat_dcard,'-') AS 'Card(%)',
+						ifnull(rawat_dkolega,'-') AS 'Kolega(%)',
+						ifnull(rawat_dkeluarga,'-') AS 'Keluarga(%)',
+						ifnull(rawat_downer,'-') AS 'Owner(%)',
+						ifnull(rawat_dgrooming,'-') AS 'Grooming(%)',
 						ifnull(rawat_point,'-') AS Poin,
 						ifnull(rawat_durasi,'-') AS Durasi,
 						ifnull(rawat_kredit,'-') AS Kredit,
@@ -1074,15 +1153,15 @@ class M_perawatan extends Model{
 				};
 				if($rawat_group!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_group LIKE '%".$rawat_group."%'";
+					$query.= " rawat_group = '".$rawat_group."'";
 				};
 				if($rawat_kategori!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_kategori LIKE '%".$rawat_kategori."%'";
+					$query.= " rawat_kategori = '".$rawat_kategori."'";
 				};
 				if($rawat_jenis!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_jenis LIKE '%".$rawat_jenis."%'";
+					$query.= " rawat_jenis = '".$rawat_jenis."'";
 				};
 				if($rawat_keterangan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1090,27 +1169,51 @@ class M_perawatan extends Model{
 				};
 				if($rawat_du!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_du LIKE '%".$rawat_du."%'";
+					$query.= " rawat_du = '".$rawat_du."'";
 				};
 				if($rawat_dm!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_dm LIKE '%".$rawat_dm."%'";
+					$query.= " rawat_dm = '".$rawat_dm."'";
 				};
+				if($rawat_dultah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dultah = '".$rawat_dultah."'";
+				};
+				if($rawat_dcard!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dcard = '".$rawat_dcard."'";
+				};
+				if($rawat_dkolega!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dkolega = '".$rawat_dkolega."'";
+				};
+				if($rawat_dkeluarga!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dkeluarga = '".$rawat_dkeluarga."'";
+				};
+				if($rawat_downer!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_downer = '".$rawat_downer."'";
+				};
+				if($rawat_dgrooming!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " rawat_dgrooming = '".$rawat_dgrooming."'";
+				};	
 				if($rawat_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_point LIKE '%".$rawat_point."%'";
+					$query.= " rawat_point = '".$rawat_point."'";
 				};
 				if($rawat_durasi!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_durasi LIKE '%".$rawat_durasi."%'";
+					$query.= " rawat_durasi = '".$rawat_durasi."'";
 				};
 				if($rawat_harga!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_harga LIKE '%".$rawat_harga."%'";
+					$query.= " rawat_harga = '".$rawat_harga."'";
 				};
 				if($rawat_gudang!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_gudang LIKE '%".$rawat_gudang."%'";
+					$query.= " rawat_gudang = '".$rawat_gudang."'";
 				};
 				if($rawat_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

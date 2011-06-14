@@ -88,6 +88,12 @@ var produk_namaField;
 var produk_satuanField;
 var produk_duField;
 var produk_dmField;
+var produk_dultahField;
+var produk_dcardField;
+var produk_dkolegaField;
+var produk_dkeluargaField;
+var produk_downerField;
+var produk_dgroomingField;
 var produk_pointField;
 var produk_volumeField;
 var produk_hargaField;
@@ -115,6 +121,12 @@ var produk_namaSearchField;
 var produk_satuanSearchField;
 var produk_duSearchField;
 var produk_dmSearchField;
+var produk_dultahSearchField;
+var produk_dcardSearchField;
+var produk_dkolegaSearchField;
+var produk_dkeluargaSearchField;
+var produk_downerSearchField;
+var produk_dgroomingSearchField;
 var produk_pointSearchField;
 var produk_volumeSearchField;
 var produk_hargaSearchField;
@@ -229,7 +241,13 @@ Ext.onReady(function(){
 		var produk_nama_create=null; 
 		var produk_satuan_create=null; 
 		var produk_du_create=null; 
-		var produk_dm_create=null; 
+		var produk_dm_create=null;
+		var produk_dultah_create=null;
+		var produk_dcard_create=null;
+		var produk_dkolega_create=null;
+		var produk_dkeluarga_create=null;
+		var produk_downer_create=null;
+		var produk_dgrooming_create=null;
 		var produk_point_create=null; 
 		var produk_volume_create=null; 
 		var produk_harga_create=null; 
@@ -255,7 +273,13 @@ Ext.onReady(function(){
 		if(produk_namaField.getValue()!== null){produk_nama_create = produk_namaField.getValue();} 
 		if(produk_satuanField.getValue()!== null){produk_satuan_create = produk_satuanField.getValue();} 
 		if(produk_duField.getValue()!== null){produk_du_create = produk_duField.getValue();} 
-		if(produk_dmField.getValue()!== null){produk_dm_create = produk_dmField.getValue();} 
+		if(produk_dmField.getValue()!== null){produk_dm_create = produk_dmField.getValue();}
+		if(produk_dultahField.getValue()!== null){produk_dultah_create = produk_dultahField.getValue();}
+		if(produk_dcardField.getValue()!== null){produk_dcard_create = produk_dcardField.getValue();}
+		if(produk_dkolegaField.getValue()!== null){produk_dkolega_create = produk_dkolegaField.getValue();}
+		if(produk_dkeluargaField.getValue()!== null){produk_dkeluarga_create = produk_dkeluargaField.getValue();}
+		if(produk_downerField.getValue()!== null){produk_downer_create = produk_downerField.getValue();}
+		if(produk_dgroomingField.getValue()!== null){produk_dgrooming_create = produk_dgroomingField.getValue();}
 		if(produk_pointField.getValue()!== null){produk_point_create = produk_pointField.getValue();} 
 		if(produk_volumeField.getValue()!== null){produk_volume_create = produk_volumeField.getValue();} 
 		if(produk_hargaField.getValue()!== null){produk_harga_create = convertToNumber(produk_hargaField.getValue());} 
@@ -287,7 +311,13 @@ Ext.onReady(function(){
 				produk_nama	: produk_nama_create, 
 				produk_satuan	: produk_satuan_create, 
 				produk_du	: produk_du_create, 
-				produk_dm	: produk_dm_create, 
+				produk_dm	: produk_dm_create,
+				produk_dultah	: produk_dultah_create,
+				produk_dcard	: produk_dcard_create,
+				produk_dkolega	: produk_dkolega_create,
+				produk_dkeluarga: produk_dkeluarga_create,
+				produk_downer	: produk_downer_create,
+				produk_dgrooming: produk_dgrooming_create,
 				produk_point	: produk_point_create, 
 				produk_volume	: produk_volume_create, 
 				produk_harga	: produk_harga_create, 
@@ -415,6 +445,18 @@ Ext.onReady(function(){
 		produk_duField.setValue(null);
 		produk_dmField.reset();
 		produk_dmField.setValue(null);
+		produk_dultahField.reset();
+		produk_dultahField.setValue(null);
+		produk_dcardField.reset();
+		produk_dcardField.setValue(null);
+		produk_dkolegaField.reset();
+		produk_dkolegaField.setValue(null);
+		produk_dkeluargaField.reset();
+		produk_dkeluargaField.setValue(null);
+		produk_downerField.reset();
+		produk_downerField.setValue(null);
+		produk_dgroomingField.reset();
+		produk_dgroomingField.setValue(null);
 		produk_pointField.reset();
 		produk_pointField.setValue(null);
 		produk_volumeField.reset();
@@ -538,6 +580,12 @@ Ext.onReady(function(){
 		produk_satuanField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_satuan'));
 		produk_duField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_du'));
 		produk_dmField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dm'));
+		produk_dultahField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dultah'));
+		produk_dcardField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dcard'));
+		produk_dkolegaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dkolega'));
+		produk_dkeluargaField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dkeluarga'));
+		produk_downerField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_downer'));
+		produk_dgroomingField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dgrooming'));
 		produk_pointField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_point'));
 		produk_volumeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_volume'));
 		produk_hargaField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_harga')));
@@ -807,6 +855,12 @@ Ext.onReady(function(){
 			{name: 'produk_satuan', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'produk_du', type: 'int', mapping: 'produk_du'}, 
 			{name: 'produk_dm', type: 'int', mapping: 'produk_dm'}, 
+			{name: 'produk_dultah', type: 'int', mapping: 'produk_dultah'}, 
+			{name: 'produk_dcard', type: 'int', mapping: 'produk_dcard'},
+			{name: 'produk_dkolega', type: 'int', mapping: 'produk_dkolega'},
+			{name: 'produk_dkeluarga', type: 'int', mapping: 'produk_dkeluarga'},
+			{name: 'produk_downer', type: 'int', mapping: 'produk_downer'},
+			{name: 'produk_dgrooming', type: 'int', mapping: 'produk_dgrooming'},
 			{name: 'produk_point', type: 'int', mapping: 'produk_point'}, 
 			{name: 'produk_volume', type: 'int', mapping: 'produk_volume'}, 
 			{name: 'produk_harga', type: 'float', mapping: 'produk_harga'}, 
@@ -849,6 +903,12 @@ Ext.onReady(function(){
 			{name: 'produk_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'produk_group_duproduk', type: 'int', mapping: 'group_duproduk'},
 			{name: 'produk_group_dmproduk', type: 'int', mapping: 'group_dmproduk'},
+			{name: 'produk_group_dultah', type: 'int', mapping: 'group_dultah'},
+			{name: 'produk_group_dcard', type: 'int', mapping: 'group_dcard'},
+			{name: 'produk_group_dkolega', type: 'int', mapping: 'group_dkolega'},
+			{name: 'produk_group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
+			{name: 'produk_group_downer', type: 'int', mapping: 'group_downer'},
+			{name: 'produk_group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
 			{name: 'produk_group_kelompok', type: 'string', mapping: 'kategori_nama'},
 			{name: 'produk_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
 		]),
@@ -989,23 +1049,20 @@ Ext.onReady(function(){
 				},
 			hidden: false
 		},*/
+		/*
 		{
 			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'produk_kodelama',
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 20
-          	})*/
 			<?php } ?>
 		},
+		*/
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'produk_kode',
-			width: 120,	//150,
+			width: 75,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -1025,7 +1082,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'produk_group',
-			width: 120, //150,
+			width: 80, //150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1041,7 +1098,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'produk_jenis',
-			width: 120,	//150,
+			width: 80,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1057,64 +1114,118 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'produk_kategori_nama',
-			width: 120,	//150,
+			width: 80,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: 'Satuan',
 			dataIndex: 'produk_satuan',
-			width: 60,	//150,
+			width: 45,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
-			header: '<div align="center">' + 'DU (%)' + '</div>',
+			header: '<div align="center">' + 'DU' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_du',
-			width: 60,	//100,
+			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + '</span>';
-			}
+				return '<span>' + val + ' %</span>';
+			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'DM (%)' + '</div>',
+			header: '<div align="center">' + 'DM' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dm',
-			width: 60,	//100,
+			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + '</span>';
-			}
+				return '<span>' + val + ' %</span>';
+			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Ultah' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dultah',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Card' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dcard',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Kolega' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dkolega',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Keluarga' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dkeluarga',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Owner' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_downer',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Grooming' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dgrooming',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_point',
-			width: 60,	//100,
+			width: 40,	//100,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1128,6 +1239,7 @@ Ext.onReady(function(){
 			})*/
 			<?php } ?>
 		},
+		/*
 		{
 			header: '<div align="center">' + 'Vol' + '</div>',
 			align: 'right',
@@ -1135,18 +1247,14 @@ Ext.onReady(function(){
 			width: 60,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 250
-			})*/
 			<?php } ?>
 		},
+		*/
 		{
-			header: '<div align="center">' + 'Harga Sat Default (Rp)' + '</div>',
+			header: '<div align="center">' + 'Hrg Sat Def(Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_harga',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -1166,23 +1274,9 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'produk_aktif',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['produk_aktif_value', 'produk_aktif_display'],
-					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
-					}),
-				mode: 'local',
-               	displayField: 'produk_aktif_display',
-               	valueField: 'produk_aktif_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })*/
 			<?php } ?>
 		}, 
 		{
@@ -1675,8 +1769,7 @@ Ext.onReady(function(){
 		]
 	});
 	
-	
-	
+
 	/* Identify  produk_group Field */
 	produk_groupField= new Ext.form.ComboBox({
 		id: 'produk_groupField',
@@ -1775,24 +1868,104 @@ Ext.onReady(function(){
 	produk_duField= new Ext.form.NumberField({
 		id: 'produk_duField',
 		name: 'produk_duField',
-		fieldLabel: 'Diskon Umum (%)',
+		fieldLabel: 'Disk Umum(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
 		allowDecimals: false,
-		width: 60,
+		enableKeyEvents : true,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  produk_dm Field */
 	produk_dmField= new Ext.form.NumberField({
 		id: 'produk_dmField',
 		name: 'produk_dmField',
-		fieldLabel: 'Diskon Member (%)',
+		fieldLabel: 'Disk Member(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
 		allowDecimals: false,
-		width: 60,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dultah Field */
+	produk_dultahField= new Ext.form.NumberField({
+		id: 'produk_dultahField',
+		name: 'produk_dultahField',
+		fieldLabel: 'Disk Ultah(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dcard Field */
+	produk_dcardField= new Ext.form.NumberField({
+		id: 'produk_dcardField',
+		name: 'produk_dcardField',
+		fieldLabel: 'Disk Card(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dkolegaField */
+	produk_dkolegaField= new Ext.form.NumberField({
+		id: 'produk_dkolegaField',
+		name: 'produk_dkolegaField',
+		fieldLabel: 'Disk Kolega(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dkeluargaField */
+	produk_dkeluargaField= new Ext.form.NumberField({
+		id: 'produk_dkeluargaField',
+		name: 'produk_dkeluargaField',
+		fieldLabel: 'Disk Keluarga(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_downer Field */
+	produk_downerField= new Ext.form.NumberField({
+		id: 'produk_downerField',
+		name: 'produk_downerField',
+		fieldLabel: 'Disk Owner(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dgrooming Field */
+	produk_dgroomingField= new Ext.form.NumberField({
+		id: 'produk_dgroomingField',
+		name: 'produk_dgroomingField',
+		fieldLabel: 'Disk Grooming(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  produk_point Field */
@@ -2048,6 +2221,33 @@ Ext.onReady(function(){
 		]
 	});
 	
+	//untuk Panel Diskon 
+	produk_diskonGroup = new Ext.form.FieldSet({
+		title: 'Jenis Diskon',
+		layout:'column',
+		autoHeight: true,
+		mode: 'remote',
+		//collapsed: true,
+		collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [produk_duField, produk_dmField, produk_dultahField, produk_dcardField]
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [produk_dkolegaField, produk_dkeluargaField, produk_downerField, produk_dgroomingField]
+			}
+		]
+	});
+	
+	
 	/* Identify  produk_aktif Field */
 	produk_aktifField= new Ext.form.ComboBox({
 		id: 'produk_aktifField',
@@ -2070,6 +2270,12 @@ Ext.onReady(function(){
 		if(cbo_produk_groupDataStore.getCount()){
 			produk_duField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_duproduk);
 			produk_dmField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dmproduk);
+			produk_dultahField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dultah);
+			produk_dcardField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dcard);
+			produk_dkolegaField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dkolega);
+			produk_dkeluargaField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dkeluarga);
+			produk_downerField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_downer);
+			produk_dgroomingField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dgrooming);
 			produk_kategoritxtField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok);
 			produk_kategoriField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok_id);
 		}
@@ -2087,7 +2293,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoritxtField, produk_namaField, produk_racikanField, produk_hargaField, produk_harga_checkField, produk_duField, produk_dmField, produk_hargaGroup] 
+				items: [produk_kodelamaField, produk_kodeField, produk_groupField, produk_jenisField, produk_kategoritxtField, produk_namaField, produk_racikanField, produk_hargaField, produk_harga_checkField, produk_hargaGroup, produk_diskonGroup] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2200,6 +2406,12 @@ Ext.onReady(function(){
 			{name: 'rawat_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'rawat_produk_dm', type: 'float', mapping: 'produk_dm'},
+			{name: 'rawat_produk_dultah', type: 'float', mapping: 'produk_dultah'},
+			{name: 'rawat_produk_dcard', type: 'float', mapping: 'produk_dcard'},
+			{name: 'rawat_produk_dkolega', type: 'float', mapping: 'produk_dkolega'},
+			{name: 'rawat_produk_dkeluarga', type: 'float', mapping: 'produk_dkeluarga'},
+			{name: 'rawat_produk_downer', type: 'float', mapping: 'produk_downer'},
+			{name: 'rawat_produk_dgrooming', type: 'float', mapping: 'produk_dgrooming'},
 			{name: 'rawat_produk_display', type: 'string', mapping: 'produk_nama'}
 		]),
 		sortInfo:{field: 'rawat_produk_display', direction: "ASC"}
@@ -2776,6 +2988,12 @@ Ext.onReady(function(){
 		var produk_satuan_search=null;
 		var produk_du_search=null;
 		var produk_dm_search=null;
+		var produk_dultah_search=null;
+		var produk_dcard_search=null;
+		var produk_dkolega_search=null;
+		var produk_dkeluarga_search=null;
+		var produk_downer_search=null;
+		var produk_dgrooming_search=null;
 		var produk_point_search=null;
 		var produk_volume_search=null;
 		var produk_kontribusi_search=null;
@@ -2793,6 +3011,12 @@ Ext.onReady(function(){
 		if(produk_satuanSearchField.getValue()!==null){produk_satuan_search=produk_satuanSearchField.getValue();}
 		if(produk_duSearchField.getValue()!==null){produk_du_search=produk_duSearchField.getValue();}
 		if(produk_dmSearchField.getValue()!==null){produk_dm_search=produk_dmSearchField.getValue();}
+		if(produk_dultahSearchField.getValue()!==null){produk_dultah_search=produk_dultahSearchField.getValue();}
+		if(produk_dcardSearchField.getValue()!==null){produk_dcard_search=produk_dcardSearchField.getValue();}
+		if(produk_dkolegaSearchField.getValue()!==null){produk_dkolega_search=produk_dkolegaSearchField.getValue();}
+		if(produk_dkeluargaSearchField.getValue()!==null){produk_dkeluarga_search=produk_dkeluargaSearchField.getValue();}
+		if(produk_downerSearchField.getValue()!==null){produk_downer_search=produk_downerSearchField.getValue();}
+		if(produk_dgroomingSearchField.getValue()!==null){produk_dgrooming_search=produk_dgroomingSearchField.getValue();}
 		if(produk_pointSearchField.getValue()!==null){produk_point_search=produk_pointSearchField.getValue();}
 		if(produk_kontribusiSearchField.getValue()!==null){produk_kontribusi_search=produk_kontribusiSearchField.getValue();}
 		if(produk_volumeSearchField.getValue()!==null){produk_volume_search=produk_volumeSearchField.getValue();}
@@ -2816,6 +3040,12 @@ Ext.onReady(function(){
 			produk_satuan	:	produk_satuan_search, 
 			produk_du	:	produk_du_search, 
 			produk_dm	:	produk_dm_search, 
+			produk_dultah	: produk_dultah_search,
+			produk_dcard	: produk_dcard_search,
+			produk_dkolega	: produk_dkolega_search,
+			produk_dkeluarga: produk_dkeluarga_search,
+			produk_downer	: produk_downer_search,
+			produk_dgrooming: produk_dgrooming_search,
 			produk_point	:	produk_point_search, 
 			kategori2_nama	:	produk_kontribusi_search,
 			produk_volume	:	produk_volume_search,
@@ -2858,6 +3088,18 @@ Ext.onReady(function(){
 		produk_duSearchField.setValue(null);
 		produk_dmSearchField.reset();
 		produk_dmSearchField.setValue(null);
+		produk_dultahSearchField.reset();
+		produk_dultahSearchField.setValue(null);
+		produk_dcardSearchField.reset();
+		produk_dcardSearchField.setValue(null);
+		produk_dkolegaSearchField.reset();
+		produk_dkolegaSearchField.setValue(null);
+		produk_dkeluargaSearchField.reset();
+		produk_dkeluargaSearchField.setValue(null);
+		produk_downerSearchField.reset();
+		produk_downerSearchField.setValue(null);
+		produk_dgroomingSearchField.reset();
+		produk_dgroomingSearchField.setValue(null);
 		produk_pointSearchField.reset();
 		produk_pointSearchField.setValue(null);
 		produk_kontribusiSearchField.reset();
@@ -2985,6 +3227,72 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  produk_dultah Field */
+	produk_dultahSearchField= new Ext.form.NumberField({
+		id: 'produk_dultahSearchField',
+		name: 'produk_dultahField',
+		fieldLabel: 'Diskon Ultah (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dcard Field */
+	produk_dcardSearchField= new Ext.form.NumberField({
+		id: 'produk_dcardSearchField',
+		name: 'produk_dcardField',
+		fieldLabel: 'Diskon Card (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dkolega Field */
+	produk_dkolegaSearchField= new Ext.form.NumberField({
+		id: 'produk_dkolegaSearchField',
+		name: 'produk_dkolegaField',
+		fieldLabel: 'Diskon Kolega (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dkeluarga Field */
+	produk_dkeluargaSearchField= new Ext.form.NumberField({
+		id: 'produk_dkeluargaSearchField',
+		name: 'produk_dkeluargaField',
+		fieldLabel: 'Diskon Keluarga (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_downer Field */
+	produk_downerSearchField= new Ext.form.NumberField({
+		id: 'produk_downerSearchField',
+		name: 'produk_downerField',
+		fieldLabel: 'Diskon Owner (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  produk_dgrooming Field */
+	produk_dgroomingSearchField= new Ext.form.NumberField({
+		id: 'produk_dgroomingSearchField',
+		name: 'produk_dgroomingField',
+		fieldLabel: 'Diskon Grooming (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  produk_point Field */
 	produk_pointSearchField= new Ext.form.NumberField({
 		id: 'produk_pointSearchField',
@@ -3048,7 +3356,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_kodelamaSearchField, produk_kodeSearchField, produk_groupSearchField, produk_jenisSearchField, produk_kategoriSearchField, produk_namaSearchField, produk_hargaSearchField, produk_duSearchField, produk_dmSearchField] 
+				items: [produk_kodelamaSearchField, produk_kodeSearchField, produk_groupSearchField, produk_jenisSearchField, produk_kategoriSearchField, produk_namaSearchField, produk_hargaSearchField, produk_duSearchField, produk_dmSearchField, produk_dultahSearchField, produk_dcardSearchField, produk_dkolegaSearchField, produk_dkeluargaSearchField, produk_downerSearchField, produk_dgroomingSearchField] 
 			}
  
 			,{
@@ -3113,6 +3421,12 @@ Ext.onReady(function(){
 		var produk_satuan_print=null;
 		var produk_du_print=null;
 		var produk_dm_print=null;
+		var produk_dultah_print=null;
+		var produk_dcard_print=null;
+		var produk_dkolega_print=null;
+		var produk_dkeluarga_print=null;
+		var produk_downer_print=null;
+		var produk_dgrooming_print=null;
 		var produk_point_print=null;
 		var produk_volume_print=null;
 		var produk_harga_print=null;
@@ -3130,6 +3444,12 @@ Ext.onReady(function(){
 		if(produk_DataStore.baseParams.produk_satuan!==null){produk_satuan_print = produk_DataStore.baseParams.produk_satuan;}
 		if(produk_DataStore.baseParams.produk_du!==null){produk_du_print = produk_DataStore.baseParams.produk_du;}
 		if(produk_DataStore.baseParams.produk_dm!==null){produk_dm_print = produk_DataStore.baseParams.produk_dm;}
+		if(produk_DataStore.baseParams.produk_dultah!==null){produk_dultah_print = produk_DataStore.baseParams.produk_dultah;}
+		if(produk_DataStore.baseParams.produk_dcard!==null){produk_dcard_print = produk_DataStore.baseParams.produk_dcard;}
+		if(produk_DataStore.baseParams.produk_dkolega!==null){produk_dkolega_print = produk_DataStore.baseParams.produk_dkolega;}
+		if(produk_DataStore.baseParams.produk_dkeluarga!==null){produk_dkeluarga_print = produk_DataStore.baseParams.produk_dkeluarga;}
+		if(produk_DataStore.baseParams.produk_downer!==null){produk_downer_print = produk_DataStore.baseParams.produk_downer;}
+		if(produk_DataStore.baseParams.produk_dgrooming!==null){produk_dgrooming_print = produk_DataStore.baseParams.produk_dgrooming;}
 		if(produk_DataStore.baseParams.produk_point!==null){produk_point_print = produk_DataStore.baseParams.produk_point;}
 		if(produk_DataStore.baseParams.produk_volume!==null){produk_volume_print = produk_DataStore.baseParams.produk_volume;}
 		if(produk_DataStore.baseParams.produk_harga!==null){produk_harga_print = produk_DataStore.baseParams.produk_harga;}
@@ -3152,6 +3472,12 @@ Ext.onReady(function(){
 			produk_satuan : produk_satuan_print,
 			produk_du : produk_du_print,
 			produk_dm : produk_dm_print,
+			produk_dultah	: produk_dultah_print,
+			produk_dcard	: produk_dcard_print,
+			produk_dkolega	: produk_dkolega_print,
+			produk_dkeluarga: produk_dkeluarga_print,
+			produk_downer	: produk_downer_print,
+			produk_dgrooming: produk_dgrooming_print,
 			produk_point : produk_point_print,
 			produk_volume : produk_volume_print,
 			produk_harga : produk_harga_print,
@@ -3203,6 +3529,12 @@ Ext.onReady(function(){
 		var produk_satuan_2excel=null;
 		var produk_du_2excel=null;
 		var produk_dm_2excel=null;
+		var produk_dultah_2excel=null;
+		var produk_dcard_2excel=null;
+		var produk_dkolega_2excel=null;
+		var produk_dkeluarga_2excel=null;
+		var produk_downer_2excel=null;
+		var produk_dgrooming_2excel=null;
 		var produk_point_2excel=null;
 		var produk_volume_2excel=null;
 		var produk_harga_2excel=null;
@@ -3220,6 +3552,12 @@ Ext.onReady(function(){
 		if(produk_DataStore.baseParams.produk_satuan!==null){produk_satuan_2excel = produk_DataStore.baseParams.produk_satuan;}
 		if(produk_DataStore.baseParams.produk_du!==null){produk_du_2excel = produk_DataStore.baseParams.produk_du;}
 		if(produk_DataStore.baseParams.produk_dm!==null){produk_dm_2excel = produk_DataStore.baseParams.produk_dm;}
+		if(produk_DataStore.baseParams.produk_dultah!==null){produk_dultah_2excel = produk_DataStore.baseParams.produk_dultah;}
+		if(produk_DataStore.baseParams.produk_dcard!==null){produk_dcard_2excel = produk_DataStore.baseParams.produk_dcard;}
+		if(produk_DataStore.baseParams.produk_dkolega!==null){produk_dkolega_2excel = produk_DataStore.baseParams.produk_dkolega;}
+		if(produk_DataStore.baseParams.produk_dkeluarga!==null){produk_dkeluarga_2excel = produk_DataStore.baseParams.produk_dkeluarga;}
+		if(produk_DataStore.baseParams.produk_downer!==null){produk_downer_2excel = produk_DataStore.baseParams.produk_downer;}
+		if(produk_DataStore.baseParams.produk_dgrooming!==null){produk_dgrooming_2excel = produk_DataStore.baseParams.produk_dgrooming;}
 		if(produk_DataStore.baseParams.produk_point!==null){produk_point_2excel = produk_DataStore.baseParams.produk_point;}
 		if(produk_DataStore.baseParams.produk_volume!==null){produk_volume_2excel = produk_DataStore.baseParams.produk_volume;}
 		if(produk_DataStore.baseParams.produk_harga!==null){produk_harga_2excel = produk_DataStore.baseParams.produk_harga;}
@@ -3242,6 +3580,12 @@ Ext.onReady(function(){
 			produk_satuan : produk_satuan_2excel,
 			produk_du : produk_du_2excel,
 			produk_dm : produk_dm_2excel,
+			produk_dultah	: produk_dultah_2excel,
+			produk_dcard	: produk_dcard_2excel,
+			produk_dkolega	: produk_dkolega_2excel,
+			produk_dkeluarga: produk_dkeluarga_2excel,
+			produk_downer	: produk_downer_2excel,
+			produk_dgrooming: produk_dgrooming_2excel,
 			produk_point : produk_point_2excel,
 			produk_volume : produk_volume_2excel,
 			produk_harga : produk_harga_2excel,
@@ -3364,6 +3708,47 @@ Ext.onReady(function(){
 	});
 	
 	
+	//Events for diskon
+	produk_duField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dmField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dultahField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dcardField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dkolegaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dkeluargaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_downerField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
 	
 });
 	--></script>

@@ -1734,7 +1734,9 @@ class M_public_function extends Model{
 	}
 	
 	function get_group_produk_list(){
-		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='produk' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
+		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket,group_dultah,group_dcard,group_dkolega,group_dkeluarga,group_downer,group_dgrooming, kategori_nama,kategori_id 
+				FROM produk_group,kategori 
+				WHERE group_kelompok=kategori_id AND kategori_jenis='produk' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -1764,7 +1766,9 @@ class M_public_function extends Model{
 	}
 	
 	function get_group_perawatan_list(){
-		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='perawatan' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
+		$sql="SELECT group_id,group_nama,
+				group_duproduk,group_dmproduk,group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming,
+				group_durawat,group_dmrawat,group_dupaket,group_dmpaket, kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='perawatan' AND group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
