@@ -79,6 +79,12 @@ var paket_kategoritxtField;
 var paket_keteranganField;
 var paket_duField;
 var paket_dmField;
+var paket_dultahField;
+var paket_dcardField;
+var paket_dkolegaField;
+var paket_dkeluargaField;
+var paket_downerField;
+var paket_dgroomingField;
 var paket_pointField;
 var paket_harga_kiField;
 var paket_harga_mdnField;
@@ -97,6 +103,12 @@ var paket_groupSearchField;
 var paket_keteranganSearchField;
 var paket_duSearchField;
 var paket_dmSearchField;
+var paket_dultahSearchField;
+var paket_dcardSearchField;
+var paket_dkolegaSearchField;
+var paket_dkeluargaSearchField;
+var paket_downerSearchField;
+var paket_dgroomingSearchField;
 var paket_pointSearchField;
 var paket_hargaSearchField;
 var paket_expiredSearchField;
@@ -200,6 +212,12 @@ Ext.onReady(function(){
 		var paket_keterangan_create=null;
 		var paket_du_create=null;
 		var paket_dm_create=null;
+		var paket_dultah_create=null;
+		var paket_dcard_create=null;
+		var paket_dkolega_create=null;
+		var paket_dkeluarga_create=null;
+		var paket_downer_create=null;
+		var paket_dgrooming_create=null;
 		var paket_point_create=null;
 		var paket_harga_create=null;
 		var paket_expired_create=null;
@@ -221,8 +239,14 @@ Ext.onReady(function(){
 		if(paket_keteranganField.getValue()!== null){paket_keterangan_create = paket_keteranganField.getValue();}
 		if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();}
 		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();}
+		if(paket_dultahField.getValue()!== null){paket_dultah_create = paket_dultahField.getValue();}
+		if(paket_dcardField.getValue()!== null){paket_dcard_create = paket_dcardField.getValue();}
+		if(paket_dkolegaField.getValue()!== null){paket_dkolega_create = paket_dkolegaField.getValue();}
+		if(paket_dkeluargaField.getValue()!== null){paket_dkeluarga_create = paket_dkeluargaField.getValue();}
+		if(paket_downerField.getValue()!== null){paket_downer_create = paket_downerField.getValue();}
+		if(paket_dgroomingField.getValue()!== null){paket_dgrooming_create = paket_dgroomingField.getValue();}
 		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
-		
+
 		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
 		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
@@ -248,8 +272,14 @@ Ext.onReady(function(){
 				
 				paket_group	: paket_group_create,
 				paket_keterangan	: paket_keterangan_create,
-				paket_du	: paket_du_create,
-				paket_dm	: paket_dm_create,
+				paket_du		: paket_du_create,
+				paket_dm		: paket_dm_create,
+				paket_dultah	: paket_dultah_create,
+				paket_dcard		: paket_dcard_create,
+				paket_dkolega	: paket_dkolega_create,
+				paket_dkeluarga	: paket_dkeluarga_create,
+				paket_downer	: paket_downer_create,
+				paket_dgrooming	: paket_dgrooming_create,
 				paket_point	: paket_point_create,
 				paket_harga	: paket_harga_create,
 				paket_expired	: paket_expired_create,
@@ -354,6 +384,18 @@ Ext.onReady(function(){
 		paket_duField.setValue(null);
 		paket_dmField.reset();
 		paket_dmField.setValue(null);
+		paket_dultahField.reset();
+		paket_dultahField.setValue(null);
+		paket_dcardField.reset();
+		paket_dcardField.setValue(null);
+		paket_dkolegaField.reset();
+		paket_dkolegaField.setValue(null);
+		paket_dkeluargaField.reset();
+		paket_dkeluargaField.setValue(null);
+		paket_downerField.reset();
+		paket_downerField.setValue(null);
+		paket_dgroomingField.reset();
+		paket_dgroomingField.setValue(null);
 		paket_pointField.reset();
 		paket_pointField.setValue(null);
 		paket_hargaField.reset();
@@ -474,6 +516,12 @@ Ext.onReady(function(){
 		paket_keteranganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_keterangan'));
 		paket_duField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_du'));
 		paket_dmField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dm'));
+		paket_dultahField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dultah'));
+		paket_dcardField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dcard'));
+		paket_dkolegaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dkolega'));
+		paket_dkeluargaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dkeluarga'));
+		paket_downerField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_downer'));
+		paket_dgroomingField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dgrooming'));
 		paket_pointField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_point'));
 		paket_expiredField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_expired'));
 		paket_perpanjanganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_perpanjangan'));
@@ -708,11 +756,16 @@ Ext.onReady(function(){
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
 			{name: 'paket_kodelama', type: 'string', mapping: 'paket_kodelama'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
-		
 			{name: 'paket_group', type: 'string', mapping: 'group_nama'},
 			{name: 'paket_keterangan', type: 'string', mapping: 'paket_keterangan'},
 			{name: 'paket_du', type: 'int', mapping: 'paket_du'},
 			{name: 'paket_dm', type: 'int', mapping: 'paket_dm'},
+			{name: 'paket_dultah', type: 'int', mapping: 'paket_dultah'},
+			{name: 'paket_dcard', type: 'int', mapping: 'paket_dcard'},
+			{name: 'paket_dkolega', type: 'int', mapping: 'paket_dkolega'},
+			{name: 'paket_dkeluarga', type: 'int', mapping: 'paket_dkeluarga'},
+			{name: 'paket_downer', type: 'int', mapping: 'paket_downer'},
+			{name: 'paket_dgrooming', type: 'int', mapping: 'paket_dgrooming'},
 			{name: 'paket_point', type: 'int', mapping: 'paket_point'},
 			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'},
@@ -770,6 +823,12 @@ Ext.onReady(function(){
 			{name: 'paket_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'paket_group_dupaket', type: 'int', mapping: 'group_dupaket'},
 			{name: 'paket_group_dmpaket', type: 'int', mapping: 'group_dmpaket'},
+			{name: 'paket_group_dultah', type: 'int', mapping: 'group_dultah'},
+			{name: 'paket_group_dcard', type: 'int', mapping: 'group_dcard'},
+			{name: 'paket_group_dkolega', type: 'int', mapping: 'group_dkolega'},
+			{name: 'paket_group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
+			{name: 'paket_group_downer', type: 'int', mapping: 'group_downer'},
+			{name: 'paket_group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
 			{name: 'paket_group_kategori_nama', type: 'string', mapping: 'kategori_nama'},
 			{name: 'paket_group_kategori_id', type: 'int', mapping: 'kategori_id'}
 		]),
@@ -797,7 +856,9 @@ Ext.onReady(function(){
 
   	/* Function for Identify of Window Column Model */
 	paket_ColumnModel = new Ext.grid.ColumnModel(
-		[{
+		[
+		/*
+		{
 			header: '#',
 			readOnly: true,
 			dataIndex: 'paket_id',
@@ -807,44 +868,36 @@ Ext.onReady(function(){
 				return value;
 				},
 			hidden: true
-		},
+		},*/
+		/*
 		{
 			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'paket_kodelama',
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			/*,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 20
-          	})*/
 			<?php } ?>
 		},
+		*/
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'paket_kode',
-			width: 120,	//150,
+			width: 75,	//150,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'paket_nama',
-			width: 300,	//250,
+			width: 260,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			/*,
-			editor: new Ext.form.TextField({
-				allowBlank: false,
-				maxLength: 250
-          	})*/
 			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'paket_group',
-			width: 120,	//150,
+			width: 80,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			/*,
@@ -863,76 +916,114 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'kategori_nama',
-			width: 120,	//150,
+			width: 80,	//150,
 			sortable: true,
 			editable: false,
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'DU (%)' + '</div>',
+			header: '<div align="center">' + 'DU' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_du',
-			width: 60,	//100,
+			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + '</span>';
+				return '<span>' + val + ' %</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
 			<?php } ?>
 		},
 		{
-			header: '<div align="center">' + 'DM (%)' + '</div>',
+			header: '<div align="center">' + 'DM' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_dm',
-			width: 60,	//100,
+			width: 45,	//100,
 			renderer: function(val){
-				return '<span>' + val + '</span>';
+				return '<span>' + val + ' %</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			/*,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Ultah' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dultah',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Card' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dcard',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Kolega' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dkolega',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Keluarga' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dkeluarga',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Owner' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_downer',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Grooming' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dgrooming',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_point',
-			width: 60,	//100,
+			width: 40,	//100,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
 			<?php } ?>
 		},
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_harga',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -953,7 +1044,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Exp. (hari)' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_expired',
-			width: 70,	//150,
+			width: 55,	//150,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
 			}
@@ -972,7 +1063,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'paket_aktif',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			/*,
@@ -1048,7 +1139,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940,	//900,
+	  	width: 1200,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: paket_DataStore,
@@ -1713,28 +1804,110 @@ Ext.onReady(function(){
 	paket_duField= new Ext.form.NumberField({
 		id: 'paket_duField',
 		name: 'paket_duField',
-		fieldLabel: 'Diskon Umum (%)',
+		fieldLabel: 'Disk Umum(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
+		enableKeyEvents : true,
 		allowDecimals: false,
-		maxLength: 3,
-		width: 60,
+		//maxLength: 3,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  paket_dm Field */
 	paket_dmField= new Ext.form.NumberField({
 		id: 'paket_dmField',
 		name: 'paket_dmField',
-		fieldLabel: 'Diskon Member (%)',
+		fieldLabel: 'Disk Member(%)',
 		allowNegatife : false,
 		emptyText: '0',
-		maxLength: 3,
+		enableKeyEvents : true,
+		//maxLength: 3,
 		allowBlank: true,
 		allowDecimals: false,
-		width: 60,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  paket_dultah Field */
+	paket_dultahField= new Ext.form.NumberField({
+		id: 'paket_dultahField',
+		name: 'paket_dultahField',
+		fieldLabel: 'Disk Ultah(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dcard Field */
+	paket_dcardField= new Ext.form.NumberField({
+		id: 'paket_dcardField',
+		name: 'paket_dcardField',
+		fieldLabel: 'Disk Card(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dkolegaField */
+	paket_dkolegaField= new Ext.form.NumberField({
+		id: 'paket_dkolegaField',
+		name: 'paket_dkolegaField',
+		fieldLabel: 'Disk Kolega(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dkeluargaField */
+	paket_dkeluargaField= new Ext.form.NumberField({
+		id: 'paket_dkeluargaField',
+		name: 'paket_dkeluargaField',
+		fieldLabel: 'Disk Keluarga(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_downer Field */
+	paket_downerField= new Ext.form.NumberField({
+		id: 'paket_downerField',
+		name: 'paket_downerField',
+		fieldLabel: 'Disk Owner(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dgrooming Field */
+	paket_dgroomingField= new Ext.form.NumberField({
+		id: 'paket_dgroomingField',
+		name: 'paket_dgroomingField',
+		fieldLabel: 'Disk Grooming(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	
+	
 	/* Identify  paket_point Field */
 	paket_pointField= new Ext.form.NumberField({
 		id: 'paket_pointField',
@@ -1785,6 +1958,34 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 
+	//untuk Panel Diskon 
+	paket_diskonGroup = new Ext.form.FieldSet({
+		title: 'Jenis Diskon',
+		layout:'column',
+		autoHeight: true,
+		mode: 'remote',
+		//collapsed: true,
+		collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [paket_duField, paket_dmField, paket_dultahField, paket_dcardField]
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [paket_dkolegaField, paket_dkeluargaField, paket_downerField, paket_dgroomingField]
+			}
+		]
+	});
+	
+	
+	
 	/* Identify  paket_aktif Field */
 	paket_aktifField= new Ext.form.ComboBox({
 		id: 'paket_aktifField',
@@ -1809,6 +2010,12 @@ Ext.onReady(function(){
 		if(cbo_paket_groupDataStore.getCount()){
 			paket_duField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dupaket);
 			paket_dmField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dmpaket);
+			paket_dultahField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dultah);
+			paket_dcardField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dcard);
+			paket_dkolegaField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dkolega);
+			paket_dkeluargaField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dkeluarga);
+			paket_downerField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_downer);
+			paket_dgroomingField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dgrooming);
 			paket_kategoritxtField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_nama);
 			paket_kategoriField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_id);
 		}
@@ -1826,7 +2033,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelWidth: 120,
 				border:false,
-				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_harga_checkField,paket_duField, paket_dmField,paket_hargaGroup]
+				items: [paket_kodelamaField, paket_kodeField, paket_namaField, paket_groupField, paket_hargaField, paket_harga_checkField,paket_hargaGroup, paket_diskonGroup]
 			}
 			,{
 				columnWidth:0.5,
@@ -2454,6 +2661,12 @@ Ext.onReady(function(){
 		var paket_keterangan_search=null;
 		var paket_du_search=null;
 		var paket_dm_search=null;
+		var paket_dultah_search=null;
+		var paket_dcard_search=null;
+		var paket_dkolega_search=null;
+		var paket_dkeluarga_search=null;
+		var paket_downer_search=null;
+		var paket_dgrooming_search=null;
 		var paket_point_search=null;
 		var paket_harga_search=null;
 		var paket_expired_search=null;
@@ -2467,6 +2680,12 @@ Ext.onReady(function(){
 		if(paket_keteranganSearchField.getValue()!==null){paket_keterangan_search=paket_keteranganSearchField.getValue();}
 		if(paket_duSearchField.getValue()!==null){paket_du_search=paket_duSearchField.getValue();}
 		if(paket_dmSearchField.getValue()!==null){paket_dm_search=paket_dmSearchField.getValue();}
+		if(paket_dultahSearchField.getValue()!==null){paket_dultah_search=paket_dultahSearchField.getValue();}
+		if(paket_dcardSearchField.getValue()!==null){paket_dcard_search=paket_dcardSearchField.getValue();}
+		if(paket_dkolegaSearchField.getValue()!==null){paket_dkolega_search=paket_dkolegaSearchField.getValue();}
+		if(paket_dkeluargaSearchField.getValue()!==null){paket_dkeluarga_search=paket_dkeluargaSearchField.getValue();}
+		if(paket_downerSearchField.getValue()!==null){paket_downer_search=paket_downerSearchField.getValue();}
+		if(paket_dgroomingSearchField.getValue()!==null){paket_dgrooming_search=paket_dgroomingSearchField.getValue();}
 		if(paket_pointSearchField.getValue()!==null){paket_point_search=paket_pointSearchField.getValue();}
 		if(paket_hargaSearchField.getValue()!==null){paket_harga_search=paket_hargaSearchField.getValue();}
 		if(paket_expiredSearchField.getValue()!==null){paket_expired_search=paket_expiredSearchField.getValue();}
@@ -2485,6 +2704,12 @@ Ext.onReady(function(){
 			paket_keterangan	:	paket_keterangan_search,
 			paket_du	:	paket_du_search,
 			paket_dm	:	paket_dm_search,
+			paket_dultah	: paket_dultah_search,
+			paket_dcard		: paket_dcard_search,
+			paket_dkolega	: paket_dkolega_search,
+			paket_dkeluarga	: paket_dkeluarga_search,
+			paket_downer	: paket_downer_search,
+			paket_dgrooming	: paket_dgrooming_search,
 			paket_point	:	paket_point_search,
 			paket_harga	:	paket_harga_search,
 			paket_expired	:	paket_expired_search,
@@ -2521,6 +2746,18 @@ Ext.onReady(function(){
 		paket_duSearchField.setValue(null);
 		paket_dmSearchField.reset();
 		paket_dmSearchField.setValue(null);
+		paket_dultahSearchField.reset();
+		paket_dultahSearchField.setValue(null);
+		paket_dcardSearchField.reset();
+		paket_dcardSearchField.setValue(null);
+		paket_dkolegaSearchField.reset();
+		paket_dkolegaSearchField.setValue(null);
+		paket_dkeluargaSearchField.reset();
+		paket_dkeluargaSearchField.setValue(null);
+		paket_downerSearchField.reset();
+		paket_downerSearchField.setValue(null);
+		paket_dgroomingSearchField.reset();
+		paket_dgroomingSearchField.setValue(null);
 		paket_pointSearchField.reset();
 		paket_pointSearchField.setValue(null);
 		paket_hargaSearchField.reset();
@@ -2619,6 +2856,74 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  paket_dultah Field */
+	paket_dultahSearchField= new Ext.form.NumberField({
+		id: 'paket_dultahSearchField',
+		fieldLabel: 'Diskon Ultah (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dcard Field */
+	paket_dcardSearchField= new Ext.form.NumberField({
+		id: 'paket_dcardSearchField',
+		fieldLabel: 'Diskon Card (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dkolega Field */
+	paket_dkolegaSearchField= new Ext.form.NumberField({
+		id: 'paket_dkolegaSearchField',
+		fieldLabel: 'Diskon Kolega (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dkeluargaField */
+	paket_dkeluargaSearchField= new Ext.form.NumberField({
+		id: 'paket_dkeluargaSearchField',
+		fieldLabel: 'Diskon Keluarga (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_downerField */
+	paket_downerSearchField= new Ext.form.NumberField({
+		id: 'paket_downerSearchField',
+		fieldLabel: 'Diskon Owner (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dgroomingField */
+	paket_dgroomingSearchField= new Ext.form.NumberField({
+		id: 'paket_dgroomingSearchField',
+		fieldLabel: 'Diskon Grooming (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		maxLength: 3,
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	
+	
 	/* Identify  paket_point Field */
 	paket_pointSearchField= new Ext.form.NumberField({
 		id: 'paket_pointSearchField',
@@ -2683,7 +2988,7 @@ Ext.onReady(function(){
 						columnWidth: 0.5,
 						layout: 'form',
 						border:false,
-						items: [paket_kodelamaSearchField, paket_kodeSearchField, paket_namaSearchField, paket_groupSearchField, paket_hargaSearchField, paket_duSearchField, paket_dmSearchField]
+						items: [paket_kodelamaSearchField, paket_kodeSearchField, paket_namaSearchField, paket_groupSearchField, paket_hargaSearchField, paket_duSearchField, paket_dmSearchField, paket_dultahSearchField, paket_dcardSearchField, paket_dkolegaSearchField, paket_dkeluargaSearchField, paket_downerSearchField, paket_dgroomingSearchField]
 					}
 					,{
 						columnWidth:0.5,
@@ -2745,6 +3050,12 @@ Ext.onReady(function(){
 		var paket_keterangan_print=null;
 		var paket_du_print=null;
 		var paket_dm_print=null;
+		var paket_dultah_print=null;
+		var paket_dcard_print=null;
+		var paket_dkolega_print=null;
+		var paket_dkeluarga_print=null;
+		var paket_downer_print=null;
+		var paket_dgrooming_print=null;
 		var paket_point_print=null;
 		var paket_harga_print=null;
 		var paket_expired_print=null;
@@ -2759,6 +3070,12 @@ Ext.onReady(function(){
 		if(paket_DataStore.baseParams.paket_keterangan!==null){paket_keterangan_print = paket_DataStore.baseParams.paket_keterangan;}
 		if(paket_DataStore.baseParams.paket_du!==null){paket_du_print = paket_DataStore.baseParams.paket_du;}
 		if(paket_DataStore.baseParams.paket_dm!==null){paket_dm_print = paket_DataStore.baseParams.paket_dm;}
+		if(paket_DataStore.baseParams.paket_dultah!==null){paket_dultah_print = paket_DataStore.baseParams.paket_dultah}
+		if(paket_DataStore.baseParams.paket_dcard!==null){paket_dcard_print = paket_DataStore.baseParams.paket_dcard}
+		if(paket_DataStore.baseParams.paket_dkolega!==null){paket_dkolega_print = paket_DataStore.baseParams.paket_dkolega}
+		if(paket_DataStore.baseParams.paket_dkeluarga!==null){paket_dkeluarga_print = paket_DataStore.baseParams.paket_dkeluarga}
+		if(paket_DataStore.baseParams.paket_downer!==null){paket_downer_print = paket_DataStore.baseParams.paket_downer}
+		if(paket_DataStore.baseParams.paket_dgrooming!==null){paket_dgrooming_print = paket_DataStore.baseParams.paket_dgrooming}
 		if(paket_DataStore.baseParams.paket_point!==null){paket_point_print = paket_DataStore.baseParams.paket_point;}
 		if(paket_DataStore.baseParams.paket_harga!==null){paket_harga_print = paket_DataStore.baseParams.paket_harga;}
 		if(paket_DataStore.baseParams.paket_expired!==null){paket_expired_print = paket_DataStore.baseParams.paket_expired;}
@@ -2778,6 +3095,12 @@ Ext.onReady(function(){
 			paket_keterangan : paket_keterangan_print,
 			paket_du : paket_du_print,
 			paket_dm : paket_dm_print,
+			paket_dultah	: paket_dultah_print,
+			paket_dcard		: paket_dcard_print,
+			paket_dkolega	: paket_dkolega_print,
+			paket_dkeluarga	: paket_dkeluarga_print,
+			paket_downer	: paket_downer_print,
+			paket_dgrooming	: paket_dgrooming_print,
 			paket_point : paket_point_print,
 			paket_harga : paket_harga_print,
 			paket_expired : paket_expired_print,
@@ -2826,6 +3149,12 @@ Ext.onReady(function(){
 		var paket_keterangan_2excel=null;
 		var paket_du_2excel=null;
 		var paket_dm_2excel=null;
+		var paket_dultah_2excel=null;
+		var paket_dcard_2excel=null;
+		var paket_dkolega_2excel=null;
+		var paket_dkeluarga_2excel=null;
+		var paket_downer_2excel=null;
+		var paket_dgrooming_2excel=null;
 		var paket_point_2excel=null;
 		var paket_harga_2excel=null;
 		var paket_expired_2excel=null;
@@ -2840,6 +3169,12 @@ Ext.onReady(function(){
 		if(paket_DataStore.baseParams.paket_keterangan!==null){paket_keterangan_2excel = paket_DataStore.baseParams.paket_keterangan;}
 		if(paket_DataStore.baseParams.paket_du!==null){paket_du_2excel = paket_DataStore.baseParams.paket_du;}
 		if(paket_DataStore.baseParams.paket_dm!==null){paket_dm_2excel = paket_DataStore.baseParams.paket_dm;}
+		if(paket_DataStore.baseParams.paket_dultah!==null){paket_dultah_2excel = paket_DataStore.baseParams.paket_dultah;}
+		if(paket_DataStore.baseParams.paket_dcard!==null){paket_dcard_2excel = paket_DataStore.baseParams.paket_dcard;}
+		if(paket_DataStore.baseParams.paket_dkolega!==null){paket_dkolega_2excel = paket_DataStore.baseParams.paket_dkolega;}
+		if(paket_DataStore.baseParams.paket_dkeluarga!==null){paket_dkeluarga_2excel = paket_DataStore.baseParams.paket_dkeluarga;}
+		if(paket_DataStore.baseParams.paket_downer!==null){paket_downer_2excel = paket_DataStore.baseParams.paket_downer;}
+		if(paket_DataStore.baseParams.paket_dgrooming!==null){paket_dgrooming_2excel = paket_DataStore.baseParams.paket_dgrooming;}
 		if(paket_DataStore.baseParams.paket_point!==null){paket_point_2excel = paket_DataStore.baseParams.paket_point;}
 		if(paket_DataStore.baseParams.paket_harga!==null){paket_harga_2excel = paket_DataStore.baseParams.paket_harga;}
 		if(paket_DataStore.baseParams.paket_expired!==null){paket_expired_2excel = paket_DataStore.baseParams.paket_expired;}
@@ -2859,6 +3194,12 @@ Ext.onReady(function(){
 			paket_keterangan : paket_keterangan_2excel,
 			paket_du : paket_du_2excel,
 			paket_dm : paket_dm_2excel,
+			paket_dultah	: paket_dultah_2excel,
+			paket_dcard		: paket_dcard_2excel,
+			paket_dkolega	: paket_dkolega_2excel,
+			paket_dkeluarga	: paket_dkeluarga_2excel,
+			paket_downer	: paket_downer_2excel,
+			paket_dgrooming	: paket_dgrooming_2excel,
 			paket_point : paket_point_2excel,
 			paket_harga : paket_harga_2excel,
 			paket_expired : paket_expired_2excel,
@@ -2912,6 +3253,50 @@ Ext.onReady(function(){
 	paket_harga_lbkField.on('blur',function(){ paket_harga_lbkField.setValue(CurrencyFormatted(paket_harga_lbkField.getValue())); });
 	paket_harga_hrField.on('focus',function(){ paket_harga_hrField.setValue(convertToNumber(paket_harga_hrField.getValue())); });
 	paket_harga_hrField.on('blur',function(){ paket_harga_hrField.setValue(CurrencyFormatted(paket_harga_hrField.getValue())); });
+	
+	
+	
+	//event for diskon
+	paket_duField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dmField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dultahField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dcardField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dkolegaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dkeluargaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_downerField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
 	
 
 });

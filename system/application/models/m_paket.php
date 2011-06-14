@@ -21,6 +21,7 @@ class M_paket extends Model{
 
 	function get_group_paket_list(){
 		$sql="SELECT group_id,group_nama,group_duproduk,group_dmproduk,group_durawat,group_dmrawat,group_dupaket,group_dmpaket,
+					group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming,
 				kategori_nama,kategori_id FROM produk_group,kategori WHERE group_kelompok=kategori_id AND kategori_jenis='paket' AND
 				group_aktif='Aktif' AND kategori_aktif='Aktif'";
 		$query = $this->db->query($sql);
@@ -302,7 +303,9 @@ class M_paket extends Model{
 	}
 
 	//function for update record
-	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
+	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
+						$paket_du ,$paket_dm ,$paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+						$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -416,13 +419,20 @@ class M_paket extends Model{
 			"paket_date_update"=>date('Y-m-d H:i:s')
 		);
 			
-		$sql="SELECT group_id,group_dupaket,group_dmpaket FROM produk_group WHERE group_id='".$paket_group."'";
+		$sql="SELECT group_id,group_dupaket,group_dmpaket, group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$data["paket_group"]=$paket_group;
 			$rs_sql=$rs->row();
 			$data["paket_du"]=$rs_sql->group_dupaket;
 			$data["paket_dm"]=$rs_sql->group_dmpaket;
+			$data["paket_dultah"]=$rs_sql->group_dultah;
+			$data["paket_dcard"]=$rs_sql->group_dcard;
+			$data["paket_dkolega"]=$rs_sql->group_dkolega;
+			$data["paket_dkeluarga"]=$rs_sql->group_dkeluarga;
+			$data["paket_downer"]=$rs_sql->group_downer;
+			$data["paket_dgrooming"]=$rs_sql->group_dgrooming;
+			
 		}
 
 		$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$paket_group."'";
@@ -455,6 +465,36 @@ class M_paket extends Model{
 		$rs=$this->db->query($sql);
 		if($rs->num_rows())
 			$data["paket_dm"]=$paket_dm;
+			
+		$sql="SELECT paket_dultah FROM paket WHERE paket_dultah!='".$paket_dultah."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dultah"]=$paket_dultah;
+			
+		$sql="SELECT paket_dcard FROM paket WHERE paket_dcard!='".$paket_dcard."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dcard"]=$paket_dcard;	
+			
+		$sql="SELECT paket_dkolega FROM paket WHERE paket_dkolega!='".$paket_dkolega."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dkolega"]=$paket_dkolega;		
+			
+		$sql="SELECT paket_dkeluarga FROM paket WHERE paket_dkeluarga!='".$paket_dkeluarga."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dkeluarga"]=$paket_dkeluarga;	
+			
+		$sql="SELECT paket_downer FROM paket WHERE paket_downer!='".$paket_downer."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_downer"]=$paket_downer;		
+			
+		$sql="SELECT paket_dgrooming FROM paket WHERE paket_dgrooming!='".$paket_dgrooming."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dgrooming"]=$paket_dgrooming;	
 
 		$this->db->where('paket_id', $paket_id);
 		$this->db->update('paket', $data);
@@ -467,7 +507,9 @@ class M_paket extends Model{
 	}
 
 	//function for create new record
-	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
+	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
+							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+							$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
 		if ($paket_point=="")
@@ -565,6 +607,12 @@ class M_paket extends Model{
 			"paket_keterangan"=>$paket_keterangan,
 			"paket_du"=>$paket_du,
 			"paket_dm"=>$paket_dm,
+			"paket_dultah"=>$paket_dultah,
+			"paket_dcard"=>$paket_dcard,
+			"paket_dkolega"=>$paket_dkolega,
+			"paket_dkeluarga"=>$paket_dkeluarga,
+			"paket_downer"=>$paket_downer,
+			"paket_dgrooming"=>$paket_dgrooming,
 			"paket_point"=>$paket_point,
 			"paket_harga"=>$paket_harga,
 			"paket_harga_ki"=>$paket_harga_ki,
@@ -640,7 +688,9 @@ class M_paket extends Model{
 	}
 
 	//function for advanced search record
-	function paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan, $paket_du, $paket_dm, $paket_point, $paket_harga, $paket_expired, $paket_aktif, $start, $end){
+	function paket_search($paket_id, $paket_kode, $paket_kodelama, $paket_nama, $paket_group, $paket_keterangan, 
+						$paket_du, $paket_dm, $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+						$paket_point, $paket_harga, $paket_expired, $paket_aktif, $start, $end){
 		if ($paket_aktif==""){
 			$paket_aktif = "Aktif";
 		}
@@ -665,7 +715,7 @@ class M_paket extends Model{
 		};
 		if($paket_group!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_group LIKE '%".$paket_group."%'";
+			$query.= " paket_group = '".$paket_group."'";
 		};
 		if($paket_keterangan!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -673,23 +723,47 @@ class M_paket extends Model{
 		};
 		if($paket_du!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_du LIKE '%".$paket_du."%'";
+			$query.= " paket_du = '".$paket_du."'";
 		};
 		if($paket_dm!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_dm LIKE '%".$paket_dm."%'";
+			$query.= " paket_dm = '".$paket_dm."'";
+		};
+		if($paket_dultah!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_dultah = '".$paket_dultah."'";
+		};
+		if($paket_dcard!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_dcard = '".$paket_dcard."'";
+		};
+		if($paket_dkolega!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_dkolega = '".$paket_dkolega."'";
+		};
+		if($paket_dkeluarga!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_dkeluarga = '".$paket_dkeluarga."'";
+		};
+		if($paket_downer!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_downer = '".$paket_downer."'";
+		};
+		if($paket_dgrooming!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " paket_dgrooming = '".$paket_dgrooming."'";
 		};
 		if($paket_point!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_point LIKE '%".$paket_point."%'";
+			$query.= " paket_point = '".$paket_point."'";
 		};
 		if($paket_harga!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_harga LIKE '%".$paket_harga."%'";
+			$query.= " paket_harga = '".$paket_harga."'";
 		};
 		if($paket_expired!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-			$query.= " paket_expired LIKE '%".$paket_expired."%'";
+			$query.= " paket_expired = '".$paket_expired."'";
 		};
 		if($paket_aktif!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -723,6 +797,12 @@ class M_paket extends Model{
 						,$paket_keterangan
 						,$paket_du
 						,$paket_dm
+						,$paket_dultah
+						,$paket_dcard
+						,$paket_dkolega
+						,$paket_dkeluarga
+						,$paket_downer
+						,$paket_dgrooming
 						,$paket_point
 						,$paket_harga
 						,$paket_expired
@@ -754,7 +834,7 @@ class M_paket extends Model{
 			};
 			if($paket_group!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " group_nama LIKE '%".$paket_group."%'";
+				$query.= " group_nama = '".$paket_group."'";
 			};
 			if($paket_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -762,27 +842,51 @@ class M_paket extends Model{
 			};
 			if($paket_du!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_du LIKE '%".$paket_du."%'";
+				$query.= " paket_du = '".$paket_du."'";
 			};
 			if($paket_dm!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_dm LIKE '%".$paket_dm."%'";
+				$query.= " paket_dm = '".$paket_dm."'";
+			};
+			if($paket_dultah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dultah = '".$paket_dultah."'";
+			};
+			if($paket_dcard!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dcard = '".$paket_dcard."'";
+			};
+			if($paket_dkolega!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dkolega = '".$paket_dkolega."'";
+			};
+			if($paket_dkeluarga!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dkeluarga = '".$paket_dkeluarga."'";
+			};
+			if($paket_downer!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_downer = '".$paket_downer."'";
+			};
+			if($paket_dgrooming!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dgrooming = '".$paket_dgrooming."'";
 			};
 			if($paket_point!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_point LIKE '%".$paket_point."%'";
+				$query.= " paket_point = '".$paket_point."'";
 			};
 			if($paket_harga!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_harga LIKE '%".$paket_harga."%'";
+				$query.= " paket_harga = '".$paket_harga."'";
 			};
 			if($paket_expired!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_expired LIKE '%".$paket_expired."%'";
+				$query.= " paket_expired = '".$paket_expired."'";
 			};
 			if($paket_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_aktif LIKE '%".$paket_aktif."%'";
+				$query.= " paket_aktif = '".$paket_aktif."'";
 			};
 
 		}
@@ -796,7 +900,9 @@ class M_paket extends Model{
 	}
 
 	//function  for export to excel
-	function paket_export_excel($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,$paket_du ,$paket_dm ,$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
+	function paket_export_excel($paket_kode ,$paket_kodelama ,$paket_nama ,$paket_group ,$paket_keterangan ,
+							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+							$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$option,$filter){
 		//full query
 		$query="SELECT
 					if(paket_kodelama='','-',ifnull(paket_kodelama,'-')) AS 'Kode lama',
@@ -805,6 +911,12 @@ class M_paket extends Model{
 					ifnull(group_nama,'-') AS 'Group 1',
 					ifnull(paket_du,'-') AS 'DU(%)',
 					ifnull(paket_dm,'-') AS 'DM(%)',
+					ifnull(paket_dultah,'-') AS 'Ultah(%)',
+					ifnull(paket_dcard,'-') AS 'Card(%)',
+					ifnull(paket_dkolega,'-') AS 'Kolega(%)',
+					ifnull(paket_dkeluarga,'-') AS 'Keluarga(%)',
+					ifnull(paket_downer,'-') AS 'Owner(%)',
+					ifnull(paket_dgrooming,'-') AS 'Grooming(%)',
 					ifnull(paket_point,'-') AS Poin,
 					ifnull(paket_harga,'-') AS 'Harga(Rp)',
 					ifnull(paket_expired,'-') AS 'Exp.(hari)',
@@ -835,7 +947,7 @@ class M_paket extends Model{
 			};
 			if($paket_group!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_group LIKE '%".$paket_group."%'";
+				$query.= " paket_group = '".$paket_group."'";
 			};
 			if($paket_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -843,23 +955,47 @@ class M_paket extends Model{
 			};
 			if($paket_du!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_du LIKE '%".$paket_du."%'";
+				$query.= " paket_du = '".$paket_du."'";
 			};
 			if($paket_dm!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_dm LIKE '%".$paket_dm."%'";
+				$query.= " paket_dm = '".$paket_dm."'";
+			};
+			if($paket_dultah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dultah = '".$paket_dultah."'";
+			};
+			if($paket_dcard!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dcard = '".$paket_dcard."'";
+			};
+			if($paket_dkolega!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dkolega = '".$paket_dkolega."'";
+			};
+			if($paket_dkeluarga!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dkeluarga = '".$paket_dkeluarga."'";
+			};
+			if($paket_downer!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_downer = '".$paket_downer."'";
+			};
+			if($paket_dgrooming!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " paket_dgrooming = '".$paket_dgrooming."'";
 			};
 			if($paket_point!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_point LIKE '%".$paket_point."%'";
+				$query.= " paket_point = '".$paket_point."'";
 			};
 			if($paket_harga!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_harga LIKE '%".$paket_harga."%'";
+				$query.= " paket_harga = '".$paket_harga."'";
 			};
 			if($paket_expired!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " paket_expired LIKE '%".$paket_expired."%'";
+				$query.= " paket_expired = '".$paket_expired."'";
 			};
 			if($paket_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

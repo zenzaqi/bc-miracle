@@ -81,6 +81,12 @@ var rawat_kategoritxtField;
 var rawat_keteranganField;
 var rawat_duField;
 var rawat_dmField;
+var rawat_dultahField;
+var rawat_dcardField;
+var rawat_dkolegaField;
+var rawat_dkeluargaField;
+var rawat_downerField;
+var rawat_dgroomingField;
 var rawat_pointField;
 var rawat_durasiField;
 var rawat_kreditField;
@@ -104,6 +110,12 @@ var rawat_jenisSearchField;
 var rawat_keteranganSearchField;
 var rawat_duSearchField;
 var rawat_dmSearchField;
+var rawat_dultahSearchField;
+var rawat_dcardSearchField;
+var rawat_dkolegaSearchField;
+var rawat_dkeluargaSearchField;
+var rawat_downerSearchField;
+var rawat_dgroomingSearchField;
 var rawat_pointSearchField;
 var rawat_durasiSearchField;
 var rawat_kreditSearchField;
@@ -227,6 +239,12 @@ Ext.onReady(function(){
 		var rawat_keterangan_create=null; 
 		var rawat_du_create=null; 
 		var rawat_dm_create=null; 
+		var rawat_dultah_create=null;
+		var rawat_dcard_create=null;
+		var rawat_dkolega_create=null;
+		var rawat_dkeluarga_create=null;
+		var rawat_downer_create=null;
+		var rawat_dgrooming_create=null;
 		var rawat_point_create=null;
 		var rawat_durasi_create=null;
 		var rawat_kredit_create=null;
@@ -252,7 +270,13 @@ Ext.onReady(function(){
 		if(rawat_kategoriField.getValue()!== null){rawat_kategori_create = rawat_kategoriField.getValue();} 
 		if(rawat_keteranganField.getValue()!== null){rawat_keterangan_create = rawat_keteranganField.getValue();} 
 		if(rawat_duField.getValue()!== null){rawat_du_create = rawat_duField.getValue();} 
-		if(rawat_dmField.getValue()!== null){rawat_dm_create = rawat_dmField.getValue();} 
+		if(rawat_dmField.getValue()!== null){rawat_dm_create = rawat_dmField.getValue();}
+		if(rawat_dultahField.getValue()!== null){rawat_dultah_create = rawat_dultahField.getValue();}
+		if(rawat_dcardField.getValue()!== null){rawat_dcard_create = rawat_dcardField.getValue();}
+		if(rawat_dkolegaField.getValue()!== null){rawat_dkolega_create = rawat_dkolegaField.getValue();} 
+		if(rawat_dkeluargaField.getValue()!== null){rawat_dkeluarga_create = rawat_dkeluargaField.getValue();}
+		if(rawat_downerField.getValue()!== null){rawat_downer_create = rawat_downerField.getValue();} 
+		if(rawat_dgroomingField.getValue()!== null){rawat_dgrooming_create = rawat_dgroomingField.getValue();} 
 		if(rawat_pointField.getValue()!== null){rawat_point_create = rawat_pointField.getValue();}
 		if(rawat_durasiField.getValue()!== null){rawat_durasi_create = rawat_durasiField.getValue();}
 		if(rawat_kreditField.getValue()!== null){rawat_kredit_create = rawat_kreditField.getValue();} 
@@ -285,6 +309,12 @@ Ext.onReady(function(){
 				rawat_keterangan	: rawat_keterangan_create, 
 				rawat_du	: rawat_du_create, 
 				rawat_dm	: rawat_dm_create, 
+				rawat_dultah: rawat_dultah_create,
+				rawat_dcard : rawat_dcard_create,
+				rawat_dkolega : rawat_dkolega_create,
+				rawat_dkeluarga : rawat_dkeluarga_create,
+				rawat_downer	: rawat_downer_create,
+				rawat_dgrooming	: rawat_dgrooming_create,
 				rawat_point	: rawat_point_create,
 				rawat_durasi: rawat_durasi_create,
 				rawat_kredit : rawat_kredit_create,
@@ -416,6 +446,18 @@ Ext.onReady(function(){
 		rawat_duField.setValue(null);
 		rawat_dmField.reset();
 		rawat_dmField.setValue(null);
+		rawat_dultahField.reset();
+		rawat_dultahField.setValue(null);
+		rawat_dcardField.reset();
+		rawat_dcardField.setValue(null);
+		rawat_dkolegaField.reset();
+		rawat_dkolegaField.setValue(null);
+		rawat_dkeluargaField.reset();
+		rawat_dkeluargaField.setValue(null);
+		rawat_downerField.reset();
+		rawat_downerField.setValue(null);
+		rawat_dgroomingField.reset();
+		rawat_dgroomingField.setValue(null);
 		rawat_pointField.reset();
 		rawat_pointField.setValue(null);
 		rawat_durasiField.reset();
@@ -515,9 +557,10 @@ Ext.onReady(function(){
 		rawat_aktif_mlgField.setValue(true);
 		rawat_aktif_checkField.reset();
 		rawat_aktif_checkField.setValue(true);
+		combo_rawat_produk.reset();
 		
-		cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
-		cbo_satuan_produkDataStore.load();
+		//cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
+		//cbo_satuan_produkDataStore.load();
 		
 	}
  	/* End of Function */
@@ -537,6 +580,12 @@ Ext.onReady(function(){
 		rawat_keteranganField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_keterangan'));
 		rawat_duField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_du'));
 		rawat_dmField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dm'));
+		rawat_dultahField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dultah'));
+		rawat_dcardField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dcard'));
+		rawat_dkolegaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dkolega'));
+		rawat_dkeluargaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dkeluarga'));
+		rawat_downerField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_downer'));
+		rawat_dgroomingField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dgrooming'));
 		rawat_pointField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_point'));
 		rawat_durasiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_durasi'));
 		rawat_kreditField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kredit'));
@@ -658,12 +707,13 @@ Ext.onReady(function(){
 	function display_form_window(){
 		
 		if(!perawatan_createWindow.isVisible()){
+			perawatan_reset_form();
+			perawatan_konsumsi_DataStore.load({params:{master_id:0}});
 			post2db='CREATE';
 			msg='created';
-			perawatan_reset_form();
 			perawatan_createWindow.show();
 		} else {
-			perawatan_konsumsi_DataStore.load({params:{master_id:0}});
+			
 			perawatan_createWindow.toFront();
 		}
 	}
@@ -691,13 +741,11 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function perawatan_confirm_update(){
 		/* only one record is selected here */
-		
 		//cbo_rawat_gudangDataSore.load();
 		if(perawatanListEditorGrid.selModel.getCount() == 1) {
-			
+			perawatan_set_form();
 			post2db='UPDATE';
 			msg='updated';
-			perawatan_set_form();
 			perawatan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -782,6 +830,12 @@ Ext.onReady(function(){
 			{name: 'rawat_keterangan', type: 'string', mapping: 'rawat_keterangan'}, 
 			{name: 'rawat_du', type: 'int', mapping: 'rawat_du'}, 
 			{name: 'rawat_dm', type: 'int', mapping: 'rawat_dm'}, 
+			{name: 'rawat_dultah', type: 'int', mapping: 'rawat_dultah'}, 
+			{name: 'rawat_dcard', type: 'int', mapping: 'rawat_dcard'}, 
+			{name: 'rawat_dkolega', type: 'int', mapping: 'rawat_dkolega'},
+			{name: 'rawat_dkeluarga', type: 'int', mapping: 'rawat_dkeluarga'}, 
+			{name: 'rawat_downer', type: 'int', mapping: 'rawat_downer'}, 
+			{name: 'rawat_dgrooming', type: 'int', mapping: 'rawat_dgrooming'}, 
 			{name: 'rawat_point', type: 'int', mapping: 'rawat_point'},
 			{name: 'rawat_durasi', tupe: 'int', mapping: 'rawat_durasi'},
 			{name: 'rawat_kredit', type: 'int', mapping: 'rawat_kredit'},
@@ -825,6 +879,12 @@ Ext.onReady(function(){
 			{name: 'rawat_group_display', type: 'string', mapping: 'group_nama'},
 			{name: 'rawat_group_durawat', type: 'int', mapping: 'group_durawat'},
 			{name: 'rawat_group_dmrawat', type: 'int', mapping: 'group_dmrawat'},
+			{name: 'rawat_group_dultah', type: 'int', mapping: 'group_dultah'},
+			{name: 'rawat_group_dcard', type: 'int', mapping: 'group_dcard'},
+			{name: 'rawat_group_dkolega', type: 'int', mapping: 'group_dkolega'},
+			{name: 'rawat_group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
+			{name: 'rawat_group_downer', type: 'int', mapping: 'group_downer'},
+			{name: 'rawat_group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
 			{name: 'rawat_group_kelompok', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
 		]),
@@ -924,30 +984,27 @@ Ext.onReady(function(){
 				},
 			hidden: false
 		},*/
+		/*
 		{
 			header: '<div align="center">' + 'Kode Lama' + '</div>',
 			dataIndex: 'rawat_kodelama',
 			width: 120,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			editor: new Ext.form.TextField({
-				allowBlank: true,
-				maxLength: 20
-          	})*/
 			<?php } ?>
 		},
+		*/
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'rawat_kode',
-			width: 120,	//150,
+			width: 75,	//150,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 300,	//250,
+			width: 260,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 			/*,
@@ -960,7 +1017,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'rawat_group',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -977,7 +1034,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'rawat_jenis',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -994,59 +1051,112 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'rawat_kategori_nama',
-			width: 120,	//150,
+			width: 80,	//150,
 			sortable: true,
 			editable: false
 		}, 
 		{
-			header: '<div align="center">' + 'DU (%)' + '</div>',
+			header: '<div align="center">' + 'DU' + '</div>',
 			align: 'right',
 			dataIndex: 'rawat_du',
-			width: 80,	//100,
+			width: 45,	//100,
 			readOnly: true,
 			renderer: function(val){
-				return '<span>' + val + ' </span>' + '</div>';
+				return '<span>' + val + ' %</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'DM (%)' + '</div>',
+			header: '<div align="center">' + 'DM' + '</div>',
 			align: 'right',
 			dataIndex: 'rawat_dm',
-			width: 80,	//100,
+			width: 45,	//100,
 			readOnly: true,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			sortable: true,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Ultah' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dultah',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 	
+		{
+			header: '<div align="center">' + 'Card' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dcard',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 			<?php } ?>
 		}, 
+		{
+			header: '<div align="center">' + 'Kolega' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dkolega',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Keluarga' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dkeluarga',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Owner' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_downer',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Grooming' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dgrooming',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+			
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'rawat_point',
 			align: 'right',
-			width: 80,	//100,
+			width: 40,	//100,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1066,7 +1176,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Durasi' + '</div>',
 			dataIndex: 'rawat_durasi',
 			align: 'right',
-			width: 80,	//100,
+			width: 40,	//100,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1086,7 +1196,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Kredit' + '</div>',
 			dataIndex: 'rawat_kredit',
 			align: 'right',
-			width: 80,	//100,
+			width: 40,	//100,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1101,7 +1211,7 @@ Ext.onReady(function(){
 			})*/
 			<?php } ?>
 		}, 
-		
+		/*
 		{
 			header: '<div align="center">' + 'Sat.Jml.Tindakan' + '</div>',
 			dataIndex: 'rawat_jumlah_tindakan',
@@ -1114,23 +1224,14 @@ Ext.onReady(function(){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})*/
 			<?php } ?>
 		}, 
-		
+		*/
 		{
-			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			header: '<div align="center">' + 'Harga(Rp)' + '</div>',
 			dataIndex: 'rawat_harga',
 			align: 'right',
-			width: 100,	//150,
+			width: 80,	//150,
 			sortable: true,
 			readOnly: true,
 			renderer: function(val){
@@ -1151,7 +1252,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Gudang' + '</div>',
 			dataIndex: 'rawat_gudang',
-			width: 150,
+			width: 80,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1165,6 +1266,7 @@ Ext.onReady(function(){
 			})*/
 			<?php } ?>
 		}, 
+		/*
 		{
 			header: 'Contribution',
 			dataIndex: 'rawat_kontribusi',
@@ -1173,38 +1275,17 @@ Ext.onReady(function(){
 			hidden: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-		/*	,
-			editor: new Ext.form.ComboBox({
-				store: cbo_rawat_kontribusiDataSore,
-				mode: 'remote',
-				editable:false,
-				displayField: 'rawat_kontribusi_display',
-				valueField: 'rawat_kontribusi_value',
-				triggerAction: 'all'
-			})*/
+
 			<?php } ?>
 		}, 
+		*/
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'rawat_aktif',
-			width: 80,	//150,
+			width: 50,	//150,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			editor: new Ext.form.ComboBox({
-				typeAhead: true,
-				triggerAction: 'all',
-				store:new Ext.data.SimpleStore({
-					fields:['rawat_aktif_value', 'rawat_aktif_display'],
-					data: [['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
-					}),
-				mode: 'local',
-               	displayField: 'rawat_aktif_display',
-               	valueField: 'rawat_aktif_value',
-               	lazyRender:true,
-               	listClass: 'x-combo-list-small'
-            })*/
 			<?php } ?>
 		}, 
 		{
@@ -1499,24 +1580,107 @@ Ext.onReady(function(){
 	rawat_duField= new Ext.form.NumberField({
 		id: 'rawat_duField',
 		name: 'rawat_duField',
-		fieldLabel: 'Diskon Umum (%)',
+		fieldLabel: 'Disk Umum(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
-		width: 60,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
 	/* Identify  rawat_dm Field */
 	rawat_dmField= new Ext.form.NumberField({
 		id: 'rawat_dmField',
 		name: 'rawat_dmField',
-		fieldLabel: 'Diskon Member (%)',
+		fieldLabel: 'Disk Member(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
-		width: 60,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  rawat_dultah Field */
+	rawat_dultahField= new Ext.form.NumberField({
+		id: 'rawat_dultahField',
+		name: 'rawat_dultahField',
+		fieldLabel: 'Disk Ultah(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dcard Field */
+	rawat_dcardField= new Ext.form.NumberField({
+		id: 'rawat_dcardField',
+		name: 'rawat_dcardField',
+		fieldLabel: 'Disk Card(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dkolega Field */
+	rawat_dkolegaField= new Ext.form.NumberField({
+		id: 'rawat_dkolegaField',
+		name: 'rawat_dkolegaField',
+		fieldLabel: 'Disk Kolega(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dkeluarga Field */
+	rawat_dkeluargaField= new Ext.form.NumberField({
+		id: 'rawat_dkeluargaField',
+		name: 'rawat_dkeluargaField',
+		fieldLabel: 'Disk Keluarga(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_downer Field */
+	rawat_downerField= new Ext.form.NumberField({
+		id: 'rawat_downerField',
+		name: 'rawat_downerField',
+		fieldLabel: 'Disk Owner(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dgrooming Field */
+	rawat_dgroomingField= new Ext.form.NumberField({
+		id: 'rawat_dgroomingField',
+		name: 'rawat_dgroomingField',
+		fieldLabel: 'Disk Grooming(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	
 	/* Identify  rawat_point Field */
 	rawat_pointField= new Ext.form.NumberField({
 		id: 'rawat_pointField',
@@ -1787,7 +1951,33 @@ Ext.onReady(function(){
 		]
 	});	
 	
-		/* Identify harga rawat*/
+	//untuk Panel Diskon 
+	rawat_diskonGroup = new Ext.form.FieldSet({
+		title: 'Jenis Diskon',
+		layout:'column',
+		autoHeight: true,
+		mode: 'remote',
+		//collapsed: true,
+		collapsible: true,
+		items:[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [rawat_duField, rawat_dmField, rawat_dultahField,rawat_dcardField]
+			},
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [rawat_dkolegaField, rawat_dkeluargaField, rawat_downerField, rawat_dgroomingField]
+			}
+		]
+	});
+	
+	/* Identify harga rawat*/
 	rawat_harga_allField=new Ext.form.TextField({
 		id : 'rawat_harga_allField',
 		fieldLabel: '(Rp.)',
@@ -2060,6 +2250,12 @@ Ext.onReady(function(){
 		if(cbo_rawat_groupDataStore.getCount()){
 			rawat_duField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_durawat);
 			rawat_dmField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dmrawat);
+			rawat_dultahField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dultah);
+			rawat_dcardField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dcard);
+			rawat_dkolegaField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dkolega);
+			rawat_dkeluargaField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dkeluarga);
+			rawat_downerField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_downer);
+			rawat_dgroomingField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dgrooming);
 			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
 			if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Medis" || cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Surgery"){
@@ -2086,7 +2282,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_highmarginField, rawat_groupField, rawat_jenisField, rawat_hargaField, rawat_harga_checkField, rawat_kategoritxtField, rawat_duField, rawat_dmField, rawat_hargaGroup] 
+				items: [rawat_kodelamaField, rawat_kodeField, rawat_namaField, rawat_highmarginField, rawat_groupField, rawat_jenisField, rawat_hargaField, rawat_harga_checkField, rawat_kategoritxtField, rawat_hargaGroup, rawat_diskonGroup] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2144,7 +2340,7 @@ Ext.onReady(function(){
 			method: 'POST'
 		}),
 		reader: perawatan_konsumsi_reader,
-		baseParams:{master_id: get_pk_id(), start: 0, limit: pageS},
+		baseParams:{start: 0, limit: pageS},
 		sortInfo:{field: 'krawat_id', direction: "ASC"}
 	});
 	/* End of Function */
@@ -2796,6 +2992,8 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					perawatan_reset_form();
+					perawatan_DataStore.reload();
 					perawatan_createWindow.hide();
 				}
 			}
@@ -2834,6 +3032,12 @@ Ext.onReady(function(){
 		var rawat_keterangan_search=null;
 		var rawat_du_search=null;
 		var rawat_dm_search=null;
+		var rawat_dultah_search=null;
+		var rawat_dcard_search=null;
+		var rawat_dkolega_search=null;
+		var rawat_dkeluarga_search=null;
+		var rawat_downer_search=null;
+		var rawat_dgrooming_search=null;
 		var rawat_point_search=null;
 		var rawat_durasi_search=null;
 		var rawat_kredit_search=null;
@@ -2855,6 +3059,12 @@ Ext.onReady(function(){
 		if(rawat_keteranganSearchField.getValue()!==null){rawat_keterangan_search=rawat_keteranganSearchField.getValue();}
 		if(rawat_duSearchField.getValue()!==null){rawat_du_search=rawat_duSearchField.getValue();}
 		if(rawat_dmSearchField.getValue()!==null){rawat_dm_search=rawat_dmSearchField.getValue();}
+		if(rawat_dultahSearchField.getValue()!==null){rawat_dultah_search=rawat_dultahSearchField.getValue();}
+		if(rawat_dcardSearchField.getValue()!==null){rawat_dcard_search=rawat_dcardSearchField.getValue();}
+		if(rawat_dkolegaSearchField.getValue()!==null){rawat_dkolega_search=rawat_dkolegaSearchField.getValue();}
+		if(rawat_dkeluargaSearchField.getValue()!==null){rawat_dkeluarga_search=rawat_dkeluargaSearchField.getValue();}
+		if(rawat_downerSearchField.getValue()!==null){rawat_downer_search=rawat_downerSearchField.getValue();}
+		if(rawat_dgroomingSearchField.getValue()!==null){rawat_dgrooming_search=rawat_dgroomingSearchField.getValue();}
 		if(rawat_pointSearchField.getValue()!==null){rawat_point_search=rawat_pointSearchField.getValue();}
 		if(rawat_durasiSearchField.getValue()!==null){rawat_durasi_search=rawat_durasiSearchField.getValue();}
 		if(rawat_kreditSearchField.getValue()!==null){rawat_kredit_search=rawat_kreditSearchField.getValue();}
@@ -2879,7 +3089,13 @@ Ext.onReady(function(){
 			rawat_jenis	:	rawat_jenis_search, 
 			rawat_keterangan	:	rawat_keterangan_search, 
 			rawat_du	:	rawat_du_search, 
-			rawat_dm	:	rawat_dm_search, 
+			rawat_dm	:	rawat_dm_search,
+			rawat_dultah	: rawat_dultah_search,
+			rawat_dcard		: rawat_dcard_search,
+			rawat_dkolega	: rawat_dkolega_search,
+			rawat_dkeluarga	: rawat_dkeluarga_search,
+			rawat_downer	: rawat_downer_search,
+			rawat_dgrooming	: rawat_dgrooming_search,
 			rawat_point	:	rawat_point_search, 
 			rawat_kredit :	rawat_kredit_search,
 			rawat_jumlah_tindakan : rawat_jumlah_tindakan_search,
@@ -2924,6 +3140,18 @@ Ext.onReady(function(){
 		rawat_duSearchField.setValue(null);
 		rawat_dmSearchField.reset();
 		rawat_dmSearchField.setValue(null);
+		rawat_dultahSearchField.reset();
+		rawat_dultahSearchField.setValue(null);
+		rawat_dcardSearchField.reset();
+		rawat_dcardSearchField.setValue(null);
+		rawat_dkolegaSearchField.reset();
+		rawat_dkolegaSearchField.setValue(null);
+		rawat_dkeluargaSearchField.reset();
+		rawat_dkeluargaSearchField.setValue(null);
+		rawat_downerSearchField.reset();
+		rawat_downerSearchField.setValue(null);
+		rawat_dgroomingSearchField.reset();
+		rawat_dgroomingSearchField.setValue(null);
 		rawat_pointSearchField.reset();
 		rawat_pointSearchField.setValue(null);
 		rawat_durasiSearchField.reset();
@@ -3040,6 +3268,66 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+	/* Identify  rawat_dultah Search Field */
+	rawat_dultahSearchField= new Ext.form.NumberField({
+		id: 'rawat_dultahSearchField',
+		fieldLabel: 'Diskon Ultah (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dcard Search Field */
+	rawat_dcardSearchField= new Ext.form.NumberField({
+		id: 'rawat_dcardSearchField',
+		fieldLabel: 'Diskon Card (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dkolega Search Field */
+	rawat_dkolegaSearchField= new Ext.form.NumberField({
+		id: 'rawat_dkolegaSearchField',
+		fieldLabel: 'Diskon Kolega (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dkeluarga Search Field */
+	rawat_dkeluargaSearchField= new Ext.form.NumberField({
+		id: 'rawat_dkeluargaSearchField',
+		fieldLabel: 'Diskon Keluarga (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_downer Search Field */
+	rawat_downerSearchField= new Ext.form.NumberField({
+		id: 'rawat_downerSearchField',
+		fieldLabel: 'Diskon Owner (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  rawat_dgrooming Search Field */
+	rawat_dgroomingSearchField= new Ext.form.NumberField({
+		id: 'rawat_dgroomingSearchField',
+		fieldLabel: 'Diskon Grooming (%)',
+		allowNegatife : false,
+		blankText: '0',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  rawat_point Search Field */
 	rawat_pointSearchField= new Ext.form.NumberField({
 		id: 'rawat_pointSearchField',
@@ -3154,7 +3442,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_jenisSearchField, rawat_kategoriSearchField, rawat_duSearchField, rawat_dmSearchField] 
+				items: [rawat_kodelamaSearchField, rawat_kodeSearchField, rawat_namaSearchField, rawat_groupSearchField, rawat_jenisSearchField, rawat_kategoriSearchField, rawat_duSearchField, rawat_dmSearchField,rawat_dultahSearchField, rawat_dcardSearchField, rawat_dkolegaSearchField, rawat_dkeluargaSearchField, rawat_downerSearchField, rawat_dgroomingSearchField ] 
 			}
  
 			,{
@@ -3219,6 +3507,12 @@ Ext.onReady(function(){
 		var rawat_keterangan_print=null;
 		var rawat_du_print=null;
 		var rawat_dm_print=null;
+		var rawat_dultah_print=null;
+		var rawat_dcard_print=null;
+		var rawat_dkolega_print=null;
+		var rawat_dkeluarga_print=null;
+		var rawat_downer_print=null;
+		var rawat_dgrooming_print=null;
 		var rawat_point_print=null;
 		var rawat_kredit_print=null;
 		var rawat_harga_print=null;
@@ -3236,6 +3530,12 @@ Ext.onReady(function(){
 		if(perawatan_DataStore.baseParams.rawat_keterangan!==null){rawat_keterangan_print = perawatan_DataStore.baseParams.rawat_keterangan;}
 		if(perawatan_DataStore.baseParams.rawat_du!==null){rawat_du_print = perawatan_DataStore.baseParams.rawat_du;}
 		if(perawatan_DataStore.baseParams.rawat_dm!==null){rawat_dm_print = perawatan_DataStore.baseParams.rawat_dm;}
+		if(perawatan_DataStore.baseParams.rawat_dultah!==null){rawat_dultah_print = perawatan_DataStore.baseParams.rawat_dultah;}
+		if(perawatan_DataStore.baseParams.rawat_dcard!==null){rawat_dcard_print = perawatan_DataStore.baseParams.rawat_dcard;}
+		if(perawatan_DataStore.baseParams.rawat_dkolega!==null){rawat_dkolega_print = perawatan_DataStore.baseParams.rawat_dkolega;}
+		if(perawatan_DataStore.baseParams.rawat_dkeluarga!==null){rawat_dkeluarga_print = perawatan_DataStore.baseParams.rawat_dkeluarga;}
+		if(perawatan_DataStore.baseParams.rawat_downer!==null){rawat_downer_print = perawatan_DataStore.baseParams.rawat_downer;}
+		if(perawatan_DataStore.baseParams.rawat_dgrooming!==null){rawat_dgrooming_print = perawatan_DataStore.baseParams.rawat_dgrooming;}
 		if(perawatan_DataStore.baseParams.rawat_point!==null){rawat_point_print = perawatan_DataStore.baseParams.rawat_point;}
 		if(perawatan_DataStore.baseParams.rawat_kredit!==null){rawat_kredit_print = perawatan_DataStore.baseParams.rawat_kredit;}
 		if(perawatan_DataStore.baseParams.rawat_harga!==null){rawat_harga_print = perawatan_DataStore.baseParams.rawat_harga;}
@@ -3258,6 +3558,12 @@ Ext.onReady(function(){
 			rawat_keterangan : rawat_keterangan_print,
 			rawat_du : rawat_du_print,
 			rawat_dm : rawat_dm_print,
+			rawat_dultah	: rawat_dultah_print,
+			rawat_dcard		: rawat_dcard_print,
+			rawat_dkolega	: rawat_dkolega_print,
+			rawat_dkeluarga	: rawat_dkeluarga_print,
+			rawat_downer	: rawat_downer_print,
+			rawat_dgrooming	: rawat_dgrooming_print,
 			rawat_point : rawat_point_print,
 			rawat_kredit : rawat_kredit_print,
 			rawat_harga : rawat_harga_print,
@@ -3309,6 +3615,12 @@ Ext.onReady(function(){
 		var rawat_keterangan_2excel=null;
 		var rawat_du_2excel=null;
 		var rawat_dm_2excel=null;
+		var rawat_dultah_2excel=null;
+		var rawat_dcard_2excel=null;
+		var rawat_dkolega_2excel=null;
+		var rawat_dkeluarga_2excel=null;
+		var rawat_downer_2excel=null;
+		var rawat_dgrooming_2excel=null;
 		var rawat_point_2excel=null;
 		var rawat_harga_2excel=null;
 		var rawat_gudang_2excel=null;
@@ -3325,6 +3637,12 @@ Ext.onReady(function(){
 		if(perawatan_DataStore.baseParams.rawat_keterangan!==null){rawat_keterangan_2excel = perawatan_DataStore.baseParams.rawat_keterangan;}
 		if(perawatan_DataStore.baseParams.rawat_du!==null){rawat_du_2excel = perawatan_DataStore.baseParams.rawat_du;}
 		if(perawatan_DataStore.baseParams.rawat_dm!==null){rawat_dm_2excel = perawatan_DataStore.baseParams.rawat_dm;}
+		if(perawatan_DataStore.baseParams.rawat_dultah!==null){rawat_dultah_2excel = perawatan_DataStore.baseParams.rawat_dultah;}
+		if(perawatan_DataStore.baseParams.rawat_dcard!==null){rawat_dcard_2excel = perawatan_DataStore.baseParams.rawat_dcard;}
+		if(perawatan_DataStore.baseParams.rawat_dkolega!==null){rawat_dkolega_2excel = perawatan_DataStore.baseParams.rawat_dkolega;}
+		if(perawatan_DataStore.baseParams.rawat_dkeluarga!==null){rawat_dkeluarga_2excel = perawatan_DataStore.baseParams.rawat_dkeluarga;}
+		if(perawatan_DataStore.baseParams.rawat_downer!==null){rawat_downer_2excel = perawatan_DataStore.baseParams.rawat_downer;}
+		if(perawatan_DataStore.baseParams.rawat_dgrooming!==null){rawat_dgrooming_2excel = perawatan_DataStore.baseParams.rawat_dgrooming;}
 		if(perawatan_DataStore.baseParams.rawat_point!==null){rawat_point_2excel = perawatan_DataStore.baseParams.rawat_point;}
 		if(perawatan_DataStore.baseParams.rawat_harga!==null){rawat_harga_2excel = perawatan_DataStore.baseParams.rawat_harga;}
 		if(perawatan_DataStore.baseParams.rawat_gudang!==null){rawat_gudang_2excel = perawatan_DataStore.baseParams.rawat_gudang;}
@@ -3346,6 +3664,12 @@ Ext.onReady(function(){
 			rawat_keterangan : rawat_keterangan_2excel,
 			rawat_du : rawat_du_2excel,
 			rawat_dm : rawat_dm_2excel,
+			rawat_dultah	: rawat_dultah_2excel,
+			rawat_dcard		: rawat_dcard_2excel,
+			rawat_dkolega	: rawat_dkolega_2excel,
+			rawat_dkeluarga	: rawat_dkeluarga_2excel,
+			rawat_downer	: rawat_downer_2excel,
+			rawat_dgrooming	: rawat_dgrooming_2excel,
 			rawat_point : rawat_point_2excel,
 			rawat_harga : rawat_harga_2excel,
 			rawat_gudang : rawat_gudang_2excel,
@@ -3399,6 +3723,48 @@ Ext.onReady(function(){
 	rawat_harga_lbkField.on('blur',function(){ rawat_harga_lbkField.setValue(CurrencyFormatted(rawat_harga_lbkField.getValue())); });
 	rawat_harga_hrField.on('focus',function(){ rawat_harga_hrField.setValue(convertToNumber(rawat_harga_hrField.getValue())); });
 	rawat_harga_hrField.on('blur',function(){ rawat_harga_hrField.setValue(CurrencyFormatted(rawat_harga_hrField.getValue())); });
+	
+	//Events for diskon
+	rawat_duField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dmField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dultahField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dcardField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dkolegaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dkeluargaField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_downerField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
 	
 });
 	</script>

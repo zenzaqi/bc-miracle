@@ -667,7 +667,9 @@ class M_produk extends Model{
 		}
 		
 		//function for advanced search record
-		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama){
+		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+								$produk_du ,$produk_dm ,$produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+								$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama){
 			//full query
 			if($produk_aktif=="")
 				$produk_aktif="Aktif";
@@ -687,7 +689,7 @@ class M_produk extends Model{
 			};
 			if($produk_group!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_group LIKE '%".$produk_group."%'";
+				$query.= " produk_group = '".$produk_group."'";
 			};
 			if($produk_kategori!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -699,7 +701,7 @@ class M_produk extends Model{
 			};
 			if($produk_jenis!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_jenis LIKE '%".$produk_jenis."%'";
+				$query.= " produk_jenis = '".$produk_jenis."'";
 			};
 			if($produk_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -711,11 +713,35 @@ class M_produk extends Model{
 			};
 			if($produk_du!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_du LIKE '%".$produk_du."%'";
+				$query.= " produk_du = '".$produk_du."'";
 			};
 			if($produk_dm!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_dm LIKE '%".$produk_dm."%'";
+				$query.= " produk_dm = '".$produk_dm."'";
+			};
+			if($produk_dultah!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_dultah = '".$produk_dultah."'";
+			};
+			if($produk_dcard!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_dcard = '".$produk_dcard."'";
+			};
+			if($produk_dkolega!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_dkolega = '".$produk_dkolega."'";
+			};
+			if($produk_dkeluarga!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_dkeluarga = '".$produk_dkeluarga."'";
+			};
+			if($produk_downer!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_downer = '".$produk_downer."'";
+			};
+			if($produk_dgrooming!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_dgrooming = '".$produk_dgrooming."'";
 			};
 			if($produk_point!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -727,11 +753,11 @@ class M_produk extends Model{
 			};
 			if($produk_volume!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_volume LIKE '%".$produk_volume."%'";
+				$query.= " produk_volume = '".$produk_volume."'";
 			};
 			if($produk_harga!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " produk_harga LIKE '%".$produk_harga."%'";
+				$query.= " produk_harga = '".$produk_harga."'";
 			};
 			if($produk_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -759,7 +785,9 @@ class M_produk extends Model{
 		}
 		
 		//function for print record
-		function produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
+		function produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+								$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
 			$query="select * from vu_produk";
 			if($option=='LIST'){
@@ -807,6 +835,30 @@ class M_produk extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_dm LIKE '%".$produk_dm."%'";
 				};
+				if($produk_dultah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dultah = '".$produk_dultah."'";
+				};
+				if($produk_dcard!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dcard = '".$produk_dcard."'";
+				};
+				if($produk_dkolega!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dkolega = '".$produk_dkolega."'";
+				};
+				if($produk_dkeluarga!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dkeluarga = '".$produk_dkeluarga."'";
+				};
+				if($produk_downer!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_downer = '".$produk_downer."'";
+				};
+				if($produk_dgrooming!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dgrooming = '".$produk_dgrooming."'";
+				};
 				if($produk_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_point LIKE '%".$produk_point."%'";
@@ -833,7 +885,9 @@ class M_produk extends Model{
 		}
 		
 		//function  for export to excel
-		function produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,$produk_du ,$produk_dm ,$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
+		function produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
+										$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
+										$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
 			$query="SELECT	if(produk_kodelama='','-',ifnull(produk_kodelama,'-')) AS kode_lama,
 							ifnull(produk_kode,'-') AS kode_baru,
@@ -844,6 +898,12 @@ class M_produk extends Model{
 							ifnull(satuan_kode,'-') AS satuan,
 							ifnull(produk_du,'-') AS 'DU (%)',
 							ifnull(produk_dm,'-') AS 'DM (%)',
+							ifnull(produk_dultah,'-') AS 'dultah (%)',
+							ifnull(produk_dcard,'-') AS 'dcard (%)',
+							ifnull(produk_dkolega,'-') AS 'dkolega (%)',
+							ifnull(produk_dkeluarga,'-') AS 'dkeluarga (%)',
+							ifnull(produk_downer,'-') AS 'downer (%)',
+							ifnull(produk_dgrooming,'-') AS 'dgrooming (%)',
 							ifnull(produk_point,'-') AS point,
 							ifnull(produk_volume,'-') AS vol,
 							ifnull(produk_harga,'-') AS harga,
@@ -895,6 +955,30 @@ class M_produk extends Model{
 				if($produk_dm!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_dm LIKE '%".$produk_dm."%'";
+				};
+				if($produk_dultah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dultah = '".$produk_dultah."'";
+				};
+				if($produk_dcard!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dcard = '".$produk_dcard."'";
+				};
+				if($produk_dkolega!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dkolega = '".$produk_dkolega."'";
+				};
+				if($produk_dkeluarga!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dkeluarga = '".$produk_dkeluarga."'";
+				};
+				if($produk_downer!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_downer = '".$produk_downer."'";
+				};
+				if($produk_dgrooming!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_dgrooming = '".$produk_dgrooming."'";
 				};
 				if($produk_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
