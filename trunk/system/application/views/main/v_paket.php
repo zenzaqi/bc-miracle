@@ -461,39 +461,39 @@ Ext.onReady(function(){
 		//paket_Field.reset();
 		//paket_Field.setValue(null);
 		paket_aktif_thField.reset();
-		paket_aktif_thField.setValue(true);
+		paket_aktif_thField.setValue(false);
 		paket_aktif_kiField.reset();
-		paket_aktif_kiField.setValue(true);
+		paket_aktif_kiField.setValue(false);
 		paket_aktif_hrField.reset();
-		paket_aktif_hrField.setValue(true);
+		paket_aktif_hrField.setValue(false);
 		paket_aktif_tpField.reset();
-		paket_aktif_tpField.setValue(true);
+		paket_aktif_tpField.setValue(false);
 		paket_aktif_dpsField.reset();
-		paket_aktif_dpsField.setValue(true);
+		paket_aktif_dpsField.setValue(false);
 		paket_aktif_jktField.reset();
-		paket_aktif_jktField.setValue(true);
+		paket_aktif_jktField.setValue(false);
 		paket_aktif_mtaField.reset();
-		paket_aktif_mtaField.setValue(true);
+		paket_aktif_mtaField.setValue(false);
 		paket_aktif_blpnField.reset();
-		paket_aktif_blpnField.setValue(true);
+		paket_aktif_blpnField.setValue(false);
 		paket_aktif_kutaField.reset();
-		paket_aktif_kutaField.setValue(true);
+		paket_aktif_kutaField.setValue(false);
 		paket_aktif_btmField.reset();
-		paket_aktif_btmField.setValue(true);
+		paket_aktif_btmField.setValue(false);
 		paket_aktif_mksField.reset();
-		paket_aktif_mksField.setValue(true);
+		paket_aktif_mksField.setValue(false);
 		paket_aktif_mdnField.reset();
-		paket_aktif_mdnField.setValue(true);
+		paket_aktif_mdnField.setValue(false);
 		paket_aktif_lbkField.reset();
-		paket_aktif_lbkField.setValue(true);
+		paket_aktif_lbkField.setValue(false);
 		paket_aktif_mndField.reset();
-		paket_aktif_mndField.setValue(true);
+		paket_aktif_mndField.setValue(false);
 		paket_aktif_ygkField.reset();
-		paket_aktif_ygkField.setValue(true);		
+		paket_aktif_ygkField.setValue(false);		
 		paket_aktif_mlgField.reset();
-		paket_aktif_mlgField.setValue(true);
+		paket_aktif_mlgField.setValue(false);
 		paket_aktif_checkField.reset();
-		paket_aktif_checkField.setValue(true);
+		paket_aktif_checkField.setValue(false);
 		
 		combo_paket_produk.reset();
 		
@@ -1315,7 +1315,16 @@ Ext.onReady(function(){
 		id : 'paket_aktif_thField',
 		boxLabel: 'TH',
 		maxLength: 200,
-		name: 'paket_aktif_th'
+		name: 'paket_aktif_th',
+		handler: function(node,checked){
+			if (checked) {
+				paket_aktifField.setValue('Aktif');
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				paket_aktifField.setValue('Tidak Aktif');
+			}
+		}
 	});
 	
 	paket_aktif_kiField=new Ext.form.Checkbox({
@@ -2039,7 +2048,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [paket_expiredField, paket_pointField, paket_keteranganField, paket_aktifField,paket_idField, paket_aktifGroup]
+				items: [paket_expiredField, paket_pointField, paket_keteranganField,paket_idField, paket_aktifGroup]
 			}
 			]
 

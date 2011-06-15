@@ -346,17 +346,18 @@ Ext.onReady(function(){
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
-		},'-',{
+		},/*'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: kartu_stok_reset_search,
 			iconCls:'icon-refresh'
-		}/*,'-',{
+		}*/
+		'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: kartu_stok_export_excel
-		}*/, '-',{
+		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -845,14 +846,30 @@ Ext.onReady(function(){
 		var satuan_id_2excel=null;
 		var satuan_nama_2excel=null;
 		var stok_saldo_2excel=null;
-		var win;              
+		var tanggal_start_2excel=null;
+		var tanggal_end_2excel=null;
+		var gudang_2excel=null;
+		var opsi_satuan_2excel=null;
+		var win;                      
+		
 		// check if we do have some search data...
 		if(kartu_stok_DataStore.baseParams.query!==null){searchquery = kartu_stok_DataStore.baseParams.query;}
 		if(kartu_stok_DataStore.baseParams.produk_id!==null){produk_id_2excel = kartu_stok_DataStore.baseParams.produk_id;}
-		if(kartu_stok_DataStore.baseParams.produk_nama!==null){produk_nama_2excel = kartu_stok_DataStore.baseParams.produk_nama;}
-		if(kartu_stok_DataStore.baseParams.satuan_id!==null){satuan_id_2excel = kartu_stok_DataStore.baseParams.satuan_id;}
-		if(kartu_stok_DataStore.baseParams.satuan_nama!==null){satuan_nama_2excel = kartu_stok_DataStore.baseParams.satuan_nama;}
-		if(kartu_stok_DataStore.baseParams.stok_saldo!==null){stok_saldo_2excel = kartu_stok_DataStore.baseParams.stok_saldo;}
+		if(kartu_stok_DataStore.baseParams.tanggal_start!==null){tanggal_start_2excel = kartu_stok_DataStore.baseParams.tanggal_start;}
+		if(kartu_stok_DataStore.baseParams.tanggal_end!==null){tanggal_end_2excel = kartu_stok_DataStore.baseParams.tanggal_end;}
+		if(kartu_stok_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_2excel = kartu_stok_DataStore.baseParams.opsi_satuan;}
+		if(kartu_stok_DataStore.baseParams.gudang!==null){gudang_2excel = kartu_stok_DataStore.baseParams.gudang;}
+		
+		
+		// check if we do have some search data...
+		if(kartu_stok_DataStore.baseParams.query!==null){searchquery = kartu_stok_DataStore.baseParams.query;}
+		if(kartu_stok_DataStore.baseParams.produk_id!==null){produk_id_print = kartu_stok_DataStore.baseParams.produk_id;}
+		if(kartu_stok_DataStore.baseParams.tanggal_start!==null){tanggal_start_print = kartu_stok_DataStore.baseParams.tanggal_start;}
+		if(kartu_stok_DataStore.baseParams.tanggal_end!==null){tanggal_end_print = kartu_stok_DataStore.baseParams.tanggal_end;}
+		if(kartu_stok_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = kartu_stok_DataStore.baseParams.opsi_satuan;}
+		if(kartu_stok_DataStore.baseParams.gudang!==null){gudang_print = kartu_stok_DataStore.baseParams.gudang;}
+		
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -862,12 +879,14 @@ Ext.onReady(function(){
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			produk_id : produk_id_2excel,
-			produk_nama : produk_nama_2excel,
-			satuan_id : satuan_id_2excel,
-			satuan_nama : satuan_nama_2excel,
-			stok_saldo : stok_saldo_2excel,
+			tanggal_start : tanggal_start_2excel,
+			tanggal_end : tanggal_end_2excel,
+			opsi_satuan : opsi_satuan_2excel,
+			gudang : gudang_2excel,
 		  	currentlisting: kartu_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		},
+		
+		
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){

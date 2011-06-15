@@ -149,19 +149,15 @@ class C_kartu_stok extends Controller {
 	function kartu_stok_export_excel(){
 		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
-		$produk_nama=trim(@$_POST["produk_nama"]);
-		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
-		$produk_nama=str_replace("'", "\'",$produk_nama);
-		$satuan_id=trim(@$_POST["satuan_id"]);
-		$satuan_nama=trim(@$_POST["satuan_nama"]);
-		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
-		$satuan_nama=str_replace("'", "\'",$satuan_nama);
-		$stok_saldo=trim(@$_POST["stok_saldo"]);
+		$tanggal_start=trim(@$_POST["tanggal_start"]);
+		$tanggal_end=trim(@$_POST["tanggal_end"]);
+		$opsi_satuan=trim(@$_POST["opsi_satuan"]);
+		$gudang=trim(@$_POST["gudang"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_kartu_stok->kartu_stok_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
-		
+		$query = $this->m_kartu_stok->kartu_stok_export_excel($produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter);
+		$this->load->plugin('to_excel');
 		to_excel($query,"kartu_stok"); 
 		echo '1';
 			
