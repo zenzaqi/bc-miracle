@@ -144,11 +144,41 @@ class C_lap_kunjungan extends Controller {
 
 	function get_daftar_customer(){
 		$tgl_tindakan=trim(@$_POST["tgl_tindakan"]);
+		
+		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+			
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
+		$lap_kunjungan_umurstart=trim(@$_POST["lap_kunjungan_umurstart"]);
+		$lap_kunjungan_umurstart=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurstart=str_replace("'", '"',$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurend=trim(@$_POST["lap_kunjungan_umurend"]);
+		$lap_kunjungan_umurend=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurend);
+		$lap_kunjungan_umurend=str_replace("'", '"',$lap_kunjungan_umurend);
+		$lap_kunjungan_tgllahir =(isset($_POST['lap_kunjungan_tgllahir']) ? @$_POST['lap_kunjungan_tgllahir'] : @$_GET['lap_kunjungan_tgllahir']);
+		$lap_kunjungan_tgllahirend =(isset($_POST['lap_kunjungan_tgllahirend']) ? @$_POST['lap_kunjungan_tgllahirend'] : @$_GET['lap_kunjungan_tgllahirend']);
+		$lap_kunjungan_tgllahirend=trim(@$_POST["lap_kunjungan_tgllahirend"]);
+		
 		//$dpaket_paket = isset($_POST['dpaket_paket']) ? $_POST['dpaket_paket'] : 0;*/
 		//$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan->get_daftar_customer($tgl_tindakan,$start,$end);
+		$result = $this->m_lap_kunjungan->get_daftar_customer($lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $tgl_tindakan,$start,$end);
 		echo $result;
 	}
 	

@@ -502,9 +502,49 @@ Ext.onReady(function(){
 	////////////////////////////////
 	
 	lap_kunjunganListEditorGrid.on('rowclick', function (lap_kunjunganListEditorGrid, rowIndex, eventObj) {
+		var lap_kunjungan_id_detail=null;
+		var lap_kunjungan_tgl_start_detail=null;
+		var lap_kunjungan_tgl_end_detail=null;
+		var lap_kunjungan_kelamin_detail=null;
+		var lap_kunjungan_member_detail=null;
+		var lap_kunjungan_cust_detail=null;
+		var lap_kunjungan_umurstart_detail=null;
+		var lap_kunjungan_umurend_detail=null;
+		var lap_kunjungan_tgllahir_detail_date="";
+		var lap_kunjungan_tgllahir_detail_dateEnd="";
+		//var report_tindakan_dokter_detail=null;
+
+		
+		
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_detail=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_detail=lap_kunjungan_custSearchField.getValue();}
+		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_detail=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_detail=lap_kunjungan_kelaminSearchField.getValue();}
+		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_detail=lap_kunjungan_tglStartSearchField.getValue();}
+		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_detail=lap_kunjungan_tglEndSearchField.getValue();}
+		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_detail=lap_kunjungan_umurstartSearchField.getValue();}
+		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_detail=lap_kunjungan_umurendSearchField.getValue();}	
+		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_detail_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_detail_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+	
+	
+	
         var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
 		var today=new Date().format('Y-m-d');
-		detail_customerStore.reload({params : {tgl_tindakan : recordMaster.get("tgl_tindakan").format('Y-m-d')}});
+		detail_customerStore.reload({params : {
+			tgl_tindakan : recordMaster.get("tgl_tindakan").format('Y-m-d'),
+			lap_kunjungan_id	:	lap_kunjungan_id_detail, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_detail,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_detail,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_detail,
+			lap_kunjungan_member : lap_kunjungan_member_detail,
+			lap_kunjungan_cust : lap_kunjungan_cust_detail,
+			lap_kunjungan_umurstart : lap_kunjungan_umurstart_detail,
+			lap_kunjungan_umurend : lap_kunjungan_umurend_detail,
+			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_detail_date, 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd 
+			
+			}});
     });
 	
 	////////////////////////
@@ -656,6 +696,30 @@ Ext.onReady(function(){
 		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_search=lap_kunjungan_umurendSearchField.getValue();}	
 		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_search_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
 		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_search_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		
+		/*untuk detail pengunjung*/
+		var lap_kunjungan_id_detail=null;
+		var lap_kunjungan_tgl_start_detail=null;
+		var lap_kunjungan_tgl_end_detail=null;
+		var lap_kunjungan_kelamin_detail=null;
+		var lap_kunjungan_member_detail=null;
+		var lap_kunjungan_cust_detail=null;
+		var lap_kunjungan_umurstart_detail=null;
+		var lap_kunjungan_umurend_detail=null;
+		var lap_kunjungan_tgllahir_detail_date="";
+		var lap_kunjungan_tgllahir_detail_dateEnd="";
+		
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_detail=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_detail=lap_kunjungan_custSearchField.getValue();}
+		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_detail=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_detail=lap_kunjungan_kelaminSearchField.getValue();}
+		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_detail=lap_kunjungan_tglStartSearchField.getValue();}
+		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_detail=lap_kunjungan_tglEndSearchField.getValue();}
+		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_detail=lap_kunjungan_umurstartSearchField.getValue();}
+		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_detail=lap_kunjungan_umurendSearchField.getValue();}	
+		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_detail_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_detail_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		/*end*/
 
 		// change the store parameters
 		lap_kunjunganDataStore.baseParams = {
@@ -703,12 +767,28 @@ Ext.onReady(function(){
 			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd 		
 			//trawat_dokter	:	report_tindakan_dokter_search,
 		};
+		var today=new Date().format('Y-m-d');
+		var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
+		detail_customerStore.reload({params : {
+			tgl_tindakan : today,
+			lap_kunjungan_id	:	lap_kunjungan_id_detail, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_detail,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_detail,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_detail,
+			lap_kunjungan_member : lap_kunjungan_member_detail,
+			lap_kunjungan_cust : lap_kunjungan_cust_detail,
+			lap_kunjungan_umurstart : lap_kunjungan_umurstart_detail,
+			lap_kunjungan_umurend : lap_kunjungan_umurend_detail,
+			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_detail_date, 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd 
+			
+			}});
 		
 		// Cause the datastore to do another query : 
 		lap_kunjunganDataStore.reload({params: {start: 0, limit: 31}});
 		lap_totalkunjungan_DataStore.reload({params: {start: 0, limit: 31}});
 		lap_average_kunjungan_DataStore.reload({params: {start: 0, limit: 31}});
-		//detail_customerStore.load({params: {start: 0, limit: 31}});
+		detail_customerStore.load({params: {start: 0, limit: 0}});
 		
 		}
 		else {
@@ -945,7 +1025,7 @@ Ext.onReady(function(){
 		lap_kunjungan_custSearchField.setValue('Semua');
 		lap_kunjungan_idSearchField.setValue(null);
 		lap_kunjungan_tglStartSearchField.reset();
-		lap_kunjungan_tglStartSearchField.setValue(null);
+		lap_kunjungan_tglStartSearchField.setValue(today);
 		lap_kunjungan_tglEndSearchField.reset();
 		lap_kunjungan_tglEndSearchField.setValue(today);
 		lap_kunjungan_umurstartSearchField.reset();
