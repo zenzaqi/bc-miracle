@@ -305,17 +305,18 @@ Ext.onReady(function(){
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
-		},'-',{
+		}/*,'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			handler: stok_mutasi_reset_search,
 			iconCls:'icon-refresh'
-		}/*,'-',{
+		}*/
+		,'-',{
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
 			handler: stok_mutasi_export_excel
-		}*/, '-',{
+		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -819,7 +820,6 @@ Ext.onReady(function(){
 		var stok_mutasi_masuk_print=null;	
 		var stok_mutasi_keluar_print=null;	
 		var win;    
-		var stok_mutasi_jumlah_print=null;			
 
 		if(stok_mutasi_DataStore.baseParams.query!==null){searchquery = stok_mutasi_DataStore.baseParams.query;}
 		
@@ -903,32 +903,53 @@ Ext.onReady(function(){
 	function stok_mutasi_export_excel(){
 		var searchquery = "";
 		var produk_id_2excel=null;
-		var produk_nama_2excel=null;
-		var satuan_id_2excel=null;
-		var satuan_nama_2excel=null;
-		var stok_saldo_2excel=null;
+		var group1_id_2excel=null;
+		var tanggal_start_2excel=null;
+		var tanggal_end_2excel=null;
+		var opsi_satuan_2excel=null;
+		var opsi_produk_2excel=null;
+		var gudang_2excel=null;
+		var stok_mutasi_jumlah_2excel=null;
+		var stok_mutasi_stok_akhir_2excel=null;
+		var stok_mutasi_stok_awal_2excel=null;
+		var stok_mutasi_masuk_2excel=null;
+		var stok_mutasi_keluar_2excel=null;
 		var win;              
+			
 		// check if we do have some search data...
 		if(stok_mutasi_DataStore.baseParams.query!==null){searchquery = stok_mutasi_DataStore.baseParams.query;}
 		if(stok_mutasi_DataStore.baseParams.produk_id!==null){produk_id_2excel = stok_mutasi_DataStore.baseParams.produk_id;}
-		if(stok_mutasi_DataStore.baseParams.produk_nama!==null){produk_nama_2excel = stok_mutasi_DataStore.baseParams.produk_nama;}
-		if(stok_mutasi_DataStore.baseParams.satuan_id!==null){satuan_id_2excel = stok_mutasi_DataStore.baseParams.satuan_id;}
-		if(stok_mutasi_DataStore.baseParams.satuan_nama!==null){satuan_nama_2excel = stok_mutasi_DataStore.baseParams.satuan_nama;}
-		if(stok_mutasi_DataStore.baseParams.stok_saldo!==null){stok_saldo_2excel = stok_mutasi_DataStore.baseParams.stok_saldo;}
-
+		if(stok_mutasi_DataStore.baseParams.group1_id!==null){group1_id_2excel = stok_mutasi_DataStore.baseParams.group1_id;}
+		if(stok_mutasi_DataStore.baseParams.tanggal_start!==null){tanggal_start_2excel = stok_mutasi_DataStore.baseParams.tanggal_start;}
+		if(stok_mutasi_DataStore.baseParams.tanggal_end!==null){tanggal_end_2excel = stok_mutasi_DataStore.baseParams.tanggal_end;}
+		if(stok_mutasi_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_2excel = stok_mutasi_DataStore.baseParams.opsi_satuan;}
+		if(stok_mutasi_DataStore.baseParams.opsi_produk!==null){opsi_produk_2excel = stok_mutasi_DataStore.baseParams.opsi_produk;}
+		if(stok_mutasi_DataStore.baseParams.gudang!==null){gudang_2excel = stok_mutasi_DataStore.baseParams.gudang;}
+		if(stok_mutasi_DataStore.baseParams.mutasi_jumlah!==null){stok_mutasi_jumlah_2excel=stok_mutasi_DataStore.baseParams.mutasi_jumlah;}
+		if(stok_mutasi_DataStore.baseParams.stok_akhir!==null){stok_mutasi_stok_akhir_2excel=stok_mutasi_DataStore.baseParams.stok_akhir;}
+		if(stok_mutasi_DataStore.baseParams.stok_awal!==null){stok_mutasi_stok_awal_2excel=stok_mutasi_DataStore.baseParams.stok_awal;}
+		if(stok_mutasi_DataStore.baseParams.stok_masuk!==null){stok_mutasi_masuk_2excel=stok_mutasi_DataStore.baseParams.stok_masuk;}
+		if(stok_mutasi_DataStore.baseParams.stok_keluar!==null){stok_mutasi_keluar_2excel=stok_mutasi_DataStore.baseParams.stok_keluar;}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_stok_mutasi&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			produk_id : produk_id_2excel,
-			produk_nama : produk_nama_2excel,
-			satuan_id : satuan_id_2excel,
-			satuan_nama : satuan_nama_2excel,
-			stok_saldo : stok_saldo_2excel,
-		  	currentlisting: stok_mutasi_DataStore.baseParams.task // this tells us if we are searching or not
+		  	query			: searchquery,                    		
+			produk_id		: produk_id_2excel, 
+			group1_id		: group1_id_2excel,
+			tanggal_start	: tanggal_start_2excel, 
+			tanggal_end		: tanggal_end_2excel,
+			opsi_satuan		: opsi_satuan_2excel,
+			gudang			: gudang_2excel,
+			opsi_produk		: opsi_produk_2excel,
+			mutasi_jumlah	: 	stok_mutasi_jumlah_2excel,
+			stok_akhir	: stok_mutasi_stok_akhir_2excel,
+			stok_awal : stok_mutasi_stok_awal_2excel,
+			stok_masuk : stok_mutasi_masuk_2excel,
+			stok_keluar : stok_mutasi_keluar_2excel,
+		  	currentlisting	: stok_mutasi_DataStore.baseParams.task 
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);

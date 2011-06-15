@@ -524,39 +524,39 @@ Ext.onReady(function(){
 		rawat_aktifField.reset();
 		rawat_aktifField.setValue('Aktif');
 		rawat_aktif_thField.reset();
-		rawat_aktif_thField.setValue(true);
+		rawat_aktif_thField.setValue(false);
 		rawat_aktif_kiField.reset();
-		rawat_aktif_kiField.setValue(true);
+		rawat_aktif_kiField.setValue(false);
 		rawat_aktif_hrField.reset();
-		rawat_aktif_hrField.setValue(true);
+		rawat_aktif_hrField.setValue(false);
 		rawat_aktif_tpField.reset();
-		rawat_aktif_tpField.setValue(true);
+		rawat_aktif_tpField.setValue(false);
 		rawat_aktif_dpsField.reset();
-		rawat_aktif_dpsField.setValue(true);
+		rawat_aktif_dpsField.setValue(false);
 		rawat_aktif_jktField.reset();
-		rawat_aktif_jktField.setValue(true);
+		rawat_aktif_jktField.setValue(false);
 		rawat_aktif_mtaField.reset();
-		rawat_aktif_mtaField.setValue(true);
+		rawat_aktif_mtaField.setValue(false);
 		rawat_aktif_blpnField.reset();
-		rawat_aktif_blpnField.setValue(true);
+		rawat_aktif_blpnField.setValue(false);
 		rawat_aktif_kutaField.reset();
-		rawat_aktif_kutaField.setValue(true);
+		rawat_aktif_kutaField.setValue(false);
 		rawat_aktif_btmField.reset();
-		rawat_aktif_btmField.setValue(true);
+		rawat_aktif_btmField.setValue(false);
 		rawat_aktif_mksField.reset();
-		rawat_aktif_mksField.setValue(true);
+		rawat_aktif_mksField.setValue(false);
 		rawat_aktif_mdnField.reset();
-		rawat_aktif_mdnField.setValue(true);
+		rawat_aktif_mdnField.setValue(false);
 		rawat_aktif_lbkField.reset();
-		rawat_aktif_lbkField.setValue(true);
+		rawat_aktif_lbkField.setValue(false);
 		rawat_aktif_mndField.reset();
-		rawat_aktif_mndField.setValue(true);
+		rawat_aktif_mndField.setValue(false);
 		rawat_aktif_ygkField.reset();
-		rawat_aktif_ygkField.setValue(true);		
+		rawat_aktif_ygkField.setValue(false);		
 		rawat_aktif_mlgField.reset();
-		rawat_aktif_mlgField.setValue(true);
+		rawat_aktif_mlgField.setValue(false);
 		rawat_aktif_checkField.reset();
-		rawat_aktif_checkField.setValue(true);
+		rawat_aktif_checkField.setValue(false);
 		combo_rawat_produk.reset();
 		
 		//cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
@@ -1774,7 +1774,16 @@ Ext.onReady(function(){
 		id : 'rawat_aktif_thField',
 		boxLabel: 'TH',
 		maxLength: 250,
-		name: 'rawat_aktif_th'
+		name: 'rawat_aktif_th',
+		handler: function(node,checked){
+			if (checked) {
+				rawat_aktifField.setValue('Aktif');
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				rawat_aktifField.setValue('Tidak Aktif');
+			}
+		}
 	});
 	
 	rawat_aktif_kiField=new Ext.form.Checkbox({
@@ -2288,7 +2297,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rawat_durasiField, rawat_pointField, rawat_kreditField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField, rawat_aktifField, rawat_idField, rawat_aktifGroup] 
+				items: [rawat_durasiField, rawat_pointField, rawat_kreditField, rawat_kontribusiField, rawat_gudangField, rawat_keteranganField,  rawat_idField, rawat_aktifGroup] 
 			}
 			]
 	

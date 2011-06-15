@@ -521,39 +521,39 @@ Ext.onReady(function(){
 		produk_harga_checkField.setValue(false);
 		
 		produk_aktif_thField.reset();
-		produk_aktif_thField.setValue(true);
+		produk_aktif_thField.setValue(false);
 		produk_aktif_kiField.reset();
-		produk_aktif_kiField.setValue(true);
+		produk_aktif_kiField.setValue(false);
 		produk_aktif_hrField.reset();
-		produk_aktif_hrField.setValue(true);
+		produk_aktif_hrField.setValue(false);
 		produk_aktif_tpField.reset();
-		produk_aktif_tpField.setValue(true);
+		produk_aktif_tpField.setValue(false);
 		produk_aktif_dpsField.reset();
-		produk_aktif_dpsField.setValue(true);
+		produk_aktif_dpsField.setValue(false);
 		produk_aktif_jktField.reset();
-		produk_aktif_jktField.setValue(true);
+		produk_aktif_jktField.setValue(false);
 		produk_aktif_mtaField.reset();
-		produk_aktif_mtaField.setValue(true);
+		produk_aktif_mtaField.setValue(false);
 		produk_aktif_blpnField.reset();
-		produk_aktif_blpnField.setValue(true);
+		produk_aktif_blpnField.setValue(false);
 		produk_aktif_kutaField.reset();
-		produk_aktif_kutaField.setValue(true);
+		produk_aktif_kutaField.setValue(false);
 		produk_aktif_btmField.reset();
-		produk_aktif_btmField.setValue(true);
+		produk_aktif_btmField.setValue(false);
 		produk_aktif_mksField.reset();
-		produk_aktif_mksField.setValue(true);
+		produk_aktif_mksField.setValue(false);
 		produk_aktif_mdnField.reset();
-		produk_aktif_mdnField.setValue(true);
+		produk_aktif_mdnField.setValue(false);
 		produk_aktif_lbkField.reset();
-		produk_aktif_lbkField.setValue(true);
+		produk_aktif_lbkField.setValue(false);
 		produk_aktif_mndField.reset();
-		produk_aktif_mndField.setValue(true);
+		produk_aktif_mndField.setValue(false);
 		produk_aktif_ygkField.reset();
-		produk_aktif_ygkField.setValue(true);		
+		produk_aktif_ygkField.setValue(false);		
 		produk_aktif_mlgField.reset();
-		produk_aktif_mlgField.setValue(true);
+		produk_aktif_mlgField.setValue(false);
 		produk_aktif_checkField.reset();
-		produk_aktif_checkField.setValue(true);
+		produk_aktif_checkField.setValue(false);
 		
 		combo_produk_satuan.setDisabled(false);
 		combo_produk_nilai.setDisabled(false);
@@ -2036,7 +2036,16 @@ Ext.onReady(function(){
 		id : 'produk_aktif_thField',
 		boxLabel: 'TH',
 		maxLength: 250,
-		name: 'produk_aktif_th'
+		name: 'produk_aktif_th',
+		handler: function(node,checked){
+			if (checked) {
+				produk_aktifField.setValue('Aktif');
+				//Ext.Msg.alert('Status', 'Changes saved successfully.');
+			}
+			else {
+				produk_aktifField.setValue('Tidak Aktif');
+			}
+		}
 	});
 	
 	produk_aktif_kiField=new Ext.form.Checkbox({
@@ -2299,7 +2308,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_pointField, produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_aktifField, produk_idField, produk_aktifGroup] 
+				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_pointField, produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_idField, produk_aktifGroup] 
 			}
 			]
 	

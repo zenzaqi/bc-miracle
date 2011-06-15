@@ -143,19 +143,24 @@ class C_stok_mutasi extends Controller {
 	function stok_mutasi_export_excel(){
 		//POST varibale here
 		$produk_id=trim(@$_POST["produk_id"]);
-		$produk_nama=trim(@$_POST["produk_nama"]);
-		$produk_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_nama);
-		$produk_nama=str_replace("'", "\'",$produk_nama);
-		$satuan_id=trim(@$_POST["satuan_id"]);
-		$satuan_nama=trim(@$_POST["satuan_nama"]);
-		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
-		$satuan_nama=str_replace("'", "\'",$satuan_nama);
-		$stok_saldo=trim(@$_POST["stok_saldo"]);
+		$group1_id=trim(@$_POST["group1_id"]);
+		$tanggal_start=trim(@$_POST["tanggal_start"]);
+		$tanggal_end=trim(@$_POST["tanggal_end"]);
+		$opsi_satuan=trim(@$_POST["opsi_satuan"]);
+		$opsi_produk=trim(@$_POST["opsi_produk"]);
+		$gudang=trim(@$_POST["gudang"]);
+		$mutasi_jumlah=trim(@$_POST["mutasi_jumlah"]);
+		$stok_akhir=trim(@$_POST["stok_akhir"]);
+		$stok_awal=trim(@$_POST["stok_awal"]);
+		$stok_masuk=trim(@$_POST["stok_masuk"]);
+		$stok_keluar=trim(@$_POST["stok_keluar"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
-		
-		$query = $this->m_stok_mutasi->stok_mutasi_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter);
-		
+
+		$query = $this->m_stok_mutasi->stok_mutasi_export_excel($gudang, $produk_id, $group1_id, $opsi_produk, 
+																$opsi_satuan, $tanggal_start, $tanggal_end, 
+																$mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar,$option,$filter);
+		$this->load->plugin('to_excel');
 		to_excel($query,"stok_mutasi"); 
 		echo '1';
 			

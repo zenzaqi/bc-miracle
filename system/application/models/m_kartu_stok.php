@@ -1388,11 +1388,14 @@ class M_kartu_stok extends Model{
 		}
 
 		//function  for export to excel
-		function kartu_stok_export_excel($produk_id ,$produk_nama ,$satuan_id ,$satuan_nama ,$stok_saldo ,$option,$filter){
+		function kartu_stok_export_excel($produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter){
 			//full query
-			$sql="SELECT * from kartu_stok
+			$sql="SELECT kartu_stok.tanggal, kartu_stok.no_bukti, kartu_stok.keterangan, kartu_stok.masuk, kartu_stok.keluar  
+					from kartu_stok
+					LEFT JOIN produk on (produk.produk_id=kartu_stok.produk_id)
+					LEFT JOIN satuan on (satuan.satuan_id = kartu_stok.satuan_id)
 				  	WHERE gudang_id='".$gudang."'
-				  	AND produk_id='".$produk_id."'
+				  	AND kartu_stok.produk_id='".$produk_id."'
 				 	AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
 					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
 					ORDER BY tanggal ASC";
