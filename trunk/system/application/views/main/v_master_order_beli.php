@@ -238,6 +238,41 @@ Ext.onReady(function(){
 		if(order_statusField.getValue()!== null){order_status_create = order_statusField.getValue();}
 		if(order_status_accField.getValue()!== null){order_status_acc_create = order_status_accField.getValue();}
 
+		var dorder_id = [];
+	    var dorder_produk = [];
+	    var dorder_satuan = [];
+	    var dorder_jumlah = [];
+	    var dorder_harga = [];
+	    var dorder_diskon = [];
+
+	    var dcount = detail_order_beli_DataStore.getCount() - 1;
+
+        if(detail_order_beli_DataStore.getCount()>0){
+            for(i=0; i<detail_order_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==undefined
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==0
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_satuan!==''
+				   && detail_order_beli_DataStore.getAt(i).data.dorder_jumlah>0){
+
+                  	dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
+					dorder_produk.push(detail_order_beli_DataStore.getAt(i).data.dorder_produk);
+                   	dorder_satuan.push(detail_order_beli_DataStore.getAt(i).data.dorder_satuan);
+					dorder_jumlah.push(detail_order_beli_DataStore.getAt(i).data.dorder_jumlah);
+					dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
+					dorder_diskon.push(detail_order_beli_DataStore.getAt(i).data.dorder_diskon);
+                }
+            }
+
+			var encoded_array_dorder_id = Ext.encode(dorder_id);
+			var encoded_array_dorder_produk = Ext.encode(dorder_produk);
+			var encoded_array_dorder_satuan = Ext.encode(dorder_satuan);
+			var encoded_array_dorder_jumlah = Ext.encode(dorder_jumlah);
+			var encoded_array_dorder_harga = Ext.encode(dorder_harga);
+			var encoded_array_dorder_diskon = Ext.encode(dorder_diskon);
+	    }
+	    
 		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=get_action',
@@ -255,13 +290,22 @@ Ext.onReady(function(){
 				order_keterangan	: order_keterangan_create,
 				order_status		: order_status_create,
 				order_status_acc	: order_status_acc_create,
-				cetak_order			: cetak_order
+				cetak_order			: cetak_order,
+				dorder_id			: encoded_array_dorder_id,
+				dorder_produk		: encoded_array_dorder_produk,
+				dorder_satuan		: encoded_array_dorder_satuan,
+				dorder_jumlah		: encoded_array_dorder_jumlah,
+				dorder_harga		: encoded_array_dorder_harga,
+				dorder_diskon		: encoded_array_dorder_diskon
 			},
 			success: function(response){
 				var result=eval(response.responseText);
 				if(result!==0){
 						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
-						detail_order_beli_insert(result, opsi)
+						if(opsi=='print'){
+							master_order_beli_cetak_faktur(result);
+						}
+						master_order_beli_DataStore.reload()
 						master_order_beli_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -1745,94 +1789,6 @@ Ext.onReady(function(){
 
 	}
 	//eof
-
-
-
-
-	//function for insert detail
-	function detail_order_beli_insert(pkid,opsi){
-        var dorder_id = [];
-        var dorder_produk = [];
-        var dorder_satuan = [];
-        var dorder_jumlah = [];
-        var dorder_harga = [];
-        var dorder_diskon = [];
-
-        var dcount = detail_order_beli_DataStore.getCount() - 1;
-
-        if(detail_order_beli_DataStore.getCount()>0){
-            for(i=0; i<detail_order_beli_DataStore.getCount();i++){
-                if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==undefined
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==''
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_produk!==0
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_satuan!==''
-				   && detail_order_beli_DataStore.getAt(i).data.dorder_jumlah>0){
-
-                  	dorder_id.push(detail_order_beli_DataStore.getAt(i).data.dorder_id);
-					dorder_produk.push(detail_order_beli_DataStore.getAt(i).data.dorder_produk);
-                   	dorder_satuan.push(detail_order_beli_DataStore.getAt(i).data.dorder_satuan);
-					dorder_jumlah.push(detail_order_beli_DataStore.getAt(i).data.dorder_jumlah);
-					dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
-					dorder_diskon.push(detail_order_beli_DataStore.getAt(i).data.dorder_diskon);
-                }
-            }
-
-			var encoded_array_dorder_id = Ext.encode(dorder_id);
-			var encoded_array_dorder_produk = Ext.encode(dorder_produk);
-			var encoded_array_dorder_satuan = Ext.encode(dorder_satuan);
-			var encoded_array_dorder_jumlah = Ext.encode(dorder_jumlah);
-			var encoded_array_dorder_harga = Ext.encode(dorder_harga);
-			var encoded_array_dorder_diskon = Ext.encode(dorder_diskon);
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_master_order_beli&m=detail_detail_order_beli_insert',
-				params:{
-					dorder_id		: encoded_array_dorder_id,
-					dorder_master	: pkid,
-					dorder_produk	: encoded_array_dorder_produk,
-					dorder_satuan	: encoded_array_dorder_satuan,
-					dorder_jumlah	: encoded_array_dorder_jumlah,
-					dorder_harga	: encoded_array_dorder_harga,
-					dorder_diskon	: encoded_array_dorder_diskon
-				},
-				success:function(response){
-					var result=eval(response.responseText);
-					if(result!='0'){
-						if(opsi=='print'){
-							master_order_beli_cetak_faktur(pkid);
-						}
-						master_order_beli_DataStore.reload()
-					}else{
-						Ext.MessageBox.hide();
-						var result=response.responseText;
-						Ext.MessageBox.show({
-						   title: 'Error',
-						   msg: 'Tidak bisa terhubung dengan database server',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'database',
-						   icon: Ext.MessageBox.ERROR
-						});
-					}
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-        }
-	}
-	//eof
-
 
 	/* Function for Delete Confirm of detail */
 	function detail_order_beli_confirm_delete(){

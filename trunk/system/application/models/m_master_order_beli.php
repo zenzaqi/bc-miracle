@@ -351,7 +351,7 @@ class M_master_order_beli extends Model{
 				$this->db->query($sql);
 			}
 			
-			return '1';
+			return $dorder_master;
           }
 		}
 		//end of function

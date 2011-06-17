@@ -1,4 +1,4 @@
-<?
+<?php
 /* 	These code was generated using phpCIGen v 0.1.b (1/08/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
@@ -15,7 +15,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-</head>
 <style type="text/css">
         p { width:650px; }
 		.search-item {
@@ -42,6 +41,7 @@
 			clear:none;
 		}
     </style>
+
 <script>
 /* declare function */
 var master_terima_beli_DataStore;
@@ -228,6 +228,74 @@ Ext.onReady(function(){
 		if(terima_tanggalField.getValue()!== ""){terima_tanggal_create_date = terima_tanggalField.getValue().format('Y-m-d');}
 		if(terima_keteranganField.getValue()!== null){terima_keterangan_create = terima_keteranganField.getValue();}
 		if(terima_statusField.getValue()!== null){terima_status_create = terima_statusField.getValue();}
+
+		var dterima_id = [];
+        var dterima_produk = [];
+        var dterima_satuan = [];
+        var dterima_jumlah = [];
+
+        if(detail_terima_beli_DataStore.getCount()>0){
+            for(i=0; i<detail_terima_beli_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_terima_beli_DataStore.getAt(i).data.dterima_produk))
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==undefined
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==''
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==0
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_satuan!==0
+				   && detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah>0){
+
+					if(detail_terima_beli_DataStore.getAt(i).data.dterima_id==undefined ||
+					   detail_terima_beli_DataStore.getAt(i).data.dterima_id==''){
+						detail_terima_beli_DataStore.getAt(i).data.dterima_id=0;
+					}
+
+                  	dterima_id.push(detail_terima_beli_DataStore.getAt(i).data.dterima_id);
+					dterima_produk.push(detail_terima_beli_DataStore.getAt(i).data.dterima_produk);
+                   	dterima_satuan.push(detail_terima_beli_DataStore.getAt(i).data.dterima_satuan);
+					dterima_jumlah.push(detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah);
+					//dterima_harga.push(detail_terima_beli_DataStore.getAt(i).data.dterima_harga);
+					//dterima_diskon.push(detail_terima_beli_DataStore.getAt(i).data.dterima_diskon);
+
+                }
+            }
+
+			var encoded_array_dterima_id = Ext.encode(dterima_id);
+			var encoded_array_dterima_produk = Ext.encode(dterima_produk);
+			var encoded_array_dterima_satuan = Ext.encode(dterima_satuan);
+			var encoded_array_dterima_jumlah = Ext.encode(dterima_jumlah);
+			//var encoded_array_dterima_harga = Ext.encode(dterima_harga);
+			//var encoded_array_dterima_diskon = Ext.encode(dterima_diskon);
+
+
+        }
+
+        var dtbonus_id = [];
+        var dtbonus_produk = [];
+        var dtbonus_satuan = [];
+        var dtbonus_jumlah = [];
+
+        if(detail_terima_bonus_DataStore.getCount()>0){
+            for(i=0; i<detail_terima_bonus_DataStore.getCount();i++){
+                if((/^\d+$/.test(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk))
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==undefined
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==''
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==0
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan!==0
+				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah>0){
+
+                  	dtbonus_id.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_id);
+					dtbonus_produk.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk);
+                   	dtbonus_satuan.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan);
+					dtbonus_jumlah.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah);
+                }
+            }
+
+			var encoded_array_dtbonus_id = Ext.encode(dtbonus_id);
+			var encoded_array_dtbonus_produk = Ext.encode(dtbonus_produk);
+			var encoded_array_dtbonus_satuan = Ext.encode(dtbonus_satuan);
+			var encoded_array_dtbonus_jumlah = Ext.encode(dtbonus_jumlah);
+
+       	}
+		
 		
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
@@ -242,9 +310,20 @@ Ext.onReady(function(){
 				terima_pengirim		: terima_pengirim_create,
 				terima_tanggal		: terima_tanggal_create_date,
 				terima_keterangan	: terima_keterangan_create,
-				terima_gudang	: terima_gudang_create,
+				terima_gudang		: terima_gudang_create,
 				terima_status		: terima_status_create,
-				cetak				: cetak
+				cetak				: cetak,
+				dterima_id			: encoded_array_dterima_id,
+				dterima_produk		: encoded_array_dterima_produk,
+				dterima_satuan		: encoded_array_dterima_satuan,
+				dterima_jumlah		: encoded_array_dterima_jumlah,
+				//dterima_harga	: encoded_array_dterima_harga,
+				//dterima_diskon	: encoded_array_dterima_diskon,
+				dtbonus_id		: encoded_array_dtbonus_id,
+				dtbonus_produk	: encoded_array_dtbonus_produk,
+				dtbonus_satuan	: encoded_array_dtbonus_satuan,
+				dtbonus_jumlah	: encoded_array_dtbonus_jumlah
+				
 			},
 			success: function(response){
 				var result=eval(response.responseText);
@@ -258,7 +337,10 @@ Ext.onReady(function(){
 						});
 				}
 				else if(result!==0){
-						detail_terima_beli_insert(result,opsi);
+						if(opsi=='print'){
+							master_terima_beli_cetak_faktur(result);
+						}
+						master_terima_beli_DataStore.reload();
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 						//cbo_terima_gudang_DataStore.reload();
 						master_terima_beli_createWindow.hide();
@@ -1621,105 +1703,7 @@ Ext.onReady(function(){
 	}
 	//eof
 
-	//function for insert detail
-	function detail_terima_beli_insert(pkid, opsi){
 
-		var dterima_id = [];
-        var dterima_produk = [];
-        var dterima_satuan = [];
-        var dterima_jumlah = [];
-
-        if(detail_terima_beli_DataStore.getCount()>0){
-            for(i=0; i<detail_terima_beli_DataStore.getCount();i++){
-                if((/^\d+$/.test(detail_terima_beli_DataStore.getAt(i).data.dterima_produk))
-				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==undefined
-				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==''
-				   && detail_terima_beli_DataStore.getAt(i).data.dterima_produk!==0
-				   && detail_terima_beli_DataStore.getAt(i).data.dterima_satuan!==0
-				   && detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah>0){
-
-					if(detail_terima_beli_DataStore.getAt(i).data.dterima_id==undefined ||
-					   detail_terima_beli_DataStore.getAt(i).data.dterima_id==''){
-						detail_terima_beli_DataStore.getAt(i).data.dterima_id=0;
-					}
-
-                  	dterima_id.push(detail_terima_beli_DataStore.getAt(i).data.dterima_id);
-					dterima_produk.push(detail_terima_beli_DataStore.getAt(i).data.dterima_produk);
-                   	dterima_satuan.push(detail_terima_beli_DataStore.getAt(i).data.dterima_satuan);
-					dterima_jumlah.push(detail_terima_beli_DataStore.getAt(i).data.dterima_jumlah);
-					//dterima_harga.push(detail_terima_beli_DataStore.getAt(i).data.dterima_harga);
-					//dterima_diskon.push(detail_terima_beli_DataStore.getAt(i).data.dterima_diskon);
-
-                }
-            }
-
-			var encoded_array_dterima_id = Ext.encode(dterima_id);
-			var encoded_array_dterima_produk = Ext.encode(dterima_produk);
-			var encoded_array_dterima_satuan = Ext.encode(dterima_satuan);
-			var encoded_array_dterima_jumlah = Ext.encode(dterima_jumlah);
-			//var encoded_array_dterima_harga = Ext.encode(dterima_harga);
-			//var encoded_array_dterima_diskon = Ext.encode(dterima_diskon);
-
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_insert',
-				params:{
-					dterima_id		: encoded_array_dterima_id,
-					dterima_master	: pkid,
-					dterima_produk	: encoded_array_dterima_produk,
-					dterima_satuan	: encoded_array_dterima_satuan,
-					dterima_jumlah	: encoded_array_dterima_jumlah//,
-					//dterima_harga	: encoded_array_dterima_harga,
-					//dterima_diskon	: encoded_array_dterima_diskon
-				},
-				success:function(response){
-					var result=eval(response.responseText);
-					detail_terima_bonus_insert(pkid, opsi)
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-        }
-
-	}
-	//eof
-
-	//function for purge detail
-	function detail_terima_beli_purge(pkid,opsi){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_beli_purge',
-			params:{ master_id: pkid },
-			timeout: 60000,
-			success: function(response){
-				var result=eval(response.responseText);
-				detail_terima_beli_insert(pkid);
-				detail_terima_bonus_purge(pkid,opsi);
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Tidak bisa terhubung dengan database server',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});
-			}
-		});
-	}
-	//eof
 
 	/* Function for Delete Confirm of detail */
 	function detail_terima_beli_confirm_delete(){
@@ -1967,131 +1951,6 @@ Ext.onReady(function(){
 	}
 	//eof
 
-	//function for insert detail
-	function detail_terima_bonus_insert(pkid, opsi){
-		var dtbonus_id = [];
-        var dtbonus_produk = [];
-        var dtbonus_satuan = [];
-        var dtbonus_jumlah = [];
-
-        if(detail_terima_bonus_DataStore.getCount()>0){
-            for(i=0; i<detail_terima_bonus_DataStore.getCount();i++){
-                if((/^\d+$/.test(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk))
-				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==undefined
-				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==''
-				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk!==0
-				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan!==0
-				   && detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah>0){
-
-                  	dtbonus_id.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_id);
-					dtbonus_produk.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_produk);
-                   	dtbonus_satuan.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_satuan);
-					dtbonus_jumlah.push(detail_terima_bonus_DataStore.getAt(i).data.dtbonus_jumlah);
-                }
-            }
-
-			var encoded_array_dtbonus_id = Ext.encode(dtbonus_id);
-			var encoded_array_dtbonus_produk = Ext.encode(dtbonus_produk);
-			var encoded_array_dtbonus_satuan = Ext.encode(dtbonus_satuan);
-			var encoded_array_dtbonus_jumlah = Ext.encode(dtbonus_jumlah);
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_insert',
-				params:{
-					dtbonus_id		: encoded_array_dtbonus_id,
-					dtbonus_master	: pkid,
-					dtbonus_produk	: encoded_array_dtbonus_produk,
-					dtbonus_satuan	: encoded_array_dtbonus_satuan,
-					dtbonus_jumlah	: encoded_array_dtbonus_jumlah
-				},
-				success:function(response){
-					var result=eval(response.responseText);
-					if(opsi=='print'){
-						master_terima_beli_cetak_faktur(pkid);
-					}
-
-					//cek semua order terpenuhi
-					Ext.Ajax.request({
-						waitMsg: 'Please wait...',
-						url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
-						params:{
-							master_id : pkid
-						},
-						timeout: 5000,
-						success: function(response){
-							var result=eval(response.responseText);
-							master_terima_beli_DataStore.reload();
-						}
-					});
-
-					master_terima_beli_DataStore.reload()
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-       	}else{
-			if(opsi=='print'){
-				master_terima_beli_cetak_faktur(pkid);
-			}
-
-			//cek semua order terpenuhi
-			Ext.Ajax.request({
-				waitMsg: 'Please wait...',
-				url: 'index.php?c=c_master_terima_beli&m=check_all_order_done',
-				params:{
-					master_id : pkid
-				},
-				timeout: 5000,
-				success: function(response){
-					var result=eval(response.responseText);
-					master_terima_beli_DataStore.reload();
-				}
-			});
-
-			master_terima_beli_DataStore.reload()
-		}
-	}
-	//eof
-
-	//function for purge detail
-	function detail_terima_bonus_purge(pkid,opsi){
-		Ext.Ajax.request({
-			waitMsg: 'Please wait...',
-			url: 'index.php?c=c_master_terima_beli&m=detail_detail_terima_bonus_purge',
-			params:{ master_id: pkid },
-			timeout: 5000,
-			success: function(response){
-				var result=eval(response.responseText);
-				detail_terima_bonus_insert(pkid);
-				if(opsi=='print'){
-					master_terima_beli_cetak_faktur(pkid);
-				}
-				master_terima_beli_DataStore.reload();
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-				   title: 'Error',
-				   msg: 'Tidak bisa terhubung dengan database server',
-				   buttons: Ext.MessageBox.OK,
-				   animEl: 'database',
-				   icon: Ext.MessageBox.ERROR
-				});
-			}
-		});
-	}
-	//eof
 
 	/* Function for Delete Confirm of detail */
 	function detail_terima_bonus_confirm_delete(){
@@ -2841,6 +2700,7 @@ Ext.onReady(function(){
 });
 
 	</script>
+</head>
 <body>
 <div>
 	<div class="col">
@@ -2852,3 +2712,4 @@ Ext.onReady(function(){
     </div>
 </div>
 </body>
+</html>

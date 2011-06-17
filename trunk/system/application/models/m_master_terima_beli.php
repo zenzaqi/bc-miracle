@@ -56,7 +56,8 @@ class M_master_terima_beli extends Model{
 			}else if($opsi=='faktur'){
 				$sql="SELECT * FROM vu_detail_terima_all WHERE master='".$faktur."'";
 			}
-
+			
+			//$this->firephp->log($sql);
 			$query=$this->db->query($sql);
 			if($opsi=='faktur')
 				return $query;
@@ -529,8 +530,8 @@ class M_master_terima_beli extends Model{
 						dterima_id NOT IN (".$query.")";
 				$this->db->query($sql);
 			}
-
-			return '1';
+			
+			return $dterima_master;
 
 		}
 		//end of function
