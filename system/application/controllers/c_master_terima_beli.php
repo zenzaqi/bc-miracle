@@ -43,12 +43,12 @@ class C_master_terima_beli extends Controller {
 		$info = $this->m_public_function->get_info();
 		$master=$result->row();
 		$data['data_print'] = $result->result();
-		$data['info_nama'] = $info->info_nama;
-		$data['no_bukti'] = $master->no_bukti;
-		$data['no_surat_jalan']=$master->terima_surat_jalan;
-        $data['tanggal'] = $master->tanggal;
-        $data['supplier_nama'] = $master->supplier_nama;
-		$data['order_no'] = $master->order_no;
+		$data['info_nama'] = @$info->info_nama;
+		$data['no_bukti'] = @$master->no_bukti;
+		$data['no_surat_jalan']=@$master->terima_surat_jalan;
+        $data['tanggal'] = @$master->tanggal;
+        $data['supplier_nama'] = @$master->supplier_nama;
+		$data['order_no'] = @$master->order_no;
 		$print_view=$this->load->view("main/p_faktur_terima_pembelian.php",$data,TRUE);
 		
 		if(!file_exists("print")){
@@ -217,19 +217,12 @@ class C_master_terima_beli extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_detail_terima_bonus_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_purge($master_id);
-		echo $result;
-	}
-	//eof
 	
 	//add detail
-	function detail_detail_terima_bonus_insert(){
+	function detail_detail_terima_bonus_insert($master_id){
 	//POST variable here
 		$dtbonus_id = $_POST['dtbonus_id']; 
-        $dtbonus_master=trim(@$_POST["dtbonus_master"]);
+        $dtbonus_master=$master_id;
         $dtbonus_produk = $_POST['dtbonus_produk']; 
 		$dtbonus_satuan = $_POST['dtbonus_satuan']; 
 		$dtbonus_jumlah = $_POST['dtbonus_jumlah'];
@@ -243,7 +236,7 @@ class C_master_terima_beli extends Controller {
 		$result=$this->m_master_terima_beli->detail_detail_terima_bonus_insert($array_dtbonus_id ,$dtbonus_master ,
 																			   $array_dtbonus_produk ,
 																			   $array_dtbonus_satuan ,$array_dtbonus_jumlah );
-		echo $result;
+		//echo $result;
 	}
 	
 	//for detail action
@@ -258,13 +251,6 @@ class C_master_terima_beli extends Controller {
 	}
 	//end of handler
 	
-	//purge all detail
-	function detail_detail_terima_beli_purge(){
-		$master_id = (integer) (isset($_POST['master_id']) ? @$_POST['master_id'] : @$_GET['master_id']);
-		$result=$this->m_master_terima_beli->detail_detail_terima_beli_purge($master_id);
-		echo $result;
-	}
-	//eof
 	
 	//get master id, note: not done yet
 	function get_master_id(){
@@ -274,10 +260,10 @@ class C_master_terima_beli extends Controller {
 	//
 	
 	//add detail
-	function detail_detail_terima_beli_insert(){
+	function detail_detail_terima_beli_insert($master_id){
 	//POST variable here
 		$dterima_id = $_POST['dterima_id']; 
-        $dterima_master=trim(@$_POST["dterima_master"]);
+        $dterima_master=$master_id;
         $dterima_produk = $_POST['dterima_produk']; 
 		$dterima_satuan = $_POST['dterima_satuan']; 
 		$dterima_jumlah = $_POST['dterima_jumlah'];
@@ -290,7 +276,7 @@ class C_master_terima_beli extends Controller {
 		
 		$result=$this->m_master_terima_beli->detail_detail_terima_beli_insert($array_dterima_id ,$dterima_master ,$array_dterima_produk ,
 																			  $array_dterima_satuan ,$array_dterima_jumlah );
-		echo $result;
+		return $result;
 	}
 	
 	
@@ -357,53 +343,51 @@ class C_master_terima_beli extends Controller {
 		$terima_id=trim(@$_POST["terima_id"]);
 		$terima_no=trim(@$_POST["terima_no"]);
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
-		$terima_no=str_replace("'", '"',$terima_no);
 		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
-		$terima_surat_jalan=str_replace("'", '"',$terima_surat_jalan);
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
-		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
-		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
+		$terima_pengirim=stripslashes($terima_pengirim);
 		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
-		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
+		$terima_keterangan=stripslashes($terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
 		$cetak=trim(@$_POST["cetak"]);
+		
 		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
 																		 $terima_keterangan, $terima_status,$cetak, $terima_gudang  );
+		$this->detail_detail_terima_bonus_insert($result);
+		$result=$this->detail_detail_terima_beli_insert($result);
 		echo $result;
 	}
 	
 	//function for create new record
 	function master_terima_beli_create(){
 		//POST varible here
-		//auto increment, don't accept anything from form values
 		$terima_no=trim(@$_POST["terima_no"]);
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
-		$terima_no=str_replace("'", '"',$terima_no);
-		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_gudang=trim(@$_POST["terima_gudang"]);
+		$terima_order=trim(@$_POST["terima_order"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
-		$terima_surat_jalan=str_replace("'", '"',$terima_surat_jalan);
 		$terima_pengirim=trim(@$_POST["terima_pengirim"]);
-		$terima_pengirim=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_pengirim);
-		$terima_pengirim=str_replace("'", '"',$terima_pengirim);
+		$terima_pengirim=stripslashes($terima_pengirim);
 		$terima_tanggal=trim(@$_POST["terima_tanggal"]);
 		$terima_keterangan=trim(@$_POST["terima_keterangan"]);
 		$terima_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_keterangan);
-		$terima_keterangan=str_replace("'", '"',$terima_keterangan);
+		$terima_keterangan=stripslashes($terima_keterangan);
 		$terima_status=trim(@$_POST["terima_status"]);
 		$cetak=trim(@$_POST["cetak"]);
 		
 		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
 																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status, $cetak, $terima_gudang);
+		$this->detail_detail_terima_bonus_insert($result);
+		$result=$this->detail_detail_terima_beli_insert($result);
 		echo $result;
 	}
 

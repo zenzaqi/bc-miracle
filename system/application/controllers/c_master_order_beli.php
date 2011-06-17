@@ -208,9 +208,9 @@ class C_master_order_beli extends Controller {
 	}
 	
 	//add detail
-	function detail_detail_order_beli_insert(){
+	function detail_detail_order_beli_insert($master_id){
         $dorder_id = $_POST['dorder_id']; 
-        $dorder_master=trim(@$_POST["dorder_master"]);
+        $dorder_master=$master_id;
         $dorder_produk = $_POST['dorder_produk']; 
 		$dorder_satuan = $_POST['dorder_satuan']; 
 		$dorder_jumlah = $_POST['dorder_jumlah'];
@@ -294,67 +294,55 @@ class C_master_order_beli extends Controller {
 		$order_id=trim(@$_POST["order_id"]);
 		$order_no=trim(@$_POST["order_no"]);
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
-		$order_no=str_replace(",", ",",$order_no);
-		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
 		$order_tanggal=trim(@$_POST["order_tanggal"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
-		$order_carabayar=str_replace(",", ",",$order_carabayar);
-		$order_carabayar=str_replace("'", '"',$order_carabayar);
 		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_diskon=trim(@$_POST["order_diskon"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
-		$order_keterangan=str_replace(",", ",",$order_keterangan);
-		$order_keterangan=str_replace("'", '"',$order_keterangan);
+		$order_keterangan=stripslashes($order_keterangan);
 		$order_status=trim(@$_POST["order_status"]);
 		$order_status=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status);
-		$order_status=str_replace(",", ",",$order_status);
-		$order_status=str_replace("'", '"',$order_status);
 		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
-		$order_status_acc=str_replace(",", ",",$order_status_acc);
-		$order_status_acc=str_replace("'", '"',$order_status_acc);
 		$cetak_order = trim(@$_POST["cetak_order"]);
+		
 		$result = $this->m_master_order_beli->master_order_beli_update($order_id, $order_no, $order_supplier, $order_tanggal, $order_carabayar, 
 																	   $order_diskon, $order_cashback, $order_biaya, $order_bayar, $order_keterangan,
 																	   $order_status, $order_status_acc, $cetak_order);
-		echo $result;
+		echo $this->detail_detail_order_beli_insert($result);
 	}
 	
 	//function for create new record
 	function master_order_beli_create(){
 		//POST varible here
-		//auto increment, don't accept anything from form values
 		$order_no=trim(@$_POST["order_no"]);
 		$order_no=str_replace("/(<\/?)(p)([^>]*>)", "",$order_no);
-		$order_no=str_replace("'", '"',$order_no);
 		$order_supplier=trim(@$_POST["order_supplier"]);
 		$order_tanggal=trim(@$_POST["order_tanggal"]);
 		$order_carabayar=trim(@$_POST["order_carabayar"]);
 		$order_carabayar=str_replace("/(<\/?)(p)([^>]*>)", "",$order_carabayar);
-		$order_carabayar=str_replace("'", '"',$order_carabayar);
 		$order_cashback=trim(@$_POST["order_cashback"]);
 		$order_diskon=trim(@$_POST["order_diskon"]);
 		$order_biaya=trim(@$_POST["order_biaya"]);
 		$order_bayar=trim(@$_POST["order_bayar"]);
 		$order_keterangan=trim(@$_POST["order_keterangan"]);
 		$order_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$order_keterangan);
-		$order_keterangan=str_replace("'", '"',$order_keterangan);
+		$order_keterangan=stripslashes($order_keterangan);
 		$order_status=trim(@$_POST["order_status"]);
 		$order_status=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status);
-		$order_status=str_replace("'", '"',$order_status);
 		$order_status_acc=trim(@$_POST["order_status_acc"]);
 		$order_status_acc=str_replace("/(<\/?)(p)([^>]*>)", "",$order_status_acc);
-		$order_status_acc=str_replace("'", '"',$order_status_acc);
 		$cetak_order = trim(@$_POST["cetak_order"]);
+		
 		$result=$this->m_master_order_beli->master_order_beli_create($order_no, $order_supplier, $order_tanggal, $order_carabayar, $order_diskon, 
 																	 $order_cashback, $order_biaya, $order_bayar, $order_keterangan, $order_status, 
 																	 $order_status_acc,$cetak_order);
-		echo $result;
+		echo $this->detail_detail_order_beli_insert($result);
 	}
 
 	//function for delete selected record

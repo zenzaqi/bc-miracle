@@ -1,4 +1,3 @@
-<?php /* These code was generated using phpCIGen v 0.1.b (24/06/2009)#zaqi zaqi.smart@gmail.com,http:#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id+ Module : outbox Print+ Description: For Print View+ Filename : p_outbox.php + Author : + Created on 01/Feb/2010 14:30:05*/ ?><!DOCTYPE html PUBLIC "-//W3C<html xmlns="http://www.w3.org/1999/xhtml">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -11,7 +10,7 @@
 	<td colspan="5">
 		<table border="0" cellspacing="0" cellpadding="0" class="clear" width="680">
 			<tr>
-				<td align="center"><center></center>
+				<td align="center"><center>
 				<h1>BUKTI JURNAL UMUM</h1>
 				</center>
 				</td>
