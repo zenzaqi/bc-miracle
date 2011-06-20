@@ -270,6 +270,9 @@ class C_perawatan extends Controller {
 		$rawat_dkeluarga=trim(@$_POST["rawat_dkeluarga"]);
 		$rawat_downer=trim(@$_POST["rawat_downer"]);
 		$rawat_dgrooming=trim(@$_POST["rawat_dgrooming"]);
+		$rawat_dwartawan=trim(@$_POST["rawat_dwartawan"]);
+		$rawat_dstaffdokter=trim(@$_POST["rawat_dstaffdokter"]);
+		$rawat_dstaffnondokter=trim(@$_POST["rawat_dstaffnondokter"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
 		$rawat_durasi=trim(@$_POST["rawat_durasi"]);
 		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
@@ -354,7 +357,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif_mlg=str_replace("'", '"',$rawat_aktif_mlg);
 		
 		$result = $this->m_perawatan->perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
-														$rawat_du ,$rawat_dm , $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+														$rawat_du ,$rawat_dm , $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
 														$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr);
 		echo $result;
 	}
@@ -388,6 +391,9 @@ class C_perawatan extends Controller {
 		$rawat_dkeluarga=trim(@$_POST["rawat_dkeluarga"]);
 		$rawat_downer=trim(@$_POST["rawat_downer"]);
 		$rawat_dgrooming=trim(@$_POST["rawat_dgrooming"]);
+		$rawat_dwartawan=trim(@$_POST["rawat_dwartawan"]);
+		$rawat_dstaffdokter=trim(@$_POST["rawat_dstaffdokter"]);
+		$rawat_dstaffnondokter=trim(@$_POST["rawat_dstaffnondokter"]);
 		$rawat_point=trim(@$_POST["rawat_point"]);
 		$rawat_durasi=trim(@$_POST["rawat_durasi"]);
 		$rawat_kredit=trim(@$_POST["rawat_kredit"]);
@@ -454,7 +460,7 @@ class C_perawatan extends Controller {
 		$rawat_aktif_mlg=str_replace("'", '"',$rawat_aktif_mlg);
 		
 		$result=$this->m_perawatan->perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama , $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
-													$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+													$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
 													$rawat_point, $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta, $rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg , $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr);
 		echo $result;
 	}

@@ -85,6 +85,9 @@ var paket_dkolegaField;
 var paket_dkeluargaField;
 var paket_downerField;
 var paket_dgroomingField;
+var paket_dwartawanField;
+var paket_dstaffdokterField;
+var paket_dstaffnondokterField;
 var paket_pointField;
 var paket_harga_kiField;
 var paket_harga_mdnField;
@@ -218,6 +221,9 @@ Ext.onReady(function(){
 		var paket_dkeluarga_create=null;
 		var paket_downer_create=null;
 		var paket_dgrooming_create=null;
+		var paket_dwartawan_create=null;
+		var paket_dstaffdokter_create=null;
+		var paket_dstaffnondokter_create=null;
 		var paket_point_create=null;
 		var paket_harga_create=null;
 		var paket_expired_create=null;
@@ -245,8 +251,10 @@ Ext.onReady(function(){
 		if(paket_dkeluargaField.getValue()!== null){paket_dkeluarga_create = paket_dkeluargaField.getValue();}
 		if(paket_downerField.getValue()!== null){paket_downer_create = paket_downerField.getValue();}
 		if(paket_dgroomingField.getValue()!== null){paket_dgrooming_create = paket_dgroomingField.getValue();}
+		if(paket_dwartawanField.getValue()!== null){paket_dwartawan_create = paket_dwartawanField.getValue();}
+		if(paket_dstaffdokterField.getValue()!== null){paket_dstaffdokter_create = paket_dstaffdokterField.getValue();}
+		if(paket_dstaffnondokterField.getValue()!== null){paket_dstaffnondokter_create = paket_dstaffnondokterField.getValue();}
 		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
-
 		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
 		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
 		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
@@ -280,6 +288,9 @@ Ext.onReady(function(){
 				paket_dkeluarga	: paket_dkeluarga_create,
 				paket_downer	: paket_downer_create,
 				paket_dgrooming	: paket_dgrooming_create,
+				paket_dwartawan	: paket_dwartawan_create,
+				paket_dstaffdokter	: paket_dstaffdokter_create,
+				paket_dstaffnondokter	: paket_dstaffnondokter_create,
 				paket_point	: paket_point_create,
 				paket_harga	: paket_harga_create,
 				paket_expired	: paket_expired_create,
@@ -396,6 +407,12 @@ Ext.onReady(function(){
 		paket_downerField.setValue(null);
 		paket_dgroomingField.reset();
 		paket_dgroomingField.setValue(null);
+		paket_dwartawanField.reset();
+		paket_dwartawanField.setValue(null);
+		paket_dstaffdokterField.reset();
+		paket_dstaffdokterField.setValue(null);
+		paket_dstaffnondokterField.reset();
+		paket_dstaffnondokterField.setValue(null);
 		paket_pointField.reset();
 		paket_pointField.setValue(null);
 		paket_hargaField.reset();
@@ -522,6 +539,9 @@ Ext.onReady(function(){
 		paket_dkeluargaField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dkeluarga'));
 		paket_downerField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_downer'));
 		paket_dgroomingField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dgrooming'));
+		paket_dwartawanField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dwartawan'));
+		paket_dstaffdokterField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dstaffdokter'));
+		paket_dstaffnondokterField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dstaffnondokter'));
 		paket_pointField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_point'));
 		paket_expiredField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_expired'));
 		paket_perpanjanganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_perpanjangan'));
@@ -766,6 +786,9 @@ Ext.onReady(function(){
 			{name: 'paket_dkeluarga', type: 'int', mapping: 'paket_dkeluarga'},
 			{name: 'paket_downer', type: 'int', mapping: 'paket_downer'},
 			{name: 'paket_dgrooming', type: 'int', mapping: 'paket_dgrooming'},
+			{name: 'paket_dwartawan', type: 'int', mapping: 'paket_dwartawan'},
+			{name: 'paket_dstaffdokter', type: 'int', mapping: 'paket_dstaffdokter'},
+			{name: 'paket_dstaffnondokter', type: 'int', mapping: 'paket_dstaffnondokter'},
 			{name: 'paket_point', type: 'int', mapping: 'paket_point'},
 			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'},
@@ -1003,6 +1026,39 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Grooming' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_dgrooming',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Wartawan' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dwartawan',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Staff Dokter' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dstaffdokter',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Staff Non Dokter' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dstaffnondokter',
 			width: 45,	//100,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -1813,7 +1869,7 @@ Ext.onReady(function(){
 	paket_duField= new Ext.form.NumberField({
 		id: 'paket_duField',
 		name: 'paket_duField',
-		fieldLabel: 'Disk Umum(%)',
+		fieldLabel: 'Umum(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1827,7 +1883,7 @@ Ext.onReady(function(){
 	paket_dmField= new Ext.form.NumberField({
 		id: 'paket_dmField',
 		name: 'paket_dmField',
-		fieldLabel: 'Disk Member(%)',
+		fieldLabel: 'Member(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		enableKeyEvents : true,
@@ -1841,7 +1897,7 @@ Ext.onReady(function(){
 	paket_dultahField= new Ext.form.NumberField({
 		id: 'paket_dultahField',
 		name: 'paket_dultahField',
-		fieldLabel: 'Disk Ultah(%)',
+		fieldLabel: 'Ultah(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1854,7 +1910,7 @@ Ext.onReady(function(){
 	paket_dcardField= new Ext.form.NumberField({
 		id: 'paket_dcardField',
 		name: 'paket_dcardField',
-		fieldLabel: 'Disk Card(%)',
+		fieldLabel: 'Card(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1867,7 +1923,7 @@ Ext.onReady(function(){
 	paket_dkolegaField= new Ext.form.NumberField({
 		id: 'paket_dkolegaField',
 		name: 'paket_dkolegaField',
-		fieldLabel: 'Disk Kolega(%)',
+		fieldLabel: 'Kolega(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1880,7 +1936,7 @@ Ext.onReady(function(){
 	paket_dkeluargaField= new Ext.form.NumberField({
 		id: 'paket_dkeluargaField',
 		name: 'paket_dkeluargaField',
-		fieldLabel: 'Disk Keluarga(%)',
+		fieldLabel: 'Keluarga(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1893,7 +1949,7 @@ Ext.onReady(function(){
 	paket_downerField= new Ext.form.NumberField({
 		id: 'paket_downerField',
 		name: 'paket_downerField',
-		fieldLabel: 'Disk Owner(%)',
+		fieldLabel: 'Owner(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1906,7 +1962,46 @@ Ext.onReady(function(){
 	paket_dgroomingField= new Ext.form.NumberField({
 		id: 'paket_dgroomingField',
 		name: 'paket_dgroomingField',
-		fieldLabel: 'Disk Grooming(%)',
+		fieldLabel: 'Grooming(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dwartawan Field */
+	paket_dwartawanField= new Ext.form.NumberField({
+		id: 'paket_dwartawanField',
+		name: 'paket_dwartawanField',
+		fieldLabel: 'Wartawan(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dstaffdokter Field */
+	paket_dstaffdokterField= new Ext.form.NumberField({
+		id: 'paket_dstaffdokterField',
+		name: 'paket_dstaffdokterField',
+		fieldLabel: 'Staff Dokter(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	/* Identify  paket_dstaffnondokter Field */
+	paket_dstaffnondokterField= new Ext.form.NumberField({
+		id: 'paket_dstaffnondokterField',
+		name: 'paket_dstaffnondokterField',
+		fieldLabel: 'Staff Non Dokter(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1981,14 +2076,14 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [paket_duField, paket_dmField, paket_dultahField, paket_dcardField]
+				items: [paket_duField, paket_dmField, paket_dultahField, paket_dcardField, paket_dwartawanField]
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [paket_dkolegaField, paket_dkeluargaField, paket_downerField, paket_dgroomingField]
+				items: [paket_dkolegaField, paket_dkeluargaField, paket_downerField, paket_dgroomingField, paket_dstaffdokterField, paket_dstaffnondokterField]
 			}
 		]
 	});
@@ -2025,6 +2120,9 @@ Ext.onReady(function(){
 			paket_dkeluargaField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dkeluarga);
 			paket_downerField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_downer);
 			paket_dgroomingField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dgrooming);
+			paket_dwartawanField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dwartawan);
+			paket_dstaffdokterField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dstaffdokter);
+			paket_dstaffnondokterField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dstaffnondokter);
 			paket_kategoritxtField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_nama);
 			paket_kategoriField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_id);
 		}
@@ -3306,8 +3404,22 @@ Ext.onReady(function(){
 			this.setRawValue(100);
 		}
 	});
+	paket_dwartawanField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dstaffdokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dstaffnondokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
 	
-
 });
 	</script>
 <body>

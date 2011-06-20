@@ -359,7 +359,7 @@ class M_perawatan extends Model{
 		
 		//function for update record
 		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
-									$rawat_du ,$rawat_dm ,$rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+									$rawat_du ,$rawat_dm ,$rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
 									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
@@ -482,7 +482,7 @@ class M_perawatan extends Model{
 				$data["rawat_highmargin"]=0;
 			
 			
-			$sql="SELECT group_id,group_durawat,group_dmrawat,group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming, group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
+			$sql="SELECT group_id,group_durawat,group_dmrawat,group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming, group_dwartawan, group_dstaffdokter, group_dstaffnondokter, group_kelompok FROM produk_group WHERE group_id='".$rawat_group."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				$data["rawat_group"]=$rawat_group;
@@ -495,6 +495,9 @@ class M_perawatan extends Model{
 				$data["rawat_dkeluarga"]=$rs_sql->group_dkeluarga;
 				$data["rawat_downer"]=$rs_sql->group_downer;
 				$data["rawat_dgrooming"]=$rs_sql->group_dgrooming;
+				$data["rawat_dwartawan"]=$rs_sql->group_dwartawan;
+				$data["rawat_dstaffdokter"]=$rs_sql->group_dstaffdokter;
+				$data["rawat_dstaffnondokter"]=$rs_sql->group_dstaffnondokter;
 				$data["rawat_kategori"]=$rs_sql->group_kelompok;
 			}
 			
@@ -517,7 +520,6 @@ class M_perawatan extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["rawat_gudang"]=$rawat_gudang;
-			
 			
 			//generate rawat kode
 			//get group kode
@@ -601,7 +603,22 @@ class M_perawatan extends Model{
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["rawat_dgrooming"]=$rawat_dgrooming;
-			
+						
+			$sql="SELECT rawat_dwartawan FROM perawatan WHERE rawat_dwartawan!='".$rawat_dwartawan."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dwartawan"]=$rawat_dwartawan;
+				
+			$sql="SELECT rawat_dstaffdokter FROM perawatan WHERE rawat_dstaffdokter!='".$rawat_dstaffdokter."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dstaffdokter"]=$rawat_dstaffdokter;
+				
+			$sql="SELECT rawat_dstaffnondokter FROM perawatan WHERE rawat_dstaffnondokter!='".$rawat_dstaffnondokter."' AND rawat_id='".$rawat_id."'";
+			$rs=$this->db->query($sql);
+			if($rs->num_rows())
+				$data["rawat_dstaffnondokter"]=$rawat_dstaffnondokter;
+
 			$this->db->where('rawat_id', $rawat_id);
 			$this->db->update('perawatan', $data);
 			
@@ -614,7 +631,7 @@ class M_perawatan extends Model{
 		
 		//function for create new record
 		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
-									$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming,
+									$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
 									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
 		if ($rawat_aktif=="")
 			$rawat_aktif = "Aktif";
@@ -718,6 +735,9 @@ class M_perawatan extends Model{
 				"rawat_dkeluarga"=>$rawat_dkeluarga,
 				"rawat_downer"=>$rawat_downer,
 				"rawat_dgrooming"=>$rawat_dgrooming,
+				"rawat_dwartawan"=>$rawat_dwartawan,
+				"rawat_dstaffdokter"=>$rawat_dstaffdokter,
+				"rawat_dstaffnondokter"=>$rawat_dstaffnondokter,
 				"rawat_point"=>$rawat_point,
 				"rawat_durasi"=>$rawat_durasi,
 				"rawat_kredit"=>$rawat_kredit,

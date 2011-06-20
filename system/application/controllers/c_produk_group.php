@@ -108,6 +108,9 @@ class C_produk_group extends Controller {
 		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
 		$group_downer=trim(@$_POST["group_downer"]);
 		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
+		$group_dwartawan=trim(@$_POST["group_dwartawan"]);
+		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
+		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -118,7 +121,7 @@ class C_produk_group extends Controller {
 		
 		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat,
 															 $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-															 $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+															 $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,
 															 $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 															 $group_revised, $group_opsi );
 		echo $result;
@@ -154,6 +157,9 @@ class C_produk_group extends Controller {
 		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
 		$group_downer=trim(@$_POST["group_downer"]);
 		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
+		$group_dwartawan=trim(@$_POST["group_dwartawan"]);
+		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
+		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -163,7 +169,7 @@ class C_produk_group extends Controller {
 		
 		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,
 														   $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-														   $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
+														   $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,
 														   $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 														   $group_revised, $group_opsi);
 		echo $result;
