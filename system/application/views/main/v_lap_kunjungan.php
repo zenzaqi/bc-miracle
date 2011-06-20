@@ -669,7 +669,7 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function lap_kunjungan_search(){
 		// render according to a SQL date format.
-		lap_kunjungan_searchWindow.hide();
+		//lap_kunjungan_searchWindow.hide();
 		if(is_lap_kunjungan_searchForm_valid())
 		{
 		var lap_kunjungan_id_search=null;

@@ -152,8 +152,18 @@ class M_lap_jum_tindakan_terapis extends Model{
 		}	
 		
 	//function for advanced search record
-	function lap_jum_tindakan_terapis_search($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
+	function lap_jum_tindakan_terapis_search($tgl_awal,$periode,$lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
+			
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(jrawat_tanggal,'%Y-%m')='".$tgl_awal."') and " ;
+				$tglpaket=" (date_format(dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and ";
+				$tglpaket=" (dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and " ;
+			}
 	
 			if ($lapjum_groupby == 'Semua')
 			{
@@ -174,8 +184,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama
 						)
 						union
@@ -194,8 +203,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
 						)
 					as tabel_union
@@ -220,8 +228,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama";
 	
 			}
@@ -242,8 +249,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama";
 			}
 			
@@ -265,8 +271,19 @@ class M_lap_jum_tindakan_terapis extends Model{
 		}
 		
 	//function for advanced search record
-	function lap_jum_tindakan_terapis_search2($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
+	function lap_jum_tindakan_terapis_search2($tgl_awal,$periode,$lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id, $lapjum_groupby, $start,$end){
 			//full query
+			
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(jrawat_tanggal,'%Y-%m')='".$tgl_awal."') and " ;
+				$tglpaket=" (date_format(dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and ";
+				$tglpaket=" (dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and " ;
+			}
+			
 			if ($lapjum_groupby == 'Semua')
 			{
 			$query ="select sum(table_union.Total_kredit) as grand_total
@@ -285,8 +302,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama)
 					union
 					(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
@@ -304,8 +320,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)) as table_union"
 				;
 			}
@@ -329,8 +344,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama) as vu_kredit";
 		
 			}
@@ -353,8 +367,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama) as vu_kredit";
 			
 			}
@@ -405,9 +418,20 @@ class M_lap_jum_tindakan_terapis extends Model{
 		}
 		
 	//function  for export to excel
-	function lap_jum_tindakan_terapis_export_excel($lapjum_id ,$terapis_id , $lapjum_tglapp_start, $lapjum_tglapp_end,
+	function lap_jum_tindakan_terapis_export_excel($tgl_awal,$periode,$lapjum_id ,$terapis_id , $lapjum_tglapp_start, $lapjum_tglapp_end,
 													$lapjum_groupby, $option,$filter){
 			//full query
+			
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(jrawat_tanggal,'%Y-%m')='".$tgl_awal."') and " ;
+				$tglpaket=" (date_format(dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and ";
+				$tglpaket=" (dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
+							and " ;
+			}
+			
 			if ($lapjum_groupby == 'Semua')
 			{
 			$query ="select karyawan_username, rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat,rawat_kredit, rawat_kode,sum(Total_kredit) as Total_kredit
@@ -424,8 +448,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama
 						)
 						union
@@ -441,8 +464,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
 						)
 					as tabel_union
@@ -464,8 +486,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(jrawat_tanggal BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (rawat_id is not null and jrawat_stat_dok='Tertutup')
+							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama";
 	
 			}
@@ -483,8 +504,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
 							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
-							(dapaket_tgl_ambil BETWEEN '".$lapjum_tglapp_start."' AND '".$lapjum_tglapp_end."') 
-							and (dapaket_item is not null and dapaket_stat_dok='Tertutup')
+							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama";
 			}
 			

@@ -106,6 +106,9 @@ var lap_jum_tindakan_terapis_detail_DataStore;
 var lap_jum_tindakan_terapisdetailListEditorGrid;
 
 var today=new Date().format('d-m-Y');
+var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 
 //declare konstant
 var post2db = '';
@@ -122,7 +125,7 @@ Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
 
 	function is_lap_jum_tindakan_terapis_searchform_valid(){
-		return (Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').isValid() && lap_jum_tindakan_terapis_dokterSearchField.isValid());
+		return (Ext.getCmp('lap_jum_tindakan_tglStartSearchField').isValid() && lap_jum_tindakan_terapis_dokterSearchField.isValid());
 	}
 
 	Ext.util.Format.comboRenderer = function(combo){
@@ -414,6 +417,9 @@ Ext.onReady(function(){
 		var lap_jum_tindakan_terapis_tgl_end_search=null;
 		var lap_jum_tindakan_terapis_dokter_search=null;
 		var lap_jum_tindakan_terapis_groupby_search=null;
+		var lap_jum_tindakan_tmedis_bulan=null;
+		var lap_jum_tindakan_tmedis_tahun=null;
+		var lap_jum_tindakan_tmedis_periode=null;
 		
 	
 		cbo_dtindakan_dokterDataStore.load({
@@ -429,30 +435,45 @@ Ext.onReady(function(){
 		});
 
 		if(lap_jum_tindakan_terapis_idSearchField.getValue()!==null){lap_jum_tindakan_terapis_id_search=lap_jum_tindakan_terapis_idSearchField.getValue();}
-		if(Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue();}
-		if(Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue();}
+		if(lap_jum_tindakan_bulanField.getValue()!==null){lap_jum_tindakan_tmedis_bulan=lap_jum_tindakan_bulanField.getValue();}
+		if(lap_jum_tindakan_tahunField.getValue()!==null){lap_jum_tindakan_tmedis_tahun=lap_jum_tindakan_tahunField.getValue();}
+		if(Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue().format('Y-m-d');}
 		if(lap_jum_tindakan_terapis_dokterSearchField.getValue()!==null){lap_jum_tindakan_terapis_dokter_search=lap_jum_tindakan_terapis_dokterSearchField.getValue();}
 		if(lap_jum_tindakan_terapis_groupbyField.getValue()!==null){lap_jum_tindakan_terapis_groupby_search=lap_jum_tindakan_terapis_groupbyField.getValue();}
 
+		if(lap_jum_tindakan_opsitglField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='tanggal';
+		}else if(lap_jum_tindakan_opsiblnField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='bulan';
+		}else{
+			lap_jum_tindakan_tmedis_periode='all';
+		}
 		// change the store parameters
 		
 		lap_jum_tindakan_terapisDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			lap_jum_tindakan_terapis_id	:	lap_jum_tindakan_terapis_id_search, 
+			lap_jum_tindakan_id	:	lap_jum_tindakan_terapis_id_search, 
 			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
 			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
 			lapjum_groupby	: lap_jum_tindakan_terapis_groupby_search,
+			bulan		: lap_jum_tindakan_tmedis_bulan,
+			tahun		: lap_jum_tindakan_tmedis_tahun,
+			periode		: lap_jum_tindakan_tmedis_periode
 		};
 		sum_lap_jum_DataStore.baseParams = {
 			task: 'SEARCH2',
 			//variable here
-			lap_jum_tindakan_terapis_id	:	lap_jum_tindakan_terapis_id_search, 
+			lap_jum_tindakan_id	:	lap_jum_tindakan_terapis_id_search, 
 			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_search,
 			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
 			lapjum_groupby	:	lap_jum_tindakan_terapis_groupby_search,
+			bulan		: lap_jum_tindakan_tmedis_bulan,
+			tahun		: lap_jum_tindakan_tmedis_tahun,
+			periode		: lap_jum_tindakan_tmedis_periode
 		};
 		// Cause the datastore to do another query : 
 		lap_jum_tindakan_terapisDataStore.reload({params: {start: 0, limit: pageS}});
@@ -519,6 +540,127 @@ Ext.onReady(function(){
 		width: 214
 	});
 
+	
+	/////tgl n bulan
+	lap_jum_tindakan_opsitglField=new Ext.form.Radio({
+		id:'lap_jum_tindakan_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
+	
+	lap_jum_tindakan_opsiblnField=new Ext.form.Radio({
+		id:'lap_jum_tindakan_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	lap_jum_tindakan_tglStartSearchField= new Ext.form.DateField({
+		id: 'lap_jum_tindakan_tglStartSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'lap_jum_tindakan_tglStartSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'lap_jum_tindakan_tglakhirField'
+		value: today
+	});
+	
+	lap_jum_tindakan_tglEndSearchField= new Ext.form.DateField({
+		id: 'lap_jum_tindakan_tglEndSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'lap_jum_tindakan_tglEndSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'lap_jum_tindakan_tglawalField',
+		value: today
+	});
+	
+	lap_jum_tindakan_bulanField=new Ext.form.ComboBox({
+		id:'lap_jum_tindakan_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	lap_jum_tindakan_tahunField=new Ext.form.ComboBox({
+		id:'lap_jum_tindakan_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var lap_jum_tindakan_periodeField=new Ext.form.FieldSet({
+		id:'lap_jum_tindakan_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[lap_jum_tindakan_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[lap_jum_tindakan_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_jum_tindakan_tglStartSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_jum_tindakan_tglEndSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[lap_jum_tindakan_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_jum_tindakan_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_jum_tindakan_tahunField]
+					   }]
+			}]
+	});
+	
+	//end of tgl n bulan
 	var dt = new Date(); 
 	
 	/* Function for retrieve search Form Panel */
@@ -536,7 +678,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [
-				        {
+				        /*{
 						layout:'column',
 						border:false,
 						items:[
@@ -572,8 +714,7 @@ Ext.onReady(function(){
 									format: 'd-m-Y',
 							        startDateField: 'lap_jum_tindakan_terapis_tglStartSearchField' // id of the end date field
 							    }] 
-						}]},
-						lap_jum_tindakan_terapis_dokterSearchField,lap_jum_tindakan_terapis_groupbyField] 
+						}]}*/lap_jum_tindakan_periodeField,lap_jum_tindakan_terapis_dokterSearchField,lap_jum_tindakan_terapis_groupbyField] 
 			}
 			]
 		}]
@@ -598,10 +739,10 @@ Ext.onReady(function(){
 		lap_jum_tindakan_terapis_dokterSearchField.setValue(null);
 		lap_jum_tindakan_terapis_groupbyField.reset();
 		lap_jum_tindakan_terapis_groupbyField.setValue('Semua');
-		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').reset();
-		Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').setValue(null);
-		Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').reset();
-		Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').setValue(today);
+		Ext.getCmp('lap_jum_tindakan_tglStartSearchField').reset();
+		Ext.getCmp('lap_jum_tindakan_tglStartSearchField').setValue(today);
+		Ext.getCmp('lap_jum_tindakan_tglEndSearchField').reset();
+		Ext.getCmp('lap_jum_tindakan_tglEndSearchField').setValue(today);
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
@@ -632,6 +773,20 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function is_valid_form(){
+		if(lap_jum_tindakan_opsitglField.getValue()==true){
+			lap_jum_tindakan_tglStartSearchField.allowBlank=false;
+			lap_jum_tindakan_tglEndSearchField.allowBlank=false;
+			if(lap_jum_tindakan_tglStartSearchField.isValid() && lap_jum_tindakan_tglEndSearchField.isValid())
+				return true;
+			else
+				return false;
+		}else{
+			lap_jum_tindakan_tglStartSearchField.allowBlank=true;
+			lap_jum_tindakan_tglEndSearchField.allowBlank=true;
+			return true;
+		}
+	}
 
 	/* Function for print List Grid */
 	function lap_jum_tindakan_terapis_print(){
@@ -695,15 +850,27 @@ Ext.onReady(function(){
 		var lap_jum_tindakan_terapis_tgl_end_search=null;
 		var lap_jum_tindakan_terapis_dokter_search=null;
 		var lap_jum_tindakan_terapis_groupby_search=null;
+		var lap_jum_tindakan_tmedis_bulan=null;
+		var lap_jum_tindakan_tmedis_tahun=null;
+		var lap_jum_tindakan_tmedis_periode=null;
 		var win;              
 		// check if we do have some search data...
 		if(lap_jum_tindakan_terapisDataStore.baseParams.query!==null){searchquery = lap_jum_tindakan_terapisDataStore.baseParams.query;}
 		//if(lap_jum_tindakan_terapisDataStore.baseParams.terapis_id!==null){tindakan_dokter_2excel = lap_jum_tindakan_terapisDataStore.baseParams.terapis_id;}
-		if(Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_terapis_tglStartSearchField').getValue();}
-		if(Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_terapis_tglEndSearchField').getValue();}
+		if(Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_search=Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_search=Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue().format('Y-m-d');}
 		if(lap_jum_tindakan_terapis_dokterSearchField.getValue()!==null){lap_jum_tindakan_terapis_dokter_search=lap_jum_tindakan_terapis_dokterSearchField.getValue();}
 		if(lap_jum_tindakan_terapis_groupbyField.getValue()!==null){lap_jum_tindakan_terapis_groupby_search=lap_jum_tindakan_terapis_groupbyField.getValue();}
+		if(lap_jum_tindakan_bulanField.getValue()!==null){lap_jum_tindakan_tmedis_bulan=lap_jum_tindakan_bulanField.getValue();}
+		if(lap_jum_tindakan_tahunField.getValue()!==null){lap_jum_tindakan_tmedis_tahun=lap_jum_tindakan_tahunField.getValue();}
 
+		if(lap_jum_tindakan_opsitglField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='tanggal';
+		}else if(lap_jum_tindakan_opsiblnField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='bulan';
+		}else{
+			lap_jum_tindakan_tmedis_periode='all';
+		}
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -717,7 +884,10 @@ Ext.onReady(function(){
 			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_search,
 			terapis_id	:	lap_jum_tindakan_terapis_dokter_search,
 			lapjum_groupby	: lap_jum_tindakan_terapis_groupby_search,
-		  	currentlisting: lap_jum_tindakan_terapisDataStore.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: lap_jum_tindakan_terapisDataStore.baseParams.task, // this tells us if we are searching or not
+			bulan		: lap_jum_tindakan_tmedis_bulan,
+			tahun		: lap_jum_tindakan_tmedis_tahun,
+			periode		: lap_jum_tindakan_tmedis_periode
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -749,6 +919,17 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	lap_jum_tindakan_opsitglField.on("check",function(){
+		if(lap_jum_tindakan_opsitglField.getValue()==true){
+			lap_jum_tindakan_tglStartSearchField.allowBlank=false;
+			lap_jum_tindakan_tglEndSearchField.allowBlank=false;
+		}else{
+			lap_jum_tindakan_tglStartSearchField.allowBlank=true;
+			lap_jum_tindakan_tglEndSearchField.allowBlank=true;
+		}
+		
+	});
 	
 });
 	</script>

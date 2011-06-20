@@ -106,6 +106,9 @@ var report_tindakan_detail_DataStore;
 var report_tindakandetailListEditorGrid;
 
 var today=new Date().format('d-m-Y');
+var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 
 //declare konstant
 var post2db = '';
@@ -411,6 +414,9 @@ Ext.onReady(function(){
 		var report_tindakan_tgl_end_search=null;
 		var report_tindakan_dokter_search=null;
 		var report_tindakan_groupby_search=null;
+		var report_tindakan_tmedis_bulan=null;
+		var report_tindakan_tmedis_tahun=null;
+		var report_tindakan_tmedis_periode=null;
 		
 		cbo_dtindakan_dokterDataStore.load({
 		 	callback: function(r,opt,success){
@@ -425,10 +431,21 @@ Ext.onReady(function(){
 		});
 
 		if(report_tindakan_idSearchField.getValue()!==null){report_tindakan_id_search=report_tindakan_idSearchField.getValue();}
-		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_tglStartSearchField').getValue();}
-		if(Ext.getCmp('report_tindakan_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_search=Ext.getCmp('report_tindakan_tglEndSearchField').getValue();}
+		if(report_tindakan_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_bulanField.getValue();}
+		if(report_tindakan_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_tahunField.getValue();}
+		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_tglStartSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('report_tindakan_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_search=Ext.getCmp('report_tindakan_tglEndSearchField').getValue().format('Y-m-d');}
 		if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
 		if(report_tindakan_groupbyField.getValue()!==null){report_tindakan_groupby_search=report_tindakan_groupbyField.getValue();}
+		
+		if(report_tindakan_opsitglField.getValue()==true){
+			report_tindakan_tmedis_periode='tanggal';
+		}else if(report_tindakan_opsiblnField.getValue()==true){
+			report_tindakan_tmedis_periode='bulan';
+		}else{
+			report_tindakan_tmedis_periode='all';
+		}
+				
 		// change the store parameters
 		
 		report_tindakanDataStore.baseParams = {
@@ -439,6 +456,9 @@ Ext.onReady(function(){
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			trawat_dokter	:	report_tindakan_dokter_search,
 			report_groupby	:	report_tindakan_groupby_search,
+			bulan		: report_tindakan_tmedis_bulan,
+			tahun		: report_tindakan_tmedis_tahun,
+			periode		: report_tindakan_tmedis_periode
 		};
 		sum_kreditDataStore.baseParams = {
 			task: 'SEARCH2',
@@ -448,6 +468,9 @@ Ext.onReady(function(){
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			trawat_dokter	:	report_tindakan_dokter_search,
 			report_groupby	:	report_tindakan_groupby_search,
+			bulan		: report_tindakan_tmedis_bulan,
+			tahun		: report_tindakan_tmedis_tahun,
+			periode		: report_tindakan_tmedis_periode
 		};
 		// Cause the datastore to do another query : 
 		report_tindakanDataStore.reload({params: {start: 0, limit: pageS}});
@@ -513,7 +536,126 @@ Ext.onReady(function(){
 		allowBlank: false,
 		width: 214
 	});
-
+	
+	/////tgl n bulan
+	report_tindakan_opsitglField=new Ext.form.Radio({
+		id:'report_tindakan_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
+	
+	report_tindakan_opsiblnField=new Ext.form.Radio({
+		id:'report_tindakan_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	report_tindakan_tglStartSearchField= new Ext.form.DateField({
+		id: 'report_tindakan_tglStartSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'report_tindakan_tglStartSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'report_tindakan_tglakhirField'
+		value: today
+	});
+	
+	report_tindakan_tglEndSearchField= new Ext.form.DateField({
+		id: 'report_tindakan_tglEndSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'report_tindakan_tglEndSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'report_tindakan_tglawalField',
+		value: today
+	});
+	
+	report_tindakan_bulanField=new Ext.form.ComboBox({
+		id:'report_tindakan_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	report_tindakan_tahunField=new Ext.form.ComboBox({
+		id:'report_tindakan_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var report_tindakan_periodeField=new Ext.form.FieldSet({
+		id:'report_tindakan_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[report_tindakan_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[report_tindakan_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[report_tindakan_tglStartSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[report_tindakan_tglEndSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[report_tindakan_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[report_tindakan_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[report_tindakan_tahunField]
+					   }]
+			}]
+	});
+	//// end of tgl n bulan
 	var dt = new Date(); 
 	
 	/* Function for retrieve search Form Panel */
@@ -521,7 +663,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 640,        
+		width: 400,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -530,45 +672,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [
-				        {
-						layout:'column',
-						border:false,
-						items:[
-				        {
-							columnWidth:0.33,
-							layout: 'form',
-							border:false,
-							defaultType: 'datefield',
-							items: [
-							    {
-									fieldLabel: 'Tanggal Tindakan',
-							        name: 'report_tindakan_tglStartSearchField',
-							        id: 'report_tindakan_tglStartSearchField',
-									vtype: 'daterange',
-									allowBlank: false,
-									format: 'd-m-Y',
-							        endDateField: 'report_tindakan_tglEndSearchField' // id of the end date field Ext.getCmp('report_tindakan_tglStartSearchField').isValid()
-							    }] 
-						},
-						{
-							columnWidth:0.30,
-							layout: 'form',
-							labelWidth:20,
-							border:false,
-							defaultType: 'datefield',
-							items: [
-						      	{
-									fieldLabel: 's/d',
-							        name: 'report_tindakan_tglEndSearchField',
-							        id: 'report_tindakan_tglEndSearchField',
-							        vtype: 'daterange',
-									allowBlank: false,
-									format: 'd-m-Y',
-							        startDateField: 'report_tindakan_tglStartSearchField' // id of the end date field
-							    }] 
-						}]},
-						report_tindakan_dokterSearchField, report_tindakan_groupbyField] 
+				items: [report_tindakan_periodeField,report_tindakan_dokterSearchField, report_tindakan_groupbyField] 
 			}
 			]
 		}]
@@ -594,7 +698,7 @@ Ext.onReady(function(){
 		report_tindakan_groupbyField.reset();
 		report_tindakan_groupbyField.setValue('Semua');
 		Ext.getCmp('report_tindakan_tglStartSearchField').reset();
-		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(null);
+		Ext.getCmp('report_tindakan_tglStartSearchField').setValue(today);
 		Ext.getCmp('report_tindakan_tglEndSearchField').reset();
 		Ext.getCmp('report_tindakan_tglEndSearchField').setValue(today);
 	}
@@ -628,6 +732,20 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	function is_valid_form(){
+		if(report_tindakan_opsitglField.getValue()==true){
+			report_tindakan_tglStartSearchField.allowBlank=false;
+			report_tindakan_tglEndSearchField.allowBlank=false;
+			if(report_tindakan_tglStartSearchField.isValid() && report_tindakan_tglEndSearchField.isValid())
+				return true;
+			else
+				return false;
+		}else{
+			report_tindakan_tglStartSearchField.allowBlank=true;
+			report_tindakan_tglEndSearchField.allowBlank=true;
+			return true;
+		}
+	}
 
 	/* Function for print List Grid */
 	function report_tindakan_print(){
@@ -698,10 +816,15 @@ Ext.onReady(function(){
 		var report_tindakan_tgl_end_search=null;
 		var report_tindakan_dokter_search=null;
 		var report_tindakan_groupby_search=null;
+		var report_tindakan_tmedis_bulan=null;
+		var report_tindakan_tmedis_tahun=null;
+		var report_tindakan_tmedis_periode=null;
 		
 		var win;              
 		// check if we do have some search data...
 		if(report_tindakanDataStore.baseParams.query!==null){searchquery = report_tindakanDataStore.baseParams.query;}
+		if(report_tindakan_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_bulanField.getValue();}
+		if(report_tindakan_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_tahunField.getValue();}
 		//if(report_tindakanDataStore.baseParams.trawat_dokter!==null){tindakan_dokter_2excel = report_tindakanDataStore.baseParams.trawat_dokter;}
 		//if(report_tindakanDataStore.baseParams.tindakan_perawatan!==null){tindakan_perawatan_2excel = report_tindakanDataStore.baseParams.tindakan_perawatan;}
 		//if(report_tindakanDataStore.baseParams.dtrawat_edit!==null){dtrawat_edit_2excel = report_tindakanDataStore.baseParams.dtrawat_edit;}
@@ -714,7 +837,13 @@ Ext.onReady(function(){
 		if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_search=report_tindakan_dokterSearchField.getValue();}
 		if(report_tindakan_groupbyField.getValue()!==null){report_tindakan_groupby_search=report_tindakan_groupbyField.getValue();}
 		
-		
+		if(report_tindakan_opsitglField.getValue()==true){
+			report_tindakan_tmedis_periode='tanggal';
+		}else if(report_tindakan_opsiblnField.getValue()==true){
+			report_tindakan_tmedis_periode='bulan';
+		}else{
+			report_tindakan_tmedis_periode='all';
+		}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -727,7 +856,10 @@ Ext.onReady(function(){
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			trawat_dokter	:	report_tindakan_dokter_search,
 			report_groupby	:	report_tindakan_groupby_search,
-		  	currentlisting: report_tindakanDataStore.baseParams.task // this tells us if we are searching or not
+		  	currentlisting: report_tindakanDataStore.baseParams.task, // this tells us if we are searching or not
+			bulan		: report_tindakan_tmedis_bulan,
+			tahun		: report_tindakan_tmedis_tahun,
+			periode		: report_tindakan_tmedis_periode
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -759,6 +891,17 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	report_tindakan_opsitglField.on("check",function(){
+		if(report_tindakan_opsitglField.getValue()==true){
+			report_tindakan_tglStartSearchField.allowBlank=false;
+			report_tindakan_tglEndSearchField.allowBlank=false;
+		}else{
+			report_tindakan_tglStartSearchField.allowBlank=true;
+			report_tindakan_tglEndSearchField.allowBlank=true;
+		}
+		
+	});
 	
 });
 	</script>
