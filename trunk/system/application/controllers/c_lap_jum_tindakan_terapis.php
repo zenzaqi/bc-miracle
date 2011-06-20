@@ -99,6 +99,7 @@ class C_lap_jum_tindakan_terapis extends Controller {
 			$lapjum_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["lapjum_tglapp_start"])));
 		else
 			$lapjum_tglapp_start="";
+			
 		if(trim(@$_POST["lapjum_tglapp_end"])!="")
 			$lapjum_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["lapjum_tglapp_end"])));
 		else
@@ -106,10 +107,15 @@ class C_lap_jum_tindakan_terapis extends Controller {
 
 		$terapis_id=trim(@$_POST["terapis_id"]);
 		$lapjum_groupby=trim(@$_POST["lapjum_groupby"]);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$tgl_awal=$tahun."-".$bulan;
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_search($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id ,$lapjum_groupby, $start,$end);
+		$result = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_search($tgl_awal,$periode,$lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id ,$lapjum_groupby, $start,$end);
 		echo $result;
 	}
 
@@ -127,10 +133,15 @@ class C_lap_jum_tindakan_terapis extends Controller {
 
 		$terapis_id=trim(@$_POST["terapis_id"]);
 		$lapjum_groupby=trim(@$_POST["lapjum_groupby"]);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$tgl_awal=$tahun."-".$bulan;
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_search2($lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id ,$lapjum_groupby, $start,$end);
+		$result = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_search2($tgl_awal,$periode,$lap_jum_tindakan_terapis_id ,$lapjum_tglapp_start ,$lapjum_tglapp_end ,$terapis_id ,$lapjum_groupby, $start,$end);
 		echo $result;
 	}
 	
@@ -203,8 +214,13 @@ class C_lap_jum_tindakan_terapis extends Controller {
 		$lapjum_groupby=trim(@$_POST["lapjum_groupby"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		$query = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_export_excel($lapjum_id ,$terapis_id , $lapjum_tglapp_start, $lapjum_tglapp_end,
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$query = $this->m_lap_jum_tindakan_terapis->lap_jum_tindakan_terapis_export_excel($tgl_awal,$periode,$lapjum_id ,$terapis_id , $lapjum_tglapp_start, $lapjum_tglapp_end,
 																							$lapjum_groupby, $option,$filter);
 		$this->load->plugin('to_excel');
 		to_excel($query,"Report_Tindakan_Terapis"); 
