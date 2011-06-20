@@ -288,9 +288,9 @@ class M_master_jual_produk extends Model{
 		}
 	}
 	
-	function catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total){
+	function catatan_piutang_update($jproduk_id){
 		/* INSERT db.master_lunas_piutang */
-		$dti_lpiutang=array(
+		/*$dti_lpiutang=array(
 			"lpiutang_faktur"=>$jproduk_nobukti,
 			"lpiutang_cust"=>$jproduk_cust,
 			"lpiutang_faktur_tanggal"=>$jproduk_tanggal,
@@ -302,10 +302,7 @@ class M_master_jual_produk extends Model{
 		$this->db->insert('master_lunas_piutang', $dti_lpiutang);
 		if($this->db->affected_rows()){
 			return 1;
-		}
-	}
-	
-	/*function catatan_piutang_update($jproduk_id){
+		}*/
 		$sql="SELECT * FROM vu_piutang_jproduk WHERE jproduk_id='$jproduk_id'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
@@ -321,13 +318,13 @@ class M_master_jual_produk extends Model{
 			* JIKA 'ada' ==> Lakukan UPDATE db.master_lunas_piutang
 			* JIKA 'tidak ada' ==> Lakukan INSERT db.master_lunas_piutang
 			*/
-/*			$sql="SELECT lpiutang_id FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
+			$sql="SELECT lpiutang_id FROM master_lunas_piutang WHERE lpiutang_faktur='$lpiutang_faktur'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				/* 1. DELETE db.master_lunas_piutang AND db.detail_jual_piutang
 				 * 2. INSERT to db.master_lunas_piutang
 				*/
-/*				$sql = "DELETE detail_lunas_piutang, master_lunas_piutang
+				$sql = "DELETE detail_lunas_piutang, master_lunas_piutang
 					FROM master_lunas_piutang
 					LEFT JOIN detail_lunas_piutang ON(dpiutang_master=lpiutang_id)
 					WHERE lpiutang_faktur='".$lpiutang_faktur."'";
@@ -350,7 +347,7 @@ class M_master_jual_produk extends Model{
 				}
 			}else{
 				/* INSERT db.master_lunas_piutang */
-/*				$dti_lpiutang=array(
+				$dti_lpiutang=array(
 				"lpiutang_faktur"=>$lpiutang_faktur,
 				"lpiutang_cust"=>$lpiutang_cust,
 				"lpiutang_faktur_tanggal"=>$lpiutang_faktur_tanggal,
@@ -367,7 +364,7 @@ class M_master_jual_produk extends Model{
 		}else{
 			return 1;
 		}
-	}*/
+	}
 	
 	function catatan_piutang_batal($jproduk_id){
 		/* 1. Cari jproduk_nobukti
@@ -764,8 +761,10 @@ class M_master_jual_produk extends Model{
 					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
 					"dproduk_creator"=>@$_SESSION[SESSION_USERID]
 				);
+				$this->db->query('LOCK TABLE detail_jual_produk WRITE');
 				$this->db->where('dproduk_id', $dproduk_id);
 				$this->db->update('detail_jual_produk', $dtu_dproduk);
+				$this->db->query('UNLOCK TABLES');
 			}else{
 				$sql_produk = "SELECT produk_point AS produk_point FROM produk WHERE produk_id='".$dproduk_produk."'";
 				$rs_produk = $this->db->query($sql_produk);
@@ -784,22 +783,35 @@ class M_master_jual_produk extends Model{
 					"dproduk_diskon_jenis"=>$dproduk_diskon_jenis,
 					"dproduk_creator"=>@$_SESSION[SESSION_USERID]
 				);
+				$this->db->query('LOCK TABLE detail_jual_produk WRITE');
 				$this->db->insert('detail_jual_produk', $dti_jproduk);
+				$this->db->query('UNLOCK TABLES');
 			}
 			
 			if($cetak==1 && $i==$size_array){
 				/*proses cetak*/
-				$rs_point_update = $this->member_point_update($dproduk_master);
-				if($rs_point_update==1){
-					$rs_membership = $this->membership_insert($dproduk_master);
-					if($rs_membership==1){
-						return $dproduk_master;
+				$rs_stat_dok = $this->stat_dok_tertutup_update($dproduk_master);
+				if($rs_stat_dok==1){
+					$rs_point_update = $this->member_point_update($dproduk_master);
+					if($rs_point_update==1){
+						$rs_membership = $this->membership_insert($dproduk_master);
+						if($rs_membership==1){
+							$rs_piutang_update = $this->catatan_piutang_update($dproduk_master);
+							if($rs_piutang_update==1){
+								return $dproduk_master;
+							}else{
+								return '0';
+							}
+						}else{
+							return 0;
+						}
 					}else{
 						return 0;
 					}
 				}else{
 					return 0;
 				}
+				
 			}else if($cetak<>1 && $i==$size_array){
 				return 0;
 			}
@@ -839,7 +851,6 @@ class M_master_jual_produk extends Model{
 				,jproduk_update
 				,jproduk_date_update
 				,jproduk_revised
-				,jproduk_stat_dok
 			FROM vu_jproduk
 			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)
 			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jproduk.jproduk_grooming)";
@@ -911,7 +922,7 @@ class M_master_jual_produk extends Model{
 		$date_now = date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
 		
-		$piutang_total = $jproduk_total - $jproduk_bayar;
+		//$piutang_total = $jproduk_total - $jproduk_bayar;
 		
 		$jproduk_revised=0;
 		
@@ -987,10 +998,10 @@ class M_master_jual_produk extends Model{
 		$rs = $this->db->affected_rows();
 		$this->db->query('UNLOCK TABLES');
 		if($rs>(-1)){
-			
+			/*
 			if(($cetak==1) && ($piutang_total>0)){
 				$this->catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total);
-			}
+			}*/
 			
 			$time_now = date('H:i:s');
 			$bayar_date_create_temp = $jproduk_tanggal.' '.$time_now;
@@ -1211,7 +1222,7 @@ class M_master_jual_produk extends Model{
 		$date_now = date('Y-m-d');
 		$datetime_now = date('Y-m-d H:i:s');
 		
-		$piutang_total = $jproduk_total - $jproduk_bayar;
+		//$piutang_total = $jproduk_total - $jproduk_bayar;
 		
 		$jproduk_tanggal_pattern=strtotime($jproduk_tanggal);
 		$pattern="FT/".date("ym",$jproduk_tanggal_pattern)."-";
@@ -1279,10 +1290,10 @@ class M_master_jual_produk extends Model{
 		$rs = $this->db->affected_rows();
 		$this->db->query('UNLOCK TABLES');
 		if($rs>0){
-			
+			/*
 			if(($cetak==1) && ($piutang_total>0)){
 				$this->catatan_piutang_update($jproduk_nobukti ,$jproduk_cust ,$jproduk_tanggal ,$piutang_total);
-			}
+			}*/
 			
 			$time_now = date('H:i:s');
 			$bayar_date_create_temp = $jproduk_tanggal.' '.$time_now;
@@ -1588,7 +1599,6 @@ class M_master_jual_produk extends Model{
 				,jproduk_update
 				,jproduk_date_update
 				,jproduk_revised
-				,jproduk_stat_dok
 			FROM vu_jproduk
 			LEFT JOIN vu_jproduk_totalbiaya ON(vu_jproduk_totalbiaya.dproduk_master=vu_jproduk.jproduk_id)
 			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jproduk.jproduk_grooming)";
