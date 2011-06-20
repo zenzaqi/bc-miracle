@@ -2220,7 +2220,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'and vu_customer.cust_kelamin = '".$lap_kunjungan_kelamin."'".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
