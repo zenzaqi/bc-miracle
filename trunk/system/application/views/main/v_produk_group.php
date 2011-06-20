@@ -78,6 +78,9 @@ var group_dkolegaField;
 var group_dkeluargaField;
 var group_downerField;
 var group_dgroomingField;
+var group_dwartawanField;
+var group_dstaffdokterField;
+var group_dstaffnondokterField;
 
 var group_kodeSearchField;
 var group_namaSearchField;
@@ -203,6 +206,9 @@ Ext.onReady(function(){
 		var group_dkeluarga_create=null;
 		var group_downer_create=null;
 		var group_dgrooming_create=null;
+		var group_dwartawan_create=null;
+		var group_dstaffdokter_create=null;	
+		var group_dstaffnondokter_create=null;
 		
 
 		group_id_create_pk=get_pk_id();
@@ -223,6 +229,11 @@ Ext.onReady(function(){
 		if(group_dkeluargaField.getValue()!== null){group_dkeluarga_create = group_dkeluargaField.getValue();}
 		if(group_downerField.getValue()!== null){group_downer_create = group_downerField.getValue();}
 		if(group_dgroomingField.getValue()!== null){group_dgrooming_create = group_dgroomingField.getValue();}
+		if(group_dwartawanField.getValue()!== null){group_dwartawan_create = group_dwartawanField.getValue();}
+		if(group_dstaffdokterField.getValue()!== null){group_dstaffdokter_create = group_dstaffdokterField.getValue();}
+		if(group_dstaffnondokterField.getValue()!== null){group_dstaffnondokter_create = group_dstaffnondokterField.getValue();}
+		
+		
 		
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
@@ -248,6 +259,9 @@ Ext.onReady(function(){
 					group_dkeluarga	: group_dkeluarga_create,
 					group_downer	: group_downer_create,
 					group_dgrooming	: group_dgrooming_create,
+					group_dwartawan	: group_dwartawan_create,
+					group_dstaffdokter : group_dstaffdokter_create,
+					group_dstaffnondokter	: group_dstaffnondokter_create,
 					group_opsi	: btn
 				}, 
 				success: function(response){             
@@ -339,6 +353,13 @@ Ext.onReady(function(){
 		group_downerField.setValue(null);
 		group_dgroomingField.reset();
 		group_dgroomingField.setValue(null);
+		group_dwartawanField.reset();
+		group_dwartawanField.setValue(null);
+		group_dstaffdokterField.reset();
+		group_dstaffdokterField.setValue(null);
+		group_dstaffnondokterField.reset();
+		group_dstaffnondokterField.setValue(null);
+		
 		
 	}
  	/* End of Function */
@@ -363,6 +384,11 @@ Ext.onReady(function(){
 		group_dkeluargaField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dkeluarga'));
 		group_downerField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_downer'));
 		group_dgroomingField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dgrooming'));
+		group_dwartawanField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dwartawan'));
+		group_dstaffdokterField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dstaffdokter'));
+		group_dstaffnondokterField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dstaffnondokter'));
+		
+		
 	}
 	/* End setValue to EDIT*/
   
@@ -501,6 +527,9 @@ Ext.onReady(function(){
 			{name: 'group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
 			{name: 'group_downer', type: 'int', mapping: 'group_downer'},
 			{name: 'group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
+			{name: 'group_dwartawan', type: 'int', mapping: 'group_dwartawan'},
+			{name: 'group_dstaffdokter', type: 'int', mapping: 'group_dstaffdokter'},
+			{name: 'group_dstaffnondokter', type: 'int', mapping: 'group_dstaffnondokter'},
 			{name: 'group_creator', type: 'string', mapping: 'group_creator'},
 			{name: 'group_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'group_date_create'},
 			{name: 'group_update', type: 'string', mapping: 'group_update'},
@@ -560,7 +589,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Produk',
 			dataIndex: 'group_duproduk',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -570,7 +599,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Produk',
 			dataIndex: 'group_dmproduk',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -580,7 +609,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Perawatan',
 			dataIndex: 'group_durawat',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -590,7 +619,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Perawatan',
 			dataIndex: 'group_dmrawat',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -600,7 +629,7 @@ Ext.onReady(function(){
 		{
 			header: 'DU Paket',
 			dataIndex: 'group_dupaket',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -610,7 +639,7 @@ Ext.onReady(function(){
 		{
 			header: 'DM Paket',
 			dataIndex: 'group_dmpaket',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -620,7 +649,7 @@ Ext.onReady(function(){
 		{
 			header: 'Ultah',
 			dataIndex: 'group_dultah',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -630,7 +659,7 @@ Ext.onReady(function(){
 		{
 			header: 'Card',
 			dataIndex: 'group_dcard',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -640,7 +669,7 @@ Ext.onReady(function(){
 		{
 			header: 'Kolega',
 			dataIndex: 'group_dkolega',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -650,7 +679,7 @@ Ext.onReady(function(){
 		{
 			header: 'Keluarga',
 			dataIndex: 'group_dkeluarga',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -660,7 +689,7 @@ Ext.onReady(function(){
 		{
 			header: 'Owner',
 			dataIndex: 'group_downer',
-			width: 100,
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -670,7 +699,37 @@ Ext.onReady(function(){
 		{
 			header: 'Grooming',
 			dataIndex: 'group_dgrooming',
-			width: 100,
+			width: 80,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Wartawan',
+			dataIndex: 'group_dwartawan',
+			width: 80,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Staff Dokter',
+			dataIndex: 'group_dstaffdokter',
+			width: 80,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Staff Non Dokter',
+			dataIndex: 'group_dstaffnondokter',
+			width: 80,
 			sortable: true,
 			renderer: function(val){
 				return '<span>' + val + ' %</span>';
@@ -793,7 +852,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 980,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: produk_group_DataStore,
@@ -1138,6 +1197,45 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify group_dwartawan Field*/
+	group_dwartawanField= new Ext.form.NumberField({
+		id: 'group_dwartawanField',
+		fieldLabel: 'Wartawan',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dstaffdokter Field*/
+	group_dstaffdokterField= new Ext.form.NumberField({
+		id: 'group_dstaffdokterField',
+		fieldLabel: 'Staff Dokter',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dstaffnondokter Field*/
+	group_dstaffnondokterField= new Ext.form.NumberField({
+		id: 'group_dstaffnondokterField',
+		fieldLabel: 'Staff Non Dokter',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	group_diskon_umumFielSet = new Ext.form.FieldSet({
 		title: 'Diskon Umum (%)',
 		labelWidth: 90,
@@ -1279,6 +1377,60 @@ Ext.onReady(function(){
 			}
 			]
 	});
+	
+	/* Group utk Diskon Wartawan */
+	group_diskon_wartawanFieldset = new Ext.form.FieldSet({
+		title: 'Wartawan (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dwartawanField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Staff Dokter */
+	group_diskon_staffdokterFieldset = new Ext.form.FieldSet({
+		title: 'Staff Dokter (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dstaffdokterField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Staff Non Dokter */
+	group_diskon_staffnondokterFieldset = new Ext.form.FieldSet({
+		title: 'Staff Non Dokter (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dstaffnondokterField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
 
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -1347,6 +1499,24 @@ Ext.onReady(function(){
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_groomingFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_wartawanFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_staffdokterFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_staffnondokterFieldset]
 								   }
 								   ]
 						}
@@ -1695,7 +1865,18 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	
+	/* Identify group_dwartawanSearchField Field*/
+	group_dwartawanSearchField= new Ext.form.NumberField({
+		id: 'group_dwartawanSearchField',
+		fieldLabel: 'Wartawan',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	
 	
 	
@@ -2177,6 +2358,21 @@ Ext.onReady(function(){
 		}
 	});
 	group_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dwartawanField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dstaffdokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	group_dstaffnondokterField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}

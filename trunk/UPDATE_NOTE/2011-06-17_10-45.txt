@@ -1,0 +1,4 @@
+2011-06-17_10-45.sql
+
+--> utk menambahan jenis diskon wartawan, staffdokter dan staffnondokter ke tabel produk_group , paket, perawatan dan paket
+beserta view nya.. 

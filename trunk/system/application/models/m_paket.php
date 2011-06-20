@@ -304,7 +304,7 @@ class M_paket extends Model{
 
 	//function for update record
 	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
-						$paket_du ,$paket_dm ,$paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+						$paket_du ,$paket_dm ,$paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dstaffnondokter,
 						$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
@@ -419,7 +419,7 @@ class M_paket extends Model{
 			"paket_date_update"=>date('Y-m-d H:i:s')
 		);
 			
-		$sql="SELECT group_id,group_dupaket,group_dmpaket, group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming FROM produk_group WHERE group_id='".$paket_group."'";
+		$sql="SELECT group_id,group_dupaket,group_dmpaket, group_dultah, group_dcard, group_dkolega, group_dkeluarga, group_downer, group_dgrooming, group_dwartawan, group_dstaffdokter, group_dstaffnondokter FROM produk_group WHERE group_id='".$paket_group."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows()){
 			$data["paket_group"]=$paket_group;
@@ -432,7 +432,9 @@ class M_paket extends Model{
 			$data["paket_dkeluarga"]=$rs_sql->group_dkeluarga;
 			$data["paket_downer"]=$rs_sql->group_downer;
 			$data["paket_dgrooming"]=$rs_sql->group_dgrooming;
-			
+			$data["paket_dwartawan"]=$rs_sql->group_dwartawan;
+			$data["paket_dstaffdokter"]=$rs_sql->group_dstaffdokter;
+			$data["paket_dstaffnondokter"]=$rs_sql->group_dstaffnondokter;
 		}
 
 		$sql_g="SELECT group_id,group_kode FROM produk_group WHERE group_id='".$paket_group."'";
@@ -495,7 +497,23 @@ class M_paket extends Model{
 		$rs=$this->db->query($sql);
 		if($rs->num_rows())
 			$data["paket_dgrooming"]=$paket_dgrooming;	
+			
+		$sql="SELECT paket_dwartawan FROM paket WHERE paket_dwartawan!='".$paket_dwartawan."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dwartawan"]=$paket_dwartawan;	
 
+		$sql="SELECT paket_dstaffdokter FROM paket WHERE paket_dstaffdokter!='".$paket_dstaffdokter."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dstaffdokter"]=$paket_dstaffdokter;	
+			
+		
+		$sql="SELECT paket_dstaffnondokter FROM paket WHERE paket_dstaffnondokter!='".$paket_dstaffnondokter."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dstaffnondokter"]=$paket_dstaffnondokter;	
+		
 		$this->db->where('paket_id', $paket_id);
 		$this->db->update('paket', $data);
 
@@ -508,7 +526,7 @@ class M_paket extends Model{
 
 	//function for create new record
 	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
-							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming,
+							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dstaffnondokter,
 							$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
@@ -613,6 +631,9 @@ class M_paket extends Model{
 			"paket_dkeluarga"=>$paket_dkeluarga,
 			"paket_downer"=>$paket_downer,
 			"paket_dgrooming"=>$paket_dgrooming,
+			"paket_dwartawan"=>$paket_dwartawan,
+			"paket_dstaffdokter"=>$paket_dstaffdokter,
+			"paket_dstaffnondokter"=>$paket_dstaffnondokter,
 			"paket_point"=>$paket_point,
 			"paket_harga"=>$paket_harga,
 			"paket_harga_ki"=>$paket_harga_ki,

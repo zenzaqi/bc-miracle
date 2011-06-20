@@ -87,6 +87,9 @@ var rawat_dkolegaField;
 var rawat_dkeluargaField;
 var rawat_downerField;
 var rawat_dgroomingField;
+var rawat_dwartawanField;
+var rawat_dstaffdokterField;
+var rawat_dstaffnondokterField;
 var rawat_pointField;
 var rawat_durasiField;
 var rawat_kreditField;
@@ -245,6 +248,9 @@ Ext.onReady(function(){
 		var rawat_dkeluarga_create=null;
 		var rawat_downer_create=null;
 		var rawat_dgrooming_create=null;
+		var rawat_dwartawan_create=null;
+		var rawat_dstaffdokter_create=null;
+		var rawat_dstaffnondokter_create=null;
 		var rawat_point_create=null;
 		var rawat_durasi_create=null;
 		var rawat_kredit_create=null;
@@ -277,6 +283,9 @@ Ext.onReady(function(){
 		if(rawat_dkeluargaField.getValue()!== null){rawat_dkeluarga_create = rawat_dkeluargaField.getValue();}
 		if(rawat_downerField.getValue()!== null){rawat_downer_create = rawat_downerField.getValue();} 
 		if(rawat_dgroomingField.getValue()!== null){rawat_dgrooming_create = rawat_dgroomingField.getValue();} 
+		if(rawat_dwartawanField.getValue()!== null){rawat_dwartawan_create = rawat_dwartawanField.getValue();}
+		if(rawat_dstaffdokterField.getValue()!== null){rawat_dstaffdokter_create = rawat_dstaffdokterField.getValue();}
+		if(rawat_dstaffnondokterField.getValue()!== null){rawat_dstaffnondokter_create = rawat_dstaffnondokterField.getValue();}
 		if(rawat_pointField.getValue()!== null){rawat_point_create = rawat_pointField.getValue();}
 		if(rawat_durasiField.getValue()!== null){rawat_durasi_create = rawat_durasiField.getValue();}
 		if(rawat_kreditField.getValue()!== null){rawat_kredit_create = rawat_kreditField.getValue();} 
@@ -315,6 +324,9 @@ Ext.onReady(function(){
 				rawat_dkeluarga : rawat_dkeluarga_create,
 				rawat_downer	: rawat_downer_create,
 				rawat_dgrooming	: rawat_dgrooming_create,
+				rawat_dwartawan	: rawat_dwartawan_create,
+				rawat_dstaffdokter	: rawat_dstaffdokter_create,
+				rawat_dstaffnondokter	: rawat_dstaffnondokter_create,
 				rawat_point	: rawat_point_create,
 				rawat_durasi: rawat_durasi_create,
 				rawat_kredit : rawat_kredit_create,
@@ -458,6 +470,12 @@ Ext.onReady(function(){
 		rawat_downerField.setValue(null);
 		rawat_dgroomingField.reset();
 		rawat_dgroomingField.setValue(null);
+		rawat_dwartawanField.reset();
+		rawat_dwartawanField.setValue(null);
+		rawat_dstaffdokterField.reset();
+		rawat_dstaffdokterField.setValue(null);
+		rawat_dstaffnondokterField.reset();
+		rawat_dstaffnondokterField.setValue(null);
 		rawat_pointField.reset();
 		rawat_pointField.setValue(null);
 		rawat_durasiField.reset();
@@ -558,6 +576,7 @@ Ext.onReady(function(){
 		rawat_aktif_checkField.reset();
 		rawat_aktif_checkField.setValue(false);
 		combo_rawat_produk.reset();
+		combo_rawat_produk.reset();
 		
 		//cbo_satuan_produkDataStore.setBaseParam('master_id',-1);
 		//cbo_satuan_produkDataStore.load();
@@ -586,6 +605,9 @@ Ext.onReady(function(){
 		rawat_dkeluargaField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dkeluarga'));
 		rawat_downerField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_downer'));
 		rawat_dgroomingField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dgrooming'));
+		rawat_dwartawanField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dwartawan'));
+		rawat_dstaffdokterField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dstaffdokter'));
+		rawat_dstaffnondokterField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_dstaffnondokter'));
 		rawat_pointField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_point'));
 		rawat_durasiField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_durasi'));
 		rawat_kreditField.setValue(perawatanListEditorGrid.getSelectionModel().getSelected().get('rawat_kredit'));
@@ -836,6 +858,9 @@ Ext.onReady(function(){
 			{name: 'rawat_dkeluarga', type: 'int', mapping: 'rawat_dkeluarga'}, 
 			{name: 'rawat_downer', type: 'int', mapping: 'rawat_downer'}, 
 			{name: 'rawat_dgrooming', type: 'int', mapping: 'rawat_dgrooming'}, 
+			{name: 'rawat_dwartawan', type: 'int', mapping: 'rawat_dwartawan'}, 
+			{name: 'rawat_dstaffdokter', type: 'int', mapping: 'rawat_dstaffdokter'}, 
+			{name: 'rawat_dstaffnondokter', type: 'int', mapping: 'rawat_dstaffnondokter'}, 
 			{name: 'rawat_point', type: 'int', mapping: 'rawat_point'},
 			{name: 'rawat_durasi', tupe: 'int', mapping: 'rawat_durasi'},
 			{name: 'rawat_kredit', type: 'int', mapping: 'rawat_kredit'},
@@ -885,6 +910,9 @@ Ext.onReady(function(){
 			{name: 'rawat_group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
 			{name: 'rawat_group_downer', type: 'int', mapping: 'group_downer'},
 			{name: 'rawat_group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
+			{name: 'rawat_group_dwartawan', type: 'int', mapping: 'group_dwartawan'},
+			{name: 'rawat_group_dstaffdokter', type: 'int', mapping: 'group_dstaffdokter'},
+			{name: 'rawat_group_dstaffnondokter', type: 'int', mapping: 'group_dstaffnondokter'},
 			{name: 'rawat_group_kelompok', type: 'string', mapping: 'kategori_nama'},
 			{name: 'rawat_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
 		]),
@@ -1143,6 +1171,43 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Grooming' + '</div>',
 			align: 'right',
 			dataIndex: 'rawat_dgrooming',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		
+		{
+			header: '<div align="center">' + 'Wartawan' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dwartawan',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Staff Dokter' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dstaffdokter',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Staff Non Dokter' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dstaffnondokter',
 			width: 45,	//100,
 			readOnly: true,
 			renderer: function(val){
@@ -1580,7 +1645,7 @@ Ext.onReady(function(){
 	rawat_duField= new Ext.form.NumberField({
 		id: 'rawat_duField',
 		name: 'rawat_duField',
-		fieldLabel: 'Disk Umum(%)',
+		fieldLabel: 'Umum(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1593,7 +1658,7 @@ Ext.onReady(function(){
 	rawat_dmField= new Ext.form.NumberField({
 		id: 'rawat_dmField',
 		name: 'rawat_dmField',
-		fieldLabel: 'Disk Member(%)',
+		fieldLabel: 'Member(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1606,7 +1671,7 @@ Ext.onReady(function(){
 	rawat_dultahField= new Ext.form.NumberField({
 		id: 'rawat_dultahField',
 		name: 'rawat_dultahField',
-		fieldLabel: 'Disk Ultah(%)',
+		fieldLabel: 'Ultah(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1619,7 +1684,7 @@ Ext.onReady(function(){
 	rawat_dcardField= new Ext.form.NumberField({
 		id: 'rawat_dcardField',
 		name: 'rawat_dcardField',
-		fieldLabel: 'Disk Card(%)',
+		fieldLabel: 'Card(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1632,7 +1697,7 @@ Ext.onReady(function(){
 	rawat_dkolegaField= new Ext.form.NumberField({
 		id: 'rawat_dkolegaField',
 		name: 'rawat_dkolegaField',
-		fieldLabel: 'Disk Kolega(%)',
+		fieldLabel: 'Kolega(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1645,7 +1710,7 @@ Ext.onReady(function(){
 	rawat_dkeluargaField= new Ext.form.NumberField({
 		id: 'rawat_dkeluargaField',
 		name: 'rawat_dkeluargaField',
-		fieldLabel: 'Disk Keluarga(%)',
+		fieldLabel: 'Keluarga(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1658,7 +1723,7 @@ Ext.onReady(function(){
 	rawat_downerField= new Ext.form.NumberField({
 		id: 'rawat_downerField',
 		name: 'rawat_downerField',
-		fieldLabel: 'Disk Owner(%)',
+		fieldLabel: 'Owner(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1671,7 +1736,49 @@ Ext.onReady(function(){
 	rawat_dgroomingField= new Ext.form.NumberField({
 		id: 'rawat_dgroomingField',
 		name: 'rawat_dgroomingField',
-		fieldLabel: 'Disk Grooming(%)',
+		fieldLabel: 'Grooming(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify  rawat_dwartawan Field */
+	rawat_dwartawanField= new Ext.form.NumberField({
+		id: 'rawat_dwartawanField',
+		name: 'rawat_dwartawanField',
+		fieldLabel: 'Wartawan(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify  rawat_dstaffdokter Field */
+	rawat_dstaffdokterField= new Ext.form.NumberField({
+		id: 'rawat_dstaffdokterField',
+		name: 'rawat_dstaffdokterField',
+		fieldLabel: 'Staff Dokter(%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		allowBlank : true,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify  rawat_dstaffnondokter Field */
+	rawat_dstaffnondokterField= new Ext.form.NumberField({
+		id: 'rawat_dstaffnondokterField',
+		name: 'rawat_dstaffnondokterField',
+		fieldLabel: 'Staff Non Dokter(%)',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1974,14 +2081,14 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [rawat_duField, rawat_dmField, rawat_dultahField,rawat_dcardField]
+				items: [rawat_duField, rawat_dmField, rawat_dultahField,rawat_dcardField, rawat_dwartawanField]
 			},
 			{
 				columnWidth:0.5,
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [rawat_dkolegaField, rawat_dkeluargaField, rawat_downerField, rawat_dgroomingField]
+				items: [rawat_dkolegaField, rawat_dkeluargaField, rawat_downerField, rawat_dgroomingField, rawat_dstaffdokterField, rawat_dstaffnondokterField]
 			}
 		]
 	});
@@ -2265,6 +2372,9 @@ Ext.onReady(function(){
 			rawat_dkeluargaField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dkeluarga);
 			rawat_downerField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_downer);
 			rawat_dgroomingField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dgrooming);
+			rawat_dwartawanField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dwartawan);
+			rawat_dstaffdokterField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dstaffdokter);
+			rawat_dstaffnondokterField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_dstaffnondokter);
 			rawat_kategoritxtField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok);
 			rawat_kategoriField.setValue(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok_id);
 			if(cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Medis" || cbo_rawat_groupDataStore.getAt(record).data.rawat_group_kelompok=="Surgery"){
@@ -3770,6 +3880,21 @@ Ext.onReady(function(){
 		}
 	});
 	rawat_dgroomingField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dwartawanField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dstaffdokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	rawat_dstaffnondokterField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}
