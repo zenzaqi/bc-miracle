@@ -535,7 +535,7 @@ class M_hpp extends Model{
 					) as stok GROUP by stok.produk";
 									
 			$query=$this->db->query($sql);
-			$this->firephp->log($sql);
+			//$this->firephp->log($sql);
 			if($query->num_rows()>0){
 				$row=$query->row();
 				return $row->stok_saldo;
