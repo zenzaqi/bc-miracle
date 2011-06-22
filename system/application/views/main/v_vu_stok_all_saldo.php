@@ -60,6 +60,8 @@ var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
 var firstday=(new Date().format('Y-m'))+'-01';
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 /* declare variable here for Field*/
 var produk_idField;
 var produk_namaField;
@@ -71,6 +73,18 @@ var produk_namaSearchField;
 var satuan_idSearchField;
 var satuan_namaSearchField;
 var stok_saldoSearchField;
+var stok_bulanField
+
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+
+?>
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -513,6 +527,26 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 
+	/* Function for Retrieve DataStore */
+	stok_group_DataStore = new Ext.data.Store({
+		id: 'stok_group_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_vu_stok_all_saldo&m=get_group_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'group_id'
+		},[
+			{name: 'group_id', type: 'int', mapping: 'group_id'}, 
+			{name: 'group_kode', type: 'string', mapping: 'group_kode'}, 
+			{name: 'group_nama', type: 'string', mapping: 'group_nama'}
+		]),
+		sortInfo:{field: 'group_id', direction: "DESC"}
+	});
+	
 	vu_stok_detail_ColumnModel = new Ext.grid.ColumnModel(
 		[{
 			header: '#',
@@ -650,12 +684,36 @@ Ext.onReady(function(){
 		var tanggal_start_search="";
 		var tanggal_end_search="";
 		var opsi_satuan_search='default';
-
+		var opsi_produk_search='all';
+		var group_nama_search=null;
+		var stok_tmedis_bulan=null;
+		var stok_tmedis_tahun=null;
+		var stok_tmedis_periode=null;
+ 
 		if(stok_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_produk_namaSearchField.getValue();}
+		if(stok_group1SearchField.getValue()!==null){group_nama_search=stok_group1SearchField.getValue();}
+		if(stok_bulanField.getValue()!==null){stok_tmedis_bulan=stok_bulanField.getValue();}
+		if(stok_tahunField.getValue()!==null){stok_tmedis_tahun=stok_tahunField.getValue();}
 		if(stok_produk_allField.getValue()==true){ produk_nama_search=null; }
-		if(stok_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_tanggal_startSearchField.getValue().format('Y-m-d');}
-		if(stok_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_tanggal_endSearchField.getValue().format('Y-m-d');}
+		if(Ext.getCmp('stok_tanggal_startSearchField').getValue()!==null){tanggal_start_search=Ext.getCmp('stok_tanggal_startSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('stok_tanggal_endSearchField').getValue()!==null){tanggal_end_search=Ext.getCmp('stok_tanggal_endSearchField').getValue().format('Y-m-d');}
 		if(stok_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
+		
+		if(stok_produk_allField.getValue()==true){ 
+			opsi_produk_search='all';
+		}else if(stok_produk_selectField.getValue()==true){
+			opsi_produk_search='produk';
+		}else if(stok_group_selectField.getValue()==true){
+			opsi_produk_search='group1';
+		}
+		
+		if(stok_opsitglField.getValue()==true){
+			stok_tmedis_periode='tanggal';
+		}else if(stok_opsiblnField.getValue()==true){
+			stok_tmedis_periode='bulan';
+		}else{
+			stok_tmedis_periode='all';
+		}
 
 		// change the store parameters
 		vu_stok_all_saldo_DataStore.baseParams = {
@@ -663,7 +721,12 @@ Ext.onReady(function(){
 			produk_id		:	produk_nama_search,
 			tanggal_start	:	tanggal_start_search,
 			tanggal_end		:	tanggal_end_search,
-			opsi_satuan		: 	opsi_satuan_search
+			opsi_satuan		: 	opsi_satuan_search,
+			opsi_produk		: 	opsi_produk_search,
+			group1_id		: 	group_nama_search,
+			bulan		: stok_tmedis_bulan,
+			tahun		: stok_tmedis_tahun,
+			periode		: stok_tmedis_periode
 		};
 
 		Ext.MessageBox.show({
@@ -689,6 +752,10 @@ Ext.onReady(function(){
 		// reset the store parameters
 		vu_stok_all_saldo_DataStore.baseParams = { task: 'LIST', start:0 , limit: pageS };
 		vu_stok_all_saldo_DataStore.reload({params: {start: 0, limit: pageS}});
+		Ext.getCmp('stok_tanggal_startSearchField').reset();
+		Ext.getCmp('stok_tanggal_startSearchField').setValue(today);
+		Ext.getCmp('stok_tanggal_endSearchField').reset();
+		Ext.getCmp('stok_tanggal_endSearchField').setValue(today);
 		vu_stok_all_saldo_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -726,7 +793,158 @@ Ext.onReady(function(){
 
 	});
 
-	stok_tanggal_startSearchField=new Ext.form.DateField({
+	var stok_group_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{group_nama} ({group_kode})</b></span>',
+        '</div></tpl>'
+    );
+	
+	stok_group1SearchField= new Ext.form.ComboBox({
+		id: 'stok_group1SearchField',
+		fieldLabel: '-',
+		store: stok_group_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'group_nama',
+		valueField: 'group_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: stok_group_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		width: 300
+	
+	});
+	
+	
+	
+	/////tgl n bulan
+	stok_opsitglField=new Ext.form.Radio({
+		id:'stok_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
+	
+	stok_opsiblnField=new Ext.form.Radio({
+		id:'stok_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	stok_tanggal_startSearchField= new Ext.form.DateField({
+		id: 'stok_tanggal_startSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'stok_tanggal_startSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'stok_tglakhirField'
+		value: today
+	});
+	
+	stok_tanggal_endSearchField= new Ext.form.DateField({
+		id: 'stok_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'stok_tanggal_endSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'stok_tglawalField',
+		value: today
+	});
+	
+	stok_bulanField=new Ext.form.ComboBox({
+		id:'stok_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	stok_tahunField=new Ext.form.ComboBox({
+		id:'stok_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var stok_periodeField=new Ext.form.FieldSet({
+		id:'stok_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[stok_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[stok_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[stok_tanggal_startSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[stok_tanggal_endSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[stok_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[stok_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[stok_tahunField]
+					   }]
+			}]
+	});
+	//// end of tgl n bulan
+	
+	
+	
+	
+	/*stok_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'stok_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
 		format: 'd-m-Y',
@@ -738,7 +956,7 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format: 'd-m-Y',
 		value: today
-	});
+	});*/
 
 	stok_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
@@ -750,6 +968,13 @@ Ext.onReady(function(){
 	stok_produk_selectField=new Ext.form.Radio({
 		name:'opsi_produk',
 		boxLabel: 'Produk',
+		checked: true,
+		width: 100
+	});
+	
+	stok_group_selectField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Group 1',
 		width: 100
 	});
 
@@ -768,30 +993,73 @@ Ext.onReady(function(){
 
 	stok_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 
-	stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
+/*	stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_tanggal_opsiSearchField',
 		title: 'Opsi Tanggal',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		frame: false,
-		items:[stok_tanggal_startSearchField, stok_label_tanggalField, stok_tanggal_endSearchField]
-	});
+		items:[//stok_tanggal_startSearchField, stok_label_tanggalField, stok_tanggal_endSearchField,
+				{
+					layout: 'column',
+					border: false,
+					items:[stok_opsitglField, {
+								layout: 'form',
+								border: false,
+								labelWidth: 15,
+								bodyStyle:'padding:3px',
+								items:[stok_tanggal_startSearchField]
+						   },{
+								layout: 'form',
+								border: false,
+								labelWidth: 15,
+								bodyStyle:'padding:3px',
+								labelSeparator: ' ', 
+								items:[stok_tanggal_endSearchField]
+						   }]
+				},{
+				layout: 'column',
+				border: false,
+				items:[stok_opsiblnField,{
+							layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[stok_bulanField]
+					   },{
+							layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[stok_tahunField]
+					   }]
+				}
+				]
+	});*/
 
 	stok_produk_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_produk_opsiSearchField',
 		title: 'Opsi Produk',
 		layout: 'form',
 		frame: false,
-		boduStyle: 'padding: 5px;',
-		items:[{
+		bodyStyle: 'padding: 5px;',
+		items:[/*{
 			   		layout	: 'column',
 					border: false,
 					items	: [stok_produk_allField]
-			   },
+			   },*/
 			   {
 				   layout	: 'column',
+				   bodyStyle: 'padding-bottom: 5px;',
 				   border: false,
 				   items	: [stok_produk_selectField,stok_produk_namaSearchField]
+			   },
+			    {
+			   		layout	: 'column',
+					bodyStyle: 'padding-bottom: 5px;',
+					border: false,
+					items	: [stok_group_selectField, stok_group1SearchField]
 			   }
 
 		]
@@ -831,7 +1099,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [stok_produk_opsiSearchField,stok_satuan_opsiSearchField, stok_tanggal_opsiSearchField]
+				items: [stok_produk_opsiSearchField,stok_satuan_opsiSearchField, stok_periodeField]
 			}
 			]
 		}]
@@ -890,6 +1158,7 @@ Ext.onReady(function(){
 		if(vu_stok_all_saldo_DataStore.baseParams.produk_id!==null){produk_id_print = vu_stok_all_saldo_DataStore.baseParams.produk_id;}
 		if(vu_stok_all_saldo_DataStore.baseParams.tanggal_start!==null){tanggal_start_print = vu_stok_all_saldo_DataStore.baseParams.tanggal_start;}
 		if(vu_stok_all_saldo_DataStore.baseParams.tanggal_end!==null){tanggal_end_print = vu_stok_all_saldo_DataStore.baseParams.tanggal_end;}
+		if(vu_stok_all_saldo_DataStore.baseParams.opsi_produk!==null){opsi_produk_print = vu_stok_all_saldo_DataStore.baseParams.opsi_produk;}
 		if(vu_stok_all_saldo_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = vu_stok_all_saldo_DataStore.baseParams.opsi_satuan;}
 
 		Ext.MessageBox.show({
@@ -910,6 +1179,7 @@ Ext.onReady(function(){
 			tanggal_start	: tanggal_start_print,
 			tanggal_end		: tanggal_end_print,
 			opsi_satuan		: opsi_satuan_print,
+			opsi_produk		: opsi_produk_print,
 		  	currentlisting	: vu_stok_all_saldo_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){
@@ -1008,7 +1278,17 @@ Ext.onReady(function(){
 	/*End of Function */
 
 	vu_stok_all_saldo_searchWindow.show();
-
+	
+	stok_opsitglField.on("check",function(){
+		if(stok_opsitglField.getValue()==true){
+			stok_tanggal_startSearchField.allowBlank=false;
+			stok_tanggal_endSearchField.allowBlank=false;
+		}else{
+			stok_tanggal_startSearchField.allowBlank=true;
+			stok_tanggal_endSearchField.allowBlank=true;
+		}
+		
+	});
 });
 	</script>
 <body>

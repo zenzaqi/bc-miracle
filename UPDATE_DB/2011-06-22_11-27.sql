@@ -1,0 +1,7 @@
+CREATE OR REPLACE VIEW `vu_stok_new_produk` AS select date_format(`vt`.`tanggal`,_utf8'%Y-%m-%d') AS `tanggal`,`vt`.`asal` AS `asal`,`vt`.`tujuan` AS `tujuan`,`pd`.`produk_id` AS `produk_id`,`vt`.`gudang` AS `gudang`,`vt`.`no_bukti` AS `no_bukti`,`pd`.`produk_kode` AS `produk_kode`,`pd`.`produk_nama` AS `produk_nama`,`pd`.`produk_group` AS `produk_group`,`pd`.`produk_volume` AS `produk_volume`,`st`.`satuan_kode` AS `satuan_kode`,`st`.`satuan_nama` AS `satuan_nama`,`sk`.`konversi_nilai` AS `konversi_nilai`,`vt`.`jml_terima_barang` AS `jml_terima_barang`,`vt`.`jml_terima_bonus` AS `jml_terima_bonus`,`vt`.`jml_retur_beli` AS `jml_retur_beli`,`vt`.`jml_mutasi_masuk` AS `jml_mutasi_masuk`,`vt`.`jml_mutasi_keluar` AS `jml_mutasi_keluar`,`vt`.`jml_koreksi_stok` AS `jml_koreksi_stok`,`vt`.`jml_jual_produk` AS `jml_jual_produk`,`vt`.`jml_jual_grooming` AS `jml_jual_grooming`,`vt`.`jml_retur_produk` AS `jml_retur_produk`,`vt`.`jml_retur_paket` AS `jml_retur_paket`,`vt`.`jml_pakai_cabin` AS `jml_pakai_cabin`,`vt`.`jenis_transaksi` AS `jenis_transaksi`,`vt`.`keterangan` AS `keterangan`,`vt`.`status` AS `status` from (((`produk` `pd` join `satuan` `st`) join `satuan_konversi` `sk`) join `vu_stok_new` `vt`) where ((`sk`.`konversi_produk` = `vt`.`produk`) and (`pd`.`produk_id` = `sk`.`konversi_produk`) and (`sk`.`konversi_satuan` = `vt`.`satuan`) and (`pd`.`produk_id` = `vt`.`produk`) and (`st`.`satuan_id` = `sk`.`konversi_satuan`));
+
+--
+-- VIEW  `vu_stok_new_produk`
+-- Data: None
+--
+

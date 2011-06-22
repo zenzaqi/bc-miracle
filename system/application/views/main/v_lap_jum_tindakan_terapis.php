@@ -120,6 +120,17 @@ var pageS=25;
 var lap_jum_tindakan_terapis_idSearchField;
 var lap_jum_tindakan_terapis_groupbyField;
 
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+
+?>
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
