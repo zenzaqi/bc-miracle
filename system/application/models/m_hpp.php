@@ -163,12 +163,12 @@ class M_hpp extends Model{
 			return $persediaan;
 		}
 		
-		function get_stok_saldo($periode, $produk_id){
+		function get_stok_saldo($tanggal_start, $produk_id){
 			/*$sql="SELECT sum(jumlah_saldo) as stok_saldo from vu_stok_new_produk 
 					where DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode."'
 					AND produk_id='".$produk_id."'";
 			
-*/			$sql="SELECT 	sum(jml_terima_barang*konversi_nilai)
+*/			/*$sql="SELECT 	sum(jml_terima_barang*konversi_nilai)
 											+sum(jml_terima_bonus*konversi_nilai)
 											-sum(jml_retur_beli*konversi_nilai)
 											-sum(jml_mutasi_keluar*konversi_nilai)
@@ -184,10 +184,358 @@ class M_hpp extends Model{
 									WHERE   date_format(tanggal,'%Y-%m-%d')<'".$periode."'
 											AND produk_id='".$produk_id."'
 											AND status<>'Batal'
-									GROUP BY produk_id";
+									GROUP BY produk_id";*/
+			$sql="";
+			
+			$sql="SELECT 	sum(stok.jml_terima_barang)
+						+sum(stok.jml_terima_bonus)
+						-sum(stok.jml_retur_beli)
+						-sum(stok.jml_mutasi_keluar)
+						+sum(stok.jml_mutasi_masuk)
+						+sum(stok.jml_koreksi_stok)
+						-sum(stok.jml_jual_produk)
+						-sum(stok.jml_jual_grooming)
+						+sum(stok.jml_retur_produk)
+						+sum(stok.jml_retur_paket)
+						-sum(stok.jml_pakai_cabin)
+						as stok_saldo
+				FROM
+								
+					(SELECT `mt`.`terima_tanggal` AS `tanggal`,
+					          `mt`.`terima_supplier` AS `asal`,
+					          1 AS `tujuan`,
+					          1 AS `gudang`,
+					          `mt`.`terima_no` AS `no_bukti`,
+					          _UTF8 'PB' AS `jenis_transaksi`,
+					          `mt`.`terima_status` AS `status`,
+					          `dt`.`dterima_produk` AS `produk`,
+					          `dt`.`dterima_satuan` AS `satuan`,
+					          `dt`.`dterima_jumlah`*sk.konversi_nilai AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'beli' AS `keterangan`,
+					          `dt`.`dterima_id` AS `detail_id`
+					     FROM `detail_terima_beli` `dt`,`master_terima_beli` `mt`,
+					           satuan_konversi sk					              
+					    WHERE `dt`.`dterima_master` = `mt`.`terima_id`
+					    AND  sk.konversi_satuan=dt.dterima_satuan
+					    AND  dt.dterima_produk='".$produk_id."'
+					    AND  date_format(mt.terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mt.terima_status='Tertutup'
+					    
+					    UNION ALL
+					    SELECT `mt`.`terima_tanggal` AS `tanggal`,
+					          `mt`.`terima_supplier` AS `asal`,
+					          1 AS `tujuan`,
+					          1 AS `gudang`,
+					          `mt`.`terima_no` AS `no_bukti`,
+					          _UTF8 'PB' AS `jenis_transaksi`,
+					          `mt`.`terima_status` AS `status`,
+					          `db`.`dtbonus_produk` AS `produk`,
+					          `db`.`dtbonus_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          `db`.`dtbonus_jumlah`*sk.konversi_nilai AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'bonus' AS `keterangan`,
+					          `db`.`dtbonus_id` AS `detail_id`
+					     FROM `detail_terima_bonus` `db`,`master_terima_beli` `mt`,
+					     		satuan_konversi sk
+					    WHERE `db`.`dtbonus_master` = `mt`.`terima_id`
+					    AND  sk.konversi_satuan=db.dtbonus_satuan
+					    AND  db.dtbonus_produk='".$produk_id."'
+					    AND  date_format(mt.terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mt.terima_status='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mr`.`rbeli_tanggal` AS `tanggal`,
+					          `mr`.`rbeli_supplier` AS `asal`,
+					          1 AS `tujuan`,
+					          1 AS `gudang`,
+					          `mr`.`rbeli_nobukti` AS `no_bukti`,
+					          _UTF8 'RB' AS `jenis_transaksi`,
+					          `mr`.`rbeli_status` AS `status`,
+					          `dr`.`drbeli_produk` AS `produk`,
+					          `dr`.`drbeli_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          `dr`.`drbeli_jumlah`*sk.konversi_nilai AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'retur' AS `keterangan`,
+					          `dr`.`drbeli_id` AS `detail_id`
+					     FROM `detail_retur_beli` `dr`,`master_retur_beli` `mr`, satuan_konversi sk
+					    WHERE `dr`.`drbeli_master` = `mr`.`rbeli_id`
+					    AND  sk.konversi_satuan=dr.drbeli_satuan
+					    AND  dr.drbeli_produk='".$produk_id."'
+					    AND  date_format(mr.rbeli_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mr.rbeli_status='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mmm`.`mutasi_tanggal` AS `tanggal`,
+					          `mmm`.`mutasi_asal` AS `asal`,
+					          `mmm`.`mutasi_tujuan` AS `tujuan`,
+					          `mmm`.`mutasi_tujuan` AS `gudang`,
+					          `mmm`.`mutasi_no` AS `no_bukti`,
+					          _UTF8 'mutasi' AS `jenis_transaksi`,
+					          `mmm`.`mutasi_status` AS `status`,
+					          `dmm`.`dmutasi_produk` AS `produk`,
+					          `dmm`.`dmutasi_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          `dmm`.`dmutasi_jumlah`*sk.konversi_nilai AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'mutasi masuk' AS `keterangan`,
+					          `dmm`.`dmutasi_id` AS `detail_id`
+					     FROM `master_mutasi` `mmm`,`detail_mutasi` `dmm`, satuan_konversi sk
+					    WHERE (`dmm`.`dmutasi_master` = `mmm`.`mutasi_id`)
+					    AND  sk.konversi_satuan=dmm.dmutasi_satuan
+					    AND  dmm.dmutasi_produk='".$produk_id."'
+					    AND  date_format(mmm.mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mmm.mutasi_status='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mmk`.`mutasi_tanggal` AS `tanggal`,
+					          `mmk`.`mutasi_asal` AS `asal`,
+					          `mmk`.`mutasi_tujuan` AS `tujuan`,
+					          `mmk`.`mutasi_asal` AS `gudang`,
+					          `mmk`.`mutasi_no` AS `no_bukti`,
+					          _UTF8 'mutasi' AS `jenis_transaksi`,
+					          `mmk`.`mutasi_status` AS `status`,
+					          `dmk`.`dmutasi_produk` AS `produk`,
+					          `dmk`.`dmutasi_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          `dmk`.`dmutasi_jumlah`*sk.konversi_nilai AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'mutasi keluar' AS `keterangan`,
+					          `dmk`.`dmutasi_id` AS `detail_id`
+					     FROM `master_mutasi` `mmk`,`detail_mutasi` `dmk`, satuan_konversi sk
+					    WHERE (`dmk`.`dmutasi_master` = `mmk`.`mutasi_id`)
+					    AND sk.konversi_satuan=dmk.dmutasi_satuan
+					    AND  dmk.dmutasi_produk='".$produk_id."'
+					    AND  date_format(mmk.mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mmk.mutasi_status='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mk`.`koreksi_tanggal` AS `tanggal`,
+					          `mk`.`koreksi_gudang` AS `asal`,
+					          `mk`.`koreksi_gudang` AS `tujuan`,
+					          `mk`.`koreksi_gudang` AS `gudang`,
+					          `mk`.`koreksi_no` AS `no_bukti`,
+					          _UTF8 'koreksi' AS `jenis_transaksi`,
+					          `mk`.`koreksi_status` AS `status`,
+					          `dk`.`dkoreksi_produk` AS `produk`,
+					          `dk`.`dkoreksi_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          `dk`.`dkoreksi_jmlkoreksi`*sk.konversi_nilai AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'koreksi' AS `keterangan`,
+					          `dk`.`dkoreksi_id` AS `detail_id`
+					     FROM `master_koreksi_stok` `mk`,`detail_koreksi_stok` `dk`, satuan_konversi sk
+					    WHERE (`mk`.`koreksi_id` = `dk`.`dkoreksi_master`)
+					    AND sk.konversi_satuan=dk.dkoreksi_satuan
+					    AND  dk.dkoreksi_produk='".$produk_id."'
+					    AND  date_format(mk.koreksi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mk.koreksi_status='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mj`.`jproduk_tanggal` AS `tanggal`,
+					          2 AS `asal`,
+					          `mj`.`jproduk_cust` AS `tujuan`,
+					          2 AS `gudang`,
+					          `mj`.`jproduk_nobukti` AS `no_bukti`,
+					          _UTF8 'jual produk' AS `jenis_traksaksi`,
+					          `mj`.`jproduk_stat_dok` AS `status`,
+					          `dj`.`dproduk_produk` AS `produk`,
+					          `dj`.`dproduk_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          `dj`.`dproduk_jumlah`*sk.konversi_nilai AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'customer' AS `keterangan`,
+					          `dj`.`dproduk_id` AS `detail_id`
+					     FROM  `master_jual_produk` `mj`,`detail_jual_produk` `dj`, satuan_konversi sk
+					    WHERE (`dj`.`dproduk_master` = `mj`.`jproduk_id`)
+					    AND  dj.dproduk_satuan=sk.konversi_satuan
+					    AND  dj.dproduk_produk='".$produk_id."'
+					    AND  date_format(mj.jproduk_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mj.jproduk_stat_dok='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mjg`.`jpgrooming_tanggal` AS `tanggal`,
+					          2 AS `asal`,
+					          `mjg`.`jpgrooming_karyawan` AS `tujuan`,
+					          2 AS `gudang`,
+					          `mjg`.`jpgrooming_nobukti` AS `no_bukti`,
+					          _UTF8 'jual produk' AS `jenis_transaksi`,
+					          _UTF8 'Tertutup' AS `status`,
+					          `djg`.`dpgrooming_produk` AS `produk`,
+					          `djg`.`dpgrooming_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          `djg`.`dpgrooming_jumlah`*sk.konversi_nilai AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'grooming' AS `keterangan`,
+					          `djg`.`dpgrooming_id` AS `detail_id`
+					     FROM `master_jualproduk_grooming` `mjg`,`detail_jualproduk_grooming` `djg`,
+					          satuan_konversi sk
+					    WHERE (`mjg`.`jpgrooming_id` = `djg`.`dpgrooming_master`)
+					    AND  sk.konversi_satuan=djg.dpgrooming_satuan
+					    AND  djg.dpgrooming_produk='".$produk_id."'
+					    AND  date_format(mjg.jpgrooming_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    
+					   UNION ALL
+					   SELECT `mrj`.`rproduk_tanggal` AS `tanggal`,
+					          `mrj`.`rproduk_cust` AS `asal`,
+					          2 AS `tujuan`,
+					          2 AS `gudang`,
+					          `mrj`.`rproduk_nobukti` AS `no_bukti`,
+					          _UTF8 'retur jual' AS `jenis_transaksi`,
+					          `mrj`.`rproduk_stat_dok` AS `status`,
+					          `drj`.`drproduk_produk` AS `produk`,
+					          `drj`.`drproduk_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          `drj`.`drproduk_jumlah`*sk.konversi_nilai AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'produk retur' AS `keterangan`,
+					          `drj`.`drproduk_id` AS `detail_id`
+					     FROM `master_retur_jual_produk` `mrj`,`detail_retur_jual_produk` `drj`,
+					           satuan_konversi sk
+					    WHERE (`mrj`.`rproduk_id` = `drj`.`drproduk_master`)
+					    AND  sk.konversi_satuan=drj.drproduk_satuan
+					    AND  drj.drproduk_produk='".$produk_id."'
+					    AND  date_format(mrj.rproduk_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mrj.rproduk_stat_dok='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `mrp`.`rpaket_tanggal` AS `tanggal`,
+					          `mrp`.`rpaket_cust` AS `asal`,
+					          2 AS `tujuan`,
+					          2 AS `gudang`,
+					          `mrp`.`rpaket_nobukti` AS `no_bukti`,
+					          _UTF8 'retur jual' AS `jenis_transaksi`,
+					          `mrp`.`rpaket_stat_dok` AS `status`,
+					          `drp`.`drpaket_produk` AS `produk`,
+					          `drp`.`drpaket_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          `drp`.`drpaket_jumlah`*sk.konversi_nilai AS `jml_retur_paket`,
+					          0 AS `jml_pakai_cabin`,
+					          _UTF8 'paket retur' AS `keterangan`,
+					          `drp`.`drpaket_id` AS `detail_id`
+					     FROM `master_retur_jual_paket` `mrp`,
+					           `detail_retur_paket_produk` `drp`,
+					           satuan_konversi  sk
+					    WHERE (`mrp`.`rpaket_id` = `drp`.`drpaket_master`)
+					    AND	 sk.konversi_satuan=drp.drpaket_satuan
+					    AND  drp.drpaket_produk='".$produk_id."'
+					    AND  date_format(mrp.rpaket_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
+					    AND  mrp.rpaket_stat_dok='Tertutup'
+					    
+					   UNION ALL
+					   SELECT `cb`.`cabin_date_create` AS `tanggal`,
+					          `cb`.`cabin_gudang` AS `asal`,
+					          `cb`.`cabin_cust` AS `tujuan`,
+					          `cb`.`cabin_gudang` AS `gudang`,
+					          `cb`.`cabin_bukti` AS `no_bukti`,
+					          _UTF8 'pakai cabin' AS `jenis_transaksi`,
+					          _UTF8 'Tertutup' AS `status`,
+					          `cb`.`cabin_produk` AS `produk`,
+					          `cb`.`cabin_satuan` AS `satuan`,
+					          0 AS `jml_terima_barang`,
+					          0 AS `jml_terima_bonus`,
+					          0 AS `jml_retur_beli`,
+					          0 AS `jml_mutasi_masuk`,
+					          0 AS `jml_mutasi_keluar`,
+					          0 AS `jml_koreksi_stok`,
+					          0 AS `jml_jual_produk`,
+					          0 AS `jml_jual_grooming`,
+					          0 AS `jml_retur_produk`,
+					          0 AS `jml_retur_paket`,
+					          `cb`.`cabin_jumlah`*sk.konversi_nilai AS `jml_pakai_cabin`,
+					          _UTF8 'pakai cabin' AS `keterangan`,
+					          `cb`.`cabin_dtrawat` AS `detail_id`
+					     FROM `detail_pakai_cabin` `cb`, satuan_konversi sk
+					    WHERE  cb.cabin_produk='".$produk_id."'
+					    AND sk.konversi_satuan=cb.cabin_satuan
+					    AND  date_format(cb.cabin_date_create,'%Y-%m-%d')<'".$tanggal_start."'
+					) as stok GROUP by stok.produk";
 									
 			$query=$this->db->query($sql);
-			//$this->firephp->log($sql);
+			$this->firephp->log($sql);
 			if($query->num_rows()>0){
 				$row=$query->row();
 				return $row->stok_saldo;
