@@ -795,7 +795,8 @@ Ext.onReady(function(){
 			{name: 'order_produk_kode', type: 'string', mapping: 'produk_kode'},
 			{name: 'order_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'order_produk_satuan', type: 'string', mapping: 'satuan_id'},
-			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'}
+			{name: 'dorder_harga', type: 'float', mapping: 'dorder_harga'},
+			{name: 'dorder_harga_log', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dorder_harga_log'}
 		]),
 		sortInfo:{field: 'order_produk_nama', direction: "ASC"}
 	});
@@ -1424,9 +1425,9 @@ Ext.onReady(function(){
 			{name: 'dorder_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_jumlah', type: 'int', mapping: 'jumlah_barang'},
 			{name: 'dorder_harga', type: 'float', mapping: 'harga_satuan'},
-			{name: 'dorder_diskon', type: 'float', mapping: 'diskon'} ,
-			{name: 'dorder_subtotal', type: 'float', mapping: 'dorder_subtotal'}
-
+			{name: 'dorder_diskon', type: 'float', mapping: 'diskon'},
+			{name: 'dorder_subtotal', type: 'float', mapping: 'dorder_subtotal'},
+			{name: 'dorder_harga_log', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dorder_harga_log'}
 	]);
 	//eof
 
@@ -1590,19 +1591,6 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},
-		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29) )){ ?>
-		{
-			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
-			align: 'right',
-			dataIndex: 'dorder_harga',
-			width: 100,	//150,
-			sortable: true,
-			editor:  order_harga_satuanField,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-
-		},
 		{
 			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			align: 'right',
@@ -1610,7 +1598,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
-			editor: order_diskon_satuanField,
+			editor: order_diskon_satuanField
 		},
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
@@ -1624,7 +1612,6 @@ Ext.onReady(function(){
                     return '<span>' + subtotal+ '</span>';
             }
 		},
-		<? } ?>
 		{
 			header: '<div align="center">Jml Terima</div>',
 			align: 'right',
@@ -1632,6 +1619,29 @@ Ext.onReady(function(){
 			width: 60,
 			sortable: true,
 			readOnly: true
+		},
+		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+		{
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'dorder_harga',
+			width: 100,	//150,
+			sortable: true,
+			editor:  order_harga_satuanField,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+
+		},
+		<? } ?>
+		{
+			header: '<div align="center">' + 'Date Last Modified' + '</div>',
+			align: 'right',
+			dataIndex: 'dorder_harga_log',
+			width: 100,	//150,
+			sortable: true,
+			readOnly : true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s')
 		},
 		]
 	);
@@ -1650,10 +1660,10 @@ Ext.onReady(function(){
 		title: 'Detail Item',
 		height: 250,
 		width: 920,	//690,
-		autoScroll: true,
+		autoScroll: false,
 		store: detail_order_beli_DataStore, // DataStore
 		colModel: detail_order_beli_ColumnModel, // Nama-nama Columns
-		enableColLock:false,
+		enableColLock:true,
 		region: 'center',
         margins: '0 5 5 5',
 		plugins: [editor_detail_order_beli],

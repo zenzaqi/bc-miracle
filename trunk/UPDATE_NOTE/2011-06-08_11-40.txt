@@ -1,0 +1,3 @@
+2011-06-08_11-40.sql
+
+--> mengupdate view piutang_total_bycust.. agar yg dipakai utk total piutang customer dimulai dari tanggal 20-07-2010.. karena sebelum tanggal itu adalah masa trial Pelunasan Piutang.. 

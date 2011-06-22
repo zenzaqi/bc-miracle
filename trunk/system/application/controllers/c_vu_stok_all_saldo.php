@@ -62,6 +62,16 @@ class C_vu_stok_all_saldo extends Controller {
 		$result=$this->m_vu_stok_all_saldo->get_detail_stok($satuan, $tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
 		echo $result;
 	}
+	
+	function get_group_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+			
+		$result=$this->m_public_function->get_group1_list($query,$start,$end);
+		echo $result;
+	}
+	
 	//function fot list record
 	function vu_stok_all_saldo_list(){
 
@@ -72,8 +82,17 @@ class C_vu_stok_all_saldo extends Controller {
 		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
 		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
-
-		$result=$this->m_vu_stok_all_saldo->vu_stok_all_saldo_list($produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
+		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
+		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$result=$this->m_vu_stok_all_saldo->vu_stok_all_saldo_list($tgl_awal,$periode,$opsi_produk, $group1_id,$produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
 		echo $result;
 	}
 
@@ -90,10 +109,12 @@ class C_vu_stok_all_saldo extends Controller {
 		$satuan_nama=str_replace("/(<\/?)(p)([^>]*>)", "",$satuan_nama);
 		$satuan_nama=str_replace("'", "''",$satuan_nama);
 		$stok_saldo=trim(@$_POST["stok_saldo"]);
+		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
 
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_search($produk_kode ,$produk_nama ,$satuan_nama ,$stok_saldo ,$start,$end);
+		$result = $this->m_vu_stok_all_saldo->vu_stok_all_saldo_search($group1_id,$opsi_produk, $produk_kode ,$produk_nama ,$satuan_nama ,$stok_saldo ,$start,$end);
 		echo $result;
 	}
 

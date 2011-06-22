@@ -132,7 +132,7 @@ class M_vu_stok_all_saldo extends Model{
 					}
 						
 					//stok mutasi
-					$sql_stok_mutasi="SELECT 	ifnull(sum(jml_terima_barang*konversi_nilai)
+					$sql_stok_mutasi="SELECT ifnull(sum(jml_terima_barang*konversi_nilai)
 										+sum(jml_terima_bonus*konversi_nilai)
 										+sum(jml_mutasi_masuk*konversi_nilai)
 										+sum(jml_retur_produk*konversi_nilai)
@@ -357,17 +357,31 @@ class M_vu_stok_all_saldo extends Model{
 		}
 		
 		//function for get list record
-		function vu_stok_all_saldo_list($produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+		function vu_stok_all_saldo_list($tgl_awal,$periode,$opsi_produk,$group1_id,$produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
 			
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
 				$sql="SELECT * FROM vu_produk_satuan_default WHERE produk_aktif='Aktif'";
-				
-			if($produk_id!==""&&$produk_id!==0){
+
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(tanggal,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."')
+								AND ";
+			}	
+			
+			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_group='".$group1_id."' ";
+				//$opsi="	produk_group='".$group1_id."' AND ";
+			}elseif($opsi_produk=='produk' & $produk_id!=="" & $produk_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	produk_id='".$produk_id."' ";
+				//$opsi="	 produk_id='".$rowproduk->produk_id."' AND ";
 			}
+
 			
 			if($filter!==""&&$filter!==NULL){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -388,8 +402,7 @@ class M_vu_stok_all_saldo extends Model{
 			$i=0;
 			
 			foreach($result->result() as $rowproduk){
-				
-				
+	
 				$data[$i]["produk_id"]=$rowproduk->produk_id;
 				$data[$i]["produk_kode"]=$rowproduk->produk_kode;
 				$data[$i]["tanggal_start"]=$tanggal_start;
@@ -402,7 +415,7 @@ class M_vu_stok_all_saldo extends Model{
 					$data[$i]["konversi_nilai"]=1;
 				else
 					$data[$i]["konversi_nilai"]=1/$rowproduk->konversi_nilai;
-				
+
 				$sql_stok="SELECT   sum(jml_terima_barang*konversi_nilai)+ 
 									sum(jml_terima_bonus*konversi_nilai) as jumlah_terima,
 									sum(jml_mutasi_masuk*konversi_nilai) as jumlah_masuk,
@@ -414,10 +427,7 @@ class M_vu_stok_all_saldo extends Model{
 									sum(jml_jual_produk*konversi_nilai)+sum(jml_jual_grooming*konversi_nilai) as jumlah_jual,
 									sum(jml_pakai_cabin*konversi_nilai) as jumlah_pakai_cabin
 							FROM	vu_stok_new_produk
-							WHERE   date_format(tanggal,'%Y-%m-%d')>='".$tanggal_start."'
-									AND date_format(tanggal,'%Y-%m-%d')<='".$tanggal_end."'
-									AND produk_id='".$rowproduk->produk_id."' 
-									AND status='Tertutup'
+							WHERE ".$isiperiode." produk_id='".$rowproduk->produk_id."' AND status='Tertutup'
 							GROUP BY produk_id";
 				$rsdata=$this->db->query($sql_stok);
 				if($rsdata->num_rows()){
@@ -542,14 +552,22 @@ class M_vu_stok_all_saldo extends Model{
 		
 	
 		//function for advanced search record
-		function vu_stok_all_saldo_search($produk_kode ,$produk_nama,$satuan_nama ,$stok_saldo ,$start,$end){
+		function vu_stok_all_saldo_search($group1_id,$opsi_produk,$produk_kode ,$produk_nama,$satuan_nama ,$stok_saldo ,$start,$end){
 			//full query
-			$query="select * from vu_stok_all_saldo";
+			$query="elect * from vu_stok_all_saldo";
 			
-			if($produk_kode!=''){
+			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_group='".$group1_id."' ";
+			}elseif($opsi_produk=='produk' & $produk_kode!=="" & $produk_kode!==0){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	produk_id='".$produk_kode."' ";
+			}
+			
+			/*if($produk_kode!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_id LIKE '%".$produk_kode."%'";
-			};
+			};*/
 			if($produk_nama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_nama LIKE '%".$produk_nama."%'";

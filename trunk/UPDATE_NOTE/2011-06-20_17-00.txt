@@ -1,0 +1,3 @@
+2011-06-20_17-00.sql 
+
+--> Menambahkan field utk dorder_harga_log.. yang menyimpan timestamp ketika terjadi insert / perubahan ke tabel detail_order_beli..
