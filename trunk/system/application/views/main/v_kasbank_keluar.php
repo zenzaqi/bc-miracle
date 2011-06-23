@@ -1037,7 +1037,7 @@ Ext.onReady(function(){
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
 		loadingText: 'Searching...',
-		typeAhead: true,
+		typeAhead: false, //true,
 		pageSize: pageS,
 		triggerAction: 'all',
 		lazyRender: false,
