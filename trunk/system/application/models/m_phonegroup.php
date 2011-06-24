@@ -259,8 +259,7 @@ class M_phonegroup extends Model{
 						$tgl_ultah_end=substr($isms_ultah,18,5);
 						
 						$sql .= eregi("WHERE",$sql)? " AND ":" WHERE ";
-						$sql .= " date_format(cust_tgllahir,'%m-%d') >= '".$tgl_ultah_start."' AND 
-															 date_format(cust_tgllahir,'%m-%d') <= '".$tgl_ultah_end."'";					
+						$sql .= " date_format(cust_tgllahir,'%m-%d') BETWEEN '".$tgl_ultah_start."' AND '".$tgl_ultah_end."'";					
 					}
 				
 					$query=$this->db->query($sql);
