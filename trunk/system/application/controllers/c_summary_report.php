@@ -221,6 +221,7 @@ class c_summary_report extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("tindakanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		/*
 		fwrite($file, "<body><table summary='Tindakan List'><caption>SUMMARY REPORT</caption>
 			<thead>
 			<tr>
@@ -248,6 +249,18 @@ class c_summary_report extends Controller {
 			</tr>
 			</thead>
 			<tfoot>");
+			*/
+			fwrite($file, "<body><table summary='Tindakan List'><caption>SUMMARY REPORT</caption>
+			<thead>
+			<tr>
+				<th scope='col'>Target</th>
+				<th scope='col'>Nilai Tujuan</th>
+				<th scope='col'>Nilai Target</th>
+				<th scope='col'>Nilai Pemb. 1</th>
+				<th scope='col'>Nilai Pemb. 2</th>
+			</tr>
+			</thead>
+			<tfoot>");
 		//fwrite($file, $nbrows);
 		fwrite($file, "</tfoot><tbody>");
 		$i=0;
@@ -263,14 +276,19 @@ class c_summary_report extends Controller {
 				fwrite($file, "</th><td>");
 				fwrite($file, $data['nilai_tujuan']);
 				fwrite($file, "</td><td>");
+				/*
 				fwrite($file, $data['rata_rata']);
 				fwrite($file, "</td><td>");
+				*/
 				fwrite($file, $data['target']);
 				fwrite($file, "</td><td>");
+				/*
 				fwrite($file, $data['pencapaian_target']);
 				fwrite($file, "</td><td>");
+				*/
 				fwrite($file, $data['nilai_pembanding1']);
 				fwrite($file, "</td><td>");
+				/*
 				fwrite($file, $data['naik_turun1']);
 				fwrite($file, "</td><td>");
 				fwrite($file, $data['prosentase_naik_turun1']);
@@ -285,8 +303,10 @@ class c_summary_report extends Controller {
 				fwrite($file, "</td><td>");
 				fwrite($file, $data['naik_turun_rata2_persen_1']);
 				fwrite($file, "</td><td>");
+				*/
 				fwrite($file, $data['nilai_pembanding2']);
 				fwrite($file, "</td><td>");
+				/*
 				fwrite($file, $data['naik_turun2']);
 				fwrite($file, "</td><td>");
 				fwrite($file, $data['prosentase_naik_turun2']);
@@ -301,6 +321,7 @@ class c_summary_report extends Controller {
 				fwrite($file, "</td><td>");
 				fwrite($file, $data['naik_turun_rata2_persen_1']);
 				fwrite($file, "</td><td>");
+				*/
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	

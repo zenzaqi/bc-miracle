@@ -1313,7 +1313,7 @@ from
 			
 			
 	//function for advanced search record
-	function lap_kunjungan_search($lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
+	function lap_kunjungan_search($tgl_awal,$periode,$lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
 			//full query
 
 		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'S')
@@ -1378,7 +1378,18 @@ from
 		}else if ($lap_kunjungan_umurstart=='' and $lap_kunjungan_umurend==''){
 			$umur= "";
 		}
-
+		
+//untuk periode
+		if ($periode == 'bulan'){
+			$periode_produk =" (date_format(master_jual_produk.jproduk_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+			$periode_paket =" (date_format(detail_ambil_paket.dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') " ;				
+			$periode_rawat = " (date_format(master_jual_rawat.jrawat_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+		}else if($periode == 'tanggal'){
+			$periode_produk = " (master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_paket =" (detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_rawat = " (master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+		}
+		
 		
 		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
@@ -1415,7 +1426,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -1430,7 +1441,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -1460,7 +1471,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -1476,7 +1487,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -1507,7 +1518,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -1523,7 +1534,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_antiaging 
 		group by tgl_tindakan
 
@@ -1555,7 +1566,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -1571,7 +1582,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -1589,7 +1600,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 		group by tgl_tindakan
 	)
 
@@ -1619,7 +1630,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '". $trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and ".$periode_rawat."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -1633,7 +1644,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			
 			union
@@ -1649,7 +1660,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			
 			)as table_union2
@@ -1659,7 +1670,7 @@ from
 ) as table_union";
 
 }
-		else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+	/*	else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				
 		$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
@@ -1671,7 +1682,7 @@ sum(jum_total)
 from
 (
 	(
-		/* MEDIS */
+		/* MEDIS 
 		select 
 			count(distinct temp_jum_cust_medis) as jum_cust_medis,
 			jum_cust_surgery,
@@ -1714,7 +1725,7 @@ from
 		group by tgl_tindakan
 	)
 	
-	/* SURGERY */
+	/* SURGERY 
 	union
 	(
 		select 
@@ -1761,7 +1772,7 @@ from
 
 	)
 
-	/* ANTI AGING */
+	/* ANTI AGING 
 	union
 	(
 		select 
@@ -1809,7 +1820,7 @@ from
 	)
 
 	
-	/*  NON-MEDIS */
+	/*  NON-MEDIS 
 	union
 	(
 		select 
@@ -1855,7 +1866,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* PRODUK*/
+	/* PRODUK
 	union
 	(
 		select 
@@ -1872,7 +1883,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* TOTAL*/
+	/* TOTAL
 	union
 	(
 		select 
@@ -1935,7 +1946,7 @@ from
 		group by tgl_tindakan
 	)
 ) as table_union";
-			}
+			}*/
 			
 			
 			
@@ -1958,7 +1969,7 @@ from
 		}
 		
 	//function for advanced search record
-	function lap_kunjungan_search2($lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
+	function lap_kunjungan_search2($tgl_awal,$periode,$lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
 			//full query
 
 		
@@ -2027,6 +2038,16 @@ from
 			$umur= "";
 		}
 
+		//untuk periode
+		if ($periode == 'bulan'){
+			$periode_produk =" (date_format(master_jual_produk.jproduk_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+			$periode_paket =" (date_format(detail_ambil_paket.dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') " ;				
+			$periode_rawat = " (date_format(master_jual_rawat.jrawat_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+		}else if($periode == 'tanggal'){
+			$periode_produk = " (master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_paket =" (detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_rawat = " (master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+		}
 		
 		//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING, JUMLAH TX UTAMA
 		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
@@ -2064,7 +2085,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -2079,7 +2100,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -2109,7 +2130,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2125,7 +2146,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -2156,7 +2177,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2172,7 +2193,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -2204,7 +2225,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2220,7 +2241,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -2238,7 +2259,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 		group by tgl_tindakan
 	)
 
@@ -2268,7 +2289,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -2282,7 +2303,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			
 			union
@@ -2298,7 +2319,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			)as table_union2
 		group by tgl_tindakan
@@ -2308,7 +2329,7 @@ from
 
 }
 	
-			else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+		/*	else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
@@ -2320,7 +2341,7 @@ sum(jum_total)
 from
 (
 	(
-		/* MEDIS */
+		/* MEDIS 
 		select 
 			count(distinct temp_jum_cust_medis) as jum_cust_medis,
 			jum_cust_surgery,
@@ -2363,7 +2384,7 @@ from
 		group by tgl_tindakan
 	)
 	
-	/* SURGERY */
+	/* SURGERY 
 	union
 	(
 		select 
@@ -2410,7 +2431,7 @@ from
 
 	)
 
-	/* ANTI AGING */
+	/* ANTI AGING 
 	union
 	(
 		select 
@@ -2458,7 +2479,7 @@ from
 	)
 
 	
-	/*  NON-MEDIS */
+	/*  NON-MEDIS 
 	union
 	(
 		select 
@@ -2504,7 +2525,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* PRODUK*/
+	/* PRODUK
 	union
 	(
 		select 
@@ -2521,7 +2542,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* TOTAL*/
+	/* TOTAL
 	union
 	(
 		select 
@@ -2584,7 +2605,7 @@ from
 		group by tgl_tindakan
 	)
 ) as table_union";
-	}
+	}*/
 			//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			//$query.=" k.karyawan_id != 60 and p.rawat_id is not null"; //60 = Available . Dr
 			//$query.=" group by k.karyawan_username, p.rawat_nama)as vu_kredit";
@@ -2605,7 +2626,7 @@ from
 			}
 		}
 
-	function lap_kunjungan_search3($lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
+	function lap_kunjungan_search3($tgl_awal,$periode,$lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end){
 			//full query
 		
 		
@@ -2673,6 +2694,16 @@ from
 			$umur= "";
 		}
 
+		//untuk periode
+		if ($periode == 'bulan'){
+			$periode_produk =" (date_format(master_jual_produk.jproduk_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+			$periode_paket =" (date_format(detail_ambil_paket.dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') " ;				
+			$periode_rawat = " (date_format(master_jual_rawat.jrawat_tanggal,'%Y-%m')='".$tgl_awal."') " ;
+		}else if($periode == 'tanggal'){
+			$periode_produk = " (master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_paket =" (detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+			$periode_rawat = " (master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
+		}
 			
 		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 	
@@ -2709,7 +2740,7 @@ from
 					left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 					left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 					left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+					where perawatan.rawat_kategori = 2 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -2724,7 +2755,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 2 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_medis
 		group by tgl_tindakan
 	)
@@ -2754,7 +2785,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2770,7 +2801,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 4 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_surgery
 		group by tgl_tindakan
 
@@ -2801,7 +2832,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2817,7 +2848,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 16 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_antiaging
 		group by tgl_tindakan
 
@@ -2849,7 +2880,7 @@ from
 				left join master_jual_rawat on (detail_jual_rawat.drawat_master = master_jual_rawat.jrawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
-				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and master_jual_rawat.jrawat_stat_dok='Tertutup' and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 
 			)
 			union
@@ -2865,7 +2896,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where perawatan.rawat_kategori = 3 and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)) as table_sum_nonmedis
 		group by tgl_tindakan
 	)
@@ -2883,7 +2914,7 @@ from
 			master_jual_produk.jproduk_tanggal as tgl_tindakan
 		from master_jual_produk
 		left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+		where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 		group by tgl_tindakan
 	)
 
@@ -2913,7 +2944,7 @@ from
 				left join perawatan on (detail_jual_rawat.drawat_rawat=perawatan.rawat_id)
 				left join vu_customer on (master_jual_rawat.jrawat_cust = vu_customer.cust_id)
 				where master_jual_rawat.jrawat_stat_dok ='Tertutup'
-				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				and (master_jual_rawat.jrawat_totalbiaya <> 0 or master_jual_rawat.jrawat_cashback <> 0) and (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and ".$periode_rawat."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			union
 			(
@@ -2927,7 +2958,7 @@ from
 					master_jual_produk.jproduk_tanggal as tgl_tindakan
 				from master_jual_produk
 				left join vu_customer on (master_jual_produk.jproduk_cust = vu_customer.cust_id)
-				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and master_jual_produk.jproduk_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where master_jual_produk.jproduk_stat_dok ='Tertutup' and (master_jual_produk.jproduk_totalbiaya <> 0 or master_jual_produk.jproduk_cashback <> 0) and ".$periode_produk."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			
 			union
@@ -2943,7 +2974,7 @@ from
 				from detail_ambil_paket
 				left join perawatan on (detail_ambil_paket.dapaket_item = perawatan.rawat_id)
 				left join vu_customer on (detail_ambil_paket.dapaket_cust = vu_customer.cust_id)
-				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and detail_ambil_paket.dapaket_tgl_ambil between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."'".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
+				where (perawatan.rawat_kategori = 2 or perawatan.rawat_kategori = 3 or perawatan.rawat_kategori = 4 or perawatan.rawat_kategori = 16) and detail_ambil_paket.dapaket_stat_dok ='Tertutup' and ".$periode_paket."".$cust_kelamin."".$cust_daftar."".$stat_member."".$umur."".$tgllahir."
 			)
 			)as table_union2
 		group by tgl_tindakan
@@ -2953,7 +2984,7 @@ from
 
 }
 	
-			else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+	/*		else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 				
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis)/count(distinct tgl_tindakan),
@@ -2965,7 +2996,7 @@ sum(jum_total)/count(distinct tgl_tindakan)
 from
 (
 	(
-		/* MEDIS */
+		/* MEDIS 
 		select 
 			count(distinct temp_jum_cust_medis) as jum_cust_medis,
 			jum_cust_surgery,
@@ -3008,7 +3039,7 @@ from
 		group by tgl_tindakan
 	)
 	
-	/* SURGERY */
+	/* SURGERY 
 	union
 	(
 		select 
@@ -3055,7 +3086,7 @@ from
 
 	)
 
-	/* ANTI AGING */
+	/* ANTI AGING 
 	union
 	(
 		select 
@@ -3103,7 +3134,7 @@ from
 	)
 
 	
-	/*  NON-MEDIS */
+	/*  NON-MEDIS 
 	union
 	(
 		select 
@@ -3149,7 +3180,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* PRODUK*/
+	/* PRODUK
 	union
 	(
 		select 
@@ -3166,7 +3197,7 @@ from
 		group by tgl_tindakan
 	)
 
-	/* TOTAL*/
+	/* TOTAL
 	union
 	(
 		select 
@@ -3228,7 +3259,7 @@ from
 		group by tgl_tindakan
 	)
 ) as table_union";
-	}
+	}*/
 			//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			//$query.=" k.karyawan_id != 60 and p.rawat_id is not null"; //60 = Available . Dr
 			//$query.=" group by k.karyawan_username, p.rawat_nama)as vu_kredit";
