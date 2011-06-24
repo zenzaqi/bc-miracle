@@ -282,6 +282,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_rata_rata',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -302,8 +303,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_pencapaian',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -322,6 +324,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -332,8 +335,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_prosentase1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -342,8 +346,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_pencapaian_pembanding1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -352,8 +357,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naik_turun_pencapaian_pembanding1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -362,6 +368,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_rata_rata1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -372,6 +379,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun_rata2_1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -382,8 +390,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun_rata2_persen_1',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -392,6 +401,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_pembanding2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : false,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -402,6 +412,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -412,8 +423,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_prosentase2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -422,8 +434,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_pencapaian_pembanding2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},
 		{	
@@ -432,8 +445,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naik_turun_pencapaian_pembanding2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		},	
 		{	
@@ -442,6 +456,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_rata_rata2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -452,6 +467,7 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun_rata2_2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
@@ -462,8 +478,9 @@ Ext.onReady(function(){
 			dataIndex: 'summary_naikturun_rata2_persen_2',
 			width: 80,	//55,
 			sortable: true,
+			hidden : true,
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				return '<span>'+Ext.util.Format.number(val,'0.00')+'</span>';
 			}
 		}
 
@@ -618,7 +635,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 2400, //940,//1200,	//970,
+	  	width: 970, //940,//1200,	//970,
 		/*
 		bbar: new Ext.PagingToolbar({
 			//pageSize: pageS,

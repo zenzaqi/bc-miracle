@@ -515,7 +515,7 @@ Ext.onReady(function(){
 			{name: 'kasbank_keluar_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_post'},
 			{name: 'kasbank_keluar_revised', type: 'int', mapping: 'kasbank_mrevised'}
 		]),
-		sortInfo:{field: 'kasbank_keluar_tanggal', direction: "DESC"}
+		//sortInfo:{field: 'kasbank_keluar_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 
@@ -1037,7 +1037,7 @@ Ext.onReady(function(){
 		displayField: 'akun_nama',
 		valueField: 'akun_id',
 		loadingText: 'Searching...',
-		typeAhead: false, //true,
+		typeAhead: true,
 		pageSize: pageS,
 		triggerAction: 'all',
 		lazyRender: false,

@@ -1,0 +1,4 @@
+Jurnal Kas/Bank Masuk/Keluar:
+-	Tampilan urut berdasarkan No Jurnal (no terakhir posisi teratas)
+-	Jurnal Kas/Bank Masuk, default jenis: Bank
+-	Jurnal Kas/Bank Masuk, default jenis: Kas

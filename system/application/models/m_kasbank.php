@@ -260,6 +260,9 @@ class M_Kasbank extends Model{
 							 akun_kode LIKE '%".addslashes($filter)."%' OR
 							 kasbank_keterangan LIKE '%".addslashes($filter)."%' )";
 			}
+			
+			$query .= " ORDER BY kasbank_nobukti DESC ";
+				
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();

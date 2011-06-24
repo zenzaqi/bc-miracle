@@ -110,6 +110,9 @@ var lap_kunjungan_detail_proxy;
 var lap_kunjungan_detail_writer;
 
 var today=new Date().format('d-m-Y');
+var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 
 //declare konstant
 var post2db = '';
@@ -118,6 +121,17 @@ var pageS=31;
 
 /* declare variable here for Field*/
 var lap_kunjungan_idSearchField;
+
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+
+?>
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -512,7 +526,7 @@ Ext.onReady(function(){
 		var lap_kunjungan_umurend_detail=null;
 		var lap_kunjungan_tgllahir_detail_date="";
 		var lap_kunjungan_tgllahir_detail_dateEnd="";
-		//var report_tindakan_dokter_detail=null;
+		//var lap_kunjungan_dokter_detail=null;
 
 		
 		
@@ -660,7 +674,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_kunjungan&m=detail_tindakan_detail_list', 
 			method: 'POST'
 		}),
-		//reader: report_tindakan_detail_reader,
+		//reader: lap_kunjungan_detail_reader,
 		//baseParams:{master_id: lap_kunjungan_idField.getValue()},
 		sortInfo:{field: 'dtrawat_id', direction: "ASC"}
 	});
@@ -682,7 +696,10 @@ Ext.onReady(function(){
 		var lap_kunjungan_umurend_search=null;
 		var lap_kunjungan_tgllahir_search_date="";
 		var lap_kunjungan_tgllahir_search_dateEnd="";
-		//var report_tindakan_dokter_search=null;
+		var lap_kunjungan_tmedis_bulan=null;
+		var lap_kunjungan_tmedis_tahun=null;
+		var lap_kunjungan_tmedis_periode=null;
+		//var lap_kunjungan_dokter_search=null;
 
 		
 		
@@ -690,12 +707,24 @@ Ext.onReady(function(){
 		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_search=lap_kunjungan_custSearchField.getValue();}
 		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_search=lap_kunjungan_idSearchField.getValue();}
 		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_search=lap_kunjungan_kelaminSearchField.getValue();}
-		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_search=lap_kunjungan_tglStartSearchField.getValue();}
-		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_search=lap_kunjungan_tglEndSearchField.getValue();}
+		//if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_search=lap_kunjungan_tglStartSearchField.getValue();}
+		//if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_search=lap_kunjungan_tglEndSearchField.getValue();}
 		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_search=lap_kunjungan_umurstartSearchField.getValue();}
 		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_search=lap_kunjungan_umurendSearchField.getValue();}	
 		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_search_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
 		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_search_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		if(lap_kunjungan_bulanField.getValue()!==null){lap_kunjungan_tmedis_bulan=lap_kunjungan_bulanField.getValue();}
+		if(lap_kunjungan_tahunField.getValue()!==null){lap_kunjungan_tmedis_tahun=lap_kunjungan_tahunField.getValue();}
+		if(Ext.getCmp('lap_kunjungan_tglStartSearchField').getValue()!==null){lap_kunjungan_tgl_start_search=Ext.getCmp('lap_kunjungan_tglStartSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue()!==null){lap_kunjungan_tgl_end_search=Ext.getCmp('lap_kunjungan_tglEndSearchField').getValue().format('Y-m-d');}
+
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tmedis_periode='tanggal';
+		}else if(lap_kunjungan_opsiblnField.getValue()==true){
+			lap_kunjungan_tmedis_periode='bulan';
+		}else{
+			lap_kunjungan_tmedis_periode='all';
+		}
 		
 		/*untuk detail pengunjung*/
 		var lap_kunjungan_id_detail=null;
@@ -734,8 +763,11 @@ Ext.onReady(function(){
 			lap_kunjungan_umurstart : lap_kunjungan_umurstart_search,
 			lap_kunjungan_umurend : lap_kunjungan_umurend_search,
 			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_search_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd 
-			//trawat_dokter	:	report_tindakan_dokter_search,
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode			
+			//trawat_dokter	:	lap_kunjungan_dokter_search,
 		};
 		lap_totalkunjungan_DataStore.baseParams = {
 			task: 'SEARCH2',
@@ -749,8 +781,11 @@ Ext.onReady(function(){
 			lap_kunjungan_umurstart : lap_kunjungan_umurstart_search,
 			lap_kunjungan_umurend : lap_kunjungan_umurend_search,
 			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_search_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd 
-			//trawat_dokter	:	report_tindakan_dokter_search,
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode			
+			//trawat_dokter	:	lap_kunjungan_dokter_search,
 		};
 		lap_average_kunjungan_DataStore.baseParams = {
 			task: 'SEARCH3',
@@ -764,8 +799,11 @@ Ext.onReady(function(){
 			lap_kunjungan_umurstart : lap_kunjungan_umurstart_search,
 			lap_kunjungan_umurend : lap_kunjungan_umurend_search,
 			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_search_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd 		
-			//trawat_dokter	:	report_tindakan_dokter_search,
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_search_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode			
+			//trawat_dokter	:	lap_kunjungan_dokter_search,
 		};
 		var today=new Date().format('Y-m-d');
 		var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
@@ -780,7 +818,10 @@ Ext.onReady(function(){
 			lap_kunjungan_umurstart : lap_kunjungan_umurstart_detail,
 			lap_kunjungan_umurend : lap_kunjungan_umurend_detail,
 			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_detail_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode			
 			
 			}});
 		
@@ -848,7 +889,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'
 	});
-	
+
 	lap_kunjungan_tgllahirSearchField= new Ext.form.DateField({
 		id: 'lap_kunjungan_tgllahirSearchField',
 		fieldLabel : 'Antara Tanggal',
@@ -931,8 +972,129 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 	
-	////	
+	
+		/////tgl n bulan
+	lap_kunjungan_opsitglField=new Ext.form.Radio({
+		id:'lap_kunjungan_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
+	
+	lap_kunjungan_opsiblnField=new Ext.form.Radio({
+		id:'lap_kunjungan_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
 	lap_kunjungan_tglStartSearchField= new Ext.form.DateField({
+		id: 'lap_kunjungan_tglStartSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'lap_kunjungan_tglStartSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'lap_kunjungan_tglakhirField'
+		value: today
+	});
+	
+	lap_kunjungan_tglEndSearchField= new Ext.form.DateField({
+		id: 'lap_kunjungan_tglEndSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'lap_kunjungan_tglEndSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'lap_kunjungan_tglawalField',
+		value: today
+	});
+	
+	lap_kunjungan_bulanField=new Ext.form.ComboBox({
+		id:'lap_kunjungan_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	lap_kunjungan_tahunField=new Ext.form.ComboBox({
+		id:'lap_kunjungan_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var lap_kunjungan_periodeField=new Ext.form.FieldSet({
+		id:'lap_kunjungan_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[lap_kunjungan_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[lap_kunjungan_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_kunjungan_tglStartSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_kunjungan_tglEndSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[lap_kunjungan_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_kunjungan_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_kunjungan_tahunField]
+					   }]
+			}]
+	});
+	//// end of tgl n bulan
+	
+	////	
+	/*lap_kunjungan_tglStartSearchField= new Ext.form.DateField({
 		id: 'lap_kunjungan_tglStartSearchField',
 		fieldLabel : 'Antara Tanggal',
 		format: 'd-m-Y'
@@ -968,7 +1130,7 @@ Ext.onReady(function(){
 							items:[lap_kunjungan_tglEndSearchField]
 					   }]
 			}]
-	});
+	});*/
 	//////
 	
 	/* Function for retrieve search Form Panel */
@@ -995,7 +1157,7 @@ Ext.onReady(function(){
 							layout: 'form',
 							border:false,
 							defaultType: 'datefield',
-							items: [lap_kunjungan_tanggal_antaraSearchField,lap_kunjungan_kelaminSearchField,lap_kunjungan_memberSearchField,lap_kunjungan_custSearchField, lap_kunjungan_tanggal_opsiSearchField,lap_kunjungan_umur_groupSearch] 
+							items: [lap_kunjungan_periodeField,lap_kunjungan_kelaminSearchField,lap_kunjungan_memberSearchField,lap_kunjungan_custSearchField, lap_kunjungan_tanggal_opsiSearchField,lap_kunjungan_umur_groupSearch] 
 						}]}
 						] 
 			}
@@ -1032,6 +1194,10 @@ Ext.onReady(function(){
 		lap_kunjungan_umurendSearchField.reset();
 		lap_kunjungan_tgllahirSearchField.reset();
 		lap_kunjungan_tgllahirSearchFieldEnd.reset();
+		Ext.getCmp('lap_kunjungan_tglStartSearchField').reset();
+		Ext.getCmp('lap_kunjungan_tglStartSearchField').setValue(today);
+		Ext.getCmp('lap_kunjungan_tglEndSearchField').reset();
+		Ext.getCmp('lap_kunjungan_tglEndSearchField').setValue(today);
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
@@ -1061,6 +1227,21 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
+	
+	function is_valid_form(){
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tglStartSearchField.allowBlank=false;
+			lap_kunjungan_tglEndSearchField.allowBlank=false;
+			if(lap_kunjungan_tglStartSearchField.isValid() && lap_kunjungan_tglEndSearchField.isValid())
+				return true;
+			else
+				return false;
+		}else{
+			lap_kunjungan_tglStartSearchField.allowBlank=true;
+			lap_kunjungan_tglEndSearchField.allowBlank=true;
+			return true;
+		}
+	}
 	
 	/* Function for print List Grid */
 	function lap_kunjungan_print(){
@@ -1166,6 +1347,16 @@ Ext.onReady(function(){
 	}
 	/*End of Function */
 	
+	lap_kunjungan_opsitglField.on("check",function(){
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tglStartSearchField.allowBlank=false;
+			lap_kunjungan_tglEndSearchField.allowBlank=false;
+		}else{
+			lap_kunjungan_tglStartSearchField.allowBlank=true;
+			lap_kunjungan_tglEndSearchField.allowBlank=true;
+		}
+		
+	});
 });
 	</script>
 <body>

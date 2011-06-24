@@ -220,7 +220,7 @@ Ext.onReady(function(){
 		kasbank_masuk_kodeakunField.reset();
 		kasbank_masuk_kodeakunField.setValue(null);
 		kasbank_masuk_jenisField.reset();
-		kasbank_masuk_jenisField.setValue('Kas');
+		kasbank_masuk_jenisField.setValue('Bank');//kasbank_masuk_jenisField.setValue('Kas');
 
 		kasbank_masuk_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_masuk_detail_DataStore.load();
@@ -521,7 +521,7 @@ Ext.onReady(function(){
 			{name: 'kasbank_masuk_date_post', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'kasbank_date_post'},
 			{name: 'kasbank_masuk_revised', type: 'int', mapping: 'kasbank_mrevised'}
 		]),
-		sortInfo:{field: 'kasbank_masuk_tanggal', direction: "DESC"}
+		//sortInfo:{field: 'kasbank_masuk_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 
