@@ -101,13 +101,13 @@ class M_hpp extends Model{
 					where DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
 					AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 					AND produk_id='".$produk_id."'
-					AND terima_status<>'Batal'";
+					AND terima_status='Tertutup'";
 			//echo $sql;
 			
-			$query=$this->db->query($sql);
-			if($query->num_rows()){
-				$row=$query->row();
-				return $row->jumlah_beli;
+			$query_nbeli=$this->db->query($sql);
+			if($query_nbeli->num_rows()){
+				$nbeli=$query_nbeli->row();
+				return $nbeli->jumlah_beli;
 			}else
 				return 0;
 		}
@@ -119,22 +119,22 @@ class M_hpp extends Model{
 						WHERE DATE_FORMAT(tanggal,'%Y-%m-%d') >= '".$periode_start."' 
 						AND DATE_FORMAT(tanggal,'%Y-%m-%d') <= '".$periode_end."' 
 						AND produk_id='".$produk_id."'
-						AND terima_status<>'Batal'";
+						AND terima_status='Tertutup'";
 			}else{
 				$sql="SELECT ifnull(avg(harga_beli),0) as harga_beli from vu_hpp_beli_terima 
 						WHERE DATE_FORMAT(tanggal,'%Y-%m-%d')< '".$periode_start."' 
 						AND produk_id='".$produk_id."'
-						AND terima_status<>'Batal'";
+						AND terima_status='Tertutup'";
 
 			}
-			$query=$this->db->query($sql);
+			$query_vbeli=$this->db->query($sql);
 			//$this->firephp->log($sql);
 			
-			if($query->num_rows()){
-				$row=$query->row();
-				return $row->harga_beli;
-				if($row->harga_beli>0)
-					return $row->harga_beli;
+			if($query_vbeli->num_rows()){
+				$row_vbeli=$query_vbeli->row();
+				return $row_vbeli->harga_beli;
+				if($row_vbeli->harga_beli>0)
+					return $row_vbeli->harga_beli;
 				else{
 					//$sql="SELECT produk_harga,konversi_nilai FROM vu_produk_satuan_default WHERE produk_id='".$produk_id."'";
 					$sql="SELECT harga_beli from vu_hpp_beli_terima 
@@ -143,12 +143,12 @@ class M_hpp extends Model{
 							(SELECT min(DATE_FORMAT(tanggal,'%Y-%m-%d')
 								FROM vu_hpp_beli_terima 
 								WHERE produk_id='".$produk_id."')
-						AND status<>'Batal'";
+						AND status='Tertutup'";
 					
-					$query=$this->db->query($sql);
-					if($query->num_rows()){
-						$row=$query->row();
-						return $row->harga_beli;
+					$query_v2beli=$this->db->query($sql);
+					if($query_v2beli->num_rows()){
+						$row_v2beli=$query_v2beli->row();
+						return $row_v2beli->harga_beli;
 					}else{
 						return 0;					
 					}
@@ -190,8 +190,6 @@ class M_hpp extends Model{
 			$sql="SELECT 	sum(stok.jml_terima_barang)
 						+sum(stok.jml_terima_bonus)
 						-sum(stok.jml_retur_beli)
-						-sum(stok.jml_mutasi_keluar)
-						+sum(stok.jml_mutasi_masuk)
 						+sum(stok.jml_koreksi_stok)
 						-sum(stok.jml_jual_produk)
 						-sum(stok.jml_jual_grooming)
@@ -213,8 +211,6 @@ class M_hpp extends Model{
 					          `dt`.`dterima_jumlah`*sk.konversi_nilai AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -227,6 +223,7 @@ class M_hpp extends Model{
 					           satuan_konversi sk					              
 					    WHERE `dt`.`dterima_master` = `mt`.`terima_id`
 					    AND  sk.konversi_satuan=dt.dterima_satuan
+					    AND  sk.konversi_produk=dt.dterima_produk
 					    AND  dt.dterima_produk='".$produk_id."'
 					    AND  date_format(mt.terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mt.terima_status='Tertutup'
@@ -244,8 +241,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          `db`.`dtbonus_jumlah`*sk.konversi_nilai AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -258,6 +253,7 @@ class M_hpp extends Model{
 					     		satuan_konversi sk
 					    WHERE `db`.`dtbonus_master` = `mt`.`terima_id`
 					    AND  sk.konversi_satuan=db.dtbonus_satuan
+					    AND  sk.konversi_produk=db.dtbonus_produk
 					    AND  db.dtbonus_produk='".$produk_id."'
 					    AND  date_format(mt.terima_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mt.terima_status='Tertutup'
@@ -275,8 +271,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          `dr`.`drbeli_jumlah`*sk.konversi_nilai AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -293,66 +287,6 @@ class M_hpp extends Model{
 					    AND  mr.rbeli_status='Tertutup'
 					    
 					   UNION ALL
-					   SELECT `mmm`.`mutasi_tanggal` AS `tanggal`,
-					          `mmm`.`mutasi_asal` AS `asal`,
-					          `mmm`.`mutasi_tujuan` AS `tujuan`,
-					          `mmm`.`mutasi_tujuan` AS `gudang`,
-					          `mmm`.`mutasi_no` AS `no_bukti`,
-					          _UTF8 'mutasi' AS `jenis_transaksi`,
-					          `mmm`.`mutasi_status` AS `status`,
-					          `dmm`.`dmutasi_produk` AS `produk`,
-					          `dmm`.`dmutasi_satuan` AS `satuan`,
-					          0 AS `jml_terima_barang`,
-					          0 AS `jml_terima_bonus`,
-					          0 AS `jml_retur_beli`,
-					          `dmm`.`dmutasi_jumlah`*sk.konversi_nilai AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
-					          0 AS `jml_koreksi_stok`,
-					          0 AS `jml_jual_produk`,
-					          0 AS `jml_jual_grooming`,
-					          0 AS `jml_retur_produk`,
-					          0 AS `jml_retur_paket`,
-					          0 AS `jml_pakai_cabin`,
-					          _UTF8 'mutasi masuk' AS `keterangan`,
-					          `dmm`.`dmutasi_id` AS `detail_id`
-					     FROM `master_mutasi` `mmm`,`detail_mutasi` `dmm`, satuan_konversi sk
-					    WHERE (`dmm`.`dmutasi_master` = `mmm`.`mutasi_id`)
-					    AND  sk.konversi_satuan=dmm.dmutasi_satuan
-					    AND  dmm.dmutasi_produk='".$produk_id."'
-					    AND  date_format(mmm.mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
-					    AND  mmm.mutasi_status='Tertutup'
-					    
-					   UNION ALL
-					   SELECT `mmk`.`mutasi_tanggal` AS `tanggal`,
-					          `mmk`.`mutasi_asal` AS `asal`,
-					          `mmk`.`mutasi_tujuan` AS `tujuan`,
-					          `mmk`.`mutasi_asal` AS `gudang`,
-					          `mmk`.`mutasi_no` AS `no_bukti`,
-					          _UTF8 'mutasi' AS `jenis_transaksi`,
-					          `mmk`.`mutasi_status` AS `status`,
-					          `dmk`.`dmutasi_produk` AS `produk`,
-					          `dmk`.`dmutasi_satuan` AS `satuan`,
-					          0 AS `jml_terima_barang`,
-					          0 AS `jml_terima_bonus`,
-					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          `dmk`.`dmutasi_jumlah`*sk.konversi_nilai AS `jml_mutasi_keluar`,
-					          0 AS `jml_koreksi_stok`,
-					          0 AS `jml_jual_produk`,
-					          0 AS `jml_jual_grooming`,
-					          0 AS `jml_retur_produk`,
-					          0 AS `jml_retur_paket`,
-					          0 AS `jml_pakai_cabin`,
-					          _UTF8 'mutasi keluar' AS `keterangan`,
-					          `dmk`.`dmutasi_id` AS `detail_id`
-					     FROM `master_mutasi` `mmk`,`detail_mutasi` `dmk`, satuan_konversi sk
-					    WHERE (`dmk`.`dmutasi_master` = `mmk`.`mutasi_id`)
-					    AND sk.konversi_satuan=dmk.dmutasi_satuan
-					    AND  dmk.dmutasi_produk='".$produk_id."'
-					    AND  date_format(mmk.mutasi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
-					    AND  mmk.mutasi_status='Tertutup'
-					    
-					   UNION ALL
 					   SELECT `mk`.`koreksi_tanggal` AS `tanggal`,
 					          `mk`.`koreksi_gudang` AS `asal`,
 					          `mk`.`koreksi_gudang` AS `tujuan`,
@@ -365,8 +299,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          `dk`.`dkoreksi_jmlkoreksi`*sk.konversi_nilai AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -378,6 +310,7 @@ class M_hpp extends Model{
 					     FROM `master_koreksi_stok` `mk`,`detail_koreksi_stok` `dk`, satuan_konversi sk
 					    WHERE (`mk`.`koreksi_id` = `dk`.`dkoreksi_master`)
 					    AND sk.konversi_satuan=dk.dkoreksi_satuan
+					    AND  sk.konversi_produk=dk.dkoreksi_produk
 					    AND  dk.dkoreksi_produk='".$produk_id."'
 					    AND  date_format(mk.koreksi_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mk.koreksi_status='Tertutup'
@@ -395,8 +328,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          `dj`.`dproduk_jumlah`*sk.konversi_nilai AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -408,6 +339,7 @@ class M_hpp extends Model{
 					     FROM  `master_jual_produk` `mj`,`detail_jual_produk` `dj`, satuan_konversi sk
 					    WHERE (`dj`.`dproduk_master` = `mj`.`jproduk_id`)
 					    AND  dj.dproduk_satuan=sk.konversi_satuan
+					    AND  sk.konversi_produk=dj.dproduk_produk
 					    AND  dj.dproduk_produk='".$produk_id."'
 					    AND  date_format(mj.jproduk_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mj.jproduk_stat_dok='Tertutup'
@@ -425,8 +357,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          `djg`.`dpgrooming_jumlah`*sk.konversi_nilai AS `jml_jual_grooming`,
@@ -439,6 +369,7 @@ class M_hpp extends Model{
 					          satuan_konversi sk
 					    WHERE (`mjg`.`jpgrooming_id` = `djg`.`dpgrooming_master`)
 					    AND  sk.konversi_satuan=djg.dpgrooming_satuan
+					    AND  sk.konversi_produk=djg.dpgrooming_produk
 					    AND  djg.dpgrooming_produk='".$produk_id."'
 					    AND  date_format(mjg.jpgrooming_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    
@@ -455,8 +386,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -469,6 +398,7 @@ class M_hpp extends Model{
 					           satuan_konversi sk
 					    WHERE (`mrj`.`rproduk_id` = `drj`.`drproduk_master`)
 					    AND  sk.konversi_satuan=drj.drproduk_satuan
+					    AND  sk.konversi_produk=drj.drproduk_produk
 					    AND  drj.drproduk_produk='".$produk_id."'
 					    AND  date_format(mrj.rproduk_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mrj.rproduk_stat_dok='Tertutup'
@@ -486,8 +416,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -501,6 +429,7 @@ class M_hpp extends Model{
 					           satuan_konversi  sk
 					    WHERE (`mrp`.`rpaket_id` = `drp`.`drpaket_master`)
 					    AND	 sk.konversi_satuan=drp.drpaket_satuan
+					    AND  sk.konversi_produk=drp.drpaket_produk
 					    AND  drp.drpaket_produk='".$produk_id."'
 					    AND  date_format(mrp.rpaket_tanggal,'%Y-%m-%d')<'".$tanggal_start."'
 					    AND  mrp.rpaket_stat_dok='Tertutup'
@@ -518,8 +447,6 @@ class M_hpp extends Model{
 					          0 AS `jml_terima_barang`,
 					          0 AS `jml_terima_bonus`,
 					          0 AS `jml_retur_beli`,
-					          0 AS `jml_mutasi_masuk`,
-					          0 AS `jml_mutasi_keluar`,
 					          0 AS `jml_koreksi_stok`,
 					          0 AS `jml_jual_produk`,
 					          0 AS `jml_jual_grooming`,
@@ -531,6 +458,7 @@ class M_hpp extends Model{
 					     FROM `detail_pakai_cabin` `cb`, satuan_konversi sk
 					    WHERE  cb.cabin_produk='".$produk_id."'
 					    AND sk.konversi_satuan=cb.cabin_satuan
+					    AND  sk.konversi_produk=cb.cabin_produk
 					    AND  date_format(cb.cabin_date_create,'%Y-%m-%d')<'".$tanggal_start."'
 					) as stok GROUP by stok.produk";
 									
@@ -559,7 +487,7 @@ class M_hpp extends Model{
 		
 		function hpp_list($produk_id, $tanggal_start, $tanggal_end, $filter,$start,$end){
 			$i=0;$j=0;
-			$sql="select * from vu_produk_satuan_default WHERE produk_aktif='Aktif' ";
+			$sql="select distinct * from vu_produk_satuan_default WHERE produk_aktif='Aktif' ";
 			if($produk_id!=="" && $produk_id!=NULL){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.=" produk_id='".$produk_id."'";
@@ -576,7 +504,17 @@ class M_hpp extends Model{
 				//$this->firephp->log($limit);
 				//cari awal tanggal
 				$trans_first="";
-				$sql_tgl="SELECT distinct min(tanggal) as min_date from vu_hpp_tanggal WHERE status<>'Batal'";
+				$sql_tgl="SELECT min(firstdate.tanggal) as min_date FROM (
+						SELECT `terima_tanggal` AS `tanggal`
+      					FROM `master_terima_beli`
+      					WHERE terima_status='Tertutup'
+      							
+      					UNION ALL
+						SELECT `master_jual_produk`.`jproduk_tanggal` AS `tanggal`
+  						FROM `master_jual_produk`
+  						WHERE jproduk_stat_dok='Tertutup') as firstdate";
+				
+				///$sql_tgl="SELECT distinct min(tanggal) as min_date from vu_hpp_tanggal WHERE status<>'Batal'";
 				$query_tgl=$this->db->query($sql_tgl);
 				if($query_tgl->num_rows()){
 					$row_tgl=$query_tgl->row();
