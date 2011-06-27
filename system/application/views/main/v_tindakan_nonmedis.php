@@ -120,6 +120,7 @@ var today=new Date().format('d-m-Y');
 var tnonmedis_post2db = '';
 var msg = '';
 var pageS=15;
+var bts_group=<?=$_SESSION[SESSION_GROUPID];?>;
 
 /* declare variable here for Field*/
 var trawat_nonmedis_idField;
@@ -533,6 +534,16 @@ Ext.onReady(function(){
 		
 	}
  	/* End of Function */
+  
+	function check_absensi(){
+		if(bts_group==31 || bts_group==1){
+			tindakan_nonmedisListEditorGrid.button_absensi.enable();
+		}else{
+			tindakan_nonmedisListEditorGrid.button_absensi.disable();
+		}
+	}
+	
+  
   
   	/* Function for get PK field */
 	function get_pk_id(){
@@ -1198,6 +1209,7 @@ Ext.onReady(function(){
 			text: 'Absensi',
 			tooltip: 'Absensi Therapist',
 			iconCls:'',
+			ref: '../button_absensi',
 			//handler: tindakan_nonmedis_print  
 			handler: function(){window.open("../Add-on/absensi/index.php")} 
 		}
@@ -1269,6 +1281,7 @@ Ext.onReady(function(){
 	tindakan_nonmedisListEditorGrid.addListener('rowcontextmenu', ontindakan_nonmedis_ListEditGridContextMenu);
 	tindakan_nonmedis_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	tindakan_nonmedisListEditorGrid.on('afteredit', tindakan_nonmedis_update); // inLine Editing Record
+	check_absensi();
 	
 	
 	trawat_nonmedis_cust_idField= new Ext.form.NumberField();
