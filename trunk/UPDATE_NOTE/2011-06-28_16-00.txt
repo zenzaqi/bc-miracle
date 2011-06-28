@@ -1,0 +1,3 @@
+2011-06-28_16-00.sql
+--> mengupdate view vu_detail_terima_produk utk kepentingan OP dan PB
+agar apa yang ada di OP sama dengan yang ada di PB
