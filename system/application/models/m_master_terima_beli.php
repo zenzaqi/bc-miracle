@@ -300,26 +300,67 @@ class M_master_terima_beli extends Model{
 
 
 		function get_order_beli_list($filter,$start,$end){
-		$date_now=date('Y-m-d');
+			$date = date('Y-m-d');
+			//$date_1 = '01';
+			//$date_2 = '02';
+			$date_3 = '03';
+			$month = substr($date,5,2);
+			$year = substr($date,0,4);
+			$begin=mktime(0,0,0,$month,1,$year);
+			$nextmonth=strtotime("+2months",$begin);
+			
+			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			
+			//$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
+			//$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
+			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
+            $datetime_now = date('Y-m-d H:i:s');
+
+			$date_now=date('Y-m-d');
 		
 			$sql_day = "SELECT trans_op_days from transaksi_setting";
 			$query_day= $this->db->query($sql_day);
 			$data_day= $query_day->row();
 			$day= $data_day->trans_op_days;
 			
-			$sql=  "SELECT
-						order_id, order_no, order_tanggal, supplier_nama, supplier_id
-					FROM master_order_beli, supplier, transaksi_setting
-					WHERE order_supplier = supplier_id
-						AND order_status = 'Tertutup'
-						AND '".$date_now."' < (order_tanggal + INTERVAL '".$day."' DAY)";
+			$sql=  "SELECT order_no, order_id, order_tanggal, supplier_nama, supplier_id, sum(dorder_jumlah) as jumlah_order, 
+						(select sum(detail_terima_beli.dterima_jumlah)
+						from detail_terima_beli
+						left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+						where (master_terima_beli.terima_order = master_order_beli.order_id)
+						)as jumlah_terima, 
+						(sum(dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
+											from detail_terima_beli
+											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+											where (master_terima_beli.terima_order = master_order_beli.order_id)
+											)
+						)as sisa
+					FROM detail_order_beli
+					LEFT JOIN master_order_beli on (master_order_beli.order_id = detail_order_beli.dorder_master)
+					LEFT JOIN supplier on (master_order_beli.order_supplier = supplier.supplier_id)
+					WHERE master_order_beli.order_status = 'Tertutup'  AND '".$date_now."' < (order_tanggal + INTERVAL '".$day."' DAY)
+					";
 					
 			if ($filter<>""){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 				$sql .= " (order_no LIKE '%".addslashes($filter)."%' OR supplier_nama LIKE '%".addslashes($filter)."%')";
 			}
 			
-			$sql .= " ORDER BY order_no desc ";			
+			$sql .= " GROUP BY order_no desc 
+						HAVING (sum(detail_order_beli.dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
+																		from detail_terima_beli
+																		left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+																		where (master_terima_beli.terima_order = master_order_beli.order_id)
+																		)
+								) <> 0 OR
+								(sum(detail_order_beli.dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
+																		from detail_terima_beli
+																		left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+																		where (master_terima_beli.terima_order = master_order_beli.order_id)
+																		)
+								) IS NULL
+						ORDER BY order_no desc ";			
 			$start=($start==""?0:$start);
 			$end=($end==""?15:$end);
 			
@@ -411,7 +452,7 @@ class M_master_terima_beli extends Model{
 		//get record list
 
 		function detail_detail_terima_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT  distinct dterima_id,dterima_master,dterima_produk,produk_nama,dterima_satuan,
+			$query = "SELECT  distinct dterima_id,dterima_master,dterima_produk,produk_nama,dterima_satuan,jumlah_order, jumlah_sisa,
 								dterima_jumlah,harga_satuan,diskon
 						 FROM vu_detail_terima_produk where dterima_master='".$master_id."'";
 			$result = $this->db->query($query);

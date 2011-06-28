@@ -1591,15 +1591,20 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},
+		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 		{
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
-			dataIndex: 'dorder_diskon',
-			width: 60,	//100,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
+			dataIndex: 'dorder_harga',
+			width: 100,	//150,
 			sortable: true,
-			editor: order_diskon_satuanField
+			editor:  order_harga_satuanField,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+
 		},
+		<? } ?>
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			align: 'right',
@@ -1620,20 +1625,15 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true
 		},
-		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 		{
-			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
 			align: 'right',
-			dataIndex: 'dorder_harga',
-			width: 100,	//150,
+			dataIndex: 'dorder_diskon',
+			width: 60,	//100,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
-			editor:  order_harga_satuanField,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-
+			editor: order_diskon_satuanField
 		},
-		<? } ?>
 		{
 			header: '<div align="center">' + 'Date Last Modified' + '</div>',
 			align: 'right',

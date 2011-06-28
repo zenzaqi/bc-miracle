@@ -103,12 +103,32 @@ class M_public_function extends Model{
 	}
 			
 	function get_order_beli_detail_by_order_id($orderid){
-		/*$sql="SELECT dorder_produk,produk_nama,jumlah_order, jumlah_order-sum(dterima_jumlah) as jumlah_sisa, dorder-satuan
-				FROM vu_detail_terima_order WHERE dorder_master='".$orderid."'
-				GROUP BY dorder_produk";*/
+		$sql="SELECT detail_order_beli.dorder_produk as dorder_produk,detail_order_beli.dorder_satuan as dorder_satuan,
+							detail_order_beli.dorder_jumlah as jumlah_order,
+							IFNULL((dorder_jumlah - (select sum(detail_terima_beli.dterima_jumlah)
+											from detail_terima_beli
+											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+											where (master_terima_beli.terima_order = master_order_beli.order_id) and (detail_order_beli.dorder_produk = detail_terima_beli.dterima_produk)
+										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan)
+											)
+							),detail_order_beli.dorder_jumlah)as dterima_jumlah,
+							IFNULL((dorder_jumlah - (select sum(detail_terima_beli.dterima_jumlah)
+											from detail_terima_beli
+											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+											where (master_terima_beli.terima_order = master_order_beli.order_id) and (detail_order_beli.dorder_produk = detail_terima_beli.dterima_produk)
+										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan)
+											)
+						),detail_order_beli.dorder_jumlah) as jumlah_sisa
+				FROM detail_order_beli
+				LEFT JOIN master_order_beli on (master_order_beli.order_id = detail_order_beli.dorder_master)
+				WHERE detail_order_beli.dorder_master = '".$orderid."'
+				group by dorder_produk, dorder_satuan";
+		
+		/*
 		$sql="SELECT produk as dorder_produk,satuan as dorder_satuan,sum(jumlah_order) as jumlah_order, sum(jumlah_terima) as jumlah_terima, sum(jumlah_sisa) as jumlah_sisa
 				FROM vu_detail_terima_order WHERE master_order='".$orderid."'
 				GROUP BY produk,satuan";
+		*/
 				
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();

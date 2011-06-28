@@ -195,17 +195,7 @@ Ext.onReady(function(){
 		
   	/* Function for add data, open window create form */
 	function master_terima_beli_create(opsi){
-		if(detail_terima_beli_DataStore.getCount()<1){
-
-			Ext.MessageBox.show({
-				title: 'Warning',
-				msg: 'Data detail harus ada minimal 1 (satu)',
-				buttons: Ext.MessageBox.OK,
-				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
-			});
-
-		}else if(is_master_terima_beli_form_valid()){
+		if(is_master_terima_beli_form_valid() && detail_terima_beli_DataStore.getCount()>0){
 
 		var terima_id_create_pk=null;
 		var terima_no_create=null;
@@ -341,6 +331,7 @@ Ext.onReady(function(){
 							master_terima_beli_cetak_faktur(result);
 						}
 						master_terima_beli_DataStore.reload();
+						cbo_tbeli_orderbeli_DataSore.reload();
 						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 						//cbo_terima_gudang_DataStore.reload();
 						master_terima_beli_createWindow.hide();
@@ -369,10 +360,10 @@ Ext.onReady(function(){
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Isian belum sempurna!.',
+				msg: 'Isian belum sempurna!. Data detail harus ada minimal 1 (satu)',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
-				icon: Ext.MessageBox.WARNING
+				icon: Ext.MessageBox.WARNING	
 			});
 		}
 	}
@@ -860,7 +851,8 @@ Ext.onReady(function(){
 			{name: 'dorder_master', type: 'int', mapping: 'order_id'},
 			{name: 'dterima_produk', type: 'int', mapping: 'dorder_produk'},
 			{name: 'dorder_produk_nama', type: 'string', mapping: 'produk_nama'},
-			{name: 'dterima_jumlah', type: 'float', mapping: 'jumlah_sisa'},
+			{name: 'jumlah_sisa', type: 'float', mapping: 'jumlah_sisa'},
+			{name: 'dterima_jumlah', type: 'float', mapping: 'dterima_jumlah'},
 			{name: 'dterima_order', type: 'float', mapping: 'jumlah_order'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dorder_satuan'},
 			{name: 'dorder_produk_satuan', type: 'string', mapping: 'satuan_nama'},
@@ -1347,7 +1339,40 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	});
 
+	
+	/* Identify Field Jumlah Pesanan*/
+	var dterima_jumlahsisaField = new Ext.form.NumberField({
+		id : 'dterima_jumlahsisaField',
+		name : 'dterima_jumlahsisaField',
+		allowDecimals: false,
+		allowNegative: false,
+		enableKeyEvents: true,
+		//blankText: '0',
+		maxLength: 11,
+		readOnly : true,
+		maskRe: /([0-9]+)$/
+	});
 
+	var dterima_jumlahField = new Ext.form.NumberField({
+		id : 'djumlah_diskonField',
+		name : 'djumlah_diskonField',
+		enableKeyEvents: true,
+		//readOnly : true,			
+		allowDecimals: false,
+		allowNegative: false,
+		//blankText: '0',
+		maxLength: 11,
+		maskRe: /([0-9]+)$/
+	});
+	
+	//events for field Jumlah 
+	dterima_jumlahField.on('keyup', function(){
+		if(this.getRawValue()>dterima_jumlahsisaField.getValue()){
+			this.setRawValue(dterima_jumlahsisaField.getValue());
+		}
+	});
+	
+	
 
   	/*Fieldset Master*/
 	master_terima_beli_masterGroup = new Ext.form.FieldSet({
@@ -1445,6 +1470,8 @@ Ext.onReady(function(){
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
 			{name: 'dterima_satuan', type: 'int', mapping: 'dterima_satuan'},
 			{name: 'dterima_jumlah', type: 'int', mapping: 'dterima_jumlah'},
+			{name: 'jumlah_sisa', type: 'int', mapping: 'jumlah_sisa'},
+			//{name: 'jumlah_sisa', type: 'int', mapping: 'jumlah_order'},
 			{name: 'dterima_order', type: 'int', mapping: 'jumlah_order'},
 			{name: 'dterima_harga', type: 'int', mapping: 'harga_satuan'},
 			{name: 'dterima_diskon', type: 'int', mapping: 'diskon'}
@@ -1589,20 +1616,24 @@ Ext.onReady(function(){
 			dataIndex: 'dterima_jumlah',
 			width: 100,
 			sortable: true,
-			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: dterima_jumlahField,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},{
 			header: '<div align="center">Jumlah Pesanan</div>',
 			align: 'right',
 			dataIndex: 'dterima_order',
 			width: 100,
 			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true
+		},
+		{
+			header: '<div align="center">Sisa</div>',
+			align: 'right',
+			dataIndex: 'jumlah_sisa',
+			width: 100,
+			sortable: true,
+			editor : dterima_jumlahsisaField,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true
 		}
@@ -2048,6 +2079,8 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					master_terima_beli_DataStore.reload();
+					cbo_tbeli_orderbeli_DataSore.reload();
 					master_terima_beli_createWindow.hide();
 				}
 			}
@@ -2696,6 +2729,11 @@ Ext.onReady(function(){
 	
 	post2db = '';
 	task = '';
+	
+	
+	
+	
+	
 	
 });
 
