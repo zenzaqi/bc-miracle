@@ -15,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-</head>
+
 <style type="text/css">
         p { width:650px; }
 		.search-item {
@@ -42,7 +42,8 @@
 			clear:none;
 		}
     </style>
-<script>
+</head>
+<script language="text/javascript">
 /* declare function */
 var kasbank_masuk_DataStore;
 var kasbank_masuk_ColumnModel;
@@ -138,6 +139,39 @@ Ext.onReady(function(){
 				if(kasbank_masuk_keteranganField.getValue()!== null){kasbank_masuk_keterangan_field = kasbank_masuk_keteranganField.getValue();}
 
 
+				var dkasbank_masuk_id = [];
+				var dkasbank_masuk_akun = [];
+				var dkasbank_masuk_detail = [];
+				var dkasbank_masuk_kredit = [];
+				var dkasbank_masuk_debet = [];
+
+				var dcount = kasbank_masuk_detail_DataStore.getCount() - 1;
+
+				if(kasbank_masuk_detail_DataStore.getCount()>0){
+					for(i=0; i<kasbank_masuk_detail_DataStore.getCount();i++){
+						if((/^\d+$/.test(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun))
+						   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==undefined
+						   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==''
+						   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==0
+						   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit!==0
+						   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit>0){
+
+							dkasbank_masuk_id.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_id);
+							dkasbank_masuk_akun.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun);
+							dkasbank_masuk_detail.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_detail);
+							dkasbank_masuk_kredit.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit);
+							dkasbank_masuk_debet.push(0);
+						}
+					}
+				}
+
+				var encoded_array_dkasbank_masuk_id = Ext.encode(dkasbank_masuk_id);
+				var encoded_array_dkasbank_masuk_akun = Ext.encode(dkasbank_masuk_akun);
+				var encoded_array_dkasbank_masuk_detail = Ext.encode(dkasbank_masuk_detail);
+				var encoded_array_dkasbank_masuk_kredit = Ext.encode(dkasbank_masuk_kredit);
+				var encoded_array_dkasbank_masuk_debet = Ext.encode(dkasbank_masuk_debet);
+
+
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
 					url: 'index.php?c=c_kasbank_masuk&m=get_action',
@@ -150,25 +184,40 @@ Ext.onReady(function(){
 						kasbank_masuk_jenis			: kasbank_masuk_jenis_field,
 						kasbank_masuk_noref			: kasbank_masuk_noref_field,
 						kasbank_masuk_keterangan	: kasbank_masuk_keterangan_field,
-						kasbank_masuk_post			: kasbank_masuk_post_field,
-						kasbank_masuk_date_post		: kasbank_masuk_date_post_field_date,
+						dkasbank_masuk_id			: encoded_array_dkasbank_masuk_id,
+					    dkasbank_masuk_akun			: encoded_array_dkasbank_masuk_akun,
+					    dkasbank_masuk_detail		: encoded_array_dkasbank_masuk_detail,
+					    dkasbank_masuk_kredit		: encoded_array_dkasbank_masuk_kredit,
+						dkasbank_masuk_debet		: encoded_array_dkasbank_masuk_debet,
 						task						: post2db
 					},
 					success: function(response){
 						var result=response.responseText;
-						var rsp_kode=result.substring(0,2);
-						var rsp_msg=result.replace(rsp_kode+':','');
-						if(rsp_kode=='OK'){
-								kasbank_masuk_detail_insert(eval(rsp_msg),opsi);
-						}else{
+						//var rsp_kode=result.substring(0,2);
+						//var rsp_msg=result.replace(rsp_kode+':','');
+						if(result!=='0'){
+								//kasbank_masuk_detail_insert(eval(rsp_msg),opsi);
+								if(opsi=='print'){
+								   kasbank_masuk_cetak_faktur(result);
+							    }
 								Ext.MessageBox.show({
+								   title: 'Success',
+								   msg: 'Data Kas/Bank Masuk sukses disimpan ',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.OK
+								});
+								kasbank_masuk_DataStore.reload();
+								kasbank_masuk_saveWindow.hide();
+						}else{
+						    Ext.MessageBox.show({
 								   title: 'Warning',
-								   msg: rsp_msg,
+								   msg: 'Data Kas/Bank Masuk gagal disimpan',
 								   buttons: Ext.MessageBox.OK,
 								   animEl: 'save',
 								   icon: Ext.MessageBox.WARNING
-								});
-							}
+						    });
+						}
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -1256,66 +1305,7 @@ Ext.onReady(function(){
 	}
 
 	function kasbank_masuk_detail_insert(pkid,opsi){
-        var dkasbank_masuk_id = [];
-        var dkasbank_masuk_akun = [];
-        var dkasbank_masuk_detail = [];
-        var dkasbank_masuk_kredit = [];
-
-        var dcount = kasbank_masuk_detail_DataStore.getCount() - 1;
-
-        if(kasbank_masuk_detail_DataStore.getCount()>0){
-            for(i=0; i<kasbank_masuk_detail_DataStore.getCount();i++){
-                if((/^\d+$/.test(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun))
-				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==undefined
-				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==''
-				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun!==0
-				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit!==0
-				   && kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit>0){
-
-                  	dkasbank_masuk_id.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_id);
-					dkasbank_masuk_akun.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_akun);
-                   	dkasbank_masuk_detail.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_detail);
-					dkasbank_masuk_kredit.push(kasbank_masuk_detail_DataStore.getAt(i).data.dkasbank_masuk_kredit);
-                }
-            }
-
-			var encoded_array_dkasbank_masuk_id = Ext.encode(dkasbank_masuk_id);
-			var encoded_array_dkasbank_masuk_akun = Ext.encode(dkasbank_masuk_akun);
-			var encoded_array_dkasbank_masuk_detail = Ext.encode(dkasbank_masuk_detail);
-			var encoded_array_dkasbank_masuk_kredit = Ext.encode(dkasbank_masuk_kredit);
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_kasbank_masuk&m=detail_kasbank_masuk_detail_insert',
-				params:{
-					dkasbank_masuk_id		: encoded_array_dkasbank_masuk_id,
-					dkasbank_masuk_master	: pkid,
-					dkasbank_masuk_akun		: encoded_array_dkasbank_masuk_akun,
-					dkasbank_masuk_detail	: encoded_array_dkasbank_masuk_detail,
-					dkasbank_masuk_kredit	: encoded_array_dkasbank_masuk_kredit
-				},
-				success:function(response){
-					if(opsi=='print'){
-						kasbank_masuk_cetak_faktur(pkid);
-					}
-					Ext.MessageBox.alert(post2db+' OK','Data Jurnal Kas/Bank berhasil disimpan.');
-					kasbank_masuk_saveWindow.hide();
-					kasbank_masuk_DataStore.reload();
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-        }
+       //
 	}
 
 	/* Function for Delete Confirm of detail */

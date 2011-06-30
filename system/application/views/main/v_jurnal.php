@@ -114,11 +114,38 @@ Ext.onReady(function(){
 				//var jurnal_noref_field=null;
 				var jurnal_unit_field=null;
 				var jurnal_no_field=null;
+				var jurnal_id = [];
+				var jurnal_akun = [];
+				var jurnal_detail = [];
+				var jurnal_debet = [];
+				var jurnal_kredit = [];
 
 				jurnal_id_field_pk=get_pk_id();
 				if(jurnal_tanggalField.getValue()!== ""){jurnal_tanggal_field_date = jurnal_tanggalField.getValue().format('Y-m-d');}
 				if(jurnal_keteranganField.getValue()!== null){jurnal_keterangan_field = jurnal_keteranganField.getValue();}
 				if(jurnal_noField.getValue()!== null){jurnal_no_field = jurnal_noField.getValue();}
+
+				if(detail_jurnal_DataStore.getCount()>0){
+					for(i=0; i<detail_jurnal_DataStore.getCount();i++){
+						if((/^\d+$/.test(detail_jurnal_DataStore.getAt(i).data.jurnal_akun))
+						   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==undefined
+						   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==''
+						   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==0){
+
+							jurnal_id.push(detail_jurnal_DataStore.getAt(i).data.jurnal_id);
+							jurnal_akun.push(detail_jurnal_DataStore.getAt(i).data.jurnal_akun);
+							jurnal_detail.push(detail_jurnal_DataStore.getAt(i).data.jurnal_detail);
+							jurnal_debet.push(detail_jurnal_DataStore.getAt(i).data.jurnal_debet);
+							jurnal_kredit.push(detail_jurnal_DataStore.getAt(i).data.jurnal_kredit);
+						}
+					}
+				}
+
+				var encoded_array_jurnal_id = Ext.encode(jurnal_id);
+				var encoded_array_jurnal_akun = Ext.encode(jurnal_akun);
+				var encoded_array_jurnal_detail = Ext.encode(jurnal_detail);
+				var encoded_array_jurnal_debet = Ext.encode(jurnal_debet);
+				var encoded_array_jurnal_kredit = Ext.encode(jurnal_kredit);
 
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -128,10 +155,39 @@ Ext.onReady(function(){
 						jurnal_tanggal		: jurnal_tanggal_field_date,
 						jurnal_keterangan	: jurnal_keterangan_field,
 						jurnal_no			: jurnal_no_field,
+						jurnal_detailid		: encoded_array_jurnal_id,
+						jurnal_akun			: encoded_array_jurnal_akun,
+						jurnal_detail		: encoded_array_jurnal_detail,
+						jurnal_debet		: encoded_array_jurnal_debet,
+						jurnal_kredit		: encoded_array_jurnal_kredit,
 						task				: post2db
 					},
 					success: function(response){
 						var result=response.responseText;
+						if(result!=='0'){
+
+						   if(opsi=='print'){
+								jurnal_cetak_faktur(result);
+						   }
+						   Ext.MessageBox.show({
+								title: 'Success',
+								msg: 'Data Jurnal Umum sukses disimpan ',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.OK
+						   });
+						   jurnal_saveWindow.hide();
+						   jurnal_DataStore.reload();
+						}else{
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Data Jurnal Umum gagal disimpan !',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							 });
+						}
+						/*
 						var rsp_kode=result.substring(0,2);
 						var rsp_msg=result.replace(rsp_kode+':','');
 						if(rsp_kode=='OK'){
@@ -144,7 +200,8 @@ Ext.onReady(function(){
 								   animEl: 'save',
 								   icon: Ext.MessageBox.WARNING
 								});
-						}
+						}*/
+
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -1147,67 +1204,7 @@ Ext.onReady(function(){
 
 	//function for insert detail
 	function detail_jurnal_insert(pkid,opsi){
-		var jurnal_id = [];
-        var jurnal_akun = [];
-        var jurnal_detail = [];
-		var jurnal_debet = [];
-        var jurnal_kredit = [];
-
-
-        if(detail_jurnal_DataStore.getCount()>0){
-            for(i=0; i<detail_jurnal_DataStore.getCount();i++){
-                if((/^\d+$/.test(detail_jurnal_DataStore.getAt(i).data.jurnal_akun))
-				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==undefined
-				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==''
-				   && detail_jurnal_DataStore.getAt(i).data.jurnal_akun!==0){
-
-                  	jurnal_id.push(detail_jurnal_DataStore.getAt(i).data.jurnal_id);
-					jurnal_akun.push(detail_jurnal_DataStore.getAt(i).data.jurnal_akun);
-                   	jurnal_detail.push(detail_jurnal_DataStore.getAt(i).data.jurnal_detail);
-					jurnal_debet.push(detail_jurnal_DataStore.getAt(i).data.jurnal_debet);
-					jurnal_kredit.push(detail_jurnal_DataStore.getAt(i).data.jurnal_kredit);
-                }
-            }
-
-			var encoded_array_jurnal_id = Ext.encode(jurnal_id);
-			var encoded_array_jurnal_akun = Ext.encode(jurnal_akun);
-			var encoded_array_jurnal_detail = Ext.encode(jurnal_detail);
-			var encoded_array_jurnal_debet = Ext.encode(jurnal_debet);
-			var encoded_array_jurnal_kredit = Ext.encode(jurnal_kredit);
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_jurnal&m=detail_jurnal_insert',
-				params:{
-					jurnal_id		: encoded_array_jurnal_id,
-					jurnal_master	: pkid,
-					jurnal_akun		: encoded_array_jurnal_akun,
-					jurnal_detail	: encoded_array_jurnal_detail,
-					jurnal_debet	: encoded_array_jurnal_debet,
-					jurnal_kredit	: encoded_array_jurnal_kredit
-				},
-				success:function(response){
-					if(opsi=='print'){
-						jurnal_cetak_faktur(pkid);
-					}
-					Ext.MessageBox.alert(post2db+' OK','Data Jurnal Umum berhasil disimpan.');
-					jurnal_saveWindow.hide();
-					jurnal_DataStore.reload();
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Could not connect to the database. retry later.',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-        }
+		//
 	}
 	//eof
 
@@ -1558,8 +1555,8 @@ Ext.onReady(function(){
 		var total_kredit=0;
 		for(i=0;i<detail_jurnal_DataStore.getCount();i++){
 			var data_balance=detail_jurnal_DataStore.getAt(i);
-			total_debet=total_debet+data_balance.data.jurnal_debet;
-			total_kredit=total_kredit+data_balance.data.jurnal_kredit;
+			total_debet+=data_balance.data.jurnal_debet;
+			total_kredit+=data_balance.data.jurnal_kredit;
 		}
 		jurnal_totaldebetField.setValue(CurrencyFormatted(total_debet));
 		jurnal_totalkreditField.setValue(CurrencyFormatted(total_kredit));

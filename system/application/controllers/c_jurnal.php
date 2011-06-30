@@ -124,23 +124,23 @@ class C_jurnal extends Controller {
 		echo $result;
 	}
 
-	function detail_jurnal_insert(){
-		$jurnal_id = isset($_POST["jurnal_id"])?@$_POST["jurnal_id"]:@$_GET["jurnal_id"];
-		$jurnal_master = isset($_POST["jurnal_master"])?@$_POST["jurnal_master"]:@$_GET["jurnal_master"];
+	function detail_jurnal_insert($master){
+		$jurnal_detailid = isset($_POST["jurnal_detailid"])?@$_POST["jurnal_detailid"]:@$_GET["jurnal_detailid"];
+		$jurnal_master = $master;
 		$jurnal_akun = isset($_POST["jurnal_akun"])?@$_POST["jurnal_akun"]:@$_GET["jurnal_akun"];
 		$jurnal_detail = isset($_POST["jurnal_detail"])?@$_POST["jurnal_detail"]:@$_GET["jurnal_detail"];
 		$jurnal_debet = isset($_POST["jurnal_debet"])?@$_POST["jurnal_debet"]:@$_GET["jurnal_debet"];
 		$jurnal_kredit = isset($_POST["jurnal_kredit"])?@$_POST["jurnal_kredit"]:@$_GET["jurnal_kredit"];
 
 		//encode array
-		$jurnal_id = json_decode(stripslashes($jurnal_id));
+		$jurnal_detailid = json_decode(stripslashes($jurnal_detailid));
 		$jurnal_akun = json_decode(stripslashes($jurnal_akun));
 		$jurnal_detail = json_decode(stripslashes($jurnal_detail));
 		$jurnal_debet = json_decode(stripslashes($jurnal_debet));
 		$jurnal_kredit = json_decode(stripslashes($jurnal_kredit));
 
-		$result=$this->m_jurnal->detail_jurnal_insert($jurnal_id,$jurnal_master,$jurnal_akun,$jurnal_detail, $jurnal_debet,$jurnal_kredit);
-		echo $result;
+		$result=$this->m_jurnal->detail_jurnal_insert($jurnal_detailid,$jurnal_master,$jurnal_akun,$jurnal_detail, $jurnal_debet,$jurnal_kredit);
+		return $result;
 	}
 
 	function detail_jurnal_purge(){
@@ -171,6 +171,10 @@ class C_jurnal extends Controller {
 		//$jurnal_revised=0;
 		$result=$this->m_jurnal->jurnal_create($jurnal_no,$jurnal_tanggal ,$jurnal_keterangan ,$jurnal_noref ,$jurnal_unit ,
 														   $jurnal_author ,$jurnal_date_create );
+		if($result>0){
+			$result=$this->detail_jurnal_insert($result);
+		}
+		
 		echo $result;
 	}
 
@@ -197,6 +201,10 @@ class C_jurnal extends Controller {
 */		//$jurnal_revised="(revised+1)";
 		$result = $this->m_jurnal->jurnal_update($jurnal_id,$jurnal_no,$jurnal_tanggal,$jurnal_keterangan,$jurnal_noref,$jurnal_unit,
 															 $jurnal_update,$jurnal_date_update);
+		if($result>0){
+			$result=$this->detail_jurnal_insert($result);
+		}
+		
 		echo $result;
 	}
 

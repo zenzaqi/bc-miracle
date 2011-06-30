@@ -239,7 +239,7 @@ class M_Kasbank extends Model{
 				$this->db->query($sql);
 			}
 
-			return '1';
+			return $dkasbank_master;
 
 		}
 		//end of function
@@ -317,7 +317,17 @@ class M_Kasbank extends Model{
 			//$this->firephp->log($pattern."-".$kasbank_kategori."-".$kasbank_jenis);
 			$kasbank_nobukti=$this->m_public_function->get_kode_1('kasbank','kasbank_nobukti',$pattern,12);
 			$data["kasbank_nobukti"]=$kasbank_nobukti;
-
+			
+			$this->db->insert('kasbank', $data);
+			if($this->db->affected_rows()){
+				return $this->db->insert_id();
+			}	
+			else{
+				return 0;
+			}
+				
+			
+			/*
 			$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -328,7 +338,7 @@ class M_Kasbank extends Model{
 					return 'OK:'.$this->db->insert_id();
 				else
 					return 'ER:Gagal disimpan digunakan !';
-			}
+			}*/
 
 
 		}
@@ -374,8 +384,12 @@ class M_Kasbank extends Model{
 			if($rsA->num_rows()){
 				$data["kasbank_akun"]=$kasbank_akun;
 			}
-
-			$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."' AND kasbank_id<>'".$kasbank_id."'";
+			
+			$this->db->where('kasbank_id', $kasbank_id);
+			$this->db->update('kasbank', $data);
+			return $kasbank_id;
+			
+			/*$sql="SELECT kasbank_nobukti FROM kasbank WHERE kasbank_nobukti='".$kasbank_nobukti."' AND kasbank_id<>'".$kasbank_id."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
 				return 'ER:No Jurnal sudah digunakan !';
@@ -388,7 +402,7 @@ class M_Kasbank extends Model{
 					return 'OK:'.$kasbank_id;
 				}else
 					return 'ER:Gagal disimpan!';
-			}
+			}*/
 		}
 
 		//fcuntion for delete record

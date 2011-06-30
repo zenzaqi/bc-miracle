@@ -1,0 +1,6 @@
+<update by zaqi.smart@gmail.com>
+- Perbaikan jurnal Kas/bank Masuk
+- Perbaikan jurnal Kas/bank Keluar
+- Perbaikan jurnal Umum
+- Perbaikan Proses Posting
+- SQL update : 2011-06-30_04-21-PM.sql
