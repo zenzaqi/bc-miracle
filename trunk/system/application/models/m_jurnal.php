@@ -234,7 +234,7 @@ class M_jurnal extends Model{
 				$this->db->query($sql);
 			}
 
-			return '1';
+			return $jurnal_master;
 		}
 
 		//function for create new record
@@ -253,7 +253,14 @@ class M_jurnal extends Model{
 			$pattern="J/".date("ym",$jurnal_tanggal)."-";
 			$jurnal_no=$this->m_public_function->get_kode_1('jurnal','jurnal_no',$pattern,11);
 			$data["jurnal_no"]=$jurnal_no;
-
+			
+			$this->db->insert('jurnal', $data);
+			if($this->db->affected_rows())
+				return $this->db->insert_id();
+			else
+				return 0;
+				
+			/*
 			$sql="SELECT jurnal_no FROM vu_jurnal WHERE jurnal_no='".$jurnal_no."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
@@ -264,7 +271,8 @@ class M_jurnal extends Model{
 					return 'OK:'.$this->db->insert_id();
 				else
 					return 'ER:Gagal disimpan digunakan !';
-			}
+			}*/
+			
 		}
 
 		//function for update record
@@ -279,9 +287,12 @@ class M_jurnal extends Model{
 				"jurnal_date_update"=>$jurnal_date_update
 			);
 
+			
 			$this->db->where('jurnal_id', $jurnal_id);
-
-			$sql="SELECT jurnal_no FROM vu_jurnal WHERE jurnal_no='".$jurnal_no."' AND jurnal_id<>'".$jurnal_id."'";
+			$this->db->update('jurnal', $data);
+			return $jurnal_id;
+				
+			/*$sql="SELECT jurnal_no FROM vu_jurnal WHERE jurnal_no='".$jurnal_no."' AND jurnal_id<>'".$jurnal_id."'";
 			$rs=$this->db->query($sql);
 			//$this->firephp->log($sql);
 			if($rs->num_rows()){
@@ -297,7 +308,7 @@ class M_jurnal extends Model{
 				}
 				else
 					return 'ER:Gagal disimpan !';
-			}
+			}*/
 		}
 
 		//fcuntion for delete record

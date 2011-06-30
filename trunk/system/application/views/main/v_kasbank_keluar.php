@@ -127,6 +127,11 @@ Ext.onReady(function(){
 				var kasbank_keluar_keterangan_field=null;
 				var kasbank_keluar_post_field=null;
 				var kasbank_keluar_date_post_field_date="";
+				var dkasbank_keluar_id = [];
+				var dkasbank_keluar_akun = [];
+				var dkasbank_keluar_detail = [];
+				var dkasbank_keluar_debet = [];
+				var dkasbank_keluar_kredit = [];
 
 				kasbank_keluar_id_field_pk=get_pk_id();
 				if(kasbank_keluar_tanggalField.getValue()!== ""){kasbank_keluar_tanggal_field_date = kasbank_keluar_tanggalField.getValue().format('Y-m-d');}
@@ -136,6 +141,35 @@ Ext.onReady(function(){
 				if(kasbank_keluar_jenisField.getValue()!== null){kasbank_keluar_jenis_field = kasbank_keluar_jenisField.getValue();}
 				if(kasbank_keluar_norefField.getValue()!== null){kasbank_keluar_noref_field = kasbank_keluar_norefField.getValue();}
 				if(kasbank_keluar_keteranganField.getValue()!== null){kasbank_keluar_keterangan_field = kasbank_keluar_keteranganField.getValue();}
+
+
+
+				var dcount = kasbank_keluar_detail_DataStore.getCount() - 1;
+
+				if(kasbank_keluar_detail_DataStore.getCount()>0){
+					for(i=0; i<kasbank_keluar_detail_DataStore.getCount();i++){
+						if((/^\d+$/.test(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun))
+						   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==undefined
+						   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==''
+						   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==0
+						   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet!==0
+						   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet>0){
+
+							dkasbank_keluar_id.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_id);
+							dkasbank_keluar_akun.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun);
+							dkasbank_keluar_detail.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_detail);
+							dkasbank_keluar_debet.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet);
+							dkasbank_keluar_kredit.push(0);
+						}
+					}
+				}
+
+				var encoded_array_dkasbank_keluar_id = Ext.encode(dkasbank_keluar_id);
+				var encoded_array_dkasbank_keluar_akun = Ext.encode(dkasbank_keluar_akun);
+				var encoded_array_dkasbank_keluar_detail = Ext.encode(dkasbank_keluar_detail);
+				var encoded_array_dkasbank_keluar_debet = Ext.encode(dkasbank_keluar_debet);
+				var encoded_array_dkasbank_keluar_kredit = Ext.encode(dkasbank_keluar_kredit);
+
 
 				Ext.Ajax.request({
 					waitMsg: 'Please wait...',
@@ -149,13 +183,16 @@ Ext.onReady(function(){
 						kasbank_keluar_jenis		: kasbank_keluar_jenis_field,
 						kasbank_keluar_noref		: kasbank_keluar_noref_field,
 						kasbank_keluar_keterangan	: kasbank_keluar_keterangan_field,
-						kasbank_keluar_post			: kasbank_keluar_post_field,
-						kasbank_keluar_date_post	: kasbank_keluar_date_post_field_date,
+						dkasbank_keluar_id			: encoded_array_dkasbank_keluar_id,
+						dkasbank_keluar_akun		: encoded_array_dkasbank_keluar_akun,
+						dkasbank_keluar_detail		: encoded_array_dkasbank_keluar_detail,
+						dkasbank_keluar_debet		: encoded_array_dkasbank_keluar_debet,
+						dkasbank_keluar_kredit		: encoded_array_dkasbank_keluar_kredit,
 						task						: post2db
 					},
 					success: function(response){
 						var result=response.responseText;
-						var rsp_kode=result.substring(0,2);
+						/*var rsp_kode=result.substring(0,2);
 						var rsp_msg=result.replace(rsp_kode+':','');
 						if(rsp_kode=='OK'){
 								kasbank_keluar_detail_insert(eval(rsp_msg),opsi);
@@ -167,7 +204,31 @@ Ext.onReady(function(){
 								   animEl: 'save',
 								   icon: Ext.MessageBox.WARNING
 								});
+							}*/
+						if(result!=='0'){
+						    if(opsi=='print'){
+								kasbank_keluar_cetak_faktur(result);
 							}
+							Ext.MessageBox.show({
+								title: 'Success',
+								msg: 'Data Kas/Bank Keluar sukses disimpan ',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.OK
+							 });
+							Ext.MessageBox.alert(post2db+' OK','Data Jurnal Kas/Bank berhasil disimpan.');
+							kasbank_keluar_saveWindow.hide();
+							kasbank_keluar_DataStore.reload();
+						}else{
+						   Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Data Kas/Bank Keluar gagal disimpan ',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+						    });
+						}
+
 					},
 					failure: function(response){
 						var result=response.responseText;
@@ -1226,66 +1287,7 @@ Ext.onReady(function(){
 
 	//function for insert detail
 	function kasbank_keluar_detail_insert(pkid,opsi){
-		var dkasbank_keluar_id = [];
-        var dkasbank_keluar_akun = [];
-        var dkasbank_keluar_detail = [];
-        var dkasbank_keluar_debet = [];
-
-        var dcount = kasbank_keluar_detail_DataStore.getCount() - 1;
-
-        if(kasbank_keluar_detail_DataStore.getCount()>0){
-            for(i=0; i<kasbank_keluar_detail_DataStore.getCount();i++){
-                if((/^\d+$/.test(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun))
-				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==undefined
-				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==''
-				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun!==0
-				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet!==0
-				   && kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet>0){
-
-                  	dkasbank_keluar_id.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_id);
-					dkasbank_keluar_akun.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_akun);
-                   	dkasbank_keluar_detail.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_detail);
-					dkasbank_keluar_debet.push(kasbank_keluar_detail_DataStore.getAt(i).data.dkasbank_keluar_debet);
-                }
-            }
-
-			var encoded_array_dkasbank_keluar_id = Ext.encode(dkasbank_keluar_id);
-			var encoded_array_dkasbank_keluar_akun = Ext.encode(dkasbank_keluar_akun);
-			var encoded_array_dkasbank_keluar_detail = Ext.encode(dkasbank_keluar_detail);
-			var encoded_array_dkasbank_keluar_debet = Ext.encode(dkasbank_keluar_debet);
-
-			Ext.Ajax.request({
-				waitMsg: 'Mohon tunggu...',
-				url: 'index.php?c=c_kasbank_keluar&m=detail_kasbank_keluar_detail_insert',
-				params:{
-					dkasbank_keluar_id		: encoded_array_dkasbank_keluar_id,
-					dkasbank_keluar_master	: pkid,
-					dkasbank_keluar_akun	: encoded_array_dkasbank_keluar_akun,
-					dkasbank_keluar_detail	: encoded_array_dkasbank_keluar_detail,
-					dkasbank_keluar_debet	: encoded_array_dkasbank_keluar_debet
-				},
-				success:function(response){
-					if(opsi=='print'){
-						kasbank_keluar_cetak_faktur(pkid);
-					}
-					Ext.MessageBox.alert(post2db+' OK','Data Jurnal Kas/Bank berhasil disimpan.');
-					kasbank_keluar_saveWindow.hide();
-					kasbank_keluar_DataStore.reload();
-				},
-				failure: function(response){
-					Ext.MessageBox.hide();
-					var result=response.responseText;
-					Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-					});
-				}
-			});
-
-        }
+		//
 	}
 	//eof
 

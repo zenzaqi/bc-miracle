@@ -99,10 +99,10 @@ class C_kasbank_masuk extends Controller {
 	//
 
 	//add detail
-	function detail_kasbank_masuk_detail_insert(){
+	function detail_kasbank_masuk_detail_insert($master){
 	//POST variable here
 		$dkasbank_masuk_id=trim(@$_POST["dkasbank_masuk_id"]);
-		$dkasbank_masuk_master=trim(@$_POST["dkasbank_masuk_master"]);
+		$dkasbank_masuk_master=$master;
 		$dkasbank_masuk_akun=trim(@$_POST["dkasbank_masuk_akun"]);
 		$dkasbank_masuk_detail=trim(@$_POST["dkasbank_masuk_detail"]);
 		$dkasbank_masuk_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$dkasbank_masuk_detail);
@@ -119,6 +119,7 @@ class C_kasbank_masuk extends Controller {
 		$result=$this->m_kasbank->detail_kasbank_detail_insert($dkasbank_masuk_id ,$dkasbank_masuk_master ,
 															   $dkasbank_masuk_akun ,$dkasbank_masuk_detail ,$dkasbank_masuk_debet ,
 															   $dkasbank_masuk_kredit );
+		return $result;
 	}
 
 
@@ -189,6 +190,11 @@ class C_kasbank_masuk extends Controller {
 												 $kasbank_masuk_terimauntuk ,"masuk", $kasbank_masuk_jenis ,$kasbank_masuk_noref ,
 												 $kasbank_masuk_keterangan ,$kasbank_masuk_author ,$kasbank_masuk_date_create ,
 												 $kasbank_masuk_post, $kasbank_masuk_date_post);
+		//$this->firephp->log($result);
+		if($result>0){
+			$result=$this->detail_kasbank_masuk_detail_insert($result);
+		}
+		
 		echo $result;
 	}
 
@@ -220,6 +226,10 @@ class C_kasbank_masuk extends Controller {
 															   $kasbank_masuk_terimauntuk,"masuk",$kasbank_masuk_jenis,$kasbank_masuk_noref,
 															   $kasbank_masuk_keterangan,$kasbank_masuk_update,$kasbank_masuk_date_update,
 															   $kasbank_masuk_post,$kasbank_masuk_date_post);
+		if($result>0){
+			$result=$this->detail_kasbank_masuk_detail_insert($result);
+		}
+		
 		echo $result;
 	}
 

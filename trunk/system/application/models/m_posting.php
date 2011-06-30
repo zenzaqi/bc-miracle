@@ -23,7 +23,7 @@ class M_posting extends Model{
 			$tanggal=date('Y-m-d H:i:s');
 			if($periode=='tanggal'){
 				//POSTING KE BUKU BESAR
-				$sql="INSERT INTO buku_besar(buku_tanggal,
+				/*$sql="INSERT INTO buku_besar(buku_tanggal,
                              buku_ref,
                              buku_akun,
                              buku_akun_kode,
@@ -42,7 +42,60 @@ class M_posting extends Model{
 							  date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."'  AND
 						      date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."'";
 				//$this->firephp->log($sql);
+				*/
+				
+				$sql="INSERT INTO buku_besar(buku_tanggal,
+                             buku_ref,
+                             buku_akun,
+                             buku_akun_kode,
+                             buku_debet,
+                             buku_kredit,
+							 buku_author)
+					   SELECT N.tanggal,
+							  N.no_jurnal,
+							  N.akun,
+							  N.akun_kode,
+							  N.debet,
+							  N.kredit,
+							   '".@$_SESSION[SESSION_USERID]."'
+							  FROM (";
+				 $sql.= "SELECT
+				 			 concat('JU-',J.djurnal_id) as no_id,
+				 			 J.`jurnal_no` AS `no_jurnal`,
+							  date_format(J.`jurnal_tanggal`,'%Y-%m-%d') AS `tanggal`,
+							  J.`djurnal_akun` AS `akun`,
+							  J.`akun_kode` AS `akun_kode`,
+							  J.`akun_nama` AS `akun_nama`,
+							  J.`djurnal_detail` AS `keterangan`,
+							  J.`djurnal_debet` AS `debet`,
+							  J.`djurnal_kredit` AS `kredit`,
+							  J.`jurnal_post` AS `post`,
+							  J.`jurnal_date_post` AS `post_date`
+						 FROM `vu_jurnal` J
+						 WHERE (J.jurnal_post<>'Y' OR J.jurnal_post IS NULL)
+						 AND date_format(J.jurnal_tanggal,'%Y-%m-%d')>=date_format('".$tgl_awal."','%Y-%m-%d')
+						 AND date_format(J.jurnal_tanggal,'%Y-%m-%d')<=date_format('".$tgl_akhir."','%Y-%m-%d')";
 
+					//JURNAL KASBANK
+				   $sql.=" UNION ";
+				   $sql.=" SELECT
+				          concat('JK-',K.kasbank_id) as no_id,
+				   		  K.`no_jurnal` AS `no_jurnal`,
+						  date_format(K.`tanggal`,'%Y-%m-%d') AS `tanggal`,
+						  K.`akun` AS `akun`,
+						  K.`akun_kode` AS `akun_kode`,
+						  K.`akun_nama` AS `akun_nama`,
+						  K.`keterangan` AS `keterangan`,
+						  K.`debet` AS `debet`,
+						  K.`kredit` AS `kredit`,
+						  K.`post` AS `post`,
+						  K.`post_date` AS `post_date`
+					 FROM `vu_jurnal_bank` K
+					 WHERE (K.post<>'Y' OR K.post is NULL)
+					 AND date_format(K.tanggal,'%Y-%m-%d')>=date_format('".$tgl_awal."','%Y-%m-%d')
+					 AND date_format(K.tanggal,'%Y-%m-%d')<=date_format('".$tgl_akhir."','%Y-%m-%d')";
+					$sql.=") as N";
+					
 				$result=$this->db->query($sql);
 
 				//UPDATE STATUS POSTING
@@ -67,7 +120,7 @@ class M_posting extends Model{
 
 
 				//POSTING KE BUKU BESAR
-				$sql="INSERT INTO buku_besar(buku_tanggal,
+				/*$sql="INSERT INTO buku_besar(buku_tanggal,
                              buku_ref,
                              buku_akun,
                              buku_akun_kode,
@@ -82,7 +135,58 @@ class M_posting extends Model{
 						 FROM vu_jurnal_harian
 						WHERE post <> 'Y' AND
 							  date_format(tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
+				*/
+				
+				$sql="INSERT INTO buku_besar(buku_tanggal,
+                             buku_ref,
+                             buku_akun,
+                             buku_akun_kode,
+                             buku_debet,
+                             buku_kredit,
+							 buku_author)
+					   SELECT N.tanggal,
+							  N.no_jurnal,
+							  N.akun,
+							  N.akun_kode,
+							  N.debet,
+							  N.kredit,
+							   '".@$_SESSION[SESSION_USERID]."'
+							  FROM (";
+				 $sql.= "SELECT concat('JU-',J.djurnal_id) as no_id,
+				 			 J.`jurnal_no` AS `no_jurnal`,
+							  date_format(J.`jurnal_tanggal`,'%Y-%m-%d') AS `tanggal`,
+							  J.`djurnal_akun` AS `akun`,
+							  J.`akun_kode` AS `akun_kode`,
+							  J.`akun_nama` AS `akun_nama`,
+							  J.`djurnal_detail` AS `keterangan`,
+							  J.`djurnal_debet` AS `debet`,
+							  J.`djurnal_kredit` AS `kredit`,
+							  J.`jurnal_post` AS `post`,
+							  J.`jurnal_date_post` AS `post_date`
+						 FROM `vu_jurnal` J
+						 WHERE (J.jurnal_post<>'Y' OR J.jurnal_post IS NULL)
+						 AND date_format(J.jurnal_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
 
+					//JURNAL KASBANK
+				   $sql.=" UNION ";
+				   $sql.=" SELECT
+				   		  concat('JK-',K.kasbank_id) as no_id,
+				   		  K.`no_jurnal` AS `no_jurnal`,
+						  date_format(K.`tanggal`,'%Y-%m-%d') AS `tanggal`,
+						  K.`akun` AS `akun`,
+						  K.`akun_kode` AS `akun_kode`,
+						  K.`akun_nama` AS `akun_nama`,
+						  K.`keterangan` AS `keterangan`,
+						  K.`debet` AS `debet`,
+						  K.`kredit` AS `kredit`,
+						  K.`post` AS `post`,
+						  K.`post_date` AS `post_date`
+					 FROM `vu_jurnal_bank` K
+					 WHERE (K.post<>'Y' OR K.post is NULL)
+					 AND date_format(K.tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
+
+					$sql.=") as N";
+					
 				$result=$this->db->query($sql);
 				//$this->firephp->log($sql);
 

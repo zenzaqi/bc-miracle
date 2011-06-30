@@ -107,10 +107,10 @@ class C_kasbank_keluar extends Controller {
 	//
 
 	//add detail
-	function detail_kasbank_keluar_detail_insert(){
+	function detail_kasbank_keluar_detail_insert($master){
 	//POST variable here
 		$dkasbank_keluar_id=trim(@$_POST["dkasbank_keluar_id"]);
-		$dkasbank_keluar_master=trim(@$_POST["dkasbank_keluar_master"]);
+		$dkasbank_keluar_master=$master;
 		$dkasbank_keluar_akun=trim(@$_POST["dkasbank_keluar_akun"]);
 		$dkasbank_keluar_detail=trim(@$_POST["dkasbank_keluar_detail"]);
 		$dkasbank_keluar_detail=str_replace("/(<\/?)(p)([^>]*>)", "",$dkasbank_keluar_detail);
@@ -126,7 +126,7 @@ class C_kasbank_keluar extends Controller {
 		$result=$this->m_kasbank->detail_kasbank_detail_insert($dkasbank_keluar_id ,$dkasbank_keluar_master ,$dkasbank_keluar_akun ,
 															   $dkasbank_keluar_detail ,$dkasbank_keluar_debet ,$dkasbank_keluar_kredit );
 
-		echo $result;
+		return $result;
 	}
 
 
@@ -199,6 +199,10 @@ class C_kasbank_keluar extends Controller {
 												 $kasbank_keluar_terimauntuk ,"keluar",$kasbank_keluar_jenis ,$kasbank_keluar_noref ,
 												 $kasbank_keluar_keterangan ,$kasbank_keluar_author ,$kasbank_keluar_date_create ,
 												 $kasbank_keluar_post, $kasbank_keluar_date_post );
+		if($result>0){
+			$result=$this->detail_kasbank_keluar_detail_insert($result);
+		}
+		
 		echo $result;
 	}
 
@@ -230,6 +234,10 @@ class C_kasbank_keluar extends Controller {
 												   $kasbank_keluar_terimauntuk,"keluar",$kasbank_keluar_jenis,$kasbank_keluar_noref,
 												   $kasbank_keluar_keterangan,$kasbank_keluar_update,$kasbank_keluar_date_update,
 												   $kasbank_keluar_post,$kasbank_keluar_date_post);
+		if($result>0){
+			$result=$this->detail_kasbank_keluar_detail_insert($result);
+		}
+		
 		echo $result;
 	}
 
