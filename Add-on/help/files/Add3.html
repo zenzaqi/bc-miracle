@@ -65,42 +65,80 @@ span.rvts9 /* Font Hint Italic */
 }
 span.rvts10
 {
- font-weight: bold;
+ font-style: italic;
 }
 span.rvts11
 {
- font-style: italic;
+ font-size: 11pt;
+ font-family: 'calibri';
 }
 span.rvts12
 {
- font-style: italic;
+ font-size: 11pt;
+ font-family: 'calibri';
+ font-weight: bold;
+ color: #ff0000;
+}
+span.rvts13
+{
+ font-size: 11pt;
+ font-family: 'calibri';
  font-weight: bold;
 }
-a.rvts13, span.rvts13
+span.rvts14
 {
+ font-size: 11pt;
+ font-family: 'calibri';
+ font-style: italic;
+}
+a.rvts15, span.rvts15
+{
+ font-size: 11pt;
+ font-family: 'calibri';
  font-style: italic;
  color: #0000ff;
  text-decoration: underline;
 }
-a.rvts13:hover { color: #0000ff; }
-span.rvts14 /* Font Style */
+a.rvts15:hover { color: #0000ff; }
+span.rvts16
+{
+ font-size: 11pt;
+ font-family: 'calibri';
+ font-style: italic;
+ font-weight: bold;
+}
+span.rvts17
+{
+ font-size: 11pt;
+ font-family: 'calibri';
+ font-style: italic;
+ font-weight: bold;
+ text-decoration: underline;
+}
+span.rvts18
+{
+ font-size: 11pt;
+ font-family: 'calibri';
+ text-decoration: underline;
+}
+span.rvts19 /* Font Style */
 {
  font-size: 16pt;
  font-family: 'Tahoma', 'Geneva', sans-serif;
  color: #ffffff;
 }
-span.rvts15 /* Font Style */
+span.rvts20 /* Font Style */
 {
  font-family: 'MS Sans Serif', 'Geneva', sans-serif;
  color: #808080;
 }
-span.rvts16 /* Font Style */
+span.rvts21 /* Font Style */
 {
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
  color: #c0c0c0;
 }
-a.rvts17, span.rvts17 /* Font Style */
+a.rvts22, span.rvts22 /* Font Style */
 {
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
@@ -128,7 +166,15 @@ p,ul,ol /* Paragraph Style */
  text-indent: -45px;
  margin: 0px 0px 0px 45px;
 }
-.rvps4 /* Paragraph Style */
+.rvps4
+{
+ margin: 0px 0px 0px 48px;
+}
+.rvps5
+{
+ margin: 0px 0px 0px 144px;
+}
+.rvps6 /* Paragraph Style */
 {
  text-align: left;
  text-indent: 0px;
@@ -136,13 +182,13 @@ p,ul,ol /* Paragraph Style */
  padding: 5px 5px 2px 5px;
  margin: -5px -5px 18px -5px;
 }
-.rvps5 /* Paragraph Style */
+.rvps7 /* Paragraph Style */
 {
  text-align: center;
  background: #e4e4e4;
  margin: 20px 0px 0px 0px;
 }
-.rvps6 /* Paragraph Style */
+.rvps8 /* Paragraph Style */
 {
  border-color: #c0c0c0;
  border-style: solid;
@@ -162,83 +208,102 @@ p,ul,ol /* Paragraph Style */
 <script type="text/javascript" src="hnd.js"></script>
 <meta name="generator" content="HelpNDoc Freeware Edition"></head>
 <body>
-<h1 class=rvps4><span class=rvts0><span class=rvts14>Faktur Penjualan Perawatan Baru</span></span></h1>
-<p>Dalam kondisi normal, kasir tidak perlu membuat faktur penjualan perawatan dari awal, karena tugas kasir hanya melanjutkan proses dari Tindakan (Medis / Non Medis).</p>
-<p><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Ketika Customer <span class=rvts10>selesai*</span> melakukan Tindakan, maka secara otomatis perawatan tersebut akan muncul di Daftar Penjualan Perawatan</li>
-</ul>
-<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>(*kondisi selesai adalah ketika Suster / Therapist telah mengganti status Tindakan perawatan customer menjadi </span><span class=rvts12>"selesai")</span></p>
+<h1 class=rvps6><span class=rvts0><span class=rvts19>Faktur Penjualan Perawatan Baru</span></span></h1>
+<p><span class=rvts12>Note: Dalam kondisi normal, kasir tidak perlu membuat faktur penjualan perawatan dari awal, karena tugas kasir hanya melanjutkan proses dari Tindakan (Medis / Non Medis).</span></p>
 <p><span class=rvts12><br></span></p>
-<p><img border=0 width=1034 height=209 alt="" hspace=1 vspace=1 src="img_110.jpg"></p>
-<p><br></p>
-<p><br></p>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11>Berikut urutan langkah untuk membuat Faktur Penjualan Perawatan:</span></p>
+<p><span class=rvts11><br></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=1><span class=rvts11>Ketika Customer </span><span class=rvts13>selesai*</span><span class=rvts11> melakukan Tindakan, maka secara otomatis perawatan tersebut akan muncul di Daftar Penjualan Perawatan</span></li>
+</ol>
+<p><span class=rvts14> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts14>(*kondisi selesai adalah ketika Suster / Terapis telah mengganti status Tindakan perawatan customer menjadi </span><span class=rvts16>"selesai")</span></p>
+<p><span class=rvts16><br></span></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=983 height=197 alt="" hspace=1 vspace=1 src="img_110.jpg"></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p><span class=rvts11><br></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=2><span class=rvts11>Perlu diperhatikan disini, bahwa Status Dokumen faktur awalnya adalah </span><span class=rvts13>Terbuka</span><span class=rvts11>, yang berarti faktur tersebut belum pernah dicetak (belum terbayar oleh customer).</span></li>
+<li value=3><span class=rvts11>Pilih Faktur milik Customer yang bersangkutan, lalu klik </span><span class=rvts13>Edit.</span></li>
+<li value=4><span class=rvts11>Kasir wajib memeriksa semua informasi pada faktur, terutama </span><span class=rvts13>Customer</span><span class=rvts11> dan </span><span class=rvts13>Detail Penjualan Perawatan</span><span class=rvts11> serta </span><span class=rvts13>Informasi Penjualan Paket</span><span class=rvts11> (jika ada), apakah informasi yang ditampilkan sudah benar.</span></li>
+</ol>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=849 height=412 alt="" hspace=1 vspace=1 src="img_111.jpg"></p>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts13>Note: </span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Perlu diperhatikan disini, bahwa Status Dokumen faktur awalnya adalah <span class=rvts10>Terbuka</span>, yang berarti faktur tersebut belum pernah dicetak (belum terbayar oleh customer).</li>
-<li>Pilih Faktur milik Customer yang bersangkutan, lalu klik <span class=rvts10>Edit.</span></li>
-<li>Kasir wajib memeriksa semua informasi pada faktur, terutama <span class=rvts10>Customer</span> dan <span class=rvts10>Detail Penjualan Perawatan</span> serta <span class=rvts10>Informasi Penjualan Paket</span> (jika ada), apakah informasi yang ditampilkan sudah benar.</li>
+<li><span class=rvts11>Pengambilan Paket yang bisa dicetak di Faktur Penjualan Perawatan adalah khusus Pengambilan Paket </span><span class=rvts13>hari ini</span><span class=rvts11>, dan sifatnya hanya </span><span class=rvts13>informasi saja </span><span class=rvts11>serta sesungguhnya tidak termasuk di dalam detail faktur yang tercetak.</span></li>
 </ul>
-<p><br></p>
-<p><img border=0 alt="" hspace=1 vspace=1 src="img_111.jpg"></p>
-<p><br></p>
-<p>note: </p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Pengambilan Paket yang bisa dicetak di Faktur Penjualan Perawatan adalah khusus Pengambilan Paket <span class=rvts10>hari ini</span>, dan sifatnya hanya <span class=rvts10>informasi saja </span>serta sesungguhnya tidak termasuk di dalam detail faktur yang tercetak.</li>
-</ul>
-<p class=rvps3> &nbsp; &nbsp; &nbsp; &nbsp;contoh: </p>
-<p class=rvps3> &nbsp; &nbsp; &nbsp; &nbsp;pada tanggal 25 Nov 2010, customer A mengambil perawatan satuan X serta mengambil paket Y. Maka dalam faktur yang dicetak pada hari itu (25 Nov 2010), akan terdapat detail perawatan satuan X serta pengambilan paket Y akan turut tercetak sebagai informasi saja. Sedangkan jika keesokan harinya (26 Nov 2010) kasir mencetak ulang faktur tersebut, maka yang nampak hanya perawatan satuan X saja, sedangkan pengambilan paket Y tidak akan ikut tercetak kembali.</p>
-<p class=rvps3><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Kasir dapat menginputkan tambahan Detail Penjualan Perawatan, <span class=rvts10>hanya jika dibutuhkan</span>, dengan cara klik tombol <span class=rvts10>Add</span></li>
-</ul>
-<p><span class=rvts10><br></span></p>
-<p><img border=0 width=1024 height=118 alt="" hspace=1 vspace=1 src="img_112.jpg"></p>
-<p> &nbsp; &nbsp; &nbsp; &nbsp;nb : - Kasir juga dapat menginputkan Referal(Kasir), dimana hal ini dibutuhkan jika memang Referal(Tindakan) belum terisi</p>
-<p> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Referal(Tindakan) adalah Referal yang diinputkan suster yang berasal dari Tindakan</p>
-<p><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Setelah semua informasi diperiksa dan benar, selanjutnya pilih cara pembayaran yang digunakan Customer pada panel <span class=rvts10>Cara Bayar</span></li>
-</ul>
-<p><span class=rvts10><br></span></p>
-<p class=rvps2><img border=0 alt="" hspace=1 vspace=1 src="img_113.jpg"></p>
-<p class=rvps2><span class=rvts10><br></span></p>
+<p class=rvps3><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>contoh: </span></p>
+<p class=rvps3><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>pada tanggal 25 Nov 2010, customer A mengambil perawatan satuan X serta mengambil paket Y. Maka dalam faktur yang dicetak pada hari itu (25 Nov 2010), akan terdapat detail perawatan satuan X serta pengambilan paket Y akan turut tercetak sebagai informasi saja. Sedangkan jika keesokan harinya (26 Nov 2010) kasir mencetak ulang faktur tersebut, maka yang nampak hanya perawatan satuan X saja, sedangkan pengambilan paket Y tidak akan ikut tercetak kembali.</span></p>
+<p class=rvps3><span class=rvts11><br></span></p>
+<p class=rvps3><span class=rvts11><br></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=5><span class=rvts11>Kasir dapat menginputkan tambahan Detail Penjualan Perawatan, </span><span class=rvts13>hanya jika dibutuhkan</span><span class=rvts11>, dengan cara klik tombol </span><span class=rvts13>Add</span></li>
+</ol>
+<p><span class=rvts13><br></span></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=974 height=110 alt="" hspace=1 vspace=1 src="img_112.jpg"></p>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts13>Note:</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps4 style="margin-left: 0"><span class=rvts11>Referal (Tindakan) adalah referal yang diinputkan suster / terapis</span></li>
+<li class=rvps4 style="margin-left: 0"><span class=rvts11>Jika Referal (Tindakan) belum terisi, kasir juga dapat menginputkan referal pada </span><span class=rvts13>Referal (Kasir) </span><span class=rvts11>jika dibutuhkan</span></li>
+</ul></ul></ul>
+<p class=rvps4><span class=rvts11><br></span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps4 style="margin-left: 0"><span class=rvts11>Pilih </span><span class=rvts13>Jenis Diskon </span><span class=rvts11>yang sesuai, diantaranya adalah : </span></li>
+</ul></ul></ul>
+<p class=rvps5><span class=rvts11>Tanpa Diskon, Umum, Member, Ultah, Card, Kolega, Keluarga, Owner, Grooming, Wartawan, Staf Dokter dan Staf Non Dokter</span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps4 style="margin-left: 0"><span class=rvts11>Secara default, </span><span class=rvts13>Diskon (%)</span><span class=rvts11> akan mengikuti Jenis Diskon yang dipilih dan nilainya sudah </span><span class=rvts16>Fix</span><span class=rvts11> (tidak bisa dirubah-rubah), hanya Jenis Diskon </span><span class=rvts18>Card</span><span class=rvts11> saja yang dapat diisikan secara manual dengan batasan isi antara </span><span class=rvts17>0-25%</span><span class=rvts11>.</span></li>
+<li class=rvps4 style="margin-left: 0"><span class=rvts11>Khusus diskon Ultah akan muncul 0%, karena akan menggunakan Voucher. Jns Diskon tetap diisi Ultah (untuk keperluan reporting)</span></li>
+</ul></ul></ul>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11><br></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=5><span class=rvts11>Setelah semua informasi diperiksa dan benar, selanjutnya pilih cara pembayaran yang digunakan Customer pada panel </span><span class=rvts13>Cara Bayar</span></li>
+</ol>
+<p><span class=rvts13><br></span></p>
+<p class=rvps2><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 alt="" hspace=1 vspace=1 src="img_113.jpg"></p>
+<p class=rvps2><span class=rvts13><br></span></p>
 <ol type="a" style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ol type="a" style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li value=1 class=rvps2 style="margin-left: 0">pilih <span class=rvts10>Cara Bayar </span>yang dipakai Customer, apakah menggunakan <span class=rvts10>Kartu Kredit, Kuitansi, Tunai, Cek/Giro, </span>atau <span class=rvts10>Transfer</span></li>
-<li value=2 class=rvps2 style="margin-left: 0">masukkan data-data yang dibutuhkan untuk setiap Cara Bayar, serta nominal pada field <span class=rvts10>Jumlah (Rp)</span></li>
+<li value=1 class=rvps2 style="margin-left: 0"><span class=rvts11>pilih </span><span class=rvts13>Cara Bayar </span><span class=rvts11>yang dipakai Customer, apakah menggunakan </span><span class=rvts13>Kartu Kredit, Kuitansi, Tunai, Cek/Giro, </span><span class=rvts11>atau </span><span class=rvts13>Transfer</span></li>
+<li value=2 class=rvps2 style="margin-left: 0"><span class=rvts11>masukkan data-data yang dibutuhkan untuk setiap Cara Bayar, serta nominal pada field </span><span class=rvts13>Jumlah (Rp)</span></li>
 </ol></ol>
-<p class=rvps2><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>(note: untuk keterangan lebih lanjut mengenai Cara Bayar, dapat dilihat pada User Manual MIS ini, di halaman Kasir --&gt; Cara Bayar, atau klik </span><a class=rvts13 href="CaraBayar.html#Cara Bayar">disini</a><span class=rvts11>)</span></p>
+<p class=rvps2><span class=rvts14> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts14> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts14>(note: untuk keterangan lebih lanjut mengenai Cara Bayar, dapat dilihat pada User Manual MIS ini, di halaman Kasir --&gt; Cara Bayar, atau klik </span><a class=rvts15 href="CaraBayar.html#Cara Bayar">disini</a><span class=rvts14>)</span></p>
+<p class=rvps2><span class=rvts14><br></span></p>
+<p><span class=rvts13> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts13> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=7><span class=rvts11>Pada panel kanan bawah, isikan data-data tambahan </span><span class=rvts13>jika diperlukan</span><span class=rvts11>:</span></li>
+</ol>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 alt="" hspace=1 vspace=1 src="img_114.jpg"></p>
+<p><span class=rvts11><br></span></p>
+<ol type="a" style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ol type="a" style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li value=1><span class=rvts13>Tot Item </span><span class=rvts11>otomatis terisi sesuai dengan jumlah perawatan yang tertera di List</span></li>
+<li value=2 class=rvps2 style="margin-left: 0"><span class=rvts13>Sub Total (Rp) </span><span class=rvts11>otomatis terisi dari jumlah total dari perawatan yang dilakukan, setelah diskon satuan</span></li>
+<li value=3 class=rvps2 style="margin-left: 0"><span class=rvts11>isikan </span><span class=rvts13>Voucher (Rp)</span><span class=rvts11> dan </span><span class=rvts13>No Voucher </span><span class=rvts11>adalah jika customer mendapatkan diskon tambahan sejumlah Rp tertentu, yang biasanya berupa Voucher</span></li>
+<li value=4 class=rvps2 style="margin-left: 0"><span class=rvts13>Total (Rp)</span><span class=rvts11> otomatis terisi dari berdasarkan perhitungan Sub Total (Rp) dikurangi Voucher (Rp)</span></li>
+<li value=5 class=rvps2 style="margin-left: 0"><span class=rvts13>Total Bayar (Rp)</span><span class=rvts11> otomatis terisi dari total Cara Bayar 1 + Cara Bayar 2 + Cara Bayar 3</span></li>
+<li value=6 class=rvps2 style="margin-left: 0"><span class=rvts13>Hutang (Rp) </span><span class=rvts11>otomatis terisi jika Total Bayar (Rp) kurang dari Total (Rp)</span></li>
+</ol></ol>
 <p class=rvps2><span class=rvts11><br></span></p>
-<p><span class=rvts10> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts10> &nbsp; &nbsp; &nbsp; &nbsp;</span> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p><span class=rvts11><br></span></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li value=8><span class=rvts11>klik </span><span class=rvts13>Save </span><span class=rvts11>untuk menyimpan Faktur, atau klik </span><span class=rvts13>Save and Print </span><span class=rvts11>untuk menyimpan sekaligus mencetak Faktur</span></li>
+</ol>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts11><br></span></p>
+<p><span class=rvts13>Note: </span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Pada panel kanan bawah, isikan data-data tambahan <span class=rvts10>jika diperlukan</span>:</li>
+<li><span class=rvts11>Faktur yang tampil di Daftar Penjualan Perawatan adalah </span><span class=rvts13>hanya</span><span class=rvts11> faktur - faktur hari ini dan yang statusnya masih Terbuka, atau masih belum dicetak. Untuk melihat faktur yang lain, dapat menggunakan fitur Adv Search)</span></li>
 </ul>
-<p><br></p>
-<p> &nbsp; &nbsp; &nbsp; &nbsp;<img border=0 alt="" hspace=1 vspace=1 src="img_114.jpg"></p>
-<p><br></p>
-<ol type="a" style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ol type="a" style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li value=1><span class=rvts10>Tot Item </span>otomatis terisi sesuai dengan jumlah produk yang dibeli</li>
-<li value=2 class=rvps2 style="margin-left: 0"><span class=rvts10>Sub Total (Rp) </span>otomatis terisi dari jumlah total dari harga produk yang dibeli, setelah diskon satuan</li>
-<li value=3>isikan <span class=rvts10>Diskon (%)</span>, yang akan dihitung dari Sub Total (Rp)</li>
-<li value=4 class=rvps2 style="margin-left: 0">isikan <span class=rvts10>Voucher (Rp)</span> dan <span class=rvts10>No Voucher </span>adalah jika customer mendapatkan diskon tambahan sejumlah Rp tertentu, yang biasanya berupa Voucher</li>
-</ol></ol>
-<p class=rvps2> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(note: Diskon (%) dan Voucher (Rp) hanya bisa diinputkan salah satu saja, dan tidak bisa keduanya sekaligus)</p>
-<ol type="a" style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ol type="a" style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li value=5 class=rvps2 style="margin-left: 0"><span class=rvts10>Total (Rp)</span> otomatis terisi dari berdasarkan perhitungan Sub Total (Rp) dikurangi Diskon (%) atau Voucher (Rp)</li>
-<li value=6 class=rvps2 style="margin-left: 0"><span class=rvts10>Total Bayar (Rp)</span> otomatis terisi dari total Cara Bayar 1 + Cara Bayar 2 + Cara Bayar 3</li>
-<li value=7 class=rvps2 style="margin-left: 0"><span class=rvts10>Hutang (Rp) </span>otomatis terisi jika Total Bayar (Rp) kurang dari Total (Rp)</li>
-</ol></ol>
-<p class=rvps2><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>klik <span class=rvts10>Save </span>untuk menyimpan Faktur, atau klik <span class=rvts10>Save and Print </span>untuk menyimpan sekaligus mencetak Faktur</li>
-</ul>
-<p><br></p>
-<p>Faktur Penjualan Perawatan telah selesai dibuat</p>
-<p> &nbsp; &nbsp; &nbsp; &nbsp;(note: Faktur yang tampil di Daftar Penjualan Perawatan adalah <span class=rvts10>hanya</span> faktur - faktur hari ini dan yang statusnya masih Terbuka, atau masih belum dicetak. Untuk melihat faktur yang lain, dapat menggunakan fitur Adv Search)</p>
-<p class=rvps2><br></p>
-<p class=rvps2><br></p>
-<p class=rvps2><br></p>
-<p class=rvps2><br></p>
-<p class=rvps2><br></p>
-<p class=rvps5><span class=rvts15>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
-<p class=rvps6><span class=rvts16>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts17 href="http://www.helpndoc.com" target="_blank">Easily create HTML Help documents</a></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps7><span class=rvts20>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
+<p class=rvps8><span class=rvts21>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts22 href="http://www.helpndoc.com" target="_blank">Easily create HTML Help documents</a></p>
 </body></html>
