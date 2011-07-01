@@ -1,0 +1,4 @@
+<update by zaqi.smart@gmail.com>
+- Neraca Percobaan/Trial Balance
+  menu link : ?c=c_trial_balance
+  SQL: 2011-07-01_12-45-AM.sql
