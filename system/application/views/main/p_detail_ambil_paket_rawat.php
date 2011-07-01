@@ -41,6 +41,13 @@
 				$rawat=""; 
 				$total_item=0;
 				$j=0;
+				$tot_medis = 0;
+				$tot_non_medis = 0;
+				$tot_aa = 0;
+				$tot_surgery = 0;
+				$tot_all = 0;
+				$total = 0;
+				$jum_all = 0;
 				
 		foreach($data_print as $printlist){
 		
@@ -59,6 +66,7 @@
 				$tot_all = 0;
 				$total = 0;
 				$jum_all = 0;
+				
 		foreach($data_print as $print) { 
 		if ($print->kategori_nama == 'Medis') {
 			$tot_medis = $tot_medis+$print->dapaket_jumlah*$print->harga_satuan;
