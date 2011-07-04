@@ -269,7 +269,7 @@ class M_Trial_balance extends Model{
 				  		AND date_format(akun_periode_akhir,'Y-m-d')=date_format('".$tgl_akhir."','Y-m-d')";
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
-			$this->firephp->log($sql);
+			//$this->firephp->log($sql);
 			
 			if($nbrows>0){
 				return $result->result();
