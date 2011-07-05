@@ -13,18 +13,18 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print()"><table summary='Rekap Jual'>
-<caption>Laporan Waktu Tunggu <?php echo $groupby; ?><br/><?php echo $periode; ?> <br/></caption>
+<body onload="window.print()"><table summary='Rekap Jual' border='1' cellspacing="0px">
+<caption><b>Laporan Waktu Tunggu <?php echo $groupby; ?><br/><?php echo $periode; ?> <br/><br/></b></caption>
 <thead> 
 <tr> 
 	<th scope='col'>No</th> 
 	<th scope='col'>Tanggal</th> 
-	<th scope='col'>Jml Cust <</th> 
-	<th scope='col'>Rata2 Wkt <</th> 
-	<th scope='col'>Jml Cust ></th> 
-	<th scope='col'>Rata2 Wkt >></th>
+	<th scope='col'>Jml Cust <=</th> 
+	<th scope='col'>Rata2 Waktu <=</th> 
+	<th scope='col'>Jml Cust >=</th> 
+	<th scope='col'>Rata2 Waktu >=</th>
 	<th scope='col'>Total Cust</th> 
-	<th scope='col'>Rata2 Wkt Tot</th> 
+	<th scope='col'>Rata2 Waktu Tot</th> 
 </tr> 
 </thead>
 
@@ -74,5 +74,8 @@ html,body,table,tr,td{
 	<td align="center" class="numeric"><b><?php echo date("H:i:s",$grandtot_wkt_tot); ?></td> 
 </tr>
 </tfoot>
+</table>
+<br>
+<table><tr><td align="right"><i>Printed on <?php echo date("d/m/y H:i:s"); ?> </i></td></tr></table>
 </body>
 </html>

@@ -32,6 +32,9 @@ class C_lap_waktu_tunggu extends Controller {
 			case "LIST":
 				$this->lap_waktu_tunggu_list();
 				break;
+			case "LIST2":
+				$this->lap_waktu_tunggu_list2();
+				break;
 			case "GET":
 				$this->get_daftar_customer();
 				break;
@@ -62,6 +65,15 @@ class C_lap_waktu_tunggu extends Controller {
 		$result=$this->m_lap_waktu_tunggu->lap_waktu_tunggu_list($query,$start,$end);
 		echo $result;
 	}	
+	
+	function lap_waktu_tunggu_list2(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_lap_waktu_tunggu->lap_waktu_tunggu_list2($query,$start,$end);
+		echo $result;
+	}
 
 	function lap_waktu_tunggu_average_search(){
 		$lap_waktu_tunggu_id=trim(@$_POST["lap_waktu_tunggu_id"]);
@@ -207,7 +219,7 @@ class C_lap_waktu_tunggu extends Controller {
 		
 		$data["data_print"]= $this->m_lap_waktu_tunggu->get_laporan_tunggu($menit,$tgl_awal,$periode,$lap_waktu_tunggu_id ,$tgl_start ,$tgl_end ,$groupby,  $trawat_id ,$trawat_cust ,$option,$filter);
 		
-		$print_view=$this->load->view("main/lap_wkt_tunggu_formcetak.php",$data,TRUE);
+		$print_view=$this->load->view("main/p_lap_wkt_tunggu_formcetak.php",$data,TRUE);
 		
 		//if(!file_exists("print")){
 		//	mkdir("print");
