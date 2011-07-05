@@ -108,6 +108,7 @@ var lap_waktu_tunggu_detail_proxy;
 var lap_waktu_tunggu_detail_writer;
 
 var today=new Date().format('d-m-Y');
+var firstday=(new Date().format('Y-m'))+'-01';
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
 var thismonth=new Date().format('m');
 var thisyear=new Date().format('Y');
@@ -176,7 +177,7 @@ Ext.onReady(function(){
 	lap_waktu_tungguColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			align : 'right',
+			align : 'Left',
 			header: '<div align="center">' + 'No' + '</div>',
 			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
 			width: 4
@@ -191,28 +192,28 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Jmlh Cust <' + '</div>',
+			header: '<div align="center">' + 'Jml Cust <=' + '</div>',
 			dataIndex: 'jum_cust_kurg',
-			width: 10,	//55,
+			width: 5,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rata2 Wkt <' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu <=' + '</div>',
 			dataIndex: 'wkt_tunggu_kurg',
 			width: 10,	//55,
 			sortable: true
 		},
 		{
 			align : 'center',
-			header: '<div align="center">' + 'Jmlh Cust >' + '</div>',
+			header: '<div align="center">' + 'Jml Cust >=' + '</div>',
 			dataIndex: 'jum_cust_lbh',
-			width: 10,
+			width: 5,
 			sortable: true
 		}, 
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rata2 Wkt >' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu >=' + '</div>',
 			dataIndex: 'wkt_tunggu_lbh',
 			width: 10,	//55,
 			sortable: true
@@ -221,12 +222,12 @@ Ext.onReady(function(){
 			align : 'center',
 			header: '<div align="center">' + 'Tot Cust' + '</div>',
 			dataIndex: 'tot_cust',
-			width: 10,	//55,
+			width: 5,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rata2 Wkt Tot' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu Tot' + '</div>',
 			dataIndex: 'rata_total_wkt_tunggu',
 			width: 10,	//55,
 			sortable: true
@@ -320,28 +321,28 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Jmlh cust <' + '</div>',
+			header: '<div align="center">' + 'Jml Cust <=' + '</div>',
 			dataIndex: 'avg_cust_kurg',
-			width: 10,	//55,
+			width: 5,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rt2 wkt <' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu <=' + '</div>',
 			dataIndex: 'avg_waktu_kurg',
 			width: 10,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Jmlh cust >' + '</div>',
+			header: '<div align="center">' + 'Jml Cust >=' + '</div>',
 			dataIndex: 'avg_cust_lbh',
-			width: 10,	//55,
+			width: 5,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rt2 wkt >' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu >=' + '</div>',
 			dataIndex: 'avg_waktu_lbh',
 			width: 10,	//55,
 			sortable: true
@@ -349,15 +350,15 @@ Ext.onReady(function(){
 		
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Tot cust' + '</div>',
+			header: '<div align="center">' + 'Tot Cust' + '</div>',
 			dataIndex: 'total_cust',
-			width: 10,	//55,
+			width: 5,	//55,
 			sortable: true
 		},
 		
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Tot rata2 wkt' + '</div>',
+			header: '<div align="center">' + 'Tot Rata-rata Waktu' + '</div>',
 			dataIndex: 'avg_waktu_total',
 			width: 10,	//55,
 			sortable: true
@@ -434,28 +435,7 @@ Ext.onReady(function(){
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'}
 		])
 	});
-		
-	/*Grid Panel utk daftar customer */
-	/*var daftar_pengunjung_Panel = new Ext.grid.GridPanel({
-		id: 'daftar_pengunjung_Panel',
-		title: 'Detail Pengunjung',
-		el: 'fp_lap_waktu_tunggu_detail',
-        store: detail_customerStore,
-        cm: detail_customer_ColumnModel,
-		view: new Ext.grid.GroupingView({
-            forceFit:true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Items" : "Item"]})'
-        }),
-        stripeRows: true,
-        autoExpandColumn: 'company',
-        autoHeight: true,
-		style: 'margin-top: 10px',
-        width: 600,//940	//800
-    });*/
-    //daftar_pengunjung_Panel.render();
-	
-	
-		
+			
 	/* Create Context Menu */
 	lap_waktu_tungguContextMenu = new Ext.menu.Menu({
 		id: '',
@@ -488,8 +468,8 @@ Ext.onReady(function(){
   	/* End of Function */
 		
 	lap_waktu_tungguListEditorGrid.addListener('rowcontextmenu', onlap_waktu_tunggu_ListEditGridContextMenu);
-	lap_waktu_tungguDataStore.load({params: {start: 0, limit: 31}});
-	lap_waktu_tunggu_average_DataStore.load({params: {start: 0, limit: 31}});
+	//lap_waktu_tungguDataStore.load({params: {start: 0, limit: 31}});
+	//lap_waktu_tunggu_average_DataStore.load({params: {start: 0, limit: 31}});
 	
 	
 	/*Detail Declaration */	
@@ -673,7 +653,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		width: 100,
         //endDateField: 'lap_waktu_tunggu_tglakhirField'
-		value: today
+		value: firstday
 	});
 	
 	lap_waktu_tunggu_tglEndSearchField= new Ext.form.DateField({
@@ -818,13 +798,12 @@ Ext.onReady(function(){
 		lap_waktu_tunggu_group_SearchField.setValue('Semua');
 		lap_waktu_tunggu_idSearchField.setValue(null);
 		lap_waktu_tunggu_tglStartSearchField.reset();
-		lap_waktu_tunggu_tglStartSearchField.setValue(today);
+		lap_waktu_tunggu_tglStartSearchField.setValue(firstday);
 		lap_waktu_tunggu_tglEndSearchField.reset();
 		lap_waktu_tunggu_tglEndSearchField.setValue(today);
-		Ext.getCmp('lap_waktu_tunggu_tglStartSearchField').reset();
-		Ext.getCmp('lap_waktu_tunggu_tglStartSearchField').setValue(today);
-		Ext.getCmp('lap_waktu_tunggu_tglEndSearchField').reset();
+		Ext.getCmp('lap_waktu_tunggu_tglStartSearchField').setValue(firstday);
 		Ext.getCmp('lap_waktu_tunggu_tglEndSearchField').setValue(today);
+		lap_waktu_tunggu_wktField.setValue('20');
 	}
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
@@ -1003,6 +982,11 @@ Ext.onReady(function(){
 		}
 		
 	});
+	
+	lap_waktu_tunggu_searchWindow.show();
+	lap_waktu_tunggu_wktField.reset();
+	lap_waktu_tunggu_wktField.setValue('20');
+	lap_waktu_tunggu_group_SearchField.setValue("Semua");
 });
 	</script>
 <body>
