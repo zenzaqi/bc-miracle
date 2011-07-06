@@ -534,30 +534,19 @@ class M_lap_waktu_tunggu extends Model{
 		if($tgl_start!='' && $tgl_end!=''){
 			//$query = "select tgl, count(cust_nama) as jum_cust,  sec_to_time(sum(time_to_sec(waktu_tunggu))/count(cust_nama)) as rata_waktu_tunggu from vu_tindakan where  ".$periode." ".$groupby." and dtrawat_status != 'Batal' and waktu_tunggu is not null";
 			
-			$query = "/*SELECT tgl,
-
-					SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) as jum_cust_kurg,
-					SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))) as wkt_tunggu_kurg,
-
-					SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) as jum_cust_lbh,
-					SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as wkt_tunggu_lbh,
-
-					SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) as tot_cust,
-
-					sec_to_time((((SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))))) + ((SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)))))) / (SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as rata_total_wkt_tunggu
-
-					FROM vu_tindakan where ".$periode." ".$groupby." and dtrawat_status != 'Batal' and waktu_tunggu is not null*/
-					
+			$query = "					
 					select tgl,SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) as jum_cust_kurg,
-					SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))) as wkt_tunggu_kurg,
+					ifnull(SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))),sec_to_time(0)) as wkt_tunggu_kurg,
 						SEC_TO_TIME(SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) * (SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))) as tot_wkt_kurg,
 
 					SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) as jum_cust_lbh,
-					SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as wkt_tunggu_lbh,
+					ifnull(SEC_TO_TIME((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))),sec_to_time(0)) as wkt_tunggu_lbh,
 					sec_to_time(SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) * (SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END))/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as tot_wkt_lbh,
 
 					SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) as tot_cust,
-					sec_to_time((((SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))))) + ((SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)))))) / (SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as rata_total_wkt_tunggu,
+					
+					sec_to_time((((SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END)) * ifnull(((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END)))),sec_to_time(0))) + ((SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)) * ifnull(((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)))),sec_to_time(0)))) / (SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as rata_total_wkt_tunggu,
+					
 					sec_to_time(SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END) * (((SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END))))) + ((SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)) * ((SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN TIME_TO_SEC(waktu_tunggu) ELSE 0 END)/(SUM(CASE WHEN SUBSTRING(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END)))))) / (SUM(CASE WHEN substring(waktu_tunggu,4,2)<".$menit." THEN 1 ELSE 0 END) + SUM(CASE WHEN substring(waktu_tunggu,4,2)>=".$menit." THEN 1 ELSE 0 END))) as tot_rata_wkt
 
 					FROM vu_tindakan where ".$periode." ".$groupby." and dtrawat_status != 'Batal' and waktu_tunggu is not null";
