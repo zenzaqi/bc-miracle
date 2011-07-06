@@ -60,6 +60,8 @@ var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
 var firstday=(new Date().format('Y-m'))+'-01';
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 /* declare variable here for Field*/
 var produk_idField;
 var produk_namaField;
@@ -71,6 +73,17 @@ var produk_namaSearchField;
 var satuan_idSearchField;
 var satuan_namaSearchField;
 var stok_saldoSearchField;
+
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+
+?>
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -342,6 +355,9 @@ Ext.onReady(function(){
 		var stok_mutasi_stok_awal_search=null;	
 		var stok_mutasi_masuk_search=null;	
 		var stok_mutasi_keluar_search=null;	
+		var stok_mutasi_bulan=null;
+		var stok_mutasi_tahun=null;
+		var stok_mutasi_periode=null;
 		
 		
 		mutasi_gudang_DataSore.load({
@@ -359,7 +375,18 @@ Ext.onReady(function(){
 			}
 		});
 		
-		stok_mutasi_periodeField.setValue(stok_mutasi_tanggal_startSearchField.getValue().format('Y-m-d')+ ' s/d ' + stok_mutasi_tanggal_endSearchField.getValue().format('Y-m-d'));
+	//	stok_mutasi_periodeField.setValue(stok_mutasi_tanggal_startSearchField.getValue().format('Y-m-d')+ ' s/d ' + //stok_mutasi_tanggal_endSearchField.getValue().format('Y-m-d'));
+		
+		if(stok_mutasi_bulanField.getValue()!==null){stok_mutasi_bulan=stok_mutasi_bulanField.getValue();}
+		if(stok_mutasi_tahunField.getValue()!==null){stok_mutasi_tahun=stok_mutasi_tahunField.getValue();}
+		
+		if(stok_mutasi_opsitglField.getValue()==true){
+			stok_mutasi_periode='tanggal';
+		}else if(stok_mutasi_opsiblnField.getValue()==true){
+			stok_mutasi_periode='bulan';
+		}else{
+			stok_mutasi_periode='all';
+		}
 						
 		if(stok_mutasi_produk_namaSearchField.getValue()!==null){produk_nama_search=stok_mutasi_produk_namaSearchField.getValue();}
 		if(stok_mutasi_group1SearchField.getValue()!==null){group1_search=stok_mutasi_group1SearchField.getValue();}
@@ -376,7 +403,7 @@ Ext.onReady(function(){
 		}else if(stok_mutasi_group1_selectField.getValue()==true){
 			opsi_produk_search='group1';
 		}
-		
+
 		if(stok_mutasi_tanggal_startSearchField.getValue()!==null){tanggal_start_search=stok_mutasi_tanggal_startSearchField.getValue().format('Y-m-d');}
 		if(stok_mutasi_tanggal_endSearchField.getValue()!==null){tanggal_end_search=stok_mutasi_tanggal_endSearchField.getValue().format('Y-m-d');}
 		if(stok_mutasi_satuan_terkecilField.getValue()==true){ opsi_satuan_search='terkecil'; }else{ opsi_satuan_search='default'; }
@@ -395,7 +422,10 @@ Ext.onReady(function(){
 			stok_awal 		:	stok_mutasi_stok_awal_search,
 			stok_masuk 			:	stok_mutasi_masuk_search,
 			stok_keluar 			: 	stok_mutasi_keluar_search,
-			opsi_produk		: 	opsi_produk_search
+			opsi_produk		: 	opsi_produk_search,
+			bulan		: stok_mutasi_bulan,
+			tahun		: stok_mutasi_tahun,
+			periode		: stok_mutasi_periode
 		};
 		// Cause the datastore to do another query : 
 		
@@ -422,7 +452,10 @@ Ext.onReady(function(){
 					stok_awal 		: stok_mutasi_stok_awal_search,
 					stok_masuk 			: stok_mutasi_masuk_search,
 					stok_keluar 			: stok_mutasi_keluar_search,
-					opsi_produk		: 	opsi_produk_search
+					opsi_produk		: 	opsi_produk_search,
+					bulan		: stok_mutasi_bulan,
+					tahun		: stok_mutasi_tahun,
+					periode		: stok_mutasi_periode
 				},
 				success:function(response){
 					
@@ -546,8 +579,128 @@ Ext.onReady(function(){
 	
 	});
 	
+	/////tgl n bulan
+	stok_mutasi_opsitglField=new Ext.form.Radio({
+		id:'stok_mutasi_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
 	
-	stok_mutasi_tanggal_startSearchField=new Ext.form.DateField({
+	stok_mutasi_opsiblnField=new Ext.form.Radio({
+		id:'stok_mutasi_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	stok_mutasi_tanggal_startSearchField= new Ext.form.DateField({
+		id: 'stok_mutasi_tanggal_startSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'stok_mutasi_tanggal_startSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'stok_tglakhirField'
+		value: today
+	});
+	
+	stok_mutasi_tanggal_endSearchField= new Ext.form.DateField({
+		id: 'stok_mutasi_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'stok_mutasi_tanggal_endSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'stok_tglawalField',
+		value: today
+	});
+	
+	stok_mutasi_bulanField=new Ext.form.ComboBox({
+		id:'stok_mutasi_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	stok_mutasi_tahunField=new Ext.form.ComboBox({
+		id:'stok_mutasi_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var stok_mutasi_periodeField=new Ext.form.FieldSet({
+		id:'stok_mutasi_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[stok_mutasi_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[stok_mutasi_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[stok_mutasi_tanggal_startSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[stok_mutasi_tanggal_endSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[stok_mutasi_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[stok_mutasi_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[stok_mutasi_tahunField]
+					   }]
+			}]
+	});
+	//// end of tgl n bulan
+	
+	
+	/*stok_mutasi_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'stok_mutasi_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
 		format: 'd-m-Y',		
@@ -559,7 +712,7 @@ Ext.onReady(function(){
 		fieldLabel: 's/d',
 		format: 'd-m-Y',
 		value: today
-	});
+	});*/
 	
 	stok_mutasi_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
@@ -685,14 +838,14 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
-	stok_mutasi_tanggal_opsiSearchField=new Ext.form.FieldSet({
+	/*stok_mutasi_tanggal_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_mutasi_tanggal_opsiSearchField',
 		title: 'Opsi Tanggal',
 		layout: 'column',
 		bodyStyle: 'padding: 5px;',
 		frame: false,
 		items:[stok_mutasi_tanggal_startSearchField, stok_mutasi_label_tanggalField, stok_mutasi_tanggal_endSearchField]
-	});
+	});*/
 	
 	stok_mutasi_produk_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_mutasi_produk_opsiSearchField',
@@ -769,7 +922,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField,stok_mutasi_jumlah_opsiSearchField,stok_mutasi_satuan_opsiSearchField, stok_mutasi_tanggal_opsiSearchField] 
+				items: [stok_mutasi_gudangSearchField, stok_mutasi_produk_opsiSearchField,stok_mutasi_jumlah_opsiSearchField,stok_mutasi_satuan_opsiSearchField, stok_mutasi_periodeField] 
 			}
 			]
 		}]
