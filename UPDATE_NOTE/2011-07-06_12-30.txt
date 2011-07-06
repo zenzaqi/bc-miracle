@@ -1,0 +1,3 @@
+update m_trial_balance, row 208:
+	saldo awal = DB - CR
+	saldo akhir = DB - CR
