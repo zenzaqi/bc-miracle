@@ -176,6 +176,7 @@ class M_Trial_balance extends Model{
 					
 					
 				}
+				/* SQL asli dari Zainal
 				$sql="INSERT INTO trial_balance(akun_id,
                                          akun_kode,
                                          akun_nama,
@@ -195,6 +196,36 @@ class M_Trial_balance extends Model{
 								sum(akun_debet) as debet, sum(akun_kredit) as akun_kredit,
 								sum(akun_awal) as akun_awal, 'D/K' as akun_awal_jenis,
 								sum(akun_awal) as akun_akhir, 'D/K' as akun_akhir_jenis,
+								akun_periode_awal,
+								akun_periode_akhir,
+								akun_generate_date
+						FROM  trial_balance
+						WHERE  date_format(akun_periode_awal,'Y-m-d')=date_format('".$tgl_awal."','Y-m-d')
+								AND date_format(akun_periode_akhir,'Y-m-d')=date_format('".$tgl_akhir."','Y-m-d')";
+				*/		
+				
+				// SQL dari Hendri
+				$sql="INSERT INTO trial_balance(akun_id,
+                                         akun_kode,
+                                         akun_nama,
+                                         akun_jenis,
+                                         akun_saldo,
+                                         akun_debet,
+                                         akun_kredit,
+                                         akun_awal,
+                                         akun_awal_jenis,
+                                         akun_akhir,
+                                         akun_akhir_jenis,
+                                         akun_periode_awal,
+                                         akun_periode_akhir,
+                                         akun_generate_date)
+						 SELECT 999999999 as akun_id, '999.999.999' as akun_kode,
+						        'TOTAL' as akun_nama, 'D/K' as akun_jenis, 'D/K' as akun_saldo,
+								sum(akun_debet) as debet, sum(akun_kredit) as akun_kredit,
+								sum(case when akun_awal_jenis = 'DB' then akun_awal else -akun_awal end) as akun_awal, 
+								'D/K' as akun_awal_jenis,
+								sum(case when akun_akhir_jenis = 'DB' then akun_akhir else -akun_akhir end) as akun_akhir, 
+								'D/K' as akun_akhir_jenis,
 								akun_periode_awal,
 								akun_periode_akhir,
 								akun_generate_date
