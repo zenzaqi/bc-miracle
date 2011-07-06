@@ -87,8 +87,14 @@ class C_stok_mutasi extends Controller {
 		$stok_masuk = trim(@$_POST["stok_masuk"]);
 		$stok_keluar = trim(@$_POST["stok_keluar"]);
 		
-		$result=$this->m_stok_mutasi->stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-													   $tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$result=$this->m_stok_mutasi->stok_mutasi_list($tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar);
 		echo $result;
 	}
 	

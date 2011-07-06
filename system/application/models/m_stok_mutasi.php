@@ -48,15 +48,23 @@ class M_stok_mutasi extends Model{
 
 		}
 
-		function stok_mutasi_list($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
+		function stok_mutasi_list($tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
 													   $tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir,$stok_awal,$stok_masuk,$stok_keluar){
 
+
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' and date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (date_format(tanggal_awal,'%Y-%m-%d')>='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')<='".$tanggal_end."')
+								AND ";
+			}											   
+													   
+													   
 			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
-					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
-					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
-					AND gudang_id='".$gudang."'";
+					AND ".$isiperiode." gudang_id='".$gudang."'";
 
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -66,16 +74,6 @@ class M_stok_mutasi extends Model{
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
 
-			/*if($mutasi_jumlah=='='){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir = '0' ";
-			}elseif($mutasi_jumlah=='<'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir < '0' ";
-			}elseif($mutasi_jumlah=='>'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir > '0' ";
-			}*/
 			
 			if($stok_akhir=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
