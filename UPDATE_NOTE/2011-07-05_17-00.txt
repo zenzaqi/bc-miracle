@@ -1,0 +1,9 @@
+update sql: 2011-07-05_17-00.sql 
+	vu_kasbank_detail
+	vu_kasbank_group
+	vu_kasbank
+	vu_jurnal_bank
+&
+update m_posting:
+
+adalah menambahkan detail_kasbank_id, supaya ketika view tsb di-union, row yg sama persis tidak di-distinct
