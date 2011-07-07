@@ -662,7 +662,9 @@ class M_master_terima_beli extends Model{
 										   $terima_tanggal , $terima_keterangan, $terima_status, $cetak ,$terima_gudang ){
 //			$pattern="LPB/".date("y/m")."/";
 //			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,14);
-			$pattern="PB/".date("ym")."-";
+				
+			$terima_tanggal_pattern=strtotime($terima_tanggal);
+			$pattern="PB/".date("ym",$terima_tanggal_pattern)."-";
 			$terima_no=$this->m_public_function->get_kode_1('master_terima_beli','terima_no',$pattern,12);
 
 			if ($terima_gudang == 'GUDANG BESAR (CABIN)'){
