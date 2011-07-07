@@ -436,7 +436,8 @@ class M_master_koreksi_stok extends Model{
 		
 		//function for create new record
 		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $koreksi_cetak){
-			$pattern="PS/".date("ym")."-";
+			$koreksi_tanggal_pattern=strtotime($koreksi_tanggal);
+			$pattern="PS/".date("ym",$koreksi_tanggal_pattern)."-";
 			$koreksi_no=$this->m_public_function->get_kode_1('master_koreksi_stok','koreksi_no',$pattern,12);
 			
 			$data = array(
