@@ -146,11 +146,11 @@ class M_master_order_beli extends Model{
 		
 		/*Function utk mengambil harga terakhir dari pemesanan barang OP berdasarkan Tanggal terbaru yg melekat di faktur dan produk yang sama */
 		function get_op_last_price($supplier_id, $produk_id, $order_tanggal){
-			$sql="SELECT dorder_harga , dorder_harga_log, order_supplier, dorder_produk
+			$sql="SELECT dorder_harga 
 					FROM detail_order_beli 
 					LEFT JOIN master_order_beli ON (master_order_beli.order_id = detail_order_beli.dorder_master)
-					WHERE detail_order_beli.dorder_produk = '".$produk_id."' AND master_order_beli.order_supplier = '".$supplier_id."'
-				ORDER BY detail_order_beli.dorder_harga_log DESC LIMIT 0,5";
+					WHERE detail_order_beli.dorder_produk = '".$produk_id."' AND master_order_beli.order_tanggal <= '".$order_tanggal."'
+				ORDER BY order_tanggal DESC, order_id DESC LIMIT 0,5";
 				
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -165,6 +165,8 @@ class M_master_order_beli extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
+		
+		
 		
 		function get_satuan_produk_list($selected_id){
 			
@@ -232,11 +234,8 @@ class M_master_order_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT dorder_id,dorder_master,dorder_produk,produk_nama,sum(jumlah_terima)as jumlah_terima,dorder_satuan,jumlah_barang,harga_satuan, 
-						date_format(dorder_harga_log, '%Y-%m-%d %H:%i:%s') as dorder_harga_log,
-						diskon FROM vu_detail_order_beli where dorder_master='".$master_id."'
-						group by vu_detail_order_beli.dorder_produk, vu_detail_order_beli.dorder_satuan
-						";
+			$query = "SELECT distinct dorder_id,dorder_master,dorder_produk,produk_nama,jumlah_terima,dorder_satuan,jumlah_barang,harga_satuan,
+						diskon FROM vu_detail_order_beli where dorder_master='".$master_id."'";
 
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -433,11 +432,15 @@ class M_master_order_beli extends Model{
 		//function for create new record
 		function master_order_beli_create($order_no ,$order_supplier ,$order_tanggal ,$order_carabayar ,$order_diskon, $order_cashback ,$order_biaya ,$order_bayar ,$order_keterangan, $order_status, $order_status_acc, $cetak_order){
 			$date_now=date('Y-m-d');
-			if($order_tanggal==""){
+			/*if($order_tanggal==""){
 				$order_tanggal=$date_now;
-			}
+			}*/
+			
+			$order_tanggal_pattern=strtotime($order_tanggal);
+			//$pattern="PR/".date("ym",$order_tanggal_pattern)."-";
+		
 			//$pattern="OP/".date("ym")."-";
-			$pattern="OP/".date("ym")."-";
+			$pattern="OP/".date("ym",$order_tanggal_pattern)."-";
 			$order_no=$this->m_public_function->get_kode_1('master_order_beli','order_no',$pattern,12);
 			
 			$data = array(
