@@ -73,7 +73,8 @@ var produk_namaSearchField;
 var satuan_idSearchField;
 var satuan_namaSearchField;
 var stok_saldoSearchField;
-var stok_bulanField
+var stok_bulanField;
+
 
 <?
 $tahun="[";
@@ -100,7 +101,46 @@ Ext.onReady(function(){
 	/* End of Function  */
 	/* setValue to EDIT */
 	function vu_stok_all_saldo_set_form(){
-		produk_periodeField.setValue(stok_tanggal_startField.getValue().format('Y-m-d') + " s/d " + stok_tanggal_endField.getValue().format('Y-m-d'));
+		var nama_bulan='';
+	
+		if(stok_opsitglField.getValue()==true){
+			produk_periodeField.setValue(Ext.getCmp('stok_tanggal_startSearchField').getValue().format('Y-m-d') + " s/d " + Ext.getCmp('stok_tanggal_endSearchField').getValue().format('Y-m-d'));
+			vu_stok_detail_DataStore.setBaseParam('periode','tanggal');
+		}else if(stok_opsiblnField.getValue()==true){
+			if (stok_bulanField.getValue() == '01') {
+				nama_bulan='Januari'
+			}else if(stok_bulanField.getValue() == '02') {
+				nama_bulan='Februari'
+			}else if(stok_bulanField.getValue() == '03') {
+				nama_bulan='Maret'
+			}else if(stok_bulanField.getValue() == '01') {
+				nama_bulan='April'
+			}else if(stok_bulanField.getValue() == '05') {
+				nama_bulan='Mei'
+			}else if(stok_bulanField.getValue() == '06') {
+				nama_bulan='Juni'
+			}else if(stok_bulanField.getValue() == '07') {
+				nama_bulan='Juli'
+			}else if(stok_bulanField.getValue() == '08') {
+				nama_bulan='Agustus'
+			}else if(stok_bulanField.getValue() == '09') {
+				nama_bulan='September'
+			}else if(stok_bulanField.getValue() == '10') {
+				nama_bulan='Oktober'
+			}else if(stok_bulanField.getValue() == '11') {
+				nama_bulan='November'
+			}else if(stok_bulanField.getValue() == '12') {
+				nama_bulan='Desember'
+			}
+
+			produk_periodeField.setValue(nama_bulan + " " +  stok_tahunField.getValue());
+			vu_stok_detail_DataStore.setBaseParam('periode','bulan');
+		}else{
+			//stok_tmedis_periode='all';
+			vu_stok_detail_DataStore.setBaseParam('periode','all');
+		}
+	
+		
 		produk_kodeField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('produk_kode'));
 		produk_namaField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('produk_nama'));
 		satuan_namaField.setValue(vu_stok_all_saldoListEditorGrid.getSelectionModel().getSelected().get('satuan_nama'));
@@ -328,7 +368,7 @@ Ext.onReady(function(){
 		}),
 		tbar: [
 		{
-			text: 'View',
+			text: 'View Detail',
 			tooltip: 'View selected record',
 			iconCls:'icon-update',
 			handler: vu_stok_all_saldo_confirm_update   // Confirm before updating
@@ -940,23 +980,6 @@ Ext.onReady(function(){
 			}]
 	});
 	//// end of tgl n bulan
-	
-	
-	
-	
-	/*stok_tanggal_startSearchField=new Ext.form.DateField({
-		id: 'stok_tanggal_startSearchField',
-		fieldLabel: 'Tanggal',
-		format: 'd-m-Y',
-		value: firstday
-	});
-
-	stok_tanggal_endSearchField=new Ext.form.DateField({
-		id: 'stok_tanggal_endSearchField',
-		fieldLabel: 's/d',
-		format: 'd-m-Y',
-		value: today
-	});*/
 
 	stok_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
@@ -992,51 +1015,6 @@ Ext.onReady(function(){
 	});
 
 	stok_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
-
-/*	stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
-		id:'stok_tanggal_opsiSearchField',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		frame: false,
-		items:[//stok_tanggal_startSearchField, stok_label_tanggalField, stok_tanggal_endSearchField,
-				{
-					layout: 'column',
-					border: false,
-					items:[stok_opsitglField, {
-								layout: 'form',
-								border: false,
-								labelWidth: 15,
-								bodyStyle:'padding:3px',
-								items:[stok_tanggal_startSearchField]
-						   },{
-								layout: 'form',
-								border: false,
-								labelWidth: 15,
-								bodyStyle:'padding:3px',
-								labelSeparator: ' ', 
-								items:[stok_tanggal_endSearchField]
-						   }]
-				},{
-				layout: 'column',
-				border: false,
-				items:[stok_opsiblnField,{
-							layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							items:[stok_bulanField]
-					   },{
-							layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
-							items:[stok_tahunField]
-					   }]
-				}
-				]
-	});*/
 
 	stok_produk_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_produk_opsiSearchField',
