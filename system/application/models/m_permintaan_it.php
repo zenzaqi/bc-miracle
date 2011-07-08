@@ -57,7 +57,11 @@ class m_permintaan_it extends Model{
 		
 		function get_user_login(){
 			$username = $_SESSION[SESSION_USERID];
-			$sql="SELECT users.user_karyawan AS user_karyawan, karyawan.karyawan_nama AS karyawan_nama FROM users 
+			$sql="SELECT 
+						users.user_karyawan AS user_karyawan, 
+						karyawan.karyawan_nama AS karyawan_nama,
+						users.user_name AS user_name
+					FROM users 
 			LEFT JOIN karyawan ON karyawan.karyawan_id = users.user_karyawan
 			WHERE user_name ='".$username."'";
 			$query = $this->db->query($sql);
@@ -72,6 +76,97 @@ class m_permintaan_it extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
+		
+		//get master id, note : not done yet
+		function get_master_id() {
+			$query = "SELECT max(permintaan_id) as master_id from permintaan_it";
+			$result = $this->db->query($query);
+			if($result->num_rows()){
+				$data=$result->row();
+				$master_id=$data->master_id;
+				return $master_id;
+			}else{
+				return '0';
+			}
+		}
+		//eof
+		
+		//insert detail record
+		function detail_catatan_insert($array_dcatatan_id ,$dcatatan_master ,$array_dcatatan_tanggal, $array_dcatatan_user, $array_dcatatan_isi){
+			//$datetime_now = date('Y-m-d H:i:s');
+			//if master id not capture from view then capture it from max pk from master table
+			if($dcatatan_master=="" || $dcatatan_master==NULL || $dcatatan_master==0){
+				$dcatatan_master=$this->get_master_id();
+			}
+			
+			$size_array = sizeof($array_dcatatan_user) - 1;
+			
+			for($i = 0; $i < sizeof($array_dcatatan_user); $i++){
+				$dcatatan_id = $array_dcatatan_id[$i];
+				$dcatatan_master = $dcatatan_master;
+				$dcatatan_tanggal = $array_dcatatan_tanggal[$i];
+				$dcatatan_user = $array_dcatatan_user[$i];
+				$dcatatan_isi = $array_dcatatan_isi[$i];
+				
+				$sql = "SELECT dcatatan_id
+						,dcatatan_revised
+					FROM permintaan_it_catatan
+					WHERE dcatatan_id='".$dcatatan_id."'";
+				$rs = $this->db->query($sql);
+				
+				if($rs->num_rows()){
+				// jika datanya sudah ada maka update saja
+					$dtu_dcatatan = array(
+						"dcatatan_master"=>$dcatatan_master,
+						"dcatatan_tanggal"=>$dcatatan_tanggal,
+						"dcatatan_user"=>$dcatatan_user,
+						"dcatatan_isi"=>$dcatatan_isi,
+						//"dcatatan_revised"=>$dcatatan_revised+1
+					);
+					$this->db->where('dcatatan_id', $dcatatan_id);
+					$this->db->update('permintaan_it_catatan', $dtu_dcatatan); 
+					if($this->db->affected_rows()){
+						$sql="UPDATE permintaan_it_catatan set dcatatan_revised=(dcatatan_revised+1) WHERE dcatatan_id='".$dcatatan_id."'";
+						$this->db->query($sql);
+					}
+				} else {
+					$data = array(
+						"dcatatan_master"=>$dcatatan_master,
+						"dcatatan_tanggal"=>$dcatatan_tanggal,
+						"dcatatan_user"=>$dcatatan_user,
+						"dcatatan_isi"=>$dcatatan_isi
+					);
+					$this->db->insert('permintaan_it_catatan', $data); 
+					
+				}
+					
+				}
+				return '1';
+		}
+		//end of function
+		
+		//function for detail
+		//get record list
+		function detail_catatan_list($master_id,$query,$start,$end) {
+			$query = "SELECT * FROM permintaan_it_catatan where dcatatan_master='".$master_id."'";
+
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;			
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
+		//end of function
+		
 		
 		//function for get list record
 		function permintaan_list($filter,$start,$end){
@@ -89,7 +184,9 @@ class m_permintaan_it extends Model{
 				permintaan_it.permintaan_client AS client,
 				permintaan_it.permintaan_id as permintaan_id,
 				permintaan_it.permintaan_tanggal_masalah AS tanggal_masalah,
-				permintaan_it.permintaan_type AS tipe, 
+				permintaan_it.permintaan_type AS tipe,
+				permintaan_it.permintaan_type2 AS tipe2,
+				permintaan_it.permintaan_type3 AS tipe3,
 				permintaan_it.permintaan_judul AS judul, 
 				permintaan_it.permintaan_masalah AS masalah,
 				permintaan_it.permintaan_prioritas AS prioritas,
@@ -134,13 +231,13 @@ class m_permintaan_it extends Model{
 		}
 		
 		//function for update record
-		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe,$permintaan_tipe2,$permintaan_tipe3 ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
-				$permintaan_tipe = "Miracle Information System";
+				$permintaan_tipe = "MIS";
 			if ($permintaan_prioritas=="")
-				$permintaan_prioritas = "Low";
+				$permintaan_prioritas = "Normal";
 			if ($permintaan_status=="")
-				$permintaan_status = "Open";
+				$permintaan_status = "Baru";
 			
 			$username = $_SESSION[SESSION_USERID];
 			$data = array(
@@ -148,7 +245,9 @@ class m_permintaan_it extends Model{
 				"permintaan_client"=>$permintaan_client,
 				//"permintaan_cabang"=>$permintaan_cabang,	
 				"permintaan_tanggal_masalah"=>$permintaan_tanggalmasalah,	
-				"permintaan_type"=>$permintaan_tipe,	
+				"permintaan_type"=>$permintaan_tipe,
+				"permintaan_type2"=>$permintaan_tipe2,
+				"permintaan_type3"=>$permintaan_tipe3,				
 				"permintaan_judul"=>$permintaan_judul,	
 				"permintaan_masalah"=>$permintaan_permintaan,	
 				"permintaan_prioritas"=>$permintaan_prioritas,				
@@ -265,7 +364,7 @@ class m_permintaan_it extends Model{
 			windra@miracle-clinic.com,
 			it@miracle-clinic.com';
 			
-			//$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.$email_client.','.'isaac@miracle-clinic.com';
+			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.$email_client.','.'isaac@miracle-clinic.com';
 			//$this->email->to('isaac@miracle-clinic.com');
 			$this->email->to($email_kirim);
 			
@@ -288,20 +387,24 @@ class m_permintaan_it extends Model{
 				'Pemohon		: '.$karyawan_nama;
 			$this->email->subject($judul_email);
 			$this->email->message($isi_email);
-			$this->email->send();
+			//$this->email->send();
 
 			return '1';
 
 		}
 		
 		//function for create new record
-		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
+		function permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe,$permintaan_tipe2,$permintaan_tipe3 ,$permintaan_judul ,$permintaan_permintaan, $permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai ){
 			if ($permintaan_tipe=="")
-				$permintaan_tipe = "Miracle Information System";
+				$permintaan_tipe = "MIS";
+			if ($permintaan_tipe2=="")
+				$permintaan_tipe2 = "";
+			if ($permintaan_tipe3=="")
+				$permintaan_tipe3 = "";
 			if ($permintaan_prioritas=="")
 				$permintaan_prioritas = "Low";
 			if ($permintaan_status=="")
-				$permintaan_status = "Open";
+				$permintaan_status = "Baru";
 			if ($permintaan_mengetahui=="")
 				$permintaan_mengetahui = "Pilih Satu";
 			if ($permintaan_mengetahui2=="")
@@ -310,6 +413,8 @@ class m_permintaan_it extends Model{
 				$permintaan_mengetahuistatus = "Pilih Satu";
 			if ($permintaan_mengetahuistatus2=="")
 				$permintaan_mengetahuistatus2 = "Pilih Satu";
+			if ($permintaan_tanggalselesai=="")
+				$permintaan_tanggalselesai = date('Y-m-d');
 							
 			$username = $_SESSION[SESSION_USERID];
 			$sql_id_cust= "SELECT user_karyawan FROM users WHERE user_name ='".$username."'";
@@ -321,7 +426,9 @@ class m_permintaan_it extends Model{
 				"permintaan_client"=>$permintaan_client_id,	
 				"permintaan_cabang"=>$permintaan_cabang,	
 				"permintaan_tanggal_masalah"=>$permintaan_tanggalmasalah,	
-				"permintaan_type"=>$permintaan_tipe,	
+				"permintaan_type"=>$permintaan_tipe,
+				"permintaan_type2"=>$permintaan_tipe2,
+				"permintaan_type3"=>$permintaan_tipe3,				
 				"permintaan_judul"=>$permintaan_judul,	
 				"permintaan_masalah"=>$permintaan_permintaan,	
 				"permintaan_prioritas"=>$permintaan_prioritas,	
@@ -388,7 +495,7 @@ class m_permintaan_it extends Model{
 			$this->email->set_newline("\r\n");
 			
 			$this->email->from('admin@miracle-clinic.com', 'Miracle Information System');
-		
+			
 			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','
 			.'isaac@miracle-clinic.com, 
 			hendri@miracle-clinic.com, 
@@ -398,7 +505,7 @@ class m_permintaan_it extends Model{
 			windra@miracle-clinic.com,
 			it@miracle-clinic.com';
 			
-			//$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.'isaac@miracle-clinic.com';
+			$email_kirim = $email_mengetahui.','.$email_mengetahui2.','.'isaac@miracle-clinic.com';
 			//$this->email->to('isaac@miracle-clinic.com');
 			$this->email->to($email_kirim);
 			

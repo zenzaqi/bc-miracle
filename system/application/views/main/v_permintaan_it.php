@@ -57,6 +57,7 @@ var gudang_ContextMenu;
 var post2db = '';
 var msg = '';
 var pageS=15;
+var dt= new Date();
 
 /* declare variable here */
 var gudang_idField;
@@ -64,12 +65,15 @@ var permintaan_namaField;
 var permintaan_clientField;
 var user_loginField;
 var nama_loginField;
+var nama_nameField;
 var permintaan_cabang_idField;
 var permintaan_mengetahui_idField;
 var permintaan_mengetahui2_idField;
 var permintaan_cabangField;
 var permintaan_tanggalmasalahField;
 var permintaan_tipeField;
+var permintaan_tipe2Field;
+var permintaan_tipe3Field;
 var permintaan_judulField;
 var permintaan_permintaanField;
 var permintaan_prioritasField;
@@ -82,6 +86,10 @@ var permintaan_mengetahuiketerangan2Field;
 var permintaan_penyelesaianField;
 var permintaan_tanggalselesaiField;
 var permintaan_statusField;
+var catatanListEditorGrid;
+var catatan_reader;
+var editor_catatan;
+var catatan_ColumnModel;
 
 var gudang_idSearchField;
 var permintaan_namaSearchField;
@@ -92,11 +100,87 @@ var prioritasSearchField;
 var tipeSearchField;
 var statusSearchField;
 var tanggalselesaiSearchField;
+// Isi Sub Kategori
+	var group_mis_Store= new Ext.data.SimpleStore({
+			id: 'group_mis_Store',
+			fields:['group'],
+			data:[['Master Data'],['Persediaan'],['Cust Service'],['Sales and Marketing'],['Kasir'],['Perawatan'],['Akuntansi'],['Laporan'],['SMS Broadcast']]
+	});
+	
+	var group_basic_Store= new Ext.data.SimpleStore({
+			id: 'group_basic_Store',
+			fields:['group'],
+			data:[['Microsoft Word'],['Microsoft Excel'],['Microsoft Power Point'],['Open Office'],['Other software'],['Microsoft Outlook']]
+	});
+	
+	var group_other_Store= new Ext.data.SimpleStore({
+			id: 'group_other_Store',
+			fields:['group'],
+			data:[['Faxes'],['Office Phones'],['Other']]
+	});
+	
+	var group_computers_Store= new Ext.data.SimpleStore({
+			id: 'group_computers_Store',
+			fields:['group'],
+			data:[['PC/Desktop'],['Laptop'],['Keyboard'],['Mouse'],['Screen'],['Printer']]
+	});	
+// end of Isi Sub Kategori
+
+// Isi 3rd Kategori
+	var group_mis3_Store= new Ext.data.SimpleStore({
+			id: 'group_mis3_Store',
+			fields:['group3'],
+			data:[['Does not work properly'],['Error Message'],['How to?'],['Cannot save data'],['Other'],['Addition'],['Change']]
+	});
+	
+	var group_basic3_Store= new Ext.data.SimpleStore({
+			id: 'group_basic3_Store',
+			fields:['group3'],
+			data:[['Does not work properly'],['Error Message'],['Request new installation'],['How to?'],['Other'],['Cannot send/receive email'],['Does not work properly'],['Error Message'],['Request new installation'],['How to?'],['Other']]
+	});
+	
+	var group_other3_Store= new Ext.data.SimpleStore({
+			id: 'group_other3_Store',
+			fields:['group3'],
+			data:[['Error'],['Other'],['How to?'],['Install new'],['Replace']]
+	});
+	
+	var group_pc3_Store= new Ext.data.SimpleStore({
+			id: 'group_pc3_Store',
+			fields:['group3'],
+			data:[['Cannot open files'],['Cannot access Internet'],['Internet very slow'],['Cannot access network drive'],['Communication problems'],['Does not turn on'],['Does not work properly'],['How to?'],['Install new'],['Is working slow'],['Login / password problems'],['Move user location'],['Replace'],['Other']]
+	});	
+	var group_laptop3_Store= new Ext.data.SimpleStore({
+			id: 'group_pc3_Store',
+			fields:['group3'],
+			data:[['Cannot open files'],['Cannot access Internet'],['Internet very slow'],['Cannot access network drive'],['Communication problems'],['Does not turn on'],['Does not work properly'],['How to?'],['Install new'],['Is working slow'],['Login / password problems'],['Move user location'],['Replace'],['Battery replacement'],['Other']]
+	});
+	var group_keyboard3_Store= new Ext.data.SimpleStore({
+			id: 'group_keyboard3_Store',
+			fields:['group3'],
+			data:[['Does not respond'],['Install new'],['Other']]
+	});	
+	var group_mouse3_Store= new Ext.data.SimpleStore({
+			id: 'group_mouse3_Store',
+			fields:['group3'],
+			data:[['Does not respond'],['Install new'],['Other']]
+	});	
+	var group_screen3_Store= new Ext.data.SimpleStore({
+			id: 'group_screen3_Store',
+			fields:['group3'],
+			data:[['Does not turn on'],['Does not work properly'],['Install new'],['Other']]
+	});	
+	var group_printer3_Store= new Ext.data.SimpleStore({
+			id: 'group_printer3_Store',
+			fields:['group3'],
+			data:[['Out of ink'],['Does not turn on'],['Does not work (not printing)'],['Error'],['Install new'],['Move'],['Noisy']]
+	});	
+	
+	// end of Isi 3rd Kategori
 
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
   	/* Function for Saving inLine Editing */
 	function gudang_update(oGrid_event){
 	var gudang_id_update_pk="";
@@ -167,6 +251,8 @@ Ext.onReady(function(){
 		var permintaan_cabang_create=null;
 		var permintaan_tanggalmasalah_create=null;
 		var permintaan_tipe_create=null;
+		var permintaan_tipe2_create=null;
+		var permintaan_tipe3_create=null;
 		var permintaan_judul_create=null;
 		var permintaan_permintaan_create=null;
 		var permintaan_prioritas_create=null;
@@ -187,6 +273,8 @@ Ext.onReady(function(){
 		if(permintaan_cabangField.getValue()!== null){permintaan_cabang_create = permintaan_cabangField.getValue();}
 		if(permintaan_tanggalmasalahField.getValue()!== ""){permintaan_tanggalmasalah_create = permintaan_tanggalmasalahField.getValue().format('Y-m-d');}
 		if(permintaan_tipeField.getValue()!== null){permintaan_tipe_create = permintaan_tipeField.getValue();}
+		if(permintaan_tipe2Field.getValue()!== null){permintaan_tipe2_create = permintaan_tipe2Field.getValue();}
+		if(permintaan_tipe3Field.getValue()!== null){permintaan_tipe3_create = permintaan_tipe3Field.getValue();}
 		if(permintaan_judulField.getValue()!== null){permintaan_judul_create = permintaan_judulField.getValue();}
 		if(permintaan_permintaanField.getValue()!== null){permintaan_permintaan_create = permintaan_permintaanField.getValue();}
 		if(permintaan_prioritasField.getValue()!== null){permintaan_prioritas_create = permintaan_prioritasField.getValue();}
@@ -218,6 +306,8 @@ Ext.onReady(function(){
 					permintaan_cabang 				: permintaan_cabang_create,
 					permintaan_tanggalmasalah 		: permintaan_tanggalmasalah_create,
 					permintaan_tipe			 		: permintaan_tipe_create,
+					permintaan_tipe2			 	: permintaan_tipe2_create,
+					permintaan_tipe3			 	: permintaan_tipe3_create,
 					permintaan_judul 				: permintaan_judul_create,
 					permintaan_permintaan 			: permintaan_permintaan_create,
 					permintaan_prioritas 			: permintaan_prioritas_create,
@@ -242,6 +332,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
+							detail_catatan_insert();
 							Ext.MessageBox.alert('Info','Permintaan anda telah disimpan');
 							cbo_cabang_DataStore.reload();
 							permintaan_DataStore.reload();
@@ -304,6 +395,10 @@ Ext.onReady(function(){
 		permintaan_tanggalmasalahField.setValue(null);
 		permintaan_tipeField.reset();
 		permintaan_tipeField.setValue(null);
+		permintaan_tipe2Field.reset();
+		permintaan_tipe2Field.setValue(null);
+		permintaan_tipe3Field.reset();
+		permintaan_tipe3Field.setValue(null);
 		permintaan_judulField.reset();
 		permintaan_judulField.setValue(null);
 		permintaan_permintaanField.reset();
@@ -339,6 +434,8 @@ Ext.onReady(function(){
 		permintaan_cabangField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('cabang'));
 		permintaan_tanggalmasalahField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tanggal_masalah'));
 		permintaan_tipeField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tipe'));
+		permintaan_tipe2Field.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tipe2'));
+		permintaan_tipe3Field.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tipe3'));
 		permintaan_judulField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('judul'));
 		permintaan_permintaanField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('masalah'));
 		permintaan_prioritasField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('prioritas'));
@@ -355,12 +452,19 @@ Ext.onReady(function(){
 		permintaan_penyelesaianField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('penyelesaian'));
 		permintaan_tanggalselesaiField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('tanggal_selesai'));
 		permintaan_statusField.setValue(permintaanEditorGrid.getSelectionModel().getSelected().get('status'));
+		catatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
 	}
 	/* End setValue to EDIT*/
   
 	/* Function for Check if the form is valid */
 	function is_permintaan_form_valid(){
-		return (permintaan_permintaanField.isValid());
+		return (
+		permintaan_cabangField.isValid() && 
+		permintaan_judulField.isValid() &&  
+		permintaan_tipeField.isValid() &&
+		permintaan_tipe2Field.isValid() &&
+		permintaan_tipe3Field.isValid() &&
+		permintaan_permintaanField.isValid());
 	}
   	/* End of Function */
   
@@ -368,10 +472,15 @@ Ext.onReady(function(){
 	function display_form_window(){
 		permintaan_reset_form();
 		cbo_cabang_DataStore.reload();
+		permintaan_tanggalmasalahField.setValue(dt.format('Y-m-d'));
+		permintaan_tanggalselesaiField.setValue(dt.format('Y-m-d'));
 		permintaan_namaField.setValue(nama_loginField.getValue());
+		//permintaan_userField.setValue(user_loginField.getValue());
 		permintaan_cabangField.setValue('Pilih Satu');
-		permintaan_tipeField.setValue('Pilih Satu');
-		permintaan_prioritasField.setValue('Normal');
+		permintaan_tipeField.setValue('Pilih Satu Kategori');
+		permintaan_tipe2Field.setValue('Pilih Satu Sub Kategori');
+		permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+		permintaan_prioritasField.setValue('Low');
 		permintaan_mengetahuiField.setValue('Pilih Satu');
 		permintaan_mengetahuistatusField.setValue('Pilih Satu');
 		permintaan_mengetahuistatus2Field.setValue('Pilih Satu');
@@ -397,6 +506,7 @@ Ext.onReady(function(){
 				permintaan_tanggalselesaiField.setDisabled(false);
 				permintaan_statusField.setDisabled(false);
 			}
+			catatan_DataStore.load({params: {master_id:0}});
 			post2db='CREATE';
 			//msg='created';
 			permintaan_createWindow.show();
@@ -432,6 +542,9 @@ Ext.onReady(function(){
 		//cbo_cabang_DataStore.reload();
 		//({params : {permintaan_id : eval(get_pk_id()), start:0, limit:pageS}});
 		if(permintaanEditorGrid.selModel.getCount() == 1) {
+			post2db='UPDATE';
+			msg='updated';
+			permintaan_tanggalselesaiField.setValue(dt.format('Y-m-d'));
 			permintaan_set_form();
 			permintaan_mengetahuiField.setDisabled(true);
 			permintaan_mengetahui2Field.setDisabled(true);
@@ -458,14 +571,11 @@ Ext.onReady(function(){
 				permintaan_mengetahuistatus2Field.setDisabled(false);
 				permintaan_mengetahuiketerangan2Field.setDisabled(false);
 			}
-			
-			post2db='UPDATE';
-			msg='updated';
 			permintaan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'You can\'t really update something you haven\'t selected?',
+				msg: 'Anda belum memilih data yang akan diedit?',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -519,7 +629,45 @@ Ext.onReady(function(){
 		}  
 	}
   	/* End of Function */
-  
+	
+	//Catatan Reader
+	// Function for json reader of detail
+	var catatan_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'dcatatan_id', type: 'int', mapping: 'dcatatan_id'},
+			{name: 'dcatatan_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dcatatan_tanggal'},
+			{name: 'dcatatan_user', type: 'string', mapping: 'dcatatan_user'},
+			{name: 'dcatatan_isi', type: 'string', mapping: 'dcatatan_isi'}
+	]);
+	//eof
+	// Catatan DataStore
+	/* Function for Retrieve DataStore of detail*/
+	catatan_DataStore = new Ext.data.Store({
+		id: 'catatan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_permintaan_it&m=detail_catatan_list',
+			method: 'POST'
+		}),
+		reader: catatan_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'dcatatan_tanggal', direction: "ASC"}
+	});
+	/* End of Function */
+	//function for editor of detail
+	var editor_catatan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update',
+		listeners: {
+			afteredit: function(){
+				catatan_DataStore.commitChanges();
+			}
+		}
+    });
+	//eof
+	
 	/* Function for Retrieve DataStore */
 	permintaan_DataStore = new Ext.data.Store({
 		id: 'permintaan_DataStore',
@@ -541,6 +689,8 @@ Ext.onReady(function(){
 			{name: 'cabang', type: 'string', mapping: 'cabang'},
 			{name: 'tanggal_masalah', type: 'date', mapping: 'tanggal_masalah'},
 			{name: 'tipe', type: 'string', mapping: 'tipe'},
+			{name: 'tipe2', type: 'string', mapping: 'tipe2'},
+			{name: 'tipe3', type: 'string', mapping: 'tipe3'},
 			{name: 'judul', type: 'string', mapping: 'judul'},
 			{name: 'masalah', type: 'string', mapping: 'masalah'},
 			{name: 'penyelesaian', type: 'string', mapping: 'penyelesaian'},
@@ -561,7 +711,6 @@ Ext.onReady(function(){
 	/* End of Function */
     
 	//datastore of cabang
-	
 	cbo_cabang_DataStore = new Ext.data.Store({
 		id: 'cbo_cabang_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -578,11 +727,9 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'permintaan_cabang_display', direction: "ASC"}
 	});
-	
 	/* eof */
 	
 	//datastore of user login
-	
 	cbo_user_login_DataStore = new Ext.data.Store({
 		id: 'cbo_user_login_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -596,10 +743,10 @@ Ext.onReady(function(){
 		},[
 			{name: 'user_karyawan', type: 'int', mapping: 'user_karyawan'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
+			{name: 'user_name', type: 'string', mapping: 'user_name'},
 		]),
 		sortInfo:{field: 'user_karyawan', direction: "ASC"}
 	});
-	
 	/* eof */
 	
 	cbo_permintaan_karyawanDataStore = new Ext.data.Store({
@@ -646,7 +793,7 @@ Ext.onReady(function(){
 			hidden: false
 		},*/
 		{
-			header: '<div align="center">' + 'Nama Peminta' + '</div>',
+			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'nama',
 			width: 180,
 			sortable: true,
@@ -658,7 +805,7 @@ Ext.onReady(function(){
 			*/
 		},
 		{
-			header: '<div align="center">' + 'Cabang' + '</div>',
+			header: '<div align="center">' + 'Untuk Cabang' + '</div>',
 			dataIndex: 'cabang',
 			width: 100,
 			sortable: true,
@@ -683,7 +830,7 @@ Ext.onReady(function(){
 			*/
 		},
 		{
-			header: '<div align="center">' + 'Tipe Permintaan' + '</div>',
+			header: '<div align="center">' + 'Kategori' + '</div>',
 			dataIndex: 'tipe',
 			width: 150,
 			sortable: true,
@@ -730,7 +877,7 @@ Ext.onReady(function(){
 				triggerAction: 'all',
 				store:new Ext.data.SimpleStore({
 					fields:['permintaan_aktif_value', 'permintaan_aktif_display'],
-					data: [['Ditolak','Ditolak'],['Proses Pengerjaan','Proses Pengerjaan'],['Closed','Closed'],['Open','Open']]
+					data: [['Baru','Baru'],['Dalam Proses','Dalam Proses'],['Ditunda','Ditunda'],['Selesai','Selesai'],['Ditolak','Ditolak']]
 					}),
 				mode: 'local',
                	displayField: 'permintaan_aktif_display',
@@ -784,7 +931,7 @@ Ext.onReady(function(){
 	permintaanEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'permintaanEditorGrid',
 		el: 'fp_permintaan',
-		title: 'Daftar Permintaan',
+		title: 'Help Desk',
 		autoHeight: true,
 		store: permintaan_DataStore, // DataStore
 		cm: permintaan_ColumnModel, // Nama-nama Columns
@@ -819,7 +966,7 @@ Ext.onReady(function(){
 			disabled:true,
 			handler: gudang_confirm_delete   // Confirm before deleting
 		}, '-', {
-			text: 'Search',
+			text: 'Adv Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -835,7 +982,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- Nama Peminta<br>- Cabang<br>- Judul Subyek'});
+				Ext.get(this.id).set({qtip:'- Nama<br>- Untuk Cabang<br>- Judul Subyek'});
 				}
 			},
 			width: 120
@@ -927,6 +1074,7 @@ Ext.onReady(function(){
 						var cust_record=cbo_user_login_DataStore.getAt(0);
 						nama_loginField.setValue(cust_record.data.karyawan_nama);
 						user_loginField.setValue(cust_record.data.user_karyawan);
+						user_nameField.setValue(cust_record.data.user_name);
 						//history_transaksi_customerField.setValue(cust_record.data.cust_nama);
 						//history_transaksi_custnoField.setValue(cust_record.data.cust_no);
 						//history_transaksi_custalamatField.setValue(cust_record.data.cust_alamat);
@@ -942,6 +1090,10 @@ Ext.onReady(function(){
 	});
 	nama_loginField= new Ext.form.TextField({
 		id: 'nama_loginField',
+		allowBlank: false,
+	});
+	user_nameField= new Ext.form.TextField({
+		id: 'nama_nameField',
 		allowBlank: false,
 	});
 	permintaan_clientField= new Ext.form.TextField({
@@ -960,10 +1112,10 @@ Ext.onReady(function(){
 		id: 'permintaan_mengetahui2_idField',
 		allowBlank: false,
 	});
-	permintaan_nama_labelField=new Ext.form.Label({ html: '<span style="font-size: 12px">Nama Peminta :</span>'});
+	permintaan_nama_labelField=new Ext.form.Label({ html: '<span style="font-size: 12px">Nama :</span>'});
 	permintaan_namaField= new Ext.form.TextField({
 		id: 'permintaan_namaField',
-		fieldLabel : 'Nama Peminta',
+		fieldLabel : 'Nama',
 		maxLength: 100,
 		//hideLabel : true,
 		width: 10,
@@ -974,7 +1126,7 @@ Ext.onReady(function(){
 	});
 	permintaan_cabangField= new Ext.form.ComboBox({
 		id: 'permintaan_cabangField',
-		fieldLabel: 'Cabang',
+		fieldLabel: 'Untuk Cabang',
 		allowBlank: false,
 		//anchor: '95%',
 		emptyText: 'Pilih Satu',
@@ -988,15 +1140,20 @@ Ext.onReady(function(){
 	});
 	permintaan_tanggalmasalahField= new Ext.form.DateField({
 		id: 'permintaan_tanggalmasalahField',
-		fieldLabel: 'Tgl Permintaan',
+		fieldLabel: 'Tanggal',
 		format : 'd-m-Y'
 	});
 	permintaan_tipeField= new Ext.form.ComboBox({
 		id: 'permintaan_tipeField',
-		fieldLabel: 'Tipe Permintaan',
+		fieldLabel: 'Kategori',
+		/*
 		store:new Ext.data.SimpleStore({
 			fields:['permintaan_tipe_value', 'permintaan_tipe_display'],
 			data:[['Refill Tinta','Refill Tinta'],['Miracle Information System','Miracle Information System'],['Pengadaan (Hardware)','Pengadaan (Hardware)'],['Kerusakan','Kerusakan'],['Kunjungan','Kunjungan'],['Pengadaan (Software)','Pengadaan (Software)'],['Lain-lain','Lain-lain']]
+		}),*/
+		store:new Ext.data.SimpleStore({
+			fields:['permintaan_tipe_value', 'permintaan_tipe_display'],
+			data:[['MIS','MIS'],['Basic Software','Basic Software'],['Other Equipment','Other Equipment'],['Computers','Computers']]
 		}),
 		mode: 'local',
 		allowBlank: false,
@@ -1007,9 +1164,49 @@ Ext.onReady(function(){
 		width: 200,
 		triggerAction: 'all'	
 	});
+	// permintaan tipe 2
+	permintaan_tipe2Field= new Ext.form.ComboBox({
+		id: 'permintaan_tipe2Field',
+		fieldLabel: '',
+		/*
+		store:new Ext.data.SimpleStore({
+			fields:['permintaan_tipe2_value', 'permintaan_tipe2_display'],
+			data:[['Refill Tinta','Refill Tinta'],['Miracle Information System','Miracle Information System'],['Pengadaan (Hardware)','Pengadaan (Hardware)'],['Kerusakan','Kerusakan'],['Kunjungan','Kunjungan'],['Pengadaan (Software)','Pengadaan (Software)'],['Lain-lain','Lain-lain']]
+		}),
+		*/
+		store: group_mis_Store,
+		mode: 'local',
+		allowBlank: true,
+		editable:false,
+		displayField: 'group',
+		valueField: 'group',
+		emptyText: 'Pilih Satu Sub Kategori',
+		width: 200,
+		triggerAction: 'all'	
+	});
+	// permintaan tipe 3
+		permintaan_tipe3Field= new Ext.form.ComboBox({
+		id: 'permintaan_tipe3Field',
+		fieldLabel: '',
+		/*
+		store:new Ext.data.SimpleStore({
+			fields:['permintaan_tipe3_value', 'permintaan_tipe3_display'],
+			data:[['Refill Tinta','Refill Tinta'],['Miracle Information System','Miracle Information System'],['Pengadaan (Hardware)','Pengadaan (Hardware)'],['Kerusakan','Kerusakan'],['Kunjungan','Kunjungan'],['Pengadaan (Software)','Pengadaan (Software)'],['Lain-lain','Lain-lain']]
+		}),
+		*/
+		store: group_mis3_Store,
+		mode: 'local',
+		allowBlank: true,
+		editable:false,
+		displayField: 'group3',
+		valueField: 'group3',
+		emptyText: 'Pilih Satu 3rd Level Kategori',
+		width: 200,
+		triggerAction: 'all'	
+	});
 	permintaan_judulField= new Ext.form.TextField({
 		id: 'permintaan_judulField',
-		fieldLabel: 'Judul Subyek',
+		fieldLabel: 'Subyek',
 		allowBlank: false,
 		maxLength: 400,
 		width: 300,
@@ -1040,6 +1237,7 @@ Ext.onReady(function(){
 		//anchor: '95%'
 	});
 	
+	
 	permintaan_mengetahuiField= new Ext.form.ComboBox({
 		fieldLabel: 'Mengetahui',
 		store: cbo_permintaan_karyawanDataStore,
@@ -1057,7 +1255,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		allowBlank: false,
+		allowBlank: true,
 		disabled:false,
 		anchor: '90%'
 	});
@@ -1079,7 +1277,7 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
-		allowBlank: false,
+		allowBlank: true,
 		disabled:false,
 		anchor: '90%'
 	});
@@ -1093,14 +1291,17 @@ Ext.onReady(function(){
 	permintaan_tanggalselesaiField= new Ext.form.DateField({
 		id: 'permintaan_tanggalselesaiField',
 		fieldLabel: 'Tanggal Selesai',
-		format : 'd-m-Y'
+		format : 'd-m-Y',
+		emptyText: dt.format('d-m-Y'),
+		blankText: dt.format('d-m-Y')
+		
 	});
 	permintaan_statusField= new Ext.form.ComboBox({
 		id: 'permintaan_statusField',
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['permintaan_status_value', 'permintaan_status_display'],
-			data: [['Ditolak','Ditolak'],['Proses Pengerjaan','Proses Pengerjaan'],['Closed','Closed'],['Open','Open']]
+			data: [['Baru','Baru'],['Dalam Proses','Dalam Proses'],['Ditunda','Ditunda'],['Selesai','Selesai'],['Ditolak','Ditolak']]
 		}),
 		mode: 'local',
 		editable:false,
@@ -1108,7 +1309,7 @@ Ext.onReady(function(){
 		valueField: 'permintaan_status_value',
 		emptyText: 'Open',
 		width: 200,
-		triggerAction: 'all'	
+		triggerAction: 'all'
 	});
 	permintaan_mengetahuistatusField= new Ext.form.ComboBox({
 		id: 'permintaan_mengetahuistatusField',
@@ -1156,7 +1357,7 @@ Ext.onReady(function(){
 	});
 	mengetahui_permintaanField=new Ext.form.FieldSet({
 		id:'mengetahui_permintaanField',
-		title: 'Mengetahui dan Persetujuan',
+		title: 'Mengetahui dan Persetujuan (min Supervisor / Manager)',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
 		frame: false,
@@ -1198,12 +1399,356 @@ Ext.onReady(function(){
 					   }]
 			}, permintaan_mengetahuiketerangan2Field]
 	});
+	//function of detail add
+	function catatan_add(){
+	var dt= new Date();
+		var edit_catatan= new catatanListEditorGrid.store.recordType({
+			dcatatan_id			:'',
+			dcatatan_tanggal	:dt.format('d-m-Y H:i:s'),
+			dcatatan_user		:user_nameField.getValue(),
+			dcatatan_isi		:''
+		});
+		editor_catatan.stopEditing();
+		catatan_DataStore.insert(0, edit_catatan);
+		catatanListEditorGrid.getView().refresh();
+		catatanListEditorGrid.getSelectionModel().selectRow(0);
+		editor_catatan.startEditing(0);
+	}
+	//eof
+	
+	//function for insert detail
+	function detail_catatan_insert(){
+		var dcatatan_id=[];
+		var dcatatan_master=[];
+		var dcatatan_tanggal=[];
+		var dcatatan_user=[];
+		var dcatatan_isi=[];
+		//var dpaket_kadaluarsa=[];
+		//var dpaket_harga=[];
+		//var dpaket_diskon=[];
+		//var dpaket_diskon_jenis=[];
+		//var dpaket_sales=[];
+		
+		var dcount = catatan_DataStore.getCount() - 1;
+		
+		if(catatan_DataStore.getCount()>0){
+			for(i=0; i<catatan_DataStore.getCount();i++){
+			
+				dcatatan_id.push(catatan_DataStore.getAt(i).data.dcatatan_id);
+				dcatatan_tanggal.push(catatan_DataStore.getAt(i).data.dcatatan_tanggal);
+				dcatatan_user.push(catatan_DataStore.getAt(i).data.dcatatan_user);
+				dcatatan_isi.push(catatan_DataStore.getAt(i).data.dcatatan_isi);
+				
+				if(i==dcount){
+					var encoded_array_dcatatan_id = Ext.encode(dcatatan_id);
+					var encoded_array_dcatatan_tanggal = Ext.encode(dcatatan_tanggal);
+					var encoded_array_dcatatan_user = Ext.encode(dcatatan_user);
+					var encoded_array_dcatatan_isi = Ext.encode(dcatatan_isi);
+					/*
+					var encoded_array_dpaket_kadaluarsa = Ext.encode(dpaket_kadaluarsa);
+					var encoded_array_dpaket_harga = Ext.encode(dpaket_harga);
+					var encoded_array_dpaket_diskon = Ext.encode(dpaket_diskon);
+					var encoded_array_dpaket_diskon_jenis = Ext.encode(dpaket_diskon_jenis);
+					var encoded_array_dpaket_sales = Ext.encode(dpaket_sales);
+					*/
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_permintaan_it&m=detail_catatan_insert',
+						params:{
+							//cetak			: cetak_jpaket,
+							dcatatan_id			: encoded_array_dcatatan_id, 
+							dcatatan_master		: eval(get_pk_id()),
+							dcatatan_tanggal	: encoded_array_dcatatan_tanggal,
+							dcatatan_user 		: encoded_array_dcatatan_user,
+							dcatatan_isi		: encoded_array_dcatatan_isi
+							/*
+							dpaket_kadaluarsa	: encoded_array_dpaket_kadaluarsa,
+							dpaket_harga		: encoded_array_dpaket_harga,
+							dpaket_diskon		: encoded_array_dpaket_diskon,
+							dpaket_diskon_jenis	: encoded_array_dpaket_diskon_jenis,
+							dpaket_sales		: encoded_array_dpaket_sales
+							*/
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				/*
+				if((/^\d+$/.test(catatan_DataStore.getAt(i).data.dcatatan_id))
+				   && catatan_DataStore.getAt(i).data.dcatatan_id!==undefined
+				   && catatan_DataStore.getAt(i).data.dcatatan_id!==''
+				   && catatan_DataStore.getAt(i).data.dcatatan_id!==0){
+					if(catatan_DataStore.getAt(i).data.dcatatan_id==undefined){
+						dcatatan_id.push('');
+					}else{
+						dcatatan_id.push(catatan_DataStore.getAt(i).data.dcatatan_id);
+					}
+					
+					dcatatan_id.push(catatan_DataStore.getAt(i).data.dcatatan_id);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+				
+				
+				/*
+				if(i==dcount){
+					var encoded_array_dpaket_id = Ext.encode(dpaket_id);
+					var encoded_array_dpaket_paket = Ext.encode(dpaket_paket);
+					var encoded_array_dpaket_karyawan = Ext.encode(dpaket_karyawan);
+					var encoded_array_dpaket_jumlah = Ext.encode(dpaket_jumlah);
+					var encoded_array_dpaket_kadaluarsa = Ext.encode(dpaket_kadaluarsa);
+					var encoded_array_dpaket_harga = Ext.encode(dpaket_harga);
+					var encoded_array_dpaket_diskon = Ext.encode(dpaket_diskon);
+					var encoded_array_dpaket_diskon_jenis = Ext.encode(dpaket_diskon_jenis);
+					var encoded_array_dpaket_sales = Ext.encode(dpaket_sales);
+					
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_master_jual_paket&m=detail_detail_jual_paket_insert',
+						params:{
+							cetak	: cetak_jpaket,
+							dpaket_id	: encoded_array_dpaket_id, 
+							dpaket_master	: eval(get_pk_id()),
+							dpaket_paket	: encoded_array_dpaket_paket,
+							dpaket_karyawan : encoded_array_dpaket_karyawan,
+							dpaket_jumlah	: encoded_array_dpaket_jumlah,
+							dpaket_kadaluarsa	: encoded_array_dpaket_kadaluarsa,
+							dpaket_harga	: encoded_array_dpaket_harga,
+							dpaket_diskon	: encoded_array_dpaket_diskon,
+							dpaket_diskon_jenis	: encoded_array_dpaket_diskon_jenis,
+							dpaket_sales	: encoded_array_dpaket_sales
+						},
+						timeout: 60000,
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+					});
+					
+				}*/
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	//declaration of detail coloumn model
+	catatan_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'dcatatan_tanggal',
+			width: 140,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i:s'),
+			readOnly: true,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y H:i:s',
+				disabled :true,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'User' + '</div>',
+			dataIndex: 'dcatatan_user',
+			width: 80,
+			sortable: true,
+			//editor: new Ext.form.TextField({maxLength:50}),
+			readOnly: true
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'dcatatan_isi',
+			width: 650,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		/*
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'User' + '</div>',
+			dataIndex: 'rpaket_jumlah',
+			width: 150,
+			sortable: true,
+			editor: new Ext.form.NumberField({
+				allowDecimals: false,
+				allowNegative: false,
+				//blankText: '1',
+				//emptyText: '1',
+				maxLength: 3,
+				maskRe: /([0-9]+)$/
+			})
+		}*/
+		]
+	);
+	catatan_ColumnModel.defaultSortable= true;
+	//eof
+	
+	// catatan editor grid
+	//declaration of detail catatan list editor grid
+	catatanListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'catatanListEditorGrid',
+		el: 'fp_catatan',
+		title: 'Catatan',
+		height: 150,
+		anchor: '98%',
+		//width: 870,
+		autoScroll: true,
+		store: catatan_DataStore, // DataStore
+		colModel: catatan_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 5 5 5',
+		plugins: [editor_catatan],
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true},
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: catatan_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			disabled : true,
+			handler: catatan_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function catatan_confirm_delete(){
+		// only one record is selected here
+		if(catatanListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', paket_isi_perawatan_delete);
+		} else if(catatanListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', paket_isi_perawatan_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	//function for Delete of detail
+	function paket_isi_perawatan_delete(btn){
+		if(btn=='yes'){
+			var s = catatanListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, r; r = s[i]; i++){
+				catatan_DataStore.remove(r);
+			}
+		}
+		catatan_DataStore.commitChanges();
+	}
+	//eof
 	
 	input_itField=new Ext.form.FieldSet({
 		id:'input_itField',
-		title: 'Diisi oleh IT Dept.',
+		title: 'Penyelesaian',
 		layout: 'form',
 		boduStyle: 'padding: 5px;',
+		anchor: '98%',
 		frame: false,
 		items:[permintaan_penyelesaianField, permintaan_tanggalselesaiField, permintaan_statusField]
 	});
@@ -1214,7 +1759,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 450,        
+		width: 800,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -1223,8 +1768,32 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [permintaan_namaField, permintaan_cabangField, permintaan_tanggalmasalahField,
-				permintaan_tipeField, permintaan_permintaanField, permintaan_prioritasField, mengetahui_permintaanField, input_itField] 
+				items: [permintaan_tanggalmasalahField, permintaan_namaField, permintaan_cabangField,
+						{
+						layout: 'column',
+						border: false,
+						items:[{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 95,
+							bodyStyle:'padding:3px',
+							items:[permintaan_tipeField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 10,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[permintaan_tipe2Field]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 10,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[permintaan_tipe3Field]
+					   }]},
+				permintaan_judulField, permintaan_permintaanField, permintaan_prioritasField, mengetahui_permintaanField, catatanListEditorGrid, input_itField] 
 			}
 			]
 		}]
@@ -1247,7 +1816,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	permintaan_createWindow= new Ext.Window({
 		id: 'permintaan_createWindow',
-		title: post2db+'Form Permintaan',
+		title: post2db+'Detail Help Desk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1345,7 +1914,7 @@ Ext.onReady(function(){
 	/* Identify  gudang_nama Search Field */
 	permintaan_namaSearchField= new Ext.form.TextField({
 		id: 'permintaan_namaSearchField',
-		fieldLabel: 'Nama Peminta',
+		fieldLabel: 'Nama',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1353,7 +1922,7 @@ Ext.onReady(function(){
 	/* Identify  gudang_lokasi Search Field */
 	cabangSearchField= new Ext.form.TextField({
 		id: 'cabangSearchField',
-		fieldLabel: 'Cabang',
+		fieldLabel: 'Untuk Cabang',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1361,7 +1930,7 @@ Ext.onReady(function(){
 	/* Identify  gudang_keterangan Search Field */
 	judulSearchField= new Ext.form.TextField({
 		id: 'judulSearchField',
-		fieldLabel: 'Judul Subyek',
+		fieldLabel: 'Subyek',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -1392,10 +1961,10 @@ Ext.onReady(function(){
 	});
 	tipeSearchField= new Ext.form.ComboBox({
 		id: 'tipeSearchField',
-		fieldLabel: 'Tipe Subyek',
+		fieldLabel: 'Kategori',
 		store:new Ext.data.SimpleStore({
 			fields:['tipe_value_search', 'tipe_display_search'],
-			data:[['Refill Tinta','Refill Tinta'],['Miracle Information System','Miracle Information System'],['Pengadaan (Hardware)','Pengadaan (Hardware)'],['Kerusakan','Kerusakan'],['Kunjungan','Kunjungan'],['Pengadaan (Software)','Pengadaan (Software)'],['Lain-lain','Lain-lain']]
+			data:[['MIS','MIS'],['Basic Software','Basic Software'],['Other Equipment','Other Equipment'],['Computers','Computers']]
 		}),
 		mode: 'local',
 		allowBlank: false,
@@ -1448,7 +2017,7 @@ Ext.onReady(function(){
 		}]
 		,
 		buttons: [{
-				text: 'Search',
+				text: 'Adv. Search',
 				handler: permintaan_list_search
 			},{
 				text: 'Close',
@@ -1462,7 +2031,7 @@ Ext.onReady(function(){
 	 
 	/* Function for retrieve search Window Form, used for andvaced search */
 	permintaan_searchWindow = new Ext.Window({
-		title: 'Pencarian Permintaan IT',
+		title: 'Pencarian Help Desk',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -1609,11 +2178,106 @@ Ext.onReady(function(){
 	/*End of Function */
 	
 });
+
+
+	// EVENTS
+	
+	// Event utk sub kategori
+	permintaan_tipeField.on("select", function(){
+		//rpt_jproduk_groupField.setValue('No faktur');
+		if(permintaan_tipeField.getValue()=='MIS'){
+			permintaan_tipe2Field.setValue('Pilih Satu Sub Kategori');
+			permintaan_tipe2Field.bindStore(group_mis_Store);
+		}else if(permintaan_tipeField.getValue()=='Basic Software')
+		{
+			permintaan_tipe2Field.reset();
+			permintaan_tipe2Field.setValue('Pilih Satu Sub Kategori');
+			permintaan_tipe2Field.bindStore(group_basic_Store);
+		}else if(permintaan_tipeField.getValue()=='Other Equipment')
+		{
+			permintaan_tipe2Field.reset();
+			permintaan_tipe2Field.setValue('Pilih Satu Sub Kategori');
+			permintaan_tipe2Field.bindStore(group_other_Store);
+		}else if(permintaan_tipeField.getValue()=='Computers')
+		{
+			permintaan_tipe2Field.reset();
+			permintaan_tipe2Field.setValue('Pilih Satu Sub Kategori');
+			permintaan_tipe2Field.bindStore(group_computers_Store);
+		}
+	});
+	
+	// Event untuk 3rd kategori
+	permintaan_tipe2Field.on("select", function(){
+		if(permintaan_tipe2Field.getValue()=='Master Data' ||
+			permintaan_tipe2Field.getValue()=='Persediaan' ||
+			permintaan_tipe2Field.getValue()=='Cust Service' ||
+			permintaan_tipe2Field.getValue()=='Sales and Marketing' ||
+			permintaan_tipe2Field.getValue()=='Kasir' ||
+			permintaan_tipe2Field.getValue()=='Perawatan' ||
+			permintaan_tipe2Field.getValue()=='Akuntansi' ||
+			permintaan_tipe2Field.getValue()=='Laporan' ||
+			permintaan_tipe2Field.getValue()=='SMS Broadcast') {
+				permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+				permintaan_tipe3Field.bindStore(group_mis3_Store);
+		}else if(permintaan_tipe2Field.getValue()=='Microsoft Word' ||
+			permintaan_tipe2Field.getValue()=='Microsoft Excel' ||
+			permintaan_tipe2Field.getValue()=='Microsoft Power Point' ||
+			permintaan_tipe2Field.getValue()=='Open Office' ||
+			permintaan_tipe2Field.getValue()=='Other software' ||
+			permintaan_tipe2Field.getValue()=='Microsoft Outlook'){
+				permintaan_tipe3Field.reset();
+				permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+				permintaan_tipe3Field.bindStore(group_basic3_Store);
+		}else if(permintaan_tipe2Field.getValue()=='Faxes' ||
+			permintaan_tipe2Field.getValue()=='Office Phones' ||
+			permintaan_tipe2Field.getValue()=='Other'){
+				permintaan_tipe3Field.reset();
+				permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+				permintaan_tipe3Field.bindStore(group_other3_Store);
+		}else if(permintaan_tipe2Field.getValue()=='PC/Desktop')
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_pc3_Store);
+		}else if(permintaan_tipe2Field.getValue()=='Laptop')		
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_laptop3_Store);
+		}
+		else if(permintaan_tipe2Field.getValue()=='Keyboard')		
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_keyboard3_Store);
+		}
+		else if(permintaan_tipe2Field.getValue()=='Mouse')		
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_mouse3_Store);
+		}
+		else if(permintaan_tipe2Field.getValue()=='Screen')		
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_screen3_Store);
+		}
+		else if(permintaan_tipe2Field.getValue()=='Printer')		
+		{
+			permintaan_tipe3Field.reset();
+			permintaan_tipe3Field.setValue('Pilih Satu 3rd Level Kategori');
+			permintaan_tipe3Field.bindStore(group_printer3_Store);
+		}
+	});
+
+	
 	</script>
 <body>
 <div>
 	<div class="col">
         <div id="fp_permintaan"></div>
+		<div id="fp_catatan"></div>
 		<div id="elwindow_permintaan_create"></div>
         <div id="elwindow_permintaan_search"></div>
     </div>

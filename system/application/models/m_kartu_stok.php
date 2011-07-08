@@ -50,7 +50,14 @@ class M_kartu_stok extends Model{
 
 		}
 
-		function kartu_stok_awal($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+		function kartu_stok_awal($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+			if ($periode == 'bulan'){
+				$isiperiode="'%Y-%m')<'".$tgl_awal."' ";
+
+			}else if($periode == 'tanggal'){
+				$isiperiode="'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d') ";
+			}
+		
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
@@ -149,7 +156,7 @@ class M_kartu_stok extends Model{
 							 WHERE     `dmm`.`dmutasi_master` = `mmm`.`mutasi_id`
 								   AND konversi_satuan = dmm.dmutasi_satuan
 								   AND konversi_produk = dmm.dmutasi_produk
-									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+									AND date_format(mutasi_tanggal,".$isiperiode."
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_tujuan='".$gudang."'
 									AND mutasi_status='Tertutup'
@@ -181,7 +188,7 @@ class M_kartu_stok extends Model{
 							 WHERE     `dmk`.`dmutasi_master` = `mmk`.`mutasi_id`
 								   AND konversi_satuan = dmk.dmutasi_satuan
 								   AND konversi_produk = dmk.dmutasi_produk
-									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+									AND date_format(mutasi_tanggal,".$isiperiode."
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_asal='".$gudang."'
 									AND mutasi_status='Tertutup'
@@ -215,7 +222,7 @@ class M_kartu_stok extends Model{
 							 WHERE     `mk`.`koreksi_id` = `dk`.`dkoreksi_master`
 								   AND konversi_satuan = dk.dkoreksi_satuan
 								   AND konversi_produk = dk.dkoreksi_produk
-									AND date_format(koreksi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+									AND date_format(koreksi_tanggal,".$isiperiode."
 									AND dkoreksi_produk='".$rowproduk->produk_id."'
 									AND koreksi_gudang='".$gudang."'
 									AND koreksi_status='Tertutup'
@@ -247,7 +254,7 @@ class M_kartu_stok extends Model{
 									 WHERE     `dt`.`dterima_master` = `mt`.`terima_id`
 											AND konversi_satuan = dt.dterima_satuan
 											AND konversi_produk = dt.dterima_produk
-											AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(terima_tanggal,".$isiperiode."
 											AND dterima_produk='".$rowproduk->produk_id."'
 											AND `mt`.`terima_gudang_id`='".$gudang."'
 											AND terima_status='Tertutup'
@@ -280,7 +287,7 @@ class M_kartu_stok extends Model{
 									 WHERE     `db`.`dtbonus_master` = `mt`.`terima_id`
 											AND konversi_satuan = db.dtbonus_satuan
 											AND konversi_produk = db.dtbonus_produk
-											AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(terima_tanggal,".$isiperiode."
 											AND dtbonus_produk='".$rowproduk->produk_id."'
 											AND `mt`.`terima_gudang_id`='".$gudang."'
 											AND terima_status='Tertutup'";
@@ -317,7 +324,7 @@ class M_kartu_stok extends Model{
 									 WHERE     `dr`.`drbeli_master` = `mr`.`rbeli_id`
 										   AND konversi_satuan = dr.drbeli_satuan
 										   AND konversi_produk = dr.drbeli_produk
-											AND date_format(rbeli_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(rbeli_tanggal,".$isiperiode."
 											AND drbeli_produk='".$rowproduk->produk_id."'
 											AND 1='".$gudang."'
 											AND rbeli_status='Tertutup'";
@@ -351,7 +358,7 @@ class M_kartu_stok extends Model{
 									  FROM `detail_pakai_cabin` `cb`, satuan_konversi
 									 WHERE konversi_produk = cabin_produk
 											AND konversi_satuan = cabin_satuan
-											AND date_format(cabin_date_create,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(cabin_date_create,".$isiperiode."
 											AND cabin_produk='".$rowproduk->produk_id."'
 											AND cabin_gudang='".$gudang."'";
 				}elseif($gudang==2){
@@ -384,7 +391,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `dj`.`dproduk_master` = `mj`.`jproduk_id`
 												   AND konversi_satuan = dj.dproduk_satuan
 												   AND konversi_produk = dj.dproduk_produk
-													AND date_format(jproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(jproduk_tanggal,".$isiperiode."
 													AND dproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND jproduk_stat_dok='Tertutup'
@@ -419,7 +426,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mjg`.`jpgrooming_id` = `djg`.`dpgrooming_master`
 												   AND konversi_satuan = djg.dpgrooming_satuan
 												   AND konversi_produk = djg.dpgrooming_produk
-													AND date_format(jpgrooming_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(jpgrooming_tanggal,".$isiperiode."
 													AND dpgrooming_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 											UNION
@@ -452,7 +459,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mrj`.`rproduk_id` = `drj`.`drproduk_master`
 												   AND konversi_satuan = drj.drproduk_satuan
 												   AND konversi_produk = drj.drproduk_produk
-													AND date_format(rproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(rproduk_tanggal,".$isiperiode."
 													AND drproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND rproduk_stat_dok='Tertutup'
@@ -486,7 +493,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mrp`.`rpaket_id` = `drp`.`drpaket_master`
 												   AND konversi_satuan = drpaket_satuan
 												   AND konversi_produk = drpaket_produk
-													AND date_format(rpaket_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(rpaket_tanggal,".$isiperiode."
 													AND drpaket_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND rpaket_stat_dok='Tertutup'";
@@ -511,12 +518,19 @@ class M_kartu_stok extends Model{
 
 		}
 
-		function stok_resume($gudang, $produk_id, $tanggal_start,$tanggal_end){
+		function stok_resume($tgl_awal,$periode,$gudang, $produk_id, $tanggal_start,$tanggal_end){
+			if ($periode == 'bulan'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')=date_format('".$tgl_awal."','%Y-%m')
+					AND date_format(tanggal_akhir,'%Y-%m')=date_format('".$tgl_awal."','%Y-%m') ";
+			}else if($periode == 'tanggal'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
+					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d') ";
+			}
+			
 			$sql="SELECT sum(masuk) as masuk, sum(keluar) as keluar from kartu_stok
 				  	WHERE gudang_id='".$gudang."'
 				  	AND produk_id='".$produk_id."'
-				 	AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')";
+				 	".$isiperiode." ";
 
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
@@ -993,8 +1007,18 @@ class M_kartu_stok extends Model{
 
 		}
 
-		function generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end){
-
+		function generate_kartu_stok($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end){
+			if ($periode == 'bulan'){
+				$isiperiode="'%Y-%m')='".$tgl_awal."'" ;
+				$isistart=" AND date_format(tanggal_awal,'%Y-%m')>='".$tgl_awal."'
+					AND date_format(tanggal_akhir,'%Y-%m')<='".$tgl_awal."' ";
+			}else if($periode == 'tanggal'){
+				$isiperiode="'%Y-%m-%d') BETWEEN '".$tanggal_start."'
+								AND '".$tanggal_end."'";
+				$isistart=" AND date_format(tanggal_awal,'%Y-%m-%d')>='".$tanggal_start."'
+					AND date_format(tanggal_akhir,'%Y-%m-%d')<='".$tanggal_end."' " ;
+			}
+			
 			/* CEK SATUAN */
 			if($opsi_satuan=='terkecil')
 			{
@@ -1030,8 +1054,7 @@ class M_kartu_stok extends Model{
 
 			//DELETE ALL REPORT
 			$sql="DELETE FROM kartu_stok WHERE produk_id=".$produk_id."
-					AND date_format(tanggal_awal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+					".$isistart."
 					AND gudang_id='".$gudang."'";
 			$result=$this->db->query($sql);
 
@@ -1055,8 +1078,7 @@ class M_kartu_stok extends Model{
 							AND mt.mutasi_asal=gd.gudang_id
 							AND konversi_satuan = dt.dmutasi_satuan
 							AND konversi_produk = dt.dmutasi_produk
-							AND date_format(mutasi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(mutasi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(mutasi_tanggal,".$isiperiode."
 							AND dmutasi_produk='".$produk_id."'
 							AND mutasi_status='Tertutup'
 							AND mutasi_tujuan='".$gudang."'";
@@ -1081,8 +1103,7 @@ class M_kartu_stok extends Model{
 							AND mt.mutasi_tujuan=gd.gudang_id
 							AND konversi_satuan = dt.dmutasi_satuan
 							AND konversi_produk = dt.dmutasi_produk
-							AND date_format(mutasi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(mutasi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(mutasi_tanggal,".$isiperiode."
 							AND dmutasi_produk='".$produk_id."'
 							AND mutasi_status='Tertutup'
 							AND mutasi_asal='".$gudang."'";
@@ -1108,8 +1129,7 @@ class M_kartu_stok extends Model{
 							AND mt.koreksi_gudang=gd.gudang_id
 							AND konversi_satuan = dt.dkoreksi_satuan
 							AND konversi_produk = dt.dkoreksi_produk
-							AND date_format(koreksi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(koreksi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(koreksi_tanggal,".$isiperiode."
 							AND dkoreksi_produk='".$produk_id."'
 							AND koreksi_status='Tertutup'
 							AND koreksi_gudang='".$gudang."'
@@ -1136,8 +1156,7 @@ class M_kartu_stok extends Model{
 							AND mt.koreksi_gudang=gd.gudang_id
 							AND konversi_satuan = dt.dkoreksi_satuan
 							AND konversi_produk = dt.dkoreksi_produk
-							AND date_format(koreksi_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(koreksi_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(koreksi_tanggal,".$isiperiode."
 							AND dkoreksi_produk='".$produk_id."'
 							AND koreksi_status='Tertutup'
 							AND koreksi_gudang='".$gudang."'
@@ -1164,8 +1183,7 @@ class M_kartu_stok extends Model{
 							AND mt.terima_supplier=sp.supplier_id
 							AND konversi_satuan = dt.dterima_satuan
 							AND konversi_produk = dt.dterima_produk
-							AND date_format(terima_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(terima_tanggal,".$isiperiode."
 							AND dterima_produk='".$produk_id."'
 							AND terima_status='Tertutup'
 							AND mt.terima_gudang_id=".$gudang;
@@ -1190,8 +1208,7 @@ class M_kartu_stok extends Model{
 							AND mt.terima_supplier=sp.supplier_id
 							AND konversi_satuan = dt.dtbonus_satuan
 							AND konversi_produk = dt.dtbonus_produk
-							AND date_format(terima_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(terima_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(terima_tanggal,".$isiperiode."
 							AND dtbonus_produk='".$produk_id."'
 							AND terima_status='Tertutup'
 							AND mt.terima_gudang_id=".$gudang;
@@ -1219,8 +1236,7 @@ class M_kartu_stok extends Model{
 							AND mt.rbeli_supplier=sp.supplier_id
 							AND konversi_satuan = dt.drbeli_satuan
 							AND konversi_produk = dt.drbeli_produk
-							AND date_format(rbeli_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(rbeli_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(rbeli_tanggal,".$isiperiode."
 							AND drbeli_produk='".$produk_id."'
 							AND rbeli_status='Tertutup'
 							AND 1=".$gudang;
@@ -1245,8 +1261,7 @@ class M_kartu_stok extends Model{
 					 WHERE  cabin_cust=cust.cust_id
 							AND konversi_satuan = cabin_satuan
 							AND konversi_produk = cabin_produk
-							AND date_format(cabin_date_create,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(cabin_date_create,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(cabin_date_create,".$isiperiode."
 							AND cabin_produk='".$produk_id."'
 							AND cabin_gudang='".$gudang."'";
 
@@ -1273,8 +1288,7 @@ class M_kartu_stok extends Model{
 					 		AND jproduk_cust=cust.cust_id
 							AND konversi_satuan = dt.dproduk_satuan
 							AND konversi_produk = dt.dproduk_produk
-							AND date_format(jproduk_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(jproduk_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(jproduk_tanggal,".$isiperiode."
 							AND dproduk_produk='".$produk_id."'
 							AND jproduk_stat_dok='Tertutup'";
 
@@ -1299,8 +1313,7 @@ class M_kartu_stok extends Model{
 					 		AND rproduk_cust=cust.cust_id
 							AND konversi_satuan = dt.drproduk_satuan
 							AND konversi_produk = dt.drproduk_produk
-							AND date_format(rproduk_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(rproduk_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(rproduk_tanggal,".$isiperiode."
 							AND drproduk_produk='".$produk_id."'
 							AND rproduk_stat_dok='Tertutup'";
 
@@ -1325,30 +1338,28 @@ class M_kartu_stok extends Model{
 							AND konversi_satuan = dt.dpgrooming_satuan
 							AND konversi_produk = dt.dpgrooming_produk
 							AND jpgrooming_karyawan=kar.karyawan_id
-							AND date_format(jpgrooming_tanggal,'%Y-%m-%d')>=date_format('".$tanggal_start."','%Y-%m-%d')
-							AND date_format(jpgrooming_tanggal,'%Y-%m-%d')<=date_format('".$tanggal_end."','%Y-%m-%d')
+							AND date_format(jpgrooming_tanggal,".$isiperiode."
 							AND dpgrooming_produk='".$produk_id."'";
 
 			//$this->firephp->log($sql);
 			$result=$this->db->query($sql);
 
 			}
-
-
 			return '1';
-
-			//
-
 		}
 
-
-		function kartu_stok_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
-
+		function kartu_stok_list($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+			if ($periode == 'bulan'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' and date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."' ";
+			}else if($periode == 'tanggal'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
+					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d') ";
+			}	
+			
 			$sql="SELECT * from kartu_stok
 				  	WHERE gudang_id='".$gudang."'
 				  	AND produk_id='".$produk_id."'
-				 	AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+				 	".$isiperiode."
 					ORDER BY tanggal ASC";
 
 			$result = $this->db->query($sql);
@@ -1365,10 +1376,7 @@ class M_kartu_stok extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
-
 		}
-
-
 
 		//function for print record
 		function kartu_stok_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end ,$option,$filter){
