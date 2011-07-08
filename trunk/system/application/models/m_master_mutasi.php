@@ -409,7 +409,8 @@ class M_master_mutasi extends Model{
 		
 		//function for create new record
 		function master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $cetak){
-			$pattern="MB/".date("ym")."-";
+			$mutasi_tanggal_pattern=strtotime($mutasi_tanggal);
+			$pattern="MB/".date("ym",$mutasi_tanggal_pattern)."-";
 			$mutasi_no=$this->m_public_function->get_kode_1('master_mutasi','mutasi_no',$pattern,12);
 			
 			$data = array(
