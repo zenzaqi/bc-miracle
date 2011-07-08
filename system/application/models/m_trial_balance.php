@@ -130,19 +130,20 @@ class M_Trial_balance extends Model{
 					$trial_akun_awal_jenis=($row->akun_saldo=='Debet'?'DB':'CR');
 
 					if($row->akun_saldo=='Debet'){
-						$trial_akun_awal=($trial_akun_awal<0?abs($trial_akun_awal):$trial_akun_awal);
-						$trial_akun_awal_jenis=($trial_akun_awal<0?"CR":"DB");
+						/*$trial_akun_awal=($trial_akun_awal<0?abs($trial_akun_awal):$trial_akun_awal);
+						$trial_akun_awal_jenis=($trial_akun_awal<0?"CR":"DB");*/
+						
 						$trial_akun_saldo=$trial_akun_awal+$trial_akun_debet-$trial_akun_kredit;
 					}else{
-						$trial_akun_awal=($trial_akun_awal<0?abs($trial_akun_awal):$trial_akun_awal);
-						$trial_akun_awal_jenis=($trial_akun_awal<0?"DB":"CR");
+						/*$trial_akun_awal=($trial_akun_awal<0?abs($trial_akun_awal):$trial_akun_awal);
+						$trial_akun_awal_jenis=($trial_akun_awal<0?"DB":"CR");*/
 						$trial_akun_saldo=$trial_akun_awal-$trial_akun_debet+$trial_akun_kredit;
 					}
 
-					if($trial_akun_saldo<0){
+					/*if($trial_akun_saldo<0){
 						$trial_akun_saldo=abs($trial_akun_saldo);
 						$trial_akun_saldo_jenis=($trial_akun_jenis=='CR'?'DB':'CR');
-					}
+					}*/
 					
 					$sql="INSERT INTO trial_balance(akun_id,
                                          akun_kode,

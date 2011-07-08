@@ -48,6 +48,7 @@ class M_posting extends Model{
                              buku_ref,
                              buku_akun,
                              buku_akun_kode,
+                             buku_keterangan,
                              buku_debet,
                              buku_kredit,
 							 buku_author)
@@ -55,6 +56,7 @@ class M_posting extends Model{
 							  N.no_jurnal,
 							  N.akun,
 							  N.akun_kode,
+							  N.keterangan,
 							  N.debet,
 							  N.kredit,
 							   '".@$_SESSION[SESSION_USERID]."'
@@ -70,8 +72,7 @@ class M_posting extends Model{
 							  J.`djurnal_debet` AS `debet`,
 							  J.`djurnal_kredit` AS `kredit`,
 							  J.`jurnal_post` AS `post`,
-							  J.`jurnal_date_post` AS `post_date`,
-							  1 AS detail_id /*supaya tidak di-distinct*/
+							  J.`jurnal_date_post` AS `post_date`
 						 FROM `vu_jurnal` J
 						 WHERE (J.jurnal_post<>'Y' OR J.jurnal_post IS NULL)
 						 AND date_format(J.jurnal_tanggal,'%Y-%m-%d')>=date_format('".$tgl_awal."','%Y-%m-%d')
@@ -80,7 +81,7 @@ class M_posting extends Model{
 					//JURNAL KASBANK
 				   $sql.=" UNION ";
 				   $sql.=" SELECT
-				          concat('JK-',K.kasbank_id) as no_id,
+				          concat('JK-',K.kasbank_detid) as no_id,
 				   		  K.`no_jurnal` AS `no_jurnal`,
 						  date_format(K.`tanggal`,'%Y-%m-%d') AS `tanggal`,
 						  K.`akun` AS `akun`,
@@ -90,8 +91,7 @@ class M_posting extends Model{
 						  K.`debet` AS `debet`,
 						  K.`kredit` AS `kredit`,
 						  K.`post` AS `post`,
-						  K.`post_date` AS `post_date`,
-						  K.kasbank_detail_id AS detail_id /*supaya tidak di-distinct*/
+						  K.`post_date` AS `post_date`
 					 FROM `vu_jurnal_bank` K
 					 WHERE (K.post<>'Y' OR K.post is NULL)
 					 AND date_format(K.tanggal,'%Y-%m-%d')>=date_format('".$tgl_awal."','%Y-%m-%d')
@@ -143,6 +143,7 @@ class M_posting extends Model{
                              buku_ref,
                              buku_akun,
                              buku_akun_kode,
+                             buku_keterangan,
                              buku_debet,
                              buku_kredit,
 							 buku_author)
@@ -150,6 +151,7 @@ class M_posting extends Model{
 							  N.no_jurnal,
 							  N.akun,
 							  N.akun_kode,
+							  N.keterangan,
 							  N.debet,
 							  N.kredit,
 							   '".@$_SESSION[SESSION_USERID]."'
@@ -164,8 +166,7 @@ class M_posting extends Model{
 							  J.`djurnal_debet` AS `debet`,
 							  J.`djurnal_kredit` AS `kredit`,
 							  J.`jurnal_post` AS `post`,
-							  J.`jurnal_date_post` AS `post_date`,
-							  1 AS detail_id /*supaya tidak di-distinct*/
+							  J.`jurnal_date_post` AS `post_date`
 						 FROM `vu_jurnal` J
 						 WHERE (J.jurnal_post<>'Y' OR J.jurnal_post IS NULL)
 						 AND date_format(J.jurnal_tanggal,'%Y-%m')='".$tahun."-".$bulan."'";
@@ -173,7 +174,7 @@ class M_posting extends Model{
 					//JURNAL KASBANK
 				   $sql.=" UNION ";
 				   $sql.=" SELECT
-				   		  concat('JK-',K.kasbank_id) as no_id,
+				   		  concat('JK-',K.kasbank_detid) as no_id,
 				   		  K.`no_jurnal` AS `no_jurnal`,
 						  date_format(K.`tanggal`,'%Y-%m-%d') AS `tanggal`,
 						  K.`akun` AS `akun`,
@@ -183,8 +184,7 @@ class M_posting extends Model{
 						  K.`debet` AS `debet`,
 						  K.`kredit` AS `kredit`,
 						  K.`post` AS `post`,
-						  K.`post_date` AS `post_date`,
-						  K.kasbank_detail_id AS detail_id /*supaya tidak di-distinct*/
+						  K.`post_date` AS `post_date`
 					 FROM `vu_jurnal_bank` K
 					 WHERE (K.post<>'Y' OR K.post is NULL)
 					 AND date_format(K.tanggal,'%Y-%m')='".$tahun."-".$bulan."'";

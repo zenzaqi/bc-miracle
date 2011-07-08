@@ -1,14 +1,14 @@
 <?php
 /* 	These code was generated using phpCIGen v 0.1.b (24/06/2009)
-	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
+	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com,
 	#CV. Trust Solution, jl. Saronojiwo 19 Surabaya, http://www.ts.co.id
-	
+
 	+ Module  		: trial_balance View
 	+ Description	: For record view
 	+ Filename 		: v_trial_balance.php
- 	+ creator  		: 
+ 	+ creator  		:
  	+ Created on 27/May/2010 16:40:49
-	
+
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -32,7 +32,7 @@
 			font-weight:bold;
 			color:#222;
 		}
-		
+
 		.search-item h3 span {
 			float: right;
 			font-weight:normal;
@@ -43,7 +43,7 @@
 		}
     </style>
 <script>
-/* declare function */		
+/* declare function */
 var trial_balance_DataStore;
 var trial_balance_ColumnModel;
 var trial_balanceListEditorGrid;
@@ -62,13 +62,13 @@ var pageS=50;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
-  	 
+
+
 	/* Function for Retrieve DataStore */
 	trial_balance_DataStore = new Ext.data.GroupingStore({
 		id: 'trial_balance_DataStore',
 		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_trial_balance&m=get_action', 
+			url: 'index.php?c=c_trial_balance&m=get_action',
 			method: 'POST',
 			timeout: 3600000
 		}),
@@ -78,13 +78,13 @@ Ext.onReady(function(){
 			totalProperty: 'total',
 			id: 'balance_id'
 		},[
-			{name: 'balance_id', type: 'int', mapping: 'akun_id'}, 
-			{name: 'balance_akun', type: 'string', mapping: 'akun_nama'}, 
-			{name: 'balance_akun_kode', type: 'string', mapping: 'akun_kode'}, 
+			{name: 'balance_id', type: 'int', mapping: 'akun_id'},
+			{name: 'balance_akun', type: 'string', mapping: 'akun_nama'},
+			{name: 'balance_akun_kode', type: 'string', mapping: 'akun_kode'},
 			{name: 'balance_awal_jenis', type: 'string', mapping: 'akun_awal_jenis'},
-			{name: 'balance_awal', type: 'float', mapping: 'akun_awal'}, 
-			{name: 'balance_debet', type: 'float', mapping: 'akun_debet'}, 
-			{name: 'balance_kredit', type: 'float', mapping: 'akun_kredit'}, 
+			{name: 'balance_awal', type: 'float', mapping: 'akun_awal'},
+			{name: 'balance_debet', type: 'float', mapping: 'akun_debet'},
+			{name: 'balance_kredit', type: 'float', mapping: 'akun_kredit'},
 			{name: 'balance_saldo', type: 'float', mapping: 'akun_akhir'},
 			{name: 'balance_jenis', type: 'string', mapping: 'akun_jenis'} ,
 			{name: 'balance_saldo_jenis', type: 'string', mapping: 'akun_akhir_jenis'},
@@ -93,8 +93,8 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'balance_akun_kode', direction: "ASC"}
 	});
-	
-		
+
+
   	/* Function for Identify of Window Column Model */
 	trial_balance_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -126,6 +126,12 @@ Ext.onReady(function(){
 			}
 		},
 		{
+			header: 'CR/DB',
+			dataIndex: 'balance_awal_jenis',
+			width: 80,
+			sortable: false
+		},
+		{
 			header: 'Beginning',
 			dataIndex: 'balance_awal',
 			width: 150,
@@ -138,15 +144,13 @@ Ext.onReady(function(){
 				if(record.data.balance_akun=='TOTAL'){
 					return '<span><b>'+Ext.util.Format.number(record.data.balance_awal,'0,000')+'</b></span>';
 				}else{
-					return '<span>'+Ext.util.Format.number(record.data.balance_awal,'0,000')+'</span>';
+						if(record.data.balance_awal<0){
+						    return '<span>('+Ext.util.Format.number(Math.abs(record.data.balance_awal),'0,000')+')</span>';
+						}else{
+							return '<span>'+Ext.util.Format.number(record.data.balance_awal,'0,000')+'</span>';
+						}
 				}
 			}
-		}, 
-		{
-			header: 'CR/DB',
-			dataIndex: 'balance_awal_jenis',
-			width: 80,
-			sortable: false
 		},
 		{
 			header: 'Debet',
@@ -164,7 +168,7 @@ Ext.onReady(function(){
 					return '<span>'+Ext.util.Format.number(record.data.balance_debet,'0,000')+'</span>';
 				}
 			}
-		}, 
+		},
 		{
 			header: 'Kredit',
 			dataIndex: 'balance_kredit',
@@ -195,23 +199,21 @@ Ext.onReady(function(){
 				if(record.data.balance_akun=='TOTAL'){
 					return '<span><b>'+Ext.util.Format.number(record.data.balance_saldo,'0,000')+'</b></span>';
 				}else{
-					return '<span>'+Ext.util.Format.number(record.data.balance_saldo,'0,000')+'</span>';
+					if(record.data.balance_saldo<0){
+						    return '<span>('+Ext.util.Format.number(Math.abs(record.data.balance_saldo),'0,000')+')</span>';
+						}else{
+							return '<span>'+Ext.util.Format.number(record.data.balance_saldo,'0,000')+'</span>';
+						}
 				}
 			}
-		},
-		{
-			header: 'CR/DB Saldo',
-			dataIndex: 'balance_saldo_jenis',
-			width: 80,
-			sortable: false
 		}
 		]);
-	
+
 	trial_balance_ColumnModel.defaultSortable= true;
 	/* End of Function */
-    
+
 	 var summary = new Ext.ux.grid.GroupSummary();
-	 
+
 	/* Declare DataStore and  show datagrid list */
 	trial_balanceListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'trial_balanceListEditorGrid',
@@ -244,7 +246,7 @@ Ext.onReady(function(){
 			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
+			handler: display_form_search_window
 		},'-',{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
@@ -259,33 +261,33 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: trial_balance_print  
+			handler: trial_balance_print
 		}
 		]
 	});
 	trial_balanceListEditorGrid.render();
 	/* End of DataStore */
-     
+
 	/* Create Context Menu */
 	trial_balance_ContextMenu = new Ext.menu.Menu({
 		id: 'trial_balance_ListEditorGridContextMenu',
 		items: [
-		{ 
+		{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: trial_balance_print 
+			handler: trial_balance_print
 		},
-		{ 
-			text: 'Export Excel', 
+		{
+			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: trial_balance_export_excel 
+			handler: trial_balance_export_excel
 		}
 		]
-	}); 
+	});
 	/* End of Declaration */
-	
+
 	/* Event while selected row via context menu */
 	function ontrial_balance_ListEditGridContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
@@ -296,86 +298,86 @@ Ext.onReady(function(){
 		trial_balance_ContextMenu.showAt([coords[0], coords[1]]);
   	}
   	/* End of Function */
-	
+
 	/* function for editing row via context menu */
 	function trial_balance_editContextMenu(){
 		trial_balance_confirm_update();
   	}
 	/* End of Function */
-  	
+
 	trial_balanceListEditorGrid.addListener('rowcontextmenu', ontrial_balance_ListEditGridContextMenu);
-	
+
 	/* Function for action list search */
 	function trial_balance_list_search(){
 		// render according to a SQL date format.
-		
+
 		var balance_tgl_awal_search_date="";
 		var balance_tgl_akhir_search_date="";
-		
-		
+
+
 		if(balance_tgl_awalSearchField.getValue()=="" || balance_tgl_akhirSearchField.getValue()==""){
-		
+
 			Ext.MessageBox.show({
 			   title: 'Error',
 			   msg: 'Tanggal Pencarian harus diisi !.',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});	
-			
+			});
+
 		}else{
-		
+
 		if(balance_tgl_awalSearchField.getValue()!==""){balance_tgl_awal_search_date=balance_tgl_awalSearchField.getValue().format('Y-m-d');}
 		if(balance_tgl_akhirSearchField.getValue()!==""){balance_tgl_akhir_search_date=balance_tgl_akhirSearchField.getValue().format('Y-m-d');}
-		
-		
+
+
 		/*trial_balance_DataStore.baseParams = {
 			task				: 'SEARCH',
-			balance_tanggal		:  balance_tgl_awal_search_date, 
+			balance_tanggal		:  balance_tgl_awal_search_date,
 			balance_tanggalEnd	:  balance_tgl_akhir_search_date,
 			start				: 0,
 			limit				: pageS
 		};
 		trial_balance_DataStore.load({
 			callback: function(r,opt,success){
-				if(success==true){ 
-					Ext.MessageBox.hide(); 
+				if(success==true){
+					Ext.MessageBox.hide();
 				}
 			}
 		});*/
-		
+
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true
 		});
-		
-		Ext.Ajax.request({   
+
+		Ext.Ajax.request({
 			waitMsg: 'Please Wait...',
 			url: 'index.php?c=c_trial_balance&m=trial_balance_generate',
 			timeout: 3600000,
 			params: {
-				balance_tgl_awal	: balance_tgl_awal_search_date, 
+				balance_tgl_awal	: balance_tgl_awal_search_date,
 				balance_tgl_akhir	: balance_tgl_akhir_search_date
-			}, 
-			success: function(response){              
+			},
+			success: function(response){
 				var result=eval(response.responseText);
 				switch(result){
 				case 1:
 					Ext.MessageBox.hide();
 					trial_balance_searchWindow.hide();
-										
+
 					trial_balance_DataStore.baseParams = {
 						task				: 'SEARCH',
-						balance_tgl_awal	:  balance_tgl_awal_search_date, 
+						balance_tgl_awal	:  balance_tgl_awal_search_date,
 						balance_tgl_akhir	:  balance_tgl_akhir_search_date,
 						start				:  0,
 						limit				:  pageS
 					};
-					
+
 					trial_balance_DataStore.load();
-					
+
 					break;
 				default:
 					Ext.MessageBox.show({
@@ -386,7 +388,7 @@ Ext.onReady(function(){
 						icon: Ext.MessageBox.WARNING
 					});
 					break;
-				}  
+				}
 			},
 			failure: function(response){
 				var result=response.responseText;
@@ -396,14 +398,14 @@ Ext.onReady(function(){
 				   buttons: Ext.MessageBox.OK,
 				   animEl: 'database',
 				   icon: Ext.MessageBox.ERROR
-				});		
-			} 	                     
+				});
+			}
 		});
-		
+
 		}
-		
+
 	}
-		
+
 	/* Function for reset search result */
 	function trial_balance_reset_search(){
 		trial_balance_list_search();
@@ -411,30 +413,30 @@ Ext.onReady(function(){
 		trial_balance_searchWindow.close();
 	};
 	/* End of Fuction */
-	
+
 	balance_tgl_awalSearchField= new Ext.form.DateField({
 		id: 'balance_tgl_awalSearchField',
 		fieldLabel: 'Tanggal',
 		format : 'Y-m-d',
 		allowBlank: false
 	});
-	
-	
+
+
 	balance_tgl_akhirSearchField= new Ext.form.DateField({
 		id: 'balance_tgl_akhirSearchField',
 		fieldLabel: 's/d',
 		format : 'Y-m-d',
 		allowBlank: false
-	
+
 	});
-		
-   
+
+
 	/* Function for retrieve search Form Panel */
 	trial_balance_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 500,        
+		width: 500,
 		items: [{
 			layout:'column',
 			border:false,
@@ -452,7 +454,7 @@ Ext.onReady(function(){
 							layout: 'form',
 							border:false,
 							defaultType: 'datefield',
-							items: [						
+							items: [
 								balance_tgl_awalSearchField
 							]
 						},
@@ -462,14 +464,14 @@ Ext.onReady(function(){
 							border:false,
 							labelWidth:30,
 							defaultType: 'datefield',
-							items: [						
+							items: [
 								balance_tgl_akhirSearchField
 							]
-						}						
-								
+						}
+
 				        ]
 					}]
-				 
+
 			}
 			]
 		}]
@@ -485,8 +487,8 @@ Ext.onReady(function(){
 			}
 		]
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
 	/* Function for retrieve search Window Form, used for andvaced search */
 	trial_balance_searchWindow = new Ext.Window({
 		title: 'Laporan Trial Balance',
@@ -502,8 +504,8 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_trial_balance_search',
 		items: trial_balance_searchForm
 	});
-    /* End of Function */ 
-	 
+    /* End of Function */
+
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!trial_balance_searchWindow.isVisible()){
@@ -513,33 +515,33 @@ Ext.onReady(function(){
 		}
 	}
   	/* End Function */
-	
+
 	/* Function for print List Grid */
 	function trial_balance_print(){
 		var balance_tgl_awal_print_date="";
 		var balance_tgl_akhir_print_date="";
-		var win;              
-	
+		var win;
+
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true
 		});
-		
-		Ext.Ajax.request({   
+
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_trial_balance&m=get_action',
 		timeout: 3600000,
 		params: {
 			task				: "PRINT",
-		 	balance_tgl_awal	: trial_balance_DataStore.baseParams.balance_tgl_awal, 
+		 	balance_tgl_awal	: trial_balance_DataStore.baseParams.balance_tgl_awal,
 		  	balance_tgl_akhir	: trial_balance_DataStore.baseParams.balance_tgl_akhir,
 			start				: trial_balance_DataStore.baseParams.start,
 			limit				: trial_balance_DataStore.baseParams.limit,
 		  	currentlisting		: trial_balance_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -555,7 +557,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -565,39 +567,39 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});		
-		} 	                     
+			});
+		}
 		});
 	}
 	/* Enf Function */
-	
+
 	/* Function for print Export to Excel Grid */
 	function trial_balance_export_excel(){
 		var balance_tgl_awal_2excel_date="";
 		var balance_tgl_akhir_2excel_date="";
-		
-		var win;              
-			
+
+		var win;
+
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true
 		});
-		
-		Ext.Ajax.request({   
+
+		Ext.Ajax.request({
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_trial_balance&m=get_action',
 		timeout: 3600000,
 		params: {
 			task				: "EXCEL",
-			balance_tgl_awal	: trial_balance_DataStore.akun_periode_awal, 
-		  	balance_tgl_akhir	: trial_balance_DataStore.akun_periode_akhir,
+			balance_tgl_awal	: trial_balance_DataStore.balance_tgl_awal,
+		  	balance_tgl_akhir	: trial_balance_DataStore.balance_tgl_akhir,
 			start				: trial_balance_DataStore.baseParams.start,
 			limit				: trial_balance_DataStore.baseParams.limit,
 		  	currentlisting		: trial_balance_DataStore.baseParams.task // this tells us if we are searching or not
-		}, 
-		success: function(response){              
+		},
+		success: function(response){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
@@ -613,7 +615,7 @@ Ext.onReady(function(){
 					icon: Ext.MessageBox.WARNING
 				});
 				break;
-		  	}  
+		  	}
 		},
 		failure: function(response){
 		  	var result=response.responseText;
@@ -623,8 +625,8 @@ Ext.onReady(function(){
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.ERROR
-			});    
-		} 	                     
+			});
+		}
 		});
 	}
 	/*End of Function */
@@ -637,11 +639,11 @@ Ext.onReady(function(){
 		   wait:true
 		});
 	});
-	
+
 	trial_balance_DataStore.on('load',function(){
 		Ext.MessageBox.hide();
 	});
-	
+
 });
 	</script>
 <body>
