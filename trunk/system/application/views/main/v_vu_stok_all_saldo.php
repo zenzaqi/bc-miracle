@@ -886,7 +886,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		width: 100,
         //endDateField: 'stok_tglakhirField'
-		value: today
+		value: firstday
 	});
 	
 	stok_tanggal_endSearchField= new Ext.form.DateField({
