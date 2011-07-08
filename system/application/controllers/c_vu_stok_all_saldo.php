@@ -59,7 +59,14 @@ class C_vu_stok_all_saldo extends Controller {
 		$tanggal_end =  (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$satuan = isset($_POST['satuan']) ? @$_POST['satuan'] : @$_GET['satuan'];
 
-		$result=$this->m_vu_stok_all_saldo->get_detail_stok($satuan, $tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$result=$this->m_vu_stok_all_saldo->get_detail_stok($tgl_awal,$periode,$satuan, $tanggal_start,$tanggal_end,$produk_id,$query,$start,$end);
 		echo $result;
 	}
 	
