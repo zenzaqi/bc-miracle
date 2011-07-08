@@ -60,6 +60,8 @@ var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
 var firstday=(new Date().format('Y-m'))+'-01';
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 /* declare variable here for Field*/
 var produk_idField;
 var produk_namaField;
@@ -71,6 +73,17 @@ var produk_namaSearchField;
 var satuan_idSearchField;
 var satuan_namaSearchField;
 var stok_saldoSearchField;
+
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+
+?>
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -385,6 +398,9 @@ Ext.onReady(function(){
 		var tanggal_end_search="";
 		var opsi_satuan_search='default';
 		var gudang_search=null;
+		var kartu_stok_bulan=null;
+		var kartu_stok_tahun=null;
+		var kartu_stok_periode=null;
 		
 		
 		
@@ -411,13 +427,53 @@ Ext.onReady(function(){
 				}
 			});
 		
+			if(kartu_stok_bulanField.getValue()!==null){kartu_stok_bulan=kartu_stok_bulanField.getValue();}
+			if(kartu_stok_tahunField.getValue()!==null){kartu_stok_tahun=kartu_stok_tahunField.getValue();}
+			
+			if(kartu_stok_opsitglField.getValue()==true){
+				kartu_stok_periode='tanggal';
+			}else if(kartu_stok_opsiblnField.getValue()==true){
+				if (kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='Januari'
+				}else if(kartu_stok_bulanField.getValue() == '02') {
+					nama_bulan='Februari'
+				}else if(kartu_stok_bulanField.getValue() == '03') {
+					nama_bulan='Maret'
+				}else if(kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='April'
+				}else if(kartu_stok_bulanField.getValue() == '05') {
+					nama_bulan='Mei'
+				}else if(kartu_stok_bulanField.getValue() == '06') {
+					nama_bulan='Juni'
+				}else if(kartu_stok_bulanField.getValue() == '07') {
+					nama_bulan='Juli'
+				}else if(kartu_stok_bulanField.getValue() == '08') {
+					nama_bulan='Agustus'
+				}else if(kartu_stok_bulanField.getValue() == '09') {
+					nama_bulan='September'
+				}else if(kartu_stok_bulanField.getValue() == '10') {
+					nama_bulan='Oktober'
+				}else if(kartu_stok_bulanField.getValue() == '11') {
+					nama_bulan='November'
+				}else if(kartu_stok_bulanField.getValue() == '12') {
+					nama_bulan='Desember'
+				}
+				
+				kartu_stok_periode='bulan';
+			}else{
+				kartu_stok_periode='all';
+			}
+			
 			kartu_stok_DataStore.baseParams = {
 				task			: 	'SEARCH',
 				produk_id		:	produk_nama_search, 
 				tanggal_start	:	tanggal_start_search, 
 				tanggal_end		:	tanggal_end_search,
 				opsi_satuan		: 	opsi_satuan_search,
-				gudang			: 	gudang_search
+				gudang			: 	gudang_search,
+				bulan		: kartu_stok_bulan,
+				tahun		: kartu_stok_tahun,
+				periode		: kartu_stok_periode
 			};
 			
 			
@@ -439,7 +495,10 @@ Ext.onReady(function(){
 					tanggal_start	:	tanggal_start_search, 
 					tanggal_end		:	tanggal_end_search,
 					opsi_satuan		: 	opsi_satuan_search,
-					gudang			: 	gudang_search 
+					gudang			: 	gudang_search,
+					bulan		: kartu_stok_bulan,
+					tahun		: kartu_stok_tahun,
+					periode		: kartu_stok_periode					
 				},
 				success:function(response){
 					
@@ -454,14 +513,20 @@ Ext.onReady(function(){
 								tanggal_start	:	tanggal_start_search, 
 								tanggal_end		:	tanggal_end_search,
 								opsi_satuan		: 	opsi_satuan_search,
-								gudang			: 	gudang_search
+								gudang			: 	gudang_search,
+								bulan		: kartu_stok_bulan,
+								tahun		: kartu_stok_tahun,
+								periode		: kartu_stok_periode
 							};
 							
 							kartu_stok_resume_DataStore.baseParams={
 								produk_id		:	produk_nama_search, 
 								tanggal_start	:	tanggal_start_search, 
 								tanggal_end		:	tanggal_end_search,
-								gudang			: 	gudang_search
+								gudang			: 	gudang_search,
+								bulan		: kartu_stok_bulan,
+								tahun		: kartu_stok_tahun,
+								periode		: kartu_stok_periode
 							};
 							kartu_stok_awal_DataStore.load({
 								callback: function(r,opt,success){
@@ -598,8 +663,128 @@ Ext.onReady(function(){
 	
 	});
 	
+	/////tgl n bulan
+	kartu_stok_opsitglField=new Ext.form.Radio({
+		id:'kartu_stok_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
 	
-	kartu_stok_tanggal_startSearchField=new Ext.form.DateField({
+	kartu_stok_opsiblnField=new Ext.form.Radio({
+		id:'kartu_stok_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	kartu_stok_tanggal_startSearchField= new Ext.form.DateField({
+		id: 'kartu_stok_tanggal_startSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'kartu_stok_tanggal_startSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'stok_tglakhirField'
+		value: firstday
+	});
+	
+	kartu_stok_tanggal_endSearchField= new Ext.form.DateField({
+		id: 'kartu_stok_tanggal_endSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'kartu_stok_tanggal_endSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'stok_tglawalField',
+		value: today
+	});
+	
+	kartu_stok_bulanField=new Ext.form.ComboBox({
+		id:'kartu_stok_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	kartu_stok_tahunField=new Ext.form.ComboBox({
+		id:'kartu_stok_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	var kartu_stok_opsiperiodeField=new Ext.form.FieldSet({
+		id:'kartu_stok_opsiperiodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[kartu_stok_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[kartu_stok_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[kartu_stok_tanggal_startSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[kartu_stok_tanggal_endSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[kartu_stok_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[kartu_stok_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[kartu_stok_tahunField]
+					   }]
+			}]
+	});
+	//// end of tgl n bulan
+	
+	
+	/*kartu_stok_tanggal_startSearchField=new Ext.form.DateField({
 		id: 'kartu_stok_tanggal_startSearchField',
 		fieldLabel: 'Tanggal',
 		format: 'd-m-Y',
@@ -613,7 +798,7 @@ Ext.onReady(function(){
 		format: 'd-m-Y',
 		allowBlank: false,
 		value: today
-	});
+	});*/
 	
 	kartu_stok_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
@@ -642,15 +827,6 @@ Ext.onReady(function(){
 	});
 	
 	kartu_stok_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
-	
-	kartu_stok_tanggal_opsiSearchField=new Ext.form.FieldSet({
-		id:'kartu_stok_tanggal_opsiSearchField',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
-		frame: false,
-		items:[kartu_stok_tanggal_startSearchField, kartu_stok_label_tanggalField, kartu_stok_tanggal_endSearchField]
-	});
 	
 	kartu_stok_produk_opsiSearchField=new Ext.form.FieldSet({
 		id:'kartu_stok_produk_opsiSearchField',
@@ -706,7 +882,7 @@ Ext.onReady(function(){
 				columnWidth: 1,
 				layout: 'form',
 				border:false,
-				items: [kartu_stok_gudangSearchField, kartu_stok_produk_namaSearchField,kartu_stok_satuan_opsiSearchField, kartu_stok_tanggal_opsiSearchField] 
+				items: [kartu_stok_gudangSearchField, kartu_stok_produk_namaSearchField,kartu_stok_satuan_opsiSearchField, kartu_stok_opsiperiodeField] 
 			}
 			]
 		}]

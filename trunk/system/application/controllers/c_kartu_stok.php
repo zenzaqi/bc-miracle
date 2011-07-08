@@ -48,18 +48,6 @@ class C_kartu_stok extends Controller {
 		}
 	}
 	
-	/*function generate_kartu_stok(){
-		$produk_id = (integer) (isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id']);
-		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
-		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
-		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
-		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
-		
-		$result=$this->m_kartu_stok->generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
-		echo $result;
-
-	}*/
-	
 	//function fot list record
 	function generate_kartu_stok(){
 		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
@@ -71,7 +59,14 @@ class C_kartu_stok extends Controller {
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result=$this->m_kartu_stok->generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$result=$this->m_kartu_stok->generate_kartu_stok($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
 		echo '1';
 	
 	}
@@ -87,8 +82,13 @@ class C_kartu_stok extends Controller {
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result=$this->m_kartu_stok->kartu_stok_list($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
-		//$result=$this->m_kartu_stok->generate_kartu_stok($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		$result=$this->m_kartu_stok->kartu_stok_list($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
 		echo $result;
 	}
 	
@@ -102,7 +102,13 @@ class C_kartu_stok extends Controller {
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result=$this->m_kartu_stok->kartu_stok_awal($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		$result=$this->m_kartu_stok->kartu_stok_awal($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end);
 		echo $result;
 	}
 	
@@ -113,7 +119,13 @@ class C_kartu_stok extends Controller {
 		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		
-		$result = $this->m_kartu_stok->stok_resume($gudang, $produk_id, $tanggal_start,$tanggal_end);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		$result = $this->m_kartu_stok->stok_resume($tgl_awal,$periode,$gudang, $produk_id, $tanggal_start,$tanggal_end);
 		echo $result;
 		
 	}

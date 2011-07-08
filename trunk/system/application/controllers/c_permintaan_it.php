@@ -86,6 +86,58 @@ class c_permintaan_it extends Controller {
 		$result=$this->m_permintaan_it->get_user_login();
 		echo $result;
 	}
+	
+	//list detail handler action
+	
+	function  detail_catatan_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$master_id = (integer) (isset($_POST['master_id']) ? $_POST['master_id'] : $_GET['master_id']);
+		$result=$this->m_permintaan_it->detail_catatan_list($master_id,$query,$start,$end);
+		echo $result;
+	}
+	
+	//end of handler
+	
+	//add detail
+	function detail_catatan_insert(){
+		//POST variable here
+		$dcatatan_id = $_POST['dcatatan_id']; // Get our array back and translate it :
+		$array_dcatatan_id = json_decode(stripslashes($dcatatan_id));
+		
+		$dcatatan_master=trim(@$_POST["dcatatan_master"]);
+		
+		$dcatatan_tanggal = $_POST['dcatatan_tanggal']; // Get our array back and translate it :
+		$array_dcatatan_tanggal = json_decode(stripslashes($dcatatan_tanggal));
+		
+		$dcatatan_user = $_POST['dcatatan_user']; // Get our array back and translate it :
+		$array_dcatatan_user = json_decode(stripslashes($dcatatan_user));
+		
+		$dcatatan_isi = $_POST['dcatatan_isi']; // Get our array back and translate it :
+		$array_dcatatan_isi = json_decode(stripslashes($dcatatan_isi));
+		/*
+		$dpaket_jumlah = $_POST['dpaket_jumlah']; // Get our array back and translate it :
+		$array_dpaket_jumlah = json_decode(stripslashes($dpaket_jumlah));
+		
+		$dpaket_harga = $_POST['dpaket_harga']; // Get our array back and translate it :
+		$array_dpaket_harga = json_decode(stripslashes($dpaket_harga));
+		
+		$dpaket_diskon_jenis = $_POST['dpaket_diskon_jenis']; // Get our array back and translate it :
+		$array_dpaket_diskon_jenis = json_decode(stripslashes($dpaket_diskon_jenis));
+		
+		$dpaket_diskon = $_POST['dpaket_diskon']; // Get our array back and translate it :
+		$array_dpaket_diskon = json_decode(stripslashes($dpaket_diskon));
+		
+		$dpaket_sales = $_POST['dpaket_sales']; // Get our array back and translate it :
+		$array_dpaket_sales = json_decode(stripslashes($dpaket_sales));
+		
+		$cetak=trim(@$_POST['cetak']);
+		*/
+		
+		$result=$this->m_permintaan_it->detail_catatan_insert($array_dcatatan_id ,$dcatatan_master ,$array_dcatatan_tanggal, $array_dcatatan_user, $array_dcatatan_isi);
+		echo $result;
+	}
 
 	//function for update record
 	function permintaan_update(){
@@ -104,6 +156,12 @@ class c_permintaan_it extends Controller {
 		$permintaan_tipe=trim(@$_POST["permintaan_tipe"]);
 		$permintaan_tipe=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe);
 		$permintaan_tipe=str_replace("'", '"',$permintaan_tipe);
+		$permintaan_tipe2=trim(@$_POST["permintaan_tipe2"]);
+		$permintaan_tipe2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe2);
+		$permintaan_tipe2=str_replace("'", '"',$permintaan_tipe2);
+		$permintaan_tipe3=trim(@$_POST["permintaan_tipe3"]);
+		$permintaan_tipe3=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe3);
+		$permintaan_tipe3=str_replace("'", '"',$permintaan_tipe3);
 		$permintaan_judul=trim(@$_POST["permintaan_judul"]);
 		$permintaan_judul=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_judul);
 		$permintaan_judul=str_replace("'", '"',$permintaan_judul);
@@ -141,7 +199,7 @@ class c_permintaan_it extends Controller {
 		$permintaan_status=str_replace("'", '"',$permintaan_status);
 		$permintaan_tanggalselesai=trim(@$_POST["permintaan_tanggalselesai"]);
 		
-		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+		$result=$this->m_permintaan_it->permintaan_update($permintaan_id, $permintaan_client, $permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe,$permintaan_tipe2,$permintaan_tipe3 ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas, $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2 ,$permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 	
@@ -159,6 +217,12 @@ class c_permintaan_it extends Controller {
 		$permintaan_tipe=trim(@$_POST["permintaan_tipe"]);
 		$permintaan_tipe=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe);
 		$permintaan_tipe=str_replace("'", '"',$permintaan_tipe);
+		$permintaan_tipe2=trim(@$_POST["permintaan_tipe2"]);
+		$permintaan_tipe2=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe2);
+		$permintaan_tipe2=str_replace("'", '"',$permintaan_tipe2);
+		$permintaan_tipe3=trim(@$_POST["permintaan_tipe3"]);
+		$permintaan_tipe3=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_tipe3);
+		$permintaan_tipe3=str_replace("'", '"',$permintaan_tipe3);
 		$permintaan_judul=trim(@$_POST["permintaan_judul"]);
 		$permintaan_judul=str_replace("/(<\/?)(p)([^>]*>)", "",$permintaan_judul);
 		$permintaan_judul=str_replace("'", '"',$permintaan_judul);
@@ -196,7 +260,7 @@ class c_permintaan_it extends Controller {
 		$permintaan_status=str_replace("'", '"',$permintaan_status);
 		$permintaan_tanggalselesai=trim(@$_POST["permintaan_tanggalselesai"]);
 
-		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe ,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas , $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
+		$result=$this->m_permintaan_it->permintaan_create($permintaan_nama ,$permintaan_cabang ,$permintaan_tanggalmasalah ,$permintaan_tipe,$permintaan_tipe2,$permintaan_tipe3,$permintaan_judul ,$permintaan_permintaan ,$permintaan_prioritas , $permintaan_mengetahui, $permintaan_mengetahuistatus, $permintaan_mengetahuiketerangan, $permintaan_mengetahuistatus2, $permintaan_mengetahuiketerangan2, $permintaan_mengetahui2, $permintaan_penyelesaian ,$permintaan_status, $permintaan_tanggalselesai );
 		echo $result;
 	}
 
