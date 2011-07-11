@@ -552,7 +552,7 @@ class M_lap_waktu_tunggu extends Model{
 					FROM vu_tindakan where ".$periode." ".$groupby." and dtrawat_status != 'Batal' and waktu_tunggu is not null";
 					}		
 			
-			$query.=" GROUP BY tgl";
+			$query.=" GROUP BY tgl ORDER BY tgl";
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			

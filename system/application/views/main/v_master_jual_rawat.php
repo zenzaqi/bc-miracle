@@ -314,9 +314,24 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
-  
-  
-		/*Function for pengecekan _dokumen */
+
+/*Function utk ReadOnly */
+Ext.override(Ext.form.Field, {
+    setReadOnly: function(readOnly) {
+        if (readOnly == this.readOnly) {
+            return;
+        }
+        this.readOnly = readOnly;
+
+        if (readOnly) {
+            this.el.dom.setAttribute('readOnly', true);
+        } else {
+            this.el.dom.removeAttribute('readOnly');
+        }
+    }
+});	
+	
+	/*Function for pengecekan _dokumen */
 	function pengecekan_dokumen(){
 		var jrawat_tanggal_create_date = "";
 	
@@ -2010,20 +2025,12 @@ Ext.onReady(function(){
 	
 	
 	function master_jual_rawat_set_updating(){
-			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust')=='STAFF MIRACLE'){
-						jrawat_karyawanField.setDisabled(false);
-			}else {
-				jrawat_karyawanField.setDisabled(true);
-				jrawat_karyawanField.setValue(null);
-				jrawat_nikkaryawanField.setValue(null);
-			}
-			
             if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
                 jrawat_custField.setDisabled(true);
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
 				jrawat_ket_diskField.setDisabled(false);
-				//jrawat_karyawanField.setDisabled(true);
+				jrawat_karyawanField.setDisabled(true);
 				jrawat_nikkaryawanField.setDisabled(false);
 				
 				//master_cara_bayarTabPanel.setDisabled(false);
@@ -2740,6 +2747,15 @@ Ext.onReady(function(){
 			{name: 'drawat_rawat_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'drawat_rawat_du', type: 'float', mapping: 'rawat_du'},
 			{name: 'drawat_rawat_dm', type: 'float', mapping: 'rawat_dm'},
+			{name: 'drawat_rawat_dultah', type: 'float', mapping: 'rawat_dultah'},
+			{name: 'drawat_rawat_dcard', type: 'float', mapping: 'rawat_dcard'},
+			{name: 'drawat_rawat_dkolega', type: 'float', mapping: 'rawat_dkolega'},
+			{name: 'drawat_rawat_dkeluarga', type: 'float', mapping: 'rawat_dkeluarga'},
+			{name: 'drawat_rawat_downer', type: 'float', mapping: 'rawat_downer'},
+			{name: 'drawat_rawat_dgrooming', type: 'float', mapping: 'rawat_dgrooming'},
+			{name: 'drawat_rawat_dwartawan', type: 'float', mapping: 'rawat_dwartawan'},
+			{name: 'drawat_rawat_dstaffdokter', type: 'float', mapping: 'rawat_dstaffdokter'},
+			{name: 'drawat_rawat_dstaffnondokter', type: 'float', mapping: 'rawat_dstaffnondokter'},
 			{name: 'drawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
 		]),
 		sortInfo:{field: 'drawat_rawat_display', direction: "ASC"}
@@ -4889,7 +4905,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_diskonField, jrawat_cashback_cfField, jrawat_ket_diskField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayar_cfField,jrawat_hutangField,jrawat_pesanLabel,jrawat_lunasLabel] 
+				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_cashback_cfField, jrawat_ket_diskField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayar_cfField,jrawat_hutangField,jrawat_pesanLabel,jrawat_lunasLabel] 
 			}
 			]
 	
@@ -5112,11 +5128,11 @@ Ext.onReady(function(){
 			var drawat_diskon = 0;
 			var dtotal_net_field = 0;
 			if(jrawat_cust_nomemberField.getValue()!==""){
-				drawat_jenis_diskonField.setValue('DM');
+				drawat_jenis_diskonField.setValue('Member');
 				drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
 				drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
 			}else{
-				drawat_jenis_diskonField.setValue('DU');
+				drawat_jenis_diskonField.setValue('Umum');
 				drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
 				drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
 			}
@@ -5169,7 +5185,7 @@ Ext.onReady(function(){
 	var drawat_jenis_diskonField= new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Keluarga'],['Owner'],['Grooming'],['Wartawan'],['Staf Dokter'],['Staf Non Dokter']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -5185,14 +5201,54 @@ Ext.onReady(function(){
 		var drawat_diskon = 0;
 		var dtotal_net_field = 0;
 		
-		if(drawat_jenis_diskonField.getValue()=='DU'){
+		if(drawat_jenis_diskonField.getValue()=='Umum'){
 			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
 			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du);
-		}else if(drawat_jenis_diskonField.getValue()=='DM'){
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Member'){
 			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
 			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm);
-		}else{
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Ultah'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dultah;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dultah);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Card'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dcard;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dcard);
+			drawat_diskonField.setReadOnly(false);
+		}else if(drawat_jenis_diskonField.getValue()=='Kolega'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dkolega;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dkolega);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Keluarga'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dkeluarga;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dkeluarga);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Owner'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_downer;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_downer);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Grooming'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dgrooming;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dgrooming);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Wartawan'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dwartawan;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dwartawan);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Staf Dokter'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffdokter;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffdokter);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Staf Non Dokter'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffnondokter;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffnondokter);
+			drawat_diskonField.setReadOnly(true);
+		}
+		else{
 			drawat_diskonField.setValue(0);
+			drawat_diskonField.setReadOnly(true);
 		}
 		
 		dtotal_net_field = ((100-drawat_diskon)/100) * (djumlah_beli_rawat*cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_harga);
@@ -5210,17 +5266,23 @@ Ext.onReady(function(){
 	});
 	
 	var drawat_diskonField= new Ext.form.NumberField({
+		id : 'drawat_diskonField',
+		name : 'drawat_diskonField',
 		allowDecimals: false,
 		allowNegative: false,
 		blankText: '0',
 		maxLength: 3,
 		enableKeyEvents: true,
+		readOnly : true,
 		maskRe: /([0-9]+)$/
 	});
 	drawat_diskonField.on('keyup', function(){
 		var sub_total_net = ((100-drawat_diskonField.getValue())/100)*drawat_subtotalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		drawat_subtotal_netField.setValue(sub_total_net);
+		if(this.getRawValue()>25){
+			this.setRawValue(25);
+		}
 	});
 	
 
@@ -5417,6 +5479,7 @@ Ext.onReady(function(){
 	function detail_jual_rawat_add(){
 		combo_jual_rawat.setDisabled(false);
 		drawat_jumlahField.setDisabled(false);
+		drawat_diskonField.setReadOnly(true);
 		master_jual_rawat_createForm.savePrintButton.disable();
 		var edit_detail_jual_rawat= new detail_jual_rawatListEditorGrid.store.recordType({
 			drawat_id	:0,
@@ -5733,12 +5796,12 @@ Ext.onReady(function(){
 					if(jrawat_cust_nomemberField.getValue()!=""){
 						if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm!==0){
 							detail_jual_rawat_record.data.drawat_diskon=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dm;
-							detail_jual_rawat_record.data.drawat_diskon_jenis='DM';
+							detail_jual_rawat_record.data.drawat_diskon_jenis='Member';
 						}
 					}else{
 						//if(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du!==0){
 							detail_jual_rawat_record.data.drawat_diskon=cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_du;
-							detail_jual_rawat_record.data.drawat_diskon_jenis='DU';
+							detail_jual_rawat_record.data.drawat_diskon_jenis='Umum';
 						//}
 					}
 				}
@@ -6818,4 +6881,4 @@ Ext.onReady(function(){
 <!--        <div id="form_rawat_addEdit"></div>-->
     </div>
 </div>
-</body>      
+</body>

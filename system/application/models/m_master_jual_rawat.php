@@ -2511,6 +2511,15 @@ class M_master_jual_rawat extends Model{
 					,kategori_nama
 					,rawat_du
 					,rawat_dm
+					,rawat_dultah
+					,rawat_dcard
+					,rawat_dkolega
+					,rawat_dkeluarga
+					,rawat_downer
+					,rawat_dgrooming
+					,rawat_dwartawan
+					,rawat_dstaffdokter
+					,rawat_dstaffnondokter
 					,rawat_nama
 				FROM perawatan
 					LEFT JOIN produk_group ON(rawat_group=group_id)
@@ -2524,6 +2533,15 @@ class M_master_jual_rawat extends Model{
 				,kategori_nama
 				,rawat_du
 				,rawat_dm
+				,rawat_dultah
+				,rawat_dcard
+				,rawat_dkolega
+				,rawat_dkeluarga
+				,rawat_downer
+				,rawat_dgrooming
+				,rawat_dwartawan
+				,rawat_dstaffdokter
+				,rawat_dstaffnondokter
 				,rawat_nama
 			FROM perawatan
 				LEFT JOIN produk_group ON(rawat_group=group_id)
