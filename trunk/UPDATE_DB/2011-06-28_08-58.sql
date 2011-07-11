@@ -1,4 +1,4 @@
-UPDATE `miracledb`.`menus` SET `menu_title` = 'Help Desk' WHERE `menus`.`menu_id` =383 LIMIT 1 ;
+UPDATE `menus` SET `menu_title` = 'Help Desk' WHERE `menus`.`menu_id` =383 LIMIT 1 ;
 
 CREATE TABLE IF NOT EXISTS `permintaan_it_catatan` (
   `dcatatan_id` int(11) NOT NULL AUTO_INCREMENT,
