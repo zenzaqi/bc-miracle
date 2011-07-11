@@ -192,6 +192,22 @@ Ext.onReady(function(){
   	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
   	    }
   	}
+
+/*Function utk ReadOnly */
+Ext.override(Ext.form.Field, {
+    setReadOnly: function(readOnly) {
+        if (readOnly == this.readOnly) {
+            return;
+        }
+        this.readOnly = readOnly;
+
+        if (readOnly) {
+            this.el.dom.setAttribute('readOnly', true);
+        } else {
+            this.el.dom.removeAttribute('readOnly');
+        }
+    }
+});	
 	
 	var total_sub_temp=0;
 	
@@ -4447,7 +4463,7 @@ Ext.onReady(function(){
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jproduk_jumlahField, jproduk_subTotal_cfField,jproduk_diskonField,jproduk_cashback_cfField,
+				items: [jproduk_jumlahField, jproduk_subTotal_cfField,jproduk_cashback_cfField,
 			  jproduk_ket_diskField, {xtype: 'spacer',height:10},jproduk_total_cfField, jproduk_bayar_cfField,jproduk_hutang_cfField, jproduk_pesanLabel, jproduk_lunasLabel] 
 			}
 			]
@@ -4551,6 +4567,15 @@ Ext.onReady(function(){
 			{name: 'dproduk_produk_kategori', type: 'string', mapping: 'kategori_nama'},
 			{name: 'dproduk_produk_du', type: 'float', mapping: 'produk_du'},
 			{name: 'dproduk_produk_dm', type: 'float', mapping: 'produk_dm'},
+			{name: 'dproduk_produk_dultah', type: 'float', mapping: 'produk_dultah'},
+			{name: 'dproduk_produk_dcard', type: 'float', mapping: 'produk_dcard'},
+			{name: 'dproduk_produk_dkolega', type: 'float', mapping: 'produk_dkolega'},
+			{name: 'dproduk_produk_dkeluarga', type: 'float', mapping: 'produk_dkeluarga'},
+			{name: 'dproduk_produk_downer', type: 'float', mapping: 'produk_downer'},
+			{name: 'dproduk_produk_dgrooming', type: 'float', mapping: 'produk_dgrooming'},
+			{name: 'dproduk_produk_dwartawan', type: 'float', mapping: 'produk_dwartawan'},
+			{name: 'dproduk_produk_dstaffdokter', type: 'float', mapping: 'produk_dstaffdokter'},
+			{name: 'dproduk_produk_dstaffnondokter', type: 'float', mapping: 'produk_dstaffnondokter'},
 			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
 		]),
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
@@ -4703,11 +4728,11 @@ Ext.onReady(function(){
 			var djumlah_diskon = 0;
 			//* Check no_member JIKA <>"" ==> jenis-diskon=DM /
 			if(jproduk_cust_nomemberField.getValue()!==""){
-					djenis_diskonField.setValue('DM');
+					djenis_diskonField.setValue('Member');
 					djumlah_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
 					djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm);
 			}else{
-					djenis_diskonField.setValue('DU');
+					djenis_diskonField.setValue('Umum');
 					djumlah_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
 					djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du);
 			}
@@ -4869,7 +4894,7 @@ Ext.onReady(function(){
 	var djenis_diskonField = new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['DU'],['DM'],['Promo'],['Ultah'],['Kolega'],['Bonus']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Keluarga'],['Owner'],['Grooming'],['Wartawan'],['Staf Dokter'],['Staf Non Dokter']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -4885,18 +4910,54 @@ Ext.onReady(function(){
 		var djumlah_beli_produk = djumlah_beli_produkField.getValue();
 		var j=cbo_dproduk_produkDataStore.findExact('dproduk_produk_value',combo_jual_produk.getValue(),0);
 		var djenis_diskon = 0;
-		if(djenis_diskonField.getValue()=='DU'){
+		if(djenis_diskonField.getValue()=='Umum'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du);
-		}else if(djenis_diskonField.getValue()=='DM'){
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Member'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm);
-		}else if(djenis_diskonField.getValue()=='Bonus'){
-			djenis_diskon = 100;
-			djumlah_diskonField.setValue(100);
-			//dsub_total_netField.setValue(0); //Artinya customer digratiskan dari membayar
-		}else{
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Ultah'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dultah;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dultah);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Card'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dcard;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dcard);
+			djumlah_diskonField.setReadOnly(false);
+		}else if(djenis_diskonField.getValue()=='Kolega'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkolega;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkolega);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Keluarga'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkeluarga;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkeluarga);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Owner'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_downer;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_downer);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Grooming'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dgrooming;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dgrooming);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Wartawan'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Staf Dokter'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Staf Non Dokter'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter);
+			djumlah_diskonField.setReadOnly(true);
+		}
+		else{
 			djumlah_diskonField.setValue(0);
+			djumlah_diskonField.setReadOnly(true);
 		}
 		dtotal_net_field = ((100-djenis_diskon)/100) * (djumlah_beli_produk*cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
 		dtotal_net_field = (dtotal_net_field>0?Math.round(dtotal_net_field):0);
@@ -4905,16 +4966,22 @@ Ext.onReady(function(){
 	});
 	
 	var djumlah_diskonField = new Ext.form.NumberField({
+		id : 'djumlah_diskonField',
+		name : 'djumlah_diskonField',
 		allowDecimals: false,
 		allowNegative: false,
 		maxLength: 3,
 		enableKeyEvents: true,
+		readOnly : true,
 		maskRe: /([0-9]+)$/
 	});
 	djumlah_diskonField.on('keyup', function(){
 		var sub_total_net = ((100-djumlah_diskonField.getValue())/100)*dsub_totalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		dsub_total_netField.setValue(sub_total_net);
+		if(this.getRawValue()>25){
+			this.setRawValue(25);
+		}
 	});
 	
 	var djumlah_beli_produkField = new Ext.form.NumberField({
@@ -5165,6 +5232,7 @@ Ext.onReady(function(){
 	
 	//function of detail add
 	function detail_jual_produk_add(){
+		djumlah_diskonField.setReadOnly(true);
 		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
 			dproduk_id	:0,
 			dproduk_produk	:'',

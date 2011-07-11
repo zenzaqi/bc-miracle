@@ -256,13 +256,17 @@ class M_master_jual_paket extends Model{
 //			$sql="SELECT paket_id, paket_harga, paket_kode, group_nama, kategori_nama, paket_du, paket_dm, paket_nama, paket_expired FROM paket INNER JOIN produk_group ON paket.paket_group=produk_group.group_id INNER JOIN kategori ON produk_group.group_kelompok=kategori.kategori_id WHERE kategori.kategori_jenis='paket' AND paket_aktif='Aktif'";
 			if($aktif=='yes'){
 				$sql=  "SELECT 
-						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
+						paket_id, paket_harga, paket_kode, 
+						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,
+						paket_nama, paket_expired 
 					FROM paket 
 					WHERE paket_aktif='Aktif'";
 			}else{
 				$sql=  "SELECT 
-						paket_id, paket_harga, paket_kode, paket_du, paket_dm, paket_nama, paket_expired 
-					FROM paket ";
+						paket_id, paket_harga, paket_kode, 
+						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,
+						paket_nama, paket_expired 
+					FROM paket";
 			}
 			
 			if($query<>"" && is_numeric($query)==false){

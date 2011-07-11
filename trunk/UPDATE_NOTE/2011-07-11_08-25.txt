@@ -1,0 +1,4 @@
+2011-07-11_08-25.txt
+
+--> Update Kasir, menambahkan jenis diskon pada detail list item menjadi (Tanpa Diskon, Umum, Member, Ultah, Card, Kolega, Owner, Grooming, dan Staff)
+serta menghapus field Disk Tambahan. 
