@@ -188,7 +188,12 @@ Ext.onReady(function(){
   	/* Function for Identify of Window Column Model */
 	//Tampilkan di grid
 	top_spenderColumnModel = new Ext.grid.ColumnModel(
-		[
+		[{
+			align : 'Left',
+			header: '<div align="center">' + 'No' + '</div>',
+			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
+			width: 30,
+		},
 		{
 			header: '<div align="center">' + 'No Customer' + '</div>',
 			dataIndex: 'cust_no',
@@ -200,7 +205,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Nama Customer' + '</div>',
 			dataIndex: 'customer_nama',
-			width: 300,//185,	//210,
+			width: 280,//185,	//210,
 			sortable: true,
 			readOnly : true,
 		}, 
@@ -262,6 +267,11 @@ Ext.onReady(function(){
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
+		},'-',{
+			text: 'Export Excel',
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: tindakan_medisexport_excel
 		}
 		]
 	});
@@ -316,19 +326,12 @@ Ext.onReady(function(){
 	});
 
 	/* Identify  jumlah Combo*/
-	jumlah_top_Field= new Ext.form.ComboBox({
+	jumlah_top_Field= new Ext.form.TextField({
 		id: 'jumlah_top_Field',
 		fieldLabel: 'Top Rank',
-		store:new Ext.data.SimpleStore({
-			fields:['jumlah_value', 'jumlah_display'],
-			data:[['5','5'],['10','10'],['15','15'],['20','20'],['25','25'],['30','30'],['35','35'],['40','40'],['45','45'],['50','50']]
-		}),
-		mode: 'local',
-		editable:false,
 		emptyText: '10',
-		displayField: 'jumlah_display',
-		valueField: 'jumlah_value',
 		width: 50,
+		allowBlank: false,
 		triggerAction: 'all'	
 	});
 
@@ -587,12 +590,17 @@ Ext.onReady(function(){
 	/* Function for print Export to Excel Grid */
 	function tindakan_medisexport_excel(){
 		var searchquery = "";
-		var tindakan_dokter_2excel=null;
-		//var tindakan_perawatan_2excel=null;
+		var trawat_tgl_start_app_excel=null;
+		var trawat_tgl_end_app_excel=null;
+		var jenis_top_Field_excel=null;
+		var jumlah_top_Field_excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(top_spenderDataStore.baseParams.query!==null){searchquery = top_spenderDataStore.baseParams.query;}
-		if(top_spenderDataStore.baseParams.trawat_dokter!==null){tindakan_dokter_2excel = top_spenderDataStore.baseParams.trawat_dokter;}
+		if(top_spenderDataStore.baseParams.trawat_tglapp_start!==null){trawat_tgl_start_app_excel = top_spenderDataStore.baseParams.trawat_tglapp_start;}
+		if(top_spenderDataStore.baseParams.trawat_tglapp_end!==null){trawat_tgl_end_app_excel = top_spenderDataStore.baseParams.trawat_tglapp_end;}
+		if(top_spenderDataStore.baseParams.top_jenis!==null){jenis_top_Field_excel = top_spenderDataStore.baseParams.top_jenis;}
+		if(top_spenderDataStore.baseParams.top_jumlah!==null){jumlah_top_Field_excel = top_spenderDataStore.baseParams.top_jumlah;}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -601,8 +609,11 @@ Ext.onReady(function(){
 			task: "EXCEL",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_dokter : tindakan_dokter_2excel,
-		  	currentlisting: top_spenderDataStore.baseParams.task // this tells us if we are searching or not
+			trawat_tglapp_start	: 	trawat_tgl_start_app_excel,
+			trawat_tglapp_end	: 	trawat_tgl_end_app_excel,
+			top_jenis			:	jenis_top_Field_excel,
+			top_jumlah			:	jumlah_top_Field_excel,
+		  	currentlisting		: 	top_spenderDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
