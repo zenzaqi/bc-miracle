@@ -144,13 +144,26 @@ class C_report_top_spender extends Controller {
 	function tindakan_export_excel(){
 		//POST varibale here
 		$trawat_id=trim(@$_POST["trawat_id"]);
-		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		//$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+
+		//$trawat_dokter=trim(@$_POST["trawat_dokter"]);
+		$top_jenis=trim(@$_POST["top_jenis"]);
+		$top_jumlah=trim(@$_POST["top_jumlah"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_report_top_spender->tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
-		
-		to_excel($query,"tindakan"); 
+		$query = $this->m_report_top_spender->tindakan_export_excel($trawat_id, $trawat_tglapp_start ,$trawat_tglapp_end, $top_jenis ,$top_jumlah ,$option,$filter);
+
+		to_excel($query,"top_spender"); 
 		echo '1';
 			
 	}

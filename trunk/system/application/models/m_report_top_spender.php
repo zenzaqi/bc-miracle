@@ -77,17 +77,17 @@ class M_report_top_spender extends Model{
 				if($trawat_id!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end=='')
 				{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_rawat.jrawat_tanggal='".$trawat_tglapp_start."' AND master_jual_rawat.jrawat_stat_dok <> 'Batal'";
+					$query.= " master_jual_rawat.jrawat_tanggal='".$trawat_tglapp_start."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
 				}
 				$query.=" GROUP BY master_jual_rawat.jrawat_cust ORDER BY SUM(master_jual_rawat.jrawat_bayar) DESC";
 			}
@@ -99,15 +99,15 @@ class M_report_top_spender extends Model{
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_produk.jproduk_tanggal='".$trawat_tglapp_start."' AND master_jual_produk.jproduk_stat_dok <> 'Batal'";
+					$query.= " master_jual_produk.jproduk_tanggal='".$trawat_tglapp_start."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
 				}
 				$query.=" GROUP BY master_jual_produk.jproduk_cust ORDER BY SUM(master_jual_produk.jproduk_bayar) DESC";
 			}
@@ -119,15 +119,15 @@ class M_report_top_spender extends Model{
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."' AND master_jual_paket.jpaket_stat_dok <> 'Batal'";
+					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
 				}
 				$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
 			}
@@ -139,15 +139,15 @@ class M_report_top_spender extends Model{
 			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur' ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur' ";
 				};
 			
 				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
 				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cetak_kwitansi.kwitansi_tanggal ='".$trawat_tglapp_start."' AND cetak_kwitansi.kwitansi_status <> 'Batal' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+					$query.= " cetak_kwitansi.kwitansi_tanggal ='".$trawat_tglapp_start."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
 				}
 				$query.=" GROUP BY cetak_kwitansi.kwitansi_cust ORDER BY SUM(cetak_kwitansi.kwitansi_nilai) DESC";
 			}
@@ -157,19 +157,19 @@ class M_report_top_spender extends Model{
 					FROM
 					(
 						(	
-							SELECT paket.jpaket_cust AS customer, paket.jpaket_bayar AS total  FROM master_jual_paket AS paket WHERE paket.jpaket_bayar IS NOT NULL AND (paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND paket.jpaket_stat_dok <> 'Batal' ORDER BY paket.jpaket_bayar DESC 
+							SELECT paket.jpaket_cust AS customer, paket.jpaket_bayar AS total  FROM master_jual_paket AS paket WHERE paket.jpaket_bayar IS NOT NULL AND (paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND paket.jpaket_stat_dok = 'Tertutup' ORDER BY paket.jpaket_bayar DESC 
 						) 
 						UNION
 						(
-							SELECT produk.jproduk_cust AS customer, produk.jproduk_bayar AS total  FROM master_jual_produk AS produk WHERE produk.jproduk_bayar IS NOT NULL AND (produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND produk.jproduk_stat_dok <> 'Batal' ORDER BY produk.jproduk_bayar DESC
+							SELECT produk.jproduk_cust AS customer, produk.jproduk_bayar AS total  FROM master_jual_produk AS produk WHERE produk.jproduk_bayar IS NOT NULL AND (produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND produk.jproduk_stat_dok = 'Tertutup' ORDER BY produk.jproduk_bayar DESC
 						) 
 						UNION	
 						(
-							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND rawat.jrawat_stat_dok <> 'Batal' ORDER BY rawat.jrawat_bayar DESC
+							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND rawat.jrawat_stat_dok = 'Tertutup' ORDER BY rawat.jrawat_bayar DESC
 						)
 						UNION	
 						(
-							SELECT kwitansi.kwitansi_cust AS customer, kwitansi.kwitansi_nilai AS total  FROM cetak_kwitansi AS kwitansi WHERE kwitansi.kwitansi_nilai IS NOT NULL AND (kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND kwitansi.kwitansi_status <> 'Batal' AND kwitansi.kwitansi_cara <> 'Retur' ORDER BY kwitansi.kwitansi_nilai DESC
+							SELECT kwitansi.kwitansi_cust AS customer, kwitansi.kwitansi_nilai AS total  FROM cetak_kwitansi AS kwitansi WHERE kwitansi.kwitansi_nilai IS NOT NULL AND (kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND kwitansi.kwitansi_status = 'Tertutup' AND kwitansi.kwitansi_cara <> 'Retur' ORDER BY kwitansi.kwitansi_nilai DESC
 						)
 					)AS table_union
 					LEFT OUTER JOIN vu_customer
@@ -224,34 +224,131 @@ class M_report_top_spender extends Model{
 		}
 		
 		//function  for export to excel
-		function tindakan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter){
+		function tindakan_export_excel($trawat_id, $trawat_tglapp_start ,$trawat_tglapp_end, $top_jenis ,$top_jumlah ,$option,$filter){
 			//full query
-			$query="select k.karyawan_username, p.rawat_nama, count(p.rawat_nama) as Jumlah_rawat, p.rawat_kredit, p.rawat_kredit*count(p.rawat_nama) as Total_kredit from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan";
 			
-			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (trawat_id LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
-			} else if($option=='SEARCH'){
+			if ($top_jenis == '')
+				$top_jenis = 'Semua';
+			if ($top_jumlah == '')
+				$top_jumlah = '10';
+			
+			if ($top_jenis == 'Perawatan')
+			{
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.cust_alamat
+						FROM master_jual_rawat LEFT OUTER JOIN vu_customer
+						ON master_jual_rawat.jrawat_cust = vu_customer.cust_id";
+			
+				if($trawat_id!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
+				};
+			
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end=='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_rawat.jrawat_tanggal='".$trawat_tglapp_start."' AND master_jual_rawat.jrawat_stat_dok = 'Tertutup'";
+				}
+				$query.=" GROUP BY master_jual_rawat.jrawat_cust ORDER BY SUM(master_jual_rawat.jrawat_bayar) DESC";
+			}
+			else if ($top_jenis == 'Produk')
+			{
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.cust_alamat
+						FROM master_jual_produk LEFT OUTER JOIN vu_customer
+						ON master_jual_produk.jproduk_cust = vu_customer.cust_id";
+			
 				if($trawat_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_id LIKE '%".$trawat_id."%'";
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
 				};
-				if($trawat_dokter!=''){
+			
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " karyawan_username LIKE '%".$trawat_dokter."%'";
-				};
-				/*if($rawat_nama!=''){
+					$query.= " master_jual_produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " rawat_nama LIKE '%".$rawat_nama."%'";
-				};*/
-				//$query.=" p.rawat_id is not null";
-				$query.=" group by k.karyawan_username, p.rawat_nama";
-				$result = $this->db->query($query);
-				
-				
-				
+					$query.= " master_jual_produk.jproduk_tanggal='".$trawat_tglapp_start."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
+				}
+				$query.=" GROUP BY master_jual_produk.jproduk_cust ORDER BY SUM(master_jual_produk.jproduk_bayar) DESC";
 			}
+			else if ($top_jenis == 'Paket')
+			{
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.cust_alamat
+						FROM master_jual_paket LEFT OUTER JOIN vu_customer
+						ON master_jual_paket.jpaket_cust = vu_customer.cust_id";
+			
+				if($trawat_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
+				};
+			
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " master_jual_paket.jpaket_tanggal='".$trawat_tglapp_start."' AND master_jual_paket.jpaket_stat_dok = 'Tertutup'";
+				}
+				$query.=" GROUP BY master_jual_paket.jpaket_cust ORDER BY SUM(master_jual_paket.jpaket_bayar) DESC";
+			}
+			else if ($top_jenis == 'Kuitansi')
+			{
+				$query = "SELECT vu_customer.cust_no, vu_customer.cust_nama, vu_customer.cust_alamat
+						FROM cetak_kwitansi LEFT OUTER JOIN vu_customer
+						ON cetak_kwitansi.kwitansi_cust = vu_customer.cust_id";
+			
+				if($trawat_id!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur' ";
+				};
+			
+				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+				}else if($trawat_tglapp_start!='' && $trawat_tglapp_end==''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cetak_kwitansi.kwitansi_tanggal ='".$trawat_tglapp_start."' AND cetak_kwitansi.kwitansi_status = 'Tertutup' AND cetak_kwitansi.kwitansi_cara <> 'Retur'";
+				}
+				$query.=" GROUP BY cetak_kwitansi.kwitansi_cust ORDER BY SUM(cetak_kwitansi.kwitansi_nilai) DESC";
+			}
+			else if ($top_jenis == 'Semua')
+			{
+				$query = "SELECT  vu_customer.cust_no,vu_customer.cust_nama, vu_customer.cust_alamat
+					FROM
+					(
+						(	
+							SELECT paket.jpaket_cust AS customer, paket.jpaket_bayar AS total  FROM master_jual_paket AS paket WHERE paket.jpaket_bayar IS NOT NULL AND (paket.jpaket_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND paket.jpaket_stat_dok = 'Tertutup' ORDER BY paket.jpaket_bayar DESC 
+						) 
+						UNION
+						(
+							SELECT produk.jproduk_cust AS customer, produk.jproduk_bayar AS total  FROM master_jual_produk AS produk WHERE produk.jproduk_bayar IS NOT NULL AND (produk.jproduk_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND produk.jproduk_stat_dok = 'Tertutup' ORDER BY produk.jproduk_bayar DESC
+						) 
+						UNION	
+						(
+							SELECT rawat.jrawat_cust AS customer, rawat.jrawat_bayar AS total  FROM master_jual_rawat AS rawat WHERE rawat.jrawat_bayar IS NOT NULL AND (rawat.jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND rawat.jrawat_stat_dok = 'Tertutup' ORDER BY rawat.jrawat_bayar DESC
+						)
+						UNION	
+						(
+							SELECT kwitansi.kwitansi_cust AS customer, kwitansi.kwitansi_nilai AS total  FROM cetak_kwitansi AS kwitansi WHERE kwitansi.kwitansi_nilai IS NOT NULL AND (kwitansi.kwitansi_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') AND kwitansi.kwitansi_status = 'Tertutup' AND kwitansi.kwitansi_cara <> 'Retur' ORDER BY kwitansi.kwitansi_nilai DESC
+						)
+					)AS table_union
+					LEFT OUTER JOIN vu_customer
+					ON vu_customer.cust_id = customer
+					GROUP BY vu_customer.cust_nama
+					ORDER BY SUM(total) DESC";
+		
+			}
+			$start = 0;
+			$end = $top_jumlah;
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);    
 			return $result;
 		}
 		
