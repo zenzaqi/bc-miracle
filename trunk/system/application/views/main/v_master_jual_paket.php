@@ -3943,7 +3943,7 @@ Ext.override(Ext.form.Field, {
 	var dpaket_jenisdiskonField= new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Keluarga'],['Owner'],['Grooming'],['Wartawan'],['Staf Dokter'],['Staf Non Dokter']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -3994,7 +3994,7 @@ Ext.override(Ext.form.Field, {
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dwartawan;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dwartawan);
 			dpaket_jumlahdiskonField.setReadOnly(true);
-		}else if(dpaket_jenisdiskonField.getValue()=='Staf Dokter'){
+		}else if(dpaket_jenisdiskonField.getValue()=='Staff'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffdokter;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffdokter);
 			dpaket_jumlahdiskonField.setReadOnly(true);
@@ -4026,7 +4026,7 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-dpaket_jumlahdiskonField.getValue())/100)*dpaket_subtotalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		dpaket_subtotalnetField.setValue(sub_total_net);
-		if(this.getRawValue()>25){
+		if(this.getRawValue()>25 && dpaket_jenisdiskonField.getValue()=='Card'){
 			this.setRawValue(25);
 		}
 	});

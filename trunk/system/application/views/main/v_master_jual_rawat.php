@@ -249,7 +249,6 @@ function jrawat_cetak_print_only(cetak_jrawat_id,customer_id,tanggal){
 	});
 }
 
-
 function apaket_cetak(cust_id ,tanggal_ambil){
 	//mencetak pengambilan paket saja dari customer di tanggal yang dipilih pada LIST
 	Ext.Ajax.request({   
@@ -5185,7 +5184,7 @@ Ext.override(Ext.form.Field, {
 	var drawat_jenis_diskonField= new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Keluarga'],['Owner'],['Grooming'],['Wartawan'],['Staf Dokter'],['Staf Non Dokter']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -5237,7 +5236,7 @@ Ext.override(Ext.form.Field, {
 			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dwartawan;
 			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dwartawan);
 			drawat_diskonField.setReadOnly(true);
-		}else if(drawat_jenis_diskonField.getValue()=='Staf Dokter'){
+		}else if(drawat_jenis_diskonField.getValue()=='Staff'){
 			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffdokter;
 			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffdokter);
 			drawat_diskonField.setReadOnly(true);
@@ -5280,7 +5279,7 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-drawat_diskonField.getValue())/100)*drawat_subtotalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		drawat_subtotal_netField.setValue(sub_total_net);
-		if(this.getRawValue()>25){
+		if(this.getRawValue()>25 && drawat_jenis_diskonField.getValue()=='Card'){
 			this.setRawValue(25);
 		}
 	});
