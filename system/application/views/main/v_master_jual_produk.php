@@ -4894,7 +4894,7 @@ Ext.override(Ext.form.Field, {
 	var djenis_diskonField = new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Keluarga'],['Owner'],['Grooming'],['Wartawan'],['Staf Dokter'],['Staf Non Dokter']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -4946,7 +4946,7 @@ Ext.override(Ext.form.Field, {
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan);
 			djumlah_diskonField.setReadOnly(true);
-		}else if(djenis_diskonField.getValue()=='Staf Dokter'){
+		}else if(djenis_diskonField.getValue()=='Staff'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter);
 			djumlah_diskonField.setReadOnly(true);
@@ -4979,7 +4979,7 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-djumlah_diskonField.getValue())/100)*dsub_totalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		dsub_total_netField.setValue(sub_total_net);
-		if(this.getRawValue()>25){
+		if(this.getRawValue()>25 && djenis_diskonField.getValue()=='Card'){
 			this.setRawValue(25);
 		}
 	});
