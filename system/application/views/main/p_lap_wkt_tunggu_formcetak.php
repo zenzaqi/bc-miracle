@@ -21,8 +21,8 @@ html,body,table,tr,td{
 	<th scope='col'>Tanggal</th> 
 	<th scope='col'>Jml Cust <=</th> 
 	<th scope='col'>Rata2 Waktu <=</th> 
-	<th scope='col'>Jml Cust >=</th> 
-	<th scope='col'>Rata2 Waktu >=</th>
+	<th scope='col'>Jml Cust ></th> 
+	<th scope='col'>Rata2 Waktu ></th>
 	<th scope='col'>Total Cust</th> 
 	<th scope='col'>Rata2 Waktu Tot</th> 
 </tr> 
