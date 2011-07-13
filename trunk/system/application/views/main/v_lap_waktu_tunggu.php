@@ -168,8 +168,8 @@ Ext.onReady(function(){
 			{name: 'wkt_tunggu_lbh', type: 'string', mapping: 'wkt_tunggu_lbh'},
 			{name: 'rata_total_wkt_tunggu', type: 'string', mapping: 'rata_total_wkt_tunggu'},
 			{name: 'tot_cust', type: 'int', mapping: 'tot_cust'},
-		])
-		//sortInfo:{field: 'tgl_tindakan', direction: "DESC"}
+		])//,
+		//sortInfo:{field: 'tgl', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -206,14 +206,14 @@ Ext.onReady(function(){
 		},
 		{
 			align : 'center',
-			header: '<div align="center">' + 'Jml Cust >=' + '</div>',
+			header: '<div align="center">' + 'Jml Cust >' + '</div>',
 			dataIndex: 'jum_cust_lbh',
 			width: 5,
 			sortable: true
 		}, 
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rata-rata Waktu >=' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu >' + '</div>',
 			dataIndex: 'wkt_tunggu_lbh',
 			width: 10,	//55,
 			sortable: true
@@ -335,14 +335,14 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Jml Cust >=' + '</div>',
+			header: '<div align="center">' + 'Jml Cust >' + '</div>',
 			dataIndex: 'avg_cust_lbh',
 			width: 5,	//55,
 			sortable: true
 		},
 		{	
 			align : 'center',
-			header: '<div align="center">' + 'Rata-rata Waktu >=' + '</div>',
+			header: '<div align="center">' + 'Rata-rata Waktu >' + '</div>',
 			dataIndex: 'avg_waktu_lbh',
 			width: 10,	//55,
 			sortable: true
