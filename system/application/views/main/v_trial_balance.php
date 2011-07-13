@@ -593,8 +593,8 @@ Ext.onReady(function(){
 		timeout: 3600000,
 		params: {
 			task				: "EXCEL",
-			balance_tgl_awal	: trial_balance_DataStore.balance_tgl_awal,
-		  	balance_tgl_akhir	: trial_balance_DataStore.balance_tgl_akhir,
+			balance_tgl_awal	: trial_balance_DataStore.baseParams.balance_tgl_awal,
+		  	balance_tgl_akhir	: trial_balance_DataStore.baseParams.balance_tgl_akhir,
 			start				: trial_balance_DataStore.baseParams.start,
 			limit				: trial_balance_DataStore.baseParams.limit,
 		  	currentlisting		: trial_balance_DataStore.baseParams.task // this tells us if we are searching or not
