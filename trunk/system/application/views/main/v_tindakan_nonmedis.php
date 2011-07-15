@@ -747,7 +747,10 @@ Ext.onReady(function(){
 			{name: 'dapaket_jpaket', type: 'int', mapping: 'dpaket_master'},
 			{name: 'dapaket_paket', type: 'int', mapping: 'dpaket_paket'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'dtrawat_edit'},
-			{name: 'dtrawat_jumlah', type: 'int', mapping: 'jumlah'}
+			{name: 'dtrawat_jumlah', type: 'int', mapping: 'jumlah'},
+			{name: 'dtrawat_jam_siap', type: 'string', mapping: 'dtrawat_jam_siap'},
+			{name: 'dtrawat_jam_selesai', type: 'string', mapping: 'dtrawat_jam_selesai'},
+			{name: 'est_jam_selesai', type: 'string', mapping: 'est_jam_selesai'}
 		])/*,
 		sortInfo:{field: 'dtrawat_id', direction: "DESC"}*/
 	});
@@ -947,17 +950,6 @@ Ext.onReady(function(){
 				anchor: '95%'
 			})
 			<?php } ?>
-		}, 
-		
-		{
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
-			header: '<div align="center">' + 'Ambil Paket' + '</div>',
-			dataIndex: 'paket_nama',
-			width: 150,	//210,
-			sortable: true,
-			editor : nonmedis_combo_list_paket
-			<?php } ?>
-			
 		},
 		
 		{
@@ -974,24 +966,6 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})
 		},
-		
-		/*
-		{
-			xtype: 'booleancolumn',
-			header: 'Ambil Paket',
-			dataIndex: 'dtrawat_ambil_paket',
-			width: 60,	//65,
-			align: 'center',
-			trueText: 'Yes',
-			falseText: 'No'
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
-			,
-			editor: {
-                xtype: 'checkbox'
-            }
-			<?php } ?>
-		},
-		*/
 		{
 			header: '<div align="center">' + 'Therapist' + '</div>',
 			dataIndex: 'dtrawat_petugas2',
@@ -1024,7 +998,10 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Jam Datang' + '</div>',
 			dataIndex: 'dtrawat_jam_datang',
 			width: 55,
-			sortable: true
+			sortable: true,
+			renderer: function(value, cell, record){
+				return '<span style="color:red;">' + value.substring(0,5) + '</span>';
+			}
 		}, 
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
@@ -1049,13 +1026,46 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })
 			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Tind' + '</div>',
+			dataIndex: 'dtrawat_jam_siap',
+			align: 'center',
+			width: 50,
+			sortable: true,
+			//hidden: true,
+			renderer: function(value, cell, record){
+				return '<span style="color:green;">' + value.substring(0,5) + '</span>';
+			}
 		}, 
+		{
+			header: '<div align="center">' + 'Est Sls' + '</div>',
+			dataIndex: 'est_jam_selesai',
+			align: 'center',
+			width: 50,
+			sortable: true,
+			//hidden: true,
+			renderer: function(value, cell, record){
+				return '<span style="color:blue;">' + value.substring(0,5) + '</span>';
+			}
+		}, 
+		{
+			header: '<div align="center">' + 'Sls' + '</div>',
+			dataIndex: 'dtrawat_jam_selesai',
+			align: 'center',
+			width: 50,
+			sortable: true,
+			//hidden: true,
+			renderer: function(value, cell, record){
+				return '<span style="color:blue;"><b>' + value.substring(0,5) + '</b></span>';
+			}
+		},  
 		{
 			header: '<div align="center">' + 'Detail Keterangan' + '</div>',
 			dataIndex: 'dtrawat_keterangan',
 			width: 180,
 			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_MEDIS'))){ ?>
 			,
 			editor: new Ext.form.TextField({
 				maxLength: 250
@@ -1070,15 +1080,16 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true
 		}, 
-		/*
 		{
-			header: '<div align="center">' + 'Info Paket' + '</div>',
-			dataIndex: 'cust_punya_paket',
-			width: 60,	//55,
-			sortable: false,
-			hidden: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_NONMEDIS'))){ ?>
+			header: '<div align="center">' + 'Ambil Paket' + '</div>',
+			dataIndex: 'paket_nama',
+			width: 150,	//210,
+			sortable: true,
+			editor : nonmedis_combo_list_paket
+			<?php } ?>
+			
 		},
-		*/
 		{
 			header: '<div align="center">' + 'Stat Kasir' + '</div>',
 			dataIndex: 'dtrawat_edit',

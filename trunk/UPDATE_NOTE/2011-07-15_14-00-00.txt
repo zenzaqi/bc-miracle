@@ -1,0 +1,17 @@
+update table karyawan
+- tambah karyawan_ktp
+- tambah karyawan_jamsostek
+- tambah karyawan_bank
+- tambah karyawan_bank_cabank
+- tambah karyawan_rekening
+- tambah karyawan_atasnama
+- tambah karyawan_agama
+
+tambah table karyawan_cuti
+tambah table karyawan_fasilitas
+tambah table karyawan_gantioff
+tambah table karyawan_jabatan
+tambah table karyawan_keluarga
+tambah table karyawan_medical
+tambah table karyawan_pendidikan
+tambah table karyawan_status

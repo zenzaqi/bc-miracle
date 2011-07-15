@@ -54,6 +54,7 @@ var karyawan_searchWindow;
 var karyawan_SelectedRow;
 var karyawan_ContextMenu;
 //declare konstant
+var today=new Date();
 var post2db = '';
 var msg = '';
 var pageS=15;
@@ -61,13 +62,21 @@ var pageS=15;
 /* declare variable here */
 var karyawan_idField;
 var karyawan_noField;
+var karyawan_noktpField;
+var karyawan_alamatktpField;
+var karyawan_agamaField;
 var karyawan_sipField;
 var karyawan_npwpField;
 var karyawan_usernameField;
+var karyawan_jmlanakField;
 var karyawan_namaField;
 var karyawan_kelaminField;
-var karyawan_pph21Field;
+//var karyawan_pph21Field;
 var karyawan_marriageField;
+var karyawan_bankField;
+var karyawan_bankcabangField;
+var karyawan_norekeningField;
+var karyawan_atasnamaField;
 var karyawan_tgllahirField;
 var karyawan_tmplahirField;
 var karyawan_alamatField;
@@ -75,20 +84,66 @@ var karyawan_kotaField;
 var karyawan_kodeposField;
 var karyawan_emailField;
 var karyawan_emiracleField;
+var karyawan_jamsostekField;
 var karyawan_keteranganField;
 var karyawan_notelpField;
 var karyawan_notelp2Field;
 var karyawan_notelp3Field;
 var karyawan_notelp4Field;
 var karyawan_cabangField;
-var karyawan_jabatanField;
-var karyawan_departemenField;
-var karyawan_golonganField;
-var karyawan_golongantxtField;
+//var karyawan_jabatanField;
+//var karyawan_departemenField;
+//var karyawan_golonganField;
+//var karyawan_golongantxtField;
 var karyawan_tglmasukField;
-var karyawan_tglbatasField;
-var karyawan_atasanField;
+//var karyawan_tglbatasField;
+//var karyawan_atasanField;
 var karyawan_aktifField;
+//for detail status kekaryawanan
+var detail_status_karyawan_ColumnModel;
+var detail_status_karyawanListEditorGrid;
+var editor_detail_status_karyawan;
+var dkaryawan_tglakhirField;
+var dkaryawan_tglawalField;
+var dkaryawan_statuskaryawanField;
+
+// for detail jabatan karyawan
+var detail_jabatan_ColumnModel;
+var detail_jabatanListEditorGrid;
+var editor_detail_jabatan_karyawan;
+
+// for detail pendidikan karyawan
+var detail_pendidikan_ColumnModel;
+var detail_pendidikanListEditorGrid;
+var editor_detail_pendidikan_karyawan;
+
+// for detail keluarga karyawan
+var detail_keluarga_ColumnModel;
+var detail_keluargaListEditorGrid;
+var editor_detail_keluarga_karyawan;
+
+// for detail cuti karyawan
+var detail_cuti_ColumnModel;
+var detail_cutiListEditorGrid;
+var editor_detail_cuti_karyawan;
+var kcuti_tglawalField;
+var kcuti_tglakhirField;
+var kcuti_jmlhariField;
+
+// for detail gantioff karyawan
+var detail_gantioff_ColumnModel;
+var detail_gantioffListEditorGrid;
+var editor_detail_gantioff_karyawan;
+
+// for detail gantioff karyawan
+var detail_medical_ColumnModel;
+var detail_medicalListEditorGrid;
+var editor_detail_medical_karyawan;
+
+// for detail keluarga karyawan
+var detail_fasilitas_ColumnModel;
+var detail_fasilitasListEditorGrid;
+var editor_detail_fasilitas_karyawan;
 
 var karyawan_idSearchField;
 var karyawan_noSearchField;
@@ -118,6 +173,16 @@ var karyawan_aktifSearchField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
+  
+  
+		Ext.util.Format.comboRenderer = function(combo){
+  		//jpaket_bankDataStore.load();
+  	    return function(value){
+  	        var record = combo.findRecord(combo.valueField, value);
+  	        return record ? record.get(combo.displayField) : combo.valueNotFoundText;
+  	    }
+  	}
+  
   
   	/* Function for Saving inLine Editing */
 	function karyawan_update(oGrid_event){
@@ -211,6 +276,7 @@ Ext.onReady(function(){
 						cbo_karyawan_departemen_DataStore.reload();
 						cbo_karyawan_golongan_DataStore.reload();
 						cbo_karyawan_jabatan_DataStore.reload();
+						cbo_karyawan_bank_DataStore.reload();
 						cbo_karyawan_atasan_DataStore.reload();
 						break;
 					default:
@@ -244,13 +310,21 @@ Ext.onReady(function(){
 		
 		var karyawan_id_create_pk=null;
 		var karyawan_no_create=null;
+		var karyawan_noktp_create=null;
+		var karyawan_alamatktp_create=null;
+		var karyawan_agama_create=null;
 		var karyawan_sip_create=null;
 		var karyawan_npwp_create=null;
 		var karyawan_username_create=null;
+		var karyawan_jmlanak_create=null;
 		var karyawan_nama_create=null;
 		var karyawan_kelamin_create=null;
-		var karyawan_pph21_create=null;
+		//var karyawan_pph21_create=null;
 		var karyawan_marriage_create=null;
+		var karyawan_bank_create=null;
+		var karyawan_bankcabang_create=null;
+		var karyawan_norekening_create=null;
+		var karyawan_atasnama_create=null;
 		var karyawan_tgllahir_create_date="";
 		var karyawan_tmplahir_create=null;
 		var karyawan_alamat_create=null;
@@ -258,30 +332,39 @@ Ext.onReady(function(){
 		var karyawan_kodepos_create=null;
 		var karyawan_email_create=null;
 		var karyawan_emiracle_create=null;
+		var karyawan_jamsostek_create=null;
 		var karyawan_keterangan_create=null;
 		var karyawan_notelp_create=null;
 		var karyawan_notelp2_create=null;
 		var karyawan_notelp3_create=null;
 		var karyawan_notelp4_create=null;
 		var karyawan_cabang_create=null;
-		var karyawan_jabatan_create=null;
-		var karyawan_departemen_create=null;
-		var karyawan_golongan_create=null;
-		var karyawan_golongantxt_create=null;
+		//var karyawan_jabatan_create=null;
+		//var karyawan_departemen_create=null;
+		//var karyawan_golongan_create=null;
+		//var karyawan_golongantxt_create=null;
 		var karyawan_tglmasuk_create_date="";
-		var karyawan_tglbatas_create_date="";
-		var karyawan_atasan_create=null;
+		//var karyawan_tglbatas_create_date="";
+		//var karyawan_atasan_create=null;
 		var karyawan_aktif_create=null;
 
 		karyawan_id_create_pk=get_pk_id();
 		if(karyawan_noField.getValue()!== null){karyawan_no_create = karyawan_noField.getValue();}
+		if(karyawan_noktpField.getValue()!== null){karyawan_noktp_create = karyawan_noktpField.getValue();}
+		if(karyawan_alamatktpField.getValue()!== null){karyawan_alamatktp_create = karyawan_alamatktpField.getValue();}
 		if(karyawan_sipField.getValue()!== null){karyawan_sip_create = karyawan_sipField.getValue();}
 		if(karyawan_npwpField.getValue()!== null){karyawan_npwp_create = karyawan_npwpField.getValue();}
 		if(karyawan_usernameField.getValue()!== null){karyawan_username_create = karyawan_usernameField.getValue();}
+		if(karyawan_jmlanakField.getValue()!== null){karyawan_jmlanak_create = karyawan_jmlanakField.getValue();}
 		if(karyawan_namaField.getValue()!== null){karyawan_nama_create = karyawan_namaField.getValue();}
 		if(karyawan_kelaminField.getValue()!== null){karyawan_kelamin_create = karyawan_kelaminField.getValue();}
-		if(karyawan_pph21Field.getValue()!== null){karyawan_pph21_create = karyawan_pph21Field.getValue();}
+		if(karyawan_agamaField.getValue()!== null){karyawan_agama_create = karyawan_agamaField.getValue();}
+		//if(karyawan_pph21Field.getValue()!== null){karyawan_pph21_create = karyawan_pph21Field.getValue();}
 		if(karyawan_marriageField.getValue()!== null){karyawan_marriage_create = karyawan_marriageField.getValue();}
+		if(karyawan_bankField.getValue()!== null){karyawan_bank_create = karyawan_bankField.getValue();}
+		if(karyawan_bankcabangField.getValue()!== null){karyawan_bankcabang_create = karyawan_bankcabangField.getValue();}
+		if(karyawan_norekeningField.getValue()!== null){karyawan_norekening_create = karyawan_norekeningField.getValue();}
+		if(karyawan_atasnamaField.getValue()!== null){karyawan_atasnama_create = karyawan_atasnamaField.getValue();}
 		if(karyawan_tgllahirField.getValue()!== ""){karyawan_tgllahir_create_date = karyawan_tgllahirField.getValue().format('Y-m-d');}
 		if(karyawan_tmplahirField.getValue()!== ""){karyawan_tmplahir_create = karyawan_tmplahirField.getValue();}
 		if(karyawan_alamatField.getValue()!== null){karyawan_alamat_create = karyawan_alamatField.getValue();}
@@ -289,19 +372,20 @@ Ext.onReady(function(){
 		if(karyawan_kodeposField.getValue()!== null){karyawan_kodepos_create = karyawan_kodeposField.getValue();}
 		if(karyawan_emailField.getValue()!== null){karyawan_email_create = karyawan_emailField.getValue();}
 		if(karyawan_emiracleField.getValue()!== null){karyawan_emiracle_create = karyawan_emiracleField.getValue();}
+		if(karyawan_jamsostekField.getValue()!== null){karyawan_jamsostek_create = karyawan_jamsostekField.getValue();}
 		if(karyawan_keteranganField.getValue()!== null){karyawan_keterangan_create = karyawan_keteranganField.getValue();}
 		if(karyawan_notelpField.getValue()!== null){karyawan_notelp_create = karyawan_notelpField.getValue();}
 		if(karyawan_notelp2Field.getValue()!== null){karyawan_notelp2_create = karyawan_notelp2Field.getValue();}
 		if(karyawan_notelp3Field.getValue()!== null){karyawan_notelp3_create = karyawan_notelp3Field.getValue();}
 		if(karyawan_notelp4Field.getValue()!== null){karyawan_notelp4_create = karyawan_notelp4Field.getValue();}
 		if(karyawan_cabangField.getValue()!== null){karyawan_cabang_create = karyawan_cabangField.getValue();}
-		if(karyawan_jabatanField.getValue()!== null){karyawan_jabatan_create = karyawan_jabatanField.getValue();}
-		if(karyawan_departemenField.getValue()!== null){karyawan_departemen_create = karyawan_departemenField.getValue();}
-		if(karyawan_golonganField.getValue()!== null){karyawan_golongan_create = karyawan_golonganField.getValue();}
-		if(karyawan_golongantxtField.getValue()!== null){karyawan_golongantxt_create = karyawan_golongantxtField.getValue();}
+		//if(karyawan_jabatanField.getValue()!== null){karyawan_jabatan_create = karyawan_jabatanField.getValue();}
+		//if(karyawan_departemenField.getValue()!== null){karyawan_departemen_create = karyawan_departemenField.getValue();}
+		//if(karyawan_golonganField.getValue()!== null){karyawan_golongan_create = karyawan_golonganField.getValue();}
+		//if(karyawan_golongantxtField.getValue()!== null){karyawan_golongantxt_create = karyawan_golongantxtField.getValue();}
 		if(karyawan_tglmasukField.getValue()!== ""){karyawan_tglmasuk_create_date = karyawan_tglmasukField.getValue().format('Y-m-d');}
-		if(karyawan_tglbatasField.getValue()!== ""){karyawan_tglbatas_create_date = karyawan_tglbatasField.getValue().format('Y-m-d');}
-		if(karyawan_atasanField.getValue()!== null){karyawan_atasan_create = karyawan_atasanField.getValue();}
+		//if(karyawan_tglbatasField.getValue()!== ""){karyawan_tglbatas_create_date = karyawan_tglbatasField.getValue().format('Y-m-d');}
+		//if(karyawan_atasanField.getValue()!== null){karyawan_atasan_create = karyawan_atasanField.getValue();}
 		if(karyawan_aktifField.getValue()!== null){karyawan_aktif_create = karyawan_aktifField.getValue();}
 
 			Ext.Ajax.request({  
@@ -309,67 +393,85 @@ Ext.onReady(function(){
 				url: 'index.php?c=c_karyawan&m=get_action',
 				params: {
 					task: post2db,
-					karyawan_id	: karyawan_id_create_pk,	
-					karyawan_no	: karyawan_no_create,
-					karyawan_sip: karyawan_sip_create,
-					karyawan_npwp	: karyawan_npwp_create,	
+					karyawan_id			: karyawan_id_create_pk,	
+					karyawan_no			: karyawan_no_create,
+					karyawan_noktp		: karyawan_noktp_create,
+					karyawan_alamatktp	: karyawan_alamatktp_create,
+					karyawan_agama		: karyawan_agama_create,
+					karyawan_sip		: karyawan_sip_create,
+					karyawan_npwp		: karyawan_npwp_create,	
 					karyawan_username	: karyawan_username_create,	
-					karyawan_nama	: karyawan_nama_create,	
+					karyawan_jmlanak	: karyawan_jmlanak_create,	
+					karyawan_nama		: karyawan_nama_create,	
 					karyawan_kelamin	: karyawan_kelamin_create,	
-					karyawan_pph21	: karyawan_pph21_create,
+					//karyawan_pph21	: karyawan_pph21_create,
 					karyawan_marriage	: karyawan_marriage_create,
+					karyawan_bank		: karyawan_bank_create,
+					karyawan_bankcabang	: karyawan_bankcabang_create,
+					karyawan_norekening	: karyawan_norekening_create,
+					karyawan_atasnama	: karyawan_atasnama_create,
 					karyawan_tgllahir	: karyawan_tgllahir_create_date,	
 					karyawan_tmplahir	: karyawan_tmplahir_create,					
-					karyawan_alamat	: karyawan_alamat_create,	
-					karyawan_kota	: karyawan_kota_create,	
+					karyawan_alamat		: karyawan_alamat_create,	
+					karyawan_kota		: karyawan_kota_create,	
 					karyawan_kodepos	: karyawan_kodepos_create,	
-					karyawan_email	: karyawan_email_create,	
+					karyawan_email		: karyawan_email_create,	
 					karyawan_emiracle	: karyawan_emiracle_create,	
+					karyawan_jamsostek	: karyawan_jamsostek_create,	
 					karyawan_keterangan	: karyawan_keterangan_create,	
-					karyawan_notelp	: karyawan_notelp_create,	
+					karyawan_notelp		: karyawan_notelp_create,	
 					karyawan_notelp2	: karyawan_notelp2_create,	
 					karyawan_notelp3	: karyawan_notelp3_create,	
 					karyawan_notelp4	: karyawan_notelp4_create,	
-					karyawan_cabang	: karyawan_cabangField.getValue(),	
-					karyawan_jabatan	: karyawan_jabatan_create,	
-					karyawan_departemen	: karyawan_departemen_create,	
-					karyawan_idgolongan	: karyawan_golongan_create,	
-					karyawan_golongantxt	: karyawan_golongantxt_create,	
+					karyawan_cabang		: karyawan_cabangField.getValue(),	
+					//karyawan_jabatan		: karyawan_jabatan_create,	
+					//karyawan_departemen	: karyawan_departemen_create,	
+					//karyawan_idgolongan	: karyawan_golongan_create,	
+					//karyawan_golongantxt	: karyawan_golongantxt_create,	
 					karyawan_tglmasuk	: karyawan_tglmasuk_create_date,	
-					karyawan_tgl_batas	: karyawan_tglbatas_create_date,					
-					karyawan_atasan	: karyawan_atasan_create,	
-					karyawan_aktif	: karyawan_aktif_create,
-					karyawan_cab_th : karyawan_cab_thField.getValue(),
-					karyawan_cab_ki : karyawan_cab_kiField.getValue(),
-					karyawan_cab_hr : karyawan_cab_hrField.getValue(),
-					karyawan_cab_tp : karyawan_cab_tpField.getValue(),
-					karyawan_cab_dps : karyawan_cab_dpsField.getValue(),
-					karyawan_cab_jkt : karyawan_cab_jktField.getValue(),
-					karyawan_cab_mta : karyawan_cab_mtaField.getValue(),
-					karyawan_cab_blpn : karyawan_cab_blpnField.getValue(),
-					karyawan_cab_kuta : karyawan_cab_kutaField.getValue(),
-					karyawan_cab_btm : karyawan_cab_btmField.getValue(),
-					karyawan_cab_mks : karyawan_cab_mksField.getValue(),
-					karyawan_cab_mdn : karyawan_cab_mdnField.getValue(),
-					karyawan_cab_lbk : karyawan_cab_lbkField.getValue(),
-					karyawan_cab_mnd : karyawan_cab_mndField.getValue(),
-					karyawan_cab_ygk : karyawan_cab_ygkField.getValue(),
-					karyawan_cab_mlg : karyawan_cab_mlgField.getValue(),
-					karyawan_cab_corp : karyawan_cab_corpField.getValue(),
-					karyawan_cab_maa : karyawan_cab_maaField.getValue(),
-					karyawan_cab_mg : karyawan_cab_mgField.getValue(),
+					//karyawan_tgl_batas	: karyawan_tglbatas_create_date,					
+					//karyawan_atasan	: karyawan_atasan_create,	
+					karyawan_aktif		: karyawan_aktif_create,
+					karyawan_cab_th 	: karyawan_cab_thField.getValue(),
+					karyawan_cab_ki 	: karyawan_cab_kiField.getValue(),
+					karyawan_cab_hr	 	: karyawan_cab_hrField.getValue(),
+					karyawan_cab_tp 	: karyawan_cab_tpField.getValue(),
+					karyawan_cab_dps 	: karyawan_cab_dpsField.getValue(),
+					karyawan_cab_jkt 	: karyawan_cab_jktField.getValue(),
+					karyawan_cab_mta 	: karyawan_cab_mtaField.getValue(),
+					karyawan_cab_blpn 	: karyawan_cab_blpnField.getValue(),
+					karyawan_cab_kuta 	: karyawan_cab_kutaField.getValue(),
+					karyawan_cab_btm 	: karyawan_cab_btmField.getValue(),
+					karyawan_cab_mks 	: karyawan_cab_mksField.getValue(),
+					karyawan_cab_mdn 	: karyawan_cab_mdnField.getValue(),
+					karyawan_cab_lbk 	: karyawan_cab_lbkField.getValue(),
+					karyawan_cab_mnd 	: karyawan_cab_mndField.getValue(),
+					karyawan_cab_ygk 	: karyawan_cab_ygkField.getValue(),
+					karyawan_cab_mlg 	: karyawan_cab_mlgField.getValue(),
+					karyawan_cab_corp 	: karyawan_cab_corpField.getValue(),
+					karyawan_cab_maa 	: karyawan_cab_maaField.getValue(),
+					karyawan_cab_mg 	: karyawan_cab_mgField.getValue(),
 					
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
+							detail_status_karyawan_insert();
+							detail_jabatan_insert();
+							detail_pendidikan_insert();
+							detail_keluarga_insert();
+							detail_cuti_insert();
+							detail_gantioff_insert();
+							detail_medical_insert();
+							detail_fasilitas_insert();
 							Ext.MessageBox.alert(post2db+' OK', 'Data karyawan berhasil disimpan');
 							karyawan_DataStore.reload();
 							cbo_karyawan_cabang_DataStore.reload();
 							cbo_karyawan_departemen_DataStore.reload();
 							cbo_karyawan_golongan_DataStore.reload();
 							cbo_karyawan_jabatan_DataStore.reload();
+							cbo_karyawan_bank_DataStore.reload();
 							cbo_karyawan_atasan_DataStore.reload();
 
 							karyawan_createWindow.hide();
@@ -422,20 +524,36 @@ Ext.onReady(function(){
 	function karyawan_reset_form(){
 		karyawan_noField.reset();
 		karyawan_noField.setValue(null);
+		karyawan_noktpField.reset();
+		karyawan_noktpField.setValue(null);
+		karyawan_alamatktpField.reset();
+		karyawan_alamatktpField.setValue(null);
+		karyawan_agamaField.reset();
+		karyawan_agamaField.setValue(null);
 		karyawan_sipField.reset();
 		karyawan_sipField.setValue(null);
 		karyawan_npwpField.reset();
 		karyawan_npwpField.setValue(null);
 		karyawan_usernameField.reset();
 		karyawan_usernameField.setValue(null);
+		karyawan_jmlanakField.reset();
+		karyawan_jmlanakField.setValue(null);
 		karyawan_namaField.reset();
 		karyawan_namaField.setValue(null);
+		karyawan_bankcabangField.reset();
+		karyawan_bankcabangField.setValue(null);
+		karyawan_norekeningField.reset();
+		karyawan_norekeningField.setValue(null);
+		karyawan_atasnamaField.reset();
+		karyawan_atasnamaField.setValue(null);
 		karyawan_kelaminField.reset();
 		karyawan_kelaminField.setValue(null);
-		karyawan_pph21Field.reset();
-		karyawan_pph21Field.setValue(null);
+		//karyawan_pph21Field.reset();
+		//karyawan_pph21Field.setValue(null);
 		karyawan_marriageField.reset();
 		karyawan_marriageField.setValue(null);
+		karyawan_bankField.reset();
+		karyawan_bankField.setValue(null);
 		karyawan_tgllahirField.reset();
 		karyawan_tgllahirField.setValue(null);
 		karyawan_tmplahirField.reset();
@@ -450,6 +568,8 @@ Ext.onReady(function(){
 		karyawan_emailField.setValue(null);
 		karyawan_emiracleField.reset();
 		karyawan_emiracleField.setValue(null);
+		karyawan_jamsostekField.reset();
+		karyawan_jamsostekField.setValue(null);
 		karyawan_keteranganField.reset();
 		karyawan_keteranganField.setValue(null);
 		karyawan_notelpField.reset();
@@ -462,21 +582,35 @@ Ext.onReady(function(){
 		karyawan_notelp4Field.setValue(null);
 		karyawan_cabangField.reset();
 		karyawan_cabangField.setValue(null);
-		karyawan_jabatanField.reset();
-		karyawan_jabatanField.setValue(null);
-		karyawan_departemenField.reset();
-		karyawan_departemenField.setValue(null);
-		karyawan_golonganField.reset();
-		karyawan_golonganField.setValue(null);
+		//karyawan_jabatanField.reset();
+		//karyawan_jabatanField.setValue(null);
+		//karyawan_departemenField.reset();
+		//karyawan_departemenField.setValue(null);
+		//karyawan_golonganField.reset();
+		//karyawan_golonganField.setValue(null);
 		karyawan_tglmasukField.reset();
 		karyawan_tglmasukField.setValue(null);
-		karyawan_tglbatasField.reset();
-		karyawan_tglbatasField.setValue(null);
-		karyawan_atasanField.reset();
-		karyawan_atasanField.setValue(null);
+		//karyawan_tglbatasField.reset();
+		//karyawan_tglbatasField.setValue(null);
+		//karyawan_atasanField.reset();
+		//karyawan_atasanField.setValue(null);
+		dkaryawan_statuskaryawanField.reset();
+		//kstatus_karyawan.setValue(null);
+		
 		karyawan_aktifField.reset();
 		karyawan_aktifField.setValue('Aktif');
 		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: -1}});
+		
+		//reset editor grid
+		status_karyawan_DataStore.load({params: {master_id:-1}});
+		jabatan_DataStore.load({params: {master_id:-1}});
+		keluarga_DataStore.load({params: {master_id:-1}});
+		pendidikan_DataStore.load({params: {master_id:-1}});
+		cuti_DataStore.load({params: {master_id:-1}});
+		gantioff_DataStore.load({params: {master_id:-1}});
+		medical_DataStore.load({params: {master_id:-1}});
+		fasilitas_DataStore.load({params: {master_id:-1}});
+		
 		karyawan_cab_thField.reset();
 		//karyawan_cab_thField.setValue(true);
 		karyawan_cab_kiField.reset();
@@ -521,13 +655,21 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function karyawan_set_form(){
 		karyawan_noField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
+		karyawan_noktpField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_ktp'));
+		karyawan_alamatktpField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_alamat_ktp'));
+		karyawan_agamaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_agama'));
 		karyawan_sipField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_sip'));
 		karyawan_npwpField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_npwp'));
 		karyawan_usernameField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_username'));
+		karyawan_jmlanakField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jmlanak'));
 		karyawan_namaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
 		karyawan_kelaminField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_kelamin'));
-		karyawan_pph21Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_pph21'));
+		//karyawan_pph21Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_pph21'));
 		karyawan_marriageField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_marriage'));
+		karyawan_bankField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_bank'));
+		karyawan_bankcabangField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_bank_cabang'));
+		karyawan_norekeningField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_rekening'));
+		karyawan_atasnamaField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasnama'));
 		karyawan_tgllahirField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgllahir'));
 		karyawan_tmplahirField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tmplahir'));
 		karyawan_alamatField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_alamat'));
@@ -535,21 +677,30 @@ Ext.onReady(function(){
 		karyawan_kodeposField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_kodepos'));
 		karyawan_emailField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_email'));
 		karyawan_emiracleField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_emiracle'));
+		karyawan_jamsostekField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jamsostek'));
 		karyawan_keteranganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_keterangan'));
 		karyawan_notelpField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp'));
 		karyawan_notelp2Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp2'));
 		karyawan_notelp3Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp3'));
 		karyawan_notelp4Field.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_notelp4'));
 		karyawan_cabangField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang'));
-		karyawan_jabatanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jabatan'));
-		karyawan_departemenField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_departemen'));
-		karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_idgolongan'));
+		//karyawan_jabatanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_jabatan'));
+		//karyawan_departemenField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_departemen'));
+		//karyawan_golonganField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_idgolongan'));
 		karyawan_tglmasukField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tglmasuk'));
-		karyawan_tglbatasField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgl_batas'));
-		karyawan_atasanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasan'));
+		//karyawan_tglbatasField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_tgl_batas'));
+		//karyawan_atasanField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_atasan'));
 		karyawan_aktifField.setValue(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_aktif'));
 		cbo_karyawan_atasan_DataStore.load({params: {karyawan_id: get_pk_id()}});
 		cbo_karyawan_cabang_DataStore.load();
+		status_karyawan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		jabatan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		keluarga_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		pendidikan_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		cuti_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		gantioff_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		medical_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
+		fasilitas_DataStore.load({params: { master_id: get_pk_id(), start:0, limit: pageS}});
 		
 		if(karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_cabang2').charAt(0)=="1")	
 			karyawan_cab_thField.setValue(true);	
@@ -653,11 +804,14 @@ Ext.onReady(function(){
 	function is_karyawan_form_valid(){
 		return ( karyawan_namaField.isValid() && 
 				karyawan_usernameField.isValid() &&  
-				//karyawan_cabangField.isValid() &&
-				karyawan_jabatanField.isValid() && 
-				karyawan_departemenField.isValid() && 
+				karyawan_cabangField.isValid() &&
+				//karyawan_jabatanField.isValid() && 
+				//karyawan_departemenField.isValid() && 
 				karyawan_kelaminField.isValid() && 
-				karyawan_marriageField.isValid() );
+				karyawan_agamaField.isValid() &&
+				karyawan_marriageField.isValid() &&
+				karyawan_tglmasukField.isValid()
+				);
 	}
   	/* End of Function */
   
@@ -667,10 +821,14 @@ Ext.onReady(function(){
 		cbo_karyawan_departemen_DataStore.reload();
 		cbo_karyawan_golongan_DataStore.reload();
 		cbo_karyawan_jabatan_DataStore.reload();
+		cbo_karyawan_bank_DataStore.reload();
 		cbo_karyawan_atasan_DataStore.reload();
 		
 		if(!karyawan_createWindow.isVisible()){
-			
+			//status_karyawan_DataStore.load({params: {master_id:0}});
+			//jabatan_DataStore.load({params: {master_id:0}});
+			//pendidikan_DataStore.load({params: {master_id:0}});
+			//keluarga_DataStore.load({params: {master_id:0}});
 			post2db='CREATE';
 			msg='created';
 			karyawan_reset_form();
@@ -704,13 +862,18 @@ Ext.onReady(function(){
 	/* Function for Update Confirm */
 	function karyawan_confirm_update(){
 		/* only one record is selected here */
+		cbo_karyawan_departemen_DataStore.load({
+				params:{
+					karyawan_id:karyawanListEditorGrid.getSelectionModel().getSelected().get('karyawan_id'),
+					query:''
+				}
+		});
+			
 		if(karyawanListEditorGrid.selModel.getCount() == 1) {
 			
 			post2db='UPDATE';
 			msg='updated';
 			karyawan_set_form();
-			
-			
 			karyawan_createWindow.show();
 		} else {
 			Ext.MessageBox.show({
@@ -746,6 +909,7 @@ Ext.onReady(function(){
 							cbo_karyawan_departemen_DataStore.reload();
 							cbo_karyawan_golongan_DataStore.reload();
 							cbo_karyawan_jabatan_DataStore.reload();
+							cbo_karyawan_bank_DataStore.reload();
 							cbo_karyawan_atasan_DataStore.reload();
 
 							break;
@@ -774,8 +938,369 @@ Ext.onReady(function(){
 		}  
 	}
   	/* End of Function */
+	
+	// STATUS KARYAWAN
+	//Status Karyawan Reader
+	// Function for json reader of detail
+	var status_karyawan_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kstatus_id', type: 'int', mapping: 'kstatus_id'},
+			{name: 'kstatus_karyawan', type: 'string', mapping: 'kstatus_karyawan'},
+			{name: 'kstatus_tglawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kstatus_tglawal'},
+			{name: 'kstatus_tglakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'kstatus_tglakhir'},
+			{name: 'kstatus_keterangan', type: 'string', mapping: 'kstatus_keterangan'}
+	]);
+	//eof
+	// Status Karyawan DataStore
+	/* Function for Retrieve DataStore of detail*/
+	status_karyawan_DataStore = new Ext.data.Store({
+		id: 'status_karyawan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_status_karyawan_list',
+			method: 'POST'
+		}),
+		reader: status_karyawan_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kstatus_tglakhir', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF STATUS KARYAWAN
+	
+	// JABATAN
+	//Status Karyawan Reader
+	// Function for json reader of detail
+	var jabatan_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			
+			{name: 'kjabatan_id', type: 'int', mapping: 'kjabatan_id'},
+			{name: 'karyawan_departemen_id', type: 'int', mapping: 'kjabatan_departemen'},
+			{name: 'karyawan_departemen_display', type: 'string', mapping: 'departemen_nama'},
+			
+			{name: 'karyawan_jabatan_id', type: 'int', mapping: 'kjabatan_jabatan'},
+			{name: 'karyawan_jabatan_display', type: 'string', mapping: 'jabatan_nama'},
+			
+			{name: 'karyawan_golongan_id', type: 'int', mapping: 'kjabatan_golongan'},
+			{name: 'karyawan_golongan_display', type: 'string', mapping: 'golongan_nama'},
+			
+			{name: 'kjabatan_pph21', type: 'string', mapping: 'kjabatan_pph21'},
+			
+			{name: 'karyawan_atasan_id', type: 'int', mapping: 'kjabatan_atasan'},
+			{name: 'karyawan_atasan_display', type: 'string', mapping: 'atasan_nama'},
+
+			{name: 'kjabatan_tglawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kjabatan_tglawal'},
+			{name: 'kjabatan_tglakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'kjabatan_tglakhir'},
+			{name: 'kjabatan_keterangan', type: 'string', mapping: 'kjabatan_keterangan'}
+	]);
+	//eof
+	// Status Karyawan DataStore
+	/* Function for Retrieve DataStore of detail*/
+	jabatan_DataStore = new Ext.data.Store({
+		id: 'jabatan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_jabatan_list',
+			method: 'POST'
+		}),
+		reader: jabatan_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kjabatan_tglakhir', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF JABATAN
+	
+	// PENDIDIKAN
+	// pendidikan Reader
+	// Function for json reader of detail
+	var pendidikan_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kpendidikan_id', type: 'int', mapping: 'kpendidikan_id'},
+			{name: 'kpendidikan_pendidikan', type: 'string', mapping: 'kpendidikan_pendidikan'},
+			{name: 'kpendidikan_sekolah', type: 'string', mapping: 'kpendidikan_sekolah'},
+			{name: 'kpendidikan_jurusan', type: 'string', mapping: 'kpendidikan_jurusan'},
+			{name: 'kpendidikan_thnmasuk', type: 'int', mapping: 'kpendidikan_thnmasuk'},
+			{name: 'kpendidikan_thnselesai', type: 'int', mapping: 'kpendidikan_thnselesai'},
+			{name: 'kpendidikan_wisuda', type: 'int', mapping: 'kpendidikan_wisuda'},
+			{name: 'kpendidikan_keterangan', type: 'string', mapping: 'kpendidikan_keterangan'}
+	]);
+	//eof
+	// Pendidikan DataStore
+	/* Function for Retrieve DataStore of detail*/
+	pendidikan_DataStore = new Ext.data.Store({
+		id: 'pendidikan_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_pendidikan_list',
+			method: 'POST'
+		}),
+		reader: pendidikan_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kpendidikan_thnselesai', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF PENDIDIKAN
+	
+	// KELUARGA
+	// keluarga Reader
+	// Function for json reader of detail
+	var keluarga_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kkeluarga_id', type: 'int', mapping: 'kkeluarga_id'},
+			{name: 'kkeluarga_nama', type: 'string', mapping: 'kkeluarga_nama'},
+			{name: 'kkeluarga_hubungan', type: 'string', mapping: 'kkeluarga_hubungan'},
+			{name: 'kkeluarga_keterangan', type: 'string', mapping: 'kkeluarga_keterangan'}
+	]);
+	//eof
+	// Keluarga  DataStore
+	/* Function for Retrieve DataStore of detail*/
+	keluarga_DataStore = new Ext.data.Store({
+		id: 'keluarga_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_keluarga_list',
+			method: 'POST'
+		}),
+		reader: keluarga_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kkeluarga_id', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF KELUARGA
+	
+	// CUTI
+	// cuti Reader
+	// Function for json reader of detail
+	var cuti_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kcuti_id', type: 'int', mapping: 'kcuti_id'},
+			{name: 'kcuti_jenis', type: 'string', mapping: 'kcuti_jenis'},
+			{name: 'kcuti_tglawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kcuti_tglawal'},
+			{name: 'kcuti_tglakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'kcuti_tglakhir'},
+			{name: 'kcuti_jmlhari', type: 'int', mapping: 'kcuti_jmlhari'},
+			{name: 'kcuti_tglpengajuan', type: 'date', dateFormat: 'Y-m-d', mapping: 'kcuti_tglpengajuan'},
+			{name: 'kcuti_keterangan', type: 'string', mapping: 'kcuti_keterangan'}
+	]);
+	//eof
+	// Cuti  DataStore
+	/* Function for Retrieve DataStore of detail*/
+	cuti_DataStore = new Ext.data.Store({
+		id: 'cuti_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_cuti_list',
+			method: 'POST'
+		}),
+		reader: cuti_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kcuti_tglakhir', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF CUTI
+	
+	// GANTIOFF
+	// gantioff Reader
+	// Function for json reader of detail
+	var gantioff_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kgantioff_id', type: 'int', mapping: 'kgantioff_id'},
+			{name: 'kgantioff_jenis', type: 'string', mapping: 'kgantioff_jenis'},
+			{name: 'kgantioff_tglawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kgantioff_tglawal'},
+			{name: 'kgantioff_tglakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'kgantioff_tglakhir'},
+			{name: 'kgantioff_jmlhari', type: 'int', mapping: 'kgantioff_jmlhari'},
+			{name: 'kgantioff_tglgantiawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'kgantioff_tglgantiawal'},
+			{name: 'kgantioff_tglgantiakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'kgantioff_tglgantiakhir'},
+			{name: 'kgantioff_tglpengajuan', type: 'date', dateFormat: 'Y-m-d', mapping: 'kgantioff_tglpengajuan'},
+			{name: 'kgantioff_keterangan', type: 'string', mapping: 'kgantioff_keterangan'}
+	]);
+	//eof
+	// Gantioff  DataStore
+	/* Function for Retrieve DataStore of detail*/
+	gantioff_DataStore = new Ext.data.Store({
+		id: 'gantioff_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_gantioff_list',
+			method: 'POST'
+		}),
+		reader: gantioff_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kgantioff_tglakhir', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF GANTIOFF
+	
+	// MEDICAL
+	// medical Reader
+	// Function for json reader of detail
+	var medical_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kmedical_id', type: 'int', mapping: 'kmedical_id'},
+			{name: 'kmedical_tujuan', type: 'string', mapping: 'kmedical_tujuan'},
+			{name: 'kmedical_jenis_rawat', type: 'string', mapping: 'kmedical_jenis_rawat'},
+			{name: 'kmedical_jenis_klaim', type: 'string', mapping: 'kmedical_jenis_klaim'},
+			{name: 'kmedical_jumlah', type: 'int', mapping: 'kmedical_jumlah'},
+			{name: 'kmedical_total', type: 'float', mapping: 'kmedical_total'},
+			{name: 'kmedical_tglpengajuan', type: 'date', dateFormat: 'Y-m-d', mapping: 'kmedical_tglpengajuan'},
+			{name: 'kmedical_keterangan', type: 'string', mapping: 'kmedical_keterangan'}
+	]);
+	//eof
+	// Gantioff  DataStore
+	/* Function for Retrieve DataStore of detail*/
+	medical_DataStore = new Ext.data.Store({
+		id: 'medical_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_medical_list',
+			method: 'POST'
+		}),
+		reader: medical_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kmedical_tglpengajuan', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF MEDICAL
+	
+	// FASILITAS
+	// fasilitas Reader
+	// Function for json reader of detail
+	var fasilitas_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		//id: 'rpaket_id'
+	},[
+	/* dataIndex => insert intoperawatan_ColumnModel, Mapping => for initiate table column */
+			{name: 'kfasilitas_id', type: 'int', mapping: 'kfasilitas_id'},
+			{name: 'kfasilitas_item', type: 'string', mapping: 'kfasilitas_item'},
+			{name: 'kfasilitas_tglserahterima', type: 'date', dateFormat: 'Y-m-d', mapping: 'kfasilitas_tglserahterima'},
+			{name: 'kfasilitas_keterangan', type: 'string', mapping: 'kfasilitas_keterangan'}
+	]);
+	//eof
+	// Fasilitas  DataStore
+	/* Function for Retrieve DataStore of detail*/
+	fasilitas_DataStore = new Ext.data.Store({
+		id: 'fasilitas_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=detail_fasilitas_list',
+			method: 'POST'
+		}),
+		reader: fasilitas_reader,
+		baseParams:{master_id: get_pk_id(), start:0, limit: pageS },
+		sortInfo:{field: 'kfasilitas_tglserahterima', direction: "ASC"}
+	});
+	/* End of Function */
+	// EOF FASILITAS
+	
+	//function for editor of detail
+	var editor_detail_status_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_jabatan_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_pendidikan_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_keluarga_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_fasilitas_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_cuti_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_gantioff_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
+	
+	//function for editor of detail
+	var editor_detail_medical_karyawan= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'/*,
+		listeners: {
+			afteredit: function(){
+				status_karyawan_DataStore.commitChanges();
+			}
+		}*/
+    });
+	//eof
   
 	/* Function for Retrieve DataStore */
+	// datastore karyawan
 	karyawan_DataStore = new Ext.data.Store({
 		id: 'karyawan_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -790,6 +1315,14 @@ Ext.onReady(function(){
 		},[
 			{name: 'karyawan_id', type: 'int', mapping: 'karyawan_id'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'karyawan_ktp', type: 'string', mapping: 'karyawan_ktp'},
+			{name: 'karyawan_alamat_ktp', type: 'string', mapping: 'karyawan_alamat_ktp'},
+			{name: 'karyawan_agama', type: 'string', mapping: 'karyawan_agama'},
+			{name: 'karyawan_bank', type: 'string', mapping: 'karyawan_bank_nama'},
+			{name: 'karyawan_bank_cabang', type: 'string', mapping: 'karyawan_bank_cabang'},
+			{name: 'karyawan_rekening', type: 'string', mapping: 'karyawan_rekening'},
+			{name: 'karyawan_atasnama', type: 'string', mapping: 'karyawan_atasnama'},
+			{name: 'karyawan_jamsostek', type: 'string', mapping: 'karyawan_jamsostek'},
 			{name: 'karyawan_sip', type: 'string', mapping: 'karyawan_sip'},
 			{name: 'karyawan_npwp', type: 'string', mapping: 'karyawan_npwp'},
 			{name: 'karyawan_username', type: 'string', mapping: 'karyawan_username'},
@@ -814,6 +1347,7 @@ Ext.onReady(function(){
 			{name: 'karyawan_atasan', type: 'int', mapping: 'karyawan_atasan'},
 			{name: 'karyawan_pph21', type: 'string', mapping: 'karyawan_pph21'},
 			{name: 'karyawan_marriage', type: 'string', mapping: 'karyawan_marriage'},
+			{name: 'karyawan_jmlanak', type: 'int', mapping: 'karyawan_jmlanak'},
 			{name: 'karyawan_tgl_batas', type: 'date', mapping: 'karyawan_tgl_batas'},
 			{name: 'karyawan_tmplahir', type: 'string', mapping: 'karyawan_tmplahir'},
 			{name: 'karyawan_aktif', type: 'string', mapping: 'karyawan_aktif'},
@@ -861,6 +1395,22 @@ Ext.onReady(function(){
 		sortInfo:{field: 'karyawan_jabatan_value', direction: "ASC"}
 	});
 	
+	cbo_karyawan_bank_DataStore = new Ext.data.Store({
+		id: 'cbo_karyawan_bank_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_karyawan&m=get_karyawan_bank_list', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+			{name: 'karyawan_bank_display', type: 'string', mapping: 'mbank_nama'},
+			{name: 'karyawan_bank_value', type: 'int', mapping: 'mbank_id'}
+		]),
+		sortInfo:{field: 'karyawan_bank_value', direction: "ASC"}
+	});
+	
 	cbo_karyawan_cabang_DataStore = new Ext.data.Store({
 		id: 'cbo_karyawan_cabang_DataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -890,7 +1440,7 @@ Ext.onReady(function(){
 			{name: 'karyawan_departemen_display', type: 'string', mapping: 'departemen_nama'},
 			{name: 'karyawan_departemen_value', type: 'int', mapping: 'departemen_id'}
 		]),
-		sortInfo:{field: 'karyawan_departemen_value', direction: "ASC"}
+		sortInfo:{field: 'karyawan_departemen_display', direction: "ASC"}
 	});
 	
 	cbo_karyawan_golongan_DataStore = new Ext.data.Store({
@@ -1409,10 +1959,3514 @@ Ext.onReady(function(){
 			sortable: true,
 			hidden: true,
 			readOnly: true
-		}]
+		},
+		{
+			/*index=29*/
+			header: 'No. KTP',
+			dataIndex: 'karyawan_ktp',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}
+		,
+		{
+			/*index=30*/
+			header: 'Alamat KTP',
+			dataIndex: 'karyawan_alamat_ktp',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}
+		,
+		{
+			/*index=31*/
+			header: 'Agama',
+			dataIndex: 'karyawan_agama',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
+		{
+			/*index=32*/
+			header: 'Bank',
+			dataIndex: 'karyawan_bank',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
+		{
+			/*index=33*/
+			header: 'Bank Cabang',
+			dataIndex: 'karyawan_bank_cabang',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
+		{
+			/*index=34*/
+			header: 'No. Rekening',
+			dataIndex: 'karyawan_rekening',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
+		{
+			/*index=35*/
+			header: 'Atas Nama',
+			dataIndex: 'karyawan_atasnama',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		},
+		{
+			/*index=35*/
+			header: 'No. Jamsostek',
+			dataIndex: 'karyawan_jamsostek',
+			width: 150,
+			sortable: true,
+			hidden: true,
+			readOnly: true
+		}
+		]
 	);
 	karyawan_ColumnModel.defaultSortable= true;
 	/* End of Function */
+	// declaration status kekaryawanan
+	dkaryawan_statuskaryawanField= new Ext.form.ComboBox({
+		id : 'dkaryawan_statuskaryawanField',
+		store:new Ext.data.SimpleStore({
+			fields:['status_karyawan_value'],
+			data:[['Percobaan'],['Kontrak I'],['Kontrak II'],['Tetap'],['Lain-lain'],['Tidak Aktif']]
+		}),
+		mode: 'local',
+		displayField: 'status_karyawan_value',
+		valueField: 'status_karyawan_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	/* Identify  dkaryawan_tglawalField Field */
+	dkaryawan_tglawalField= new Ext.form.DateField({
+		id: 'dkaryawan_tglawalField',
+		//fieldLabel: 'Tanggal Masuk',
+		format : 'Y-m-d',
+		//vtype: 'daterange',
+		endDateField: 'dkaryawan_tglakhirField',
+		width : 100
+	});
+	
+	/* Identify  dkaryawan_tglakhirField Field */
+	dkaryawan_tglakhirField= new Ext.form.DateField({
+		id: 'dkaryawan_tglakhirField',
+		//fieldLabel: 'Tanggal Masuk',
+		format : 'Y-m-d',
+		value : today,
+		//vtype: 'daterange',
+		startDateField: 'dkaryawan_tglawalField', 
+		width : 100
+	});
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_status_karyawan_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kstatus_id',
+            hidden: true
+		},
+		/*
+		{	align : 'Left',
+			header: '<div align="center">' + 'Paket' + '</div>',
+			dataIndex: 'dpaket_paket',
+			width: 300,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: combo_jual_paket,
+			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(combo_jual_paket)
+		},
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Jumlah' + '</div>',
+			dataIndex: 'dpaket_jumlah',
+			width: 60,
+			sortable: false,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: dpaket_jumlahField
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Kadaluarsa' + '</div>',
+			dataIndex: 'dpaket_kadaluarsa',
+			width: 80,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: dpaket_kadaluarsaField,
+			<?php } ?>
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+		},
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			dataIndex: 'dpaket_harga',
+			width: 100,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: dpaket_hargaField,
+			<?php } ?>
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},{
+			align : 'Right',
+			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
+			dataIndex: 'dpaket_subtotal',
+			width: 100,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: dpaket_subtotalField,
+			<?php } ?>
+			//renderer: Ext.util.Format.numberRenderer('0,000'),
+			renderer: function(v, params, record){
+				return Ext.util.Format.number(record.data.dpaket_jumlah * record.data.dpaket_harga,'0,000');
+            }
+		},
+		*/
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Status Kekaryawanan' + '</div>',
+			dataIndex: 'kstatus_karyawan',
+			width: 140,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: dkaryawan_statuskaryawanField
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Awal' + '</div>',
+			dataIndex: 'kstatus_tglawal',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: dkaryawan_tglawalField
+			/*
+			new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			*/
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Akhir' + '</div>',
+			dataIndex: 'kstatus_tglakhir',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: dkaryawan_tglakhirField
+			/*new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			*/
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kstatus_keterangan',
+			width: 680,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		/*
+		{
+			align : 'Right',
+			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			dataIndex: 'dpaket_diskon',
+			width: 80,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: dpaket_jumlahdiskonField,
+			<?php } ?>
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},{
+			align : 'Right',
+			header: '<div align="center">' + 'Sub Tot Net (Rp)' + '</div>',
+			dataIndex: 'dpaket_subtotal_net',
+			width: 100,
+			sortable: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: dpaket_subtotalnetField,
+			<?php } ?>
+			//renderer: Ext.util.Format.numberRenderer('0,000')
+			renderer: function(v, params, record){
+				var record_dtotal_net = record.data.dpaket_jumlah*record.data.dpaket_harga*((100-record.data.dpaket_diskon)/100);
+				record_dtotal_net = (record_dtotal_net>0?Math.round(record_dtotal_net):0);
+				return Ext.util.Format.number(record_dtotal_net,'0,000');
+            }
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Referal' + '</div>',
+			dataIndex: 'dpaket_karyawan',
+			width: 150,
+			sortable: false,
+			allowBlank: false,
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			editor: combo_reveral_paket,
+			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(combo_reveral_paket)
+		}*/
+		]
+	);
+	detail_status_karyawan_ColumnModel.defaultSortable= true;
+	//eof
+	
+	//declaration of detail list editor grid
+	detail_status_karyawanListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_status_karyawanListEditorGrid',
+		el: 'fp_detail_status_karyawan',
+		title: 'Status Kekaryawanan',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: status_karyawan_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_status_karyawan_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_status_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: status_karyawan_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_status_karyawan_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_status_karyawan_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_status_karyawan_add(){
+		var edit_detail_jual_paket= new detail_status_karyawanListEditorGrid.store.recordType({
+			kstatus_id			:'',		
+			kstatus_karyawan	:'',
+			kstatus_tglawal		:today.dateFormat('Y-m-d'), //today.dateFormat('Y-m-d'),
+			kstatus_tglakhir	:today.dateFormat('Y-m-d'),
+			kstatus_keterangan	:''
+
+		});
+		
+		editor_detail_status_karyawan.stopEditing();
+		status_karyawan_DataStore.insert(0, edit_detail_jual_paket);
+		detail_status_karyawanListEditorGrid.getView().refresh();
+		detail_status_karyawanListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_status_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_status_karyawan_insert(){
+		var kstatus_id=[];
+		var kstatus_karyawan=[];
+		var kstatus_tglawal=[];
+		var kstatus_tglakhir=[];
+		var kstatus_keterangan=[];
+		
+		var dcount = status_karyawan_DataStore.getCount() - 1;
+		
+		if(status_karyawan_DataStore.getCount()>0){
+			for(i=0; i<status_karyawan_DataStore.getCount();i++){
+			
+				kstatus_id.push(status_karyawan_DataStore.getAt(i).data.kstatus_id);
+				kstatus_karyawan.push(status_karyawan_DataStore.getAt(i).data.kstatus_karyawan);
+				kstatus_tglawal.push(status_karyawan_DataStore.getAt(i).data.kstatus_tglawal);
+				kstatus_tglakhir.push(status_karyawan_DataStore.getAt(i).data.kstatus_tglakhir);
+				kstatus_keterangan.push(status_karyawan_DataStore.getAt(i).data.kstatus_keterangan);
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+				if(i==dcount){
+					var encoded_array_kstatus_id = Ext.encode(kstatus_id);
+					var encoded_array_kstatus_karyawan = Ext.encode(kstatus_karyawan);
+					var encoded_array_kstatus_tglawal = Ext.encode(kstatus_tglawal);
+					var encoded_array_kstatus_tglakhir = Ext.encode(kstatus_tglakhir);
+					var encoded_array_kstatus_keterangan = Ext.encode(kstatus_keterangan);
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_status_karyawan_insert',
+						params:{
+							kstatus_id			: encoded_array_kstatus_id, 
+							kstatus_master		: eval(get_pk_id()),
+							kstatus_karyawan	: encoded_array_kstatus_karyawan,
+							kstatus_tglawal		: encoded_array_kstatus_tglawal,
+							kstatus_tglakhir	: encoded_array_kstatus_tglakhir,
+							kstatus_keterangan	: encoded_array_kstatus_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_status_karyawan_confirm_delete(){
+		// only one record is selected here
+		if(detail_status_karyawanListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_status_karyawan_delete);
+		} else if(detail_status_karyawanListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_status_karyawan_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_status_karyawan_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_status_karyawanListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kstatus_id==''){
+                    status_karyawan_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kstatus_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    status_karyawan_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "DDELETE", kstatus_id:  record.data.kstatus_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	
+	// JABATAN
+	// declaration jabatan
+	var jabatan_departemen_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{karyawan_departemen_display}</span>',
+		'</div></tpl>'
+    );
+	
+	var jabatan_jabatan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{karyawan_jabatan_display}</span>',
+		'</div></tpl>'
+    );
+	
+	var jabatan_golongan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{karyawan_golongan_display}</span>',
+		'</div></tpl>'
+    );
+	
+	var jabatan_atasan_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{karyawan_atasan_display}</span>',
+		'</div></tpl>'
+    );
+	
+	
+	var djabatan_departemenField=new Ext.form.ComboBox({
+		store: cbo_karyawan_departemen_DataStore,
+		mode: 'remote',
+		displayField: 'karyawan_departemen_display',
+		valueField: 'karyawan_departemen_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:pageS,
+		hideTrigger:false,
+		tpl: jabatan_departemen_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
+	var djabatan_jabatanField=new Ext.form.ComboBox({
+		store: cbo_karyawan_jabatan_DataStore,
+		mode: 'remote',
+		displayField: 'karyawan_jabatan_display',
+		valueField: 'karyawan_jabatan_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:pageS,
+		hideTrigger:false,
+		tpl: jabatan_jabatan_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
+	var djabatan_golonganField=new Ext.form.ComboBox({
+		store: cbo_karyawan_golongan_DataStore,
+		mode: 'remote',
+		displayField: 'karyawan_golongan_display',
+		valueField: 'karyawan_golongan_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:pageS,
+		hideTrigger:false,
+		tpl: jabatan_golongan_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
+	var djabatan_pph21Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_pph21_value'],
+			data:[['TK'],['K'],['K/1'],['K/2'],['K/3'],['TK/1'],['TK/2'],['TK/3']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_pph21_value',
+		valueField: 'karyawan_pph21_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	var djabatan_atasanField=new Ext.form.ComboBox({
+		store: cbo_karyawan_atasan_DataStore,
+		mode: 'remote',
+		displayField: 'karyawan_atasan_display',
+		valueField: 'karyawan_atasan_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:pageS,
+		hideTrigger:false,
+		tpl: jabatan_atasan_tpl,
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%'
+	});
+	
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_jabatan_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kjabatan_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Departemen' + '</div>',
+			dataIndex: 'karyawan_departemen_id',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: djabatan_departemenField,
+		
+			<?php } ?>
+			renderer: Ext.util.Format.comboRenderer(djabatan_departemenField)
+		}
+		,
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jabatan' + '</div>',
+			dataIndex: 'karyawan_jabatan_id',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: djabatan_jabatanField
+			<?php } ?>
+			,renderer: Ext.util.Format.comboRenderer(djabatan_jabatanField)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Golongan' + '</div>',
+			dataIndex: 'karyawan_golongan_id',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: djabatan_golonganField
+			<?php } ?>
+			,renderer: Ext.util.Format.comboRenderer(djabatan_golonganField)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'PPH 21' + '</div>',
+			dataIndex: 'kjabatan_pph21',
+			width: 50,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: djabatan_pph21Field
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Atasan Langsung' + '</div>',
+			dataIndex: 'karyawan_atasan_id',
+			width: 140,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: djabatan_atasanField
+			<?php } ?>
+			,renderer: Ext.util.Format.comboRenderer(djabatan_atasanField)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Awal' + '</div>',
+			dataIndex: 'kjabatan_tglawal',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Akhir' + '</div>',
+			dataIndex: 'kjabatan_tglakhir',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kjabatan_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		]
+	);
+	detail_jabatan_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_jabatanListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_jabatanListEditorGrid',
+		el: 'fp_detail_jabatan',
+		title: 'Jabatan',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: jabatan_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_jabatan_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_jabatan_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: jabatan_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_jabatan_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_jabatan_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_jabatan_add(){
+		var edit_detail_jual_paket= new detail_jabatanListEditorGrid.store.recordType({
+			kjabatan_id				:'',		
+			karyawan_departemen_id	:'',
+			karyawan_jabatan_id		:'',
+			karyawan_golongan_id	:'',
+			kjabatan_pph21			:'',
+			karyawan_atasan_id		:'',
+			kjabatan_tglawal		:null,
+			kjabatan_tglakhir		:null,
+			kjabatan_keterangan		:''
+			
+		});
+		editor_detail_jabatan_karyawan.stopEditing();
+		jabatan_DataStore.insert(0, edit_detail_jual_paket);
+		detail_jabatanListEditorGrid.getView().refresh();
+		detail_jabatanListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_jabatan_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_jabatan_insert(){
+		var	kjabatan_id				=[];		
+		var	karyawan_departemen_id	=[];
+		var	karyawan_jabatan_id		=[];
+		var	karyawan_golongan_id	=[];
+		var	kjabatan_pph21			=[];
+		var	karyawan_atasan_id		=[];
+		var	kjabatan_tglawal		=[];
+		var	kjabatan_tglakhir		=[];
+		var	kjabatan_keterangan		=[];
+		
+		var dcount = jabatan_DataStore.getCount() - 1;
+		
+		if(jabatan_DataStore.getCount()>0){
+			for(i=0; i<jabatan_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+				
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				karyawan_departemen_id.push(jabatan_DataStore.getAt(i).data.karyawan_departemen_id);
+				karyawan_jabatan_id.push(jabatan_DataStore.getAt(i).data.karyawan_jabatan_id);
+				karyawan_golongan_id.push(jabatan_DataStore.getAt(i).data.karyawan_golongan_id);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				karyawan_atasan_id.push(jabatan_DataStore.getAt(i).data.karyawan_atasan_id);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				if(i==dcount){
+					var encoded_array_djabatan_id = Ext.encode(kjabatan_id);
+					var encoded_array_djabatan_departemen = Ext.encode(karyawan_departemen_id);
+					var encoded_array_djabatan_jabatan = Ext.encode(karyawan_jabatan_id);
+					var encoded_array_djabatan_golongan = Ext.encode(karyawan_golongan_id);
+					var encoded_array_djabatan_pph21 = Ext.encode(kjabatan_pph21);
+					var encoded_array_djabatan_atasan = Ext.encode(karyawan_atasan_id);
+					var encoded_array_djabatan_tglawal = Ext.encode(kjabatan_tglawal);
+					var encoded_array_djabatan_tglakhir = Ext.encode(kjabatan_tglakhir);
+					var encoded_array_djabatan_keterangan = Ext.encode(kjabatan_keterangan);
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_jabatan_insert',
+						params:{
+							djabatan_id				: encoded_array_djabatan_id, 
+							djabatan_master			: eval(get_pk_id()),
+							djabatan_departemen		: encoded_array_djabatan_departemen,
+							djabatan_jabatan		: encoded_array_djabatan_jabatan,
+							djabatan_golongan		: encoded_array_djabatan_golongan,
+							djabatan_pph21			: encoded_array_djabatan_pph21,
+							djabatan_atasan			: encoded_array_djabatan_atasan,
+							djabatan_tglawal		: encoded_array_djabatan_tglawal,
+							djabatan_tglakhir		: encoded_array_djabatan_tglakhir,
+							djabatan_keterangan		: encoded_array_djabatan_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_jabatan_confirm_delete(){
+		// only one record is selected here
+		if(detail_jabatanListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_status_karyawan_delete);
+		} else if(detail_jabatanListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_status_karyawan_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_jabatan_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_jabatanListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kstatus_id==''){
+                    jabatan_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kstatus_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    jabatan_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "DDELETE", kstatus_id:  record.data.kstatus_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF JABATAN
+	
+	// PENDIDIKAN
+	// declaration pendidikan
+	var kpendidikan_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_pendidikan_value'],
+			data:[['SD'],['SMP'],['SMA'],['D1'],['D2'],['D3'],['D4'],['S1'],['S2'],['S3']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_pendidikan_value',
+		valueField: 'karyawan_pendidikan_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_pendidikan_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kpendidikan_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Pendidikan' + '</div>',
+			dataIndex: 'kpendidikan_pendidikan',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kpendidikan_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Nama Sekolah' + '</div>',
+			dataIndex: 'kpendidikan_sekolah',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jurusan' + '</div>',
+			dataIndex: 'kpendidikan_jurusan',
+			width: 100,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Thn Masuk' + '</div>',
+			dataIndex: 'kpendidikan_thnmasuk',
+			width: 70,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Thn Sls' + '</div>',
+			dataIndex: 'kpendidikan_thnselesai',
+			width: 70,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Wisuda' + '</div>',
+			dataIndex: 'kpendidikan_wisuda',
+			width: 70,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kpendidikan_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		]
+	);
+	detail_pendidikan_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_pendidikanListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_pendidikanListEditorGrid',
+		el: 'fp_detail_pendidikan',
+		title: 'Pendidikan',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: pendidikan_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_pendidikan_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_pendidikan_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: pendidikan_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_pendidikan_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_pendidikan_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_pendidikan_add(){
+		var edit_detail_pendidikan= new detail_pendidikanListEditorGrid.store.recordType({
+			kpendidikan_id			:'',		
+			kpendidikan_pendidikan	:'',
+			kpendidikan_sekolah		:'',
+			kpendidikan_jurusan		:'',
+			kpendidikan_thnmasuk	:'',
+			kpendidikan_thnselesai	:'',
+			kpendidikan_wisuda		:'',
+			kpendidikan_keterangan	:''
+			
+		});
+		editor_detail_pendidikan_karyawan.stopEditing();
+		pendidikan_DataStore.insert(0, edit_detail_pendidikan);
+		detail_pendidikanListEditorGrid.getView().refresh();
+		detail_pendidikanListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_pendidikan_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_pendidikan_insert(){
+		var	kpendidikan_id			=[];		
+		var	kpendidikan_pendidikan	=[];
+		var	kpendidikan_sekolah		=[];
+		var	kpendidikan_jurusan		=[];
+		var	kpendidikan_thnmasuk	=[];
+		var	kpendidikan_thnselesai	=[];
+		var	kpendidikan_wisuda		=[];
+		var	kpendidikan_keterangan	=[];
+		
+		var dcount = pendidikan_DataStore.getCount() - 1;
+		
+		if(pendidikan_DataStore.getCount()>0){
+			for(i=0; i<pendidikan_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+		
+				kpendidikan_id.push(pendidikan_DataStore.getAt(i).data.kpendidikan_id);
+				kpendidikan_pendidikan.push(pendidikan_DataStore.getAt(i).data.kpendidikan_pendidikan);
+				kpendidikan_sekolah.push(pendidikan_DataStore.getAt(i).data.kpendidikan_sekolah);
+				kpendidikan_jurusan.push(pendidikan_DataStore.getAt(i).data.kpendidikan_jurusan);
+				kpendidikan_thnmasuk.push(pendidikan_DataStore.getAt(i).data.kpendidikan_thnmasuk);
+				kpendidikan_thnselesai.push(pendidikan_DataStore.getAt(i).data.kpendidikan_thnselesai);
+				kpendidikan_wisuda.push(pendidikan_DataStore.getAt(i).data.kpendidikan_wisuda);
+				kpendidikan_keterangan.push(pendidikan_DataStore.getAt(i).data.kpendidikan_keterangan);
+				if(i==dcount){
+					var encoded_array_kpendidikan_id = Ext.encode(kpendidikan_id);
+					var encoded_array_kpendidikan_pendidikan = Ext.encode(kpendidikan_pendidikan);
+					var encoded_array_kpendidikan_sekolah = Ext.encode(kpendidikan_sekolah);
+					var encoded_array_kpendidikan_jurusan = Ext.encode(kpendidikan_jurusan);
+					var encoded_array_kpendidikan_thnmasuk = Ext.encode(kpendidikan_thnmasuk);
+					var encoded_array_kpendidikan_thnselesai = Ext.encode(kpendidikan_thnselesai);
+					var encoded_array_kpendidikan_wisuda = Ext.encode(kpendidikan_wisuda);
+					var encoded_array_kpendidikan_keterangan = Ext.encode(kpendidikan_keterangan);
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_pendidikan_insert',
+						params:{
+							kpendidikan_id			: encoded_array_kpendidikan_id, 
+							kpendidikan_master		: eval(get_pk_id()),
+							kpendidikan_pendidikan	: encoded_array_kpendidikan_pendidikan,
+							kpendidikan_sekolah		: encoded_array_kpendidikan_sekolah,
+							kpendidikan_jurusan		: encoded_array_kpendidikan_jurusan,
+							kpendidikan_thnmasuk	: encoded_array_kpendidikan_thnmasuk,
+							kpendidikan_thnselesai	: encoded_array_kpendidikan_thnselesai,
+							kpendidikan_wisuda		: encoded_array_kpendidikan_wisuda,
+							kpendidikan_keterangan	: encoded_array_kpendidikan_keterangan,
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_pendidikan_confirm_delete(){
+		// only one record is selected here
+		if(detail_pendidikanListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_pendidikan_delete);
+		} else if(detail_pendidikanListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_pendidikan_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_pendidikan_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_pendidikanListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kpendidikan_id==''){
+                    pendidikan_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kpendidikan_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    pendidikan_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "PDELETE", kpendidikan_id:  record.data.kpendidikan_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF PENDIDIKAN
+	
+	// KELUARGA
+	// declaration keluarga
+	var khubungan_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_hubungan_value'],
+			data:[['Suami/Istri'],['Anak']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_hubungan_value',
+		valueField: 'karyawan_hubungan_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_keluarga_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kkeluarga_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Nama' + '</div>',
+			dataIndex: 'kkeluarga_nama',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Hubungan' + '</div>',
+			dataIndex: 'kkeluarga_hubungan',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: khubungan_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kkeluarga_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		]
+	);
+	detail_keluarga_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_keluargaListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_keluargaListEditorGrid',
+		el: 'fp_detail_keluarga',
+		title: 'Keluarga',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: keluarga_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_keluarga_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_keluarga_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: keluarga_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_keluarga_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_keluarga_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_keluarga_add(){
+		var edit_detail_keluarga= new detail_keluargaListEditorGrid.store.recordType({
+			kkeluarga_id			:'',		
+			kkeluarga_nama			:'',
+			kkeluarga_hubungan		:'',
+			kkeluarga_keterangan	:''
+		});
+		editor_detail_keluarga_karyawan.stopEditing();
+		keluarga_DataStore.insert(0, edit_detail_keluarga);
+		detail_keluargaListEditorGrid.getView().refresh();
+		detail_keluargaListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_keluarga_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_keluarga_insert(){
+		var	kkeluarga_id			=[];		
+		var	kkeluarga_nama			=[];
+		var	kkeluarga_hubungan		=[];
+		var	kkeluarga_keterangan	=[];
+
+		var dcount = keluarga_DataStore.getCount() - 1;
+		
+		if(keluarga_DataStore.getCount()>0){
+			for(i=0; i<keluarga_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+
+				kkeluarga_id.push(keluarga_DataStore.getAt(i).data.kkeluarga_id);
+				kkeluarga_nama.push(keluarga_DataStore.getAt(i).data.kkeluarga_nama);
+				kkeluarga_hubungan.push(keluarga_DataStore.getAt(i).data.kkeluarga_hubungan);
+				kkeluarga_keterangan.push(keluarga_DataStore.getAt(i).data.kkeluarga_keterangan);
+	
+				if(i==dcount){
+					var encoded_array_kkeluarga_id = Ext.encode(kkeluarga_id);
+					var encoded_array_kkeluarga_nama = Ext.encode(kkeluarga_nama);
+					var encoded_array_kkeluarga_hubungan = Ext.encode(kkeluarga_hubungan);
+					var encoded_array_kkeluarga_keterangan = Ext.encode(kkeluarga_keterangan);
+
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_keluarga_insert',
+						params:{
+							kkeluarga_id			: encoded_array_kkeluarga_id, 
+							kkeluarga_master		: eval(get_pk_id()),
+							kkeluarga_nama			: encoded_array_kkeluarga_nama,
+							kkeluarga_hubungan		: encoded_array_kkeluarga_hubungan,
+							kkeluarga_keterangan	: encoded_array_kkeluarga_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_keluarga_confirm_delete(){
+		// only one record is selected here
+		if(detail_keluargaListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_keluarga_delete);
+		} else if(detail_keluargaListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_keluarga_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_keluarga_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_keluargaListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kkeluarga_id==''){
+                    keluarga_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kkeluarga_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    keluarga_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "KDELETE", kkeluarga_id:  record.data.kkeluarga_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF KELUARGA
+	
+	// CUTI
+	// declaration cuti
+	var kcuti_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_cuti_value'],
+			data:[['Umum Tahunan'],['Cuti Hamil'],['Cuti Istimewa'],['Cuti Panjang'],['Unpaid Leave']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_cuti_value',
+		valueField: 'karyawan_cuti_value',
+		allowBlank: true,
+		anchor: '50%',
+		//hidden: true,
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	/* Identify  kcuti_tglawalField Field */
+	kcuti_tglawalField= new Ext.form.DateField({
+		id: 'kcuti_tglawalField',
+		format : 'Y-m-d',
+		//vtype: 'daterange',
+		value : today,
+		endDateField: 'kcuti_tglakhirField',
+		width : 100
+	});
+	
+	/* Identify  kcuti_tglakhirField Field */
+	kcuti_tglakhirField= new Ext.form.DateField({
+		id: 'kcuti_tglakhirField',
+		format : 'Y-m-d',
+		value : today,
+		//vtype: 'daterange',
+		startDateField: 'kcuti_tglawalField', 
+		width : 100
+	});
+	
+	/* Identify  kcuti_tglakhirField Field */
+	kcuti_jmlhariField= new Ext.form.TextField({
+		id: 'kcuti_jmlhariField',
+		//readOnly: true,
+		align: 'Right',
+		width : 100
+	});
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_cuti_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kcuti_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Cuti' + '</div>',
+			dataIndex: 'kcuti_jenis',
+			width: 100,
+			//hidden: true,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kcuti_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Awal' + '</div>',
+			dataIndex: 'kcuti_tglawal',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: kcuti_tglawalField
+			/*new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			*/
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Akhir' + '</div>',
+			dataIndex: 'kcuti_tglakhir',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: kcuti_tglakhirField
+			/*new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			*/
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align: 'Right',
+			header: '<div align="center">' + 'Jml Hari' + '</div>',
+			dataIndex: 'kcuti_jmlhari',
+			width: 70,
+			sortable: false,
+			readOnly: true,
+			editor: kcuti_jmlhariField
+			//new Ext.form.TextField({maxLength:5})
+
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Pengajuan' + '</div>',
+			dataIndex: 'kcuti_tglpengajuan',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kcuti_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		
+		]
+	);
+	detail_cuti_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_cutiListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_cutiListEditorGrid',
+		el: 'fp_detail_cuti',
+		title: 'Cuti',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: cuti_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_cuti_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_cuti_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: cuti_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_cuti_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_cuti_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_cuti_add(){
+		var edit_detail_cuti= new detail_cutiListEditorGrid.store.recordType({
+			kcuti_id			:'',		
+			kcuti_jenis			:'',
+			kcuti_tglawal		:today.dateFormat('Y-m-d'),
+			kcuti_tglakhir		:today.dateFormat('Y-m-d'),
+			kcuti_jmlhari		:null,
+			kcuti_tglpengajuan	:null,
+			kcuti_keterangan	:''
+			
+		});
+		editor_detail_cuti_karyawan.stopEditing();
+		cuti_DataStore.insert(0, edit_detail_cuti);
+		detail_cutiListEditorGrid.getView().refresh();
+		detail_cutiListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_cuti_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_cuti_insert(){
+		var	kcuti_id			=[];		
+		var	kcuti_jenis			=[];
+		var	kcuti_tglawal		=[];
+		var	kcuti_tglakhir		=[];
+		var	kcuti_jmlhari		=[];
+		var	kcuti_tglpengajuan	=[];
+		var	kcuti_keterangan	=[];
+
+		var dcount = cuti_DataStore.getCount() - 1;
+		
+		if(cuti_DataStore.getCount()>0){
+			for(i=0; i<cuti_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+
+
+				kcuti_id.push(cuti_DataStore.getAt(i).data.kcuti_id);
+				kcuti_jenis.push(cuti_DataStore.getAt(i).data.kcuti_jenis);
+				kcuti_tglawal.push(cuti_DataStore.getAt(i).data.kcuti_tglawal);
+				kcuti_tglakhir.push(cuti_DataStore.getAt(i).data.kcuti_tglakhir);
+				kcuti_jmlhari.push(cuti_DataStore.getAt(i).data.kcuti_jmlhari);
+				kcuti_tglpengajuan.push(cuti_DataStore.getAt(i).data.kcuti_tglpengajuan);
+				kcuti_keterangan.push(cuti_DataStore.getAt(i).data.kcuti_keterangan);
+	
+				if(i==dcount){
+					var encoded_array_kcuti_id = Ext.encode(kcuti_id);
+					var encoded_array_kcuti_jenis = Ext.encode(kcuti_jenis);
+					var encoded_array_kcuti_tglawal = Ext.encode(kcuti_tglawal);
+					var encoded_array_kcuti_tglakhir = Ext.encode(kcuti_tglakhir);
+					var encoded_array_kcuti_jmlhari = Ext.encode(kcuti_jmlhari);
+					var encoded_array_kcuti_tglpengajuan = Ext.encode(kcuti_tglpengajuan);
+					var encoded_array_kcuti_keterangan = Ext.encode(kcuti_keterangan);
+
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_cuti_insert',
+						params:{
+							kcuti_id			: encoded_array_kcuti_id, 
+							kcuti_master		: eval(get_pk_id()),
+							kcuti_jenis			: encoded_array_kcuti_jenis,
+							kcuti_tglawal		: encoded_array_kcuti_tglawal,
+							kcuti_tglakhir		: encoded_array_kcuti_tglakhir,
+							kcuti_jmlhari		: encoded_array_kcuti_jmlhari,
+							kcuti_tglpengajuan	: encoded_array_kcuti_tglpengajuan,
+							kcuti_keterangan	: encoded_array_kcuti_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_cuti_confirm_delete(){
+		// only one record is selected here
+		if(detail_cutiListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_cuti_delete);
+		} else if(detail_cutiListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_cuti_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_cuti_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_cutiListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kcuti_id==''){
+                    cuti_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kcuti_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    cuti_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "CDELETE", kcuti_id:  record.data.kcuti_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF CUTI
+	
+	// GANTIOFF
+	// declaration gantiooff
+	var kgantioff_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_gantioff_value'],
+			data:[['Ganti Off']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_gantioff_value',
+		valueField: 'karyawan_gantioff_value',
+		allowBlank: true,
+		hidden: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_gantioff_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kgantioff_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Cuti' + '</div>',
+			dataIndex: 'kgantioff_jenis',
+			width: 100,
+			hidden: true,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kgantioff_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Awal' + '</div>',
+			dataIndex: 'kgantioff_tglawal',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Akhir' + '</div>',
+			dataIndex: 'kgantioff_tglakhir',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jml Hari' + '</div>',
+			dataIndex: 'kgantioff_jmlhari',
+			width: 100,
+			sortable: false,
+			readOnly: true,
+			editor: new Ext.form.TextField({maxLength:5})
+
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Diganti Awal' + '</div>',
+			dataIndex: 'kgantioff_tglgantiawal',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Diganti Akhir' + '</div>',
+			dataIndex: 'kgantioff_tglgantiakhir',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Pengajuan' + '</div>',
+			dataIndex: 'kgantioff_tglpengajuan',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kgantioff_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		
+		]
+	);
+	detail_gantioff_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_gantioffListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_gantioffListEditorGrid',
+		el: 'fp_detail_gantioff',
+		title: 'Ganti Off',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: gantioff_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_gantioff_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_gantioff_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: gantioff_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_gantioff_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_gantioff_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_gantioff_add(){
+		var edit_detail_gantioff= new detail_gantioffListEditorGrid.store.recordType({
+			kgantioff_id			:'',		
+			kgantioff_jenis			:'',
+			kgantioff_tglawal		:today.dateFormat('Y-m-d'),
+			kgantioff_tglakhir		:today.dateFormat('Y-m-d'),
+			kgantioff_jmlhari		:null,
+			kgantioff_tglgantiawal	:today.dateFormat('Y-m-d'),
+			kgantioff_tglgantiakhir	:today.dateFormat('Y-m-d'),
+			kgantioff_tglpengajuan	:today.dateFormat('Y-m-d'),
+			kgantioff_keterangan	:''
+			
+		});
+		editor_detail_gantioff_karyawan.stopEditing();
+		gantioff_DataStore.insert(0, edit_detail_gantioff);
+		detail_gantioffListEditorGrid.getView().refresh();
+		detail_gantioffListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_gantioff_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_gantioff_insert(){
+		var	kgantioff_id			=[];		
+		var	kgantioff_jenis			=[];
+		var	kgantioff_tglawal		=[];
+		var	kgantioff_tglakhir		=[];
+		var	kgantioff_jmlhari		=[];
+		var	kgantioff_tglgantiawal	=[];
+		var	kgantioff_tglgantiakhir	=[];
+		var	kgantioff_tglpengajuan	=[];
+		var	kgantioff_keterangan	=[];
+
+		var dcount = gantioff_DataStore.getCount() - 1;
+		
+		if(gantioff_DataStore.getCount()>0){
+			for(i=0; i<gantioff_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+
+
+				kgantioff_id.push(gantioff_DataStore.getAt(i).data.kgantioff_id);
+				kgantioff_jenis.push(gantioff_DataStore.getAt(i).data.kgantioff_jenis);
+				kgantioff_tglawal.push(gantioff_DataStore.getAt(i).data.kgantioff_tglawal);
+				kgantioff_tglakhir.push(gantioff_DataStore.getAt(i).data.kgantioff_tglakhir);
+				kgantioff_jmlhari.push(gantioff_DataStore.getAt(i).data.kgantioff_jmlhari);
+				kgantioff_tglgantiawal.push(gantioff_DataStore.getAt(i).data.kgantioff_tglgantiawal);
+				kgantioff_tglgantiakhir.push(gantioff_DataStore.getAt(i).data.kgantioff_tglgantiakhir);
+				kgantioff_tglpengajuan.push(gantioff_DataStore.getAt(i).data.kgantioff_tglpengajuan);
+				kgantioff_keterangan.push(gantioff_DataStore.getAt(i).data.kgantioff_keterangan);
+	
+				if(i==dcount){
+					var encoded_array_kgantioff_id = Ext.encode(kgantioff_id);
+					var encoded_array_kgantioff_jenis = Ext.encode(kgantioff_jenis);
+					var encoded_array_kgantioff_tglawal = Ext.encode(kgantioff_tglawal);
+					var encoded_array_kgantioff_tglakhir = Ext.encode(kgantioff_tglakhir);
+					var encoded_array_kgantioff_jmlhari = Ext.encode(kgantioff_jmlhari);
+					var encoded_array_kgantioff_tglgantiawal = Ext.encode(kgantioff_tglgantiawal);
+					var encoded_array_kgantioff_tglgantiakhir = Ext.encode(kgantioff_tglgantiakhir);
+					var encoded_array_kgantioff_tglpengajuan = Ext.encode(kgantioff_tglpengajuan);
+					var encoded_array_kgantioff_keterangan = Ext.encode(kgantioff_keterangan);
+
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_gantioff_insert',
+						params:{
+							kgantioff_id			: encoded_array_kgantioff_id, 
+							kgantioff_master		: eval(get_pk_id()),
+							kgantioff_jenis			: encoded_array_kgantioff_jenis,
+							kgantioff_tglawal		: encoded_array_kgantioff_tglawal,
+							kgantioff_tglakhir		: encoded_array_kgantioff_tglakhir,
+							kgantioff_jmlhari		: encoded_array_kgantioff_jmlhari,
+							kgantioff_tglgantiawal	: encoded_array_kgantioff_tglgantiawal,
+							kgantioff_tglgantiakhir	: encoded_array_kgantioff_tglgantiakhir,
+							kgantioff_tglpengajuan	: encoded_array_kgantioff_tglpengajuan,
+							kgantioff_keterangan	: encoded_array_kgantioff_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_gantioff_confirm_delete(){
+		// only one record is selected here
+		if(detail_gantioffListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_gantioff_delete);
+		} else if(detail_gantioffListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_gantioff_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_gantioff_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_gantioffListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kgantioff_id==''){
+                    gantioff_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kgantioff_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    gantioff_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "GDELETE", kgantioff_id:  record.data.kgantioff_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF GANTIOFF
+	
+	// MEDICAL
+	// declaration medical
+	var kmedicaltujuan_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicaltujuan_value'],
+			data:[['Diri Sendiri'],['Istri'],['Anak']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicaltujuan_value',
+		valueField: 'kmedicaltujuan_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	var kmedicalrawat_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicalrawat_value'],
+			data:[['Rawat Jalan'],['Rawat Inap']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicalrawat_value',
+		valueField: 'kmedicalrawat_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	var kmedicaljenis_Field= new Ext.form.ComboBox({
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicaljenis_value'],
+			data:[['Umum'],['Spesialis'],['Frame'],['Lensa'],['Lain-lain']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicaljenis_value',
+		valueField: 'kmedicaljenis_value',
+		allowBlank: true,
+		anchor: '50%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	
+	
+	// eof declaration status kekaryawanan
+	
+	//declaration of detail coloumn model
+	detail_medical_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kmedical_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tujuan Klaim' + '</div>',
+			dataIndex: 'kmedical_tujuan',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kmedicaltujuan_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Rawat' + '</div>',
+			dataIndex: 'kmedical_jenis_rawat',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kmedicalrawat_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Klaim' + '</div>',
+			dataIndex: 'kmedical_jenis_klaim',
+			width: 100,
+			sortable: false
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+			,
+			editor: kmedicaljenis_Field,
+		
+			<?php } ?>
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Jml Kuitansi' + '</div>',
+			dataIndex: 'kmedical_jumlah',
+			width: 50,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:10})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			dataIndex: 'kmedical_total',
+			width: 100,
+			sortable: true,
+			valueRenderer: 'numberToCurrency',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor: new Ext.form.NumberField({maxLength:10})
+			
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Pengajuan' + '</div>',
+			dataIndex: 'kmedical_tglpengajuan',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kmedical_keterangan',
+			width: 500,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		
+		]
+	);
+	detail_medical_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_medicalListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_medicalListEditorGrid',
+		el: 'fp_detail_medical',
+		title: 'Medical Reimbursement',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: medical_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_medical_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_medical_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: medical_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_medical_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_medical_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_medical_add(){
+		var edit_detail_medical= new detail_medicalListEditorGrid.store.recordType({
+			kmedical_id				:'',		
+			kmedical_tujuan			:'',
+			kmedical_jenis_rawat	:'',
+			kmedical_jenis_klaim	:'',
+			kmedical_jumlah			:'',
+			kmedical_total			:'',
+			kmedical_tglpengajuan	:today.dateFormat('Y-m-d'),
+			kmedical_keterangan		:''
+			
+		});
+		editor_detail_medical_karyawan.stopEditing();
+		medical_DataStore.insert(0, edit_detail_medical);
+		detail_medicalListEditorGrid.getView().refresh();
+		detail_medicalListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_medical_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_medical_insert(){
+		var	kmedical_id				=[];		
+		var	kmedical_tujuan			=[];
+		var	kmedical_jenis_rawat	=[];
+		var	kmedical_jenis_klaim	=[];
+		var	kmedical_jumlah			=[];
+		var	kmedical_total			=[];
+		var	kmedical_tglpengajuan	=[];
+		var	kmedical_keterangan		=[];
+
+		var dcount = medical_DataStore.getCount() - 1;
+		
+		if(medical_DataStore.getCount()>0){
+			for(i=0; i<medical_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+				kmedical_id.push(medical_DataStore.getAt(i).data.kmedical_id);
+				kmedical_tujuan.push(medical_DataStore.getAt(i).data.kmedical_tujuan);
+				kmedical_jenis_rawat.push(medical_DataStore.getAt(i).data.kmedical_jenis_rawat);
+				kmedical_jenis_klaim.push(medical_DataStore.getAt(i).data.kmedical_jenis_klaim);
+				kmedical_jumlah.push(medical_DataStore.getAt(i).data.kmedical_jumlah);
+				kmedical_total.push(medical_DataStore.getAt(i).data.kmedical_total);
+				kmedical_tglpengajuan.push(medical_DataStore.getAt(i).data.kmedical_tglpengajuan);
+				kmedical_keterangan.push(medical_DataStore.getAt(i).data.kmedical_keterangan);
+	
+				if(i==dcount){
+					var encoded_array_kmedical_id = Ext.encode(kmedical_id);
+					var encoded_array_kmedical_tujuan = Ext.encode(kmedical_tujuan);
+					var encoded_array_kmedical_jenis_rawat = Ext.encode(kmedical_jenis_rawat);
+					var encoded_array_kmedical_jenis_klaim = Ext.encode(kmedical_jenis_klaim);
+					var encoded_array_kmedical_jumlah = Ext.encode(kmedical_jumlah);
+					var encoded_array_kmedical_total = Ext.encode(kmedical_total);
+					var encoded_array_kmedical_tglpengajuan = Ext.encode(kmedical_tglpengajuan);
+					var encoded_array_kmedical_keterangan = Ext.encode(kmedical_keterangan);
+
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_medical_insert',
+						params:{
+							kmedical_id				: encoded_array_kmedical_id, 
+							kmedical_master			: eval(get_pk_id()),
+							kmedical_tujuan			: encoded_array_kmedical_tujuan,
+							kmedical_jenis_rawat	: encoded_array_kmedical_jenis_rawat,
+							kmedical_jenis_klaim	: encoded_array_kmedical_jenis_klaim,
+							kmedical_jumlah			: encoded_array_kmedical_jumlah,
+							kmedical_total			: encoded_array_kmedical_total,
+							kmedical_tglpengajuan	: encoded_array_kmedical_tglpengajuan,
+							kmedical_keterangan		: encoded_array_kmedical_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_medical_confirm_delete(){
+		// only one record is selected here
+		if(detail_medicalListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_medical_delete);
+		} else if(detail_medicalListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_medical_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_medical_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_medicalListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kmedical_id==''){
+                    medical_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kmedical_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    medical_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "MDELETE", kmedical_id:  record.data.kmedical_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF MEDICAL
+	
+	// FASILITAS
+	//declaration of detail coloumn model
+	detail_fasilitas_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			align : 'Left',
+			header: 'ID',
+			dataIndex: 'kfasilitas_id',
+            hidden: true
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Item' + '</div>',
+			dataIndex: 'kfasilitas_item',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tgl Serah Terima' + '</div>',
+			dataIndex: 'kfasilitas_tglserahterima',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'kfasilitas_keterangan',
+			width: 300,
+			sortable: true,
+			editor: new Ext.form.TextField({maxLength:250})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		}
+		]
+	);
+	detail_fasilitas_ColumnModel.defaultSortable= true;
+	//eof
+	//declaration of detail list editor grid
+	detail_fasilitasListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_fasilitasListEditorGrid',
+		el: 'fp_detail_fasilitas',
+		title: 'Fasilitas',
+		height: 200,
+		width: 1050,
+		autoScroll: true,
+		store: fasilitas_DataStore, //detail_jual_paket_DataStore, // DataStore
+		colModel: detail_fasilitas_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 0 0 0',
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		plugins: [editor_detail_fasilitas_karyawan],
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		<?php } ?>
+		frame: true,
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:false},
+		bbar: new Ext.PagingToolbar({
+			pageSize: pageS,
+			store: fasilitas_DataStore,
+			displayInfo: true
+		})
+		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
+		,
+		/* Add Control on ToolBar */
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../djpaket_add',
+			handler: detail_fasilitas_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../djpaket_delete',
+			disabled: false,
+			handler: detail_fasilitas_confirm_delete
+		}
+		]
+		<?php } ?>
+	});
+	//eof
+	
+	//function of detail add
+	function detail_fasilitas_add(){
+		var edit_detail_fasilitas= new detail_fasilitasListEditorGrid.store.recordType({
+			kfasilitas_id				:'',		
+			kfasilitas_item				:'',
+			kfasilitas_tglserahterima	:today.dateFormat('Y-m-d'),
+			kfasilitas_keterangan		:''
+		});
+		editor_detail_fasilitas_karyawan.stopEditing();
+		fasilitas_DataStore.insert(0, edit_detail_fasilitas);
+		detail_fasilitasListEditorGrid.getView().refresh();
+		detail_fasilitasListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_fasilitas_karyawan.startEditing(0);
+	}
+	
+	//function for insert detail
+	function detail_fasilitas_insert(){
+		var	kfasilitas_id				=[];		
+		var	kfasilitas_item				=[];
+		var	kfasilitas_tglserahterima	=[];
+		var	kfasilitas_keterangan		=[];
+
+		var dcount = fasilitas_DataStore.getCount() - 1;
+		
+		if(fasilitas_DataStore.getCount()>0){
+			for(i=0; i<fasilitas_DataStore.getCount();i++){
+				/*
+				kjabatan_id.push(jabatan_DataStore.getAt(i).data.kjabatan_id);
+				kjabatan_departemen.push(jabatan_DataStore.getAt(i).data.kjabatan_departemen);
+				kjabatan_jabatan.push(jabatan_DataStore.getAt(i).data.kjabatan_jabatan);
+				kjabatan_golongan.push(jabatan_DataStore.getAt(i).data.kjabatan_golongan);
+				kjabatan_pph21.push(jabatan_DataStore.getAt(i).data.kjabatan_pph21);
+				kjabatan_atasan.push(jabatan_DataStore.getAt(i).data.kjabatan_atasan);
+				kjabatan_tglawal.push(jabatan_DataStore.getAt(i).data.kjabatan_tglawal);
+				kjabatan_tglakhir.push(jabatan_DataStore.getAt(i).data.kjabatan_tglakhir);
+				kjabatan_keterangan.push(jabatan_DataStore.getAt(i).data.kjabatan_keterangan);
+				*/
+				
+			/*
+				if((/^\d+$/.test(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket))
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==undefined
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==''
+				   && detail_jual_paket_DataStore.getAt(i).data.dpaket_paket!==0){
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_id==undefined){
+						dpaket_id.push('');
+					}else{
+						dpaket_id.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_id);
+					}
+					
+					dpaket_paket.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_paket);
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan==undefined){
+						dpaket_karyawan.push('');
+					}else{
+						dpaket_karyawan.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_karyawan);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah==undefined){
+						dpaket_jumlah.push('');
+					}else{
+						dpaket_jumlah.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah);
+					}
+					
+					dpaket_kadaluarsa.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_kadaluarsa.format('Y-m-d'));
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga==undefined){
+						dpaket_harga.push('');
+					}else{
+						dpaket_harga.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_harga);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon==undefined){
+						dpaket_diskon.push('');
+					}else{
+						dpaket_diskon.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis==undefined){
+						dpaket_diskon_jenis.push('');
+					}else{
+						dpaket_diskon_jenis.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_diskon_jenis);
+					}
+					
+					if(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales==undefined){
+						dpaket_sales.push('');
+					}else{
+						dpaket_sales.push(detail_jual_paket_DataStore.getAt(i).data.dpaket_sales);
+					}
+				}
+				*/
+
+				kfasilitas_id.push(fasilitas_DataStore.getAt(i).data.kfasilitas_id);
+				kfasilitas_item.push(fasilitas_DataStore.getAt(i).data.kfasilitas_item);
+				kfasilitas_tglserahterima.push(fasilitas_DataStore.getAt(i).data.kfasilitas_tglserahterima);
+				kfasilitas_keterangan.push(fasilitas_DataStore.getAt(i).data.kfasilitas_keterangan);
+	
+				if(i==dcount){
+					var encoded_array_kfasilitas_id = Ext.encode(kfasilitas_id);
+					var encoded_array_kfasilitas_item = Ext.encode(kfasilitas_item);
+					var encoded_array_kfasilitas_tglserahterima = Ext.encode(kfasilitas_tglserahterima);
+					var encoded_array_kfasilitas_keterangan = Ext.encode(kfasilitas_keterangan);
+
+
+					Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_karyawan&m=detail_fasilitas_insert',
+						params:{
+							kfasilitas_id				: encoded_array_kfasilitas_id, 
+							kfasilitas_master			: eval(get_pk_id()),
+							kfasilitas_item				: encoded_array_kfasilitas_item,
+							kfasilitas_tglserahterima	: encoded_array_kfasilitas_tglserahterima,
+							kfasilitas_keterangan		: encoded_array_kfasilitas_keterangan
+						},
+						timeout: 60000,
+						/*
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result==0){
+								Ext.MessageBox.alert(jpaket_post2db+' OK','Data penjualan paket berhasil disimpan');
+								jpaket_btn_cancel();
+							}else if(result>0){
+								jpaket_cetak(result);
+								cetak_jpaket=0;
+							}else{
+								jpaket_btn_cancel();
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+							jpaket_btn_cancel();
+						}
+						*/
+					});
+					
+				}
+				
+			}
+		}
+		
+	}
+	//eof
+	
+	/* Function for Delete Confirm of detail */
+	function detail_fasilitas_confirm_delete(){
+		// only one record is selected here
+		if(detail_fasilitasListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_fasilitas_delete);
+		} else if(detail_fasilitasListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus data ini?', detail_fasilitas_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda belum memilih data yang akan dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail
+	function detail_fasilitas_delete(btn){
+		if(btn=='yes'){
+            var selections = detail_fasilitasListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, record; record = selections[i]; i++){
+                if(record.data.kfasilitas_id==''){
+                    fasilitas_DataStore.remove(record);
+					//load_dstore_jpaket();
+                }else if((/^\d+$/.test(record.data.kfasilitas_id))){
+                    //Delete dari db.detail_jual_paket
+                    Ext.MessageBox.show({
+                        title: 'Please wait',
+                        msg: 'Loading items...',
+                        progressText: 'Initializing...',
+                        width:300,
+                        wait:true,
+                        waitConfig: {interval:200},
+                        closable:false
+                    });
+                    fasilitas_DataStore.remove(record);
+                    Ext.Ajax.request({ 
+                        waitMsg: 'Please Wait',
+                        url: 'index.php?c=c_karyawan&m=get_action', 
+                        params: { task: "FDELETE", kfasilitas_id:  record.data.kfasilitas_id }, 
+                        success: function(response){
+							var result=eval(response.responseText);
+							switch(result){
+								case 1:
+									//load_dstore_jpaket();
+                                    Ext.MessageBox.hide();
+									//Ext.Msg.alert('OK', 'Penghapusan secara permanen sudah dilakukan.');
+									break;
+								default:
+									Ext.MessageBox.hide();
+                                    Ext.MessageBox.show({
+                                        title: 'Warning',
+                                        msg: 'Could not delete the entire selection',
+                                        buttons: Ext.MessageBox.OK,
+                                        animEl: 'save',
+                                        icon: Ext.MessageBox.WARNING
+                                    });
+                                    break;
+							}
+                        },
+                        failure: function(response){
+                            Ext.MessageBox.hide();
+                            var result=response.responseText;
+                            Ext.MessageBox.show({
+                               title: 'Error',
+                               msg: 'Could not connect to the database. retry later.',
+                               buttons: Ext.MessageBox.OK,
+                               animEl: 'database',
+                               icon: Ext.MessageBox.ERROR
+                            });	
+                        }
+                    });
+                }
+			}
+		} 
+		
+	}
+	//eof
+	// EOF FASILITAS
     
 	/* Declare DataStore and  show datagrid list */
 	karyawanListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -1568,16 +5622,16 @@ Ext.onReady(function(){
 	//karyawan_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	karyawanListEditorGrid.on('afteredit', karyawan_update); // inLine Editing Record
 	
-	//cbo_karyawan_golongan_DataStore.load();
-	//cbo_karyawan_jabatan_DataStore.load();
+	cbo_karyawan_golongan_DataStore.load();
+	cbo_karyawan_jabatan_DataStore.load();
 	cbo_karyawan_cabang_DataStore.load();
-	//cbo_karyawan_departemen_DataStore.load();
-	//cbo_karyawan_atasan_DataStore.load();
+	cbo_karyawan_departemen_DataStore.load();
+	cbo_karyawan_atasan_DataStore.load();
 	
 	/* Identify  karyawan_no Field */
 	karyawan_noField= new Ext.form.TextField({
 		id: 'karyawan_noField',
-		fieldLabel: 'NIK <span style="color: #ec0000">*</span>',
+		fieldLabel: 'NIK',
 		maxLength: 30,
 		allowBlank: false,
 		readOnly: true,
@@ -1585,12 +5639,51 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	/* Identify  karyawan_noktp Field */
+	karyawan_noktpField= new Ext.form.TextField({
+		id: 'karyawan_noktpField',
+		fieldLabel: 'No. KTP',
+		maxLength: 30,
+		allowBlank: true,
+		readOnly: false,
+		//emptyText: '(auto)',
+		anchor: '95%'
+	});
+	
+	/* Identify  karyawan_alamatktp Field */
+	karyawan_alamatktpField= new Ext.form.TextField({
+		id: 'karyawan_alamatktpField',
+		fieldLabel: 'Alamat KTP',
+		maxLength: 30,
+		allowBlank: true,
+		readOnly: false,
+		//emptyText: '(auto)',
+		anchor: '95%'
+	});
+	
+	/* Identify  karyawan_agama Field */
+	karyawan_agamaField= new Ext.form.ComboBox({
+		id: 'karyawan_agamaField',
+		fieldLabel: 'Agama',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_agama_value', 'karyawan_agama_display'],
+			data:[['Kristen','Kristen'],['Katholik','Katholik'],['Islam','Islam'],['Budha','Budha'],['Hindu','Hindu']]
+		}),
+		mode: 'local',
+		editable:false,
+		allowBlank: false,
+		displayField: 'karyawan_agama_display',
+		valueField: 'karyawan_agama_value',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	
 	/*Identify karyawan_sip Field*/
 	karyawan_sipField= new Ext.form.TextField({
 		id: 'karyawan_sipField',
-		fieldLabel: '&nbsp; &nbsp; &nbsp; SIP',
+		fieldLabel: 'SIP (Jika Diperlukan)',
 		maxLength: 15,
-		width : 100
+		anchor: '95%'
 	});
 	
 	/* Identify  karyawan_npwp Field */
@@ -1603,7 +5696,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_username Field */
 	karyawan_usernameField= new Ext.form.TextField({
 		id: 'karyawan_usernameField',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;Nickname <span style="color: #ec0000">*</span>',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;Nickname',
 		maxLength: 15,
 		allowBlank: false,
 		width: 100
@@ -1611,7 +5704,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_nama Field */
 	karyawan_namaField= new Ext.form.TextField({
 		id: 'karyawan_namaField',
-		fieldLabel: 'Nama Lengkap <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Nama Lengkap',
 		maxLength: 50,
 		allowBlank: false,
 		anchor: '95%'
@@ -1619,7 +5712,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_kelamin Field */
 	karyawan_kelaminField= new Ext.form.ComboBox({
 		id: 'karyawan_kelaminField',
-		fieldLabel: 'Jenis Kelamin <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Jenis Kelamin',
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_kelamin_value', 'karyawan_kelamin_display'],
 			data:[['L','Laki-laki'],['P','Perempuan']]
@@ -1629,13 +5722,13 @@ Ext.onReady(function(){
 		allowBlank: false,
 		displayField: 'karyawan_kelamin_display',
 		valueField: 'karyawan_kelamin_value',
-		width: 80,
+		width: 100,
 		triggerAction: 'all'	
 	});
 	/* Identify  karyawan_kelamin Field */
 	karyawan_marriageField= new Ext.form.ComboBox({
 		id: 'karyawan_marriageField',
-		fieldLabel: 'Status Pernikahan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status Pernikahan',
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_marriage_value', 'karyawan_marriage_display'],
 			data:[['Single','Belum Menikah'],['Marriage','Menikah']]
@@ -1648,10 +5741,59 @@ Ext.onReady(function(){
 		width: 100,
 		triggerAction: 'all'	
 	});
+	
+	/* Identify  karyawan_jumlahanak Field */
+	karyawan_jmlanakField= new Ext.form.TextField({
+		id: 'karyawan_jmlanakField',
+		fieldLabel: 'Jml Anak',
+		maxLength: 15,
+		allowBlank: false,
+		disabled: true,
+		width: 100
+	});
+	
+	/* Identify  karyawan_bank Field */
+	karyawan_bankField= new Ext.form.ComboBox({
+		id: 'karyawan_bankField',
+		fieldLabel: 'Nama Bank',
+		store:cbo_karyawan_bank_DataStore,
+		mode: 'remote',
+		editable:false,
+		allowBlank: true,
+		displayField: 'karyawan_bank_display',
+		valueField: 'karyawan_bank_value',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	/* Identify  karyawan_bankcabang Field */
+	karyawan_bankcabangField= new Ext.form.TextField({
+		id: 'karyawan_bankcabangField',
+		fieldLabel: 'Cabang',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	/* Identify  karyawan_norekening Field */
+	karyawan_norekeningField= new Ext.form.TextField({
+		id: 'karyawan_norekeningField',
+		fieldLabel: 'No Rekening',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	/* Identify  karyawan_atasnama Field */
+	karyawan_atasnamaField= new Ext.form.TextField({
+		id: 'karyawan_atasnamaField',
+		fieldLabel: 'Atas Nama',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	
 	/* Identify  karyawan_kelamin Field */
 	karyawan_pph21Field= new Ext.form.ComboBox({
 		id: 'karyawan_pph21Field',
-		fieldLabel: 'PPH 21 <span style="color: #ec0000">*</span>',
+		fieldLabel: 'PPH 21',
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_pph21_value', 'karyawan_pph21_display'],
 			data:[['TK','TK'],['K','K'],['K/1','K/1'],['K/2','K/2'],['K/3','K/3'],['TK/1','TK/1'],['TK/2','TK/2'],['TK/3','TK/3']]
@@ -1667,13 +5809,14 @@ Ext.onReady(function(){
 	/* Identify  karyawan_tgllahir Field */
 	karyawan_tgllahirField= new Ext.form.DateField({
 		id: 'karyawan_tgllahirField',
-		fieldLabel: 'Tgl Lahir',
+		fieldLabel: '/',
 		format : 'd-m-Y',
+		allowBlank: false,
 	});
 	/* Identify  karyawan_tmplahir Field */
 	karyawan_tmplahirField= new Ext.form.TextField({
 		id: 'karyawan_tmplahirField',
-		fieldLabel: 'Tempat Lahir <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Tempat / Tgl Lahir',
 		maxLength: 100,
 		allowBlank: false,
 		anchor: '95%'
@@ -1681,7 +5824,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_alamat Field */
 	karyawan_alamatField= new Ext.form.TextField({
 		id: 'karyawan_alamatField',
-		fieldLabel: 'Alamat <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Alamat Saat Ini',
 		maxLength: 250,
 		allowBlank: false,
 		anchor: '95%'
@@ -1715,6 +5858,13 @@ Ext.onReady(function(){
 		maxLength: 40,
 		anchor: '95%'
 	});
+	/* Identify  karyawan_jamsostek Field */
+	karyawan_jamsostekField= new Ext.form.TextField({
+		id: 'karyawan_jamsostekField',
+		fieldLabel: 'No. Jamsostek',
+		maxLength: 40,
+		anchor: '95%'
+	});
 	/* Identify  karyawan_keterangan Field */
 	karyawan_keteranganField= new Ext.form.TextArea({
 		id: 'karyawan_keteranganField',
@@ -1733,7 +5883,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp2 Field */
 	karyawan_notelp2Field= new Ext.form.TextField({
 		id: 'karyawan_notelp2Field',
-		fieldLabel: 'Ponsel 1',
+		fieldLabel: 'Ponsel',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1741,7 +5891,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp3 Field */
 	karyawan_notelp3Field= new Ext.form.TextField({
 		id: 'karyawan_notelp3Field',
-		fieldLabel: 'Ponsel 2',
+		fieldLabel: '',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1749,7 +5899,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_notelp4 Field */
 	karyawan_notelp4Field= new Ext.form.TextField({
 		id: 'karyawan_notelp4Field',
-		fieldLabel: 'Ponsel 3',
+		fieldLabel: '',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1757,7 +5907,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_cabang Field */
 	karyawan_cabangField= new Ext.form.ComboBox({
 		id: 'karyawan_cabangField ',
-		fieldLabel: 'Cabang Terdaftar <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Cabang',
 		store:cbo_karyawan_cabang_DataStore,
 		mode: 'remote',
 		editable:false,
@@ -1770,7 +5920,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_jabatan Field */
 	karyawan_jabatanField= new Ext.form.ComboBox({
 		id: 'karyawan_jabatanField',
-		fieldLabel: 'Jabatan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Jabatan',
 		store:cbo_karyawan_jabatan_DataStore,
 		mode: 'remote',
 		editable:false,
@@ -1783,7 +5933,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_departemen Field */
 	karyawan_departemenField= new Ext.form.ComboBox({
 		id: 'karyawan_departemenField',
-		fieldLabel: 'Departemen <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Departemen',
 		store:cbo_karyawan_departemen_DataStore,
 		mode: 'remote',
 		editable:false,
@@ -1796,7 +5946,7 @@ Ext.onReady(function(){
 	
 	karyawan_golonganField= new Ext.form.ComboBox({
 		id: 'karyawan_golonganField',
-		fieldLabel: 'Golongan <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Golongan',
 		store:cbo_karyawan_golongan_DataStore,
 		mode: 'remote',
 		editable:false,
@@ -1821,6 +5971,8 @@ Ext.onReady(function(){
 		id: 'karyawan_tglmasukField',
 		fieldLabel: 'Tanggal Masuk',
 		format : 'Y-m-d',
+		allowBlank: false,
+		width : 100
 	});
 	/* Identify  karyawan_tgl_batas Field */
 	karyawan_tglbatasField= new Ext.form.DateField({
@@ -2057,7 +6209,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_aktif Field */
 	karyawan_aktifField= new Ext.form.ComboBox({
 		id: 'karyawan_aktifField',
-		fieldLabel: 'Status <span style="color: #ec0000">*</span>',
+		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_aktif_value', 'karyawan_aktif_display'],
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
@@ -2070,15 +6222,91 @@ Ext.onReady(function(){
 		width: 80,
 		triggerAction: 'all'	
 	});
+	/*
+	[
+			{
+				columnWidth:0.5,
+				layout: 'form',
+				labelAlign: 'left',
+				border:false,
+				items: [ karyawan_cab_corpField, karyawan_cab_thField, karyawan_cab_kiField, karyawan_cab_hrField, karyawan_cab_tpField,  karyawan_cab_mlgField, karyawan_cab_dpsField, karyawan_cab_jktField, karyawan_cab_mtaField, karyawan_cab_blpnField, karyawan_cab_mgField]
+			},
+			 {
+				   	layout: 'form',
+					border: false,
+					columnWidth: 0.5,
+					labelWidth: 80,
+					labelAlign: 'left',
+					items:[karyawan_cab_kutaField, karyawan_cab_btmField, karyawan_cab_mksField, karyawan_cab_mdnField, karyawan_cab_lbkField, karyawan_cab_mndField, karyawan_cab_ygkField]
+			   }
+		]
+	*/
   	
 	group_alamat = new Ext.form.FieldSet({
 		title: 'Alamat',
 		autoHeight: true,
-		defaultType: 'textfield',
+		layout:'form',
+		//mode: 'remote',
+		//defaultType: 'textfield',	
 		anchor: '95%',
-		items:[karyawan_alamatField ,karyawan_kotaField ,karyawan_kodeposField]
+		items:
+			[karyawan_alamatField ,
+			{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_kotaField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 70,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_kodeposField]
+					}
+				]}, karyawan_notelpField,
+				{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_notelp2Field]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.24,
+						labelWidth: 3,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_notelp3Field]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.23,
+						labelWidth: 3,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_notelp4Field]
+					}
+				]},karyawan_emailField
+			]
 	});
-	
+	/*
 	group_kontak = new Ext.form.FieldSet({
 		title: 'Kontak',
 		autoHeight: true,
@@ -2086,13 +6314,27 @@ Ext.onReady(function(){
 		anchor: '95%',
 		items:[karyawan_notelpField ,karyawan_notelp2Field ,karyawan_notelp3Field,karyawan_notelp4Field ,karyawan_emailField]
 	});
-	
-	group_pekerjaan = new Ext.form.FieldSet({
-		title: 'Pekerjaan',
+	*/
+	group_rekening = new Ext.form.FieldSet({
+		title: 'Rekening',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_tglmasukField, karyawan_tglbatasField, karyawan_cabangField, karyawan_cabGroup , karyawan_jabatanField, karyawan_sipField, karyawan_departemenField, karyawan_golonganField, karyawan_atasanField, karyawan_emiracleField, karyawan_pph21Field]
+		items:[karyawan_bankField, karyawan_bankcabangField, karyawan_norekeningField, karyawan_atasnamaField ]
+	});
+	
+	var detail_tab_data_karyawan = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [detail_status_karyawanListEditorGrid,detail_jabatanListEditorGrid, detail_pendidikanListEditorGrid, detail_keluargaListEditorGrid]
+	});
+	
+	var detail_tab_aktivitas_karyawan = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [detail_cutiListEditorGrid,detail_gantioffListEditorGrid, detail_medicalListEditorGrid, detail_fasilitasListEditorGrid]
 	});
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -2110,16 +6352,61 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [karyawan_noField, karyawan_npwpField, karyawan_namaField, karyawan_usernameField, karyawan_tmplahirField, karyawan_tgllahirField, karyawan_kelaminField, karyawan_marriageField, group_alamat, group_kontak ] 
+				items: [karyawan_cabangField, karyawan_noField, karyawan_namaField, karyawan_usernameField, karyawan_noktpField, karyawan_alamatktpField, karyawan_agamaField,
+						{
+							columnWidth:1,
+							layout: 'column',
+							border:false,
+							items: [
+								{
+									columnWidth:0.5,
+									layout: 'form',
+									labelAlign: 'left',
+									border:false,
+									items: [karyawan_tmplahirField]
+								},
+								{
+									layout: 'form',
+									border: false,
+									columnWidth: 0.5,
+									labelWidth: 20,
+									//labelAlign: 'left',
+									labelSeparator: ' ', 
+									items:[karyawan_tgllahirField]
+								}
+							]},karyawan_kelaminField,
+							{	
+							columnWidth:1,
+							layout: 'column',
+							border:false,
+							items: [
+								{
+									columnWidth:0.5,
+									layout: 'form',
+									labelAlign: 'left',
+									border:false,
+									items: [karyawan_marriageField]
+								},
+								{
+									layout: 'form',
+									border: false,
+									columnWidth: 0.5,
+									labelWidth: 60,
+									//labelAlign: 'left',
+									labelSeparator: ' ', 
+									items:[karyawan_jmlanakField]
+								}
+							]},karyawan_tglmasukField, group_alamat, group_rekening ] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,	
-				items: [group_pekerjaan, karyawan_keteranganField, karyawan_aktifField ] 
+				items: [karyawan_cabGroup, karyawan_sipField,  karyawan_jamsostekField, karyawan_npwpField, karyawan_emiracleField, karyawan_keteranganField, karyawan_aktifField ] 
 			}
 			]
-		}]
+		}, detail_tab_data_karyawan,detail_tab_aktivitas_karyawan]
+		//detail_status_karyawanListEditorGrid, detail_jabatanListEditorGrid]
 		,
 		buttons: [
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KARYAWAN'))){ ?>
@@ -2132,12 +6419,21 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					karyawan_reset_form();
 					karyawan_createWindow.hide();
 				}
 			}
 		]
 	});
 	/* End  of Function*/
+	/*
+	var detail_tab_data_karyawan = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [detail_status_karyawanListEditorGrid,detail_jabatanListEditorGrid]
+	});
+	*/
 	
 	/* Function for retrieve create Window Form */
 	karyawan_createWindow= new Ext.Window({
@@ -2256,6 +6552,7 @@ Ext.onReady(function(){
 		cbo_karyawan_departemen_DataStore.reload();
 		cbo_karyawan_golongan_DataStore.reload();
 		cbo_karyawan_jabatan_DataStore.reload();
+		cbo_karyawan_bank_DataStore.reload();
 		cbo_karyawan_atasan_DataStore.reload();
 
 		karyawan_searchWindow.close();
@@ -2366,7 +6663,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'karyawan_kelamin',
 		valueField: 'value',
-		width: 80,
+		width: 100,
 		triggerAction: 'all'	 
 	
 	});
@@ -2481,7 +6778,7 @@ Ext.onReady(function(){
 	/* Identify  karyawan_cabang Search Field */
 	karyawan_cabangSearchField= new Ext.form.ComboBox({
 		id: 'karyawan_cabangSearchField',
-		fieldLabel: 'Cabang Terdaftar',
+		fieldLabel: 'Cabang',
 		store:cbo_karyawan_cabang_DataStore,
 		mode: 'remote',
 		displayField: 'karyawan_cabang_display',
@@ -2658,6 +6955,26 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	// Event utk sub kategori
+	dkaryawan_statuskaryawanField.on("select", function(){
+		if(dkaryawan_statuskaryawanField.getValue()=='Tidak Aktif'){
+			Ext.MessageBox.confirm('Confirmation','Mengubah status menjadi Tidak Aktif akan mentidak aktifkan karyawan ini. Anda yakin mentidak aktifkan karyawan ini?', karyawan_tidak_aktif);
+
+		}else if(dkaryawan_statuskaryawanField.getValue()!='Tidak Aktif'){
+			karyawan_aktifField.setValue('Aktif');
+		}
+	});
+	
+	function karyawan_tidak_aktif(btn){
+	if(btn=='yes'){
+		karyawan_aktifField.setValue('Tidak Aktif');
+	} else{
+		dkaryawan_statuskaryawanField.setValue('Percobaan')
+		karyawan_aktifField.setValue('Aktif');
+	}
+	}
+	
+
 	/* Function for print List Grid */
 	function karyawan_print(){
 		var searchquery = "";
@@ -2881,14 +7198,46 @@ Ext.onReady(function(){
 		} 	                     
 		});
 	}
-	/*End of Function */
+	/*End of Function */		
 	
 });
+	
+	
+	
+	// EVENTS
+	// Event utk sub kategori
+	karyawan_marriageField.on("select", function(){
+		if(karyawan_marriageField.getValue()=='Marriage'){
+			karyawan_jmlanakField.setDisabled(false);
+		}else if(karyawan_marriageField.getValue()=='Single'){
+			karyawan_jmlanakField.setDisabled(true);
+		}
+	});
+	
+	// otomatis mengisi jum hari
+	/*
+	kcuti_tglawalField.on("select", function(){
+		kcuti_jmlhariField.setValue(((kcuti_tglakhirField.getValue()-kcuti_tglawalField.getValue())/86400000)+1); 		
+	});
+	kcuti_tglakhirField.on("select", function(){
+		kcuti_jmlhariField.setValue(((kcuti_tglakhirField.getValue()-kcuti_tglawalField.getValue())/86400000)+1); 		
+	});
+	*/
+
+	
 	</script>
 <body>
 <div>
 	<div class="col">
         <div id="fp_karyawan"></div>
+		<div id="fp_detail_status_karyawan"></div>
+		<div id="fp_detail_jabatan"></div>
+		<div id="fp_detail_pendidikan"></div>
+		<div id="fp_detail_keluarga"></div>
+		<div id="fp_detail_cuti"></div>
+		<div id="fp_detail_gantioff"></div>
+		<div id="fp_detail_medical"></div>
+		<div id="fp_detail_fasilitas"></div>
 		<div id="elwindow_karyawan_create"></div>
         <div id="elwindow_karyawan_search"></div>
     </div>
