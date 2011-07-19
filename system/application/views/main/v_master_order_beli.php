@@ -159,6 +159,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 						case 1:
+							cetak_order=0;
 							master_order_beli_create();
 						break;
 						default:

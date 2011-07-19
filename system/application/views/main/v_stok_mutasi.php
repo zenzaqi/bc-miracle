@@ -385,7 +385,7 @@ Ext.onReady(function(){
 				nama_bulan='Februari'
 			}else if(stok_mutasi_bulanField.getValue() == '03') {
 				nama_bulan='Maret'
-			}else if(stok_mutasi_bulanField.getValue() == '01') {
+			}else if(stok_mutasi_bulanField.getValue() == '04') {
 				nama_bulan='April'
 			}else if(stok_mutasi_bulanField.getValue() == '05') {
 				nama_bulan='Mei'
@@ -434,6 +434,8 @@ Ext.onReady(function(){
 		// change the store parameters
 		stok_mutasi_DataStore.baseParams = {
 			task			: 	'SEARCH',
+			start: 0,
+			limit: pageS,
 			produk_id		:	produk_nama_search, 
 			group1_id		:	group1_search,
 			tanggal_start	:	tanggal_start_search, 
