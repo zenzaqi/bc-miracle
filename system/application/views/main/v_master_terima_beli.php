@@ -2082,6 +2082,7 @@ Ext.onReady(function(){
 					master_terima_beli_DataStore.reload();
 					cbo_tbeli_orderbeli_DataSore.reload();
 					master_terima_beli_createWindow.hide();
+					
 				}
 			}
 		]

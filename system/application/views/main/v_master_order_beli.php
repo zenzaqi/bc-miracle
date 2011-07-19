@@ -401,6 +401,9 @@ Ext.onReady(function(){
 		order_keteranganField.setDisabled(false);
 		order_statusField.setDisabled(false);
 		order_status_accField.setDisabled(false);
+		combo_order_produk.setDisabled(false);
+		combo_order_satuan.setDisabled(false);
+		order_jumlah_barangField.setDisabled(false);
 		/*cbo_order_satuanDataStore.load();
 		cbo_order_produk_DataStore.load();*/
 		detail_order_beli_DataStore.load({params: {master_id:-1}});
@@ -490,6 +493,9 @@ Ext.onReady(function(){
 			order_keteranganField.setDisabled(false);
 			order_statusField.setDisabled(false);
 			order_status_accField.setDisabled(false);
+			combo_order_produk.setDisabled(false);
+			combo_order_satuan.setDisabled(false);
+			order_jumlah_barangField.setDisabled(false);
 			master_order_beli_createForm.obeli_savePrint.enable();
 		}
 		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Tertutup"){
@@ -505,6 +511,9 @@ Ext.onReady(function(){
 			order_keteranganField.setDisabled(true);
 			order_status_accField.setDisabled(true);
 			order_statusField.setDisabled(false);
+			combo_order_produk.setDisabled(true);
+			combo_order_satuan.setDisabled(true);
+			order_jumlah_barangField.setDisabled(true);
 			if(cetak_order==1){
 					//jproduk_cetak(jproduk_id_for_cetak);
 				cetak_order=0;
@@ -524,6 +533,9 @@ Ext.onReady(function(){
 			order_keteranganField.setDisabled(true);
 			order_status_accField.setDisabled(true);
 			order_statusField.setDisabled(true);
+			combo_order_produk.setDisabled(true);
+			combo_order_satuan.setDisabled(true);
+			order_jumlah_barangField.setDisabled(true);
 			master_order_beli_createForm.obeli_savePrint.disable();
 		}
 
@@ -956,6 +968,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Stat Acc' + '</div>',
 			dataIndex: 'order_status_acc',
+			hidden : true,
 			width: 60
 		},
 		{
@@ -1377,7 +1390,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [order_keteranganField, order_statusField, order_status_accField, order_idField]
+				items: [order_keteranganField, order_statusField, order_idField]
 
 			}
 			]
@@ -1534,6 +1547,19 @@ Ext.onReady(function(){
 		lazyRender:true
 	});
 
+	var order_jumlah_barangField = new Ext.form.NumberField({
+		id : 'order_jumlah_barangField',
+		name : 'order_jumlah_barangField',
+		allowDecimals: false,
+		allowNegative: false,
+		blankText : '0',
+		maxLength: 11,
+		enableKeyEvents: true,
+		readOnly : false,
+		maskRe: /([0-9]+)$/
+
+	});
+	
 	var order_harga_satuanField=new Ext.form.NumberField({
 		allowDecimals: true,
 		allowNegative: false,
@@ -1583,13 +1609,7 @@ Ext.onReady(function(){
 			width: 60,	//100,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			editor: new Ext.form.NumberField({
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})
+			editor: order_jumlah_barangField
 		},
 		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 		{
@@ -2205,8 +2225,8 @@ Ext.onReady(function(){
 					},
 					order_carabayarSearchField,
 					order_keteranganSearchField,
-					order_statusSearchField,
-					order_status_accSearchField]
+					order_statusSearchField
+					]
 			}
 			]
 		}]

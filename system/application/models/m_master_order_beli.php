@@ -232,10 +232,19 @@ class M_master_order_beli extends Model{
 		//function for detail
 		//get record list
 		function detail_detail_order_beli_list($master_id,$query,$start,$end) {
-			$query = "SELECT dorder_id,dorder_master,dorder_produk,produk_nama,sum(jumlah_terima)as jumlah_terima,dorder_satuan,jumlah_barang,harga_satuan, 
-						date_format(dorder_harga_log, '%Y-%m-%d %H:%i:%s') as dorder_harga_log,
-						diskon FROM vu_detail_order_beli where dorder_master='".$master_id."'
-						group by vu_detail_order_beli.dorder_produk, vu_detail_order_beli.dorder_satuan
+			$query = "SELECT detail_order_beli.dorder_id as dorder_id, detail_order_beli.dorder_master as dorder_master, detail_order_beli.dorder_produk as dorder_produk,detail_order_beli.dorder_satuan as dorder_satuan,
+							detail_order_beli.dorder_jumlah as jumlah_barang, detail_order_beli.dorder_harga as harga_satuan, date_format(dorder_harga_log, '%Y-%m-%d %H:%i:%s') as dorder_harga_log,
+							detail_order_beli.dorder_diskon as diskon,
+							(select sum(detail_terima_beli.dterima_jumlah)
+											from detail_terima_beli
+											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
+											where (master_terima_beli.terima_order = master_order_beli.order_id) and (detail_order_beli.dorder_produk = detail_terima_beli.dterima_produk)
+										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan) and (master_terima_beli.terima_status <> 'Batal')
+											) as jumlah_terima
+				FROM detail_order_beli
+				LEFT JOIN master_order_beli on (master_order_beli.order_id = detail_order_beli.dorder_master)
+				WHERE detail_order_beli.dorder_master = '".$master_id."'
+				group by dorder_produk, dorder_satuan
 						";
 
 			$result = $this->db->query($query);

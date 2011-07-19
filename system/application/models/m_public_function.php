@@ -109,14 +109,14 @@ class M_public_function extends Model{
 											from detail_terima_beli
 											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
 											where (master_terima_beli.terima_order = master_order_beli.order_id) and (detail_order_beli.dorder_produk = detail_terima_beli.dterima_produk)
-										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan)
+										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan) and (master_terima_beli.terima_status <> 'Batal')
 											)
 							),detail_order_beli.dorder_jumlah)as dterima_jumlah,
 							IFNULL((dorder_jumlah - (select sum(detail_terima_beli.dterima_jumlah)
 											from detail_terima_beli
 											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
 											where (master_terima_beli.terima_order = master_order_beli.order_id) and (detail_order_beli.dorder_produk = detail_terima_beli.dterima_produk)
-										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan)
+										and (detail_order_beli.dorder_satuan = detail_terima_beli.dterima_satuan) and (master_terima_beli.terima_status <> 'Batal')
 											)
 						),detail_order_beli.dorder_jumlah) as jumlah_sisa
 				FROM detail_order_beli

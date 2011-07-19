@@ -328,12 +328,12 @@ class M_master_terima_beli extends Model{
 						(select sum(detail_terima_beli.dterima_jumlah)
 						from detail_terima_beli
 						left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
-						where (master_terima_beli.terima_order = master_order_beli.order_id)
+						where (master_terima_beli.terima_order = master_order_beli.order_id AND master_terima_beli.terima_status <> 'Batal')
 						)as jumlah_terima, 
 						(sum(dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
 											from detail_terima_beli
 											left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
-											where (master_terima_beli.terima_order = master_order_beli.order_id)
+											where (master_terima_beli.terima_order = master_order_beli.order_id AND master_terima_beli.terima_status <> 'Batal')
 											)
 						)as sisa
 					FROM detail_order_beli
@@ -351,13 +351,13 @@ class M_master_terima_beli extends Model{
 						HAVING (sum(detail_order_beli.dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
 																		from detail_terima_beli
 																		left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
-																		where (master_terima_beli.terima_order = master_order_beli.order_id)
+																		where (master_terima_beli.terima_order = master_order_beli.order_id AND master_terima_beli.terima_status <> 'Batal')
 																		)
 								) <> 0 OR
 								(sum(detail_order_beli.dorder_jumlah) - (select sum(detail_terima_beli.dterima_jumlah)
 																		from detail_terima_beli
 																		left join master_terima_beli on (master_terima_beli.terima_id = detail_terima_beli.dterima_master)
-																		where (master_terima_beli.terima_order = master_order_beli.order_id)
+																		where (master_terima_beli.terima_order = master_order_beli.order_id AND master_terima_beli.terima_status <> 'Batal')
 																		)
 								) IS NULL
 						ORDER BY order_no desc ";			
