@@ -5667,7 +5667,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Agama',
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_agama_value', 'karyawan_agama_display'],
-			data:[['Kristen','Kristen'],['Katholik','Katholik'],['Islam','Islam'],['Budha','Budha'],['Hindu','Hindu']]
+			data:[['Kristen','Kristen'],['Katholik','Katholik'],['Islam','Islam'],['Budha','Budha'],['Hindu','Hindu'],['Kong Hu Chu','Kong Hu Chu']]
 		}),
 		mode: 'local',
 		editable:false,

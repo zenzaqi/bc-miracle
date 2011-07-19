@@ -48,7 +48,7 @@ class M_login extends Model{
 					$rs=$this->db->get('usergroups');
 					$row_group=$rs->row_array();
 					$_SESSION[SESSION_GROUPNAMA]=$row_group["group_name"];
-					$sql="update users set user_log=now() where user_name='".$u."'";
+					$sql="update users set user_log=now() where user_name='".$u."' and user_aktif = 'Aktif'";
 					$this->db->query($sql);
 					return true;
 				}else{
