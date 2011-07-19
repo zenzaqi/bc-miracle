@@ -48,31 +48,17 @@ class M_member_exc extends Model{
 			
 			//$sql = "SELECT member_id, member_no FROM member WHERE member_cust='$member_cust' AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND member_status='Serah Terima'";
 			//untuk perpanjangan, tidak perlu melihat (member_valid + interval $periode_tenggang day), yg penting cust sdh pernah jadi member, otomatis lsg perpanjangan
+			//update 2011-07-19: utk perpanjangan, jika ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) maka dianggap buat 'baru'
 			$sql = "SELECT member_id, member_no 
 					FROM member 
 					WHERE 
 						member_cust='$member_cust' AND 
-						/*((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND */
-						member_status='Serah Terima'";
+						((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND
+						(member_status='Daftar' OR member_status='Cetak') ";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows()){
-				$record = $rs->row_array();
-				//* di-check lagi apakah customer ini sudah di didaftarkan dengan member_status='Daftar' atau member_status='Cetak' /
-				$sql = 
-				   "SELECT member_id 
-				    FROM member 
-					WHERE 
-						member_cust='$member_cust' 
-						/*AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) */
-						AND (member_valid > (date_format(now(), '%Y-%m-%d') + interval $periode_tenggang day)) 
-						AND (member_status='Daftar' OR member_status='Cetak')"; 
-						//updated by hendri, 2011-07-19
-				$rs = $this->db->query($sql);
-				if($rs->num_rows()){
-					//* customer sudah didaftarkan menjadi member Miracle berstatus 'perpanjangan', yang fisik Card masih dalam proses Serah Terima /
-					return '2';
-				}else{
-					//* customer melakukan 'perpanjangan' member /
+					$record = $rs->row_array();
+					//* customer melakukan 'perpanjangan' member  --> yg tgl validnya masih/
 					$dti_member = array(
 					"member_cust"=>$member_cust, 
 					"member_no"=>$record['member_no'], 
@@ -88,25 +74,8 @@ class M_member_exc extends Model{
 						$this->cust_member_update($member_cust);
 						return '1';
 					}else
-						return '0';
-				}
-				
+						return '0';				
 			}else{
-				//* di-check lagi apakah customer ini sudah di didaftarkan dengan member_status='Daftar' atau member_status='Cetak' /
-				$sql = 
-				   "SELECT member_id 
-				    FROM member 
-					WHERE 
-						member_cust='$member_cust' 
-						/*AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) */
-						AND (member_valid > (date_format(now(), '%Y-%m-%d') + interval $periode_tenggang day)) 
-						AND (member_status='Daftar' OR member_status='Cetak')";
-						//updated by hendri, 2011-07-19
-				$rs = $this->db->query($sql);
-				if($rs->num_rows()){
-					//* customer sudah resmi menjadi member Miracle tapi fisik Card masih dalam proses Serah Terima /
-					return '2';
-				}else{
 					//* Customer yang belum sama sekali menjadi Member Miracle atau masa aktif member sudah lewat dari masa tenggang /
 					$data = array(
 					"member_cust"=>$member_cust, 
@@ -123,11 +92,8 @@ class M_member_exc extends Model{
 						$this->cust_member_update($member_cust);
 						return '1';
 					}else
-						return '0';
-				}
-				
-			}
-			
+						return '0';			
+			}		
 		}
 		
 		function cust_member_update($cust_id){
