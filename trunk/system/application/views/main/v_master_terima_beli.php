@@ -414,6 +414,10 @@ Ext.onReady(function(){
 		terima_tanggalField.setDisabled(false);
 		terima_keteranganField.setDisabled(false);
 		terima_statusField.setDisabled(false);
+		
+		combo_produk_terima.setDisabled(false);
+		combo_produk_satuan.setDisabled(false);
+		dterima_jumlahField.setDisabled(false);
 
 		cbo_satuan_produkDataStore.load();
 		cbo_produk_detailDataStore.load();
@@ -447,7 +451,6 @@ Ext.onReady(function(){
 		//cbo_terima_gudang_DataStore.load();
 		
 		//LOAD DETAIL
-		
 		
 		cbo_satuan_produkDataStore.setBaseParam('task','detail');
 		cbo_satuan_produkDataStore.setBaseParam('master_id',get_pk_id());
@@ -516,6 +519,9 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(false);
 			terima_keteranganField.setDisabled(false);
 			terima_statusField.setDisabled(false);
+			combo_produk_terima.setDisabled(false);
+			combo_produk_satuan.setDisabled(false);
+			dterima_jumlahField.setDisabled(false);
 			master_terima_beli_createForm.tbeli_savePrint.enable();
 		}
 		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
@@ -531,6 +537,9 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(true);
 			terima_keteranganField.setDisabled(true);
 			terima_statusField.setDisabled(false);
+			combo_produk_terima.setDisabled(true);
+			combo_produk_satuan.setDisabled(true);
+			dterima_jumlahField.setDisabled(true);
 			if(cetak==1){
 					//jproduk_cetak(jproduk_id_for_cetak);
 				cetak=0;
@@ -550,6 +559,9 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(true);
 			terima_keteranganField.setDisabled(true);
 			terima_statusField.setDisabled(true);
+			combo_produk_terima.setDisabled(true);
+			combo_produk_satuan.setDisabled(true);
+			dterima_jumlahField.setDisabled(true);
 			master_terima_beli_createForm.tbeli_savePrint.disable();
 		}
 		
