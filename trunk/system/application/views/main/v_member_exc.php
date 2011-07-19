@@ -84,7 +84,7 @@ Ext.onReady(function(){
 						mainPanel.remove(mainPanel.getActiveTab().getId());
 						break;
 					case 2:
-						Ext.MessageBox.alert(' OK','Kartu Member dari Customer: '+member_cust_namaField.getValue()+'<br/> masih dalam proses.');
+						Ext.MessageBox.alert(' Warning','Kartu Member dari Customer: '+member_cust_namaField.getValue()+'<br/> masih dalam proses.');
 						member_exc_addWindow.hide();
 						mainPanel.remove(mainPanel.getActiveTab().getId());
 						break;

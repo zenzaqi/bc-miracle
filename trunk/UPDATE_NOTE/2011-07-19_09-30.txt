@@ -1,0 +1,3 @@
+update m_member_exc:
+
+yg member_validnya sudah masuk 90 hari dari sekarang, bisa diperpanjang
