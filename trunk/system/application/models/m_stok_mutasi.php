@@ -381,7 +381,7 @@ class M_stok_mutasi extends Model{
 							WHERE produk_id='".$rowproduk->produk_id."'
 							AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 							AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
-							AND gudang_id='".$gudang."'";
+							AND gudang_id='1'";
 
 				//$this->firephp->log($sqlupdate);
 

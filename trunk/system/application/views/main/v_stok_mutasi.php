@@ -489,7 +489,7 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								Ext.MessageBox.hide();
-								stok_mutasi_searchWindow.hide();
+								//stok_mutasi_searchWindow.hide();
 							}					 
 						}
 					});
@@ -766,7 +766,7 @@ Ext.onReady(function(){
 		width: 100
 	});
 	
-	stok_mutasi_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	//stok_mutasi_label_tanggalField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 	
 	/* Identify  jum stok Field */
 	stok_mutasi_jumlahSearchField= new Ext.form.ComboBox({
@@ -803,6 +803,16 @@ Ext.onReady(function(){
 		//allowBlank: false,
 		triggerAction: 'all'	
 	});
+	
+	awal_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Stok Awal  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
+	masuk_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Masuk &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
+	keluar_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Keluar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
+	akhir_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Stok Akhir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
+	
+	and1_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
+	and2_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
+	and3_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
+
 	
 	/* Identify  jum stok Field */
 	stok_mutasi_stok_akhirSearchField= new Ext.form.ComboBox({
@@ -858,15 +868,6 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
-	/*stok_mutasi_tanggal_opsiSearchField=new Ext.form.FieldSet({
-		id:'stok_mutasi_tanggal_opsiSearchField',
-		title: 'Opsi Tanggal',
-		layout: 'column',
-		bodyStyle: 'padding: 5px;',
-		frame: false,
-		items:[stok_mutasi_tanggal_startSearchField, stok_mutasi_label_tanggalField, stok_mutasi_tanggal_endSearchField]
-	});*/
-	
 	stok_mutasi_produk_opsiSearchField=new Ext.form.FieldSet({
 		id:'stok_mutasi_produk_opsiSearchField',
 		title: 'Opsi Produk',
@@ -921,10 +922,31 @@ Ext.onReady(function(){
 		frame: false,
 		bodyStyle: 'padding: 5px;',
 		items:[{
+				   layout	: 'column',
+				   border: false,
+				   items	: [awal_Field, stok_mutasi_stok_awalSearchField, and1_Field]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [masuk_Field, stok_mutasi_masukSearchField, and2_Field]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [keluar_Field, stok_mutasi_keluarSearchField, and3_Field]
+			   },
+			   {
+				   layout	: 'column',
+				   border: false,
+				   items	: [akhir_Field, stok_mutasi_stok_akhirSearchField]
+			   }
+		
+		/*{
 			   		layout	: 'form',
 					border: false,
-					items	: [/*stok_mutasi_jumlahSearchField,*/stok_mutasi_stok_awalSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField, stok_mutasi_stok_akhirSearchField]
-			   }
+					items	: [/*stok_mutasi_jumlahSearchField,*//*stok_mutasi_stok_awalSearchField, stok_mutasi_masukSearchField, stok_mutasi_keluarSearchField, stok_mutasi_stok_akhirSearchField]
+			   }*/
 		]
 	});
 	
