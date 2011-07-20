@@ -1,0 +1,1 @@
+m_stok_mutasi : nilai saldo awal pada master produk hanya dimasukkan pada gudang besar saja
