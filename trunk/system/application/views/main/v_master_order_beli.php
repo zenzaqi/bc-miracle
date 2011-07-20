@@ -247,7 +247,8 @@ Ext.onReady(function(){
 	    var dorder_diskon = [];
 
 	    var dcount = detail_order_beli_DataStore.getCount() - 1;
-
+		var jum_terima=0;
+		
         if(detail_order_beli_DataStore.getCount()>0){
             for(i=0; i<detail_order_beli_DataStore.getCount();i++){
                 if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
@@ -264,6 +265,7 @@ Ext.onReady(function(){
 					dorder_harga.push(detail_order_beli_DataStore.getAt(i).data.dorder_harga);
 					dorder_diskon.push(detail_order_beli_DataStore.getAt(i).data.dorder_diskon);
                 }
+				jum_terima=jum_terima+detail_order_beli_record.data.dorder_terima;
             }
 
 			var encoded_array_dorder_id = Ext.encode(dorder_id);
@@ -272,6 +274,8 @@ Ext.onReady(function(){
 			var encoded_array_dorder_jumlah = Ext.encode(dorder_jumlah);
 			var encoded_array_dorder_harga = Ext.encode(dorder_harga);
 			var encoded_array_dorder_diskon = Ext.encode(dorder_diskon);
+			
+			
 	    }
 	    
 		Ext.Ajax.request({
@@ -301,14 +305,24 @@ Ext.onReady(function(){
 			},
 			success: function(response){
 				var result=eval(response.responseText);
-				if(result!==0){
+				if(jum_terima > 0 && order_statusField.getValue()=='Batal'){
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'OP yang pernah diambil di PB tidak dapat dibatalkan!',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
+					
+				} else if(result!==0){
 						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
 						if(opsi=='print'){
 							master_order_beli_cetak_faktur(result);
 						}
 						master_order_beli_DataStore.reload()
 						master_order_beli_createWindow.hide();
-				}else{
+				} else {
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
@@ -901,7 +915,7 @@ Ext.onReady(function(){
 			}
 		},
 		{
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			header: '<div align="center">' + 'Disk (%)' + '</div>',
 			align: 'right',
 			dataIndex: 'order_diskon',
 			width: 60,	//150,
@@ -912,7 +926,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Diskon (Rp)' + '</div>',
+			header: '<div align="center">' + 'Disk (Rp)' + '</div>',
 			align: 'right',
 			width: 100,	//150,
 			dataIndex: 'order_cashback',
@@ -1604,7 +1618,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_order_satuan)
 		},
 		{
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jml Order' + '</div>',
 			align: 'right',
 			dataIndex: 'dorder_jumlah',
 			width: 60,	//100,
@@ -1647,7 +1661,7 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'Diskon (%)' + '</div>',
+			header: '<div align="center">' + 'Disk (%)' + '</div>',
 			align: 'right',
 			dataIndex: 'dorder_diskon',
 			width: 60,	//100,
@@ -1656,7 +1670,7 @@ Ext.onReady(function(){
 			editor: order_diskon_satuanField
 		},
 		{
-			header: '<div align="center">' + 'Date Last Modified' + '</div>',
+			header: '<div align="center">' + 'Last Modified' + '</div>',
 			align: 'right',
 			dataIndex: 'dorder_harga_log',
 			width: 100,	//150,

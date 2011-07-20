@@ -980,7 +980,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	produk_groupListEditorGrid.addListener('rowcontextmenu', onproduk_group_ListEditGridContextMenu);
-	//produk_group_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	produk_group_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	produk_groupListEditorGrid.on('afteredit', produk_group_update); // inLine Editing Record
 	
 	/* Identify  group_nama Field */
