@@ -3284,7 +3284,7 @@ Ext.onReady(function(){
 		rawat_gudangSearchField.reset();
 		rawat_gudangSearchField.setValue(null);
 		rawat_aktifSearchField.reset();
-		rawat_aktifSearchField.setValue(null);
+		rawat_aktifSearchField.setValue('Aktif');
 	}
 	
 	/* Field for search */
@@ -3539,6 +3539,7 @@ Ext.onReady(function(){
 			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
 		}),
 		mode: 'local',
+		//emptyText: 'Aktif',
 		displayField: 'rawat_aktif',
 		valueField: 'value',
 		width: 120,

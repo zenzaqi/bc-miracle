@@ -48,7 +48,7 @@ class M_member_exc extends Model{
 			
 			//$sql = "SELECT member_id, member_no FROM member WHERE member_cust='$member_cust' AND ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) AND member_status='Serah Terima'";
 			//untuk perpanjangan, tidak perlu melihat (member_valid + interval $periode_tenggang day), yg penting cust sdh pernah jadi member, otomatis lsg perpanjangan
-			//update 2011-07-19: utk perpanjangan, jika ((member_valid + interval $periode_tenggang day) > date_format(now(), '%Y-%m-%d')) maka dianggap buat 'baru'
+			//update 2011-07-19: utk perpanjangan, jika ((member_valid + interval $periode_tenggang day) < date_format(now(), '%Y-%m-%d')) maka dianggap buat 'baru'
 			$sql = "SELECT member_id, member_no 
 					FROM member 
 					WHERE 

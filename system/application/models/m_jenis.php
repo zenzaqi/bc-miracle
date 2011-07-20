@@ -28,6 +28,9 @@ class M_jenis extends Model{
 				$query .= " (jenis_kode LIKE '%".addslashes($filter)."%' OR jenis_nama LIKE '%".addslashes($filter)."%' OR jenis_kelompok LIKE '%".addslashes($filter)."%' )";
 			}
 			
+			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+			$query .= " (jenis_aktif = 'Aktif') ";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		

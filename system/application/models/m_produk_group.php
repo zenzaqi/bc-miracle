@@ -28,6 +28,9 @@ class M_produk_group extends Model{
 				$query .= " (group_kode LIKE '%".addslashes($filter)."%' OR group_nama LIKE '%".addslashes($filter)."%' )";
 			}
 			
+			$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+			$query .= " (group_aktif = 'Aktif' )";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			$limit = $query." LIMIT ".$start.",".$end;		
