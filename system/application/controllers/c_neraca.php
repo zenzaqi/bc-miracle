@@ -69,11 +69,15 @@ class C_neraca extends Controller {
 		$neraca_bulan=trim(@$_POST["neraca_bulan"]);
 		$neraca_tahun=trim(@$_POST["neraca_tahun"]);
 		$neraca_akun=trim(@$_POST["neraca_akun"]);
+		$neraca_jenis=trim(@$_POST["neraca_jenis"]);
 		
 		$start = 0;
 		$end = 0;
 		
-		$result = $this->m_neraca->neraca_search($neraca_periode, $neraca_tglawal, $neraca_tglakhir, $neraca_bulan, $neraca_tahun, $neraca_akun, $start,$end);
+		$result = $this->m_neraca->neraca_search($neraca_periode, $neraca_tglawal, 
+													$neraca_tglakhir, $neraca_bulan, 
+													$neraca_tahun, $neraca_akun, $start,$end, 
+													$neraca_jenis);
 		echo $result;
 	}
 
@@ -90,7 +94,15 @@ class C_neraca extends Controller {
 		$start = 0;
 		$end = 0;
 		
-		$data["data_print"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, $neraca_tglakhir, $neraca_bulan, $neraca_tahun, $neraca_akun, $start,$end);
+		$data["neraca_aktiva"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, 
+															$neraca_tglakhir, $neraca_bulan, 
+															$neraca_tahun, $neraca_akun, 
+															$start,$end, "Aktiva");
+		$data["neraca_pasiva"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, 
+															$neraca_tglakhir, $neraca_bulan, 
+															$neraca_tahun, $neraca_akun, 
+															$start,$end, "Pasiva");
+															
 		$print_view=$this->load->view("main/p_neraca.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");
@@ -115,7 +127,9 @@ class C_neraca extends Controller {
 		$start = 0;
 		$end = 0;
 		
-		$data["data_print"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, $neraca_tglakhir, $neraca_bulan, $neraca_tahun, $neraca_akun, $start,$end);
+		$data["data_print"]= $this->m_neraca->neraca_print($neraca_periode, $neraca_tglawal, 
+															$neraca_tglakhir, $neraca_bulan, 
+															$neraca_tahun, $neraca_akun, $start,$end);
 		$data["type"]="excel";
 		$print_view=$this->load->view("main/p_neraca.php",$data,TRUE);
 		if(!file_exists("print")){

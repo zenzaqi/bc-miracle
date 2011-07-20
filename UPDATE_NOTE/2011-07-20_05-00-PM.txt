@@ -1,0 +1,7 @@
+<update by zaqi.smart@gmail.com>
+- Modul Akuntansi
+  o Perbaikan notifikasi buka posting pada
+    Kas/Bank Masuk, Kas/Bank Keluar, Jurnal Umum
+  o Perbaikan batas tanggal buka posting pada
+    Kas/Bank Masuk, Kas/Bank Keluar, Jurnal Umum
+  o Perbaikan Format Laporan Neraca

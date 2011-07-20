@@ -43,7 +43,7 @@
 		}
     </style>
 </head>
-<script language="text/javascript">
+<script>
 /* declare function */
 var kasbank_masuk_DataStore;
 var kasbank_masuk_ColumnModel;
@@ -69,9 +69,9 @@ var msg = '';
 var pageS=16;
 var today=new Date().format('Y-m-d');
 var thismonth=new Date().format('Y-m');
-var MIN_CREATE_DATE="<?php echo add_date(date('Y-m-d'),-7,'day'); ?>";
+var MIN_CREATE_DATE="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-7,'day'); ?>";
 var MAX_CREATE_DATE="<?php echo date('Y-m-d'); ?>";
-var MAX_UNPOSTING="<?php echo add_date(date('Y-m-d'),-37,'day') ?>";
+var MAX_UNPOSTING="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-37,'day') ?>";
 /* declare variable here for Field*/
 var kasbank_masuk_idField;
 var kasbank_masuk_tanggalField;
@@ -410,8 +410,17 @@ Ext.onReady(function(){
 		if(kasbankMasukListEditorGrid.selModel.getCount() == 1) {
 				var id="";
 				var tanggal=null;
+			if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')!=='Y'){
+				
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Data yang belum terposting tidak perlu dibuka',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
 
-			if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y' &&
+			}else if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y' &&
 					kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal').format('Y-m-d')<=MAX_UNPOSTING){
 
 				id = kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_id');

@@ -53,14 +53,6 @@ var neraca_searchForm;
 var neraca_searchWindow;
 var neraca_SelectedRow;
 var neraca_ContextMenu;
-//for detail data
-var _DataStor;
-var ListEditorGrid;
-var _ColumnModel;
-var _proxy;
-var _writer;
-var _reader;
-var editor_;
 
 //declare konstant
 var post2db = '';
@@ -133,14 +125,14 @@ Ext.onReady(function(){
     };
 	
 	/* Function for Retrieve DataStore */
-	neraca_DataStore =new Ext.data.GroupingStore({
-		id: 'neraca_DataStore',
+	neraca_aktiva_DataStore =new Ext.data.GroupingStore({
+		id: 'neraca_aktiva_DataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_neraca&m=get_action', 
 			method: 'POST'
 		}),
 		groupField:'neraca_parent_id',
-		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: pageS, neraca_jenis: 'Aktiva'}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -161,7 +153,7 @@ Ext.onReady(function(){
     
 	
   	/* Function for Identify of Window Column Model */
-	neraca_ColumnModel = new Ext.grid.ColumnModel(
+	neraca_aktiva_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
 			header: '',
@@ -209,18 +201,18 @@ Ext.onReady(function(){
 		}
 		]);
 	
-	neraca_ColumnModel.defaultSortable= true;
+	neraca_aktiva_ColumnModel.defaultSortable= true;
 	/* End of Function */
      var summary = new Ext.ux.grid.GroupSummary();
 	 
 	/* Declare DataStore and  show datagrid list */
-	neracaListEditorGrid =  new Ext.grid.EditorGridPanel({
-		id: 'neracaListEditorGrid',
-		el: 'fp_neraca',
-		title: 'Laporan Neraca',
+	neraca_aktivaListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'neraca_aktivaListEditorGrid',
+		el: 'fp_neraca_aktiva',
+		title: 'Aktiva',
 		autoHeight: true,
-		store: neraca_DataStore, // DataStore
-		cm: neraca_ColumnModel, // Nama-nama Columns
+		store: neraca_aktiva_DataStore, // DataStore
+		cm: neraca_aktiva_ColumnModel, // Nama-nama Columns
 		enableColLock:false,
 		frame: true,
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
@@ -259,7 +251,7 @@ Ext.onReady(function(){
 		}
 		]
 	});
-	neracaListEditorGrid.render();
+	neraca_aktivaListEditorGrid.render();
 	/* End of DataStore */
      
 	 function rounding(num, dec) {
@@ -268,8 +260,8 @@ Ext.onReady(function(){
 	}
 	
 	/* Create Context Menu */
-	neraca_ContextMenu = new Ext.menu.Menu({
-		id: 'neraca_ListEditorGridContextMenu',
+	neraca_aktiva_ContextMenu = new Ext.menu.Menu({
+		id: 'neraca_aktiva_ContextMenu',
 		items: [
 		{ 
 			text: 'Print',
@@ -288,10 +280,10 @@ Ext.onReady(function(){
 	/* End of Declaration */
 	
 	/* Event while selected row via context menu */
-	function onneraca_ListEditGridContextMenu(grid, rowIndex, e) {
+	function onneraca_aktiva_ContextMenu(grid, rowIndex, e) {
 		e.stopEvent();
 		var coords = e.getXY();
-		neraca_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
+		neraca_aktiva_ContextMenu.rowRecord = grid.store.getAt(rowIndex);
 		grid.selModel.selectRow(rowIndex);
 		neraca_SelectedRow=rowIndex;
 		neraca_ContextMenu.showAt([coords[0], coords[1]]);
@@ -299,16 +291,120 @@ Ext.onReady(function(){
   	/* End of Function */
 	
 	/* function for editing row via context menu */
-	function neraca_editContextMenu(){
-		neracaListEditorGrid.startEditing(neraca_SelectedRow,1);
+	function neraca_aktiva_ContextMenu(){
+		neraca_aktivaListEditorGrid.startEditing(neraca_SelectedRow,1);
   	}
 	/* End of Function */
   	
-	function neraca_update(){
-	}
+
+	neraca_aktivaListEditorGrid.addListener('rowcontextmenu', onneraca_aktiva_ContextMenu);
+
+	/* Function for Retrieve Pasiva DataStore */
+	neraca_pasiva_DataStore =new Ext.data.GroupingStore({
+		id: 'neraca_pasiva_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_neraca&m=get_action', 
+			method: 'POST'
+		}),
+		groupField:'neraca_parent_id',
+		baseParams:{task: "LIST", start:0, limit: pageS, neraca_jenis: 'Pasiva'}, 
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'neraca_akun_kode'
+		},[
+			{name: 'neraca_parent', type: 'string', mapping: 'neraca_jenis'}, 
+			{name: 'neraca_parent_id', type: 'int', mapping: 'neraca_jenis_id'}, 
+			{name: 'neraca_akun_kode', type: 'string', mapping: 'neraca_akun_kode'}, 
+			{name: 'neraca_akun_nama', type: 'string', mapping: 'neraca_akun_nama'}, 
+			{name: 'neraca_debet', type: 'float', mapping: 'neraca_debet'}, 
+			{name: 'neraca_kredit', type: 'float', mapping: 'neraca_kredit'},
+			{name: 'neraca_saldo', type: 'float', mapping: 'neraca_saldo'},
+			{name: 'neraca_saldo_periode', type: 'float', mapping: 'neraca_saldo_periode'}
+		]),
+		sortInfo:{field: 'neraca_akun_kode', direction: "ASC"}
+	});
+	/* End of Function */
+    
 	
-	neracaListEditorGrid.addListener('rowcontextmenu', onneraca_ListEditGridContextMenu);
-	neracaListEditorGrid.on('afteredit', neraca_update); // inLine Editing Record
+  	/* Function for Identify of Window Column Model */
+	neraca_pasiva_ColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '',
+			dataIndex: 'neraca_parent_id',
+			width: 50,
+			sortable: false,
+			readOnly: true,
+			renderer: function(v, params, record){
+                    return '<span>' + record.data.neraca_parent+ '</span>';
+            }
+		},
+		{
+			header: 'Kode',
+			dataIndex: 'neraca_akun_kode',
+			width: 80,
+			sortable: false,
+			readOnly: true
+		}, 
+		{
+			header: 'Nama Akun',
+			dataIndex: 'neraca_akun_nama',
+			width: 250,
+			sortable: false,
+			readOnly: true
+		}, 
+		{
+			header: 'Bulan ini',
+			dataIndex: 'neraca_saldo_periode',
+			width: 150,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			sortable: false,
+			readOnly: true,
+			summaryType: 'sum'
+		}, 
+		{
+			header: 's/d Bulan ini',
+			dataIndex: 'neraca_saldo',
+			width: 150,
+			sortable: false,
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			align: 'right',
+			readOnly: true,
+			summaryType: 'sum'
+		}
+		]);
+	
+	neraca_pasiva_ColumnModel.defaultSortable= true;
+	/* End of Function */
+     var summary = new Ext.ux.grid.GroupSummary();
+	 
+	/* Declare DataStore and  show datagrid list */
+	neraca_pasivaListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'neraca_pasivaListEditorGrid',
+		el: 'fp_neraca_pasiva',
+		title: 'Pasiva',
+		autoHeight: true,
+		store: neraca_pasiva_DataStore, // DataStore
+		cm: neraca_pasiva_ColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 1024,
+		view: new Ext.grid.GroupingView({
+            forceFit: true,
+            showGroupName: true,
+            enableNoGroups: false,
+			enableGroupingMenu: false,
+            hideGroupedColumn: true
+        }),
+		plugins: summary
+	});
+	neraca_pasivaListEditorGrid.render();
+
 	
 	function is_valid_form(){
 		if(neraca_opsitgl_searchField.getValue()==true){
@@ -345,27 +441,42 @@ Ext.onReady(function(){
 				neraca_periode_search='all';
 			}
 			
-			if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
-			if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
-			if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
+			if(neraca_tglakhir_searchField.getValue()!==""){neraca_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
+			if(neraca_bulan_searchField.getValue()!==""){neraca_bulan_search=neraca_bulan_searchField.getValue(); }
+			if(neraca_tahun_searchField.getValue()!==""){neraca_tahun_search=neraca_tahun_searchField.getValue(); }
 			
 			// change the store parameters
-			neraca_DataStore.baseParams = {
-				task: 'SEARCH',
+			neraca_aktiva_DataStore.baseParams = {
+				task				: 'SEARCH',
 				neraca_periode		:	neraca_periode_search,
 				neraca_tglakhir		:	neraca_tglakhir_search, 
 				neraca_bulan		: 	neraca_bulan_search,
-				neraca_tahun		:	neraca_tahun_search
+				neraca_tahun		:	neraca_tahun_search,
+				neraca_jenis		:   'Aktiva'
 			};
 			
-			neraca_DataStore.load({params:{query:null}});
+			neraca_aktiva_DataStore.load({params:{query:null}});
+
+			neraca_pasiva_DataStore.baseParams = {
+					task				: 'SEARCH',
+					neraca_periode		:	neraca_periode_search,
+					neraca_tglakhir		:	neraca_tglakhir_search, 
+					neraca_bulan		: 	neraca_bulan_search,
+					neraca_tahun		:	neraca_tahun_search,
+					neraca_jenis		:   'Pasiva'
+			};
+				
+			neraca_pasiva_DataStore.load({params:{query:null}});
+				
 		}
 	}
 		
 	/* Function for reset search result */
 	function neraca_reset_search(){
 		// reset the store parameters
-		neraca_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
+		//neraca_aktiva_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
+		//neraca_pasiva_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
+		
 		neraca_searchWindow.close();
 	};
 	/* End of Fuction */
@@ -562,9 +673,9 @@ Ext.onReady(function(){
 			neraca_periode_search='all';
 		}
 		
-		if(neraca_tglakhir_searchField.getValue()!==""){order_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
-		if(neraca_bulan_searchField.getValue()!==""){order_bulan_search=neraca_bulan_searchField.getValue(); }
-		if(neraca_tahun_searchField.getValue()!==""){order_tahun_search=neraca_tahun_searchField.getValue(); }
+		if(neraca_tglakhir_searchField.getValue()!==""){neraca_tglakhir_search = neraca_tglakhir_searchField.getValue().format('Y-m-d');}
+		if(neraca_bulan_searchField.getValue()!==""){neraca_bulan_search=neraca_bulan_searchField.getValue(); }
+		if(neraca_tahun_searchField.getValue()!==""){neraca_tahun_search=neraca_tahun_searchField.getValue(); }
 		
 
 		Ext.Ajax.request({   
@@ -582,12 +693,12 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/lap_neraca.html','neracalist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
-				
+				//win.print();
 				break;
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Tidak bisa mencetak data!',
+					msg: 'Unable to print the grid!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -652,7 +763,7 @@ Ext.onReady(function(){
 		  	default:
 				Ext.MessageBox.show({
 					title: 'Warning',
-					msg: 'Tidak bisa mencetak data!',
+					msg: 'Unable to print the grid!',
 					buttons: Ext.MessageBox.OK,
 					animEl: 'save',
 					icon: Ext.MessageBox.WARNING
@@ -681,7 +792,8 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
-        <div id="fp_neraca"></div>
+        <div id="fp_neraca_aktiva"></div>
+        <div id="fp_neraca_pasiva"></div>
 		<div id="elwindow_neraca_create"></div>
         <div id="elwindow_neraca_search"></div>
     </div>
