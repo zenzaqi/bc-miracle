@@ -6,6 +6,25 @@ class M_public_function extends Model{
 		parent::Model();
 	}
 	
+	
+	function add_date($time='',$value=0,$interval='day'){
+		$time=mysql_to_unix($time);
+		$year=date("Y",$time);
+		$month=date("m",$time);
+		$day=date("d",$time);
+		$in_date=$year."-".$month."-".$day;
+		$sql="SELECT DATE_ADD('$in_date', INTERVAL $value $interval) as tanggal ";
+		$result=$this->db->query($sql);
+		if($result->num_rows()){
+			$data=$result->row();
+			return $data->tanggal;
+		}else{
+			return date('Y/m/d');
+		}
+		
+	}
+
+	
 	function get_gudang_nama($gudang_id){
 		$sql="SELECT gudang_nama FROM gudang WHERE gudang_id='".$gudang_id."'";
 		$query = $this->db->query($sql);
@@ -3350,6 +3369,9 @@ class M_public_function extends Model{
 			$query_cust_priority	= $this->db->query($sql_cust_priority);
 			
 		}
+	
+
+
 	
 }
 ?>

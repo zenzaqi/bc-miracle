@@ -378,39 +378,6 @@ if ( ! function_exists('mysql_to_unix'))
 						);
 	}
 }
-// ------------------------------------------------------------------------
-
-/**
- * Adding Date
- *
- * @access	public
- * @param	date
- * @param	integer
- * @param   string (day,month,year)
- * @return	string
- */
-
-if ( ! function_exists('add_date'))
-{
-	function add_date($time='',$value=0,$interval='day'){
-		$time=mysql_to_unix($time);
-		$year=date("Y",$time);
-		$month=date("m",$time);
-		$day=date("d",$time);
-
-		if($interval==='day'){
-			$day=((int)$day+$value);
-		}else if($interval==='month'){
-			$month=((int)$month+$value);
-		}else if($interval==='year'){
-			$year=((int)$year+$value);
-		}
-		if(strlen($day)<2) $day="0".$day;
-		if(strlen($month)<2) $month="0".$month;
-		$date=$year."-".$month."-".$day;
-		return $date;
-	}
-}
 
 // ------------------------------------------------------------------------
 
