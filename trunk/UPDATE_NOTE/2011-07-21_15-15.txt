@@ -1,0 +1,2 @@
+update v_kasbank_masuk/keluar:
+- ketika edit Jenis mjd disabled
