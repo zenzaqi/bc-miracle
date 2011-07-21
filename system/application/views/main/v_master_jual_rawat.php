@@ -3197,7 +3197,7 @@ Ext.override(Ext.form.Field, {
 	
 	jrawat_cashback_cfField= new Ext.form.TextField({
 		id: 'jrawat_cashback_cfField',
-		fieldLabel: 'Voucher (Rp)',
+		fieldLabel: 'Voucher / Promo (Rp)',
 		allowNegatife : false,
 		readOnly : false,
 		enableKeyEvents: true,
