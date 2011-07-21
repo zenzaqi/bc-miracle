@@ -69,9 +69,9 @@ var msg = '';
 var pageS=16;
 var today=new Date().format('Y-m-d');
 var thismonth=new Date().format('Y-m');
-var MIN_CREATE_DATE="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-7,'day'); ?>";
+var MIN_CREATE_DATE="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-60,'day'); ?>";
 var MAX_CREATE_DATE="<?php echo date('Y-m-d'); ?>";
-var MAX_UNPOSTING="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-37,'day') ?>";
+var MAX_UNPOSTING="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-60,'day') ?>";
 /* declare variable here for Field*/
 var kasbank_masuk_idField;
 var kasbank_masuk_tanggalField;
@@ -269,7 +269,8 @@ Ext.onReady(function(){
 		kasbank_masuk_kodeakunField.reset();
 		kasbank_masuk_kodeakunField.setValue(null);
 		kasbank_masuk_jenisField.reset();
-		kasbank_masuk_jenisField.setValue('Bank');//kasbank_masuk_jenisField.setValue('Kas');
+		kasbank_masuk_jenisField.setValue('Bank');
+		kasbank_masuk_jenisField.setDisabled(false);
 
 		kasbank_masuk_detail_DataStore.setBaseParam('master_id',-1);
 		kasbank_masuk_detail_DataStore.load();
@@ -301,6 +302,7 @@ Ext.onReady(function(){
 			jenis_kb='Bank';
  	 	}
 		kasbank_masuk_jenisField.setValue(jenis_kb);
+		kasbank_masuk_jenisField.setDisabled(true);
 
 		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('task','detail');
 		cbo_akun_dkasbank_masuk_renderDataStore.setBaseParam('master_id',get_pk_id());
