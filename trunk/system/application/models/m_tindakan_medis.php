@@ -1423,6 +1423,7 @@ class M_tindakan_medis extends Model{
 		/* hanya INSERT record tindakan_detail-medis yang baru */
 		$date_now=date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
+		$time_now=date('H:i:s');
 		
 		$size_array = sizeof($array_dtrawat_perawatan) - 1;
 		
@@ -1470,6 +1471,8 @@ class M_tindakan_medis extends Model{
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_petugas1"=>$dtrawat_petugas1,
 					"dtrawat_kategori"=>'Medis',
+					"dtrawat_status"=>'tindakan',
+					"dtrawat_jam_siap"=>$time_now,
 					"dtrawat_tglapp"=>$date_now,
 					"dtrawat_jam"=>$dtrawat_jamreservasi,
 					"dtrawat_keterangan"=>$dtrawat_keterangan,
@@ -1578,6 +1581,7 @@ class M_tindakan_medis extends Model{
 												   ,$array_dtrawat_status){
 		$date_now=date('Y-m-d');
 		$datetime_now=date('Y-m-d');
+		$time_now=date('H:i:s');
 		
 		$size_array = sizeof($array_dtrawat_perawatan) - 1;
 		
@@ -1600,6 +1604,7 @@ class M_tindakan_medis extends Model{
 					"dtrawat_tglapp"=>$date_now,
 					"dtrawat_status"=>"tindakan",
 					"dtrawat_kategori"=>'Medis',
+					"dtrawat_jam_siap"=>$time_now,
 					"dtrawat_jumlah"=>$dtrawat_jumlah,
 					"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
 				);

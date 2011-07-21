@@ -1202,6 +1202,7 @@ class M_tindakan_nonmedis extends Model{
 		/* hanya INSERT record tindakan_detail-nonmedis yang baru */
 		$date_now=date('Y-m-d');
 		$datetime_now=date('Y-m-d H:i:s');
+		$time_now=date('H:i:s');
 		
 		$size_array = sizeof($array_dtrawat_perawatan) - 1;
 		
@@ -1267,6 +1268,7 @@ class M_tindakan_nonmedis extends Model{
 						"dtrawat_status"=>'tindakan',
 						"dtrawat_tglapp"=>$date_now,
 						"dtrawat_jam"=>$dtrawat_jam,
+						"dtrawat_jam_siap"=>$time_now,
 						"dtrawat_keterangan"=>$dtrawat_keterangan,
 						"dtrawat_jumlah"=>$jumlah,
 						"dtrawat_creator"=>@$_SESSION[SESSION_USERID]
