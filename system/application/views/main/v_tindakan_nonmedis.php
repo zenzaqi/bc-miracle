@@ -945,6 +945,9 @@ Ext.onReady(function(){
 				mode: 'remote',
 				displayField: 'perawatan_display',
 				valueField: 'perawatan_value',
+				tpl : cbo_trawat_rawat_tpl,
+				itemSelector: 'div.search-item',
+				pageSize:15,
 				loadingText: 'Searching...',
 				triggerAction: 'all',
 				anchor: '95%'
