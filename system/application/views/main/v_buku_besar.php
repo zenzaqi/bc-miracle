@@ -57,7 +57,7 @@ var buku_besar_ContextMenu;
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=50;
+var pageS=200;
 
 /* declare variable here for Field*/
 var buku_idField;
