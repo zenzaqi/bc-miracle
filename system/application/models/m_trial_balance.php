@@ -299,6 +299,7 @@ class M_Trial_balance extends Model{
 				  FROM trial_balance
 				  WHERE date_format(akun_periode_awal,'Y-m-d')=date_format('".$tgl_awal."','Y-m-d') 
 				  		AND date_format(akun_periode_akhir,'Y-m-d')=date_format('".$tgl_akhir."','Y-m-d')";
+			$sql.=" ORDER BY akun_kode ";
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
 			//$this->firephp->log($sql);

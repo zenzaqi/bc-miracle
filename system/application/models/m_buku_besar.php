@@ -234,7 +234,7 @@ class M_buku_besar extends Model{
 										$data[$i]["buku_akun"] = '';
 										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";;
 										$data[$i]["akun_kode"] = $akun_kode;
-										$data[$i]["buku_debet"] = $rowdata->buku_saldo;
+										$data[$i]["buku_debet"] = 0; //$rowdata->buku_saldo;
 										$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
 										$data[$i]["buku_kredit"] = 0;
 										$data[$i]["buku_author"] = '';
@@ -315,7 +315,7 @@ class M_buku_besar extends Model{
 											$data[$i]["buku_akun"] = '';
 											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";;
 											$data[$i]["akun_kode"] = $row->akun_kode;
-											$data[$i]["buku_debet"] = $rowdata->buku_saldo;
+											$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
 											$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
 											$data[$i]["buku_kredit"] = 0;
 											$data[$i]["buku_author"] = '';
@@ -477,7 +477,7 @@ class M_buku_besar extends Model{
 										$data[$i]["buku_akun"] = '';
 										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";;
 										$data[$i]["akun_kode"] = $akun_kode;
-										$data[$i]["buku_debet"] = $rowdata->buku_saldo;
+										$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
 										$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
 										$data[$i]["buku_kredit"] = 0;
 										$data[$i]["buku_author"] = '';
@@ -558,7 +558,7 @@ class M_buku_besar extends Model{
 											$data[$i]["buku_akun"] = '';
 											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";;
 											$data[$i]["akun_kode"] = $row->akun_kode;
-											$data[$i]["buku_debet"] = $rowdata->buku_saldo;
+											$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
 											$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
 											$data[$i]["buku_kredit"] = 0;
 											$data[$i]["buku_author"] = '';
