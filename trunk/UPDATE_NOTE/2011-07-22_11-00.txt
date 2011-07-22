@@ -1,0 +1,2 @@
+- create vu_karyawan
+- insert karyawan_jabatan dengan data mengacu ke data karyawan (karyawan_jabatan, karyawan_departemen, karyawan_idgolongan, karyawan_pph21, karyawan_atasan)
