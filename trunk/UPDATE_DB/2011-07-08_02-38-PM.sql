@@ -1,7 +1,5 @@
-/* BUKU BESAR */
-ALTER TABLE `buku_besar` ADD `buku_keterangan` VARCHAR( 300 ) AFTER `buku_akun_kode` ;
 
-CREATE OR REPLACE VIEW `miracledb`.`vu_jurnal_bank`
+CREATE OR REPLACE VIEW `vu_jurnal_bank`
 AS
    SELECT `vu_kasbank`.`kasbank_id` AS `kasbank_id`,
           concat('M-', kasbank_id) AS kasbank_detid,
@@ -38,3 +36,6 @@ AS
           `vu_kasbank_detail`.`kasbank_date_post` AS `post_date`,
           `vu_kasbank_detail`.`kasbank_arsip` AS `kasbank_arsip`
      FROM `vu_kasbank_detail`;
+	 
+/* BUKU BESAR */
+ALTER TABLE `buku_besar` ADD `buku_keterangan` VARCHAR( 300 ) AFTER `buku_akun_kode` ;
