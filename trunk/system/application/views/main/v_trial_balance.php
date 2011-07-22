@@ -91,7 +91,7 @@ Ext.onReady(function(){
 			{name: 'balance_periode_awal', type: 'date', dateFormat: 'Y-m-d', mapping: 'akun_periode_awal'},
 			{name: 'balance_periode_akhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'akun_periode_akhir'}
 		]),
-		sortInfo:{field: 'balance_akun_kode', direction: "ASC"}
+		//sortInfo:{field: 'balance_akun_kode', direction: "ASC"}
 	});
 
 

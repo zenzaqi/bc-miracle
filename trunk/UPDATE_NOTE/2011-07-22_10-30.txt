@@ -1,0 +1,5 @@
+update v_trial_balance, m_trial_balace:
+- memperbaiki tampilan, supaya sama
+
+update m_buku_besar:
+- SALDO AWAL --> di debet di-nol-kan
