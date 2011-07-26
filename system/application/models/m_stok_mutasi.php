@@ -55,8 +55,8 @@ class M_stok_mutasi extends Model{
 			if ($periode == 'bulan'){
 				$isiperiode=" (date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' and date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."') and " ;
 			}else if($periode == 'tanggal'){
-				$isiperiode=" (date_format(tanggal_awal,'%Y-%m-%d')>='".$tanggal_start."'
-								AND date_format(tanggal_akhir,'%Y-%m-%d')<='".$tanggal_end."')
+				$isiperiode=" (date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."')
 								AND ";
 			}											   
 													   
@@ -302,15 +302,20 @@ class M_stok_mutasi extends Model{
 		}
 		
 
-		function generate_stok_mutasi($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
-									  $tanggal_end,  $mutasi_jumlah,  $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar){
+		function generate_stok_mutasi($bulan, $tahun, $periode, $gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,
+									  $tanggal_end, $mutasi_jumlah, $stok_akhir	,$stok_awal, $stok_masuk, $stok_keluar){
 
+			if ($periode == 'bulan'){
+				$tanggal_start	= $tahun.'-'.$bulan.'-01';
+				$tanggal_end	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
+			}
+			
 			//DELETE ALL REPORT
 			$sql="DELETE FROM stok_mutasi
 					WHERE date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
 					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
 					AND gudang_id='".$gudang."'";
-
+						
 			$result=$this->db->query($sql);
 
 			if($opsi_satuan=='terkecil')

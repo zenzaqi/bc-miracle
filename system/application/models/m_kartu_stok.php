@@ -520,8 +520,7 @@ class M_kartu_stok extends Model{
 
 		function stok_resume($tgl_awal,$periode,$gudang, $produk_id, $tanggal_start,$tanggal_end){
 			if ($periode == 'bulan'){
-				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')=date_format('".$tgl_awal."','%Y-%m')
-					AND date_format(tanggal_akhir,'%Y-%m')=date_format('".$tgl_awal."','%Y-%m') ";
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' AND date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."'";
 			}else if($periode == 'tanggal'){
 				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
 					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d') ";
@@ -1007,8 +1006,9 @@ class M_kartu_stok extends Model{
 
 		}
 
-		function generate_kartu_stok($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end){
-			if ($periode == 'bulan'){
+		function generate_kartu_stok($bulan, $tahun, $periode, $gudang, $produk_id, $opsi_satuan, $tanggal_start, $tanggal_end){
+			
+			/*if ($periode == 'bulan'){
 				$isiperiode="'%Y-%m')='".$tgl_awal."'" ;
 				$isistart=" AND date_format(tanggal_awal,'%Y-%m')>='".$tgl_awal."'
 					AND date_format(tanggal_akhir,'%Y-%m')<='".$tgl_awal."' ";
@@ -1017,7 +1017,16 @@ class M_kartu_stok extends Model{
 								AND '".$tanggal_end."'";
 				$isistart=" AND date_format(tanggal_awal,'%Y-%m-%d')>='".$tanggal_start."'
 					AND date_format(tanggal_akhir,'%Y-%m-%d')<='".$tanggal_end."' " ;
+			}*/
+			
+			if ($periode == 'bulan'){
+				$tanggal_start	= $tahun.'-'.$bulan.'-01';
+				$tanggal_end	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun);
 			}
+			
+			$isiperiode	="'%Y-%m-%d') BETWEEN '".$tanggal_start."' AND '".$tanggal_end."'";
+			$isistart	=" AND date_format(tanggal_awal,'%Y-%m-%d')>='".$tanggal_start."' AND date_format(tanggal_akhir,'%Y-%m-%d')<='".$tanggal_end."' " ;
+			
 			
 			/* CEK SATUAN */
 			if($opsi_satuan=='terkecil')

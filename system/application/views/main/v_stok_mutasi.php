@@ -626,7 +626,7 @@ Ext.onReady(function(){
 		id:'stok_mutasi_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		disabled: true,
+		//disabled: true,
 		name: 'filter_opsi'
 	});
 	
@@ -666,7 +666,7 @@ Ext.onReady(function(){
 		valueField: 'value',
 		value: thismonth,
 		width: 100,
-		disabled: true,
+		//disabled: true,
 		triggerAction: 'all'
 	});
 	
@@ -682,7 +682,7 @@ Ext.onReady(function(){
 		valueField: 'tahun',
 		value: thisyear,
 		width: 100,
-		disabled: true,
+		//disabled: true,
 		triggerAction: 'all'
 	});
 	

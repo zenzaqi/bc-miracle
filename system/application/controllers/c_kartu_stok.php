@@ -64,9 +64,9 @@ class C_kartu_stok extends Controller {
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
 		
-		$tgl_awal=$tahun."-".$bulan;
+		//$tgl_awal=$tahun."-".$bulan;
 		
-		$result=$this->m_kartu_stok->generate_kartu_stok($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end);
+		$result=$this->m_kartu_stok->generate_kartu_stok($bulan, $tahun, $periode, $gudang, $produk_id, $opsi_satuan, $tanggal_start, $tanggal_end);
 		echo '1';
 	
 	}
