@@ -1,0 +1,2 @@
+2011-07-20_16-19.sql : menambah field cust_id2 pasa table customer
+2011-07-22_10-57.sql : trigger autogenerate cust_id2
