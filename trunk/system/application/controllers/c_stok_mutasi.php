@@ -55,16 +55,20 @@ class C_stok_mutasi extends Controller {
 		$tanggal_start =(isset($_POST['tanggal_start']) ? @$_POST['tanggal_start'] : @$_GET['tanggal_start']);
 		$tanggal_end = (isset($_POST['tanggal_end']) ? @$_POST['tanggal_end'] : @$_GET['tanggal_end']);
 		$opsi_satuan = (isset($_POST['opsi_satuan']) ? @$_POST['opsi_satuan'] : @$_GET['opsi_satuan']);
-		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		$mutasi_jumlah = trim(@$_POST["mutasi_jumlah"]);
 		$stok_akhir	= trim(@$_POST["stok_akhir"]);
 		$stok_awal = trim(@$_POST["stok_awal"]);
 		$stok_masuk = trim(@$_POST["stok_masuk"]);
 		$stok_keluar = trim(@$_POST["stok_keluar"]);
+		$opsi_produk = (isset($_POST['opsi_produk']) ? @$_POST['opsi_produk'] : @$_GET['opsi_produk']);
 		
-		$result=$this->m_stok_mutasi->generate_stok_mutasi($gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, 
-														   $tanggal_start, $tanggal_end, $mutasi_jumlah,  $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$result=$this->m_stok_mutasi->generate_stok_mutasi($bulan, $tahun, $periode, $gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, 
+														   $tanggal_start, $tanggal_end, $mutasi_jumlah, $stok_akhir, $stok_awal, $stok_masuk, $stok_keluar);
 		echo $result;
 		
 	}

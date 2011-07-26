@@ -675,7 +675,7 @@ Ext.onReady(function(){
 	kartu_stok_opsiblnField=new Ext.form.Radio({
 		id:'kartu_stok_opsiblnField',
 		boxLabel:'Bulan',
-		disabled: true,
+		//disabled: true,
 		width:100,
 		name: 'filter_opsi'
 	});
@@ -716,7 +716,7 @@ Ext.onReady(function(){
 		valueField: 'value',
 		value: thismonth,
 		width: 100,
-		disabled: true,
+		//disabled: true,
 		triggerAction: 'all'
 	});
 	
@@ -732,7 +732,7 @@ Ext.onReady(function(){
 		valueField: 'tahun',
 		value: thisyear,
 		width: 100,
-		disabled: true,
+		//disabled: true,
 		triggerAction: 'all'
 	});
 	
