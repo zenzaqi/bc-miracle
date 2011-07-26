@@ -65,9 +65,8 @@ CREATE TRIGGER `cust_generate_id2` BEFORE INSERT ON `customer` FOR EACH ROW BEGI
 		end;
 	end if;
 	
-	if new.cust_id2 = '-' then
-		set new.cust_id2 = kode;
-	end if;
+	set new.cust_id2 = kode;
+
 END//
 DELIMITER ;
 SET SESSION SQL_MODE=@OLD_SQL_MODE;
