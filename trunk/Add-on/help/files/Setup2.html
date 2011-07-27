@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>Menjalankan SMSe.Net</title>
+<html><head><title>Cek Pulsa</title>
 <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -82,36 +82,35 @@ span.rvts9 /* Font Hint Italic */
 }
 span.rvts10
 {
- font-size: 10pt;
- font-family: 'Arial', 'Helvetica', sans-serif;
- font-weight: bold;
 }
 span.rvts11
 {
- font-size: 10pt;
- font-family: 'Arial', 'Helvetica', sans-serif;
  font-style: italic;
 }
-span.rvts12 /* Font Style */
+span.rvts12
+{
+ font-weight: bold;
+}
+span.rvts13 /* Font Style */
 {
  font-size: 16pt;
  font-family: 'Tahoma', 'Geneva', sans-serif;
  color: #ffffff;
 }
-span.rvts13 /* Font Style */
+span.rvts14 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'MS Sans Serif', 'Geneva', sans-serif;
  color: #808080;
 }
-span.rvts14 /* Font Style */
+span.rvts15 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
  color: #c0c0c0;
 }
-a.rvts15, span.rvts15 /* Font Style */
+a.rvts16, span.rvts16 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
@@ -131,7 +130,15 @@ p,ul,ol /* Paragraph Style */
 {
  text-align: center;
 }
-.rvps2 /* Paragraph Style */
+.rvps2
+{
+ margin: 0px 0px 0px 24px;
+}
+.rvps3
+{
+ margin: 0px 0px 0px 48px;
+}
+.rvps4 /* Paragraph Style */
 {
  text-align: left;
  text-indent: 0px;
@@ -139,13 +146,13 @@ p,ul,ol /* Paragraph Style */
  padding: 5px 5px 2px 5px;
  margin: -5px -5px 18px -5px;
 }
-.rvps3 /* Paragraph Style */
+.rvps5 /* Paragraph Style */
 {
  text-align: center;
  background: #e4e4e4;
  margin: 20px 0px 0px 0px;
 }
-.rvps4 /* Paragraph Style */
+.rvps6 /* Paragraph Style */
 {
  border-color: #c0c0c0;
  border-style: solid;
@@ -165,26 +172,19 @@ p,ul,ol /* Paragraph Style */
 <script type="text/javascript" src="hnd.js"></script>
 <meta name="generator" content="HelpNDoc Freeware Edition"></head>
 <body>
-<h1 class=rvps2><span class=rvts0><span class=rvts12>Setup</span></span></h1>
+<h1 class=rvps4><span class=rvts0><span class=rvts13>Cek Pulsa</span></span></h1>
+<p><span class=rvts10>Pengecekan pulsa dapat dilakukan tanpa melepas SIM Card dari modem. Anda dapat melakukannya dengan mengikuti petunjuk berikut: </span></p>
+<p><span class=rvts10><br></span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Tampilan awal SMSe.Net:<br>(Tampilan ini menunjukkan program SMSe.Net pada posisi standby.)</li>
-</ul>
-<p><br></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img border=0 alt="" hspace=1 vspace=1 src="img_227.jpg"></p>
-<p><br></p>
-<p><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Untuk memulai mengirimkan sms, klik tombol <span class=rvts10>Start</span> pada program ini. <br><span class=rvts11>(Ketika program sudah jalan, maka tombol Start akan berubah menjadi tombol Stop, ini berarti program SMSe.Net siap atau sedang mengirimkan sms)</span></li>
-</ul>
-<p><br></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img border=0 alt="" hspace=1 vspace=1 src="img_228.jpg"></p>
-<p><br></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Untuk menghentikan pengiriman SMS, tekan tombol <span class=rvts10>Stop</span> pada program SMSe.Net.</li>
-</ul>
-<p><br></p>
-<p><br></p>
-<p><br></p>
-<p class=rvps3><span class=rvts13>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
-<p class=rvps4><span class=rvts14>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts15 href="http://www.helpndoc.com" target="_blank">Free CHM Help documentation generator</a></p>
+<li><span class=rvts10>Download Program batch</span><br><span class=rvts10>Anda dapat mendownload&nbsp; 4 buah file batch pada komputer server dengan alamat folder share:</span><br><span class=rvts10> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>\\192.168.1.2\Source\SMS Gateway\batch</span><br><span class=rvts10><br></span></li>
+<li><span class=rvts10>Pengecekan pulsa</span><br><span class=rvts10>(Setiap kita akan memulai proses pengecekan pulsa, kita harus menutup program gammu yang berjalan terlebih dahulu. cara singkat nya dengan melakukan double click program batch "stop sms.bat")</span></li>
+<ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps3 style="margin-left: 0"><span class=rvts10>Pulsa Utama</span><br><span class=rvts10>Sebelum menjalankan file cek pulsa utama.bat, edit file tersebut dan pastikan untuk mengecek cara cek pulsa sesuai operator yang dipakai.</span><br><img border=0 alt="" hspace=1 vspace=1 src="img_13.png"><br><span class=rvts10>Contoh diatas dengan menekan *555# (Indosat)</span></li>
+<li class=rvps3 style="margin-left: 0"><span class=rvts10>Pulsa SMS</span><br><span class=rvts10>Apabila operator mendukung pulsa sms, sebelum menjalankan file cek pulsa sms.bat, edit file tersebut dan pastikan untuk mengecek cara cek pulsa sesuai operator yang dipakai.</span><br><img border=0 alt="" hspace=1 vspace=1 src="img_14.png"><br><span class=rvts10>Contoh diatas dengan menekan *555*1# (Indosat)</span></li>
+</ul></ul>
+<p class=rvps3><span class=rvts10><br></span></p>
+<p class=rvps2><span class=rvts10>Setelah kita selesai, </span><span class=rvts12>jangan lupa untuk menjalankan kembali program gammu</span><span class=rvts10> dengan melakukan double click program batch "start sms.bat".</span><br><span class=rvts10><br></span></p>
+<p><span class=rvts10> &nbsp; &nbsp; &nbsp; &nbsp;</span><br><span class=rvts10><br></span></p>
+<p class=rvps5><span class=rvts14>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
+<p class=rvps6><span class=rvts15>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts16 href="http://www.helpndoc.com" target="_blank">Free CHM Help documentation generator</a></p>
 </body></html>
