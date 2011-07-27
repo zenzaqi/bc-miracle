@@ -98,7 +98,7 @@ class C_stok_mutasi extends Controller {
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
-		$result=$this->m_stok_mutasi->stok_mutasi_list($tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar);
+		$result=$this->m_stok_mutasi->stok_mutasi_list($bulan, $tahun, $tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, $opsi_satuan, $tanggal_start,$tanggal_end,$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar);
 		echo $result;
 	}
 	
