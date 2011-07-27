@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>Test Send SMS</title>
+<html><head><title>Troubleshoot Gammu</title>
 <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -84,28 +84,44 @@ span.rvts10
 {
  font-size: 10pt;
  font-family: 'Arial', 'Helvetica', sans-serif;
+}
+span.rvts11
+{
+}
+a.rvts12, span.rvts12
+{
+ color: #0000ff;
+ text-decoration: underline;
+}
+a.rvts12:hover { color: #0000ff; }
+span.rvts13
+{
+ font-style: italic;
+}
+span.rvts14
+{
  font-weight: bold;
 }
-span.rvts11 /* Font Style */
+span.rvts15 /* Font Style */
 {
  font-size: 16pt;
  font-family: 'Tahoma', 'Geneva', sans-serif;
  color: #ffffff;
 }
-span.rvts12 /* Font Style */
+span.rvts16 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'MS Sans Serif', 'Geneva', sans-serif;
  color: #808080;
 }
-span.rvts13 /* Font Style */
+span.rvts17 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
  color: #c0c0c0;
 }
-a.rvts14, span.rvts14 /* Font Style */
+a.rvts18, span.rvts18 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
@@ -125,7 +141,11 @@ p,ul,ol /* Paragraph Style */
 {
  text-align: center;
 }
-.rvps2 /* Paragraph Style */
+.rvps2
+{
+ margin: 0px 0px 0px 25px;
+}
+.rvps3 /* Paragraph Style */
 {
  text-align: left;
  text-indent: 0px;
@@ -133,13 +153,13 @@ p,ul,ol /* Paragraph Style */
  padding: 5px 5px 2px 5px;
  margin: -5px -5px 18px -5px;
 }
-.rvps3 /* Paragraph Style */
+.rvps4 /* Paragraph Style */
 {
  text-align: center;
  background: #e4e4e4;
  margin: 20px 0px 0px 0px;
 }
-.rvps4 /* Paragraph Style */
+.rvps5 /* Paragraph Style */
 {
  border-color: #c0c0c0;
  border-style: solid;
@@ -159,20 +179,25 @@ p,ul,ol /* Paragraph Style */
 <script type="text/javascript" src="hnd.js"></script>
 <meta name="generator" content="HelpNDoc Freeware Edition"></head>
 <body>
-<h1 class=rvps2><span class=rvts0><span class=rvts11>Test Send SMS</span></span></h1>
+<h1 class=rvps3><span class=rvts0><span class=rvts15>Troubleshoot Gammu</span></span></h1>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Untuk mengecek semua setup berjalan dengan baik dapat dilakukan Test Send. Pada program SMSe.Net klik <span class=rvts10>SMS</span> --&gt; <span class=rvts10>Test Send</span></li>
+<li><span class=rvts11><a name="troubleshoot_gammu"></a></span><span class=rvts11>Untuk melakukan troubleshooting program gammu yang mungkin bermasalah, kita memerlukan program tambahan bernama </span><span class=rvts14>WinTail</span><span class=rvts11>.</span></li>
 </ul>
-<p><br></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img border=0 alt="" hspace=1 vspace=1 src="img_225.jpg"></p>
-<p><br></p>
-<p><br></p>
+<p><span class=rvts11><br></span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li>Masukkan nomor tujuan pada Destination dan pesan yg akan dikirim pada kolom Message. Kemudian tekan tombol <span class=rvts10>Send.</span> Bila pengiriman sms sukses maka akan muncul " SMS has been sent! ". Untuk keluar dari windows Test Sent, klik tombol <span class=rvts10>Cancel</span>.</li>
+<li><span class=rvts11>Download WinTail.</span><br><span class=rvts14>Note</span><span class=rvts11>:</span></li>
 </ul>
-<p><br></p>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img border=0 alt="" hspace=1 vspace=1 src="img_226.jpg"></p>
-<p><br></p>
-<p class=rvps3><span class=rvts12>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
-<p class=rvps4><span class=rvts13>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts14 href="http://www.helpndoc.com" target="_blank">Full featured Documentation generator</a></p>
+<p><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11>Anda dapat mendownload WinTail pada komputer server dengan alamat folder share:</span><br><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts13>\\192.168.1.2\Source\SMS Gateway\WinTail.exe</span></p>
+<p><span class=rvts13><br></span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li><span class=rvts11>Program WinTail.</span><br><span class=rvts11>Saat program wintail dijalankan, pertama kita akan ditanyakan untuk membuka salah satu file. Arahkan ke file log dari gammu (opsi log pada file </span><a class=rvts12 href="Setup2.html#konfigurasi_smsdrc">konfigurasi smsdrc</a><span class=rvts11> harus dalam keadaan aktif) seperti gambar di bawah ini:</span></li>
+</ul>
+<p><span class=rvts11></span><br><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=451 height=336 alt="" hspace=1 vspace=1 src="img_11.png"></p>
+<p class=rvps2><span class=rvts11></span><br><span class=rvts11></span><br><span class=rvts11>Setelah kita memilih file log gammu (gammu-log.txt), maka akan muncul isi dari file tersebut seperti berikut:</span><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span></p>
+<p class=rvps2><span class=rvts11><br></span></p>
+<p class=rvps2><span class=rvts11> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=511 height=281 alt="" hspace=1 vspace=1 src="img_12.png"></p>
+<p class=rvps2><span class=rvts11></span><br><span class=rvts11>Informasi status, dan error akan muncul. </span></p>
+<p><span class=rvts11>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><br><span class=rvts11><br></span></p>
+<p class=rvps4><span class=rvts16>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
+<p class=rvps5><span class=rvts17>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts18 href="http://www.helpndoc.com" target="_blank">Full featured Documentation generator</a></p>
 </body></html>
