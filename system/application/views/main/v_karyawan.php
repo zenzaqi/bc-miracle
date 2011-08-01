@@ -145,30 +145,117 @@ var detail_fasilitas_ColumnModel;
 var detail_fasilitasListEditorGrid;
 var editor_detail_fasilitas_karyawan;
 
+// GENERAL SEARCH
 var karyawan_idSearchField;
+var karyawan_cabangSearchField;
 var karyawan_noSearchField;
+var karyawan_noktpSearchField;
+var karyawan_alamatktpSearchField;
+var karyawan_agamaSearchField;
 var karyawan_npwpSearchField;
+var karyawan_jamsostekSearchField;
+var karyawan_sipSearchField;
 var karyawan_usernameSearchField;
 var karyawan_namaSearchField;
 var karyawan_kelaminSearchField;
+var karyawan_marriageSearchField;
+var karyawan_jmlanakSearchField;
+var karyawan_tglmasukSearchField;
+var karyawan_aktifSearchField;
+// TEMPAT TANGGAL LAHIR SEARCH
+var karyawan_tempatlahirSearchField;
+var karyawan_tgllahirawalSearchField;
+var karyawan_tgllahirakhirSearchField;
 var karyawan_tgllahirSearchField;
+var karyawan_blnlahirSearchField;
+// ALAMAT SEARCH
 var karyawan_alamatSearchField;
 var karyawan_kotaSearchField;
 var karyawan_kodeposSearchField;
 var karyawan_emailSearchField;
-var karyawan_emiracleSearchField;
+//var karyawan_emiracleSearchField;
 var karyawan_keteranganSearchField;
 var karyawan_notelpSearchField;
-var karyawan_notelp2SearchField;
-var karyawan_notelp3SearchField;
-var karyawan_notelp4SearchField;
-var karyawan_cabangSearchField;
+//var karyawan_notelp2SearchField;
+//var karyawan_notelp3SearchField;
+//var karyawan_notelp4SearchField;
+// INFO REKENING SEARCH
+var karyawan_bankSearchField;
+var karyawan_bankcabangSearchField;
+var karyawan_norekeningSearchField;
+var karyawan_atasnamaSearchField;
+// STATUS KEKARYAWANAN SEARCH
+var karyawan_statuskekaryawananSearchField;
+var karyawan_statustglawalawalSearchField;
+var karyawan_statustglawalakhirSearchField;
+var karyawan_statustglakhirawalSearchField;
+var karyawan_statustglakhirakhirSearchField;
+var karyawan_statuskaryawanSearchField;
+// JABATAN SEARCH
 var karyawan_jabatanSearchField;
 var karyawan_departemenSearchField;
 var karyawan_golonganSearchField;
-var karyawan_tglmasukSearchField;
 var karyawan_atasanSearchField;
-var karyawan_aktifSearchField;
+var karyawan_pph21SearchField;
+var karyawan_tgljbtawalawalSearchField;
+var karyawan_tgljbtawalakhirSearchField;
+var karyawan_tgljbtakhirawalSearchField;
+var karyawan_tgljbtakhirakhirSearchField;
+var karyawan_jabatanketeranganSearchField;
+// PENDIDIKAN SEARCH
+var karyawan_pendidikanSearchField;
+var karyawan_namasekolahSearchField;
+var karyawan_jurusanSearchField;
+var karyawan_thnmskawalSearchField;
+var karyawan_thnmskakhirSearchField;
+var karyawan_thnslsawalSearchField;
+var karyawan_thnslsakhirSearchField;
+var karyawan_wisudaawalSearchField;
+var karyawan_wisudaakhirSearchField;
+var karyawan_pendidikanketeranganSearchField;
+// CUTI SEARCH
+var karyawan_jeniscutiSearchField;
+var karyawan_tglcutiawalawalSearchField;
+var karyawan_tglcutiawalakhirSearchField;
+var karyawan_tglcutiakhirawalSearchField;
+var karyawan_tglcutiakhirakhirSearchField;
+var karyawan_jmlharicutiawalSearchField;
+var karyawan_jmlharicutiakhirSearchField;
+var karyawan_tglpengajuanawalSearchField;
+var karyawan_tglpengajuanakhirSearchField;
+var karyawan_cutiketeranganSearchField;
+// GANTIOFF SEARCH
+var karyawan_tgloffawalawalSearchField;
+var karyawan_tgloffawalakhirSearchField;
+var karyawan_tgloffakhirawalSearchField;
+var karyawan_tgloffakhirakhirSearchField;
+var karyawan_jmlharioffawalSearchField;
+var karyawan_jmlharioffakhirSearchField;
+var karyawan_tgloffgantiawalawalSearchField;
+var karyawan_tgloffgantiawalakhirSearchField;
+var karyawan_tgloffgantiakhirawalSearchField;
+var karyawan_tgloffgantiakhirakhirSearchField;
+var karyawan_tgloffpengajuanakhirawalSearchField;
+var karyawan_tgloffpengajuanakhirakhirSearchField;
+var karyawan_offketeranganSearchField;
+// MEDICAL SEARCH
+var karyawan_tujuanklaimSearchField;
+var karyawan_jenisrawatSearchField;
+var karyawan_jenisklaimSearchField;
+var karyawan_jmlkuitansiawalSearchField;
+var karyawan_jmlkuitansiakhirSearchField;
+var karyawan_totalkuitansiawalSearchField;
+var karyawan_totalkuitansiakhirSearchField;
+var karyawan_tglmedicalpengajuanawalSearchField;
+var karyawan_tglmedicalpengajuanakhirSearchField;
+var karyawan_medicalketeranganSearchField;
+// FASILITAS SEARCH
+var karyawan_fasilitasitemSearchField;
+var karyawan_tglserahterimaawalSearchField;
+var karyawan_tglserahterimaakhirSearchField;
+var karyawan_fasilitasketeranganSearchField;
+
+
 
 /* on ready fuction */
 Ext.onReady(function(){
@@ -6337,6 +6424,23 @@ Ext.onReady(function(){
 		items: [detail_cutiListEditorGrid,detail_gantioffListEditorGrid, detail_medicalListEditorGrid, detail_fasilitasListEditorGrid]
 	});
 	
+	group_detail_data = new Ext.form.FieldSet({
+		title: 'Detail Data Karyawan',
+		autoHeight: true,
+		defaultType: 'textfield',
+		anchor: '95%',
+		items:[detail_tab_data_karyawan]
+	});
+	group_detail_aktivitas = new Ext.form.FieldSet({
+		title: 'Detail Aktivitas Karyawan',
+		autoHeight: true,
+		defaultType: 'textfield',
+		anchor: '95%',
+		items:[detail_tab_aktivitas_karyawan]
+	});
+	
+
+	
 	/* Function for retrieve create Window Panel*/ 
 	karyawan_createForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -6405,7 +6509,7 @@ Ext.onReady(function(){
 				items: [karyawan_cabGroup, karyawan_sipField,  karyawan_jamsostekField, karyawan_npwpField, karyawan_emiracleField, karyawan_keteranganField, karyawan_aktifField ] 
 			}
 			]
-		}, detail_tab_data_karyawan,detail_tab_aktivitas_karyawan]
+		}, group_detail_data, group_detail_aktivitas]
 		//detail_status_karyawanListEditorGrid, detail_jabatanListEditorGrid]
 		,
 		buttons: [
@@ -6457,86 +6561,336 @@ Ext.onReady(function(){
 	/* Function for action list search */
 	function karyawan_list_search(){
 		// render according to a SQL date format.
+		// GENERAL SEARCH
 		var karyawan_id_search=null;
 		var karyawan_no_search=null;
+		var karyawan_cabang_search=null;
+		var karyawan_noktp_search=null;
+		var karyawan_alamatktp_search=null;
+		var karyawan_agama_search=null;
 		var karyawan_npwp_search=null;
+		var karyawan_jamsostek_search=null;
+		var karyawan_sip_search=null;
 		var karyawan_username_search=null;
 		var karyawan_nama_search=null;
 		var karyawan_kelamin_search=null;
-		var karyawan_tgllahir_search_date="";
+		var karyawan_marriage_search=null;
+		var karyawan_jmlanak_search=null;
+		var karyawan_tglmasuk_search_date="";
+		var karyawan_aktif_search=null;
+		// TEMPAT TANGGAL LAHIR SEARCH
+		var karyawan_tempatlahir_search=null;
+		var karyawan_tgllahirawal_search="";
+		var karyawan_tgllahirakhir_search="";
+		var karyawan_tgllahir_search=null;
+		var karyawan_blnlahir_search=null;
+		// ALAMAT SEARCH
 		var karyawan_alamat_search=null;
 		var karyawan_kota_search=null;
 		var karyawan_kodepos_search=null;
 		var karyawan_email_search=null;
-		var karyawan_emiracle_search=null;
+		//var karyawan_emiracle_search=null;
 		var karyawan_keterangan_search=null;
 		var karyawan_notelp_search=null;
-		var karyawan_notelp2_search=null;
-		var karyawan_notelp3_search=null;
-		var karyawan_notelp4_search=null;
-		var karyawan_cabang_search=null;
+		//var karyawan_notelp2_search=null;
+		//var karyawan_notelp3_search=null;
+		//var karyawan_notelp4_search=null;
+		// INFO REKENING SEARCH
+		var karyawan_bank_search=null;
+		var karyawan_bankcabang_search=null;
+		var karyawan_norekening_search=null;
+		var karyawan_atasnama_search=null;
+		// STATUS KEKARYAWANAN SEARCH
+		var karyawan_statuskekaryawanan_search=null;
+		var karyawan_statustglawalawal_search="";
+		var karyawan_statustglawalakhir_search="";
+		var karyawan_statustglakhirawal_search="";
+		var karyawan_statustglakhirakhir_search="";
+		var karyawan_statuskaryawan_search=null;
+		// JABATAN SEARCH
 		var karyawan_jabatan_search=null;
 		var karyawan_departemen_search=null;
 		var karyawan_golongan_search=null;
-		var karyawan_tglmasuk_search_date="";
 		var karyawan_atasan_search=null;
-		var karyawan_aktif_search=null;
-
+		var karyawan_pph21_search=null;
+		var karyawan_tgljbtawalawal_search="";
+		var karyawan_tgljbtawalakhir_search="";
+		var karyawan_tgljbtakhirawal_search="";
+		var karyawan_tgljbtakhirakhir_search="";
+		var karyawan_jabatanketerangan_search=null;
+		// PENDIDIKAN SEARCH
+		var karyawan_pendidikan_search=null;
+		var karyawan_namasekolah_search=null;
+		var karyawan_jurusan_search=null;
+		var karyawan_thnmskawal_search=null;
+		var karyawan_thnmskakhir_search=null;
+		var karyawan_thnslsawal_search=null;
+		var karyawan_thnslsakhir_search=null;
+		var karyawan_wisudaawal_search=null;
+		var karyawan_wisudaakhir_search=null;
+		var karyawan_pendidikanketerangan_search=null;
+		// CUTI SEARCH
+		var karyawan_jeniscuti_search=null;
+		var karyawan_tglcutiawalawal_search=null;
+		var karyawan_tglcutiawalakhir_search=null;
+		var karyawan_tglcutiakhirawal_search=null;
+		var karyawan_tglcutiakhirakhir_search=null;
+		var karyawan_jmlharicutiawal_search=null;
+		var karyawan_jmlharicutiakhir_search=null;
+		var karyawan_tglpengajuanawal_search="";
+		var karyawan_tglpengajuanakhir_search="";
+		var karyawan_cutiketerangan_search=null;
+		// GANTIOFF SEARCH		
+		var karyawan_tgloffawalawal_search="";
+		var karyawan_tgloffawalakhir_search="";
+		var karyawan_tgloffakhirawal_search="";
+		var karyawan_tgloffakhirakhir_search="";
+		var karyawan_jmlharioffawal_search=null;
+		var karyawan_jmlharioffakhir_search=null;
+		var karyawan_tgloffgantiawalawal_search="";
+		var karyawan_tgloffgantiawalakhir_search="";
+		var karyawan_tgloffgantiakhirawal_search="";
+		var karyawan_tgloffgantiakhirakhir_search="";
+		var karyawan_tgloffpengajuanakhirawal_search="";
+		var karyawan_tgloffpengajuanakhirakhir_search="";
+		var karyawan_offketerangan_search=null;
+		// MEDICAL SEARCH
+		var karyawan_tujuanklaim_search=null;
+		var karyawan_jenisrawat_search=null;
+		var karyawan_jenisklaim_search=null;
+		var karyawan_jmlkuitansiawal_search=null;
+		var karyawan_jmlkuitansiakhir_search=null;
+		var karyawan_totalkuitansiawal_search=null;
+		var karyawan_totalkuitansiakhir_search=null;
+		var karyawan_tglmedicalpengajuanawal_search="";
+		var karyawan_tglmedicalpengajuanakhir_search="";
+		var karyawan_medicalketerangan_search=null;
+		// FASILITAS SEARCH
+		var karyawan_fasilitasitem_search=null;
+		var karyawan_tglserahterimaawal_search="";
+		var karyawan_tglserahterimaakhir_search="";
+		var karyawan_fasilitasketerangan_search=null;
+		// GENERAL SEARCH
 		if(karyawan_idSearchField.getValue()!==null){karyawan_id_search=karyawan_idSearchField.getValue();}
 		if(karyawan_noSearchField.getValue()!==null){karyawan_no_search=karyawan_noSearchField.getValue();}
+		if(karyawan_cabangSearchField.getValue()!==null){karyawan_cabang_search=karyawan_cabangSearchField.getValue();}
+		if(karyawan_noktpSearchField.getValue()!==null){karyawan_noktp_search=karyawan_noktpSearchField.getValue();}
+		if(karyawan_alamatktpSearchField.getValue()!==null){karyawan_alamatktp_search=karyawan_alamatktpSearchField.getValue();}
+		if(karyawan_agamaSearchField.getValue()!==null){karyawan_agama_search=karyawan_agamaSearchField.getValue();}
 		if(karyawan_npwpSearchField.getValue()!==null){karyawan_npwp_search=karyawan_npwpSearchField.getValue();}
+		if(karyawan_jamsostekSearchField.getValue()!==null){karyawan_jamsostek_search=karyawan_jamsostekSearchField.getValue();}
+		if(karyawan_sipSearchField.getValue()!==null){karyawan_sip_search=karyawan_sipSearchField.getValue();}
 		if(karyawan_usernameSearchField.getValue()!==null){karyawan_username_search=karyawan_usernameSearchField.getValue();}
 		if(karyawan_namaSearchField.getValue()!==null){karyawan_nama_search=karyawan_namaSearchField.getValue();}
 		if(karyawan_kelaminSearchField.getValue()!==null){karyawan_kelamin_search=karyawan_kelaminSearchField.getValue();}
-		if(karyawan_tgllahirSearchField.getValue()!==""){karyawan_tgllahir_search_date=karyawan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_marriageSearchField.getValue()!==null){karyawan_marriage_search=karyawan_marriageSearchField.getValue();}
+		if(karyawan_jmlanakSearchField.getValue()!==null){karyawan_jmlanak_search=karyawan_jmlanakSearchField.getValue();}
+		if(karyawan_tglmasukSearchField.getValue()!==""){karyawan_tglmasuk_search_date=karyawan_tglmasukSearchField.getValue().format('Y-m-d');}
+		if(karyawan_aktifSearchField.getValue()!==null){karyawan_aktif_search=karyawan_aktifSearchField.getValue();}
+		// TEMPAT TANGGAL LAHIR SEARCH
+		if(karyawan_tempatlahirSearchField.getValue()!==null){karyawan_tempatlahir_search=karyawan_tempatlahirSearchField.getValue();}
+		if(karyawan_tgllahirawalSearchField.getValue()!==""){karyawan_tgllahirawal_search=karyawan_tgllahirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgllahirakhirSearchField.getValue()!==""){karyawan_tgllahirakhir_search=karyawan_tgllahirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgllahirSearchField.getValue()!==null){karyawan_tgllahir_search=karyawan_tgllahirSearchField.getValue();}
+		if(karyawan_blnlahirSearchField.getValue()!==null){karyawan_blnlahir_search=karyawan_blnlahirSearchField.getValue();}
+		// ALAMAT SEARCH
 		if(karyawan_alamatSearchField.getValue()!==null){karyawan_alamat_search=karyawan_alamatSearchField.getValue();}
 		if(karyawan_kotaSearchField.getValue()!==null){karyawan_kota_search=karyawan_kotaSearchField.getValue();}
 		if(karyawan_kodeposSearchField.getValue()!==null){karyawan_kodepos_search=karyawan_kodeposSearchField.getValue();}
 		if(karyawan_emailSearchField.getValue()!==null){karyawan_email_search=karyawan_emailSearchField.getValue();}
-		if(karyawan_emiracleSearchField.getValue()!==null){karyawan_emiracle_search=karyawan_emiracleSearchField.getValue();}
+		//if(karyawan_emiracleSearchField.getValue()!==null){karyawan_emiracle_search=karyawan_emiracleSearchField.getValue();}
 		if(karyawan_keteranganSearchField.getValue()!==null){karyawan_keterangan_search=karyawan_keteranganSearchField.getValue();}
 		if(karyawan_notelpSearchField.getValue()!==null){karyawan_notelp_search=karyawan_notelpSearchField.getValue();}
-		if(karyawan_notelp2SearchField.getValue()!==null){karyawan_notelp2_search=karyawan_notelp2SearchField.getValue();}
-		if(karyawan_notelp3SearchField.getValue()!==null){karyawan_notelp3_search=karyawan_notelp3SearchField.getValue();}
-		if(karyawan_notelp4SearchField.getValue()!==null){karyawan_notelp4_search=karyawan_notelp4SearchField.getValue();}
-		if(karyawan_cabangSearchField.getValue()!==null){karyawan_cabang_search=karyawan_cabangSearchField.getValue();}
+		//if(karyawan_notelp2SearchField.getValue()!==null){karyawan_notelp2_search=karyawan_notelp2SearchField.getValue();}
+		//if(karyawan_notelp3SearchField.getValue()!==null){karyawan_notelp3_search=karyawan_notelp3SearchField.getValue();}
+		//if(karyawan_notelp4SearchField.getValue()!==null){karyawan_notelp4_search=karyawan_notelp4SearchField.getValue();}
+		// INFO REKENING SEARCH
+		if(karyawan_bankSearchField.getValue()!==null){karyawan_bank_search=karyawan_bankSearchField.getValue();}
+		if(karyawan_bankcabangSearchField.getValue()!==null){karyawan_bankcabang_search=karyawan_bankcabangSearchField.getValue();}
+		if(karyawan_norekeningSearchField.getValue()!==null){karyawan_norekening_search=karyawan_norekeningSearchField.getValue();}
+		if(karyawan_atasnamaSearchField.getValue()!==null){karyawan_atasnama_search=karyawan_atasnamaSearchField.getValue();}
+		// STATUS KEKARYAWANAN SEARCH
+		if(karyawan_statuskekaryawananSearchField.getValue()!==null){karyawan_statuskekaryawanan_search=karyawan_statuskekaryawananSearchField.getValue();}
+		if(karyawan_statustglawalawalSearchField.getValue()!==""){karyawan_statustglawalawal_search=karyawan_statustglawalawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_statustglawalakhirSearchField.getValue()!==""){karyawan_statustglawalakhir_search=karyawan_statustglawalakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_statustglakhirawalSearchField.getValue()!==""){karyawan_statustglakhirawal_search=karyawan_statustglakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_statustglakhirakhirSearchField.getValue()!==""){karyawan_statustglakhirakhir_search=karyawan_statustglakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_statuskaryawanSearchField.getValue()!==null){karyawan_statuskaryawan_search=karyawan_statuskaryawanSearchField.getValue();}
+		// JABATAN SEARCH
 		if(karyawan_jabatanSearchField.getValue()!==null){karyawan_jabatan_search=karyawan_jabatanSearchField.getValue();}
 		if(karyawan_departemenSearchField.getValue()!==null){karyawan_departemen_search=karyawan_departemenSearchField.getValue();}
 		if(karyawan_golonganSearchField.getValue()!==null){karyawan_golongan_search=karyawan_golonganSearchField.getValue();}
-		if(karyawan_tglmasukSearchField.getValue()!==""){karyawan_tglmasuk_search_date=karyawan_tglmasukSearchField.getValue().format('Y-m-d');}
 		if(karyawan_atasanSearchField.getValue()!==null){karyawan_atasan_search=karyawan_atasanSearchField.getValue();}
-		if(karyawan_aktifSearchField.getValue()!==null){karyawan_aktif_search=karyawan_aktifSearchField.getValue();}
-			
+		if(karyawan_pph21SearchField.getValue()!==null){karyawan_pph21_search=karyawan_pph21SearchField.getValue();}
+		if(karyawan_tgljbtawalawalSearchField.getValue()!==""){karyawan_tgljbtawalawal_search=karyawan_tgljbtawalawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgljbtawalakhirSearchField.getValue()!==""){karyawan_tgljbtawalakhir_search=karyawan_tgljbtawalakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgljbtakhirawalSearchField.getValue()!==""){karyawan_tgljbtakhirawal_search=karyawan_tgljbtakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgljbtakhirakhirSearchField.getValue()!==""){karyawan_tgljbtakhirakhir_search=karyawan_tgljbtakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_jabatanketeranganSearchField.getValue()!==null){karyawan_jabatanketerangan_search=karyawan_jabatanketeranganSearchField.getValue();}
+		// PENDIDIKAN SEARCH
+		if(karyawan_pendidikanSearchField.getValue()!==null){karyawan_pendidikan_search=karyawan_pendidikanSearchField.getValue();}
+		if(karyawan_namasekolahSearchField.getValue()!==null){karyawan_namasekolah_search=karyawan_namasekolahSearchField.getValue();}
+		if(karyawan_jurusanSearchField.getValue()!==null){karyawan_jurusan_search=karyawan_jurusanSearchField.getValue();}
+		if(karyawan_thnmskawalSearchField.getValue()!==null){karyawan_thnmskawal_search=karyawan_thnmskawalSearchField.getValue();}
+		if(karyawan_thnmskakhirSearchField.getValue()!==null){karyawan_thnmskakhir_search=karyawan_thnmskakhirSearchField.getValue();}
+		if(karyawan_thnslsawalSearchField.getValue()!==null){karyawan_thnslsawal_search=karyawan_thnslsawalSearchField.getValue();}
+		if(karyawan_thnslsakhirSearchField.getValue()!==null){karyawan_thnslsakhir_search=karyawan_thnslsakhirSearchField.getValue();}
+		if(karyawan_wisudaawalSearchField.getValue()!==null){karyawan_wisudaawal_search=karyawan_wisudaawalSearchField.getValue();}
+		if(karyawan_wisudaakhirSearchField.getValue()!==null){karyawan_wisudaakhir_search=karyawan_wisudaakhirSearchField.getValue();}
+		if(karyawan_pendidikanketeranganSearchField.getValue()!==null){karyawan_pendidikanketerangan_search=karyawan_pendidikanketeranganSearchField.getValue();}	
+		// CUTI SEARCH
+		if(karyawan_jeniscutiSearchField.getValue()!==""){karyawan_jeniscuti_search=karyawan_jeniscutiSearchField.getValue();}
+		if(karyawan_tglcutiawalawalSearchField.getValue()!==""){karyawan_tglcutiawalawal_search=karyawan_tglcutiawalawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglcutiawalakhirSearchField.getValue()!==""){karyawan_tglcutiawalakhir_search=karyawan_tglcutiawalakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglcutiakhirawalSearchField.getValue()!==""){karyawan_tglcutiakhirawal_search=karyawan_tglcutiakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglcutiakhirakhirSearchField.getValue()!==""){karyawan_tglcutiakhirakhir_search=karyawan_tglcutiakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_jmlharicutiawalSearchField.getValue()!==null){karyawan_jmlharicutiawal_search=karyawan_jmlharicutiawalSearchField.getValue();}
+		if(karyawan_jmlharicutiakhirSearchField.getValue()!==null){karyawan_jmlharicutiakhir_search=karyawan_jmlharicutiakhirSearchField.getValue();}
+		if(karyawan_tglpengajuanawalSearchField.getValue()!==""){karyawan_tglpengajuanawal_search=karyawan_tglpengajuanawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglpengajuanakhirSearchField.getValue()!==""){karyawan_tglpengajuanakhir_search=karyawan_tglpengajuanakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_cutiketeranganSearchField.getValue()!==null){karyawan_cutiketerangan_search=karyawan_cutiketeranganSearchField.getValue();}	
+		// GANTIOFF SEARCH
+		if(karyawan_tgloffawalawalSearchField.getValue()!==""){karyawan_tgloffawalawal_search=karyawan_tgloffawalawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffawalakhirSearchField.getValue()!==""){karyawan_tgloffawalakhir_search=karyawan_tgloffawalakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffakhirawalSearchField.getValue()!==""){karyawan_tgloffakhirawal_search=karyawan_tgloffakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffakhirakhirSearchField.getValue()!==""){karyawan_tgloffakhirakhir_search=karyawan_tgloffakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_jmlharioffawalSearchField.getValue()!==null){karyawan_jmlharioffawal_search=karyawan_jmlharioffawalSearchField.getValue();}
+		if(karyawan_jmlharioffakhirSearchField.getValue()!==null){karyawan_jmlharioffakhir_search=karyawan_jmlharioffakhirSearchField.getValue();}
+		if(karyawan_tgloffgantiawalawalSearchField.getValue()!==""){karyawan_tgloffgantiawalawal_search=karyawan_tgloffgantiawalawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffgantiawalakhirSearchField.getValue()!==""){karyawan_tgloffgantiawalakhir_search=karyawan_tgloffgantiawalakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffgantiakhirawalSearchField.getValue()!==""){karyawan_tgloffgantiakhirawal_search=karyawan_tgloffgantiakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffgantiakhirakhirSearchField.getValue()!==""){karyawan_tgloffgantiakhirakhir_search=karyawan_tgloffgantiakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffpengajuanakhirawalSearchField.getValue()!==""){karyawan_tgloffpengajuanakhirawal_search=karyawan_tgloffpengajuanakhirawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tgloffpengajuanakhirakhirSearchField.getValue()!==""){karyawan_tgloffpengajuanakhirakhir_search=karyawan_tgloffpengajuanakhirakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_offketeranganSearchField.getValue()!==null){karyawan_offketerangan_search=karyawan_offketeranganSearchField.getValue();}
+		// MEDICAL SEARCH
+		if(karyawan_tujuanklaimSearchField.getValue()!==null){karyawan_tujuanklaim_search=karyawan_tujuanklaimSearchField.getValue();}
+		if(karyawan_jenisrawatSearchField.getValue()!==null){karyawan_jenisrawat_search=karyawan_jenisrawatSearchField.getValue();}
+		if(karyawan_jenisklaimSearchField.getValue()!==null){karyawan_jenisklaim_search=karyawan_jenisklaimSearchField.getValue();}
+		if(karyawan_jmlkuitansiawalSearchField.getValue()!==null){karyawan_jmlkuitansiawal_search=karyawan_jmlkuitansiawalSearchField.getValue();}
+		if(karyawan_jmlkuitansiakhirSearchField.getValue()!==null){karyawan_jmlkuitansiakhir_search=karyawan_jmlkuitansiakhirSearchField.getValue();}
+		if(karyawan_totalkuitansiawalSearchField.getValue()!==null){karyawan_totalkuitansiawal_search=karyawan_totalkuitansiawalSearchField.getValue();}
+		if(karyawan_totalkuitansiakhirSearchField.getValue()!==null){karyawan_totalkuitansiakhir_search=karyawan_totalkuitansiakhirSearchField.getValue();}
+		if(karyawan_tglmedicalpengajuanawalSearchField.getValue()!==""){karyawan_tglmedicalpengajuanawal_search=karyawan_tglmedicalpengajuanawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglmedicalpengajuanakhirSearchField.getValue()!==""){karyawan_tglmedicalpengajuanakhir_search=karyawan_tglmedicalpengajuanakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_medicalketeranganSearchField.getValue()!==null){karyawan_medicalketerangan_search=karyawan_medicalketeranganSearchField.getValue();}
+		// FASILITAS SEARCH
+		if(karyawan_fasilitasitemSearchField.getValue()!==null){karyawan_fasilitasitem_search=karyawan_fasilitasitemSearchField.getValue();}
+		if(karyawan_tglserahterimaawalSearchField.getValue()!==""){karyawan_tglserahterimaawal_search=karyawan_tglserahterimaawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglserahterimaakhirSearchField.getValue()!==""){karyawan_tglserahterimaakhir_search=karyawan_tglserahterimaakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_fasilitasketeranganSearchField.getValue()!==null){karyawan_fasilitasketerangan_search=karyawan_fasilitasketeranganSearchField.getValue();}
+		
 		// change the store parameters
 		karyawan_DataStore.baseParams = {
 			task: 'SEARCH',
 			start: 0,
 			limit: pageS,
 			//variable here
-			karyawan_id	:	karyawan_id_search, 
-			karyawan_no	:	karyawan_no_search, 
-			karyawan_npwp	:	karyawan_npwp_search, 
-			karyawan_username	:	karyawan_username_search, 
-			karyawan_nama	:	karyawan_nama_search, 
-			karyawan_kelamin	:	karyawan_kelamin_search, 
-			karyawan_tgllahir	:	karyawan_tgllahir_search_date, 
-			karyawan_alamat	:	karyawan_alamat_search, 
-			karyawan_kota	:	karyawan_kota_search, 
-			karyawan_kodepos	:	karyawan_kodepos_search, 
-			karyawan_email	:	karyawan_email_search, 
-			karyawan_emiracle	:	karyawan_emiracle_search, 
-			karyawan_keterangan	:	karyawan_keterangan_search, 
-			karyawan_notelp	:	karyawan_notelp_search, 
-			karyawan_notelp2	:	karyawan_notelp2_search, 
-			karyawan_notelp3	:	karyawan_notelp3_search, 
-			karyawan_notelp4	:	karyawan_notelp4_search, 
-			karyawan_cabang	:	karyawan_cabang_search, 
-			karyawan_jabatan	:	karyawan_jabatan_search, 
-			karyawan_departemen	:	karyawan_departemen_search, 
-			karyawan_idgolongan	:	karyawan_golongan_search, 
-			karyawan_tglmasuk	:	karyawan_tglmasuk_search_date, 
-			karyawan_atasan	:	karyawan_atasan_search, 
-			karyawan_aktif	:	karyawan_aktif_search, 
+			// GENERAL SEARCH
+			karyawan_id				:	karyawan_id_search, 
+			karyawan_cabang			:	karyawan_cabang_search, 
+			karyawan_no				:	karyawan_no_search, 
+			karyawan_noktp			:	karyawan_noktp_search, 
+			karyawan_alamatktp		:	karyawan_alamatktp_search, 
+			karyawan_npwp			:	karyawan_npwp_search, 
+			karyawan_jamsostek		:	karyawan_jamsostek_search, 
+			karyawan_sip			:	karyawan_sip_search, 
+			karyawan_username		:	karyawan_username_search, 
+			karyawan_nama			:	karyawan_nama_search, 
+			karyawan_kelamin		:	karyawan_kelamin_search, 
+			karyawan_marriage		:	karyawan_marriage_search,
+			karyawan_agama			:	karyawan_agama_search,
+			karyawan_jmlanak		:	karyawan_jmlanak_search, 
+			karyawan_tglmasuk		:	karyawan_tglmasuk_search_date, 
+			karyawan_aktif			:	karyawan_aktif_search,
+			// TEMPAT TANGGAL LAHIR SEARCH
+			karyawan_tempatlahir	:	karyawan_tempatlahir_search,
+			karyawan_tgllahirawal	:	karyawan_tgllahirawal_search,
+			karyawan_tgllahirakhir	:	karyawan_tgllahirakhir_search,
+			karyawan_tgllahir		:	karyawan_tgllahir_search,
+			karyawan_blnlahir		:	karyawan_blnlahir_search,
+			// ALAMAT & KONTAK SEARCH
+			karyawan_alamat			:	karyawan_alamat_search, 
+			karyawan_kota			:	karyawan_kota_search, 
+			karyawan_kodepos		:	karyawan_kodepos_search, 
+			karyawan_email			:	karyawan_email_search, 
+			karyawan_keterangan		:	karyawan_keterangan_search, 
+			karyawan_notelp			:	karyawan_notelp_search, 
+			// INFO REKENING SEARCH
+			karyawan_bank			:	karyawan_bank_search, 
+			karyawan_bankcabang		:	karyawan_bankcabang_search, 
+			karyawan_norekening		:	karyawan_norekening_search, 
+			karyawan_atasnama		:	karyawan_atasnama_search, 
+			// STATUS KEKARYAWANAN SEARCH
+			karyawan_statuskekaryawanan		:	karyawan_statuskekaryawanan_search, 
+			karyawan_statustglawalawal		:	karyawan_statustglawalawal_search, 
+			karyawan_statustglawalakhir		:	karyawan_statustglawalakhir_search, 
+			karyawan_statustglakhirawal		:	karyawan_statustglakhirawal_search, 
+			karyawan_statustglakhirakhir	:	karyawan_statustglakhirakhir_search, 
+			karyawan_statuskaryawan			:	karyawan_statuskaryawan_search, 
+			// JABATAN SEARCH
+			karyawan_jabatan			:	karyawan_jabatan_search, 
+			karyawan_departemen			:	karyawan_departemen_search, 
+			karyawan_idgolongan			:	karyawan_golongan_search, 
+			karyawan_atasan				:	karyawan_atasan_search,
+			karyawan_pph21				:	karyawan_pph21_search,
+			karyawan_tgljbtawalawal		:	karyawan_tgljbtawalawal_search,
+			karyawan_tgljbtawalakhir	:	karyawan_tgljbtawalakhir_search,
+			karyawan_tgljbtakhirawal	:	karyawan_tgljbtakhirawal_search,
+			karyawan_tgljbtakhirakhir	:	karyawan_tgljbtakhirakhir_search,
+			karyawan_jabatanketerangan	:	karyawan_jabatanketerangan_search,
+			// PENDIDIKAN SEARCH
+			karyawan_pendidikan				:	karyawan_pendidikan_search,
+			karyawan_namasekolah			:	karyawan_namasekolah_search,
+			karyawan_jurusan				:	karyawan_jurusan_search,
+			karyawan_thnmskawal				:	karyawan_thnmskawal_search,
+			karyawan_thnmskakhir			:	karyawan_thnmskakhir_search,
+			karyawan_thnslsawal				:	karyawan_thnslsawal_search,
+			karyawan_thnslsakhir			:	karyawan_thnslsakhir_search,
+			karyawan_wisudaawal				:	karyawan_wisudaawal_search,
+			karyawan_wisudaakhir			:	karyawan_wisudaakhir_search,
+			karyawan_pendidikanketerangan	:	karyawan_pendidikanketerangan_search,
+			// CUTI SEARCH
+			karyawan_jeniscuti			:	karyawan_jeniscuti_search,
+			karyawan_tglcutiawalawal	:	karyawan_tglcutiawalawal_search,
+			karyawan_tglcutiawalakhir	:	karyawan_tglcutiawalakhir_search,
+			karyawan_tglcutiakhirawal	:	karyawan_tglcutiakhirawal_search,
+			karyawan_tglcutiakhirakhir	:	karyawan_tglcutiakhirakhir_search,
+			karyawan_jmlharicutiawal	:	karyawan_jmlharicutiawal_search,
+			karyawan_jmlharicutiakhir	:	karyawan_jmlharicutiakhir_search,
+			karyawan_tglpengajuanawal	:	karyawan_tglpengajuanawal_search,
+			karyawan_tglpengajuanakhir	:	karyawan_tglpengajuanakhir_search,
+			karyawan_cutiketerangan		:	karyawan_cutiketerangan_search,
+			// GANTIOFF SEARCH
+			karyawan_tgloffawalawal				:	karyawan_tgloffawalawal_search,
+			karyawan_tgloffawalakhir			:	karyawan_tgloffawalakhir_search,
+			karyawan_tgloffakhirawal			:	karyawan_tgloffakhirawal_search,
+			karyawan_tgloffakhirakhir			:	karyawan_tgloffakhirakhir_search,
+			karyawan_jmlharioffawal				:	karyawan_jmlharioffawal_search,
+			karyawan_jmlharioffakhir			:	karyawan_jmlharioffakhir_search,
+			karyawan_tgloffgantiawalawal		:	karyawan_tgloffgantiawalawal_search,
+			karyawan_tgloffgantiawalakhir		:	karyawan_tgloffgantiawalakhir_search,
+			karyawan_tgloffgantiakhirawal		:	karyawan_tgloffgantiakhirawal_search,
+			karyawan_tgloffgantiakhirakhir		:	karyawan_tgloffgantiakhirakhir_search,
+			karyawan_tgloffpengajuanakhirawal	:	karyawan_tgloffpengajuanakhirawal_search,
+			karyawan_tgloffpengajuanakhirakhir	:	karyawan_tgloffpengajuanakhirakhir_search,
+			karyawan_offketerangan				:	karyawan_offketerangan_search,
+			// MEDICAL SEARCH
+			karyawan_tujuanklaim				:	karyawan_tujuanklaim_search,
+			karyawan_jenisrawat					:	karyawan_jenisrawat_search,
+			karyawan_jenisklaim					:	karyawan_jenisklaim_search,
+			karyawan_jmlkuitansiawal			:	karyawan_jmlkuitansiawal_search,
+			karyawan_jmlkuitansiakhir			:	karyawan_jmlkuitansiakhir_search,
+			karyawan_totalkuitansiawal			:	karyawan_totalkuitansiawal_search,
+			karyawan_totalkuitansiakhir			:	karyawan_totalkuitansiakhir_search,
+			karyawan_tglmedicalpengajuanawal	:	karyawan_tglmedicalpengajuanawal_search,
+			karyawan_tglmedicalpengajuanakhir	:	karyawan_tglmedicalpengajuanakhir_search,
+			karyawan_medicalketerangan			:	karyawan_medicalketerangan_search,
+			// FASILITAS SEARCH
+			karyawan_fasilitasitem			:	karyawan_fasilitasitem_search,
+			karyawan_tglserahterimaawal		:	karyawan_tglserahterimaawal_search,
+			karyawan_tglserahterimaakhir	:	karyawan_tglserahterimaakhir_search,
+			karyawan_fasilitasketerangan	:	karyawan_fasilitasketerangan_search,
 		};
 		// Cause the datastore to do another query : 
 		karyawan_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -6560,18 +6914,49 @@ Ext.onReady(function(){
 	/* End of Fuction */
 	
 	function karyawan_reset_SearchForm(){
+		// GENERAL SEARCH
 		karyawan_noSearchField.reset();
 		karyawan_noSearchField.setValue(null);
+		karyawan_cabangSearchField.reset();
+		karyawan_cabangSearchField.setValue(null);
+		karyawan_noktpSearchField.reset();
+		karyawan_noktpSearchField.setValue(null);
+		karyawan_alamatktpSearchField.reset();
+		karyawan_alamatktpSearchField.setValue(null);
+		karyawan_agamaSearchField.reset();
+		karyawan_agamaSearchField.setValue(null);
 		karyawan_npwpSearchField.reset();
 		karyawan_npwpSearchField.setValue(null);
+		karyawan_jamsostekSearchField.reset();
+		karyawan_jamsostekSearchField.setValue(null);
+		karyawan_sipSearchField.reset();
+		karyawan_sipSearchField.setValue(null);
 		karyawan_usernameSearchField.reset();
 		karyawan_usernameSearchField.setValue(null);
 		karyawan_namaSearchField.reset();
 		karyawan_namaSearchField.setValue(null);
 		karyawan_kelaminSearchField.reset();
 		karyawan_kelaminSearchField.setValue(null);
+		karyawan_marriageSearchField.reset();
+		karyawan_marriageSearchField.setValue(null);
+		karyawan_jmlanakSearchField.reset();
+		karyawan_jmlanakSearchField.setValue(null);
+		karyawan_tglmasukSearchField.reset();
+		karyawan_tglmasukSearchField.setValue(null);
+		karyawan_aktifSearchField.reset();
+		karyawan_aktifSearchField.setValue(null);
+		// TEMPAT TANGGAL LAHIR SEARCH
+		karyawan_tempatlahirSearchField.reset();
+		karyawan_tempatlahirSearchField.setValue(null);
+		karyawan_tgllahirawalSearchField.reset();
+		karyawan_tgllahirawalSearchField.setValue(null);
+		karyawan_tgllahirakhirSearchField.reset();
+		karyawan_tgllahirakhirSearchField.setValue(null);
 		karyawan_tgllahirSearchField.reset();
 		karyawan_tgllahirSearchField.setValue(null);
+		karyawan_blnlahirSearchField.reset();
+		karyawan_blnlahirSearchField.setValue(null);
+		// ALAMAT SEARCH
 		karyawan_alamatSearchField.reset();
 		karyawan_alamatSearchField.setValue(null);
 		karyawan_kotaSearchField.reset();
@@ -6580,35 +6965,171 @@ Ext.onReady(function(){
 		karyawan_kodeposSearchField.setValue(null);
 		karyawan_emailSearchField.reset();
 		karyawan_emailSearchField.setValue(null);
-		karyawan_emiracleSearchField.reset();
-		karyawan_emiracleSearchField.setValue(null);
+		//karyawan_emiracleSearchField.reset();
+		//karyawan_emiracleSearchField.setValue(null);
 		karyawan_keteranganSearchField.reset();
 		karyawan_keteranganSearchField.setValue(null);
 		karyawan_notelpSearchField.reset();
 		karyawan_notelpSearchField.setValue(null);
-		karyawan_notelp2SearchField.reset();
-		karyawan_notelp2SearchField.setValue(null);
-		karyawan_notelp3SearchField.reset();
-		karyawan_notelp3SearchField.setValue(null);
-		karyawan_notelp4SearchField.reset();
-		karyawan_notelp4SearchField.setValue(null);
-		karyawan_cabangSearchField.reset();
-		karyawan_cabangSearchField.setValue(null);
+		//karyawan_notelp2SearchField.reset();
+		//karyawan_notelp2SearchField.setValue(null);
+		//karyawan_notelp3SearchField.reset();
+		//karyawan_notelp3SearchField.setValue(null);
+		//karyawan_notelp4SearchField.reset();
+		//karyawan_notelp4SearchField.setValue(null);
+		// INFO REKENING SEARCH
+		karyawan_bankSearchField.reset();
+		karyawan_bankSearchField.setValue(null);
+		karyawan_bankcabangSearchField.reset();
+		karyawan_bankcabangSearchField.setValue(null);
+		karyawan_norekeningSearchField.reset();
+		karyawan_norekeningSearchField.setValue(null);
+		karyawan_atasnamaSearchField.reset();
+		karyawan_atasnamaSearchField.setValue(null);
+		// STATUS KEKARYAWANAN SEARCH
+		karyawan_statuskekaryawananSearchField.reset();
+		karyawan_statuskekaryawananSearchField.setValue(null);
+		karyawan_statustglawalawalSearchField.reset();
+		karyawan_statustglawalawalSearchField.setValue(null);
+		karyawan_statustglawalakhirSearchField.reset();
+		karyawan_statustglawalakhirSearchField.setValue(null);
+		karyawan_statustglakhirawalSearchField.reset();
+		karyawan_statustglakhirawalSearchField.setValue(null);
+		karyawan_statustglakhirakhirSearchField.reset();
+		karyawan_statustglakhirakhirSearchField.setValue(null);
+		karyawan_statuskaryawanSearchField.reset();
+		karyawan_statuskaryawanSearchField.setValue(null);
+		// JABATAN SEARCH
 		karyawan_jabatanSearchField.reset();
 		karyawan_jabatanSearchField.setValue(null);
 		karyawan_departemenSearchField.reset();
 		karyawan_departemenSearchField.setValue(null);
 		karyawan_golonganSearchField.reset();
 		karyawan_golonganSearchField.setValue(null);
-		karyawan_tglmasukSearchField.reset();
-		karyawan_tglmasukSearchField.setValue(null);
 		karyawan_atasanSearchField.reset();
 		karyawan_atasanSearchField.setValue(null);
-		karyawan_aktifSearchField.reset();
-		karyawan_aktifSearchField.setValue(null);
+		karyawan_pph21SearchField.reset();
+		karyawan_pph21SearchField.setValue(null);
+		karyawan_tgljbtawalawalSearchField.reset();
+		karyawan_tgljbtawalawalSearchField.setValue(null);
+		karyawan_tgljbtawalakhirSearchField.reset();
+		karyawan_tgljbtawalakhirSearchField.setValue(null);
+		karyawan_tgljbtakhirawalSearchField.reset();
+		karyawan_tgljbtakhirawalSearchField.setValue(null);
+		karyawan_tgljbtakhirakhirSearchField.reset();
+		karyawan_tgljbtakhirakhirSearchField.setValue(null);
+		karyawan_jabatanketeranganSearchField.reset();
+		karyawan_jabatanketeranganSearchField.setValue(null);
+		
+		// PENDIDIKAN SEARCH
+		karyawan_pendidikanSearchField.reset();
+		karyawan_pendidikanSearchField.setValue(null);
+		karyawan_namasekolahSearchField.reset();
+		karyawan_namasekolahSearchField.setValue(null);
+		karyawan_jurusanSearchField.reset();
+		karyawan_jurusanSearchField.setValue(null);
+		karyawan_thnmskawalSearchField.reset();
+		karyawan_thnmskawalSearchField.setValue(null);
+		karyawan_thnmskakhirSearchField.reset();
+		karyawan_thnmskakhirSearchField.setValue(null);
+		karyawan_thnslsawalSearchField.reset();
+		karyawan_thnslsawalSearchField.setValue(null);
+		karyawan_thnslsakhirSearchField.reset();
+		karyawan_thnslsakhirSearchField.setValue(null);
+		karyawan_wisudaawalSearchField.reset();
+		karyawan_wisudaawalSearchField.setValue(null);
+		karyawan_wisudaakhirSearchField.reset();
+		karyawan_wisudaakhirSearchField.setValue(null);
+		karyawan_pendidikanketeranganSearchField.reset();
+		karyawan_pendidikanketeranganSearchField.setValue(null);
+		
+		// CUTI SEARCH
+		karyawan_jeniscutiSearchField.reset();
+		karyawan_jeniscutiSearchField.setValue(null);
+		karyawan_tglcutiawalawalSearchField.reset();
+		karyawan_tglcutiawalawalSearchField.setValue(null);
+		karyawan_tglcutiawalakhirSearchField.reset();
+		karyawan_tglcutiawalakhirSearchField.setValue(null);
+		karyawan_tglcutiakhirawalSearchField.reset();
+		karyawan_tglcutiakhirawalSearchField.setValue(null);
+		karyawan_tglcutiakhirakhirSearchField.reset();
+		karyawan_tglcutiakhirakhirSearchField.setValue(null);
+		karyawan_jmlharicutiawalSearchField.reset();
+		karyawan_jmlharicutiawalSearchField.setValue(null);
+		karyawan_jmlharicutiakhirSearchField.reset();
+		karyawan_jmlharicutiakhirSearchField.setValue(null);
+		karyawan_tglpengajuanawalSearchField.reset();
+		karyawan_tglpengajuanawalSearchField.setValue(null);
+		karyawan_tglpengajuanakhirSearchField.reset();
+		karyawan_tglpengajuanakhirSearchField.setValue(null);
+		karyawan_cutiketeranganSearchField.reset();
+		karyawan_cutiketeranganSearchField.setValue(null);
+		
+		// GANTIOFF SEARCH
+		karyawan_tgloffawalawalSearchField.reset();
+		karyawan_tgloffawalawalSearchField.setValue(null);
+		karyawan_tgloffawalakhirSearchField.reset();
+		karyawan_tgloffawalakhirSearchField.setValue(null);
+		karyawan_tgloffakhirawalSearchField.reset();
+		karyawan_tgloffakhirawalSearchField.setValue(null);
+		karyawan_tgloffakhirakhirSearchField.reset();
+		karyawan_tgloffakhirakhirSearchField.setValue(null);
+		karyawan_jmlharioffawalSearchField.reset();
+		karyawan_jmlharioffawalSearchField.setValue(null);
+		karyawan_jmlharioffakhirSearchField.reset();
+		karyawan_jmlharioffakhirSearchField.setValue(null);
+		karyawan_tgloffgantiawalawalSearchField.reset();
+		karyawan_tgloffgantiawalawalSearchField.setValue(null);
+		karyawan_tgloffgantiawalakhirSearchField.reset();
+		karyawan_tgloffgantiawalakhirSearchField.setValue(null);
+		karyawan_tgloffgantiakhirawalSearchField.reset();
+		karyawan_tgloffgantiakhirawalSearchField.setValue(null);
+		karyawan_tgloffgantiakhirakhirSearchField.reset();
+		karyawan_tgloffgantiakhirakhirSearchField.setValue(null);
+		karyawan_tgloffpengajuanakhirawalSearchField.reset();
+		karyawan_tgloffpengajuanakhirawalSearchField.setValue(null);
+		karyawan_tgloffpengajuanakhirakhirSearchField.reset();
+		karyawan_tgloffpengajuanakhirakhirSearchField.setValue(null);
+		karyawan_offketeranganSearchField.reset();
+		karyawan_offketeranganSearchField.setValue(null);
+		
+		// MEDICAL SEARCH
+		karyawan_tujuanklaimSearchField.reset();
+		karyawan_tujuanklaimSearchField.setValue(null);
+		karyawan_jenisrawatSearchField.reset();
+		karyawan_jenisrawatSearchField.setValue(null);
+		karyawan_jenisklaimSearchField.reset();
+		karyawan_jenisklaimSearchField.setValue(null);
+		karyawan_jmlkuitansiawalSearchField.reset();
+		karyawan_jmlkuitansiawalSearchField.setValue(null);
+		karyawan_jmlkuitansiakhirSearchField.reset();
+		karyawan_jmlkuitansiakhirSearchField.setValue(null);
+		karyawan_totalkuitansiawalSearchField.reset();
+		karyawan_totalkuitansiawalSearchField.setValue(null);
+		karyawan_totalkuitansiakhirSearchField.reset();
+		karyawan_totalkuitansiakhirSearchField.setValue(null);
+		karyawan_tglmedicalpengajuanawalSearchField.reset();
+		karyawan_tglmedicalpengajuanawalSearchField.setValue(null);
+		karyawan_tglmedicalpengajuanakhirSearchField.reset();
+		karyawan_tglmedicalpengajuanakhirSearchField.setValue(null);
+		karyawan_medicalketeranganSearchField.reset();
+		karyawan_medicalketeranganSearchField.setValue(null);
+		
+		// FASILITAS SEARCH
+		karyawan_fasilitasitemSearchField.reset();
+		karyawan_fasilitasitemSearchField.setValue(null);
+		karyawan_tglserahterimaawalSearchField.reset();
+		karyawan_tglserahterimaawalSearchField.setValue(null);
+		karyawan_tglserahterimaakhirSearchField.reset();
+		karyawan_tglserahterimaakhirSearchField.setValue(null);
+		karyawan_fasilitasketeranganSearchField.reset();
+		karyawan_fasilitasketeranganSearchField.setValue(null);
+
 	}
 	
 	/* Field for search */
+	
+	// GENERAL SEARCH
 	/* Identify  karyawan_id Search Field */
 	karyawan_idSearchField= new Ext.form.NumberField({
 		id: 'karyawan_idSearchField',
@@ -6620,6 +7141,19 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+	/* Identify  karyawan_cabang Search Field */
+	karyawan_cabangSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_cabangSearchField',
+		fieldLabel: 'Cabang',
+		store:cbo_karyawan_cabang_DataStore,
+		mode: 'remote',
+		displayField: 'karyawan_cabang_display',
+		valueField: 'karyawan_cabang_value',
+		allowBlank: true,
+		anchor: '95%',
+		triggerAction: 'all'
+	
+	});
 	/* Identify  karyawan_no Search Field */
 	karyawan_noSearchField= new Ext.form.TextField({
 		id: 'karyawan_noSearchField',
@@ -6628,13 +7162,35 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	/* Identify  karyawan_npwp Search Field */
-	karyawan_npwpSearchField= new Ext.form.TextField({
-		id: 'karyawan_npwpSearchField',
-		fieldLabel: 'NPWP',
+	/* Identify  karyawan_no Search Field */
+	karyawan_noktpSearchField= new Ext.form.TextField({
+		id: 'karyawan_noktpSearchField',
+		fieldLabel: 'No KTP',
 		maxLength: 30,
 		anchor: '95%'
-	
+	});
+	/* Identify  karyawan_no Search Field */
+	karyawan_alamatktpSearchField= new Ext.form.TextField({
+		id: 'karyawan_alamatktpSearchField',
+		fieldLabel: 'Alamat KTP',
+		maxLength: 250,
+		anchor: '95%'
+	});
+	/* Identify  karyawan_agama Field */
+	karyawan_agamaSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_agamaSearchField',
+		fieldLabel: 'Agama',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_agamaSearch_value', 'karyawan_agamaSearch_display'],
+			data:[['Kristen','Kristen'],['Katholik','Katholik'],['Islam','Islam'],['Budha','Budha'],['Hindu','Hindu'],['Kong Hu Chu','Kong Hu Chu']]
+		}),
+		mode: 'local',
+		editable:false,
+		allowBlank: true,
+		displayField: 'karyawan_agamaSearch_display',
+		valueField: 'karyawan_agamaSearch_value',
+		width: 100,
+		triggerAction: 'all'	
 	});
 	/* Identify  karyawan_username Search Field */
 	karyawan_usernameSearchField= new Ext.form.TextField({
@@ -6651,6 +7207,28 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '95%'
 	
+	});
+	/* Identify  karyawan_npwp Search Field */
+	karyawan_npwpSearchField= new Ext.form.TextField({
+		id: 'karyawan_npwpSearchField',
+		fieldLabel: 'NPWP',
+		maxLength: 30,
+		anchor: '95%'
+	
+	});
+	/*Identify karyawan_sip Field*/
+	karyawan_sipSearchField= new Ext.form.TextField({
+		id: 'karyawan_sipsSearchField',
+		fieldLabel: 'SIP',
+		maxLength: 15,
+		anchor: '95%'
+	});
+		/* Identify  karyawan_jamsostek Field */
+	karyawan_jamsostekSearchField= new Ext.form.TextField({
+		id: 'karyawan_jamsostekSearchField',
+		fieldLabel: 'No. Jamsostek',
+		maxLength: 40,
+		anchor: '95%'
 	});
 	/* Identify  karyawan_kelamin Search Field */
 	karyawan_kelaminSearchField= new Ext.form.ComboBox({
@@ -6682,17 +7260,107 @@ Ext.onReady(function(){
 		triggerAction: 'all'	 
 	
 	});
+	/* Identify  karyawan_jumlahanak Field */
+	karyawan_jmlanakSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlanakSearchField',
+		fieldLabel: 'Jml Anak',
+		maxLength: 15,
+		allowBlank: true,
+		disabled: false,
+		width: 100
+	});
+	/* Identify  karyawan_keterangan Search Field */
+	karyawan_keteranganSearchField= new Ext.form.TextArea({
+		id: 'karyawan_keteranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		anchor: '95%'
+	
+	});
+	/* Identify  karyawan_tglmasuk Search Field */
+	karyawan_tglmasukSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglmasukSearchField',
+		fieldLabel: 'Tanggal Masuk',
+		format : 'Y-m-d',
+	
+	});
+	/* Identify  karyawan_aktif Search Field */
+	karyawan_aktifSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_aktifSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'karyawan_aktif'],
+			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_aktif',
+		valueField: 'value',
+		emptyText: 'Aktif',
+		width: 80,
+		triggerAction: 'all'	 
+	
+	});
+	//EOF GENERAL SEARCH
+	
+	// TEMPAT & TANGGAL LAHIR SEARCH
 	/* Identify  karyawan_tgllahir Search Field */
-	karyawan_tgllahirSearchField= new Ext.form.DateField({
-		id: 'karyawan_tgllahirSearchField',
+	karyawan_tempatlahirSearchField= new Ext.form.TextField({
+		id: 'karyawan_tempatlahirSearchField',
+		fieldLabel: 'Tempat',
+		maxLength: 250,
+		anchor: '95%'
+	
+	});
+	karyawan_tgllahirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgllahirawalSearchField',
 		fieldLabel: 'Tgl Lahir',
 		format : 'd-m-Y'
 	
+	});	
+	karyawan_tgllahirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgllahirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgllahirSearchField= new Ext.form.ComboBox({
+		id : 'karyawan_tgllahirSearchField',
+		fieldLabel: 'Tanggal & Bulan',
+		store:new Ext.data.SimpleStore({
+			fields:['status_karyawan_value'],
+			data: [['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['10'],['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
+		}),	
+		mode: 'local',
+		displayField: 'status_karyawan_value',
+		valueField: 'status_karyawan_value',
+		allowBlank: true,
+		anchor: '80%',
+		triggerAction: 'all',
+		lazyRenderer: true
 	});
+	karyawan_blnlahirSearchField= new Ext.form.ComboBox({
+		id : 'karyawan_blnlahirSearchField',
+		fieldLabel: '',
+		store:new Ext.data.SimpleStore({
+			fields:['status_karyawan_bulan_value', 'status_karyawan_bulan_display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'status_karyawan_bulan_display',
+		valueField: 'status_karyawan_bulan_value',
+		allowBlank: true,
+		width: 100,
+		//anchor: '95%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	// EOF TEMPAT & TANGGAL LAHIR SEARCH
+	
+	// ALAMAT SEARCH
 	/* Identify  karyawan_alamat Search Field */
 	karyawan_alamatSearchField= new Ext.form.TextField({
 		id: 'karyawan_alamatSearchField',
-		fieldLabel: 'Alamat',
+		fieldLabel: 'Alamat Saat Ini',
 		maxLength: 250,
 		anchor: '95%'
 	
@@ -6715,6 +7383,7 @@ Ext.onReady(function(){
 	
 	});
 	/* Identify  karyawan_email Search Field */
+	
 	karyawan_emailSearchField= new Ext.form.TextField({
 		id: 'karyawan_emailSearchField',
 		fieldLabel: 'Email',
@@ -6722,6 +7391,7 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
+	
 	/* Identify  karyawan_emiracle Search Field */
 	karyawan_emiracleSearchField= new Ext.form.TextField({
 		id: 'karyawan_emiracleSearchField',
@@ -6730,24 +7400,18 @@ Ext.onReady(function(){
 		anchor: '95%'
 	
 	});
-	/* Identify  karyawan_keterangan Search Field */
-	karyawan_keteranganSearchField= new Ext.form.TextArea({
-		id: 'karyawan_keteranganSearchField',
-		fieldLabel: 'Keterangan',
-		maxLength: 500,
-		anchor: '95%'
 	
-	});
 	/* Identify  karyawan_notelp Search Field */
 	karyawan_notelpSearchField= new Ext.form.TextField({
 		id: 'karyawan_notelpSearchField',
-		fieldLabel: 'Telp Rumah',
+		fieldLabel: 'Telp',
 		maxLength: 25,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  karyawan_notelp2 Search Field */
+	
+	/*
 	karyawan_notelp2SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp2SearchField',
 		fieldLabel: 'No Ponsel 1',
@@ -6756,7 +7420,6 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	/* Identify  karyawan_notelp3 Search Field */
 	karyawan_notelp3SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp3SearchField',
 		fieldLabel: 'No Ponsel 2',
@@ -6765,7 +7428,6 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
-	
 	karyawan_notelp4SearchField= new Ext.form.TextField({
 		id: 'karyawan_notelp4SearchField',
 		fieldLabel: 'No Ponsel 3',
@@ -6774,20 +7436,100 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	
 	});
+	*/
+	// EOF ALAMAT SEARCH
 	
-	/* Identify  karyawan_cabang Search Field */
-	karyawan_cabangSearchField= new Ext.form.ComboBox({
-		id: 'karyawan_cabangSearchField',
-		fieldLabel: 'Cabang',
-		store:cbo_karyawan_cabang_DataStore,
+	// INFO REKENING SEARCH
+	/* Identify  karyawan_bank Field */
+	karyawan_bankSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_bankSearchField',
+		fieldLabel: 'Nama Bank',
+		store:cbo_karyawan_bank_DataStore,
 		mode: 'remote',
-		displayField: 'karyawan_cabang_display',
-		valueField: 'karyawan_cabang_value',
+		editable:false,
+		allowBlank: true,
+		displayField: 'karyawan_bank_display',
+		valueField: 'karyawan_bank_value',
+		width: 100,
+		triggerAction: 'all'	
+	});
+	/* Identify  karyawan_bankcabang Field */
+	karyawan_bankcabangSearchField= new Ext.form.TextField({
+		id: 'karyawan_bankcabangSearchField',
+		fieldLabel: 'Cabang',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	/* Identify  karyawan_norekening Field */
+	karyawan_norekeningSearchField= new Ext.form.TextField({
+		id: 'karyawan_norekeningSearchField',
+		fieldLabel: 'No Rekening',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	/* Identify  karyawan_atasnama Field */
+	karyawan_atasnamaSearchField= new Ext.form.TextField({
+		id: 'karyawan_atasnamaSearchField',
+		fieldLabel: 'Atas Nama',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	// EOF INFO REKENING SEARCH
+	
+	// STATUS KEKARYAWANAN SEARCH
+	karyawan_statuskekaryawananSearchField= new Ext.form.ComboBox({
+		id : 'karyawan_statuskekaryawananSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['status_karyawan_value'],
+			data:[['Percobaan'],['Kontrak I'],['Kontrak II'],['Tetap'],['Lain-lain'],['Tidak Aktif']]
+		}),
+		mode: 'local',
+		displayField: 'status_karyawan_value',
+		valueField: 'status_karyawan_value',
 		allowBlank: true,
 		anchor: '95%',
-		triggerAction: 'all'
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_statustglawalawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_statustglawalawalSearchField',
+		fieldLabel: 'Tgl Awal',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_statustglawalakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_statustglawalakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_statustglakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_statustglakhirawalSearchField',
+		fieldLabel: 'Tgl Akhir',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_statustglakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_statustglakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
 	
 	});
+	karyawan_statuskaryawanSearchField= new Ext.form.TextField({
+		id: 'karyawan_statuskaryawanSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+
+	// EOF STATUS KEKARYAWANAN SEARCH
+	
+	// JABATAN SEARCH
 	/* Identify  karyawan_jabatan Search Field */
 	karyawan_jabatanSearchField= new Ext.form.ComboBox({
 		id: 'karyawan_jabatanSearchField',
@@ -6827,13 +7569,6 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	
 	});
-	/* Identify  karyawan_tglmasuk Search Field */
-	karyawan_tglmasukSearchField= new Ext.form.DateField({
-		id: 'karyawan_tglmasukSearchField',
-		fieldLabel: 'Tanggal Masuk',
-		format : 'Y-m-d',
-	
-	});
 	/* Identify  karyawan_atasan Search Field */
 	karyawan_atasanSearchField= new Ext.form.ComboBox({
 		id: 'karyawan_atasanSearchField',
@@ -6847,32 +7582,458 @@ Ext.onReady(function(){
 		triggerAction: 'all'
 	
 	});
-	
-	/* Identify  karyawan_aktif Search Field */
-	karyawan_aktifSearchField= new Ext.form.ComboBox({
-		id: 'karyawan_aktifSearchField',
-		fieldLabel: 'Status',
+	/* Identify  karyawan_kelamin Field */
+	karyawan_pph21SearchField= new Ext.form.ComboBox({
+		id: 'karyawan_pph21SearchField',
+		fieldLabel: 'PPH 21',
 		store:new Ext.data.SimpleStore({
-			fields:['value', 'karyawan_aktif'],
-			data:[['Aktif','Aktif'],['Tidak Aktif','Tidak Aktif']]
+			fields:['karyawan_pph21Search_value', 'karyawan_pph21Search_display'],
+			data:[['TK','TK'],['K','K'],['K/1','K/1'],['K/2','K/2'],['K/3','K/3'],['TK/1','TK/1'],['TK/2','TK/2'],['TK/3','TK/3']]
 		}),
 		mode: 'local',
-		displayField: 'karyawan_aktif',
-		valueField: 'value',
-		emptyText: 'Aktif',
+		editable:false,
+		allowBlank: true,
+		displayField: 'karyawan_pph21Search_display',
+		valueField: 'karyawan_pph21Search_value',
 		width: 80,
-		triggerAction: 'all'	 
+		triggerAction: 'all'	
+	});
+	karyawan_tgljbtawalawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgljbtawalawalSearchField',
+		fieldLabel: 'Tgl Awal',
+		format : 'd-m-Y'
 	
+	});	
+	karyawan_tgljbtawalakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgljbtawalakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgljbtakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgljbtakhirawalSearchField',
+		fieldLabel: 'Tgl Akhir',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgljbtakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgljbtakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_jabatanketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_jabatanketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	// EOF JABATAN SEARCH
+	
+	// PENDIDIKAN SEARCH
+	karyawan_pendidikanSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_pendidikanSearchField',
+		fieldLabel: 'Pendidikan',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_pendidikan_value'],
+			data:[['SD'],['SMP'],['SMA'],['D1'],['D2'],['D3'],['D4'],['S1'],['S2'],['S3']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_pendidikan_value',
+		valueField: 'karyawan_pendidikan_value',
+		allowBlank: true,
+		anchor: '95%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_namasekolahSearchField= new Ext.form.TextField({
+		id: 'karyawan_namasekolahSearchField',
+		fieldLabel: 'Nama Sekolah',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	karyawan_jurusanSearchField= new Ext.form.TextField({
+		id: 'karyawan_jurusanSearchField',
+		fieldLabel: 'Jurusan',
+		maxLength: 50,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	karyawan_thnmskawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_thnmskawalSearchField',
+		fieldLabel: 'Thn Masuk',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_thnmskakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_thnmskakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_thnslsawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_thnslsawalSearchField',
+		fieldLabel: 'Thn Selesai',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_thnslsakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_thnslsakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_wisudaawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_wisudaawalSearchField',
+		fieldLabel: 'Wisuda',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_wisudaakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_wisudaakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_pendidikanketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_pendidikanketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
 	});
 	
+	// EOF PENDIDIKAN SEARCH
+	
+	// KELUARGA SEARCH
+	// EOF KELUARGA SEARCH
+	
+	// CUTI SEARCH
+	karyawan_jeniscutiSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_jeniscutiSearchField',
+		fieldLabel: 'Jenis Cuti',
+		store:new Ext.data.SimpleStore({
+			fields:['karyawan_cuti_value'],
+			data:[['Umum Tahunan'],['Cuti Hamil'],['Cuti Istimewa'],['Cuti Panjang'],['Unpaid Leave']]
+		}),
+		mode: 'local',
+		displayField: 'karyawan_cuti_value',
+		valueField: 'karyawan_cuti_value',
+		allowBlank: true,
+		anchor: '95%',
+		//hidden: true,
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_tglcutiawalawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglcutiawalawalSearchField',
+		fieldLabel: 'Tgl Awal',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglcutiawalakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglcutiawalakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglcutiakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglcutiakhirawalSearchField',
+		fieldLabel: 'Tgl Akhir',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglcutiakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglcutiakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_jmlharicutiawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlharicutiawalSearchField',
+		fieldLabel: 'Jml Hari',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_jmlharicutiakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlharicutiakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_tglpengajuanawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglpengajuanawalSearchField',
+		fieldLabel: 'Tgl Pengajuan',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglpengajuanakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglpengajuanakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_cutiketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_cutiketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	// EOF CUTI SEARCH
+	
+	// GANTIOFF SEARCH
+	karyawan_tgloffawalawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffawalawalSearchField',
+		fieldLabel: 'Tgl Awal',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffawalakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffawalakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffakhirawalSearchField',
+		fieldLabel: 'Tgl Akhir',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_jmlharioffawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlharioffawalSearchField',
+		fieldLabel: 'Jml Hari',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_jmlharioffakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlharioffakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_tgloffgantiawalawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffgantiawalawalSearchField',
+		fieldLabel: 'Tgl Diganti Awal',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffgantiawalakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffgantiawalakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_tgloffgantiakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffgantiakhirawalSearchField',
+		fieldLabel: 'Tgl Diganti Akhir',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffgantiakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffgantiakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_tgloffpengajuanakhirawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffpengajuanakhirawalSearchField',
+		fieldLabel: 'Tgl Pengajuan',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tgloffpengajuanakhirakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tgloffpengajuanakhirakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_offketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_offketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	// EOF GANTIOFF SEARCH
+	
+	// MEDICAL SEARCH
+	karyawan_tujuanklaimSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_tujuanklaimSearchField',
+		fieldLabel: 'Tujuan Klaim',
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicaltujuan_value'],
+			data:[['Diri Sendiri'],['Istri'],['Anak']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicaltujuan_value',
+		valueField: 'kmedicaltujuan_value',
+		allowBlank: true,
+		anchor: '95%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_jenisrawatSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_jenisrawatSearchField',
+		fieldLabel: 'Jenis Rawat',
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicalrawat_value'],
+			data:[['Rawat Jalan'],['Rawat Inap']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicalrawat_value',
+		valueField: 'kmedicalrawat_value',
+		allowBlank: true,
+		anchor: '95%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_jenisklaimSearchField= new Ext.form.ComboBox({
+		id: 'karyawan_jenisklaimSearchField',
+		fieldLabel: 'Jenis Klaim',
+		store:new Ext.data.SimpleStore({
+			fields:['kmedicaljenis_value'],
+			data:[['Umum'],['Spesialis'],['Frame'],['Lensa'],['Lain-lain']]
+		}),
+		mode: 'local',
+		displayField: 'kmedicaljenis_value',
+		valueField: 'kmedicaljenis_value',
+		allowBlank: true,
+		anchor: '95%',
+		triggerAction: 'all',
+		lazyRenderer: true
+	});
+	karyawan_jmlkuitansiawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlkuitansiawalSearchField',
+		fieldLabel: 'Jml Kuitansi',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_jmlkuitansiakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_jmlkuitansiakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_totalkuitansiawalSearchField= new Ext.form.TextField({
+		id: 'karyawan_totalkuitansiawalSearchField',
+		fieldLabel: 'Total (Rp.)',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_totalkuitansiakhirSearchField= new Ext.form.TextField({
+		id: 'karyawan_totalkuitansiakhirSearchField',
+		fieldLabel: 's/d',
+		maxLength: 50,
+		width: 80,
+		allowBlank: true,
+		//anchor: '95%'
+	});
+	karyawan_tglmedicalpengajuanawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglmedicalpengajuanawalSearchField',
+		fieldLabel: 'Tgl Pengajuan',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglmedicalpengajuanakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglmedicalpengajuanakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_medicalketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_medicalketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	// EOF MEDICAL SEARCH
+	
+	// FASILITAS SEARCH
+	karyawan_fasilitasitemSearchField= new Ext.form.TextField({
+		id: 'karyawan_fasilitasitemSearchField',
+		fieldLabel: 'Item',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+	karyawan_tglserahterimaawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglserahterimaawalSearchField',
+		fieldLabel: 'Tgl Serah Terima',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglserahterimaakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglserahterimaakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
+	karyawan_fasilitasketeranganSearchField= new Ext.form.TextField({
+		id: 'karyawan_fasilitasketeranganSearchField',
+		fieldLabel: 'Keterangan',
+		maxLength: 500,
+		allowBlank: true,
+		anchor: '95%'
+	});
+
+	// EOF FASILITAS SEARCH
+	
+	// GROUP PLACEMENT
 	group_search_alamat = new Ext.form.FieldSet({
-		title: 'Alamat',
+		title: 'Alamat & Kontak',
 		autoHeight: true,
 		defaultType: 'textfield',
 		anchor: '95%',
-		items:[karyawan_alamatSearchField ,karyawan_kotaSearchField ,karyawan_kodeposSearchField]
+		items:[karyawan_alamatSearchField ,karyawan_kotaSearchField ,karyawan_kodeposSearchField, karyawan_notelpSearchField, karyawan_emailSearchField]
 	});
 	
+	group_search_rekening = new Ext.form.FieldSet({
+		title: 'Info Rekening',
+		autoHeight: true,
+		defaultType: 'textfield',
+		anchor: '95%',
+		items:[karyawan_bankSearchField, karyawan_bankcabangSearchField, karyawan_norekeningSearchField, karyawan_atasnamaSearchField]
+	});
+	
+	
+	/*
 	group_search_kontak = new Ext.form.FieldSet({
 		title: 'Kontak',
 		autoHeight: true,
@@ -6880,21 +8041,594 @@ Ext.onReady(function(){
 		anchor: '95%',
 		items:[karyawan_notelpSearchField ,karyawan_notelp2SearchField ,karyawan_notelp3SearchField,karyawan_notelp4SearchField ,karyawan_emailSearchField]
 	});
-	
-	group_search_pekerjaan = new Ext.form.FieldSet({
-		title: 'Pekerjaan',
+	*/
+	group_search_tgllahir = new Ext.form.FieldSet({
+		title: 'Tgl & Tmp Lahir',
 		autoHeight: true,
-		defaultType: 'textfield',
+		//defaultType: 'textfield',
+		layout: 'form',
 		anchor: '95%',
-		items:[karyawan_tglmasukSearchField, karyawan_cabangSearchField, karyawan_jabatanSearchField, karyawan_departemenSearchField, karyawan_golonganSearchField, karyawan_atasanSearchField, karyawan_emiracleSearchField]
+		items:[karyawan_tempatlahirSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgllahirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgllahirakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgllahirSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_blnlahirSearchField]
+					}
+				]}]
 	});
+	group_search_status = new Ext.form.FieldSet({
+		title: 'Status Kekaryawanan',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_statuskekaryawananSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_statustglawalawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_statustglawalakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_statustglakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_statustglakhirakhirSearchField]
+					}
+				]}, karyawan_statuskaryawanSearchField]
+	});
+	group_search_jabatan = new Ext.form.FieldSet({
+		title: 'Jabatan',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_departemenSearchField, karyawan_jabatanSearchField, karyawan_golonganSearchField, karyawan_pph21SearchField, karyawan_atasanSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgljbtawalawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgljbtawalakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgljbtakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgljbtakhirakhirSearchField]
+					}
+				]}, karyawan_jabatanketeranganSearchField]
+	});
+	
+	group_search_pendidikan = new Ext.form.FieldSet({
+		title: 'Pendidikan',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_pendidikanSearchField, karyawan_namasekolahSearchField, karyawan_jurusanSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_thnmskawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_thnmskakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_thnslsawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_thnslsakhirSearchField]
+					}
+				]}, 
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_wisudaawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_wisudaakhirSearchField]
+					}
+				]},
+		karyawan_pendidikanketeranganSearchField]
+	});
+	
+	group_search_cuti = new Ext.form.FieldSet({
+		title: 'Cuti',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_jeniscutiSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglcutiawalawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglcutiawalakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglcutiakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglcutiakhirakhirSearchField]
+					}
+				]}, 
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_jmlharicutiawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_jmlharicutiakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglpengajuanawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglpengajuanakhirSearchField]
+					}
+				]},
+		karyawan_cutiketeranganSearchField]
+	});
+
+	group_search_gantioff = new Ext.form.FieldSet({
+		title: 'Ganti Off',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgloffawalawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgloffawalakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgloffakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgloffakhirakhirSearchField]
+					}
+				]}, 
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_jmlharioffawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_jmlharioffakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgloffgantiawalawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgloffgantiawalakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgloffgantiakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgloffgantiakhirakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tgloffpengajuanakhirawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tgloffpengajuanakhirakhirSearchField]
+					}
+				]},
+		karyawan_offketeranganSearchField]
+	});
+	
+	group_search_medical = new Ext.form.FieldSet({
+		title: 'Medical Reimbursemen',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_tujuanklaimSearchField, karyawan_jenisrawatSearchField, karyawan_jenisklaimSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_jmlkuitansiawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_jmlkuitansiakhirSearchField]
+					}
+				]},
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.45,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_totalkuitansiawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.55,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_totalkuitansiakhirSearchField]
+					}
+				]}, 
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglmedicalpengajuanawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglmedicalpengajuanakhirSearchField]
+					}
+				]}, karyawan_medicalketeranganSearchField]
+	});
+	
+	group_search_fasilitas = new Ext.form.FieldSet({
+		title: 'Fasilitas',
+		autoHeight: true,
+		//defaultType: 'textfield',
+		layout: 'form',
+		anchor: '95%',
+		items:[karyawan_fasilitasitemSearchField,
+		{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglserahterimaawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglserahterimaakhirSearchField]
+					}
+				]}, karyawan_fasilitasketeranganSearchField]
+	});
+	// EOF GROUP PLACEMENT
     
 	/* Function for retrieve search Form Panel */
 	karyawan_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
+		labelWidth: 120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 700,        
+		width: 1100,        
 		items: [{
 			layout:'column',
 			border:false,
@@ -6903,13 +8637,37 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [karyawan_noSearchField, karyawan_npwpSearchField, karyawan_namaSearchField, karyawan_usernameSearchField, karyawan_tgllahirSearchField, karyawan_kelaminSearchField, group_search_alamat, group_search_kontak ] 
+				items: [karyawan_cabangSearchField, karyawan_noSearchField, karyawan_namaSearchField, karyawan_usernameSearchField, karyawan_noktpSearchField, karyawan_alamatktpSearchField, karyawan_agamaSearchField, karyawan_kelaminSearchField, 
+				{	
+							columnWidth:1,
+							layout: 'column',
+							border:false,
+							items: [
+								{
+									columnWidth:0.5,
+									layout: 'form',
+									labelAlign: 'left',
+									border:false,
+									items: [karyawan_marriageSearchField]
+								},
+								{
+									layout: 'form',
+									border: false,
+									columnWidth: 0.5,
+									labelWidth: 60,
+									//labelAlign: 'left',
+									labelSeparator: ' ', 
+									items:[karyawan_jmlanakSearchField]
+								}
+							]},
+				karyawan_tglmasukSearchField, group_search_alamat, group_search_rekening, group_search_status,
+				group_search_jabatan, group_search_pendidikan,] 
 			}
 			,{
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [group_search_pekerjaan, karyawan_keteranganSearchField, karyawan_aktifSearchField] 
+				items: [group_search_tgllahir, karyawan_sipSearchField, karyawan_jamsostekSearchField, karyawan_npwpSearchField, karyawan_keteranganSearchField, karyawan_aktifSearchField, group_search_cuti, group_search_gantioff, group_search_medical, group_search_fasilitas] 
 			}
 			]
 		}]
@@ -6958,7 +8716,7 @@ Ext.onReady(function(){
 	// Event utk sub kategori
 	dkaryawan_statuskaryawanField.on("select", function(){
 		if(dkaryawan_statuskaryawanField.getValue()=='Tidak Aktif'){
-			Ext.MessageBox.confirm('Confirmation','Mengubah status menjadi Tidak Aktif akan mentidak aktifkan karyawan ini. Anda yakin mentidak aktifkan karyawan ini?', karyawan_tidak_aktif);
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk membuat Tidak Aktif karyawan ini?', karyawan_tidak_aktif);
 
 		}else if(dkaryawan_statuskaryawanField.getValue()!='Tidak Aktif'){
 			karyawan_aktifField.setValue('Aktif');

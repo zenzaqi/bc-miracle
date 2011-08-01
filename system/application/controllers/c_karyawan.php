@@ -947,13 +947,27 @@ class C_karyawan extends Controller {
 	//function for advanced search
 	function karyawan_search(){
 		//POST varibale here
+		// GENERAL SEARCH
 		$karyawan_id=trim(@$_POST["karyawan_id"]);
+		$karyawan_cabang=trim(@$_POST["karyawan_cabang"]);
 		$karyawan_no=trim(@$_POST["karyawan_no"]);
 		$karyawan_no=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_no);
 		$karyawan_no=str_replace("'", '"',$karyawan_no);
 		$karyawan_npwp=trim(@$_POST["karyawan_npwp"]);
 		$karyawan_npwp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_npwp);
 		$karyawan_npwp=str_replace("'", '"',$karyawan_npwp);
+		$karyawan_jamsostek=trim(@$_POST["karyawan_jamsostek"]);
+		$karyawan_jamsostek=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jamsostek);
+		$karyawan_jamsostek=str_replace("'", '"',$karyawan_jamsostek);
+		$karyawan_sip=trim(@$_POST["karyawan_sip"]);
+		$karyawan_sip=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_sip);
+		$karyawan_sip=str_replace("'", '"',$karyawan_sip);
+		$karyawan_noktp=trim(@$_POST["karyawan_noktp"]);
+		$karyawan_noktp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_noktp);
+		$karyawan_noktp=str_replace("'", '"',$karyawan_noktp);
+		$karyawan_alamatktp=trim(@$_POST["karyawan_alamatktp"]);
+		$karyawan_alamatktp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_alamatktp);
+		$karyawan_alamatktp=str_replace("'", '"',$karyawan_alamatktp);
 		$karyawan_username=trim(@$_POST["karyawan_username"]);
 		$karyawan_username=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_username);
 		$karyawan_username=str_replace("'", '"',$karyawan_username);
@@ -963,7 +977,23 @@ class C_karyawan extends Controller {
 		$karyawan_kelamin=trim(@$_POST["karyawan_kelamin"]);
 		$karyawan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_kelamin);
 		$karyawan_kelamin=str_replace("'", '"',$karyawan_kelamin);
-		$karyawan_tgllahir=trim(@$_POST["karyawan_tgllahir"]);
+		$karyawan_marriage=trim(@$_POST["karyawan_marriage"]);
+		$karyawan_marriage=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_marriage);
+		$karyawan_marriage=str_replace("'", '"',$karyawan_marriage);
+		$karyawan_jmlanak=trim(@$_POST["karyawan_jmlanak"]);
+		$karyawan_jmlanak=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlanak);
+		$karyawan_jmlanak=str_replace("'", '"',$karyawan_jmlanak);
+		$karyawan_agama=trim(@$_POST["karyawan_agama"]);
+		$karyawan_agama=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_agama);
+		$karyawan_agama=str_replace("'", '"',$karyawan_agama);
+		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
+		$karyawan_keterangan=trim(@$_POST["karyawan_keterangan"]);
+		$karyawan_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_keterangan);
+		$karyawan_keterangan=str_replace("'", '"',$karyawan_keterangan);
+		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
+		$karyawan_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_aktif);
+		$karyawan_aktif=str_replace("'", '"',$karyawan_aktif);
+		// ALAMAT KONTAK SEARCH
 		$karyawan_alamat=trim(@$_POST["karyawan_alamat"]);
 		$karyawan_alamat=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_alamat);
 		$karyawan_alamat=str_replace("'", '"',$karyawan_alamat);
@@ -973,39 +1003,175 @@ class C_karyawan extends Controller {
 		$karyawan_kodepos=trim(@$_POST["karyawan_kodepos"]);
 		$karyawan_kodepos=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_kodepos);
 		$karyawan_kodepos=str_replace("'", '"',$karyawan_kodepos);
-		$karyawan_email=trim(@$_POST["karyawan_email"]);
-		$karyawan_email=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_email);
-		$karyawan_email=str_replace("'", '"',$karyawan_email);
-		$karyawan_emiracle=trim(@$_POST["karyawan_emiracle"]);
-		$karyawan_emiracle=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_emiracle);
-		$karyawan_emiracle=str_replace("'", '"',$karyawan_emiracle);
-		$karyawan_keterangan=trim(@$_POST["karyawan_keterangan"]);
-		$karyawan_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_keterangan);
-		$karyawan_keterangan=str_replace("'", '"',$karyawan_keterangan);
 		$karyawan_notelp=trim(@$_POST["karyawan_notelp"]);
 		$karyawan_notelp=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_notelp);
 		$karyawan_notelp=str_replace("'", '"',$karyawan_notelp);
-		$karyawan_notelp2=trim(@$_POST["karyawan_notelp2"]);
-		$karyawan_notelp2=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_notelp2);
-		$karyawan_notelp2=str_replace("'", '"',$karyawan_notelp2);
-		$karyawan_notelp3=trim(@$_POST["karyawan_notelp3"]);
-		$karyawan_notelp3=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_notelp3);
-		$karyawan_notelp3=str_replace("'", '"',$karyawan_notelp3);
-		$karyawan_notelp4=trim(@$_POST["karyawan_notelp4"]);
-		$karyawan_notelp4=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_notelp4);
-		$karyawan_notelp4=str_replace(",", ",",$karyawan_notelp4);
-		$karyawan_notelp4=str_replace("'", '"',$karyawan_notelp4);
-		$karyawan_cabang=trim(@$_POST["karyawan_cabang"]);
+		$karyawan_email=trim(@$_POST["karyawan_email"]);
+		$karyawan_email=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_email);
+		$karyawan_email=str_replace("'", '"',$karyawan_email);
+		// INFO REKENING SEARCH
+		$karyawan_bank=trim(@$_POST["karyawan_bank"]);
+		$karyawan_bank=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_bank);
+		$karyawan_bank=str_replace("'", '"',$karyawan_bank);
+		$karyawan_bankcabang=trim(@$_POST["karyawan_bankcabang"]);
+		$karyawan_bankcabang=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_bankcabang);
+		$karyawan_bankcabang=str_replace("'", '"',$karyawan_bankcabang);
+		$karyawan_norekening=trim(@$_POST["karyawan_norekening"]);
+		$karyawan_norekening=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_norekening);
+		$karyawan_norekening=str_replace("'", '"',$karyawan_norekening);
+		$karyawan_atasnama=trim(@$_POST["karyawan_atasnama"]);
+		$karyawan_atasnama=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_atasnama);
+		$karyawan_atasnama=str_replace("'", '"',$karyawan_atasnama);
+		// STATUS KEKARYAWANAN SEARCH
+		$karyawan_statuskekaryawanan=trim(@$_POST["karyawan_statuskekaryawanan"]);
+		$karyawan_statuskekaryawanan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_statuskekaryawanan);
+		$karyawan_statuskekaryawanan=str_replace("'", '"',$karyawan_statuskekaryawanan);
+		$karyawan_statustglawalawal=trim(@$_POST["karyawan_statustglawalawal"]);
+		$karyawan_statustglawalakhir=trim(@$_POST["karyawan_statustglawalakhir"]);
+		$karyawan_statustglakhirawal=trim(@$_POST["karyawan_statustglakhirawal"]);
+		$karyawan_statustglakhirakhir=trim(@$_POST["karyawan_statustglakhirakhir"]);
+		$karyawan_statuskaryawan=trim(@$_POST["karyawan_statuskaryawan"]);
+		$karyawan_statuskaryawan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_statuskaryawan);
+		$karyawan_statuskaryawan=str_replace("'", '"',$karyawan_statuskaryawan);
+		// JABATAN SEARCH
 		$karyawan_jabatan=trim(@$_POST["karyawan_jabatan"]);
 		$karyawan_departemen=trim(@$_POST["karyawan_departemen"]);
 		$karyawan_idgolongan=trim(@$_POST["karyawan_idgolongan"]);
-		$karyawan_idgolongan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_idgolongan);
-		$karyawan_idgolongan=str_replace("'", '"',$karyawan_idgolongan);
-		$karyawan_tglmasuk=trim(@$_POST["karyawan_tglmasuk"]);
 		$karyawan_atasan=trim(@$_POST["karyawan_atasan"]);
-		$karyawan_aktif=trim(@$_POST["karyawan_aktif"]);
-		$karyawan_aktif=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_aktif);
-		$karyawan_aktif=str_replace("'", '"',$karyawan_aktif);
+		$karyawan_pph21=trim(@$_POST["karyawan_pph21"]);
+		$karyawan_pph21=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_pph21);
+		$karyawan_pph21=str_replace("'", '"',$karyawan_pph21);
+		$karyawan_tgljbtawalawal=trim(@$_POST["karyawan_tgljbtawalawal"]);
+		$karyawan_tgljbtawalakhir=trim(@$_POST["karyawan_tgljbtawalakhir"]);
+		$karyawan_tgljbtakhirawal=trim(@$_POST["karyawan_tgljbtakhirawal"]);
+		$karyawan_tgljbtakhirakhir=trim(@$_POST["karyawan_tgljbtakhirakhir"]);
+		$karyawan_jabatanketerangan=trim(@$_POST["karyawan_jabatanketerangan"]);
+		$karyawan_jabatanketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jabatanketerangan);
+		$karyawan_jabatanketerangan=str_replace("'", '"',$karyawan_jabatanketerangan);
+		// PENDIDIKAN SEARCH
+		$karyawan_pendidikan=trim(@$_POST["karyawan_pendidikan"]);
+		$karyawan_pendidikan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_pendidikan);
+		$karyawan_pendidikan=str_replace("'", '"',$karyawan_pendidikan);
+		$karyawan_namasekolah=trim(@$_POST["karyawan_namasekolah"]);
+		$karyawan_namasekolah=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_namasekolah);
+		$karyawan_namasekolah=str_replace("'", '"',$karyawan_namasekolah);
+		$karyawan_jurusan=trim(@$_POST["karyawan_jurusan"]);
+		$karyawan_jurusan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jurusan);
+		$karyawan_jurusan=str_replace("'", '"',$karyawan_jurusan);
+		$karyawan_thnmskawal=trim(@$_POST["karyawan_thnmskawal"]);
+		$karyawan_thnmskawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_thnmskawal);
+		$karyawan_thnmskawal=str_replace("'", '"',$karyawan_thnmskawal);
+		$karyawan_thnmskakhir=trim(@$_POST["karyawan_thnmskakhir"]);
+		$karyawan_thnmskakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_thnmskakhir);
+		$karyawan_thnmskakhir=str_replace("'", '"',$karyawan_thnmskakhir);
+		$karyawan_thnslsawal=trim(@$_POST["karyawan_thnslsawal"]);
+		$karyawan_thnslsawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_thnslsawal);
+		$karyawan_thnslsawal=str_replace("'", '"',$karyawan_thnslsawal);
+		$karyawan_thnslsakhir=trim(@$_POST["karyawan_thnslsakhir"]);
+		$karyawan_thnslsakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_thnslsakhir);
+		$karyawan_thnslsakhir=str_replace("'", '"',$karyawan_thnslsakhir);
+		$karyawan_wisudaawal=trim(@$_POST["karyawan_wisudaawal"]);
+		$karyawan_wisudaawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_wisudaawal);
+		$karyawan_wisudaawal=str_replace("'", '"',$karyawan_wisudaawal);
+		$karyawan_wisudaakhir=trim(@$_POST["karyawan_wisudaakhir"]);
+		$karyawan_wisudaakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_wisudaakhir);
+		$karyawan_wisudaakhir=str_replace("'", '"',$karyawan_wisudaakhir);
+		$karyawan_pendidikanketerangan=trim(@$_POST["karyawan_pendidikanketerangan"]);
+		$karyawan_pendidikanketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_pendidikanketerangan);
+		$karyawan_pendidikanketerangan=str_replace("'", '"',$karyawan_pendidikanketerangan);
+		// KELUARGA SEARCH
+		
+		// TANGGAL LAHIR SEARCH
+		$karyawan_tempatlahir=trim(@$_POST["karyawan_tempatlahir"]);
+		$karyawan_tempatlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_tempatlahir);
+		$karyawan_tempatlahir=str_replace("'", '"',$karyawan_tempatlahir);
+		$karyawan_tgllahirawal=trim(@$_POST["karyawan_tgllahirawal"]);
+		$karyawan_tgllahirakhir=trim(@$_POST["karyawan_tgllahirakhir"]);
+		$karyawan_tgllahir=trim(@$_POST["karyawan_tgllahir"]);
+		$karyawan_tgllahir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_tgllahir);
+		$karyawan_tgllahir=str_replace("'", '"',$karyawan_tgllahir);
+		$karyawan_blnlahir=trim(@$_POST["karyawan_blnlahir"]);
+		$karyawan_blnlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_blnlahir);
+		$karyawan_blnlahir=str_replace("'", '"',$karyawan_blnlahir);		
+		// CUTI SEARCH
+		$karyawan_jeniscuti=trim(@$_POST["karyawan_jeniscuti"]);
+		$karyawan_jeniscuti=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jeniscuti);
+		$karyawan_jeniscuti=str_replace("'", '"',$karyawan_jeniscuti);
+		$karyawan_tglcutiawalawal=trim(@$_POST["karyawan_tglcutiawalawal"]);
+		$karyawan_tglcutiawalakhir=trim(@$_POST["karyawan_tglcutiawalakhir"]);
+		$karyawan_tglcutiakhirawal=trim(@$_POST["karyawan_tglcutiakhirawal"]);
+		$karyawan_tglcutiakhirakhir=trim(@$_POST["karyawan_tglcutiakhirakhir"]);
+		$karyawan_jmlharicutiawal=trim(@$_POST["karyawan_jmlharicutiawal"]);
+		$karyawan_jmlharicutiawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlharicutiawal);
+		$karyawan_jmlharicutiawal=str_replace("'", '"',$karyawan_jmlharicutiawal);
+		$karyawan_jmlharicutiakhir=trim(@$_POST["karyawan_jmlharicutiakhir"]);
+		$karyawan_jmlharicutiakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlharicutiakhir);
+		$karyawan_jmlharicutiakhir=str_replace("'", '"',$karyawan_jmlharicutiakhir);
+		$karyawan_jeniscuti=trim(@$_POST["karyawan_jeniscuti"]);
+		$karyawan_jeniscuti=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jeniscuti);
+		$karyawan_jeniscuti=str_replace("'", '"',$karyawan_jeniscuti);
+		$karyawan_tglpengajuanawal=trim(@$_POST["karyawan_tglpengajuanawal"]);
+		$karyawan_tglpengajuanakhir=trim(@$_POST["karyawan_tglpengajuanakhir"]);
+		$karyawan_cutiketerangan=trim(@$_POST["karyawan_cutiketerangan"]);
+		$karyawan_cutiketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_cutiketerangan);
+		$karyawan_cutiketerangan=str_replace("'", '"',$karyawan_cutiketerangan);
+		// GANTIOFF SEARCH
+		$karyawan_tgloffawalawal=trim(@$_POST["karyawan_tgloffawalawal"]);
+		$karyawan_tgloffawalakhir=trim(@$_POST["karyawan_tgloffawalakhir"]);
+		$karyawan_tgloffakhirawal=trim(@$_POST["karyawan_tgloffakhirawal"]);
+		$karyawan_tgloffakhirakhir=trim(@$_POST["karyawan_tgloffakhirakhir"]);
+		$karyawan_jmlharioffawal=trim(@$_POST["karyawan_jmlharioffawal"]);
+		$karyawan_jmlharioffawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlharioffawal);
+		$karyawan_jmlharioffawal=str_replace("'", '"',$karyawan_jmlharioffawal);
+		$karyawan_jmlharioffakhir=trim(@$_POST["karyawan_jmlharioffakhir"]);
+		$karyawan_jmlharioffakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlharioffakhir);
+		$karyawan_jmlharioffakhir=str_replace("'", '"',$karyawan_jmlharioffakhir);
+		$karyawan_tgloffgantiawalawal=trim(@$_POST["karyawan_tgloffgantiawalawal"]);
+		$karyawan_tgloffgantiawalakhir=trim(@$_POST["karyawan_tgloffgantiawalakhir"]);
+		$karyawan_tgloffgantiakhirawal=trim(@$_POST["karyawan_tgloffgantiakhirawal"]);
+		$karyawan_tgloffgantiakhirakhir=trim(@$_POST["karyawan_tgloffgantiakhirakhir"]);
+		$karyawan_tgloffpengajuanakhirawal=trim(@$_POST["karyawan_tgloffpengajuanakhirawal"]);
+		$karyawan_tgloffpengajuanakhirakhir=trim(@$_POST["karyawan_tgloffpengajuanakhirakhir"]);
+		$karyawan_offketerangan=trim(@$_POST["karyawan_offketerangan"]);
+		$karyawan_offketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_offketerangan);
+		$karyawan_offketerangan=str_replace("'", '"',$karyawan_offketerangan);
+		// MEDICAL SEARCH
+		$karyawan_tujuanklaim=trim(@$_POST["karyawan_tujuanklaim"]);
+		$karyawan_tujuanklaim=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_tujuanklaim);
+		$karyawan_tujuanklaim=str_replace("'", '"',$karyawan_tujuanklaim);
+		$karyawan_jenisrawat=trim(@$_POST["karyawan_jenisrawat"]);
+		$karyawan_jenisrawat=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jenisrawat);
+		$karyawan_jenisrawat=str_replace("'", '"',$karyawan_jenisrawat);
+		$karyawan_jenisklaim=trim(@$_POST["karyawan_jenisklaim"]);
+		$karyawan_jenisklaim=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jenisklaim);
+		$karyawan_jenisklaim=str_replace("'", '"',$karyawan_jenisklaim);
+		$karyawan_jmlkuitansiawal=trim(@$_POST["karyawan_jmlkuitansiawal"]);
+		$karyawan_jmlkuitansiawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlkuitansiawal);
+		$karyawan_jmlkuitansiawal=str_replace("'", '"',$karyawan_jmlkuitansiawal);
+		$karyawan_jmlkuitansiakhir=trim(@$_POST["karyawan_jmlkuitansiakhir"]);
+		$karyawan_jmlkuitansiakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_jmlkuitansiakhir);
+		$karyawan_jmlkuitansiakhir=str_replace("'", '"',$karyawan_jmlkuitansiakhir);
+		$karyawan_totalkuitansiawal=trim(@$_POST["karyawan_totalkuitansiawal"]);
+		$karyawan_totalkuitansiawal=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_totalkuitansiawal);
+		$karyawan_totalkuitansiawal=str_replace("'", '"',$karyawan_totalkuitansiawal);
+		$karyawan_totalkuitansiakhir=trim(@$_POST["karyawan_totalkuitansiakhir"]);
+		$karyawan_totalkuitansiakhir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_totalkuitansiakhir);
+		$karyawan_totalkuitansiakhir=str_replace("'", '"',$karyawan_totalkuitansiakhir);
+		$karyawan_tglmedicalpengajuanawal=trim(@$_POST["karyawan_tglmedicalpengajuanawal"]);
+		$karyawan_tglmedicalpengajuanakhir=trim(@$_POST["karyawan_tglmedicalpengajuanakhir"]);
+		$karyawan_medicalketerangan=trim(@$_POST["karyawan_medicalketerangan"]);
+		$karyawan_medicalketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_medicalketerangan);
+		$karyawan_medicalketerangan=str_replace("'", '"',$karyawan_medicalketerangan);
+		// FASILITAS SEARCH
+		$karyawan_fasilitasitem=trim(@$_POST["karyawan_fasilitasitem"]);
+		$karyawan_fasilitasitem=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_fasilitasitem);
+		$karyawan_fasilitasitem=str_replace("'", '"',$karyawan_fasilitasitem);
+		$karyawan_tglserahterimaawal=trim(@$_POST["karyawan_tglserahterimaawal"]);
+		$karyawan_tglserahterimaakhir=trim(@$_POST["karyawan_tglserahterimaakhir"]);
+		$karyawan_fasilitasketerangan=trim(@$_POST["karyawan_fasilitasketerangan"]);
+		$karyawan_fasilitasketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_fasilitasketerangan);
+		$karyawan_fasilitasketerangan=str_replace("'", '"',$karyawan_fasilitasketerangan);
+		// GENERAL SEARCH
 		$karyawan_creator=trim(@$_POST["karyawan_creator"]);
 		$karyawan_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_creator);
 		$karyawan_creator=str_replace("'", '"',$karyawan_creator);
@@ -1018,7 +1184,31 @@ class C_karyawan extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_karyawan->karyawan_search($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end);
+		$result = $this->m_karyawan->karyawan_search(
+		// GENERAL SEARCH
+		$karyawan_id, $karyawan_cabang, $karyawan_no, $karyawan_noktp, $karyawan_alamatktp, $karyawan_npwp, $karyawan_jamsostek, $karyawan_sip, $karyawan_username ,$karyawan_nama ,$karyawan_kelamin, $karyawan_marriage, $karyawan_agama, $karyawan_jmlanak, $karyawan_tglmasuk, $karyawan_aktif,
+		// TEMPAT TANGGAL LAHIR SEARCH
+		$karyawan_tempatlahir, $karyawan_tgllahirawal, $karyawan_tgllahirakhir, $karyawan_tgllahir, $karyawan_blnlahir,
+		// ALAMAT KONTAK SEARCG
+		$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email, $karyawan_keterangan ,$karyawan_notelp,
+		// INFO REKENING SEARCH
+		$karyawan_bank, $karyawan_bankcabang, $karyawan_norekening, $karyawan_atasnama,
+		// STATUS KEKARYAWANAN SEARCH
+		$karyawan_statuskekaryawanan, $karyawan_statustglawalawal, $karyawan_statustglawalakhir, $karyawan_statustglakhirawal, $karyawan_statustglakhirakhir, $karyawan_statuskaryawan,
+		// JABATAN SEARCH
+		$karyawan_jabatan, $karyawan_departemen ,$karyawan_idgolongan  ,$karyawan_atasan, $karyawan_pph21, $karyawan_tgljbtawalawal, $karyawan_tgljbtawalakhir, $karyawan_tgljbtakhirawal, $karyawan_tgljbtakhirakhir, $karyawan_jabatanketerangan,
+		// PENDIDIKAN SEARCH
+		$karyawan_pendidikan, $karyawan_namasekolah, $karyawan_jurusan, $karyawan_thnmskawal, $karyawan_thnmskakhir, $karyawan_thnslsawal, $karyawan_thnslsakhir, $karyawan_wisudaawal, $karyawan_wisudaakhir, $karyawan_pendidikanketerangan,
+		// CUTI SEARCH
+		$karyawan_jeniscuti, $karyawan_tglcutiawalawal, $karyawan_tglcutiawalakhir, $karyawan_tglcutiakhirawal, $karyawan_tglcutiakhirakhir, $karyawan_jmlharicutiawal, $karyawan_jmlharicutiakhir, $karyawan_tglpengajuanawal, $karyawan_tglpengajuanakhir, $karyawan_cutiketerangan,
+		// GANTIOFF SEARCH
+		$karyawan_tgloffawalawal, $karyawan_tgloffawalakhir, $karyawan_tgloffakhirawal, $karyawan_tgloffakhirakhir, $karyawan_jmlharioffawal, $karyawan_jmlharioffakhir, $karyawan_tgloffgantiawalawal, $karyawan_tgloffgantiawalakhir, $karyawan_tgloffgantiakhirawal, $karyawan_tgloffgantiakhirakhir, $karyawan_tgloffpengajuanakhirawal, $karyawan_tgloffpengajuanakhirakhir, $karyawan_offketerangan,
+		// MEDICAL SEARCH
+		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_medicalketerangan,
+		// FASILITAS SEARCH
+		$karyawan_fasilitasitem, $karyawan_tglserahterimaawal, $karyawan_tglserahterimaakhir, $karyawan_fasilitasketerangan,
+		// GENERAL SEARCH
+		$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end);
 		echo $result;
 	}
 
