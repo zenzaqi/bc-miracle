@@ -248,6 +248,8 @@ var karyawan_totalkuitansiawalSearchField;
 var karyawan_totalkuitansiakhirSearchField;
 var karyawan_tglmedicalpengajuanawalSearchField;
 var karyawan_tglmedicalpengajuanakhirSearchField;
+var karyawan_tglmedicalkuitansiawalSearchField;
+var karyawan_tglmedicalkuitansiakhirSearchField;
 var karyawan_medicalketeranganSearchField;
 // FASILITAS SEARCH
 var karyawan_fasilitasitemSearchField;
@@ -1249,6 +1251,7 @@ Ext.onReady(function(){
 			{name: 'kmedical_jenis_klaim', type: 'string', mapping: 'kmedical_jenis_klaim'},
 			{name: 'kmedical_jumlah', type: 'int', mapping: 'kmedical_jumlah'},
 			{name: 'kmedical_total', type: 'float', mapping: 'kmedical_total'},
+			{name: 'kmedical_tglkuitansi', type: 'date', dateFormat: 'Y-m-d', mapping: 'kmedical_tglkuitansi'},
 			{name: 'kmedical_tglpengajuan', type: 'date', dateFormat: 'Y-m-d', mapping: 'kmedical_tglpengajuan'},
 			{name: 'kmedical_keterangan', type: 'string', mapping: 'kmedical_keterangan'}
 	]);
@@ -3548,7 +3551,7 @@ Ext.onReady(function(){
 	var khubungan_Field= new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['karyawan_hubungan_value'],
-			data:[['Suami/Istri'],['Anak']]
+			data:[['Suami'],['Istri'],['Anak'],['Bapak'],['Ibu'],['Saudara']]
 		}),
 		mode: 'local',
 		displayField: 'karyawan_hubungan_value',
@@ -4896,6 +4899,21 @@ Ext.onReady(function(){
 		},
 		{
 			align : 'Left',
+			header: '<div align="center">' + 'Tgl Kuitansi' + '</div>',
+			dataIndex: 'kmedical_tglkuitansi',
+			width: 100,
+			sortable: true,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			readOnly: false,
+			editor: new Ext.form.DateField({
+				format: 'd-m-Y',
+				disabled :false,
+				})
+			//editor: combo_paket_rawat,
+			//renderer: Ext.util.Format.comboRenderer(combo_paket_rawat)
+		},
+		{
+			align : 'Left',
 			header: '<div align="center">' + 'Tgl Pengajuan' + '</div>',
 			dataIndex: 'kmedical_tglpengajuan',
 			width: 100,
@@ -4981,6 +4999,7 @@ Ext.onReady(function(){
 			kmedical_jenis_klaim	:'',
 			kmedical_jumlah			:'',
 			kmedical_total			:'',
+			kmedical_tglkuitansi	:today.dateFormat('Y-m-d'),
 			kmedical_tglpengajuan	:today.dateFormat('Y-m-d'),
 			kmedical_keterangan		:''
 			
@@ -5000,6 +5019,7 @@ Ext.onReady(function(){
 		var	kmedical_jenis_klaim	=[];
 		var	kmedical_jumlah			=[];
 		var	kmedical_total			=[];
+		var	kmedical_tglkuitansi	=[];
 		var	kmedical_tglpengajuan	=[];
 		var	kmedical_keterangan		=[];
 
@@ -5078,6 +5098,7 @@ Ext.onReady(function(){
 				kmedical_jenis_klaim.push(medical_DataStore.getAt(i).data.kmedical_jenis_klaim);
 				kmedical_jumlah.push(medical_DataStore.getAt(i).data.kmedical_jumlah);
 				kmedical_total.push(medical_DataStore.getAt(i).data.kmedical_total);
+				kmedical_tglkuitansi.push(medical_DataStore.getAt(i).data.kmedical_tglkuitansi);
 				kmedical_tglpengajuan.push(medical_DataStore.getAt(i).data.kmedical_tglpengajuan);
 				kmedical_keterangan.push(medical_DataStore.getAt(i).data.kmedical_keterangan);
 	
@@ -5088,6 +5109,7 @@ Ext.onReady(function(){
 					var encoded_array_kmedical_jenis_klaim = Ext.encode(kmedical_jenis_klaim);
 					var encoded_array_kmedical_jumlah = Ext.encode(kmedical_jumlah);
 					var encoded_array_kmedical_total = Ext.encode(kmedical_total);
+					var encoded_array_kmedical_tglkuitansi = Ext.encode(kmedical_tglkuitansi);
 					var encoded_array_kmedical_tglpengajuan = Ext.encode(kmedical_tglpengajuan);
 					var encoded_array_kmedical_keterangan = Ext.encode(kmedical_keterangan);
 
@@ -5103,6 +5125,7 @@ Ext.onReady(function(){
 							kmedical_jenis_klaim	: encoded_array_kmedical_jenis_klaim,
 							kmedical_jumlah			: encoded_array_kmedical_jumlah,
 							kmedical_total			: encoded_array_kmedical_total,
+							kmedical_tglkuitansi	: encoded_array_kmedical_tglkuitansi,
 							kmedical_tglpengajuan	: encoded_array_kmedical_tglpengajuan,
 							kmedical_keterangan		: encoded_array_kmedical_keterangan
 						},
@@ -5741,7 +5764,7 @@ Ext.onReady(function(){
 	karyawan_alamatktpField= new Ext.form.TextField({
 		id: 'karyawan_alamatktpField',
 		fieldLabel: 'Alamat KTP',
-		maxLength: 30,
+		maxLength: 250,
 		allowBlank: true,
 		readOnly: false,
 		//emptyText: '(auto)',
@@ -6664,6 +6687,8 @@ Ext.onReady(function(){
 		var karyawan_totalkuitansiakhir_search=null;
 		var karyawan_tglmedicalpengajuanawal_search="";
 		var karyawan_tglmedicalpengajuanakhir_search="";
+		var karyawan_tglmedicalkuitansiawal_search="";
+		var karyawan_tglmedicalkuitansiakhir_search="";
 		var karyawan_medicalketerangan_search=null;
 		// FASILITAS SEARCH
 		var karyawan_fasilitasitem_search=null;
@@ -6773,6 +6798,8 @@ Ext.onReady(function(){
 		if(karyawan_totalkuitansiakhirSearchField.getValue()!==null){karyawan_totalkuitansiakhir_search=karyawan_totalkuitansiakhirSearchField.getValue();}
 		if(karyawan_tglmedicalpengajuanawalSearchField.getValue()!==""){karyawan_tglmedicalpengajuanawal_search=karyawan_tglmedicalpengajuanawalSearchField.getValue().format('Y-m-d');}
 		if(karyawan_tglmedicalpengajuanakhirSearchField.getValue()!==""){karyawan_tglmedicalpengajuanakhir_search=karyawan_tglmedicalpengajuanakhirSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglmedicalkuitansiawalSearchField.getValue()!==""){karyawan_tglmedicalkuitansiawal_search=karyawan_tglmedicalkuitansiawalSearchField.getValue().format('Y-m-d');}
+		if(karyawan_tglmedicalkuitansiakhirSearchField.getValue()!==""){karyawan_tglmedicalkuitansiakhir_search=karyawan_tglmedicalkuitansiakhirSearchField.getValue().format('Y-m-d');}
 		if(karyawan_medicalketeranganSearchField.getValue()!==null){karyawan_medicalketerangan_search=karyawan_medicalketeranganSearchField.getValue();}
 		// FASILITAS SEARCH
 		if(karyawan_fasilitasitemSearchField.getValue()!==null){karyawan_fasilitasitem_search=karyawan_fasilitasitemSearchField.getValue();}
@@ -6885,6 +6912,8 @@ Ext.onReady(function(){
 			karyawan_totalkuitansiakhir			:	karyawan_totalkuitansiakhir_search,
 			karyawan_tglmedicalpengajuanawal	:	karyawan_tglmedicalpengajuanawal_search,
 			karyawan_tglmedicalpengajuanakhir	:	karyawan_tglmedicalpengajuanakhir_search,
+			karyawan_tglmedicalkuitansiawal		:	karyawan_tglmedicalkuitansiawal_search,
+			karyawan_tglmedicalkuitansiakhir	:	karyawan_tglmedicalkuitansiakhir_search,
 			karyawan_medicalketerangan			:	karyawan_medicalketerangan_search,
 			// FASILITAS SEARCH
 			karyawan_fasilitasitem			:	karyawan_fasilitasitem_search,
@@ -7112,6 +7141,10 @@ Ext.onReady(function(){
 		karyawan_tglmedicalpengajuanawalSearchField.setValue(null);
 		karyawan_tglmedicalpengajuanakhirSearchField.reset();
 		karyawan_tglmedicalpengajuanakhirSearchField.setValue(null);
+		karyawan_tglmedicalkuitansiawalSearchField.reset();
+		karyawan_tglmedicalkuitansiawalSearchField.setValue(null);
+		karyawan_tglmedicalkuitansiakhirSearchField.reset();
+		karyawan_tglmedicalkuitansiakhirSearchField.setValue(null);
 		karyawan_medicalketeranganSearchField.reset();
 		karyawan_medicalketeranganSearchField.setValue(null);
 		
@@ -7976,6 +8009,18 @@ Ext.onReady(function(){
 		format : 'd-m-Y'
 	
 	});
+	karyawan_tglmedicalkuitansiawalSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglmedicalkuitansiawalSearchField',
+		fieldLabel: 'Tgl Kuitansi',
+		format : 'd-m-Y'
+	
+	});	
+	karyawan_tglmedicalkuitansiakhirSearchField= new Ext.form.DateField({
+		id: 'karyawan_tglmedicalkuitansiakhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y'
+	
+	});
 	karyawan_medicalketeranganSearchField= new Ext.form.TextField({
 		id: 'karyawan_medicalketeranganSearchField',
 		fieldLabel: 'Keterangan',
@@ -8019,6 +8064,8 @@ Ext.onReady(function(){
 	group_search_alamat = new Ext.form.FieldSet({
 		title: 'Alamat & Kontak',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		defaultType: 'textfield',
 		anchor: '95%',
 		items:[karyawan_alamatSearchField ,karyawan_kotaSearchField ,karyawan_kodeposSearchField, karyawan_notelpSearchField, karyawan_emailSearchField]
@@ -8027,6 +8074,8 @@ Ext.onReady(function(){
 	group_search_rekening = new Ext.form.FieldSet({
 		title: 'Info Rekening',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		defaultType: 'textfield',
 		anchor: '95%',
 		items:[karyawan_bankSearchField, karyawan_bankcabangSearchField, karyawan_norekeningSearchField, karyawan_atasnamaSearchField]
@@ -8045,6 +8094,8 @@ Ext.onReady(function(){
 	group_search_tgllahir = new Ext.form.FieldSet({
 		title: 'Tgl & Tmp Lahir',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8097,6 +8148,8 @@ Ext.onReady(function(){
 	group_search_status = new Ext.form.FieldSet({
 		title: 'Status Kekaryawanan',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8149,6 +8202,8 @@ Ext.onReady(function(){
 	group_search_jabatan = new Ext.form.FieldSet({
 		title: 'Jabatan',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8202,6 +8257,8 @@ Ext.onReady(function(){
 	group_search_pendidikan = new Ext.form.FieldSet({
 		title: 'Pendidikan',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8278,6 +8335,8 @@ Ext.onReady(function(){
 	group_search_cuti = new Ext.form.FieldSet({
 		title: 'Cuti',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8376,6 +8435,8 @@ Ext.onReady(function(){
 	group_search_gantioff = new Ext.form.FieldSet({
 		title: 'Ganti Off',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8518,6 +8579,8 @@ Ext.onReady(function(){
 	group_search_medical = new Ext.form.FieldSet({
 		title: 'Medical Reimbursemen',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',
@@ -8587,12 +8650,36 @@ Ext.onReady(function(){
 						labelSeparator: ' ', 
 						items:[karyawan_tglmedicalpengajuanakhirSearchField]
 					}
+				]},
+			{
+				columnWidth:1,
+				layout: 'column',
+				border:false,
+				items: [
+					{
+						columnWidth:0.5,
+						layout: 'form',
+						labelAlign: 'left',
+						border:false,
+						items: [karyawan_tglmedicalkuitansiawalSearchField]
+					},
+					{
+						layout: 'form',
+						border: false,
+						columnWidth: 0.5,
+						labelWidth: 30,
+						//labelAlign: 'left',
+						labelSeparator: ' ', 
+						items:[karyawan_tglmedicalkuitansiakhirSearchField]
+					}
 				]}, karyawan_medicalketeranganSearchField]
 	});
 	
 	group_search_fasilitas = new Ext.form.FieldSet({
 		title: 'Fasilitas',
 		autoHeight: true,
+		collapsed: true,
+		collapsible: true,
 		//defaultType: 'textfield',
 		layout: 'form',
 		anchor: '95%',

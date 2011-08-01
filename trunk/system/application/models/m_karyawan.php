@@ -235,7 +235,7 @@ class M_karyawan extends Model{
 					golongan.nama_golongan AS golongan_nama,
 					vu_karyawan.karyawan_nama AS atasan_nama
 					FROM karyawan_jabatan	
-					LEFT JOIN departemen ON departemen.departemen_nama = karyawan_jabatan.kjabatan_departemen
+					LEFT JOIN departemen ON departemen.departemen_id = karyawan_jabatan.kjabatan_departemen
 					LEFT JOIN jabatan ON jabatan.jabatan_id = karyawan_jabatan.kjabatan_jabatan
 					LEFT JOIN golongan ON golongan.id_golongan = karyawan_jabatan.kjabatan_golongan
 					LEFT JOIN vu_karyawan ON vu_karyawan.karyawan_id = karyawan_jabatan.kjabatan_atasan 
@@ -755,7 +755,7 @@ class M_karyawan extends Model{
 		//end of function
 		
 		//insert detail record
-		function detail_medical_insert($array_kmedical_id , $kmedical_master, $array_kmedical_tujuan ,$array_kmedical_jenis_rawat, $array_kmedical_jenis_klaim, $array_kmedical_jumlah, $array_kmedical_total, $array_kmedical_tglpengajuan, $array_kmedical_keterangan){
+		function detail_medical_insert($array_kmedical_id , $kmedical_master, $array_kmedical_tujuan ,$array_kmedical_jenis_rawat, $array_kmedical_jenis_klaim, $array_kmedical_jumlah, $array_kmedical_total, $array_kmedical_tglkuitansi, $array_kmedical_tglpengajuan, $array_kmedical_keterangan){
 			//$datetime_now = date('Y-m-d H:i:s');
 			//if master id not capture from view then capture it from max pk from master table
 			if($kmedical_master=="" || $kmedical_master==NULL || $kmedical_master==0){
@@ -770,6 +770,7 @@ class M_karyawan extends Model{
 				$kmedical_jenis_klaim = $array_kmedical_jenis_klaim[$i];
 				$kmedical_jumlah = $array_kmedical_jumlah[$i];
 				$kmedical_total = $array_kmedical_total[$i];
+				$kmedical_tglkuitansi = $array_kmedical_tglkuitansi[$i];
 				$kmedical_tglpengajuan = $array_kmedical_tglpengajuan[$i];
 				$kmedical_keterangan = $array_kmedical_keterangan[$i];
 
@@ -788,6 +789,7 @@ class M_karyawan extends Model{
 						"kmedical_jenis_klaim"=>$kmedical_jenis_klaim,
 						"kmedical_jumlah"=>$kmedical_jumlah,
 						"kmedical_total"=>$kmedical_total,
+						"kmedical_tglkuitansi"=>$kmedical_tglkuitansi,
 						"kmedical_tglpengajuan"=>$kmedical_tglpengajuan,
 						"kmedical_keterangan"=>$kmedical_keterangan
 					);
@@ -805,6 +807,7 @@ class M_karyawan extends Model{
 						"kmedical_jenis_klaim"=>$kmedical_jenis_klaim,
 						"kmedical_jumlah"=>$kmedical_jumlah,
 						"kmedical_total"=>$kmedical_total,
+						"kmedical_tglkuitansi"=>$kmedical_tglkuitansi,
 						"kmedical_tglpengajuan"=>$kmedical_tglpengajuan,
 						"kmedical_keterangan"=>$kmedical_keterangan
 					);
@@ -1385,7 +1388,7 @@ class M_karyawan extends Model{
 		// GANTIOFF SEARCH
 		$karyawan_tgloffawalawal, $karyawan_tgloffawalakhir, $karyawan_tgloffakhirawal, $karyawan_tgloffakhirakhir, $karyawan_jmlharioffawal, $karyawan_jmlharioffakhir, $karyawan_tgloffgantiawalawal, $karyawan_tgloffgantiawalakhir, $karyawan_tgloffgantiakhirawal, $karyawan_tgloffgantiakhirakhir, $karyawan_tgloffpengajuanakhirawal, $karyawan_tgloffpengajuanakhirakhir, $karyawan_offketerangan,
 		// MEDICAL SEARCH
-		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_medicalketerangan,
+		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_tglmedicalkuitansiawal, $karyawan_tglmedicalkuitansiakhir, $karyawan_medicalketerangan,
 		// FASILITAS SEARCH
 		$karyawan_fasilitasitem, $karyawan_tglserahterimaawal, $karyawan_tglserahterimaakhir, $karyawan_fasilitasketerangan,
 		// GENERAL SEARCH
@@ -1732,8 +1735,8 @@ class M_karyawan extends Model{
 			// EOF GANTIOFF SEARCH
 			
 			// MEDICAL SEARCH		
-			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_medicalketerangan <> ""){
-			$sql_medical = "SELECT karyawan_medical.medical_master AS karyawan_id FROM karyawan_medical";
+			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_tglmedicalkuitansiawal <> "" || $karyawan_tglmedicalkuitansiakhir <> "" || $karyawan_medicalketerangan <> ""){
+			$sql_medical = "SELECT karyawan_medical.kmedical_master AS karyawan_id FROM karyawan_medical";
 				if($karyawan_tujuanklaim!=''){
 					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
 					$sql_medical.= " kmedical_tujuan '".$karyawan_tujuanklaim."'";
@@ -1774,6 +1777,16 @@ class M_karyawan extends Model{
 						$sql_medical.= " kmedical_tglpengajuan BETWEEN '".$karyawan_tglmedicalpengajuanawal."' AND now()";
 					}else if ($karyawan_tglmedicalpengajuanawal=='' and $karyawan_tglmedicalpengajuanakhir!=''){
 						$sql_medical.= " kmedical_tglpengajuan < '".$karyawan_tglmedicalpengajuanakhir."'";
+					}
+				};
+				if($karyawan_tglmedicalkuitansiawal!='' or $karyawan_tglmedicalkuitansiakhir!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					if($karyawan_tglmedicalkuitansiawal!='' and $karyawan_tglmedicalkuitansiakhir!=''){
+						$sql_medical.= " kmedical_tglkuitansi BETWEEN '".$karyawan_tglmedicalkuitansiawal."' AND '".$karyawan_tglmedicalkuitansiakhir."'";
+					}else if ($karyawan_tglmedicalkuitansiawal!='' and $karyawan_tglmedicalkuitansiakhir==''){
+						$sql_medical.= " kmedical_tglkuitansi BETWEEN '".$karyawan_tglmedicalkuitansiawal."' AND now()";
+					}else if ($karyawan_tglmedicalkuitansiawal=='' and $karyawan_tglmedicalkuitansiakhir!=''){
+						$sql_medical.= " kmedical_tglkuitansi < '".$karyawan_tglmedicalkuitansiakhir."'";
 					}
 				};
 				if($karyawan_medicalketerangan!=''){
@@ -1869,7 +1882,7 @@ class M_karyawan extends Model{
 				$query.= " karyawan_id in (".$gantioff.")";
 			}
 			// MEDICAL SEARCH
-			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_medicalketerangan <> ""){
+			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_tglmedicalkuitansiawal <> "" || $karyawan_tglmedicalkuitansiakhir <> "" || $karyawan_medicalketerangan <> ""){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_id in (".$medical.")";
 			}
