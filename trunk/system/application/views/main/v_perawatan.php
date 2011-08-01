@@ -765,8 +765,8 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		//cbo_rawat_gudangDataSore.load();
 		if(perawatanListEditorGrid.selModel.getCount() == 1) {
-			perawatan_set_form();
 			post2db='UPDATE';
+			perawatan_set_form();
 			msg='updated';
 			perawatan_createWindow.show();
 		} else {
