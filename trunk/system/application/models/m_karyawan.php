@@ -19,7 +19,7 @@ class M_karyawan extends Model{
 		}
 		
 		function get_karyawan_atasan_list($karyawan_id, $query){
-			$sql="SELECT karyawan_id,karyawan_nama FROM karyawan where karyawan_aktif='Aktif'";
+			$sql="SELECT karyawan_id,karyawan_nama FROM vu_karyawan where karyawan_aktif='Aktif'";
 			
 			if($karyawan_id<>0){
 				$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
@@ -105,7 +105,7 @@ class M_karyawan extends Model{
 		}
 		
 		function get_karyawan_golongan_list(){
-			//$sql="SELECT distinct karyawan_golongan FROM karyawan WHERE karyawan_golongan<>''";
+			//$sql="SELECT distinct karyawan_golongan FROM vu_karyawan WHERE karyawan_golongan<>''";
 			$sql="select distinct nama_golongan, id_golongan from golongan where nama_golongan <>''";
 			$query = $this->db->query($sql);
 			$nbrows = $query->num_rows();
@@ -122,7 +122,7 @@ class M_karyawan extends Model{
 		
 		//get master id, note : not done yet
 		function get_master_id() {
-			$query = "SELECT max(karyawan_id) as master_id from karyawan";
+			$query = "SELECT max(karyawan_id) as master_id from vu_karyawan";
 			$result = $this->db->query($query);
 			if($result->num_rows()){
 				$data=$result->row();
@@ -233,12 +233,12 @@ class M_karyawan extends Model{
 					karyawan_jabatan.*, departemen.departemen_nama AS departemen_nama,
 					jabatan.jabatan_nama AS jabatan_nama,
 					golongan.nama_golongan AS golongan_nama,
-					karyawan.karyawan_nama AS atasan_nama
+					vu_karyawan.karyawan_nama AS atasan_nama
 					FROM karyawan_jabatan	
 					LEFT JOIN departemen ON departemen.departemen_nama = karyawan_jabatan.kjabatan_departemen
 					LEFT JOIN jabatan ON jabatan.jabatan_id = karyawan_jabatan.kjabatan_jabatan
 					LEFT JOIN golongan ON golongan.id_golongan = karyawan_jabatan.kjabatan_golongan
-					LEFT JOIN karyawan ON karyawan.karyawan_id = karyawan_jabatan.kjabatan_atasan 
+					LEFT JOIN vu_karyawan ON vu_karyawan.karyawan_id = karyawan_jabatan.kjabatan_atasan 
 					WHERE kjabatan_master='".$master_id."'
 					ORDER BY karyawan_jabatan.kjabatan_tglakhir ASC";
 
@@ -920,13 +920,13 @@ class M_karyawan extends Model{
 		
 		//function for get list record
 		function karyawan_list($filter,$start,$end){
-			//$query = "SELECT * FROM karyawan,departemen,cabang,jabatan,golongan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id and karyawan_idgolongan=id_karyawan_golongan";
-			$query = "SELECT karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, bank_master.mbank_nama as karyawan_bank_nama, golongan.* FROM karyawan
-						left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
-						left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
-						left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
-						left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)
-						left join bank_master on (bank_master.mbank_id = karyawan.karyawan_bank)";
+			//$query = "SELECT * FROM vu_karyawan,departemen,cabang,jabatan,golongan where karyawan_departemen=departemen_id and karyawan_cabang=cabang_id and karyawan_jabatan=jabatan_id and karyawan_idgolongan=id_karyawan_golongan";
+			$query = "SELECT vu_karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, bank_master.mbank_nama as karyawan_bank_nama, golongan.* FROM vu_karyawan
+						left join departemen on (departemen.departemen_id=vu_karyawan.karyawan_departemen)
+						left join cabang on (cabang.cabang_id=vu_karyawan.karyawan_cabang)
+						left join jabatan on (jabatan.jabatan_id=vu_karyawan.karyawan_jabatan)
+						left join golongan on (golongan.id_golongan=vu_karyawan.karyawan_idgolongan)
+						left join bank_master on (bank_master.mbank_id = vu_karyawan.karyawan_bank)";
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -1053,9 +1053,9 @@ class M_karyawan extends Model{
 		if($karyawan_no=="")
 		{	
 			if(is_numeric($karyawan_cabang))
-				{$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_id = ".$karyawan_cabang;}
+				{$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, vu_karyawan k WHERE c.cabang_id = ".$karyawan_cabang;}
 			else
-			{	$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_nama = '".$karyawan_cabang."'";}
+			{	$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, vu_karyawan k WHERE c.cabang_nama = '".$karyawan_cabang."'";}
 			
 			$a_cabang_kode = $this->db->query($sql_cabang_kode);
 			if($a_cabang_kode->num_rows()>0){
@@ -1147,7 +1147,7 @@ class M_karyawan extends Model{
 				$data["karyawan_idgolongan"]=$karyawan_idgolongan;	
 				
 
-			$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_id='".$karyawan_atasan."'";
+			$sql="SELECT karyawan_id FROM vu_karyawan WHERE karyawan_id='".$karyawan_atasan."'";
 			$rs=$this->db->query($sql);
 			if($rs->num_rows())
 				$data["karyawan_atasan"]=$karyawan_atasan;
@@ -1264,7 +1264,7 @@ class M_karyawan extends Model{
 		$temp_cabang=$th.$ki.$hr.$tp.$dps.$jkt.$mta.$blpn.$kuta.$btm.$mks.$mdn.$lbk.$mnd.$ygk.$mlg.$corp.$maa.$mg;	
 		
 		//autogenerate NIK
-		$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, karyawan k WHERE c.cabang_id = ".$karyawan_cabang;
+		$sql_cabang_kode = "SELECT c.cabang_kode FROM cabang c, vu_karyawan k WHERE c.cabang_id = ".$karyawan_cabang;
 		$a_cabang_kode = $this->db->query($sql_cabang_kode);
 		if($a_cabang_kode->num_rows()>0){
 			$record = $a_cabang_kode->row_array();
@@ -1362,29 +1362,554 @@ class M_karyawan extends Model{
 		}
 		
 		//function for advanced search record
-		function karyawan_search($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end){
+		/*
+			$karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end
+		*/
+		function karyawan_search(
+		// GENERAL SEARCH
+		$karyawan_id, $karyawan_cabang, $karyawan_no, $karyawan_noktp, $karyawan_alamatktp, $karyawan_npwp, $karyawan_jamsostek, $karyawan_sip, $karyawan_username ,$karyawan_nama ,$karyawan_kelamin, $karyawan_marriage, $karyawan_agama, $karyawan_jmlanak, $karyawan_tglmasuk, $karyawan_aktif,
+		// TEMPAT TANGGAL LAHIR SEARCH
+		$karyawan_tempatlahir, $karyawan_tgllahirawal, $karyawan_tgllahirakhir, $karyawan_tgllahir, $karyawan_blnlahir,
+		// ALAMAT KONTAK SEARCH
+		$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email, $karyawan_keterangan ,$karyawan_notelp,
+		// INFO REKENING SEARCH
+		$karyawan_bank, $karyawan_bankcabang, $karyawan_norekening, $karyawan_atasnama,
+		// STATUS KEKARYAWANAN SEARCH
+		$karyawan_statuskekaryawanan, $karyawan_statustglawalawal, $karyawan_statustglawalakhir, $karyawan_statustglakhirawal, $karyawan_statustglakhirakhir, $karyawan_statuskaryawan,
+		// JABATAN SEARCH
+		$karyawan_jabatan, $karyawan_departemen ,$karyawan_idgolongan  ,$karyawan_atasan, $karyawan_pph21, $karyawan_tgljbtawalawal, $karyawan_tgljbtawalakhir, $karyawan_tgljbtakhirawal, $karyawan_tgljbtakhirakhir, $karyawan_jabatanketerangan,
+		// PENDIDIKAN SEARCH
+		$karyawan_pendidikan, $karyawan_namasekolah, $karyawan_jurusan, $karyawan_thnmskawal, $karyawan_thnmskakhir, $karyawan_thnslsawal, $karyawan_thnslsakhir, $karyawan_wisudaawal, $karyawan_wisudaakhir, $karyawan_pendidikanketerangan,
+		// CUTI SEARCH
+		$karyawan_jeniscuti, $karyawan_tglcutiawalawal, $karyawan_tglcutiawalakhir, $karyawan_tglcutiakhirawal, $karyawan_tglcutiakhirakhir, $karyawan_jmlharicutiawal, $karyawan_jmlharicutiakhir, $karyawan_tglpengajuanawal, $karyawan_tglpengajuanakhir, $karyawan_cutiketerangan,
+		// GANTIOFF SEARCH
+		$karyawan_tgloffawalawal, $karyawan_tgloffawalakhir, $karyawan_tgloffakhirawal, $karyawan_tgloffakhirakhir, $karyawan_jmlharioffawal, $karyawan_jmlharioffakhir, $karyawan_tgloffgantiawalawal, $karyawan_tgloffgantiawalakhir, $karyawan_tgloffgantiakhirawal, $karyawan_tgloffgantiakhirakhir, $karyawan_tgloffpengajuanakhirawal, $karyawan_tgloffpengajuanakhirakhir, $karyawan_offketerangan,
+		// MEDICAL SEARCH
+		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_medicalketerangan,
+		// FASILITAS SEARCH
+		$karyawan_fasilitasitem, $karyawan_tglserahterimaawal, $karyawan_tglserahterimaakhir, $karyawan_fasilitasketerangan,
+		// GENERAL SEARCH
+		$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$start,$end
+		){
 			//full query
 			if($karyawan_aktif=="")
 				$karyawan_aktif="Aktif";
-			$query="select karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, golongan.*
-				from karyawan
-				left join departemen on (departemen.departemen_id=karyawan.karyawan_departemen)
-				left join cabang on (cabang.cabang_id=karyawan.karyawan_cabang)
-				left join jabatan on (jabatan.jabatan_id=karyawan.karyawan_jabatan)
-				left join golongan on (golongan.id_golongan=karyawan.karyawan_idgolongan)
+			// STATUS KEKARYAWANAN SEARCH
+			if ($karyawan_statuskekaryawanan <> "" || $karyawan_statustglawalawal <> "" || $karyawan_statustglawalakhir <> "" || $karyawan_statustglakhirawal <> "" || $karyawan_statustglakhirakhir <> "" || $karyawan_statuskaryawan <> "") {
+				$sql_status_karyawan = "SELECT karyawan_status.kstatus_master AS karyawan_id FROM karyawan_status";
+				
+				if($karyawan_statuskekaryawanan!=''){
+					$sql_status_karyawan.=eregi("WHERE",$sql_status_karyawan)?" AND ":" WHERE ";
+					$sql_status_karyawan.= " kstatus_karyawan LIKE '%".$karyawan_statuskekaryawanan."%'";
+				};
+				if($karyawan_statustglawalawal!='' or $karyawan_statustglawalakhir!=''){
+					$sql_status_karyawan.=eregi("WHERE",$sql_status_karyawan)?" AND ":" WHERE ";
+					
+					if($karyawan_statustglawalawal!='' and $karyawan_statustglawalakhir!=''){
+						$sql_status_karyawan.= " kstatus_tglawal BETWEEN '".$karyawan_statustglawalawal."' AND '".$karyawan_statustglawalakhir."'";
+					}else if ($karyawan_statustglawalawal!='' and $karyawan_statustglawalakhir==''){
+						$sql_status_karyawan.= " kstatus_tglawal BETWEEN '".$karyawan_statustglawalawal."' AND now()";
+					}else if ($karyawan_statustglawalawal=='' and $karyawan_statustglawalakhir!=''){
+						$sql_status_karyawan.= " kstatus_tglawal < '".$karyawan_statustglawalakhir."'";
+					}
+				};
+				if($karyawan_statustglakhirawal!='' or $karyawan_statustglakhirakhir!=''){
+					$sql_status_karyawan.=eregi("WHERE",$sql_status_karyawan)?" AND ":" WHERE ";
+					
+					if($karyawan_statustglakhirawal!='' and $karyawan_statustglakhirakhir!=''){
+						$sql_status_karyawan.= " kstatus_tglakhir BETWEEN '".$karyawan_statustglakhirawal."' AND '".$karyawan_statustglakhirakhir."'";
+					}else if ($karyawan_statustglakhirawal!='' and $karyawan_statustglakhirakhir==''){
+						$sql_status_karyawan.= " kstatus_tglakhir BETWEEN '".$karyawan_statustglakhirawal."' AND now()";
+					}else if ($karyawan_statustglakhirawal=='' and $karyawan_statustglakhirakhir!=''){
+						$sql_status_karyawan.= " kstatus_tglakhir < '".$karyawan_statustglakhirakhir."'";
+					}
+				};
+				
+				if($karyawan_statuskaryawan!=''){
+					$sql_status_karyawan.=eregi("WHERE",$sql_status_karyawan)?" AND ":" WHERE ";
+					$sql_status_karyawan.= " kstatus_keterangan LIKE '%".$karyawan_statuskaryawan."%'";
+				};
+				/*
+					$sql="SELECT jpaket_nobukti FROM master_jual_paket WHERE jpaket_id='$jpaket_id'";
+					$rs=$this->db->query($sql);
+					if($rs->num_rows()){
+						$record = $rs->row_array();
+						$jpaket_nobukti = $record['jpaket_nobukti'];
+					}
+				*/
+				$rs=$this->db->query($sql_status_karyawan);
+				$num_rows = $rs->num_rows();
+				$j=0;
+			
+				foreach($rs->result() as $row){
+					//$record = $rs->row();
+					$status = $status.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$status = $status.',';
+					}
+					$j++;
+				}
+			}
+			// EOF STATUS KEKARYAWANAN SEARCH
+			
+			// JABATAN SEARCH
+			if ($karyawan_jabatan <> "" || $karyawan_departemen <> "" || $karyawan_idgolongan <> "" || $karyawan_atasan <> "" || $karyawan_pph21 <> "" || $karyawan_tgljbtawalawal <> "" || $karyawan_tgljbtawalakhir <> "" || $karyawan_tgljbtakhirawal <> "" || $karyawan_tgljbtakhirakhir <> "" || $karyawan_jabatanketerangan <> "") {
+				$sql_jabatan = "SELECT karyawan_jabatan.kjabatan_master AS karyawan_id FROM karyawan_jabatan";
+				if($karyawan_jabatan!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_jabatan = '".$karyawan_jabatan."'";
+				};
+				if($karyawan_departemen!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_departemen = '".$karyawan_departemen."'";
+				};
+				if($karyawan_idgolongan!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_golongan = '".$karyawan_idgolongan."'";
+				};
+				if($karyawan_atasan!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_atasan = '".$karyawan_atasan."'";
+				};
+				if($karyawan_pph21!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_pph21 = '".$karyawan_pph21."'";
+				};
+				if($karyawan_tgljbtawalawal!='' or $karyawan_tgljbtawalakhir!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					if($karyawan_tgljbtawalawal!='' and $karyawan_tgljbtawalakhir!=''){
+						$sql_jabatan.= " kjabatan_tglawal BETWEEN '".$karyawan_tgljbtawalawal."' AND '".$karyawan_tgljbtawalakhir."'";
+					}else if ($karyawan_tgljbtawalawal!='' and $karyawan_tgljbtawalakhir==''){
+						$sql_jabatan.= " kjabatan_tglawal BETWEEN '".$karyawan_tgljbtawalawal."' AND now()";
+					}else if ($karyawan_tgljbtawalawal=='' and $karyawan_tgljbtawalakhir!=''){
+						$sql_jabatan.= " kjabatan_tglawal < '".$karyawan_tgljbtawalakhir."'";
+					}
+				};
+				if($karyawan_tgljbtakhirawal!='' or $karyawan_tgljbtakhirakhir!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					if($karyawan_tgljbtakhirawal!='' and $karyawan_tgljbtakhirakhir!=''){
+						$sql_jabatan.= " kjabatan_tglakhir BETWEEN '".$karyawan_tgljbtakhirawal."' AND '".$karyawan_tgljbtakhirakhir."'";
+					}else if ($karyawan_tgljbtakhirawal!='' and $karyawan_tgljbtakhirakhir==''){
+						$sql_jabatan.= " kjabatan_tglakhir BETWEEN '".$karyawan_tgljbtakhirawal."' AND now()";
+					}else if ($karyawan_tgljbtakhirawal=='' and $karyawan_tgljbtakhirakhir!=''){
+						$sql_jabatan.= " kjabatan_tglakhir < '".$karyawan_tgljbtakhirakhir."'";
+					}
+				};
+				
+				if($karyawan_jabatanketerangan!=''){
+					$sql_jabatan.=eregi("WHERE",$sql_jabatan)?" AND ":" WHERE ";
+					$sql_jabatan.= " kjabatan_keterangan LIKE '%".$karyawan_jabatanketerangan."%'";
+				};
+				$rs=$this->db->query($sql_jabatan);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$jabatan=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row_array();
+					$jabatan = $jabatan.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$jabatan = $jabatan.',';
+					}
+					$j++;
+				}
+			}
+			// EOF JABATAN SEARCH
+			
+			// PENDIDIKAN SEARCH
+			if ($karyawan_pendidikan <> "" || $karyawan_namasekolah <> "" || $karyawan_jurusan <> "" || $karyawan_thnmskawal <> "" || $karyawan_thnmskakhir <> "" || $karyawan_thnslsawal <> "" || $karyawan_thnslsakhir <> "" || $karyawan_wisudaawal <> "" || $karyawan_wisudaakhir <> "" || $karyawan_pendidikanketerangan <> "") {
+				$sql_pendidikan = "SELECT karyawan_pendidikan.kpendidikan_master AS karyawan_id FROM karyawan_pendidikan";
+				
+				if($karyawan_pendidikan!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					$sql_pendidikan.= " kpendidikan_pendidikan LIKE '%".$karyawan_pendidikan."%'";
+				};
+				if($karyawan_namasekolah!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					$sql_pendidikan.= " kpendidikan_sekolah LIKE '%".$karyawan_namasekolah."%'";
+				};
+				if($karyawan_jurusan!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					$sql_pendidikan.= " kpendidikan_jurusan LIKE '%".$karyawan_jurusan."%'";
+				};
+				if($karyawan_thnmskawal!='' or $karyawan_thnmskakhir!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					if($karyawan_thnmskawal!='' and $karyawan_thnmskakhir!=''){
+						$sql_pendidikan.= " kpendidikan_thnmasuk BETWEEN '".$karyawan_thnmskawal."' AND '".$karyawan_thnmskakhir."'";
+					}else if ($karyawan_thnmskawal!='' and $karyawan_thnmskakhir==''){
+						$sql_pendidikan.= " kpendidikan_thnmasuk BETWEEN '".$karyawan_thnmskawal."' AND now()";
+					}else if ($karyawan_thnmskawal=='' and $karyawan_thnmskakhir!=''){
+						$sql_pendidikan.= " kpendidikan_thnmasuk < '".$karyawan_thnmskakhir."'";
+					}
+				};
+				if($karyawan_thnslsawal!='' or $karyawan_thnslsakhir!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					if($karyawan_thnslsawal!='' and $karyawan_thnslsakhir!=''){
+						$sql_pendidikan.= " kpendidikan_thnselesai BETWEEN '".$karyawan_thnslsawal."' AND '".$karyawan_thnslsakhir."'";
+					}else if ($karyawan_thnslsawal!='' and $karyawan_thnslsakhir==''){
+						$sql_pendidikan.= " kpendidikan_thnselesai BETWEEN '".$karyawan_thnslsawal."' AND now()";
+					}else if ($karyawan_thnslsawal=='' and $karyawan_thnslsakhir!=''){
+						$sql_pendidikan.= " kpendidikan_thnselesai < '".$karyawan_thnslsakhir."'";
+					}
+				};
+				if($karyawan_wisudaawal!='' or $karyawan_wisudaakhir!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					if($karyawan_wisudaawal!='' and $karyawan_wisudaakhir!=''){
+						$sql_pendidikan.= " kpendidikan_wisuda BETWEEN '".$karyawan_wisudaawal."' AND '".$karyawan_wisudaakhir."'";
+					}else if ($karyawan_wisudaawal!='' and $karyawan_wisudaakhir==''){
+						$sql_pendidikan.= " kpendidikan_wisuda BETWEEN '".$karyawan_wisudaawal."' AND now()";
+					}else if ($karyawan_wisudaawal=='' and $karyawan_wisudaakhir!=''){
+						$sql_pendidikan.= " kpendidikan_wisuda < '".$karyawan_wisudaakhir."'";
+					}
+				};
+				if($karyawan_pendidikanketerangan!=''){
+					$sql_pendidikan.=eregi("WHERE",$sql_pendidikan)?" AND ":" WHERE ";
+					$sql_pendidikan.= " kpendidikan_keterangan LIKE '%".$karyawan_pendidikanketerangan."%'";
+				};
+				$rs=$this->db->query($sql_pendidikan);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$pendidikan=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row_array();
+					$pendidikan = $pendidikan.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$pendidikan = $pendidikan.',';
+					}
+					$j++;
+				}
+			}
+			// EOF PENDIDIKAN SEARCH
+			
+			// CUTI SEARCH
+			if ($karyawan_jeniscuti <> "" || $karyawan_tglcutiawalawal <> "" || $karyawan_tglcutiawalakhir <> "" || $karyawan_tglcutiakhirawal <> "" || $karyawan_tglcutiakhirakhir <> "" || $karyawan_jmlharicutiawal <> "" || $karyawan_jmlharicutiakhir <> "" || $karyawan_tglpengajuanawal <> "" || $karyawan_tglpengajuanakhir <> "" || $karyawan_cutiketerangan <> "") {
+				$sql_cuti = "SELECT karyawan_cuti.kcuti_master AS karyawan_id FROM karyawan_cuti";
+				
+				if($karyawan_jeniscuti!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					$sql_cuti.= " kcuti_jenis LIKE '%".$karyawan_jeniscuti."%'";
+				};
+				if($karyawan_tglcutiawalawal!='' or $karyawan_tglcutiawalakhir!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					if($karyawan_tglcutiawalawal!='' and $karyawan_tglcutiawalakhir!=''){
+						$sql_cuti.= " kcuti_tglawal BETWEEN '".$karyawan_tglcutiawalawal."' AND '".$karyawan_tglcutiawalakhir."'";
+					}else if ($karyawan_tglcutiawalawal!='' and $karyawan_tglcutiawalakhir==''){
+						$sql_cuti.= " kcuti_tglawal BETWEEN '".$karyawan_tglcutiawalawal."' AND now()";
+					}else if ($karyawan_tglcutiawalawal=='' and $karyawan_tglcutiawalakhir!=''){
+						$sql_cuti.= " kcuti_tglawal < '".$karyawan_tglcutiawalakhir."'";
+					}
+				};
+				if($karyawan_tglcutiakhirawal!='' or $karyawan_tglcutiakhirakhir!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					if($karyawan_tglcutiakhirawal!='' and $karyawan_tglcutiakhirakhir!=''){
+						$sql_cuti.= " kcuti_tglakhir BETWEEN '".$karyawan_tglcutiakhirawal."' AND '".$karyawan_tglcutiakhirakhir."'";
+					}else if ($karyawan_tglcutiakhirawal!='' and $karyawan_tglcutiakhirakhir==''){
+						$sql_cuti.= " kcuti_tglakhir BETWEEN '".$karyawan_tglcutiakhirawal."' AND now()";
+					}else if ($karyawan_tglcutiakhirawal=='' and $karyawan_tglcutiakhirakhir!=''){
+						$sql_cuti.= " kcuti_tglakhir < '".$karyawan_tglcutiakhirakhir."'";
+					}
+				};
+				if($karyawan_jmlharicutiawal!='' or $karyawan_jmlharicutiakhir!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					if($karyawan_jmlharicutiawal!='' and $karyawan_jmlharicutiakhir!=''){
+						$sql_cuti.= " kcuti_jmlhari BETWEEN '".$karyawan_jmlharicutiawal."' AND '".$karyawan_jmlharicutiakhir."'";
+					}else if ($karyawan_jmlharicutiawal!='' and $karyawan_jmlharicutiakhir==''){
+						$sql_cuti.= " kcuti_jmlhari BETWEEN '".$karyawan_jmlharicutiawal."' AND now()";
+					}else if ($karyawan_jmlharicutiawal=='' and $karyawan_jmlharicutiakhir!=''){
+						$sql_cuti.= " kcuti_jmlhari < '".$karyawan_jmlharicutiakhir."'";
+					}
+				};
+				if($karyawan_tglpengajuanawal!='' or $karyawan_tglpengajuanakhir!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					if($karyawan_tglpengajuanawal!='' and $karyawan_tglpengajuanakhir!=''){
+						$sql_cuti.= " kcuti_tglpengajuan BETWEEN '".$karyawan_tglpengajuanawal."' AND '".$karyawan_tglpengajuanakhir."'";
+					}else if ($karyawan_tglpengajuanawal!='' and $karyawan_tglpengajuanakhir==''){
+						$sql_cuti.= " kcuti_tglpengajuan BETWEEN '".$karyawan_tglpengajuanawal."' AND now()";
+					}else if ($karyawan_tglpengajuanawal=='' and $karyawan_tglpengajuanakhir!=''){
+						$sql_cuti.= " kcuti_tglpengajuan < '".$karyawan_tglpengajuanakhir."'";
+					}
+				};
+				if($karyawan_cutiketerangan!=''){
+					$sql_cuti.=eregi("WHERE",$sql_cuti)?" AND ":" WHERE ";
+					$sql_cuti.= " kcuti_keterangan LIKE '%".$karyawan_cutiketerangan."%'";
+				};
+				$rs=$this->db->query($sql_cuti);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$cuti=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row_array();
+					$cuti = $cuti.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$cuti = $cuti.',';
+					}
+					$j++;
+				}
+			}
+			// EOF CUTI SEARCH
+			
+			// GANTIOFF SEARCH
+			if ($karyawan_tgloffawalawal <> "" || $karyawan_tgloffawalakhir <> "" || $karyawan_tgloffakhirawal <> "" || $karyawan_tgloffakhirakhir <> "" || $karyawan_jmlharioffawal <> "" || $karyawan_jmlharioffakhir <> "" || $karyawan_tgloffgantiawalawal <> "" || $karyawan_tgloffgantiawalakhir <> "" || $karyawan_tgloffgantiakhirawal <> "" || $karyawan_tgloffgantiakhirakhir <> "" || $karyawan_tgloffpengajuanakhirawal <> "" || $karyawan_tgloffpengajuanakhirakhir <> "" || $karyawan_offketerangan <> ""){	
+			
+			$sql_gantioff = "SELECT karyawan_gantioff.kgantioff_master AS karyawan_id FROM karyawan_gantioff";
+
+				if($karyawan_tgloffawalawal!='' or $karyawan_tgloffawalakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_tgloffawalawal!='' and $karyawan_tgloffawalakhir!=''){
+						$sql_gantioff.= " kgantioff_tglawal BETWEEN '".$karyawan_tgloffawalawal."' AND '".$karyawan_tgloffawalakhir."'";
+					}else if ($karyawan_tgloffawalawal!='' and $karyawan_tgloffawalakhir==''){
+						$sql_gantioff.= " kgantioff_tglawal BETWEEN '".$karyawan_tgloffawalawal."' AND now()";
+					}else if ($karyawan_tgloffawalawal=='' and $karyawan_tgloffawalakhir!=''){
+						$sql_gantioff.= " kgantioff_tglawal < '".$karyawan_tgloffawalakhir."'";
+					}
+				};
+				if($karyawan_tgloffakhirawal!='' or $karyawan_tgloffakhirakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_tgloffakhirawal!='' and $karyawan_tgloffakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglakhir BETWEEN '".$karyawan_tgloffakhirawal."' AND '".$karyawan_tgloffakhirakhir."'";
+					}else if ($karyawan_tgloffakhirawal!='' and $karyawan_tgloffakhirakhir==''){
+						$sql_gantioff.= " kgantioff_tglakhir BETWEEN '".$karyawan_tgloffakhirawal."' AND now()";
+					}else if ($karyawan_tgloffakhirawal=='' and $karyawan_tgloffakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglakhir < '".$karyawan_tgloffakhirakhir."'";
+					}
+				};
+				if($karyawan_jmlharioffawal!='' or $karyawan_jmlharioffakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_jmlharioffawal!='' and $karyawan_jmlharioffakhir!=''){
+						$sql_gantioff.= " kgantioff_jmlhari BETWEEN '".$karyawan_jmlharioffawal."' AND '".$karyawan_jmlharioffakhir."'";
+					}else if ($karyawan_jmlharioffawal!='' and $karyawan_jmlharioffakhir==''){
+						$sql_gantioff.= " kgantioff_jmlhari BETWEEN '".$karyawan_jmlharioffawal."' AND now()";
+					}else if ($karyawan_jmlharioffawal=='' and $karyawan_jmlharioffakhir!=''){
+						$sql_gantioff.= " kgantioff_jmlhari < '".$karyawan_jmlharioffakhir."'";
+					}
+				};
+				if($karyawan_tgloffgantiawalawal!='' or $karyawan_tgloffgantiawalakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_tgloffgantiawalawal!='' and $karyawan_tgloffgantiawalakhir!=''){
+						$sql_gantioff.= " kgantioff_tglgantiawal BETWEEN '".$karyawan_tgloffgantiawalawal."' AND '".$karyawan_tgloffgantiawalakhir."'";
+					}else if ($karyawan_tgloffgantiawalawal!='' and $karyawan_tgloffgantiawalakhir==''){
+						$sql_gantioff.= " kgantioff_tglgantiawal BETWEEN '".$karyawan_tgloffgantiawalawal."' AND now()";
+					}else if ($karyawan_tgloffgantiawalawal=='' and $karyawan_tgloffgantiawalakhir!=''){
+						$sql_gantioff.= " kgantioff_tglgantiawal < '".$karyawan_tgloffgantiawalakhir."'";
+					}
+				};
+				if($karyawan_tgloffgantiakhirawal!='' or $karyawan_tgloffgantiakhirakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_tgloffgantiakhirawal!='' and $karyawan_tgloffgantiakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglgantiakhir BETWEEN '".$karyawan_tgloffgantiakhirawal."' AND '".$karyawan_tgloffgantiakhirakhir."'";
+					}else if ($karyawan_tgloffgantiakhirawal!='' and $karyawan_tgloffgantiakhirakhir==''){
+						$sql_gantioff.= " kgantioff_tglgantiakhir BETWEEN '".$karyawan_tgloffgantiakhirawal."' AND now()";
+					}else if ($karyawan_tgloffgantiakhirawal=='' and $karyawan_tgloffgantiakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglgantiakhir < '".$karyawan_tgloffgantiakhirakhir."'";
+					}
+				};
+				if($karyawan_tgloffpengajuanakhirawal!='' or $karyawan_tgloffpengajuanakhirakhir!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					if($karyawan_tgloffpengajuanakhirawal!='' and $karyawan_tgloffpengajuanakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglpengajuan BETWEEN '".$karyawan_tgloffpengajuanakhirawal."' AND '".$karyawan_tgloffpengajuanakhirakhir."'";
+					}else if ($karyawan_tgloffpengajuanakhirawal!='' and $karyawan_tgloffpengajuanakhirakhir==''){
+						$sql_gantioff.= " kgantioff_tglpengajuan BETWEEN '".$karyawan_tgloffpengajuanakhirawal."' AND now()";
+					}else if ($karyawan_tgloffpengajuanakhirawal=='' and $karyawan_tgloffpengajuanakhirakhir!=''){
+						$sql_gantioff.= " kgantioff_tglpengajuan < '".$karyawan_tgloffpengajuanakhirakhir."'";
+					}
+				};
+				if($karyawan_offketerangan!=''){
+					$sql_gantioff.=eregi("WHERE",$sql_gantioff)?" AND ":" WHERE ";
+					$sql_gantioff.= " kgantioff_keterangan LIKE '%".$karyawan_offketerangan."%'";
+				};
+				$rs=$this->db->query($sql_gantioff);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$gantioff=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row_array();
+					$gantioff = $gantioff.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$gantioff = $gantioff.',';
+					}
+					$j++;
+				}
+			}
+			// EOF GANTIOFF SEARCH
+			
+			// MEDICAL SEARCH		
+			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_medicalketerangan <> ""){
+			$sql_medical = "SELECT karyawan_medical.medical_master AS karyawan_id FROM karyawan_medical";
+				if($karyawan_tujuanklaim!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					$sql_medical.= " kmedical_tujuan '".$karyawan_tujuanklaim."'";
+				};
+				if($karyawan_jenisrawat!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					$sql_medical.= " kmedical_jenis_rawat '".$karyawan_jenisrawat."'";
+				};
+				if($karyawan_jenisklaim!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					$sql_medical.= " kmedical_jenis_klaim '".$karyawan_jenisklaim."'";
+				};
+				if($karyawan_jmlkuitansiawal!='' or $karyawan_jmlkuitansiakhir!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					if($karyawan_jmlkuitansiawal!='' and $karyawan_jmlkuitansiakhir!=''){
+						$sql_medical.= " kmedical_jumlah BETWEEN '".$karyawan_jmlkuitansiawal."' AND '".$karyawan_jmlkuitansiakhir."'";
+					}else if ($karyawan_jmlkuitansiawal!='' and $karyawan_jmlkuitansiakhir==''){
+						$sql_medical.= " kmedical_jumlah BETWEEN '".$karyawan_jmlkuitansiawal."' AND now()";
+					}else if ($karyawan_jmlkuitansiawal=='' and $karyawan_jmlkuitansiakhir!=''){
+						$sql_medical.= " kmedical_jumlah < '".$karyawan_jmlkuitansiakhir."'";
+					}
+				};
+				if($karyawan_totalkuitansiawal!='' or $karyawan_totalkuitansiakhir!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					if($karyawan_totalkuitansiawal!='' and $karyawan_totalkuitansiakhir!=''){
+						$sql_medical.= " kmedical_total BETWEEN '".$karyawan_totalkuitansiawal."' AND '".$karyawan_totalkuitansiakhir."'";
+					}else if ($karyawan_totalkuitansiawal!='' and $karyawan_totalkuitansiakhir==''){
+						$sql_medical.= " kmedical_total BETWEEN '".$karyawan_totalkuitansiawal."' AND now()";
+					}else if ($karyawan_totalkuitansiawal=='' and $karyawan_totalkuitansiakhir!=''){
+						$sql_medical.= " kmedical_total < '".$karyawan_totalkuitansiakhir."'";
+					}
+				};
+				if($karyawan_tglmedicalpengajuanawal!='' or $karyawan_tglmedicalpengajuanakhir!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					if($karyawan_tglmedicalpengajuanawal!='' and $karyawan_tglmedicalpengajuanakhir!=''){
+						$sql_medical.= " kmedical_tglpengajuan BETWEEN '".$karyawan_tglmedicalpengajuanawal."' AND '".$karyawan_tglmedicalpengajuanakhir."'";
+					}else if ($karyawan_tglmedicalpengajuanawal!='' and $karyawan_tglmedicalpengajuanakhir==''){
+						$sql_medical.= " kmedical_tglpengajuan BETWEEN '".$karyawan_tglmedicalpengajuanawal."' AND now()";
+					}else if ($karyawan_tglmedicalpengajuanawal=='' and $karyawan_tglmedicalpengajuanakhir!=''){
+						$sql_medical.= " kmedical_tglpengajuan < '".$karyawan_tglmedicalpengajuanakhir."'";
+					}
+				};
+				if($karyawan_medicalketerangan!=''){
+					$sql_medical.=eregi("WHERE",$sql_medical)?" AND ":" WHERE ";
+					$sql_medical.= " kmedical_keterangan LIKE '%".$karyawan_medicalketerangan."%'";
+				};
+				$rs=$this->db->query($sql_medical);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$medical=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row_array();
+					$medical = $medical.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$medical = $medical.',';
+					}
+					$j++;
+				}
+			}
+			// EOF MEDICAL SEARCH
+			
+			// FASILITAS SEARCH
+			if ($karyawan_fasilitasitem <> "" || $karyawan_tglserahterimaawal <> "" || $karyawan_tglserahterimaakhir <> "" || $karyawan_fasilitasketerangan <> "") {
+				$sql_fasilitas = "SELECT karyawan_fasilitas.kfasilitas_master AS karyawan_id FROM karyawan_fasilitas";
+				
+				if($karyawan_fasilitasitem!=''){
+					$sql_fasilitas.=eregi("WHERE",$sql_fasilitas)?" AND ":" WHERE ";
+					$sql_fasilitas.= " kfasilitas_item LIKE '%".$karyawan_fasilitasitem."%'";
+				};
+				if($karyawan_tglserahterimaawal!='' or $karyawan_tglserahterimaakhir!=''){
+					$sql_fasilitas.=eregi("WHERE",$sql_fasilitas)?" AND ":" WHERE ";
+					
+					if($karyawan_tglserahterimaawal!='' and $karyawan_tglserahterimaakhir!=''){
+						$sql_fasilitas.= " kfasilitas_tglserahterima BETWEEN '".$karyawan_tglserahterimaawal."' AND '".$karyawan_tglserahterimaakhir."'";
+					}else if ($karyawan_tglserahterimaawal!='' and $karyawan_tglserahterimaakhir==''){
+						$sql_fasilitas.= " kfasilitas_tglserahterima BETWEEN '".$karyawan_tglserahterimaawal."' AND now()";
+					}else if ($karyawan_tglserahterimaawal=='' and $karyawan_tglserahterimaakhir!=''){
+						$sql_fasilitas.= " kfasilitas_tglserahterima < '".$karyawan_tglserahterimaakhir."'";
+					}
+				};
+				if($karyawan_fasilitasketerangan!=''){
+					$sql_fasilitas.=eregi("WHERE",$sql_fasilitas)?" AND ":" WHERE ";
+					$sql_fasilitas.= " kfasilitas_keterangan LIKE '%".$karyawan_fasilitasketerangan."%'";
+				};
+				$rs=$this->db->query($sql_fasilitas);
+				$num_rows = $rs->num_rows();
+				$j=0;
+				$fasilitas=0;
+				foreach($rs->result() as $row){
+					//$record = $rs->row();
+					$fasilitas = $fasilitas.$row->karyawan_id;
+					if ($j <> $num_rows-1){
+						$fasilitas = $fasilitas.',';
+					}
+					$j++;
+				}
+			}
+			// EOF FASILITAS SEARCH
+			
+			
+			// MAIN SELECT
+			$query="select vu_karyawan.*, departemen.*, cabang.*, jabatan.jabatan_nama, golongan.*
+				from vu_karyawan
+				left join departemen on (departemen.departemen_id=vu_karyawan.karyawan_departemen)
+				left join cabang on (cabang.cabang_id=vu_karyawan.karyawan_cabang)
+				left join jabatan on (jabatan.jabatan_id=vu_karyawan.karyawan_jabatan)
+				left join golongan on (golongan.id_golongan=vu_karyawan.karyawan_idgolongan)
 			";
+			// GENERAL SEARCH
+			//STATUS KEKARYAWANAN SEARCH
+			if ($karyawan_statuskekaryawanan <> "" || $karyawan_statustglawalawal <> "" || $karyawan_statustglawalakhir <> "" || $karyawan_statustglakhirawal <> "" || $karyawan_statustglakhirakhir <> "" || $karyawan_statuskaryawan <> "") {
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$status.")";
+			}
+			// JABATAN SEARCH
+			if ($karyawan_jabatan <> "" || $karyawan_departemen <> "" || $karyawan_idgolongan <> "" || $karyawan_atasan <> "" || $karyawan_pph21 <> "" || $karyawan_tgljbtawalawal <> "" || $karyawan_tgljbtawalakhir <> "" || $karyawan_tgljbtakhirawal <> "" || $karyawan_tgljbtakhirakhir <> "" || $karyawan_jabatanketerangan <> "") {
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$jabatan.")";
+			}
+			// PENDIDIKAN SEARCH
+			if ($karyawan_pendidikan <> "" || $karyawan_namasekolah <> "" || $karyawan_jurusan <> "" || $karyawan_thnmskawal <> "" || $karyawan_thnmskakhir <> "" || $karyawan_thnslsawal <> "" || $karyawan_thnslsakhir <> "" || $karyawan_wisudaawal <> "" || $karyawan_wisudaakhir <> "" || $karyawan_pendidikanketerangan <> "") {
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$pendidikan.")";
+			}
+			// CUTI SEARCH
+			if ($karyawan_jeniscuti <> "" || $karyawan_tglcutiawalawal <> "" || $karyawan_tglcutiawalakhir <> "" || $karyawan_tglcutiakhirawal <> "" || $karyawan_tglcutiakhirakhir <> "" || $karyawan_jmlharicutiawal <> "" || $karyawan_jmlharicutiakhir <> "" || $karyawan_tglpengajuanawal <> "" || $karyawan_tglpengajuanakhir <> "" || $karyawan_cutiketerangan <> "") {
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$cuti.")";
+			}
+			// GANTIOFF SEARCH
+			if ($karyawan_tgloffawalawal <> "" || $karyawan_tgloffawalakhir <> "" || $karyawan_tgloffakhirawal <> "" || $karyawan_tgloffakhirakhir <> "" || $karyawan_jmlharioffawal <> "" || $karyawan_jmlharioffakhir <> "" || $karyawan_tgloffgantiawalawal <> "" || $karyawan_tgloffgantiawalakhir <> "" || $karyawan_tgloffgantiakhirawal <> "" || $karyawan_tgloffgantiakhirakhir <> "" || $karyawan_tgloffpengajuanakhirawal <> "" || $karyawan_tgloffpengajuanakhirakhir <> "" || $karyawan_offketerangan <> ""){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$gantioff.")";
+			}
+			// MEDICAL SEARCH
+			if ($karyawan_tujuanklaim <> "" || $karyawan_jenisrawat <> "" || $karyawan_jenisklaim <> "" || $karyawan_jmlkuitansiawal <> "" || $karyawan_jmlkuitansiakhir <> "" || $karyawan_totalkuitansiawal <> "" || $karyawan_totalkuitansiakhir <> "" || $karyawan_tglmedicalpengajuanawal <> "" || $karyawan_tglmedicalpengajuanakhir <> "" || $karyawan_medicalketerangan <> ""){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$medical.")";
+			}
+			// FASILITAS SEARCH
+			if ($karyawan_fasilitasitem <> "" || $karyawan_tglserahterimaawal <> "" || $karyawan_tglserahterimaakhir <> "" || $karyawan_fasilitasketerangan <> "") {
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_id in (".$fasilitas.")";
+			}
 			
 			if($karyawan_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_id LIKE '%".$karyawan_id."%'";
 			};
+			if($karyawan_cabang!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_cabang = '".$karyawan_cabang."'";
+			};
 			if($karyawan_no!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_no LIKE '%".$karyawan_no."%'";
 			};
+			if($karyawan_noktp!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_ktp LIKE '%".$karyawan_noktp."%'";
+			};
+			if($karyawan_alamatktp!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_alamat_ktp LIKE '%".$karyawan_alamatktp."%'";
+			};
 			if($karyawan_npwp!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_npwp LIKE '%".$karyawan_npwp."%'";
+			};
+			if($karyawan_jamsostek!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_jamsostek LIKE '%".$karyawan_jamsostek."%'";
+			};
+			if($karyawan_sip!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_sip LIKE '%".$karyawan_sip."%'";
 			};
 			if($karyawan_username!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1398,9 +1923,44 @@ class M_karyawan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_kelamin LIKE '%".$karyawan_kelamin."%'";
 			};
-			if($karyawan_tgllahir!=''){
+			if($karyawan_marriage!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_tgllahir LIKE '%".$karyawan_tgllahir."%'";
+				$query.= " karyawan_marriage LIKE '%".$karyawan_marriage."%'";
+			};
+			if($karyawan_agama!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_agama LIKE '%".$karyawan_agama."%'";
+			};
+			if($karyawan_jmlanak!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_jmlanak LIKE '%".$karyawan_jmlanak."%'";
+			};
+			if($karyawan_tglmasuk!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_tglmasuk LIKE '%".$karyawan_tglmasuk."%'";
+			};
+			if($karyawan_aktif!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_aktif='".$karyawan_aktif."'";
+			};
+			if($karyawan_tempatlahir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " karyawan_tmplahir LIKE '%".$karyawan_tempatlahir."%'";
+			};
+			if($karyawan_tgllahirawal!='' or $karyawan_tgllahirakhir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($karyawan_tgllahirawal!='' and $karyawan_tgllahirakhir!=''){
+					$query.= " karyawan_tgllahir BETWEEN '".$karyawan_tgllahirawal."' AND '".$karyawan_tgllahirakhir."'";
+				}else if ($karyawan_tgllahirawal!='' and $karyawan_tgllahirakhir==''){
+					$query.= " karyawan_tgllahir BETWEEN '".$karyawan_tgllahirawal."' AND now()";
+				}else if ($karyawan_tgllahirawal=='' and $karyawan_tgllahirakhir!=''){
+					$query.= " karyawan_tgllahir < '".$karyawan_tgllahirakhir."'";
+				}
+			};
+			if($karyawan_tgllahir!='' and $karyawan_blnlahir!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " day(karyawan_tgllahir)='".$karyawan_tgllahir."' AND month(karyawan_tgllahir)='".$karyawan_blnlahir."'";
 			};
 			if($karyawan_alamat!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1416,11 +1976,7 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_email!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_email LIKE '%".$karyawan_email."%'";
-			};
-			if($karyawan_emiracle!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_emiracle LIKE '%".$karyawan_emiracle."%'";
+				$query.= " (karyawan_email LIKE '%".$karyawan_email."%' OR karyawan_emiracle LIKE '%".$karyawan_email."%')";
 			};
 			if($karyawan_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1428,24 +1984,27 @@ class M_karyawan extends Model{
 			};
 			if($karyawan_notelp!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_notelp LIKE '%".$karyawan_notelp."%'";
+				$query.= " (karyawan_notelp LIKE '%".$karyawan_notelp."%' 
+				OR karyawan_notelp2 LIKE '%".$karyawan_notelp."%' OR karyawan_notelp3 LIKE '%".$karyawan_notelp."%'
+				OR karyawan_notelp4 LIKE '%".$karyawan_notelp."%')";
 			};
-			if($karyawan_notelp2!=''){
+			if($karyawan_bank!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_notelp2 LIKE '%".$karyawan_notelp2."%'";
+				$query.= " karyawan_bank LIKE '%".$karyawan_bank."%'";
 			};
-			if($karyawan_notelp3!=''){
+			if($karyawan_bankcabang!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_notelp3 LIKE '%".$karyawan_notelp3."%'";
+				$query.= " karyawan_bank_cabang LIKE '%".$karyawan_bankcabang."%'";
 			};
-			if($karyawan_notelp4!=''){
+			if($karyawan_norekening!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_notelp4 LIKE '%".$karyawan_notelp4."%'";
+				$query.= " karyawan_rekening LIKE '%".$karyawan_norekening."%'";
 			};
-			if($karyawan_cabang!=''){
+			if($karyawan_atasnama!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_cabang = '".$karyawan_cabang."'";
+				$query.= " karyawan_atasnama LIKE '%".$karyawan_atasnama."%'";
 			};
+			/*
 			if($karyawan_jabatan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_jabatan = '".$karyawan_jabatan."'";
@@ -1458,18 +2017,11 @@ class M_karyawan extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_idgolongan LIKE '%".$karyawan_idgolongan."%'";
 			};
-			if($karyawan_tglmasuk!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_tglmasuk LIKE '%".$karyawan_tglmasuk."%'";
-			};
 			if($karyawan_atasan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_atasan LIKE '%".$karyawan_atasan."%'";
 			};
-			if($karyawan_aktif!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " karyawan_aktif='".$karyawan_aktif."'";
-			};
+			*/
 			if($karyawan_creator!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " karyawan_creator LIKE '%".$karyawan_creator."%'";
@@ -1494,7 +2046,7 @@ class M_karyawan extends Model{
 			$nbrows = $result->num_rows();
 			
 			$limit = $query." LIMIT ".$start.",".$end;		
-			$result = $this->db->query($limit);    
+			$result = $this->db->query($limit); 
 			
 			if($nbrows>0){
 				foreach($result->result() as $row){
@@ -1510,7 +2062,7 @@ class M_karyawan extends Model{
 		//function for print record
 		function karyawan_print($karyawan_id ,$karyawan_no ,$karyawan_npwp ,$karyawan_username ,$karyawan_nama ,$karyawan_kelamin ,$karyawan_tgllahir ,$karyawan_alamat ,$karyawan_kota ,$karyawan_kodepos ,$karyawan_email ,$karyawan_emiracle ,$karyawan_keterangan ,$karyawan_notelp ,$karyawan_notelp2 ,$karyawan_notelp3, $karyawan_notelp4 ,$karyawan_cabang ,$karyawan_jabatan ,$karyawan_departemen ,$karyawan_idgolongan ,$karyawan_tglmasuk ,$karyawan_atasan ,$karyawan_aktif ,$karyawan_creator ,$karyawan_date_create ,$karyawan_update ,$karyawan_date_update ,$karyawan_revised ,$option,$filter){
 			//full query
-			$query="select * from karyawan";
+			$query="select * from vu_karyawan";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (karyawan_id LIKE '%".addslashes($filter)."%' OR karyawan_no LIKE '%".addslashes($filter)."%' OR karyawan_npwp LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR karyawan_kelamin LIKE '%".addslashes($filter)."%' OR karyawan_tgllahir LIKE '%".addslashes($filter)."%' OR karyawan_alamat LIKE '%".addslashes($filter)."%' OR karyawan_kota LIKE '%".addslashes($filter)."%' OR karyawan_kodepos LIKE '%".addslashes($filter)."%' OR karyawan_email LIKE '%".addslashes($filter)."%' OR karyawan_emiracle LIKE '%".addslashes($filter)."%' OR karyawan_keterangan LIKE '%".addslashes($filter)."%' OR karyawan_notelp LIKE '%".addslashes($filter)."%' OR karyawan_notelp2 LIKE '%".addslashes($filter)."%' OR karyawan_notelp3 LIKE '%".addslashes($filter)."%' OR karyawan_notelp4 LIKE '%".addslashes($filter)."%' OR karyawan_cabang LIKE '%".addslashes($filter)."%' OR karyawan_jabatan LIKE '%".addslashes($filter)."%' OR karyawan_departemen LIKE '%".addslashes($filter)."%' OR karyawan_idgolongan LIKE '%".addslashes($filter)."%' OR karyawan_tglmasuk LIKE '%".addslashes($filter)."%' OR karyawan_atasan LIKE '%".addslashes($filter)."%' OR karyawan_aktif LIKE '%".addslashes($filter)."%' OR karyawan_creator LIKE '%".addslashes($filter)."%' OR karyawan_date_create LIKE '%".addslashes($filter)."%' OR karyawan_update LIKE '%".addslashes($filter)."%' OR karyawan_date_update LIKE '%".addslashes($filter)."%' OR karyawan_revised LIKE '%".addslashes($filter)."%' )";
@@ -1653,7 +2205,7 @@ class M_karyawan extends Model{
 							if(karyawan_notelp2='','-',ifnull(karyawan_notelp2,'-')) AS ponsel_1,
 							if(karyawan_departemen='','-',ifnull(karyawan_departemen,'-')) AS departemen,
 							if(karyawan_aktif='','-',ifnull(karyawan_aktif,'-')) AS aktif
-					from karyawan";
+					from vu_karyawan";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (karyawan_id LIKE '%".addslashes($filter)."%' OR karyawan_no LIKE '%".addslashes($filter)."%' OR karyawan_npwp LIKE '%".addslashes($filter)."%' OR karyawan_username LIKE '%".addslashes($filter)."%' OR karyawan_nama LIKE '%".addslashes($filter)."%' OR karyawan_kelamin LIKE '%".addslashes($filter)."%' OR karyawan_tgllahir LIKE '%".addslashes($filter)."%' OR karyawan_alamat LIKE '%".addslashes($filter)."%' OR karyawan_kota LIKE '%".addslashes($filter)."%' OR karyawan_kodepos LIKE '%".addslashes($filter)."%' OR karyawan_email LIKE '%".addslashes($filter)."%' OR karyawan_emiracle LIKE '%".addslashes($filter)."%' OR karyawan_keterangan LIKE '%".addslashes($filter)."%' OR karyawan_notelp LIKE '%".addslashes($filter)."%' OR karyawan_notelp2 LIKE '%".addslashes($filter)."%' OR karyawan_notelp3 LIKE '%".addslashes($filter)."%' OR karyawan_notelp4 LIKE '%".addslashes($filter)."%' OR karyawan_cabang LIKE '%".addslashes($filter)."%' OR karyawan_jabatan LIKE '%".addslashes($filter)."%' OR karyawan_departemen LIKE '%".addslashes($filter)."%' OR karyawan_idgolongan LIKE '%".addslashes($filter)."%' OR karyawan_tglmasuk LIKE '%".addslashes($filter)."%' OR karyawan_atasan LIKE '%".addslashes($filter)."%' OR karyawan_aktif LIKE '%".addslashes($filter)."%' OR karyawan_creator LIKE '%".addslashes($filter)."%' OR karyawan_date_create LIKE '%".addslashes($filter)."%' OR karyawan_update LIKE '%".addslashes($filter)."%' OR karyawan_date_update LIKE '%".addslashes($filter)."%' OR karyawan_revised LIKE '%".addslashes($filter)."%' )";
