@@ -395,13 +395,16 @@ class C_karyawan extends Controller {
 		$kmedical_total = $_POST['kmedical_total']; // Get our array back and translate it :
 		$array_kmedical_total = json_decode(stripslashes($kmedical_total));
 		
+		$kmedical_tglkuitansi = $_POST['kmedical_tglkuitansi']; // Get our array back and translate it :
+		$array_kmedical_tglkuitansi = json_decode(stripslashes($kmedical_tglkuitansi));
+		
 		$kmedical_tglpengajuan = $_POST['kmedical_tglpengajuan']; // Get our array back and translate it :
 		$array_kmedical_tglpengajuan = json_decode(stripslashes($kmedical_tglpengajuan));
 		
 		$kmedical_keterangan = $_POST['kmedical_keterangan']; // Get our array back and translate it :
 		$array_kmedical_keterangan = json_decode(stripslashes($kmedical_keterangan));
 		
-		$result=$this->m_karyawan->detail_medical_insert($array_kmedical_id , $kmedical_master, $array_kmedical_tujuan ,$array_kmedical_jenis_rawat, $array_kmedical_jenis_klaim, $array_kmedical_jumlah, $array_kmedical_total, $array_kmedical_tglpengajuan, $array_kmedical_keterangan);
+		$result=$this->m_karyawan->detail_medical_insert($array_kmedical_id , $kmedical_master, $array_kmedical_tujuan ,$array_kmedical_jenis_rawat, $array_kmedical_jenis_klaim, $array_kmedical_jumlah, $array_kmedical_total, $array_kmedical_tglkuitansi, $array_kmedical_tglpengajuan, $array_kmedical_keterangan);
 		echo $result;
 	}
 	
@@ -1080,7 +1083,6 @@ class C_karyawan extends Controller {
 		$karyawan_pendidikanketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_pendidikanketerangan);
 		$karyawan_pendidikanketerangan=str_replace("'", '"',$karyawan_pendidikanketerangan);
 		// KELUARGA SEARCH
-		
 		// TANGGAL LAHIR SEARCH
 		$karyawan_tempatlahir=trim(@$_POST["karyawan_tempatlahir"]);
 		$karyawan_tempatlahir=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_tempatlahir);
@@ -1159,6 +1161,8 @@ class C_karyawan extends Controller {
 		$karyawan_totalkuitansiakhir=str_replace("'", '"',$karyawan_totalkuitansiakhir);
 		$karyawan_tglmedicalpengajuanawal=trim(@$_POST["karyawan_tglmedicalpengajuanawal"]);
 		$karyawan_tglmedicalpengajuanakhir=trim(@$_POST["karyawan_tglmedicalpengajuanakhir"]);
+		$karyawan_tglmedicalkuitansiawal=trim(@$_POST["karyawan_tglmedicalkuitansiawal"]);
+		$karyawan_tglmedicalkuitansiakhir=trim(@$_POST["karyawan_tglmedicalkuitansiakhir"]);
 		$karyawan_medicalketerangan=trim(@$_POST["karyawan_medicalketerangan"]);
 		$karyawan_medicalketerangan=str_replace("/(<\/?)(p)([^>]*>)", "",$karyawan_medicalketerangan);
 		$karyawan_medicalketerangan=str_replace("'", '"',$karyawan_medicalketerangan);
@@ -1204,7 +1208,7 @@ class C_karyawan extends Controller {
 		// GANTIOFF SEARCH
 		$karyawan_tgloffawalawal, $karyawan_tgloffawalakhir, $karyawan_tgloffakhirawal, $karyawan_tgloffakhirakhir, $karyawan_jmlharioffawal, $karyawan_jmlharioffakhir, $karyawan_tgloffgantiawalawal, $karyawan_tgloffgantiawalakhir, $karyawan_tgloffgantiakhirawal, $karyawan_tgloffgantiakhirakhir, $karyawan_tgloffpengajuanakhirawal, $karyawan_tgloffpengajuanakhirakhir, $karyawan_offketerangan,
 		// MEDICAL SEARCH
-		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_medicalketerangan,
+		$karyawan_tujuanklaim, $karyawan_jenisrawat, $karyawan_jenisklaim, $karyawan_jmlkuitansiawal, $karyawan_jmlkuitansiakhir, $karyawan_totalkuitansiawal, $karyawan_totalkuitansiakhir, $karyawan_tglmedicalpengajuanawal, $karyawan_tglmedicalpengajuanakhir, $karyawan_tglmedicalkuitansiawal, $karyawan_tglmedicalkuitansiakhir, $karyawan_medicalketerangan,
 		// FASILITAS SEARCH
 		$karyawan_fasilitasitem, $karyawan_tglserahterimaawal, $karyawan_tglserahterimaakhir, $karyawan_fasilitasketerangan,
 		// GENERAL SEARCH

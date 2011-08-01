@@ -634,14 +634,20 @@ class M_perawatan extends Model{
 									$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
 									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
 		if ($rawat_aktif=="")
-			$rawat_aktif = "Aktif";
+			
 		if ($rawat_point=="")
 			$rawat_point = 1;
 
 		if($rawat_aktif_th=='true')
+		{
 			$th="1";
+			$rawat_aktif = "Aktif";
+		}
 		else if($rawat_aktif_th=='false')
+		{
 			$th="0";	
+			$rawat_aktif = "Tidak Aktif";
+		}
 			
 		if($rawat_aktif_ki=='true')
 			$ki="1";
