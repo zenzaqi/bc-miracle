@@ -16,7 +16,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 	
 	function get_terapis_list($query="",$start=0,$end=200){
 		$sql="select karyawan_id,karyawan_no,karyawan_nama,karyawan_username,jabatan_nama 
-		from karyawan,jabatan 
+		from vu_karyawan,jabatan 
 		where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif' and (karyawan_jabatan='7' or karyawan_nama = 'Susana Novita Hartono' or karyawan_nama = 'Nathaliza Aryati Permatasari' or karyawan_nama = 'Irmalatus Soleha' or karyawan_nama = 'Linda Fitriana' or karyawan_nama = 'Ling Mei' or karyawan_nama = 'Linda Kartika Dewi' or karyawan_nama = 'Maharani Pratama')";
 		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%' or karyawan_username like '%".$query."%'
@@ -42,7 +42,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 	//function for get list record
 	function lap_jum_tindakan_terapis_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
+			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join vu_karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
 			$query = "";
 			// For simple search
 			if ($filter<>""){
@@ -68,7 +68,7 @@ class M_lap_jum_tindakan_terapis extends Model{
 		
 	function lap_jum_tindakan_terapis_list2($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
+			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join vu_karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -180,9 +180,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama
@@ -199,9 +199,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
@@ -224,9 +224,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama";
@@ -245,9 +245,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama";
@@ -298,9 +298,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama)
@@ -316,9 +316,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)) as table_union"
@@ -340,9 +340,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama) as vu_kredit";
@@ -363,9 +363,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama) as vu_kredit";
@@ -444,9 +444,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama
@@ -460,9 +460,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama)
@@ -482,9 +482,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 							left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_jual_rawat.drawat_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_jual_rawat.drawat_sales=referal.karyawan_id)
 						WHERE (detail_jual_rawat.drawat_sales = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$isiperiode." (rawat_id is not null and jrawat_stat_dok='Tertutup')
 						group by karyawan_username, rawat_nama";
@@ -500,9 +500,9 @@ class M_lap_jum_tindakan_terapis extends Model{
 						from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 							left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
-							left join karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
-							left join karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
-							left join karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
+							left join vu_karyawan as dokter on (tindakan_detail.dtrawat_petugas1=dokter.karyawan_id)
+							left join vu_karyawan as terapis on (tindakan_detail.dtrawat_petugas2=terapis.karyawan_id)
+							left join vu_karyawan as referal on (detail_ambil_paket.dapaket_referal=referal.karyawan_id)
 						WHERE  (detail_ambil_paket.dapaket_referal = '".$terapis_id."' or tindakan_detail.dtrawat_petugas2 = '".$terapis_id."') and 
 							".$tglpaket." (dapaket_item is not null and dapaket_stat_dok='Tertutup')
 							group by karyawan_username, rawat_nama";

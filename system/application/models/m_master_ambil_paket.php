@@ -82,7 +82,7 @@ class M_master_ambil_paket extends Model{
 		function get_referal_list($query){
 			$sql=  "SELECT 
 						karyawan_id,karyawan_nama,karyawan_username
-					FROM karyawan 
+					FROM vu_karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff' OR jabatan_nama='Supervisor')";
 			if($query<>"" && is_numeric($query)==false){
@@ -236,9 +236,9 @@ class M_master_ambil_paket extends Model{
 				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 				LEFT JOIN customer ON(dapaket_cust=cust_id)
 				LEFT JOIN tindakan_detail ON(dapaket_dtrawat=dtrawat_id)
-				LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
-                LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
-				LEFT JOIN karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
+				LEFT JOIN vu_karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
+                LEFT JOIN vu_karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+				LEFT JOIN vu_karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
 				WHERE dapaket_dpaket='$dapaket_dpaket'
 				ORDER BY dapaket_date_create DESC";*/
 			$query = "SELECT dapaket_id
@@ -253,9 +253,9 @@ class M_master_ambil_paket extends Model{
 				LEFT JOIN perawatan ON(dapaket_item=rawat_id)
 				LEFT JOIN customer ON(dapaket_cust=cust_id)
 				LEFT JOIN tindakan_detail ON(dapaket_dtrawat=dtrawat_id)
-				LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
-                LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
-				LEFT JOIN karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
+				LEFT JOIN vu_karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
+                LEFT JOIN vu_karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+				LEFT JOIN vu_karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
 				WHERE dapaket_dpaket='$dapaket_dpaket'
 				ORDER BY dapaket_tgl_ambil DESC";
 			
