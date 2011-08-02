@@ -20,7 +20,7 @@ class M_master_jual_rawat extends Model{
 	
 	function get_allkaryawan_list($query,$start,$end){
 		$sql="SELECT karyawan_id,karyawan_no,karyawan_username,karyawan_nama,karyawan_tgllahir,karyawan_alamat
-		FROM karyawan where karyawan_aktif='Aktif'";
+		FROM vu_karyawan where karyawan_aktif='Aktif'";
 		if($query<>""){
 			$sql=$sql." and (karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%') ";
 		}
@@ -287,7 +287,7 @@ class M_master_jual_rawat extends Model{
 	function get_referal_list($query){
 			$sql=  "SELECT 
 						karyawan_id,karyawan_nama,karyawan_username
-					FROM karyawan 
+					FROM vu_karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 					WHERE karyawan_aktif='Aktif' AND (jabatan_nama='Dokter' OR jabatan_nama='Therapist' OR jabatan_nama='Staff')";
 			if($query<>"" && is_numeric($query)==false){
@@ -370,8 +370,8 @@ class M_master_jual_rawat extends Model{
 			FROM detail_jual_rawat
 			LEFT JOIN perawatan ON(rawat_id=drawat_rawat)
 			LEFT JOIN tindakan_detail ON(drawat_dtrawat=dtrawat_id)
-			LEFT JOIN karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
-			LEFT JOIN karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
+			LEFT JOIN vu_karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
+			LEFT JOIN vu_karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
 			WHERE drawat_master='".$master_id."'";
 		
 		$result = $this->db->query($query);
@@ -1302,7 +1302,7 @@ class M_master_jual_rawat extends Model{
 				dpaket_id
 			FROM vu_jrawat_pr
 			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
-			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)
+			LEFT JOIN vu_karyawan ON(vu_karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)
 			WHERE vu_jrawat_pr.jrawat_stat_dok='Terbuka' AND date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d')='$date_now'";
 		
 		// For simple search
@@ -1886,8 +1886,8 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pr.jrawat_id,
 				vu_jrawat_pr.jrawat_nobukti,
 				vu_jrawat_pr.cust_nama,
-				karyawan.karyawan_no,
-				karyawan.karyawan_nama,
+				vu_karyawan.karyawan_no,
+				vu_karyawan.karyawan_nama,
 				vu_jrawat_pr.jrawat_cust,
 				vu_jrawat_pr.cust_no,
 				vu_jrawat_pr.member_no,
@@ -1911,7 +1911,7 @@ class M_master_jual_rawat extends Model{
 				0 AS dpaket_id
 			FROM vu_jrawat_pr
 			LEFT JOIN vu_jrawat_totalbiaya ON(vu_jrawat_totalbiaya.drawat_master=vu_jrawat_pr.jrawat_id)
-			LEFT JOIN karyawan ON(karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)";
+			LEFT JOIN vu_karyawan ON(vu_karyawan.karyawan_id = vu_jrawat_pr.jrawat_grooming)";
 
 			
 		if($jrawat_nobukti!=''){

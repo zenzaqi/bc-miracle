@@ -27,14 +27,14 @@ class M_appointment extends Model{
 		}elseif($tgl_app!=""){
 			$bln_filter=date('Y-m', strtotime($tgl_app));
 		}
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$sql=  "SELECT 
 					karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_dokter.dokter_count 
-				FROM karyawan 
+				FROM vu_karyawan 
 				INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
-				LEFT JOIN vu_report_tindakan_dokter ON(vu_report_tindakan_dokter.dokter_id=karyawan.karyawan_id AND
+				LEFT JOIN vu_report_tindakan_dokter ON(vu_report_tindakan_dokter.dokter_id=vu_karyawan.karyawan_id AND
 					vu_report_tindakan_dokter.dokter_bulan='$bln_filter') 
-					left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+					left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND(karyawan_cabang = (SELECT info_cabang FROM info limit 1) 
 					OR substring(karyawan_cabang2,
@@ -79,23 +79,23 @@ class M_appointment extends Model{
 		}
 		
 		/* Mencari Terapis yang sudah memiliki Jadwal di db.absensi WHERE db.absensi.absensi_shift = 'P' */
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$sql=  "SELECT 
-					karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
+					vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
 					vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
-				FROM karyawan 
+				FROM vu_karyawan 
 				INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 				INNER JOIN 
 					(SELECT absensi_karyawan_id,absensi_tgl,absensi_shift 
 					 FROM absensi WHERE absensi_shift='P') as ab 
-					 ON (karyawan.karyawan_id=ab.absensi_karyawan_id) 
+					 ON (vu_karyawan.karyawan_id=ab.absensi_karyawan_id) 
 				LEFT JOIN vu_report_tindakan_terapis ON
-					(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND
+					(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND
 					 vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
 				LEFT JOIN tindakan_adjust on 
 					(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 					 date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
+				left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_id)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 					OR substring(karyawan_cabang2,
@@ -115,21 +115,21 @@ class M_appointment extends Model{
 		$sql.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
 		$sql2= "SELECT 
-					karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
+					vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
 					vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
-				FROM karyawan 
+				FROM vu_karyawan 
 				INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 				INNER JOIN 
 				   (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift 
 					FROM absensi WHERE absensi_shift='S') as ab 
-					ON(karyawan.karyawan_id=ab.absensi_karyawan_id) 
+					ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) 
 				LEFT JOIN vu_report_tindakan_terapis ON
-					(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND 
+					(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND 
 					 vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
 				LEFT JOIN tindakan_adjust on 
 					(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 					 date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+				left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 					OR substring(karyawan_cabang2,
@@ -148,13 +148,13 @@ class M_appointment extends Model{
 		}
 		$sql2.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
-		$sql3= "SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
-				FROM karyawan 
+		$sql3= "SELECT vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
+				FROM vu_karyawan 
 				INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
-				INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) 
-				LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
+				INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='M') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) 
+				LEFT JOIN vu_report_tindakan_terapis ON(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
 				LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+				left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 					OR substring(karyawan_cabang2,
@@ -173,8 +173,8 @@ class M_appointment extends Model{
 		}
 		$sql3.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
-		$sql4=" SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+		$sql4=" SELECT vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='OFF') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 					OR substring(karyawan_cabang2,
@@ -193,8 +193,8 @@ class M_appointment extends Model{
 		}
 		$sql4.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
-		$sql5= "SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='CT') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+		$sql5= "SELECT vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='CT') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 						OR substring(karyawan_cabang2,
@@ -213,8 +213,8 @@ class M_appointment extends Model{
 		}
 		$sql5.=" ORDER BY vu_report_tindakan_terapis.terapis_count ASC";
 		
-		$sql6= "SELECT karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='H') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-		left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+		$sql6= "SELECT vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='H') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN vu_report_tindakan_terapis ON(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND vu_report_tindakan_terapis.terapis_bulan='$bln_filter') LEFT JOIN tindakan_adjust on (tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
+		left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
 						OR substring(karyawan_cabang2,
@@ -254,23 +254,23 @@ class M_appointment extends Model{
 		
 		$nbrows7=0;
 		if($nbrows==0 && $nbrows2==0 && $nbrows3==0 && $nbrows4==0){
-			//$sql7="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab ON(karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' ORDER BY reportt_jmltindakan ASC";
+			//$sql7="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif' ORDER BY reportt_jmltindakan ASC";
 			$sql7= "SELECT 
-						karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
+						vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
 						vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
-					FROM karyawan 
+					FROM vu_karyawan 
 					INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) 
 					LEFT JOIN 
 						(SELECT absensi_karyawan_id,absensi_tgl,absensi_shift 
 						 FROM absensi WHERE date_format(absensi_tgl,'%Y-%m')='$bln_filter') as ab 
-						 ON(karyawan.karyawan_id=ab.absensi_karyawan_id) 
+						 ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) 
 					LEFT JOIN vu_report_tindakan_terapis ON
-						(karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND 
+						(vu_karyawan.karyawan_id=vu_report_tindakan_terapis.terapis_id AND 
 						vu_report_tindakan_terapis.terapis_bulan='$bln_filter') 
 					LEFT JOIN tindakan_adjust on 
 						(tindakan_adjust.karyawan_id=vu_report_tindakan_terapis.terapis_id and
 						date_format(tindakan_adjust.adj_bln,'%Y-%m')=vu_report_tindakan_terapis.terapis_bulan) 
-					left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+					left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 					WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' 
 						AND karyawan_aktif='Aktif' 
 						AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1)
@@ -457,9 +457,9 @@ class M_appointment extends Model{
 				}
 			}else{
 				//Detail Baru
-				/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
+				/* JIKA $dapp_medis_petugas=="" ==> diisi db.vu_karyawan.karyawan_id WHERE username="Available dr." */
 				if($dapp_medis_petugas==""){
-					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='99'";
+					$sql="SELECT karyawan_id FROM vu_karyawan WHERE karyawan_no='99'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
@@ -705,9 +705,9 @@ class M_appointment extends Model{
 				
 			}else{
 				//Detail Baru
-				/* JIKA $dapp_medis_petugas=="" ==> diisi db.karyawan.karyawan_id WHERE username="Available dr." */
+				/* JIKA $dapp_medis_petugas=="" ==> diisi db.vu_karyawan.karyawan_id WHERE username="Available dr." */
 				if($dapp_nonmedis_petugas2==""){
-					$sql="SELECT karyawan_id FROM karyawan WHERE karyawan_no='999'";
+					$sql="SELECT karyawan_id FROM vu_karyawan WHERE karyawan_no='999'";
 					$rs=$this->db->query($sql);
 					if($rs->num_rows()){
 						$rs_record=$rs->row_array();
@@ -1840,7 +1840,7 @@ class M_appointment extends Model{
 		/*$query="SELECT app_id,app_customer,cust_nama,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_terapis.karyawan_nama as terapis_nama,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
 FROM (((appointment inner join appointment_detail on appointment.app_id=appointment_detail.dapp_master inner join perawatan on appointment_detail.dapp_perawatan=perawatan.rawat_id 
 inner join customer on appointment.app_customer=customer.cust_id inner join kategori on perawatan.rawat_kategori=kategori.kategori_id) 
-left join karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
+left join vu_karyawan as karyawan_dokter on appointment_detail.dapp_petugas=karyawan_dokter.karyawan_id) left join vu_karyawan as karyawan_terapis on appointment_detail.dapp_petugas2=karyawan_terapis.karyawan_id)";
 */
 		$dt=date('Y-m-d');
 		$dt_six=date('Y-m-d',mktime(0,0,0,date("m"),date("d")+6,date("Y")));

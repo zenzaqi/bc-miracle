@@ -203,17 +203,17 @@ class M_public_function extends Model{
 	}
 	
 	function get_petugas_list($query, $tgl_app="", $karyawan_jabatan){
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM vu_karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
 			$departemen_id=8;
 		elseif($rawat_kategori==3)
 			$departemen_id=9;
 		else
 			$departemen_id=0;*/
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$bln_now=date('Y-m');
-		$sql=  "SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_id)
+		$sql=  "SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) 
+				left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_id)
 				WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1) 
 					OR substring(karyawan_cabang2,
@@ -796,7 +796,7 @@ class M_public_function extends Model{
 	
 	
 	function get_auto_karyawan_sip($karyawan_id){
-		$sql = "SELECT karyawan_sip, karyawan_no from karyawan where karyawan_id='".$karyawan_id."' and karyawan_aktif!='Tidak Aktif' order by karyawan_id desc limit 1";
+		$sql = "SELECT karyawan_sip, karyawan_no from vu_karyawan where karyawan_id='".$karyawan_id."' and karyawan_aktif!='Tidak Aktif' order by karyawan_id desc limit 1";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){
@@ -1546,7 +1546,7 @@ class M_public_function extends Model{
 	//END Ambil Perawatan berdasarkan kategori NON-MEDIS
 	
 	function get_karyawan_list($query="",$start=0,$end=10){
-		$sql="select karyawan_id,karyawan_no,karyawan_nama,jabatan_nama from karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif'";
+		$sql="select karyawan_id,karyawan_no,karyawan_nama,jabatan_nama from vu_karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif'";
 		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
 						 or jabatan_nama like '%".$query."%')";
@@ -1567,7 +1567,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_terapis_list($query="",$start=0,$end=30){
-		$sql="select karyawan_id,karyawan_no,karyawan_nama,karyawan_username,jabatan_nama from karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif' and karyawan_jabatan='7'";
+		$sql="select karyawan_id,karyawan_no,karyawan_nama,karyawan_username,jabatan_nama from vu_karyawan,jabatan where jabatan_id=karyawan_jabatan and karyawan_aktif='Aktif' and karyawan_jabatan='7'";
 		if($query!=="")
 			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
 						 or jabatan_nama like '%".$query."%')";
@@ -1588,7 +1588,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_user_karyawan_nolist($query,$start,$end){
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan 
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM vu_karyawan,jabatan 
 				WHERE jabatan_id=karyawan_jabatan AND karyawan_aktif='Aktif'
 				AND karyawan_id NOT IN(select user_karyawan from users)";
 		if($query!=="")
@@ -1611,7 +1611,7 @@ class M_public_function extends Model{
 	}
 	
 	function get_user_karyawan_list($query,$start,$end){
-		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM karyawan,jabatan 
+		$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,jabatan_nama FROM vu_karyawan,jabatan 
 				WHERE jabatan_id=karyawan_jabatan AND karyawan_aktif='Aktif'
 				AND karyawan_id IN(select user_karyawan from users)";
 		if($query!=="")

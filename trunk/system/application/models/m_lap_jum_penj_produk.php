@@ -15,17 +15,17 @@ class M_lap_jum_penj_produk extends Model{
 
 	
 	function get_petugas_list($query, $tgl_app="", $karyawan_jabatan, $jabatan_staff){
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama FROM vu_karyawan WHERE karyawan_departemen='$departemen_id' AND karyawan_aktif='Aktif'";
 /*		if($rawat_kategori==2)
 			$departemen_id=8;
 		elseif($rawat_kategori==3)
 			$departemen_id=9;
 		else
 			$departemen_id=0;*/
-		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN absensi ON(karyawan_no=absensi_nik) LEFT JOIN report_tindakan ON(karyawan_no=reportt_nik) WHERE karyawan_jabatan=jabatan_id AND karyawan_no=absensi_nik AND absensi_shift!='OFF' AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
 		$bln_now=date('Y-m');
-		$sql=  "SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) 
-				left join cabang on(karyawan.karyawan_cabang=cabang.cabang_value)
+		$sql=  "SELECT karyawan_id,karyawan_no,karyawan_nama, karyawan_sip,karyawan_username,reportt_jmltindakan FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE reportt_bln LIKE '$bln_now%') as rt ON(karyawan_id=rt.reportt_karyawan_id) 
+				left join cabang on(vu_karyawan.karyawan_cabang=cabang.cabang_value)
 				WHERE karyawan_jabatan=jabatan_id AND (jabatan_nama='$karyawan_jabatan' or jabatan_nama='$jabatan_staff') AND karyawan_aktif='Aktif'
 					AND (karyawan_cabang = (SELECT info_cabang FROM info limit 1) 
 					OR substring(karyawan_cabang2,
@@ -61,7 +61,7 @@ class M_lap_jum_penj_produk extends Model{
 	//function for get list record
 	function lap_jum_penj_produk_list($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
+			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join vu_karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
 			$query = "";
 			// For simple search
 			if ($filter<>""){
@@ -87,7 +87,7 @@ class M_lap_jum_penj_produk extends Model{
 		
 	function lap_jum_penj_produk_list2($filter,$start,$end){
 			$date_now=date('Y-m-d');
-			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
+			//$query = "SELECT d.dtrawat_date_create, k.karyawan_username, p.rawat_nama from tindakan_detail d left outer join vu_karyawan k on k.karyawan_id=d.dtrawat_petugas1 left outer join perawatan p on p.rawat_id = d.dtrawat_perawatan where d.dtrawat_date_create > '2010-01-31'";
 			
 			// For simple search
 			if ($filter<>""){
@@ -175,17 +175,17 @@ class M_lap_jum_penj_produk extends Model{
 			//full query	
 			if ($ljpp_groupby == 'Semua')
 			{
-			$query="select karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
+			$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 						master_jual_produk.jproduk_tanggal as tanggal,
 						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
 					from detail_jual_produk
 					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
-					left join karyawan on (detail_jual_produk.dproduk_karyawan=karyawan.karyawan_id)
+					left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
 					left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
 						where master_jual_produk.jproduk_stat_dok = 'Tertutup'
 						and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
 						and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
-						group by karyawan.karyawan_username, produk.produk_nama
+						group by vu_karyawan.karyawan_username, produk.produk_nama
 							";		
 			}
 		
@@ -224,17 +224,17 @@ class M_lap_jum_penj_produk extends Model{
 			$query="select sum(vu_lap_jml_produk.Jumlah_produk) as Total_jumlah
 				from
 				(	
-					select karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
+					select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 						master_jual_produk.jproduk_tanggal as tanggal,
 						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
 					from detail_jual_produk
 					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
-					left join karyawan on (detail_jual_produk.dproduk_karyawan=karyawan.karyawan_id)
+					left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
 					left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
 						where master_jual_produk.jproduk_stat_dok = 'Tertutup'
 						and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
 						and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
-						group by karyawan.karyawan_username, produk.produk_nama
+						group by vu_karyawan.karyawan_username, produk.produk_nama
 				) as vu_lap_jml_produk
 							";
 							
@@ -310,17 +310,17 @@ class M_lap_jum_penj_produk extends Model{
 				
 			if ($ljpp_groupby == 'Semua')
 			{
-			$query="select karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
+			$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 						master_jual_produk.jproduk_tanggal as tanggal,
 						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
 					from detail_jual_produk
 					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
-					left join karyawan on (detail_jual_produk.dproduk_karyawan=karyawan.karyawan_id)
+					left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
 					left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
 						where master_jual_produk.jproduk_stat_dok = 'Tertutup'
 						and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
 						and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
-						group by karyawan.karyawan_username, produk.produk_nama
+						group by vu_karyawan.karyawan_username, produk.produk_nama
 							";
 							
 			}
