@@ -423,7 +423,7 @@ Ext.onReady(function(){
 				});
 
 			}else if(kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_post')=='Y' &&
-					kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal').format('Y-m-d')<=MAX_UNPOSTING){
+					kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_tanggal').format('Y-m-d')>=MAX_UNPOSTING){
 
 				id = kasbankMasukListEditorGrid.getSelectionModel().getSelected().get('kasbank_masuk_id');
 
