@@ -40,6 +40,7 @@
             <th scope='col'>No Ref</th>
             <th scope='col'>Kode</th>
             <th scope='col'>Akun</th>
+			<th scope='col'>Keterangan</th>
             <th scope='col'>Debet</th>
             <th scope='col'>Kredit</th>
             <th scope='col'>Saldo</th>
@@ -75,6 +76,7 @@
             <td><?php echo $print_list["buku_ref"]; ?></td>
             <td><?php echo $print_list["akun_kode"]; ?></td>
             <td><?php echo $print_list["akun_nama"]; ?></td>
+			<td><?php echo $print_list["buku_keterangan"]; ?></td>
             <td align="right" class="numeric"><?php echo number_format($print_list["buku_debet"]); ?></td>
             <td align="right" class="numeric"><?php echo number_format($print_list["buku_kredit"]); ?></td>
             <td align="right" class="numeric"><b><?php echo number_format($print_list["buku_saldo"]);?></b></td>
