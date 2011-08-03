@@ -216,12 +216,12 @@ class M_buku_besar extends Model{
 									$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
 										FROM vu_buku_besar
 										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
-										AND buku_tanggal <= '".$buku_tanggal."'";
+										AND buku_tanggal < '".$buku_tanggal."'";
 									}else{
 										$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
 										FROM vu_buku_besar
 										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
-										AND buku_tanggal <= '".$buku_tanggal."'";
+										AND buku_tanggal < '".$buku_tanggal."'";
 									}
 									$result=$this->db->query($sql);
 									if($result->num_rows()){
@@ -232,7 +232,7 @@ class M_buku_besar extends Model{
 										$data[$i]["buku_tanggal"] = '';
 										$data[$i]["buku_ref"] = '';
 										$data[$i]["buku_akun"] = '';
-										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";;
+										$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$akun_nama."</b>";;
 										$data[$i]["akun_kode"] = $akun_kode;
 										$data[$i]["buku_debet"] = 0; //$rowdata->buku_saldo;
 										$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
@@ -250,7 +250,7 @@ class M_buku_besar extends Model{
 										$data[$i]["buku_tanggal"] = '';
 										$data[$i]["buku_ref"] = '';
 										$data[$i]["buku_akun"] = '';
-										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";
+										$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$akun_nama."</b>";
 										$data[$i]["akun_kode"] = $akun_kode;
 										$data[$i]["buku_debet"] =0;
 										$data[$i]["buku_kredit"] = 0;
@@ -268,7 +268,7 @@ class M_buku_besar extends Model{
 								$data[$i]["buku_tanggal"] = '';
 								$data[$i]["buku_ref"] = '';
 								$data[$i]["buku_akun"] = '';
-								$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";
+								$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$akun_nama."</b>";
 								$data[$i]["akun_kode"] = $akun_kode;
 								$data[$i]["buku_debet"] =0;
 								$data[$i]["buku_saldo"] =0;
@@ -297,12 +297,12 @@ class M_buku_besar extends Model{
 										$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
 											FROM vu_buku_besar
 											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
-											AND buku_tanggal <= '".$buku_tanggal."'";
+											AND buku_tanggal < '".$buku_tanggal."'";
 										}else{
 											$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
 											FROM vu_buku_besar
 											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
-											AND buku_tanggal <= '".$buku_tanggal."'";
+											AND buku_tanggal < '".$buku_tanggal."'";
 										}
 										$result=$this->db->query($sql);
 										if($result->num_rows()){
@@ -313,7 +313,7 @@ class M_buku_besar extends Model{
 											$data[$i]["buku_tanggal"] = '';
 											$data[$i]["buku_ref"] = '';
 											$data[$i]["buku_akun"] = '';
-											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";;
+											$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$row->akun_nama."</b>";;
 											$data[$i]["akun_kode"] = $row->akun_kode;
 											$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
 											$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
@@ -331,7 +331,7 @@ class M_buku_besar extends Model{
 											$data[$i]["buku_tanggal"] = '';
 											$data[$i]["buku_ref"] = '';
 											$data[$i]["buku_akun"] = '';
-											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";
+											$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$row->akun_nama."</b>";
 											$data[$i]["akun_kode"] = $row->akun_kode;
 											$data[$i]["buku_debet"] =0;
 											$data[$i]["buku_kredit"] = 0;
@@ -349,7 +349,7 @@ class M_buku_besar extends Model{
 									$data[$i]["buku_tanggal"] = '';
 									$data[$i]["buku_ref"] = '';
 									$data[$i]["buku_akun"] = '';
-									$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";
+									$data[$i]["akun_nama"] = "<b>Saldo Awal: ".$row->akun_nama."</b>";
 									$data[$i]["akun_kode"] = $row->akun_kode;
 									$data[$i]["buku_debet"] =0;
 									$data[$i]["buku_saldo"] =0;
