@@ -431,7 +431,7 @@ Ext.onReady(function(){
 				});
 
 			}else if(kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_post')=='Y' &&
-			   kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_tanggal').format('Y-m-d')<=MAX_UNPOSTING){
+			   kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_tanggal').format('Y-m-d')>=MAX_UNPOSTING){
 
 				id = kasbankKeluarListEditorGrid.getSelectionModel().getSelected().get('kasbank_keluar_id');
 
