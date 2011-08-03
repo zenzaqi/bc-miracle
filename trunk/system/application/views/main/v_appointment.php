@@ -954,7 +954,7 @@ Ext.onReady(function(){
 			{name: 'dokter_value', type: 'int', mapping: 'karyawan_id'},
 			{name: 'dokter_count', type: 'int', mapping: 'dokter_count'}
 		]),
-		sortInfo:{field: 'dokter_display', direction: "ASC"}
+		//sortInfo:{field: 'dokter_display', direction: "ASC"}
 	});
 	var dapp_dokter_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
