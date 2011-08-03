@@ -68,9 +68,9 @@ var msg = '';
 var pageS=16;
 var today=new Date().format('Y-m-d');
 var thismonth=new Date().format('Y-m');
-var MIN_CREATE_DATE="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-60,'day'); ?>";
+var MIN_CREATE_DATE="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-90,'day'); ?>";
 var MAX_CREATE_DATE="<?php echo date('Y-m-d'); ?>";
-var MAX_UNPOSTING="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-60,'day') ?>";
+var MAX_UNPOSTING="<?php echo $this->m_public_function->add_date(date('Y-m-d'),-90,'day') ?>";
 /* declare variable here for Field*/
 var kasbank_keluar_idField;
 var kasbank_keluar_tanggalField;
