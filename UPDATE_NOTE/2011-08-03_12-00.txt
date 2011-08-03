@@ -1,0 +1,4 @@
+2011-08-03_11-30.sql & m_buku_besar:
+  - buku_besar keterangan belum masuk
+
+v_buku_besar: perbaikan tampilan

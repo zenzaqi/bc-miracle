@@ -53,6 +53,7 @@ class M_appointment extends Model{
 			$sql .= " (absensi_tgl='".addslashes($tgl_app)."')";
 		}*/
 		//echo $sql;
+		$sql .= " ORDER BY karyawan_username";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

@@ -188,7 +188,7 @@ Ext.onReady(function(){
 		{
 			header: 'Ref',
 			dataIndex: 'buku_ref',
-			width: 120,
+			width: 100,
 			readOnly:true,
 			sortable: false
 
@@ -203,7 +203,7 @@ Ext.onReady(function(){
 		{
 			header: 'Nama Rekening',
 			dataIndex: 'buku_akun',
-			width: 300,
+			width: 240,
 			sortable: false
 		},
 		{
@@ -215,7 +215,7 @@ Ext.onReady(function(){
 		{
 			header: 'Debet',
 			dataIndex: 'buku_debet',
-			width: 150,
+			width: 100,
 			align: 'right',
 			sortable: false,
 			readOnly:true,
@@ -225,7 +225,7 @@ Ext.onReady(function(){
 		{
 			header: 'Kredit',
 			dataIndex: 'buku_kredit',
-			width: 150,
+			width: 100,
 			sortable: false,
 			readOnly:true,
 			summaryType: 'sum',
@@ -235,7 +235,7 @@ Ext.onReady(function(){
 		{
 			header: 'Saldo',
 			dataIndex: 'buku_saldo',
-			width: 150,
+			width: 100,
 			readOnly:true,
 			sortable: false,
 			align:'right',
@@ -264,7 +264,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1024,
+	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: buku_besar_DataStore,

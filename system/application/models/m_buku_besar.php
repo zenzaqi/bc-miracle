@@ -385,7 +385,8 @@ class M_buku_besar extends Model{
 					$data[$i]["buku_date_create"] = $row->buku_date_create;
 					$data[$i]["buku_update"] = $row->buku_update;
 					$data[$i]["buku_revised"] = $row->buku_revised;
-					
+					$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+															
 					
 					if($row->akun_saldo=='Debet')
 						$saldo+= ($row->buku_debet-$row->buku_kredit);
