@@ -18,11 +18,12 @@ class C_buku_besar extends Controller {
 		parent::Controller();
 		session_start();
 		$this->load->model('m_buku_besar', '', TRUE);
+		$this->load->plugin('to_excel');
 	}
 	
 	//set index
 	function index(){
-		$this->load->plugin('to_excel');
+		$this->load->helper('asset');
 		$this->load->view('main/v_buku_besar');
 	}
 	
@@ -189,7 +190,11 @@ class C_buku_besar extends Controller {
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		
-		$data["data_print"] = $this->m_buku_besar->buku_besar_print($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+		//$data["data_print"] = $this->m_buku_besar->buku_besar_print($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+		$query = $this->m_buku_besar->buku_besar_print($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end );
+		
+		to_excel($query,"bukubesar");
+		/*
 		$data["type"]="excel";
 		$print_view=$this->load->view("main/p_buku_besar.php",$data,TRUE);
 		if(!file_exists("print")){
@@ -197,6 +202,7 @@ class C_buku_besar extends Controller {
 		}
 		$print_file=fopen("print/buku_besar_printlist.xls","w+");
 		fwrite($print_file, $print_view);
+		*/
 		echo '1'; 
 			
 	}

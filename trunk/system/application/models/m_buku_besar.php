@@ -472,6 +472,7 @@ class M_buku_besar extends Model{
 										$rowdata=$result->row();
 										$data[$i]["buku_akun_kode"] = $akun_kode;
 										$data[$i]["buku_akun_nama"] = $akun_nama;
+										$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 										$data[$i]["buku_id"] = '';
 										$data[$i]["buku_tanggal"] = '';
 										$data[$i]["buku_ref"] = '';
@@ -508,6 +509,7 @@ class M_buku_besar extends Model{
 							}else{							
 								$data[$i]["buku_akun_kode"] = $akun_kode;
 								$data[$i]["buku_akun_nama"] = $akun_nama;
+								$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 								$data[$i]["buku_id"] = '';
 								$data[$i]["buku_tanggal"] = '';
 								$data[$i]["buku_ref"] = '';
@@ -553,6 +555,7 @@ class M_buku_besar extends Model{
 											$rowdata=$result->row();
 											$data[$i]["buku_akun_kode"] = $akun_kode;
 											$data[$i]["buku_akun_nama"] = $akun_nama;
+											$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 											$data[$i]["buku_id"] = '';
 											$data[$i]["buku_tanggal"] = '';
 											$data[$i]["buku_ref"] = '';
@@ -571,6 +574,7 @@ class M_buku_besar extends Model{
 										}else{							
 											$data[$i]["buku_akun_kode"] = $row->akun_kode;
 											$data[$i]["buku_akun_nama"] = $row->akun_nama;
+											$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 											$data[$i]["buku_id"] = '';
 											$data[$i]["buku_tanggal"] = '';
 											$data[$i]["buku_ref"] = '';
@@ -589,6 +593,7 @@ class M_buku_besar extends Model{
 								}else{							
 									$data[$i]["buku_akun_kode"] = $row->akun_kode;
 									$data[$i]["buku_akun_nama"] = $row->akun_nama;
+									$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 									$data[$i]["buku_id"] = '';
 									$data[$i]["buku_tanggal"] = '';
 									$data[$i]["buku_ref"] = '';
@@ -619,7 +624,7 @@ class M_buku_besar extends Model{
 					$data[$i]["buku_id"] = $row->buku_id;
 					$data[$i]["buku_tanggal"] = $row->buku_tanggal;
 					$data[$i]["buku_ref"] = $row->buku_ref;
-					
+					$data[$i]["buku_keterangan"] = $row->buku_keterangan;
 					$data[$i]["buku_akun"] = $row->buku_akun;
 					$data[$i]["akun_nama"] = $row->akun_nama;
 					$data[$i]["akun_kode"] = $row->akun_kode;
@@ -649,8 +654,8 @@ class M_buku_besar extends Model{
 		//function  for export to excel
 		function buku_besar_export_excel($buku_akun, $buku_tanggal, $buku_tanggalEnd ,$start,$end){
 			//full query
-									
-			$query="SELECT
+			/*						
+			$query="ELECT
 				`buku_besar`.`buku_tanggal`,
 				`buku_besar`.`buku_ref`,
 				`akun`.`akun_nama`,
@@ -689,6 +694,249 @@ class M_buku_besar extends Model{
 			$result = $this->db->query($limit);   
 			
 			return $result;
+			*/
+			$query="SELECT *,date_format(buku_tanggal,'%Y-%m-%d') as buku_tanggal FROM vu_buku_besar WHERE (buku_kredit>0 OR buku_debet>0)";
+			
+			if($buku_tanggal!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " buku_tanggal >= '".$buku_tanggal."'";
+			}
+			
+			if($buku_tanggalEnd!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " buku_tanggal <= '".$buku_tanggalEnd."'";
+			}
+			
+			
+			$akun_kode="";
+			$akun_nama="";
+			if($buku_akun!=''){
+				$sql="SELECT akun_kode,akun_nama FROM akun WHERE akun_id='".$buku_akun."'";
+				$result=$this->db->query($sql);
+				if($result->num_rows()){
+					$row=$result->row();
+					$akun_kode=$row->akun_kode;
+					$akun_nama=$row->akun_nama;
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
+				}
+			}else{
+				
+			}
+				
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." ORDER BY buku_akun, buku_tanggal  "." LIMIT ".$start.",".$end;
+			
+			//$this->firephp->log($limit);
+			$result = $this->db->query($limit);   
+			$i=0;
+			$group_akun="";
+			$group_akun_s="";
+			$saldo=0;
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					
+					if($akun_kode!=="")
+					{
+						if(trim($group_akun_s)<>trim($akun_kode)){
+							
+							//$this->firephp->log("akun : ".$akun_kode.", group : ".$group_akun_s);
+							$group_akun_s=$akun_kode;
+							if($buku_tanggal!=="")
+							{
+									if($row->akun_saldo=='Debet'){
+									$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
+										FROM vu_buku_besar
+										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
+										AND buku_tanggal <= '".$buku_tanggal."'";
+									}else{
+										$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
+										FROM vu_buku_besar
+										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
+										AND buku_tanggal <= '".$buku_tanggal."'";
+									}
+									$result=$this->db->query($sql);
+									if($result->num_rows()){
+										$rowdata=$result->row();
+										$data[$i]["buku_akun_kode"] = $akun_kode;
+										$data[$i]["buku_akun_nama"] = $akun_nama;
+										$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+										$data[$i]["buku_id"] = '';
+										$data[$i]["buku_tanggal"] = '';
+										$data[$i]["buku_ref"] = '';
+										$data[$i]["buku_akun"] = '';
+										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";;
+										$data[$i]["akun_kode"] = $akun_kode;
+										$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
+										$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
+										$data[$i]["buku_kredit"] = 0;
+										$data[$i]["buku_author"] = '';
+										$data[$i]["buku_date_create"] = '';
+										$data[$i]["buku_update"] = '';
+										$data[$i]["buku_revised"] = '';
+										$saldo=$rowdata->buku_saldo;
+										$i++;
+									}else{							
+										$data[$i]["buku_akun_kode"] = $akun_kode;
+										$data[$i]["buku_akun_nama"] = $akun_nama;
+										$data[$i]["buku_id"] = '';
+										$data[$i]["buku_tanggal"] = '';
+										$data[$i]["buku_ref"] = '';
+										$data[$i]["buku_akun"] = '';
+										$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";
+										$data[$i]["akun_kode"] = $akun_kode;
+										$data[$i]["buku_debet"] =0;
+										$data[$i]["buku_kredit"] = 0;
+										$data[$i]["buku_saldo"] =0;
+										$data[$i]["buku_author"] = '';
+										$data[$i]["buku_date_create"] = '';
+										$data[$i]["buku_update"] = '';
+										$data[$i]["buku_revised"] = '';
+										$i++;
+									}
+							}else{							
+								$data[$i]["buku_akun_kode"] = $akun_kode;
+								$data[$i]["buku_akun_nama"] = $akun_nama;
+								$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+								$data[$i]["buku_id"] = '';
+								$data[$i]["buku_tanggal"] = '';
+								$data[$i]["buku_ref"] = '';
+								$data[$i]["buku_akun"] = '';
+								$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$akun_nama."</b>";
+								$data[$i]["akun_kode"] = $akun_kode;
+								$data[$i]["buku_debet"] =0;
+								$data[$i]["buku_saldo"] =0;
+								$data[$i]["buku_kredit"] = 0;
+								$data[$i]["buku_author"] = '';
+								$data[$i]["buku_date_create"] = '';
+								$data[$i]["buku_update"] = '';
+								$data[$i]["buku_revised"] = '';
+								$i++;
+							}
+							
+						}
+	
+						$data[$i]["buku_akun_kode"] = $akun_kode;
+						$data[$i]["buku_akun_nama"] = $akun_nama;
+					}else
+					{
+						if($row->akun_kode!==$group_akun){
+							$saldo=0; 
+							
+							if(trim($group_akun_s)<>trim($row->akun_kode)){
+								$group_akun_s=$row->akun_kode;
+								if($buku_tanggal!=="")
+								{
+										if($row->akun_saldo=='Debet'){
+										$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
+											FROM vu_buku_besar
+											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
+											AND buku_tanggal <= '".$buku_tanggal."'";
+										}else{
+											$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
+											FROM vu_buku_besar
+											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
+											AND buku_tanggal <= '".$buku_tanggal."'";
+										}
+										$result=$this->db->query($sql);
+										if($result->num_rows()){
+											$rowdata=$result->row();
+											$data[$i]["buku_akun_kode"] = $akun_kode;
+											$data[$i]["buku_akun_nama"] = $akun_nama;
+											$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+											$data[$i]["buku_id"] = '';
+											$data[$i]["buku_tanggal"] = '';
+											$data[$i]["buku_ref"] = '';
+											$data[$i]["buku_akun"] = '';
+											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";;
+											$data[$i]["akun_kode"] = $row->akun_kode;
+											$data[$i]["buku_debet"] = 0;//$rowdata->buku_saldo;
+											$data[$i]["buku_saldo"] = $rowdata->buku_saldo;
+											$data[$i]["buku_kredit"] = 0;
+											$data[$i]["buku_author"] = '';
+											$data[$i]["buku_date_create"] = '';
+											$data[$i]["buku_update"] = '';
+											$data[$i]["buku_revised"] = '';
+											$saldo=$rowdata->buku_saldo;
+											$i++;
+										}else{							
+											$data[$i]["buku_akun_kode"] = $row->akun_kode;
+											$data[$i]["buku_akun_nama"] = $row->akun_nama;
+											$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+											$data[$i]["buku_id"] = '';
+											$data[$i]["buku_tanggal"] = '';
+											$data[$i]["buku_ref"] = '';
+											$data[$i]["buku_akun"] = '';
+											$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";
+											$data[$i]["akun_kode"] = $row->akun_kode;
+											$data[$i]["buku_debet"] =0;
+											$data[$i]["buku_kredit"] = 0;
+											$data[$i]["buku_saldo"] =0;
+											$data[$i]["buku_author"] = '';
+											$data[$i]["buku_date_create"] = '';
+											$data[$i]["buku_update"] = '';
+											$data[$i]["buku_revised"] = '';
+											$i++;
+										}
+								}else{							
+									$data[$i]["buku_akun_kode"] = $row->akun_kode;
+									$data[$i]["buku_akun_nama"] = $row->akun_nama;
+									$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+									$data[$i]["buku_id"] = '';
+									$data[$i]["buku_tanggal"] = '';
+									$data[$i]["buku_ref"] = '';
+									$data[$i]["buku_akun"] = '';
+									$data[$i]["akun_nama"] = "<b>Saldo Awal : ".$row->akun_nama."</b>";
+									$data[$i]["akun_kode"] = $row->akun_kode;
+									$data[$i]["buku_saldo"] =0;
+									$data[$i]["buku_debet"] =0;
+									$data[$i]["buku_kredit"] = 0;
+									$data[$i]["buku_author"] = '';
+									$data[$i]["buku_date_create"] = '';
+									$data[$i]["buku_update"] = '';
+									$data[$i]["buku_revised"] = '';
+									$i++;
+								}
+							
+							}
+						
+						}
+						
+						
+						$data[$i]["buku_akun_kode"] = $row->akun_kode;
+						$data[$i]["buku_akun_nama"] =$row->akun_nama;
+					}
+					
+					$group_akun=$row->akun_kode;
+					
+					$data[$i]["buku_id"] = $row->buku_id;
+					$data[$i]["buku_tanggal"] = $row->buku_tanggal;
+					$data[$i]["buku_ref"] = $row->buku_ref;
+					$data[$i]["buku_keterangan"] = $row->buku_keterangan;
+					$data[$i]["buku_akun"] = $row->buku_akun;
+					$data[$i]["akun_nama"] = $row->akun_nama;
+					$data[$i]["akun_kode"] = $row->akun_kode;
+					$data[$i]["buku_debet"] = $row->buku_debet;
+					$data[$i]["buku_kredit"] = $row->buku_kredit;
+					$data[$i]["buku_author"] = $row->buku_author;
+					$data[$i]["buku_date_create"] = $row->buku_date_create;
+					$data[$i]["buku_update"] = $row->buku_update;
+					$data[$i]["buku_revised"] = $row->buku_revised;
+					
+					
+					if($row->akun_saldo=='Debet')
+						$saldo+= ($row->buku_debet-$row->buku_kredit);
+					else
+						$saldo+= ($row->buku_kredit-$row->buku_debet);
+					$data[$i]["buku_saldo"] = $saldo;
+					
+					
+					$i++;
+				}
+				return $result;
+			}else
+				return NULL;
 		}
 		
 	
