@@ -58,17 +58,18 @@ class M_perpanjang_paket extends Model{
 	//function for get list record
 	function perpanjang_paket_list($filter,$start,$end){
 		
-			$query = "select 
+			$query = "SELECT 
 						CONCAT(customer.cust_nama, ' (', customer.cust_no, ')') as cust_display,
 						CONCAT(paket.paket_nama, ' (', master_jual_paket.jpaket_nobukti, ')') as paket_display,
 						detail_jual_paket.dpaket_kadaluarsa,
 						perpanjang_paket.*,
-						date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'),INTERVAL -perpanjang_hari DAY) as kadaluarsa_sebelum
-					from perpanjang_paket
-					left join detail_jual_paket on (detail_jual_paket.dpaket_id=perpanjang_paket.perpanjang_djpaket_id)
-					left join master_jual_paket on (master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master)
-					left join customer on (customer.cust_id=master_jual_paket.jpaket_cust)
-					left join paket on (paket.paket_id=detail_jual_paket.dpaket_paket)";
+						date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'),INTERVAL -perpanjang_hari DAY) as kadaluarsa_sebelum,
+						date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) as tanggal_hangus
+					FROM perpanjang_paket
+					LEFT JOIN detail_jual_paket on (detail_jual_paket.dpaket_id=perpanjang_paket.perpanjang_djpaket_id)
+					LEFT JOIN master_jual_paket on (master_jual_paket.jpaket_id=detail_jual_paket.dpaket_master)
+					LEFT JOIN customer on (customer.cust_id=master_jual_paket.jpaket_cust)
+					LEFT JOIN paket on (paket.paket_id=detail_jual_paket.dpaket_paket)";
 			
 			// For simple search
 			if ($filter<>""){
@@ -76,6 +77,7 @@ class M_perpanjang_paket extends Model{
 				$query .= " (bank_kode LIKE '%".addslashes($filter)."%' OR bank_nama LIKE '%".addslashes($filter)."%' OR bank_norek LIKE '%".addslashes($filter)."%' OR bank_atasnama LIKE '%".addslashes($filter)."%' )";
 			}
 			
+			$query.=" ORDER BY perpanjang_tanggal DESC";
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
