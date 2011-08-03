@@ -246,6 +246,7 @@ Ext.onReady(function(){
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			//{name: 'tanggal_hangus', type: 'date', dateFormat:'Y-m-d', mapping: 'tanggal_hangus'}, 
 			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
@@ -291,9 +292,10 @@ Ext.onReady(function(){
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'},
+			{name: 'tanggal_hangus', type: 'date', dateFormat:'Y-m-d', mapping: 'tanggal_hangus'},
 			{name: 'kadaluarsa_sebelum', type: 'date', dateFormat:'Y-m-d', mapping: 'kadaluarsa_sebelum'}
 		]),
-		sortInfo:{field: 'perpanjang_id', direction: "ASC"}
+		sortInfo:{field: 'perpanjang_tanggal', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -349,9 +351,18 @@ Ext.onReady(function(){
 		}, 
 		
 		{
+			header: '<div align="center">Tgl Hangus</div>',
+			dataIndex: 'tanggal_hangus',
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			width: 45,
+			sortable: true
+			
+		}, 
+		
+		{
 			header: '<div align="center">Keterangan</div>',
 			dataIndex: 'perpanjang_keterangan',
-			width: 190,
+			width: 160,
 			sortable: true,
 			editor: new Ext.form.TextField({
 				maxLength: 200
