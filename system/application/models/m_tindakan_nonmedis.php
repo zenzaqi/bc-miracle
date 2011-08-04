@@ -50,11 +50,7 @@ class M_tindakan_nonmedis extends Model{
 	function get_customer_paket_list($trawat_cust_id,$dtrawat_rawat_id,$start,$end){
 			$rs_rows=0;
 			if(is_numeric($trawat_cust_id)==true AND is_numeric($dtrawat_rawat_id)==true){
-		
-				
-				//$sql_backup20100405="SELECT apaket_id, rawat_id, rawat_kode, rawat_nama, apaket_sisa_item FROM master_ambil_paket LEFT JOIN perawatan ON(apaket_item=rawat_id) WHERE apaket_jpaket='$apaket_jpaket' AND apaket_paket='$apaket_paket'";
-				//$sql="SELECT rawat_id, rawat_kode, rawat_nama FROM paket_isi_perawatan LEFT JOIN paket ON(rpaket_master=paket_id) LEFT JOIN perawatan ON(rpaket_perawatan=rawat_id) WHERE rpaket_master='$dapaket_paket'";
-				
+			
 				$sql="
 				(
 				SELECT 
@@ -85,7 +81,7 @@ class M_tindakan_nonmedis extends Model{
 				LEFT JOIN perawatan ON (perawatan.rawat_id=paket_isi_perawatan.rpaket_perawatan)
 				WHERE detail_jual_paket.dpaket_sisa_paket > 0
 					AND date_add(date_format(detail_jual_paket.dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
-					AND master_jual_paket.jpaket_stat_dok<>'Batal'
+					AND (master_jual_paket.jpaket_stat_dok='Tertutup' OR (master_jual_paket.jpaket_stat_dok='Terbuka' and master_jual_paket.jpaket_tanggal >= date_format(now(),'%Y-%m-%d')))
 					AND detail_jual_paket.dpaket_sisa_paket>0
 					AND (customer.cust_id = '$trawat_cust_id' OR pengguna_paket.ppaket_cust = '$trawat_cust_id')
 					AND perawatan.rawat_id = '$dtrawat_rawat_id'

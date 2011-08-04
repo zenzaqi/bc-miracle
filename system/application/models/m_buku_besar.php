@@ -213,15 +213,28 @@ class M_buku_besar extends Model{
 							if($buku_tanggal!=="")
 							{
 									if($row->akun_saldo=='Debet'){
-									$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
-										FROM vu_buku_besar
-										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
-										AND buku_tanggal < '".$buku_tanggal."'";
-									}else{
-										$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
-										FROM vu_buku_besar
-										WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
-										AND buku_tanggal < '".$buku_tanggal."'";
+										$sql = "SELECT 
+													(
+														select a.akun_debet - a.akun_kredit
+														from akun a
+														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
+													) -
+													ifnull(sum(buku_debet), 0) - ifnull(sum(buku_kredit), 0) as buku_saldo
+												FROM vu_buku_besar
+												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
+													AND buku_tanggal < '".$buku_tanggal."'";
+									}
+									else{
+										$sql = "SELECT 
+													(
+														select a.akun_kredit - a.akun_debet
+														from akun a
+														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
+													) -													
+													ifnull(sum(buku_kredit), 0) - ifnull(sum(buku_debet), 0) as buku_saldo
+												FROM vu_buku_besar
+												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
+													AND buku_tanggal < '".$buku_tanggal."'";
 									}
 									$result=$this->db->query($sql);
 									if($result->num_rows()){
@@ -294,15 +307,28 @@ class M_buku_besar extends Model{
 								if($buku_tanggal!=="")
 								{
 										if($row->akun_saldo=='Debet'){
-										$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
-											FROM vu_buku_besar
-											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
-											AND buku_tanggal < '".$buku_tanggal."'";
-										}else{
-											$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
-											FROM vu_buku_besar
-											WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
-											AND buku_tanggal < '".$buku_tanggal."'";
+										$sql = "SELECT 
+													(
+														select a.akun_debet - a.akun_kredit
+														from akun a
+														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
+													) -														
+													ifnull(sum(buku_debet), 0) - ifnull(sum(buku_kredit), 0) as buku_saldo
+												FROM vu_buku_besar
+												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
+												AND buku_tanggal < '".$buku_tanggal."'";
+										}
+										else{
+										$sql = "SELECT 										
+													(
+														select a.akun_kredit - a.akun_dedit
+														from akun a
+														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
+													) -																											
+													ifnull(sum(buku_kredit), 0) - ifnull(sum(buku_debet), 0) as buku_saldo
+												FROM vu_buku_besar
+												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
+												AND buku_tanggal < '".$buku_tanggal."'";
 										}
 										$result=$this->db->query($sql);
 										if($result->num_rows()){
