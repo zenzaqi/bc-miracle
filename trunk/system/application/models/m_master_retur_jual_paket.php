@@ -142,10 +142,12 @@ class M_master_retur_jual_paket extends Model{
 					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
 					,(vu_dpaket_total_bayar.total_isi_paket - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
 					,vu_paket_harga_satu_rawat_now.harga_per_satu AS harga_per_satu
+					, master_jual_paket.jpaket_cashback as voucher, master_jual_paket.jpaket_nobukti as jpaket_nobukti
 				FROM vu_dpaket_total_bayar
 					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = vu_dpaket_total_bayar.dpaket_id)
 					LEFT JOIN vu_paket_harga_satu_rawat_now ON(vu_paket_harga_satu_rawat_now.paket_id=vu_dpaket_total_bayar.dpaket_paket)
 					left join detail_jual_paket on (detail_jual_paket.dpaket_id = vu_dpaket_total_bayar.dpaket_id)
+					left join master_jual_paket on (master_jual_paket.jpaket_id = detail_jual_paket.dpaket_master)
 				WHERE vu_dpaket_total_bayar.jpaket_id='".$jpaket_id."'
 					AND vu_dpaket_total_bayar.dpaket_id NOT IN
 						(SELECT detail_retur_paket_rawat.drpaket_dpaket
@@ -161,10 +163,12 @@ class M_master_retur_jual_paket extends Model{
 					,ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0) AS total_ambil_paket
 					,(vu_dpaket_total_bayar.total_isi_paket - ifnull(vu_dapaket_group_dpaket.total_ambil_dpaket,0)) AS total_sisa_paket
 					,vu_paket_harga_satu_rawat_now.harga_per_satu AS harga_per_satu
+					, master_jual_paket.jpaket_cashback as voucher, master_jual_paket.jpaket_nobukti as jpaket_nobukti
 				FROM vu_dpaket_total_bayar
 					LEFT JOIN vu_dapaket_group_dpaket ON(vu_dapaket_group_dpaket.dapaket_dpaket = vu_dpaket_total_bayar.dpaket_id)
 					LEFT JOIN vu_paket_harga_satu_rawat_now ON(vu_paket_harga_satu_rawat_now.paket_id=vu_dpaket_total_bayar.dpaket_paket)
 					left join detail_jual_paket on (detail_jual_paket.dpaket_id = vu_dpaket_total_bayar.dpaket_id)
+					left join master_jual_paket on (master_jual_paket.jpaket_id = detail_jual_paket.dpaket_master)
 				WHERE detail_jual_paket.dpaket_master='".$jpaket_id."' and '".$date_now."' < (detail_jual_paket.dpaket_kadaluarsa + INTERVAL 1 YEAR)";
 		}
 		$result = $this->db->query($sql);
@@ -737,6 +741,7 @@ class M_master_retur_jual_paket extends Model{
 				,rpaket_date_update
 				,rpaket_revised
 				,jpaket_bayar
+				,rpaket_voucher
 			FROM master_retur_jual_paket
 			LEFT JOIN customer ON(master_retur_jual_paket.rpaket_cust = customer.cust_id)
 			LEFT JOIN master_jual_paket ON(master_retur_jual_paket.rpaket_nobuktijual = master_jual_paket.jpaket_id)
@@ -787,7 +792,7 @@ class M_master_retur_jual_paket extends Model{
 	}
 	
 	//function for create new record
-	function master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_stat_dok, $rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan ){
+	function master_retur_jual_paket_create($rpaket_nobukti ,$rpaket_nobuktijual ,$rpaket_cust ,$rpaket_tanggal ,$rpaket_keterangan ,$rpaket_stat_dok, $rpaket_kwitansi_nilai ,$rpaket_kwitansi_keterangan, $rpaket_voucher ){
 		//* karena retur paket langsung print kuitansi maka $rpaket_stat_dok='Tertutup' /
 		$rpaket_stat_dok='Tertutup';
 		//$pattern="RPK/".date("ym")."-";
@@ -801,6 +806,7 @@ class M_master_retur_jual_paket extends Model{
 			"rpaket_tanggal"=>$rpaket_tanggal, 
 			"rpaket_keterangan"=>$rpaket_keterangan,
 			"rpaket_stat_dok"=>$rpaket_stat_dok,
+			"rpaket_voucher"=>$rpaket_voucher,
 			"rpaket_creator"=>@$_SESSION[SESSION_USERID]
 		);
 		$this->db->insert('master_retur_jual_paket', $data); 
@@ -875,6 +881,7 @@ class M_master_retur_jual_paket extends Model{
 				,rpaket_date_update
 				,rpaket_revised
 				,jpaket_bayar
+				,rpaket_voucher
 			FROM master_retur_jual_paket
 			LEFT JOIN customer ON(master_retur_jual_paket.rpaket_cust = customer.cust_id)
 			LEFT JOIN master_jual_paket ON(master_retur_jual_paket.rpaket_nobuktijual = master_jual_paket.jpaket_id)

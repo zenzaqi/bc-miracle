@@ -249,6 +249,7 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_stat_dok=str_replace(",", ",",$rproduk_stat_dok);
 		$rproduk_stat_dok=str_replace("'", '"',$rproduk_stat_dok);
 		
+		
 		$result = $this->m_master_retur_jual_produk->master_retur_jual_produk_update($rproduk_id ,$rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan, $rproduk_stat_dok     );
 		echo $result;
 	}
@@ -277,7 +278,8 @@ class C_master_retur_jual_produk extends Controller {
 		$rproduk_kwitansi_keterangan=trim(@$_POST["rproduk_kwitansi_keterangan"]);
 		$rproduk_kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$rproduk_kwitansi_keterangan);
 		$rproduk_kwitansi_keterangan=str_replace("'", '"',$rproduk_kwitansi_keterangan);
-		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan);
+		$rproduk_voucher=trim(@$_POST["rproduk_voucher"]);
+		$result=$this->m_master_retur_jual_produk->master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan, $rproduk_voucher);
 		echo $result;
 	}
 
