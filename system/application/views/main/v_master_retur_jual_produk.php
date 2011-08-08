@@ -254,6 +254,7 @@ Ext.onReady(function(){
 			var rproduk_stat_dok_create=null;
 			var rproduk_kwitansi_nilai_create=null; 
 			var rproduk_kwitansi_keterangan_create=null;
+			var rproduk_voucher_nilai_create=null;
 			
 			if(rproduk_idField.getValue()!== null){rproduk_id_create_pk = rproduk_idField.getValue();}else{rproduk_id_create_pk=get_pk_id();} 
 			if(rproduk_nobuktiField.getValue()!== null){rproduk_nobukti_create = rproduk_nobuktiField.getValue();} 
@@ -263,6 +264,7 @@ Ext.onReady(function(){
 			if(rproduk_keteranganField.getValue()!== null){rproduk_keterangan_create = rproduk_keteranganField.getValue();}
 			if(rproduk_stat_dokField.getValue()!== null){rproduk_stat_dok_create = rproduk_stat_dokField.getValue();} 
 			if(rproduk_kwitansi_nilaiField.getValue()!== null){rproduk_kwitansi_nilai_create = rproduk_kwitansi_nilaiField.getValue();} 
+			if(rproduk_voucher_nilaiField.getValue()!== null){rproduk_voucher_nilai_create = rproduk_voucher_nilaiField.getValue();}
 			if(rproduk_kwitansi_keteranganField.getValue()!== null){rproduk_kwitansi_keterangan_create = rproduk_kwitansi_keteranganField.getValue();} 
 			
 			Ext.Ajax.request({  
@@ -278,7 +280,8 @@ Ext.onReady(function(){
 					rproduk_keterangan	: rproduk_keterangan_create,
 					rproduk_stat_dok		: rproduk_stat_dok_create,
 					rproduk_kwitansi_nilai	: rproduk_kwitansi_nilai_create, 
-					rproduk_kwitansi_keterangan	: rproduk_kwitansi_keterangan_create
+					rproduk_kwitansi_keterangan	: rproduk_kwitansi_keterangan_create,
+					rproduk_voucher				: rproduk_voucher_nilai_create
 				}, 
 				success: function(response){             
 					//var result=eval(response.responseText);
@@ -403,6 +406,10 @@ Ext.onReady(function(){
 		rproduk_keteranganField.setValue(null);
 		rproduk_stat_dokField.reset();
 		rproduk_stat_dokField.setValue('Terbuka');
+		rproduk_voucher_nilaicfField.reset();
+		rproduk_voucher_nilaicfField.setValue(null);
+		rproduk_voucher_nilaiField.reset();
+		rproduk_voucher_nilaiField.setValue(null);
 		rproduk_kwitansi_nilaiField.reset();
 		rproduk_kwitansi_nilaiField.setValue(null);
 		rproduk_nobuktijualField.setDisabled(false);
@@ -412,10 +419,12 @@ Ext.onReady(function(){
 			detail_retur_jual_produkListEditorGrid.setDisabled(true);
 			rproduk_keteranganField.setDisabled(true);
 			rproduk_kwitansi_keteranganField.setDisabled(true);
+			rproduk_voucher_nilaicfField.setDisabled(true);
 		}else if(rproduk_stat_dokField.getValue()=='Terbuka'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(false);
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
+			rproduk_voucher_nilaicfField.setDisabled(false);
 		}
 		detail_retur_jual_produk_DataStore.load({params: {master_id:0, start:0, limit:pageS}});
 		
@@ -439,6 +448,7 @@ Ext.onReady(function(){
 		rproduk_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_keterangan'));
 		rproduk_stat_dokField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok'));
 		rproduk_kwitansi_nilaiField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+		rproduk_voucher_nilaicfField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_voucher'));
 		rproduk_kwitansi_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 		rproduk_nobuktijualField.setDisabled(true);
 		rproduk_custField.setDisabled(true);
@@ -447,10 +457,12 @@ Ext.onReady(function(){
 			detail_retur_jual_produkListEditorGrid.setDisabled(true);
 			rproduk_keteranganField.setDisabled(true);
 			rproduk_kwitansi_keteranganField.setDisabled(true);
+			rproduk_voucher_nilaicfField.setDisabled(true);
 		}else if(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok')=='Terbuka'){
 			detail_retur_jual_produkListEditorGrid.setDisabled(false);
 			rproduk_keteranganField.setDisabled(false);
 			rproduk_kwitansi_keteranganField.setDisabled(false);
+			rproduk_voucher_nilaicfField.setDisabled(false);
 		}
 		
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_RETURPRODUK'))){ ?>
@@ -684,6 +696,7 @@ Ext.onReady(function(){
 			{name: 'rproduk_cust_id', type: 'int', mapping: 'cust_id'}, 
 			{name: 'rproduk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'rproduk_tanggal'}, 
 			{name: 'rproduk_keterangan', type: 'string', mapping: 'rproduk_keterangan'}, 
+			{name: 'rproduk_voucher', type: 'float', mapping: 'rproduk_voucher'},
 			{name: 'rproduk_stat_dok', type: 'string', mapping: 'rproduk_stat_dok'}, 
 			{name: 'rproduk_creator', type: 'string', mapping: 'rproduk_creator'}, 
 			{name: 'rproduk_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'rproduk_date_create'}, 
@@ -716,7 +729,8 @@ Ext.onReady(function(){
 			{name: 'retur_produk_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jproduk_tanggal'},
 			{name: 'retur_produk_nama_customer', type: 'string', mapping: 'cust_nama'},
 			{name: 'retur_produk_customer_id', type: 'string', mapping: 'cust_id'},
-			{name: 'retur_produk_alamat', type: 'string', mapping: 'cust_alamat'}
+			{name: 'retur_produk_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'voucher', type: 'float', mapping: 'voucher'}
 		]),
 		sortInfo:{field: 'retur_produk_display', direction: "ASC"}
 	});
@@ -1142,7 +1156,27 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
-	
+	rproduk_voucher_nilaicfField= new Ext.form.TextField({
+		id: 'rproduk_voucher_nilaicfField',
+		fieldLabel: 'Nilai Voucher (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		//readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
+	rproduk_voucher_nilaiField= new Ext.form.NumberField({
+		id: 'rproduk_voucher_nilaiField',
+		fieldLabel: 'Nilai Voucher (Rp)',
+		//valueRenderer: 'numberToCurrency',
+		//allowNegatife : false,
+		//blankText: '0',
+		//allowDecimals: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	
 	
 	/*rproduk_kwitansi_nilaiField= new Ext.form.NumberField({
@@ -1174,6 +1208,8 @@ Ext.onReady(function(){
 		if(cbo_retur_produk_DataStore.getCount()){
 			rproduk_custField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_nama_customer);
 			rproduk_custidField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_customer_id);
+			rproduk_voucher_nilaicfField.setValue(CurrencyFormatted(cbo_retur_produk_DataStore.getAt(j).data.voucher));
+			rproduk_voucher_nilaiField.setValue(cbo_retur_produk_DataStore.getAt(j).data.voucher);
 			cbo_drproduk_produkDataStore.load({params: {query: rproduk_nobuktijualField.getValue()}});
 		}
 	});
@@ -1527,10 +1563,10 @@ Ext.onReady(function(){
 	
 	function refresh_detail_retur_jual_produk(){
 		var sum_subtotal_detail=0;
-		
+		var voucher = rproduk_voucher_nilaiField.getValue();
 		for(i=0;i<detail_retur_jual_produk_DataStore.getCount();i++){
 			sum_subtotal_detail+=(detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_jumlah*detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_harga);
-			rproduk_kwitansi_nilaiField.setValue(sum_subtotal_detail);
+			rproduk_kwitansi_nilaiField.setValue(sum_subtotal_detail-voucher);
 		}
 		
 	}
@@ -1609,7 +1645,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rproduk_kwitansi_nilaiField] 
+				items: [rproduk_voucher_nilaicfField,rproduk_kwitansi_nilaiField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2030,6 +2066,21 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	
+	rproduk_voucher_nilaicfField.on("keyup",function(){
+		var cf_value = rproduk_voucher_nilaicfField.getValue();
+		var cf_tonumber = convertToNumber(cf_value);
+		rproduk_voucher_nilaiField.setValue(cf_tonumber);
+		//load_total_bayar();
+		
+		var number_tocf = CurrencyFormatted(cf_value);
+		this.setRawValue(number_tocf);
+		
+		refresh_detail_retur_jual_produk();
+		
+	});
+	
 	
 });
 	</script>

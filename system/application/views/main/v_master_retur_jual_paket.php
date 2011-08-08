@@ -267,6 +267,8 @@ Ext.onReady(function(){
 					var rpaket_stat_dok_create=null;
 					var rpaket_kwitansi_nilai_create=null; 
 					var rpaket_kwitansi_keterangan_create=null;
+					var rpaket_voucher_nilai_create=null;
+					
 					
 					if(rpaket_idField.getValue()!== null){rpaket_id_create_pk = rpaket_idField.getValue();}else{rpaket_id_create_pk=get_pk_id();} 
 					if(rpaket_nobuktiField.getValue()!= null){rpaket_nobukti_create = rpaket_nobuktiField.getValue();} 
@@ -277,6 +279,7 @@ Ext.onReady(function(){
 					if(rpaket_kwitansi_nilaiField.getValue()!== null){rpaket_kwitansi_nilai_create = rpaket_kwitansi_nilaiField.getValue();} 
 					if(rpaket_kwitansi_keteranganField.getValue()!== null){rpaket_kwitansi_keterangan_create = rpaket_kwitansi_keteranganField.getValue();} 
 					if(rpaket_stat_dokField.getValue()!= null){rpaket_stat_dok_create = rpaket_stat_dokField.getValue();} 
+					if(rpaket_voucher_nilaiField.getValue()!== null){rpaket_voucher_nilai_create = rpaket_voucher_nilaiField.getValue();} 
 					
 					Ext.Ajax.request({  
 						waitMsg: 'Please wait...',
@@ -291,7 +294,8 @@ Ext.onReady(function(){
 							rpaket_keterangan	: rpaket_keterangan_create,
 							rpaket_stat_dok		: rpaket_stat_dok_create,
 							rpaket_kwitansi_nilai	: rpaket_kwitansi_nilai_create, 
-							rpaket_kwitansi_keterangan	: rpaket_kwitansi_keterangan_create
+							rpaket_kwitansi_keterangan	: rpaket_kwitansi_keterangan_create,
+							rpaket_voucher				: rpaket_voucher_nilai_create
 						}, 
 						success: function(response){             
 							//var result=eval(response.responseText);
@@ -430,6 +434,10 @@ Ext.onReady(function(){
 		rpaket_jpaket_total_bayarField.setValue(null);
 		rpaket_kwitansi_nilai_cfField.reset();
 		rpaket_kwitansi_nilai_cfField.setValue(null);
+		rpaket_voucher_nilaicfField.reset();
+		rpaket_voucher_nilaicfField.setValue(null);
+		rpaket_voucher_nilaiField.reset();
+		rpaket_voucher_nilaiField.setValue(null);
 		cbo_dpaket_byJpaketDataStore.load({
 			params: {jpaket_id: -1}
 		});
@@ -444,6 +452,7 @@ Ext.onReady(function(){
 		master_retur_jual_paket_createForm.cetak_kuitansi_btn.enable();
 		<?php } ?>
 		drpaketListEditorGrid.setDisabled(false);
+		rpaket_voucher_nilaicfField.setDisabled(false);
 		//drpaketListEditorGrid.drpaket_add.enable();
 		//drpaketListEditorGrid.drpaket_delete.enable();
 		//combo_dpaket_byjpaket_retur.setDisabled(false);
@@ -460,6 +469,7 @@ Ext.onReady(function(){
 		rpaket_tanggalField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_tanggal'));
 		rpaket_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_keterangan'));
 		rpaket_stat_dokField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_stat_dok'));
+		rpaket_voucher_nilaicfField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_voucher'));
 		rpaket_kwitansi_nilaiField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		rpaket_kwitansi_keteranganField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 		rpaket_jpaket_total_bayarField.setValue(master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
@@ -470,6 +480,7 @@ Ext.onReady(function(){
 		
 		if((master_retur_jual_paketListEditorGrid.getSelectionModel().getSelected().get('rpaket_stat_dok')!=='Terbuka')){
 			drpaketListEditorGrid.setDisabled(true);
+			rpaket_voucher_nilaicfField.setDisabled(true);
 			//drpaketListEditorGrid.drpaket_add.disable();
 			//drpaketListEditorGrid.drpaket_delete.disable();
 			//combo_dpaket_byjpaket_retur.setDisabled(true);
@@ -478,6 +489,7 @@ Ext.onReady(function(){
 			<?php } ?>
 		}else{
 			drpaketListEditorGrid.setDisabled(false);
+			rpaket_voucher_nilaicfField.setDisabled(false);
 			//drpaketListEditorGrid.drpaket_add.enable();
 			//drpaketListEditorGrid.drpaket_delete.enable();
 			//combo_dpaket_byjpaket_retur.setDisabled(false);
@@ -647,6 +659,7 @@ Ext.onReady(function(){
 			{name: 'rpaket_revised', type: 'int', mapping: 'rpaket_revised'},
 			{name: 'kwitansi_id', type: 'int', mapping: 'kwitansi_id'},
 			{name: 'kwitansi_nilai', type: 'float', mapping: 'kwitansi_nilai'},
+			{name: 'rpaket_voucher', type: 'float', mapping: 'rpaket_voucher'},
 			{name: 'kwitansi_keterangan', type: 'string', mapping: 'kwitansi_keterangan'},
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}
 		]),
@@ -715,7 +728,8 @@ Ext.onReady(function(){
 			{name: 'dpaket_total_ambil', type: 'int', mapping: 'total_ambil_paket'},
 			{name: 'dpaket_total_sisa', type: 'int', mapping: 'total_sisa_paket'},
 			{name: 'dpaket_harga_per_satu', type: 'float', mapping: 'harga_per_satu'},
-			{name: 'dpaket_rupiah_retur', type: 'float', mapping: 'rupiah_retur'}
+			{name: 'dpaket_rupiah_retur', type: 'float', mapping: 'rupiah_retur'},
+			{name: 'voucher', type: 'float', mapping: 'voucher'}
 		]),
 		sortInfo:{field: 'dpaket_paket_nama', direction: "ASC"}
 	});
@@ -1192,18 +1206,27 @@ Ext.onReady(function(){
 		}
 	}
 	
-	
-	/*rpaket_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
-		id: 'rpaket_kwitansi_nilaiField',
-		fieldLabel: 'Nilai Kuitansi(Rp)',
-		valueRenderer: 'numberToCurrency',
+	rpaket_voucher_nilaicfField= new Ext.form.TextField({
+		id: 'rpaket_voucher_nilaicfField',
+		fieldLabel: 'Nilai Voucher (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		//readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/ 
+	});
+	rpaket_voucher_nilaiField= new Ext.form.NumberField({
+		id: 'rpaket_voucher_nilaiField',
+		fieldLabel: 'Nilai Voucher (Rp)',
+		//valueRenderer: 'numberToCurrency',
 		//allowNegatife : false,
 		//blankText: '0',
 		//allowDecimals: true,
 		readOnly: true,
-		anchor: '95%'//,
-		//maskRe: /([0-9]+)$/
-	});*/
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	rpaket_kwitansi_nilai_cfField= new Ext.form.TextField({
 		id: 'rpaket_kwitansi_nilai_cfField',
 		fieldLabel: 'Nilai Kuitansi (Rp)',
@@ -1344,11 +1367,13 @@ Ext.onReady(function(){
 		listeners: {
 			afteredit: function(){
 				var total_retur = 0;
+				var voucher = rpaket_voucher_nilaiField.getValue();
 				for(i=0; i<drpaketListEditorGrid.getStore().getCount(); i++){
 					total_retur += drpaketListEditorGrid.getStore().getAt(i).data.drpaket_rupiah_retur;
 				}
-				rpaket_kwitansi_nilaiField.setValue(total_retur);
-				rpaket_kwitansi_nilai_cfField.setValue(CurrencyFormatted(total_retur));
+				rpaket_kwitansi_nilaiField.setValue(total_retur-voucher);
+				rpaket_kwitansi_nilai_cfField.setValue(CurrencyFormatted(total_retur-voucher));
+				
 			}
 		}
     });
@@ -1422,6 +1447,9 @@ Ext.onReady(function(){
 			dpaket_harga_per_satuField.setValue(cbo_dpaket_byJpaketDataStore.getAt(j).data.dpaket_harga_per_satu);
 			dpaket_rupiah_returField.setValue(cbo_dpaket_byJpaketDataStore.getAt(j).data.dpaket_rupiah_retur);
 			dpaket_paketField.setValue(cbo_dpaket_byJpaketDataStore.getAt(j).data.dpaket_paket);
+			rpaket_voucher_nilaicfField.setValue(CurrencyFormatted(cbo_dpaket_byJpaketDataStore.getAt(j).data.voucher));
+			rpaket_voucher_nilaiField.setValue(cbo_dpaket_byJpaketDataStore.getAt(j).data.voucher);
+			
 		}
 	});
 	
@@ -1723,7 +1751,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rpaket_kwitansi_nilai_cfField] 
+				items: [rpaket_voucher_nilaicfField, rpaket_kwitansi_nilai_cfField] 
 			}
 			,{
 				columnWidth:0.5,
@@ -2146,6 +2174,26 @@ Ext.onReady(function(){
 		});
 	}
 	/*End of Function */
+	
+	rpaket_voucher_nilaicfField.on("keyup",function(){
+		var cf_value = rpaket_voucher_nilaicfField.getValue();
+		var cf_tonumber = convertToNumber(cf_value);
+		rpaket_voucher_nilaiField.setValue(cf_tonumber);
+		//load_total_bayar();
+		
+		var number_tocf = CurrencyFormatted(cf_value);
+		this.setRawValue(number_tocf);
+		
+		var total_retur = 0;
+		var voucher = rpaket_voucher_nilaiField.getValue();
+			for(i=0; i<drpaketListEditorGrid.getStore().getCount(); i++){
+				total_retur += drpaketListEditorGrid.getStore().getAt(i).data.drpaket_rupiah_retur;
+			}
+			rpaket_kwitansi_nilaiField.setValue(total_retur-voucher);
+			rpaket_kwitansi_nilai_cfField.setValue(CurrencyFormatted(total_retur-voucher));
+		
+	});
+	
 	
 });
 	</script>

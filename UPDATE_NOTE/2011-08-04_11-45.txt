@@ -1,0 +1,3 @@
+2011-08-04_11-45.sql 
+
+--> Menambah field yang menyimpan nominal voucher ke tabel master_retur_jual_paket dan master_retur_jual_produk.. 

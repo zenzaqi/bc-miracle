@@ -40,6 +40,7 @@ class M_master_retur_jual_produk extends Model{
 				,satuan_kode
 				,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)) AS retur_produk_harga
 				,dproduk_jumlah
+				,master_jual_produk.jproduk_cashback as voucher
 			FROM detail_jual_produk
 			LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
 			LEFT JOIN produk ON(dproduk_produk=produk_id)
@@ -290,7 +291,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 	
 		function get_jual_produk_list($query,$start,$end){
-			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup' AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')";
+			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id, jproduk_cashback as voucher FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup' AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')";
 			if($query<>"")
 				$sql.=" and (jproduk_nobukti like '%".$query."%' or jproduk_tanggal like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or jproduk_nobukti like '%".$query."%') "; 
 			$query = $this->db->query($sql);
@@ -379,7 +380,7 @@ class M_master_retur_jual_produk extends Model{
 //			$query = "SELECT * FROM master_retur_jual_produk LEFT JOIN customer ON(rproduk_cust=cust_id) LEFT JOIN master_jual_produk ON(rproduk_nobuktijual=jproduk_id) LEFT JOIN cetak_kwitansi ON(kwitansi_ref=rproduk_nobukti)";
 			$query =   "SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
-							rproduk_tanggal, rproduk_keterangan, rproduk_stat_dok, rproduk_creator,	
+							rproduk_tanggal, rproduk_keterangan, rproduk_stat_dok, rproduk_creator,	rproduk_voucher,
 							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
 						FROM master_retur_jual_produk m
 						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
@@ -428,7 +429,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//function for create new record
-		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan){
+		function master_retur_jual_produk_create($rproduk_nobukti ,$rproduk_nobuktijual ,$rproduk_cust ,$rproduk_tanggal ,$rproduk_keterangan , $rproduk_stat_dok, $rproduk_kwitansi_nilai ,$rproduk_kwitansi_keterangan,$rproduk_voucher){
 			$sql = "SELECT rproduk_id
 				FROM master_retur_jual_produk
 				WHERE rproduk_nobuktijual='".$rproduk_nobuktijual."'
@@ -447,6 +448,7 @@ class M_master_retur_jual_produk extends Model{
 					"rproduk_cust"=>$rproduk_cust, 
 					"rproduk_tanggal"=>$rproduk_tanggal, 
 					"rproduk_keterangan"=>$rproduk_keterangan,
+					"rproduk_voucher"=>$rproduk_voucher,
 					//"rproduk_stat_dok"=>$rproduk_stat_dok
 					"rproduk_stat_dok"=>'Tertutup',
 					"rproduk_creator"=>@$_SESSION[SESSION_USERID]
@@ -531,7 +533,7 @@ class M_master_retur_jual_produk extends Model{
 			//full query
 			$query="SELECT
 							rproduk_id, rproduk_nobukti, jproduk_nobukti, cust_no, cust_nama, cust_id, 
-							rproduk_tanggal, rproduk_keterangan, rproduk_stat_dok, rproduk_creator,	
+							rproduk_tanggal, rproduk_keterangan, rproduk_stat_dok, rproduk_creator,	rproduk_voucher,
 							rproduk_date_create, rproduk_update, rproduk_date_update, rproduk_revised, kwitansi_id, kwitansi_nilai, kwitansi_keterangan
 						FROM master_retur_jual_produk m
 						LEFT JOIN customer c ON(m.rproduk_cust=c.cust_id) 
