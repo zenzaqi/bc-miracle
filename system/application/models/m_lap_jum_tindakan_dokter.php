@@ -139,13 +139,17 @@ class M_lap_jum_tindakan_dokter extends Model{
 			
 			if ($report_groupby == 'Semua')
 			{
-			$query="select rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, total_kredit as Total_Kredit, sum(Total_kredit) as Total_kredit 
+			$query="select rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, rawat_kreditrp as rawat_kreditrp, total_kredit as Total_Kredit, sum(Total_kredit) as Total_kredit, sum(Total_kreditrp) as Total_kreditrp
 						from(
 							(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, 
+							perawatan.rawat_kredit, 
+							perawatan.rawat_kreditrp, 
+							perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -162,9 +166,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 							)
 							union
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -187,9 +192,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 			else if ($report_groupby == 'Perawatan')
 			{			
 			$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -210,9 +216,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 			else if ($report_groupby == 'Pengambilan_Paket')
 			{
 				$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -258,12 +265,13 @@ class M_lap_jum_tindakan_dokter extends Model{
 		
 			if ($report_groupby == 'Semua')
 			{
-			$query="select sum(table_union.Total_kredit) as grand_total
+			$query="select sum(table_union.Total_kredit) as grand_total, sum(table_union.Total_kreditrp) as grand_total_rp 
 						from(
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -283,6 +291,7 @@ class M_lap_jum_tindakan_dokter extends Model{
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -313,12 +322,13 @@ class M_lap_jum_tindakan_dokter extends Model{
 
 			else if ($report_groupby == 'Perawatan')
 			{
-			$query="select sum(vu_kredit.Total_kredit) as grand_total 
+			$query="select sum(vu_kredit.Total_kredit) as grand_total, sum(vu_kredit.Total_kreditrp) as grand_total_rp
 						from(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status,
 							master_jual_rawat.jrawat_tanggal as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -337,12 +347,13 @@ class M_lap_jum_tindakan_dokter extends Model{
 			
 			else if ($report_groupby == 'Pengambilan_Paket')
 			{
-			$query="select sum(vu_kredit.Total_kredit) as grand_total 
+			$query="select sum(vu_kredit.Total_kredit) as grand_total, sum(vu_kredit.Total_kreditrp) as grand_total_rp
 						from(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status,
 							detail_ambil_paket.dapaket_tgl_ambil as tanggal,
 							perawatan.rawat_id as perawatan_id,
@@ -416,13 +427,14 @@ class M_lap_jum_tindakan_dokter extends Model{
 			
 			if ($report_groupby == 'Semua')
 			{
-			$query="select karyawan_username, rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, sum(Total_kredit) as Total_kredit 
+			$query="select karyawan_username, rawat_kode as rawat_kode, rawat_nama as rawat_nama, sum(Jumlah_rawat) as Jumlah_rawat, rawat_kredit as rawat_kredit, rawat_kreditrp as rawat_kreditrp, sum(Total_kredit) as Total_kredit, sum(Total_kreditrp) as Total_kreditrp  
 						from(
 							(
 							select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status
 							from detail_jual_rawat
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
@@ -436,9 +448,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 							)
 							union
 							(select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status
 							from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
@@ -458,9 +471,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 			else if ($report_groupby == 'Perawatan')
 			{
 			$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_jual_rawat.drawat_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_jual_rawat.drawat_jumlah) as Total_kreditrp,
 							'satuan' as status
 							from detail_jual_rawat
 							left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
@@ -478,9 +492,10 @@ class M_lap_jum_tindakan_dokter extends Model{
 			else if ($report_groupby == 'Pengambilan_Paket')
 			{
 				$query ="select ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
-							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kode,
+							perawatan.rawat_nama, perawatan.rawat_kredit, perawatan.rawat_kreditrp, perawatan.rawat_kode,
 							sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
 							perawatan.rawat_kredit * sum(detail_ambil_paket.dapaket_jumlah) as Total_kredit,
+							perawatan.rawat_kreditrp * sum(detail_ambil_paket.dapaket_jumlah) as Total_kreditrp,
 							'paket' as status
 							from detail_ambil_paket
 							left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)

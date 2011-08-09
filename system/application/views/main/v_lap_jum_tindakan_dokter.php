@@ -167,7 +167,9 @@ Ext.onReady(function(){
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
 			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
+			{name: 'dtrawat_skreditrp', type: 'string', mapping: 'rawat_kreditrp'},
 			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_kredit'},
+			{name: 'dtrawat_jkreditrp', type: 'string', mapping: 'Total_kreditrp'},
 		]),
 		sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
 	});
@@ -196,6 +198,7 @@ Ext.onReady(function(){
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
 			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_kredit'},
 			{name: 'dtrawat_kredit', type: 'string', mapping: 'grand_total'},
+			{name: 'dtrawat_kreditrp', type: 'string', mapping: 'grand_total_rp'},
 		]),
 		sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
 	});
@@ -238,29 +241,49 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
 			dataIndex: 'tindakan_perawatan',
-			width: 300,//185,	//210,
+			width: 260,//185,	//210,
 			sortable: true,
 		}, 
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 80,	//55,
+			width: 70,	//55,
 			sortable: false
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Kredit (Satuan)' + '</div>',
+			header: '<div align="center">' + 'Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_skredit',
 			width: 80,	//55,
 			sortable: false
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit' + '</div>',
-			dataIndex: 'dtrawat_jkredit',
+			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
+			dataIndex: 'dtrawat_skreditrp',
 			width: 80,	//55,
+			sortable: false,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total Kredit (Poin)' + '</div>',
+			dataIndex: 'dtrawat_jkredit',
+			width: 120,	//55,
 			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total Kredit (Rp)' + '</div>',
+			dataIndex: 'dtrawat_jkreditrp',
+			width: 90,	//55,
+			sortable: true,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 	]);
 	
@@ -281,10 +304,20 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Grand Total Kredit' + '</div>',
+			header: '<div align="right">' + 'Grand Total Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_kredit',
-			width: 80,	//55,
+			width: 675,	//55,
 			sortable: false
+		},
+		{	
+			align : 'Right',
+			header: '<div align="right">' + 'Grand Total Kredit (Rp)' + '</div>',
+			dataIndex: 'dtrawat_kreditrp',
+			width: 125,	//55,
+			sortable: false,
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
 		},
 		]);
 	
