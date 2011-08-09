@@ -25,42 +25,46 @@ class M_master_lunas_piutang extends Model{
 		return $query2; //by isaac
 	}
 	
-	/*function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer){
 		
-		switch($group){
+		/*switch($group){
 			case "Tanggal": $order_by=" ORDER BY tanggal";break;
-			case "Supplier": $order_by=" ORDER BY supplier_id";break;
-			case "No Faktur": $order_by=" ORDER BY no_bukti";break;
-			case "Produk": $order_by=" ORDER BY produk_kode";break;
+			case "Customer": $order_by=" ORDER BY cust_id";break;
 			default: $order_by=" ORDER BY no_bukti";break;
+		}*/
+		$order_by="";
+		
+		//$sql="SELECT * FROM vu_trans_piutang WHERE tanggal > '2010-07-20' AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ".$order_by;
+		if($opsi=='rekap'){
+			$order_by=" ORDER BY cust_id";
+			if($periode=='all')
+				$sql="SELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ";
+			else if($periode=='bulan')
+				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
+			else if($periode=='tanggal')
+				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
+		}else if($opsi=='detail'){
+			$order_by=" ORDER BY cust_id, no_bukti, dpiutang_nobukti";
+			if($periode=='all')
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ";
+			else if($periode=='bulan')
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
+			else if($periode=='tanggal')
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
 		}
 		
-		if($opsi=='rekap'){
-			if($periode=='all')
-				$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' ".$order_by;
-			else if($periode=='bulan')
-				$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
-			else if($periode=='tanggal')
-				$sql="SELECT * FROM vu_trans_order WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
-						AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
-		}else if($opsi=='detail'){
-			if($periode=='all')
-				$sql="SELECT * FROM vu_detail_lunas_piutang order_status<>'Batal' AND  ".$order_by;
-			else if($periode=='bulan')
-				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
-			else if($periode=='tanggal')
-				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE order_status<>'Batal' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
-						AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
-		}else if($opsi=='faktur'){
-			$sql="SELECT DISTINCT * FROM vu_detail_lunas_piutang WHERE dorder_master='".$faktur."'";
+		if(is_numeric($customer)){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" cust_id=".$customer;
 		}
+		$sql.=$order_by;
 		
 		$query=$this->db->query($sql);
 		if($opsi=='faktur')
 			return $query;
 		else
 			return $query->result();
-	}*/
+	}
 	
 	
 	function get_faktur_piutang_selected_list($fpiutang_id,$query,$start,$end){
@@ -224,7 +228,8 @@ class M_master_lunas_piutang extends Model{
 		//*eof
 		
 	//insert detail record
-	function detail_lunas_piutang_insert($fpiutang_cust ,$array_dpiutang_id ,$array_lpiutang_id ,$fpiutang_no ,$array_dpiutang_nilai ,$array_dpiutang_keterangan ,$cetak_lp){
+	function detail_lunas_piutang_insert($fpiutang_cust ,$array_dpiutang_id ,$array_lpiutang_id ,$fpiutang_no ,$array_dpiutang_nilai
+										 ,$fpiutang_cara ,$array_dpiutang_keterangan ,$cetak_lp){
 		$date_now=date('Y-m-d');
 		
 		$size_array = sizeof($array_lpiutang_id) - 1;
@@ -241,6 +246,7 @@ class M_master_lunas_piutang extends Model{
 					"dpiutang_master"=>$lpiutang_id,
 					"dpiutang_nobukti"=>$fpiutang_no,
 					"dpiutang_nilai"=>$dpiutang_nilai,
+					"dpiutang_cara"=>$fpiutang_cara,
 					"dpiutang_keterangan"=>$dpiutang_keterangan
 				);
 				$this->db->query('LOCK TABLE detail_lunas_piutang WRITE');
@@ -252,6 +258,7 @@ class M_master_lunas_piutang extends Model{
 					"dpiutang_master"=>$lpiutang_id,
 					"dpiutang_nobukti"=>$fpiutang_no,
 					"dpiutang_nilai"=>$dpiutang_nilai,
+					"dpiutang_cara"=>$fpiutang_cara,
 					"dpiutang_keterangan"=>$dpiutang_keterangan
 				);
 				$this->db->query('LOCK TABLE detail_lunas_piutang WRITE');
@@ -374,6 +381,7 @@ class M_master_lunas_piutang extends Model{
 										,$array_dpiutang_id ,$array_lpiutang_id ,$array_dpiutang_nilai ,$array_dpiutang_keterangan
 										,$cetak_lp){
 		$date_now=date('Y-m-d');
+		$datetime_now=date('Y-m-d H:i:s');
 		
 		$jenis_transaksi = 'jual_lunas';
 		
@@ -381,7 +389,9 @@ class M_master_lunas_piutang extends Model{
 			"fpiutang_tanggal"=>$fpiutang_tanggal,
 			"fpiutang_cara"=>$fpiutang_cara,
 			"fpiutang_bayar"=>$fpiutang_bayar,
-			"fpiutang_keterangan"=>$fpiutang_keterangan
+			"fpiutang_keterangan"=>$fpiutang_keterangan,
+			"fpiutang_date_update"=>$datetime_now,
+			"fpiutang_update"=>$_SESSION[SESSION_USERID]
 		);
 		
 		if($cetak_lp==1){
@@ -501,7 +511,8 @@ class M_master_lunas_piutang extends Model{
 			"fpiutang_tanggal"=>$fpiutang_tanggal,
 			"fpiutang_cara"=>$fpiutang_cara,
 			"fpiutang_bayar"=>$fpiutang_bayar,
-			"fpiutang_keterangan"=>$fpiutang_keterangan
+			"fpiutang_keterangan"=>$fpiutang_keterangan,
+			"fpiutang_creator"=>$_SESSION[SESSION_USERID]
 		);
 		
 		if($cetak_lp==1){
@@ -586,7 +597,8 @@ class M_master_lunas_piutang extends Model{
 				}
 			}
 			
-			$rs_dpiutang_insert = $this->detail_lunas_piutang_insert($fpiutang_cust ,$array_dpiutang_id ,$array_lpiutang_id ,$fpiutang_no ,$array_dpiutang_nilai ,$array_dpiutang_keterangan ,$cetak_lp);
+			$rs_dpiutang_insert = $this->detail_lunas_piutang_insert($fpiutang_cust ,$array_dpiutang_id ,$array_lpiutang_id ,$fpiutang_no
+																	 ,$array_dpiutang_nilai ,$fpiutang_cara ,$array_dpiutang_keterangan ,$cetak_lp);
 			
 			if($cetak_lp==1){
 				return $rs_dpiutang_insert;

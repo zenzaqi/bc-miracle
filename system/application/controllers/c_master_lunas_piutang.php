@@ -25,19 +25,19 @@ class C_master_lunas_piutang extends Controller {
 		$this->load->view('main/v_master_lunas_piutang');
 	}
 	
-	/*function laporan(){
-		$this->load->view('main/v_lap_order');
-	}*/
+	function laporan(){
+		$this->load->view('main/v_lap_piutang');
+	}
 	
-	/*function print_laporan(){
+	function print_laporan(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
-		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
-		$faktur="";
+		//$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		$customer=(isset($_POST['customer']) ? @$_POST['customer'] : @$_GET['customer']);
 		
 		$data["jenis"]='Produk';
 		if($periode=="all"){
@@ -46,38 +46,56 @@ class C_master_lunas_piutang extends Controller {
 			$tgl_awal=$tahun."-".$bulan;
 			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
 		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			$date_akhir = substr($tgl_akhir,8,2);
+			$month_akhir = substr($tgl_akhir,5,2);
+			$year_akhir = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date_akhir.'-'.$month_akhir.'-'.$year_akhir;
+			
+			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
-		$data["data_print"]=$this->m_master_lunas_piutang->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur);
+		$data["data_print"]=$this->m_master_lunas_piutang->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer);
+		
 		if($opsi=='rekap'){
-				
-			switch($group){
-				case "Tanggal": $print_view=$this->load->view("main/p_rekap_order_tanggal.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_rekap_order_supplier.php",$data,TRUE);break;
-				default: $print_view=$this->load->view("main/p_rekap_order.php",$data,TRUE);break;
-			}
+			$print_view=$this->load->view("main/p_rekap_piutang_customer.php",$data,TRUE);
+			/*switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_rekap_piutang_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_rekap_piutang_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_rekap_piutang.php",$data,TRUE);break;
+			}*/
+			//$print_view=$this->load->view("main/p_rekap_piutang_customer.php",$data,TRUE);
 			
 		}else{
-			switch($group){
-				case "Tanggal": $print_view=$this->load->view("main/p_detail_order_tanggal.php",$data,TRUE);break;
-				case "Supplier": $print_view=$this->load->view("main/p_detail_order_supplier.php",$data,TRUE);break;
-				case "Produk": $print_view=$this->load->view("main/p_detail_order_produk.php",$data,TRUE);break;
-				default: $print_view=$this->load->view("main/p_detail_order.php",$data,TRUE);break;
-			}
+			$print_view=$this->load->view("main/p_detail_piutang_customer.php",$data,TRUE);
+			/*switch($group){
+				case "Tanggal": $print_view=$this->load->view("main/p_detail_piutang_tanggal.php",$data,TRUE);break;
+				case "Customer": $print_view=$this->load->view("main/p_detail_piutang_customer.php",$data,TRUE);break;
+				default: $print_view=$this->load->view("main/p_detail_piutang.php",$data,TRUE);break;
+			}*/
+			//$print_view=$this->load->view("main/p_detail_piutang_customer.php",$data,TRUE);
 		}
 		
 		if(!file_exists("print")){
 			mkdir("print");
 		}
-		if($opsi=='rekap')
-			$print_file=fopen("print/report_order.html","w+");
-		else if($opsi=='detail')
-			$print_file=fopen("print/report_order.html","w+");
+		$print_file=fopen("print/report_piutang.html","w+");
 		
 		fwrite($print_file, $print_view);
 		echo '1'; 
-	}*/
+	}
+	
+	function get_customer_list(){
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		$result=$this->m_public_function->get_customer_list($query,$start,$end);
+		echo $result;
+	}
 	
 	//for detail action
 	//list detail handler action
