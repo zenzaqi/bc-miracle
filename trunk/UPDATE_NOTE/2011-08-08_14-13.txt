@@ -1,0 +1,2 @@
+- tambah field "rawat_kreditrp" di perawatan untuk menyimpan nilai kredit (Rp)
+- ubah vu_perawatan untuk leporan jumlah tindakan dokter
