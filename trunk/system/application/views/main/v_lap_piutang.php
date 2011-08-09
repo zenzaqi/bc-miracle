@@ -112,6 +112,34 @@ Ext.onReady(function(){
 			data:[['No Faktur'],['Tanggal'],['Customer']]
 	});
 	
+	custDataStore = new Ext.data.Store({
+		id: 'custDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_lunas_piutang&m=get_customer_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'cust_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'cust_id', type: 'int', mapping: 'cust_id'},
+			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
+			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
+			{name: 'cust_tgllahir', type: 'date', dateFormat: 'Y-m-d', mapping: 'cust_tgllahir'},
+			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
+			{name: 'cust_telprumah', type: 'string', mapping: 'cust_telprumah'}
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
+	});
+	var customer_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{cust_no} : {cust_nama}</b><br /></span>',
+        '</div></tpl>'
+    );
+	
 	var rpt_piutang_groupField=new Ext.form.ComboBox({
 		id:'rpt_piutang_groupField',
 		fieldLabel:'Kelompokkan',
@@ -124,6 +152,26 @@ Ext.onReady(function(){
 		triggerAction: 'all',
 		typeAhead: true,
 		lazyRender: true
+	});
+	
+	var rpt_piutang_custField=new Ext.form.ComboBox({
+		id: 'rpt_piutang_custField',
+		fieldLabel: 'Customer',
+		store: custDataStore,
+		mode: 'remote',
+		displayField:'cust_nama',
+		valueField: 'cust_id',
+		forceSelection: true,
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: customer_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '100%'
 	});
 	
 	rpt_piutang_bulanField=new Ext.form.ComboBox({
@@ -222,11 +270,11 @@ Ext.onReady(function(){
 		frame: false,
 		bolder: false,
 		anchor: '98%',
-		items:[/*{
+		items:[{
 				layout: 'column',
 				border: false,
 				items:[rpt_piutang_opsiallField]
-			},*/{
+			},{
 				layout: 'column',
 				border: false,
 				items:[rpt_piutang_opsitglField, {
@@ -279,6 +327,14 @@ Ext.onReady(function(){
 		items: [rpt_piutang_groupField]
 	});
 	
+	var	rpt_piutang_custbyField=new Ext.form.FieldSet({
+		id: 'rpt_piutang_custbyField',
+		title: 'Customer',
+		border: true,
+		anchor: '98%',
+		items: [rpt_piutang_custField]
+	});
+	
 	function is_valid_form(){
 		if(rpt_piutang_opsitglField.getValue()==true){
 			rpt_piutang_tglawalField.allowBlank=false;
@@ -299,11 +355,11 @@ Ext.onReady(function(){
 		
 		var piutang_tglawal="";
 		var piutang_tglakhir="";
-		var jrpdouk_opsi="";
 		var piutang_bulan="";
 		var piutang_tahun="";
 		var piutang_periode="";
-		var piutang_group="";
+		//var piutang_group="";
+		var piutang_customer="";
 		
 		var win;               
 		if(is_valid_form()){
@@ -319,7 +375,8 @@ Ext.onReady(function(){
 		}else{
 			piutang_periode='all';
 		}
-		if(rpt_piutang_groupField.getValue()!==""){piutang_group=rpt_piutang_groupField.getValue(); }
+		//if(rpt_piutang_groupField.getValue()!==""){piutang_group=rpt_piutang_groupField.getValue(); }
+		if((/^\d+$/.test(rpt_piutang_custField.getValue())) && rpt_piutang_custField.getValue()!==""){piutang_customer=rpt_piutang_custField.getValue()}
 		
 		if(rpt_piutang_rekapField.getValue()==true){piutang_opsi='rekap';}else{piutang_opsi='detail';}
 		
@@ -341,7 +398,8 @@ Ext.onReady(function(){
 					bulan		: piutang_bulan,
 					tahun		: piutang_tahun,
 					periode		: piutang_periode,
-					group		: piutang_group
+					customer	: piutang_customer
+					//group		: piutang_group
 					
 				}, 
 				success: function(response){              
@@ -391,9 +449,9 @@ Ext.onReady(function(){
 		bodyStyle:'padding:5px',
 		x:0,
 		y:0,
-		width: 400, 
+		width: 500, 
 		autoHeight: true,
-		items: [rpt_piutang_periodeField,rpt_piutang_opsiField, rpt_piutang_groupbyField],
+		items: [rpt_piutang_periodeField,rpt_piutang_opsiField, rpt_piutang_custbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
