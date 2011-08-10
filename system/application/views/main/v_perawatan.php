@@ -3883,6 +3883,16 @@ Ext.onReady(function(){
 	rawat_harga_hrField.on('focus',function(){ rawat_harga_hrField.setValue(convertToNumber(rawat_harga_hrField.getValue())); });
 	rawat_harga_hrField.on('blur',function(){ rawat_harga_hrField.setValue(CurrencyFormatted(rawat_harga_hrField.getValue())); });
 	
+	//Events for poin dan kredit
+	//rawat_kreditField
+	rawat_kreditField.on("change",function(){
+		rawat_kreditrpField.setValue(0);
+	});
+	
+	rawat_kreditrpField.on("change",function(){
+		rawat_kreditField.setValue(0);	
+	});
+	
 	//Events for diskon
 	rawat_duField.on("keyup",function(){
 		if(this.getRawValue()>100){
