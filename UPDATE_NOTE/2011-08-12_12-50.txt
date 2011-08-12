@@ -1,0 +1,1 @@
+m_labarugi: perbaikan perhitungan "bulan" & "s/d bulan ini", 2 digit awal tidak dipakai, karena hanya menunjukkan kode divisi

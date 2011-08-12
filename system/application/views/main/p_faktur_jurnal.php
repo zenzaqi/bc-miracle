@@ -7,8 +7,8 @@
 </head><body onload='window.print()'>
 <table summary='Customer List' border="1" cellspacing="0" cellpadding="0" width="700">
 <tr>
-	<td colspan="5">
-		<table border="0" cellspacing="0" cellpadding="0" class="clear" width="680">
+	<td colspan="6">
+		<table border="0" cellspacing="0" cellpadding="0" class="clear" width="780">
 			<tr>
 				<td align="center"><center>
 				<h1>BUKTI JURNAL UMUM</h1>
@@ -29,11 +29,12 @@
 	</td>
 </tr>
 <tr>
-	<td align="center" width="30"><b>No</b></td>
-	<td align="center" width="100"><b>Kode Akun</b></td>
-	<td align="center"><b>Uraian</b></td>
-	<td align="center" width="150"><b>Debet (Rp)</b></td>
-	<td align="center" width="150"><b>Kredit (Rp)</b></td>
+	<td align="center" width="15"><b>No</b></td>
+	<td align="center" width="80"><b>Kode Akun</b></td>
+	<td align="center" width="175"><b>Nama Akun</b></td>
+	<td align="center" width="175"><b>Uraian</b></td>
+	<td align="center" width="80"><b>Debet (Rp)</b></td>
+	<td align="center" width="80"><b>Kredit (Rp)</b></td>
 </tr>
 <?php $i=0;
 	  $total_debet=0;
@@ -42,6 +43,7 @@
 <tr class="clear">
 	<td><?php echo $i; ?></td>
 	<td><?php echo $list_print->akun_kode; ?></td>
+	<td><?php echo $list_print->akun_nama; ?></td>
 	<td><?php echo $list_print->uraian; ?></td>
 	<td class="numeric" style="align:right"><?php echo number_format($list_print->debet); ?></td>
 	<td class="numeric" style="align:right"><?php echo number_format($list_print->kredit); ?></td>
@@ -51,16 +53,16 @@
 	$total_debet+=$list_print->debet;
 	} ?>
 <tr>
-	<td colspan="3"> JUMLAH</td>
+	<td colspan="4"> JUMLAH</td>
 	<td class="numeric" style="align:right"> <?php echo number_format($total_debet);?></td>
 	<td class="numeric" style="align:right"> <?php echo number_format($total_kredit);?></td>
 </tr>
 <tr class="clear">
-	<td colspan="5"><?php echo "Terbilang : <b><i>".ucwords(terbilang($total_debet))." Rupiah</b></i>"; ?></td>
+	<td colspan="6"><?php echo "Terbilang : <b><i>".ucwords(terbilang($total_debet))." Rupiah</b></i>"; ?></td>
 </tr>
 <tfoot>
 <tr>
-	<table border="0" cellspacing="0" cellpadding="0" width="700">
+	<table border="0" cellspacing="0" cellpadding="0" width="784">
 		<tr class="clear">
 			<td>
 				Disetujui,
@@ -69,7 +71,7 @@
 				<br/>
 			</td>
 			<td>
-				Penerima,
+				Pembuat/Accounting,
 				<br/>
 				<br/>
 				<br/>
