@@ -844,7 +844,7 @@ Ext.onReady(function(){
 			handler: kasbank_masuk_reset_search,
 			iconCls:'icon-refresh'
 		}
-		<?php if(ereg('R',$this->m_security->get_access_group_by_kode('MENU_POSTING'))){ ?>
+		<?php if(ereg('D',$this->m_security->get_access_group_by_kode('MENU_KASBANKMASUK'))){ ?>
 		,'-',
 		{
 			text: 'Buka Posting',

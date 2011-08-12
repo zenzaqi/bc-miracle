@@ -205,154 +205,172 @@ Ext.onReady(function(){
 
   	/* Function for add data, open window create form */
 	function paket_create(){
-
-		if(is_paket_form_valid()){
-		var paket_id_create_pk=null;
-		var paket_kode_create=null;
-		var paket_kodelama_create=null;
-		var paket_nama_create=null;
-		var paket_group_create=null;
-		var paket_keterangan_create=null;
-		var paket_du_create=null;
-		var paket_dm_create=null;
-		var paket_dultah_create=null;
-		var paket_dcard_create=null;
-		var paket_dkolega_create=null;
-		var paket_dkeluarga_create=null;
-		var paket_downer_create=null;
-		var paket_dgrooming_create=null;
-		var paket_dwartawan_create=null;
-		var paket_dstaffdokter_create=null;
-		var paket_dstaffnondokter_create=null;
-		var paket_point_create=null;
-		var paket_harga_create=null;
-		var paket_expired_create=null;
-		var paket_perpanjangan_create=null;
-		var paket_aktif_create=null;
-		var paket_harga_createki=null;
-		var paket_harga_createmta=null;
-		var paket_harga_createlbk=null;
-		var paket_harga_createhr=null;
-		var paket_harga_createmdn=null;
-		var paket_harga_createmnd=null;
-		var paket_harga_createygk=null;
-
-		if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();}
-		if(paket_kodeField.getValue()!== null){paket_kode_create = paket_kodeField.getValue();}
-		if(paket_kodelamaField.getValue()!== null){paket_kodelama_create = paket_kodelamaField.getValue();}
-		if(paket_namaField.getValue()!== null){paket_nama_create = paket_namaField.getValue();}
-		if(paket_groupField.getValue()!== null){paket_group_create = paket_groupField.getValue();}
-		if(paket_keteranganField.getValue()!== null){paket_keterangan_create = paket_keteranganField.getValue();}
-		if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();}
-		if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();}
-		if(paket_dultahField.getValue()!== null){paket_dultah_create = paket_dultahField.getValue();}
-		if(paket_dcardField.getValue()!== null){paket_dcard_create = paket_dcardField.getValue();}
-		if(paket_dkolegaField.getValue()!== null){paket_dkolega_create = paket_dkolegaField.getValue();}
-		if(paket_dkeluargaField.getValue()!== null){paket_dkeluarga_create = paket_dkeluargaField.getValue();}
-		if(paket_downerField.getValue()!== null){paket_downer_create = paket_downerField.getValue();}
-		if(paket_dgroomingField.getValue()!== null){paket_dgrooming_create = paket_dgroomingField.getValue();}
-		if(paket_dwartawanField.getValue()!== null){paket_dwartawan_create = paket_dwartawanField.getValue();}
-		if(paket_dstaffdokterField.getValue()!== null){paket_dstaffdokter_create = paket_dstaffdokterField.getValue();}
-		if(paket_dstaffnondokterField.getValue()!== null){paket_dstaffnondokter_create = paket_dstaffnondokterField.getValue();}
-		if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
-		if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
-		if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
-		if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
-		if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());}
-		if(paket_harga_kiField.getValue()!== null){paket_harga_createki = convertToNumber(paket_harga_kiField.getValue());}
-		if(paket_harga_mdnField.getValue()!== null){paket_harga_createmdn = convertToNumber(paket_harga_mdnField.getValue());}
-		if(paket_harga_mndField.getValue()!== null){paket_harga_createmnd = convertToNumber(paket_harga_mndField.getValue());}
-		if(paket_harga_mtaField.getValue()!== null){paket_harga_createmta = convertToNumber(paket_harga_mtaField.getValue());}
-		if(paket_harga_lbkField.getValue()!== null){paket_harga_createlbk = convertToNumber(paket_harga_lbkField.getValue());}
-		if(paket_harga_hrField.getValue()!== null){paket_harga_createhr = convertToNumber(paket_harga_hrField.getValue());}
-		if(paket_harga_ygkField.getValue()!== null){paket_harga_createygk = convertToNumber(paket_harga_ygkField.getValue());}
-		//if(paket_Field.getValue()!== null){paket_create = paket_Field.getValue();}
-
-		Ext.Ajax.request({
-			waitMsg: 'Mohon tunggu...',
-			url: 'index.php?c=c_paket&m=get_action',
-			params: {
-				task: post2db,
-				paket_id	: paket_id_create_pk,
-				paket_kode	: paket_kode_create,
-				paket_kodelama	: paket_kodelama_create,
-				paket_nama	: paket_nama_create,
-				
-				paket_group	: paket_group_create,
-				paket_keterangan	: paket_keterangan_create,
-				paket_du		: paket_du_create,
-				paket_dm		: paket_dm_create,
-				paket_dultah	: paket_dultah_create,
-				paket_dcard		: paket_dcard_create,
-				paket_dkolega	: paket_dkolega_create,
-				paket_dkeluarga	: paket_dkeluarga_create,
-				paket_downer	: paket_downer_create,
-				paket_dgrooming	: paket_dgrooming_create,
-				paket_dwartawan	: paket_dwartawan_create,
-				paket_dstaffdokter	: paket_dstaffdokter_create,
-				paket_dstaffnondokter	: paket_dstaffnondokter_create,
-				paket_point	: paket_point_create,
-				paket_harga	: paket_harga_create,
-				paket_expired	: paket_expired_create,
-				paket_perpanjangan : paket_perpanjangan_create,
-				paket_aktif	: paket_aktif_create,
-				paket_harga_mta : paket_harga_createmta,
-				paket_harga_ki : paket_harga_createki,
-				paket_harga_mdn : paket_harga_createmdn,
-				paket_harga_mnd : paket_harga_createmnd,
-				paket_harga_ygk : paket_harga_createygk,
-				paket_harga_lbk : paket_harga_createlbk,
-				paket_harga_hr	: paket_harga_createhr,
-				//paket : paket_create,
-				paket_aktif_th : paket_aktif_thField.getValue(),
-				paket_aktif_ki : paket_aktif_kiField.getValue(),
-				paket_aktif_hr : paket_aktif_hrField.getValue(),
-				paket_aktif_tp : paket_aktif_tpField.getValue(),
-				paket_aktif_dps : paket_aktif_dpsField.getValue(),
-				paket_aktif_jkt : paket_aktif_jktField.getValue(),
-				paket_aktif_mta : paket_aktif_mtaField.getValue(),
-				paket_aktif_blpn : paket_aktif_blpnField.getValue(),
-				paket_aktif_kuta : paket_aktif_kutaField.getValue(),
-				paket_aktif_btm : paket_aktif_btmField.getValue(),
-				paket_aktif_mks : paket_aktif_mksField.getValue(),
-				paket_aktif_mdn : paket_aktif_mdnField.getValue(),
-				paket_aktif_lbk : paket_aktif_lbkField.getValue(),
-				paket_aktif_mnd : paket_aktif_mndField.getValue(),
-				paket_aktif_ygk : paket_aktif_ygkField.getValue(),
-				paket_aktif_mlg : paket_aktif_mlgField.getValue()
-			},
-			success: function(response){
-				var result=eval(response.responseText);
-				switch(result){
-					case 1:
-						paket_isi_produk_purge();
-						paket_isi_perawatan_purge();
-						Ext.MessageBox.alert(post2db+' OK','Data Paket berhasil disimpan');
-						paket_DataStore.reload();
-						paket_createWindow.hide();
-						break;
-					default:
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   msg: 'Data paket tidak bisa disimpan',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-						break;
-				}
-			},
-			failure: function(response){
-				var result=response.responseText;
-				Ext.MessageBox.show({
-					   title: 'Error',
-					   msg: 'Tidak bisa terhubung dengan database server',
-					   buttons: Ext.MessageBox.OK,
-					   animEl: 'database',
-					   icon: Ext.MessageBox.ERROR
-				});
+		var status_nol = 0;
+		for(i=0; i<paket_isi_perawatan_DataStore.getCount(); i++){
+			paket_isi_perawatan_DataStore_record=paket_isi_perawatan_DataStore.getAt(i);
+			if(paket_isi_perawatan_DataStore_record.data.rpaket_jumlah!=0){
+				status_nol=1;
 			}
-		});
+		}
+		if(is_paket_form_valid()){
+			if (status_nol == 1){
+				var paket_id_create_pk=null;
+				var paket_kode_create=null;
+				var paket_kodelama_create=null;
+				var paket_nama_create=null;
+				var paket_group_create=null;
+				var paket_keterangan_create=null;
+				var paket_du_create=null;
+				var paket_dm_create=null;
+				var paket_dultah_create=null;
+				var paket_dcard_create=null;
+				var paket_dkolega_create=null;
+				var paket_dkeluarga_create=null;
+				var paket_downer_create=null;
+				var paket_dgrooming_create=null;
+				var paket_dwartawan_create=null;
+				var paket_dstaffdokter_create=null;
+				var paket_dstaffnondokter_create=null;
+				var paket_point_create=null;
+				var paket_harga_create=null;
+				var paket_expired_create=null;
+				var paket_perpanjangan_create=null;
+				var paket_aktif_create=null;
+				var paket_harga_createki=null;
+				var paket_harga_createmta=null;
+				var paket_harga_createlbk=null;
+				var paket_harga_createhr=null;
+				var paket_harga_createmdn=null;
+				var paket_harga_createmnd=null;
+				var paket_harga_createygk=null;
+
+				if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();}
+				if(paket_kodeField.getValue()!== null){paket_kode_create = paket_kodeField.getValue();}
+				if(paket_kodelamaField.getValue()!== null){paket_kodelama_create = paket_kodelamaField.getValue();}
+				if(paket_namaField.getValue()!== null){paket_nama_create = paket_namaField.getValue();}
+				if(paket_groupField.getValue()!== null){paket_group_create = paket_groupField.getValue();}
+				if(paket_keteranganField.getValue()!== null){paket_keterangan_create = paket_keteranganField.getValue();}
+				if(paket_duField.getValue()!== null){paket_du_create = paket_duField.getValue();}
+				if(paket_dmField.getValue()!== null){paket_dm_create = paket_dmField.getValue();}
+				if(paket_dultahField.getValue()!== null){paket_dultah_create = paket_dultahField.getValue();}
+				if(paket_dcardField.getValue()!== null){paket_dcard_create = paket_dcardField.getValue();}
+				if(paket_dkolegaField.getValue()!== null){paket_dkolega_create = paket_dkolegaField.getValue();}
+				if(paket_dkeluargaField.getValue()!== null){paket_dkeluarga_create = paket_dkeluargaField.getValue();}
+				if(paket_downerField.getValue()!== null){paket_downer_create = paket_downerField.getValue();}
+				if(paket_dgroomingField.getValue()!== null){paket_dgrooming_create = paket_dgroomingField.getValue();}
+				if(paket_dwartawanField.getValue()!== null){paket_dwartawan_create = paket_dwartawanField.getValue();}
+				if(paket_dstaffdokterField.getValue()!== null){paket_dstaffdokter_create = paket_dstaffdokterField.getValue();}
+				if(paket_dstaffnondokterField.getValue()!== null){paket_dstaffnondokter_create = paket_dstaffnondokterField.getValue();}
+				if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
+				if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
+				if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
+				if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
+				if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());}
+				if(paket_harga_kiField.getValue()!== null){paket_harga_createki = convertToNumber(paket_harga_kiField.getValue());}
+				if(paket_harga_mdnField.getValue()!== null){paket_harga_createmdn = convertToNumber(paket_harga_mdnField.getValue());}
+				if(paket_harga_mndField.getValue()!== null){paket_harga_createmnd = convertToNumber(paket_harga_mndField.getValue());}
+				if(paket_harga_mtaField.getValue()!== null){paket_harga_createmta = convertToNumber(paket_harga_mtaField.getValue());}
+				if(paket_harga_lbkField.getValue()!== null){paket_harga_createlbk = convertToNumber(paket_harga_lbkField.getValue());}
+				if(paket_harga_hrField.getValue()!== null){paket_harga_createhr = convertToNumber(paket_harga_hrField.getValue());}
+				if(paket_harga_ygkField.getValue()!== null){paket_harga_createygk = convertToNumber(paket_harga_ygkField.getValue());}
+				//if(paket_Field.getValue()!== null){paket_create = paket_Field.getValue();}
+
+				Ext.Ajax.request({
+					waitMsg: 'Mohon tunggu...',
+					url: 'index.php?c=c_paket&m=get_action',
+					params: {
+						task: post2db,
+						paket_id	: paket_id_create_pk,
+						paket_kode	: paket_kode_create,
+						paket_kodelama	: paket_kodelama_create,
+						paket_nama	: paket_nama_create,
+						
+						paket_group	: paket_group_create,
+						paket_keterangan	: paket_keterangan_create,
+						paket_du		: paket_du_create,
+						paket_dm		: paket_dm_create,
+						paket_dultah	: paket_dultah_create,
+						paket_dcard		: paket_dcard_create,
+						paket_dkolega	: paket_dkolega_create,
+						paket_dkeluarga	: paket_dkeluarga_create,
+						paket_downer	: paket_downer_create,
+						paket_dgrooming	: paket_dgrooming_create,
+						paket_dwartawan	: paket_dwartawan_create,
+						paket_dstaffdokter	: paket_dstaffdokter_create,
+						paket_dstaffnondokter	: paket_dstaffnondokter_create,
+						paket_point	: paket_point_create,
+						paket_harga	: paket_harga_create,
+						paket_expired	: paket_expired_create,
+						paket_perpanjangan : paket_perpanjangan_create,
+						paket_aktif	: paket_aktif_create,
+						paket_harga_mta : paket_harga_createmta,
+						paket_harga_ki : paket_harga_createki,
+						paket_harga_mdn : paket_harga_createmdn,
+						paket_harga_mnd : paket_harga_createmnd,
+						paket_harga_ygk : paket_harga_createygk,
+						paket_harga_lbk : paket_harga_createlbk,
+						paket_harga_hr	: paket_harga_createhr,
+						//paket : paket_create,
+						paket_aktif_th : paket_aktif_thField.getValue(),
+						paket_aktif_ki : paket_aktif_kiField.getValue(),
+						paket_aktif_hr : paket_aktif_hrField.getValue(),
+						paket_aktif_tp : paket_aktif_tpField.getValue(),
+						paket_aktif_dps : paket_aktif_dpsField.getValue(),
+						paket_aktif_jkt : paket_aktif_jktField.getValue(),
+						paket_aktif_mta : paket_aktif_mtaField.getValue(),
+						paket_aktif_blpn : paket_aktif_blpnField.getValue(),
+						paket_aktif_kuta : paket_aktif_kutaField.getValue(),
+						paket_aktif_btm : paket_aktif_btmField.getValue(),
+						paket_aktif_mks : paket_aktif_mksField.getValue(),
+						paket_aktif_mdn : paket_aktif_mdnField.getValue(),
+						paket_aktif_lbk : paket_aktif_lbkField.getValue(),
+						paket_aktif_mnd : paket_aktif_mndField.getValue(),
+						paket_aktif_ygk : paket_aktif_ygkField.getValue(),
+						paket_aktif_mlg : paket_aktif_mlgField.getValue()
+					},
+					success: function(response){
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:
+								paket_isi_produk_purge();
+								paket_isi_perawatan_purge();
+								Ext.MessageBox.alert(post2db+' OK','Data Paket berhasil disimpan');
+								paket_DataStore.reload();
+								paket_createWindow.hide();
+								break;
+							default:
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Data paket tidak bisa disimpan',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Tidak bisa terhubung dengan database server',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});
+					}
+				});
+			} else {
+				Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Jumlah Detail Paket Isi Perawatan tidak boleh 0',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				width: 300,
+				icon: Ext.MessageBox.WARNING
+			});
+			
+			}
 		} else {
 			Ext.MessageBox.show({
 				title: 'Warning',

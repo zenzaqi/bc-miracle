@@ -41,15 +41,17 @@ class M_labarugi extends Model{
 			foreach($master->result() as $row){
 				
 				//s/d bulan ini
-				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
-						FROM	buku_besar B, akun A
-						WHERE B.buku_akun=A.akun_id
-						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+				$sql = "SELECT 
+							A.akun_kode, sum(B.buku_debet) as debet, sum(B.buku_kredit) as kredit
+						FROM buku_besar B, akun A
+						WHERE B.buku_akun = A.akun_id
+							AND substring(replace(A.akun_kode,'.',''), 3) like '".substr(str_replace(".","",$row->akun_kode), 2)."%' ";
+						//substring(x, 3) (mysql) & substr(x, 2) (php) --> karena 2 digit awal tidak dipakai (menunjukkan kode divisi)
 				if($buku_periode=="bulan"){
 					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
 				}
-				$sql.="GROUP BY A.akun_kode";
-				$sql.="	ORDER BY A.akun_kode ASC";
+				//$sql.="GROUP BY A.akun_kode";
+				//$sql.="	ORDER BY A.akun_kode ASC";
 				
 				//$this->firephp->log($sql);;
 				
@@ -97,15 +99,17 @@ class M_labarugi extends Model{
 				}
 				
 				//bulan ini
-				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
-						FROM	buku_besar B, akun A
+				$sql = "SELECT 
+							A.akun_kode, sum(B.buku_debet) as debet, sum(B.buku_kredit) as kredit
+						FROM buku_besar B, akun A
 						WHERE B.buku_akun=A.akun_id
-						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+							AND substring(replace(A.akun_kode,'.',''), 3) like '".substr(str_replace(".","",$row->akun_kode), 2)."%' ";
+						//substring(x, 3) (mysql) & substr(x, 2) (php) --> karena 2 digit awal tidak dipakai (menunjukkan kode divisi)
 				if($buku_periode=="bulan"){
 					$sql.="	AND date_format(buku_tanggal,'%Y-%m')='".$buku_tahun."-".$buku_bulan."'";
 				}
-				$sql.="GROUP BY A.akun_kode";
-				$sql.="	ORDER BY A.akun_kode ASC";
+				//$sql.="GROUP BY A.akun_kode";
+				//$sql.="	ORDER BY A.akun_kode ASC";
 						
 				$isi=$this->db->query($sql);
 				if($isi->num_rows()){
