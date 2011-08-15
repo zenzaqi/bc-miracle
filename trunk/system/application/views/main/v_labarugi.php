@@ -135,7 +135,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_labarugi&m=get_action', 
 			method: 'POST'
 		}),
-		groupField:'labarugi_jenis_id',
+		//groupField:'labarugi_jenis_id',
 		baseParams:{task: "LIST", start: 0, limit: pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
@@ -144,13 +144,14 @@ Ext.onReady(function(){
 		},[
 			{name: 'labarugi_jenis', type: 'string', mapping: 'labarugi_jenis'},
 			{name: 'labarugi_jenis_id', type: 'string', mapping: 'labarugi_jenis_id'},
+			{name: 'akun_parent_kode', type: 'string', mapping: 'akun_parent_kode'},
 			{name: 'labarugi_akun', type: 'int', mapping: 'labarugi_akun'}, 
 			{name: 'labarugi_akun_kode', type: 'string', mapping: 'labarugi_akun_kode'}, 
 			{name: 'labarugi_akun_nama', type: 'string', mapping: 'labarugi_akun_nama'}, 
 			{name: 'labarugi_saldo', type: 'float', mapping: 'labarugi_saldo'}, 
 			{name: 'labarugi_saldo_periode', type: 'float', mapping: 'labarugi_saldo_periode'}, 
 		]),
-		sortInfo:{field: 'labarugi_akun_kode', direction: "ASC"}
+		//sortInfo:{field: 'labarugi_akun_kode', direction: "ASC"}
 	});
 	/* End of Function */
     
@@ -158,10 +159,19 @@ Ext.onReady(function(){
 
   	/* Function for Identify of Window Column Model */
 	labarugi_ColumnModel = new Ext.grid.ColumnModel(
-		[{
-			header: 'Jenis',
+		[
+		/*{
+			header: 'Kode Grup Akun',
+			dataIndex: 'akun_parent_kode',
+			width: 80,
+			sortable: false,
+			readOnly: true
+            }
+		},*/
+		{
+			header: 'Grup Akun', //'Jenis',
 			dataIndex: 'labarugi_jenis_id',
-			width: 100,
+			width: 200,
 			sortable: false,
 			readOnly: true,
 			renderer: function(v, params, record){
@@ -172,7 +182,7 @@ Ext.onReady(function(){
 		{
 			header: 'Kode',
 			dataIndex: 'labarugi_akun_kode',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -184,9 +194,9 @@ Ext.onReady(function(){
 			readOnly: true
 		},
 		{
-			header: 'Bulan ini',
+			header: 'Bulan Ini (Rp)',
 			dataIndex: 'labarugi_saldo_periode',
-			width: 150,
+			width: 100,
 			align :'right',
 			sortable: true,
 			readOnly: true,
@@ -194,9 +204,9 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'S/d Bulan ini',
+			header: 'S/d Bulan Ini (Rp)',
 			dataIndex: 'labarugi_saldo',
-			width: 150,
+			width: 100,
 			align :'right',
 			sortable: true,
 			readOnly: true,
@@ -217,7 +227,7 @@ Ext.onReady(function(){
 		}*/
 		]);
 	
-	labarugi_ColumnModel.defaultSortable= true;
+	//labarugi_ColumnModel.defaultSortable= true;
 	/* End of Function */
     
 	/* Declare DataStore and  show datagrid list */
