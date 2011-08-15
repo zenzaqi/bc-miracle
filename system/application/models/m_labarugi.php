@@ -24,8 +24,9 @@ class M_labarugi extends Model{
 			
 			
 			//AKUN LEVEL 1
-			$sql="SELECT	A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, 
-							B.akun_nama as akun_parent 
+			$sql = "SELECT	
+						A.akun_id, A.akun_saldo, A.akun_kode, A.akun_jenis, A.akun_nama, A.akun_level,
+						B.akun_id as akun_parent_id, B.akun_nama as akun_parent, B.akun_kode as akun_parent_kode
 					FROM 	akun A, akun B
 					WHERE 	A.akun_level=2  
 							AND A.	akun_parent_kode=B.akun_kode
@@ -38,6 +39,9 @@ class M_labarugi extends Model{
 
 			$saldo=0;
 			$i=0;
+			$labarugi_tot = 0;
+			$labarugi_tot_periode = 0;
+			
 			foreach($master->result() as $row){
 				
 				//s/d bulan ini
@@ -70,9 +74,11 @@ class M_labarugi extends Model{
 					if($rowsaldo->akun_saldo=='Debet'){
 						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
 					}else{
-						$data[$i]["labarugi_saldo"]= ($rowsaldo->debet-$rowsaldo->kredit);
+						$data[$i]["labarugi_saldo"]= ($rowsaldo->kredit-$rowsaldo->debet);
 					}
 				}
+				$labarugi_tot += ($rowsaldo->debet - $rowsaldo->kredit);
+				
 				//----->
 					
 				$isi=$this->db->query($sql);
@@ -97,7 +103,8 @@ class M_labarugi extends Model{
 					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
 					$data[$i]["labarugi_saldo"]=0;
 				}
-				
+				$labarugi_tot += ($rowisi->debet - $rowisi->kredit);
+								
 				//bulan ini
 				$sql = "SELECT 
 							A.akun_kode, sum(B.buku_debet) as debet, sum(B.buku_kredit) as kredit
@@ -121,10 +128,19 @@ class M_labarugi extends Model{
 				}else{
 					$data[$i]["labarugi_saldo_periode"]=0;
 				}
+				$labarugi_tot_periode += ($rowisi->debet - $rowisi->kredit);
 				
 				$i++;
 			}
 			
+					$data[$i]["labarugi_akun"]			= '';
+					$data[$i]["labarugi_jenis"]			= '';
+					$data[$i]["labarugi_jenis_id"]		= '';
+					$data[$i]["labarugi_akun_kode"]		= '';
+					$data[$i]["labarugi_akun_nama"]		= "<b>TOTAL LABA / RUGI :</b>";
+					$data[$i]["labarugi_saldo_periode"]	= $labarugi_tot_periode;
+					$data[$i]["labarugi_saldo"]			= $labarugi_tot;
+					
 			if($nbrows>0){
 				$jsonresult = json_encode($data);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
