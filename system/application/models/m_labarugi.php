@@ -77,7 +77,7 @@ class M_labarugi extends Model{
 						$data[$i]["labarugi_saldo"]= ($rowsaldo->kredit-$rowsaldo->debet);
 					}
 				}
-				$labarugi_tot += ($rowsaldo->debet - $rowsaldo->kredit);
+				$labarugi_tot += ($rowsaldo->kredit - $rowsaldo->debet);
 				
 				//----->
 					
@@ -103,7 +103,7 @@ class M_labarugi extends Model{
 					$data[$i]["labarugi_akun_nama"]=$row->akun_nama;
 					$data[$i]["labarugi_saldo"]=0;
 				}
-				$labarugi_tot += ($rowisi->debet - $rowisi->kredit);
+				$labarugi_tot += ($rowisi->kredit - $rowisi->debet);
 								
 				//bulan ini
 				$sql = "SELECT 
@@ -128,7 +128,7 @@ class M_labarugi extends Model{
 				}else{
 					$data[$i]["labarugi_saldo_periode"]=0;
 				}
-				$labarugi_tot_periode += ($rowisi->debet - $rowisi->kredit);
+				$labarugi_tot_periode += ($rowisi->kredit - $rowisi->debet);
 				
 				$i++;
 			}
