@@ -669,6 +669,7 @@ Ext.onReady(function(){
 		}else{
 			order_harga_satuanField.setDisabled(true);
 			order_diskon_satuanField.setDisabled(true);
+
 		}
 	}
 
@@ -1641,7 +1642,7 @@ Ext.onReady(function(){
 			<? } ?>
 			<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(0000,'0,000')+'</span>';
+				return '<span>'+'NA'+'</span>';
 			}
 			<? } ?>
 
@@ -1663,7 +1664,7 @@ Ext.onReady(function(){
 			<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
-                    return '<span>' + 0+ '</span>';
+                    return '<span>' +'NA'+ '</span>';
             }
 			<? } ?>
 			
