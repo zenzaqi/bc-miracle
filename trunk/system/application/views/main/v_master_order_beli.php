@@ -1626,7 +1626,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			editor: order_jumlah_barangField
 		},
-		<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
@@ -1634,12 +1634,19 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			editor:  order_harga_satuanField,
+			<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
+			<? } ?>
+			<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(0000,'0,000')+'</span>';
+			}
+			<? } ?>
 
 		},
-		<? } ?>
+
 		{
 			header: '<div align="center">' + 'Sub Total (Rp)' + '</div>',
 			align: 'right',
@@ -1647,10 +1654,19 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
+			<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
             }
+			<? } ?>
+			<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
+			renderer: function(v, params, record){
+					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
+                    return '<span>' + 0+ '</span>';
+            }
+			<? } ?>
+			
 		},
 		{
 			header: '<div align="center">Jml Terima</div>',
@@ -2510,7 +2526,18 @@ Ext.onReady(function(){
 					
 					if(cbo_dorder_produk_hargaDataStore.getCount()>0){
 					var last_price_op=cbo_dorder_produk_hargaDataStore.getAt(0);
-					order_harga_satuanField.setValue(last_price_op.data.dorder_harga);	
+					order_harga_satuanField.setValue(last_price_op.data.dorder_harga);
+					
+					<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+						order_harga_satuanField.setVisible(true);
+					<? } ?>
+					<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
+						order_harga_satuanField.setVisible(false);
+					<? } ?>
+					
+					
+			
+					
 					}
 				}
 			}
@@ -2546,6 +2573,9 @@ Ext.onReady(function(){
 		cbo_order_satuanDataStore.setBaseParam('selected_id',satuan_selected);
 		cbo_order_satuanDataStore.load();
 		stat='EDIT';
+		
+
+
 	});
 
 	detail_order_beli_DataStore.on("load", function(){
