@@ -91,7 +91,7 @@ Ext.onReady(function(){
 			{name: 'poin_faktur_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tanggal'}, 
 			{name: 'poin_faktur_cust_no', type: 'string', mapping: 'cust_no'}
 		]),
-		sortInfo:{field: 'poin_faktur_no', direction: "DESC"}
+		//sortInfo:{field: 'poin_faktur_no', direction: "DESC"}
 	});
 	/* End of Function */
    	
