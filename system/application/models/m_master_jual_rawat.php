@@ -443,16 +443,23 @@ class M_master_jual_rawat extends Model{
 	function member_point_update($jrawat_id){
 		$date_now=date('Y-m-d');
 		
-		$sqlu = "UPDATE master_jual_rawat, vu_jrawat_total_point
-			SET master_jual_rawat.jrawat_point = vu_jrawat_total_point.jrawat_total_point
-			WHERE master_jual_rawat.jrawat_id = vu_jrawat_total_point.jrawat_id
-				AND vu_jrawat_total_point.jrawat_id='".$jrawat_id."'";
+		$sqlu = "UPDATE master_jual_rawat JOIN (SELECT vu_jrawat_total_point.jrawat_id, 
+						vu_jrawat_total_point.jrawat_total_point
+					FROM vu_jrawat_total_point
+					WHERE vu_jrawat_total_point.jrawat_id = ".$jrawat_id."
+					LIMIT 1) AS vu_jrawat_total_point_temp ON (vu_jrawat_total_point_temp.jrawat_id = master_jual_rawat.jrawat_id)
+			SET master_jual_rawat.jrawat_point = vu_jrawat_total_point_temp.jrawat_total_point
+			WHERE master_jual_rawat.jrawat_id=".$jrawat_id;
 		$this->db->query($sqlu);
 		if($this->db->affected_rows()){
-			$sqlu_cust = "UPDATE customer, vu_jrawat_total_point
-				SET customer.cust_point = (customer.cust_point + vu_jrawat_total_point.jrawat_total_point)
-				WHERE customer.cust_id = vu_jrawat_total_point.jrawat_cust
-					AND vu_jrawat_total_point.jrawat_id='".$jrawat_id."'";
+			$sqlu_cust = "UPDATE customer JOIN (SELECT vu_jrawat_total_point.jrawat_id, 
+							vu_jrawat_total_point.jrawat_cust,
+							vu_jrawat_total_point.jrawat_total_point
+						FROM vu_jrawat_total_point
+						WHERE vu_jrawat_total_point.jrawat_id = ".$jrawat_id."
+						LIMIT 1) AS vu_jrawat_total_point_temp 
+				SET customer.cust_point = (customer.cust_point + vu_jrawat_total_point_temp.jrawat_total_point)
+				WHERE vu_jrawat_total_point_temp.jrawat_cust = customer.cust_id";
 			$this->db->query($sqlu_cust);
 			if($this->db->affected_rows()>-1){
 				return 1;
