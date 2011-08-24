@@ -139,7 +139,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
 			dataIndex: 'poin_faktur_no',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		},  
@@ -147,7 +147,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'poin_faktur_point',
 			align: 'right',
-			width: 60,
+			width: 40,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			readOnly: true
@@ -169,7 +169,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
 			dataIndex: 'poin_faktur_jenis',
-			width: 100,
+			width: 80,
 			sortable: true,
 			readOnly: true
 		}
@@ -191,7 +191,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,
+	  	width: 800,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: poin_faktur_DataStore,
