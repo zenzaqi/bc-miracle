@@ -80,7 +80,7 @@ class M_poin_faktur extends Model{
 				$query.= " tanggal LIKE '%".$poin_faktur_tanggal."%'";
 			};*/
 			
-			$query.=" ORDER BY tanggal, no_bukti ASC";
+			$query.=" ORDER BY tanggal DESC, no_bukti ASC";
 			
 			//$this->firephp->log($query);
 			
