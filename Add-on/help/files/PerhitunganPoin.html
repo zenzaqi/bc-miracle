@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html><head><title>Instalasi Modem</title>
+<html><head><title>Perhitungan Poin</title>
 <meta http-equiv="Content-Type" content="text/html; charset=Windows-1252">
 <meta http-equiv="Content-Style-Type" content="text/css">
 <style type="text/css"><!--
@@ -80,42 +80,51 @@ span.rvts9 /* Font Hint Italic */
  font-style: italic;
  color: #a0a0a0;
 }
-span.rvts10
+a.rvts10, span.rvts10
 {
- font-weight: bold;
+ color: #0000ff;
+ text-decoration: underline;
 }
+a.rvts10:hover { color: #0000ff; }
 span.rvts11
 {
- font-style: italic;
+ font-weight: bold;
 }
 span.rvts12
 {
+ font-weight: bold;
+ color: #ff0000;
 }
 span.rvts13
 {
- font-style: italic;
  font-weight: bold;
+ color: #0000ff;
 }
-span.rvts14 /* Font Style */
+span.rvts14
+{
+ font-weight: bold;
+ color: #800000;
+}
+span.rvts15 /* Font Style */
 {
  font-size: 16pt;
  font-family: 'Tahoma', 'Geneva', sans-serif;
  color: #ffffff;
 }
-span.rvts15 /* Font Style */
+span.rvts16 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'MS Sans Serif', 'Geneva', sans-serif;
  color: #808080;
 }
-span.rvts16 /* Font Style */
+span.rvts17 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
  color: #c0c0c0;
 }
-a.rvts17, span.rvts17 /* Font Style */
+a.rvts18, span.rvts18 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
@@ -137,9 +146,21 @@ p,ul,ol /* Paragraph Style */
 }
 .rvps2
 {
+ margin: 0px 0px 0px 25px;
+}
+.rvps3
+{
  margin: 0px 0px 0px 24px;
 }
-.rvps3 /* Paragraph Style */
+.rvps4
+{
+ margin: 0px 0px 0px 48px;
+}
+.rvps5
+{
+ margin: 0px 0px 0px 70px;
+}
+.rvps6 /* Paragraph Style */
 {
  text-align: left;
  text-indent: 0px;
@@ -147,13 +168,13 @@ p,ul,ol /* Paragraph Style */
  padding: 5px 5px 2px 5px;
  margin: -5px -5px 18px -5px;
 }
-.rvps4 /* Paragraph Style */
+.rvps7 /* Paragraph Style */
 {
  text-align: center;
  background: #e4e4e4;
  margin: 20px 0px 0px 0px;
 }
-.rvps5 /* Paragraph Style */
+.rvps8 /* Paragraph Style */
 {
  border-color: #c0c0c0;
  border-style: solid;
@@ -173,36 +194,46 @@ p,ul,ol /* Paragraph Style */
 <script type="text/javascript" src="hnd.js"></script>
 <meta name="generator" content="HelpNDoc Freeware Edition"></head>
 <body>
-<h1 class=rvps3><span class=rvts0><span class=rvts14>Instalasi Modem</span></span></h1>
-<p><span class=rvts12>Berikut langkah-langkah untuk melakukan instalasi driver perangkat modem:</span></p>
-<p><span class=rvts12></span><br><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=382 height=290 alt="" hspace=1 vspace=1 src="img_5.png"></p>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12><br></span></p>
+<h1 class=rvps6><span class=rvts0><span class=rvts15>Perhitungan Poin</span></span></h1>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
-<li><span class=rvts12>Ikuti petunjuk instalasi driver sampai selesai. </span></li>
-<li><span class=rvts12>Setelah proses instalasi driver modem selesai, selanjutnya kita harus melakukan pengecekan </span><span class=rvts10>port</span><span class=rvts12> mana yang digunakan oleh modem tersebut.</span><br><span class=rvts12><br></span></li>
-<li><span class=rvts12><a name="cek_port_modem"></a></span><span class=rvts12>Untuk mengetahui port mana yg digunakan modem tersebut dapat mengikuti langkah-langkah berikut:</span></li>
+<li><span class=rvts11>Perhitungan Poin</span> ditentukan dari <a class=rvts10 href="SetupMember.html#Setup Member">Setup Member</a>, yang hanya dapat dilakukan oleh Accounting.</li>
 </ul>
-<p><span class=rvts12>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+<p class=rvps2>Untuk contoh Setup Member Perhitungan Poin saat ini adalah:</p>
+<p class=rvps2><br></p>
+<p class=rvps2> &nbsp; &nbsp; &nbsp; &nbsp;<img border=0 alt="" hspace=1 vspace=1 src="img_122.jpg"></p>
+<p class=rvps2><br></p>
+<p class=rvps2>yang berarti setiap transaksi kelipatan Rp. 100.000,- akan mendapatkan 1 Poin.</p>
+<p><br></p>
+<p><br></p>
+<p><br></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li>Tidak semua Item (Produk, Perawatan, Paket) bisa mendapatkan poin. Untuk mengetahui item apa saja yang mendapatkan poin, dapat dilihat pada menu Master Data (Produk, Perawatan, Paket), kolom <span class=rvts11>Poin</span>.</li>
+</ul>
+<p> &nbsp; &nbsp; &nbsp; &nbsp;</p>
+<p> &nbsp; &nbsp; &nbsp; &nbsp;<img border=0 width=969 height=139 alt="" hspace=1 vspace=1 src="img_123.jpg"></p>
+<p><br></p>
+<p> &nbsp; &nbsp; &nbsp; &nbsp;<span class=rvts11>Note:</span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li class=rvps2 style="margin-left: 0"><span class=rvts12>DI Icon </span><span class=rvts10>My Computer</span><span class=rvts12> klik kanan --&gt; </span><span class=rvts10>Properties</span><span class=rvts12> </span></li>
+<li class=rvps3 style="margin-left: 0">Ketentuan item apa saja yang mendapatkan poin atau tidak ditentukan oleh Corporate Accounting.</li>
 </ul></ul>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts12>&nbsp; </span><img border=0 width=172 height=191 alt="" hspace=1 vspace=1 src="img_224.jpg"></p>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12><br></span></p>
+<p class=rvps3><br></p>
+<p><br></p>
+<p><br></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;">
+<li><span class=rvts11>Contoh Perhitungan Poin</span></li>
+</ul>
+<p><span class=rvts11><br></span></p>
 <ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li class=rvps2 style="margin-left: 0"><span class=rvts12>Pilih Tab </span><span class=rvts10>Hardware</span><span class=rvts12> -- &gt; </span><span class=rvts10>Device Manager</span></li>
+<li class=rvps3 style="margin-left: 0">Customer X melakukan pembelian:</li>
 </ul></ul>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12> </span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=307 height=357 alt="" hspace=1 vspace=1 src="img_225.jpg"></p>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12><br></span></p>
-<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
-<li class=rvps2 style="margin-left: 0"><span class=rvts12>Kemudian tekan tanda "</span><span class=rvts10>+</span><span class=rvts12>" pada Ports (COM &amp; LPT). </span><br><span class=rvts11>contoh pada gambar: port yg digunakan modem adalah </span><span class=rvts13>COM4</span><span class=rvts11> (Prolific USB-to-Serial Comm Port (COM4)).</span></li>
-</ul></ul>
-<p><span class=rvts12><br></span></p>
-<p><span class=rvts12>&nbsp;&nbsp;&nbsp;&nbsp; </span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><span class=rvts12> &nbsp; &nbsp; &nbsp; &nbsp;</span><img border=0 width=504 height=354 alt="" hspace=1 vspace=1 src="img_226.jpg"></p>
-<p class=rvps4><span class=rvts15>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
-<p class=rvps5><span class=rvts16>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts17 href="http://www.helpndoc.com" target="_blank">Easily create PDF Help documents</a></p>
+<ol style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ol style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li value=1 class=rvps4 style="margin-left: 0">Produk A, Rp. <span class=rvts12>80.000</span>,-, sebanyak <span class=rvts13>2</span> pcs. Pada master data, kolom Poin tersetting <span class=rvts14>1</span> (mendapatkan Poin)</li>
+<li value=2 class=rvps4 style="margin-left: 0">Produk B, Rp. <span class=rvts12>145.000</span>,-, sebanyak <span class=rvts13>1</span> pcs. Pada master data, kolom Poin tersetting <span class=rvts14>1</span> (mendapatkan Poin)</li>
+</ol></ol></ol>
+<p class=rvps5>Maka Poin yang didapat oleh Customer X adalah: </p>
+<p class=rvps5> &nbsp; &nbsp; &nbsp; &nbsp;= ((<span class=rvts12>80.000</span> * <span class=rvts14>1</span> * <span class=rvts13>2</span>) + ( <span class=rvts12>145.000</span> * <span class=rvts14>1</span> * <span class=rvts13>1</span>)) / 100.000</p>
+<p class=rvps5> &nbsp; &nbsp; &nbsp; &nbsp;= (305.000) / 100.000</p>
+<p class=rvps5> &nbsp; &nbsp; &nbsp; &nbsp;= <span class=rvts11>3 Poin</span></p>
+<p class=rvps7><span class=rvts16>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
+<p class=rvps8><span class=rvts17>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts18 href="http://www.helpndoc.com" target="_blank">Free PDF documentation generator</a></p>
 </body></html>
