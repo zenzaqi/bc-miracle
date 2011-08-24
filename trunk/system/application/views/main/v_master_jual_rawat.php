@@ -2024,12 +2024,20 @@ Ext.override(Ext.form.Field, {
 	
 	
 	function master_jual_rawat_set_updating(){
+			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust')=='STAFF MIRACLE'){
+				jrawat_karyawanField.setDisabled(false);
+			}else {
+				jrawat_karyawanField.setDisabled(true);
+				jrawat_karyawanField.setValue(null);
+				jrawat_nikkaryawanField.setValue(null);
+			}
+			
             if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
                 jrawat_custField.setDisabled(true);
                 jrawat_tanggalField.setDisabled(true);
                 jrawat_keteranganField.setDisabled(false);
 				jrawat_ket_diskField.setDisabled(false);
-				jrawat_karyawanField.setDisabled(true);
+				//jrawat_karyawanField.setDisabled(true);
 				jrawat_nikkaryawanField.setDisabled(false);
 				
 				//master_cara_bayarTabPanel.setDisabled(false);
