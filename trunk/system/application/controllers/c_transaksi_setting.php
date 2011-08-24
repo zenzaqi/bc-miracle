@@ -72,9 +72,10 @@ class C_transaksi_setting extends Controller {
 		//POST variable here
 			
 		$trans_op_days=trim(@$_POST["trans_op_days"]);
+		$mb_days=trim(@$_POST["mb_days"]);
 		$trans_update=@$_SESSION[SESSION_USERID];
 		$trans_date_update=date(LONG_FORMATDATE);
-		$result = $this->m_transaksi_setting->transaksi_setting_update($trans_op_days, $trans_update, $trans_date_update);
+		$result = $this->m_transaksi_setting->transaksi_setting_update($trans_op_days, $mb_days, $trans_update, $trans_date_update);
 		echo $result;
 	}
 	
