@@ -88,13 +88,13 @@ class M_Trial_balance extends Model{
 
 					if($tgl_awal!==""){
 						if($row->akun_saldo=='Debet'){
-							$sql="SELECT sum(buku_debet)-sum(buku_kredit) as buku_saldo
+							$sql="SELECT sum(ifnull(buku_debet, 0)) - sum(ifnull(buku_kredit, 0)) as buku_saldo
 								FROM buku_besar
 								WHERE buku_akun=".$row->akun_id."
 								AND buku_tanggal < '".$tgl_awal."'";
 
 						}else{
-								$sql="SELECT sum(buku_kredit)-sum(buku_debet) as buku_saldo
+								$sql="SELECT sum(ifnull(buku_kredit, 0)) - sum(ifnull(buku_debet, 0)) as buku_saldo
 								FROM buku_besar
 								WHERE buku_akun=".$row->akun_id."
 								AND buku_tanggal < '".$tgl_awal."'";
@@ -206,30 +206,36 @@ class M_Trial_balance extends Model{
 				*/		
 				
 				// SQL dari Hendri
-				$sql="INSERT INTO trial_balance(akun_id,
-                                         akun_kode,
-                                         akun_nama,
-                                         akun_jenis,
-                                         akun_saldo,
-                                         akun_debet,
-                                         akun_kredit,
-                                         akun_awal,
-                                         akun_awal_jenis,
-                                         akun_akhir,
-                                         akun_akhir_jenis,
-                                         akun_periode_awal,
-                                         akun_periode_akhir,
-                                         akun_generate_date)
-						 SELECT 999999999 as akun_id, '999.999.999' as akun_kode,
-						        'TOTAL' as akun_nama, 'D/K' as akun_jenis, 'D/K' as akun_saldo,
-								sum(akun_debet) as debet, sum(akun_kredit) as akun_kredit,
-								sum(case when akun_awal_jenis = 'DB' then akun_awal else -akun_awal end) as akun_awal, 
-								'D/K' as akun_awal_jenis,
-								sum(case when akun_akhir_jenis = 'DB' then akun_akhir else -akun_akhir end) as akun_akhir, 
-								'D/K' as akun_akhir_jenis,
-								akun_periode_awal,
-								akun_periode_akhir,
-								akun_generate_date
+				$sql = "INSERT INTO trial_balance(
+							akun_id,
+							akun_kode,
+							akun_nama,
+							akun_jenis,
+							akun_saldo,
+							akun_debet,
+							akun_kredit,
+							akun_awal,
+							akun_awal_jenis,
+							akun_akhir,
+							akun_akhir_jenis,
+							akun_periode_awal,
+							akun_periode_akhir,
+							akun_generate_date)
+						SELECT 
+							999999999 as akun_id, 
+							'999.999.999' as akun_kode,
+							'TOTAL' as akun_nama, 
+							'D/K' as akun_jenis, 
+							'D/K' as akun_saldo,
+							sum(akun_debet) as debet, 
+							sum(akun_kredit) as akun_kredit,
+							sum(case when akun_awal_jenis = 'DB' then akun_awal else -akun_awal end) as akun_awal, 
+							'D/K' as akun_awal_jenis,
+							sum(case when akun_akhir_jenis = 'DB' then akun_akhir else -akun_akhir end) as akun_akhir, 
+							'D/K' as akun_akhir_jenis,
+							akun_periode_awal,
+							akun_periode_akhir,
+							akun_generate_date
 						FROM  trial_balance
 						WHERE  date_format(akun_periode_awal,'Y-m-d')=date_format('".$tgl_awal."','Y-m-d')
 								AND date_format(akun_periode_akhir,'Y-m-d')=date_format('".$tgl_akhir."','Y-m-d')";
