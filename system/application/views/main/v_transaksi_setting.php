@@ -60,14 +60,18 @@ Ext.onReady(function(){
 	function transaksi_setting_save(){
 	
 		if(is_transaksi_setting_form_valid()){	
-			var trans_op_days_field=null; 			
+			var trans_op_days_field=null; 
+			var mb_days_field=null;
+			
 			if(trans_days_Field.getValue()!== null){trans_op_days_field = trans_days_Field.getValue();}
-					
+			if(mutasi_barang_days_Field.getValue()!== null){mb_days_field = mutasi_barang_days_Field.getValue();}
+
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_transaksi_setting&m=get_action',
 				params: {
 					trans_op_days	: trans_op_days_field, 
+					mb_days			: mb_days_field,
 					task			: post2db
 				}, 
 				success: function(response){             
@@ -150,6 +154,7 @@ Ext.onReady(function(){
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
 
 			{name: 'trans_op_days', type: 'string', mapping: 'trans_op_days'}, 
+			{name: 'mb_days', type: 'int', mapping: 'mb_days'},
 			{name: 'trans_author', type: 'string', mapping: 'trans_author'}, 
 			{name: 'trans_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'trans_date_create'}, 
 			{name: 'trans_update', type: 'string', mapping: 'trans_update'}, 
@@ -170,8 +175,21 @@ Ext.onReady(function(){
 		maxLength : 11		
 	});
 	
+	mutasi_barang_days_Field= new Ext.form.NumberField({
+		id: 'mutasi_barang_days_Field',
+		name: 'mb_days',
+		fieldLabel: 'Penguncian Mutasi Barang',
+		allowNegatife : false,
+		allowDecimals: true,
+		anchor: '20%',
+		width : 40,
+		maxLength : 11		
+	});
+	
 	set_trans_label_transField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Masa berlaku OP : &nbsp;'});
+	set_mb_labelField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Penguncian Mutasi Barang : &nbsp;'});
 	set_trans_label_daysField=new Ext.form.Label({ html: '&nbsp; hari<br> <br>'});
+	set_mb_label_daysField=new Ext.form.Label({ html: '&nbsp; hari<br> <br>'});
 	
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -184,7 +202,8 @@ Ext.onReady(function(){
 			//id: 'setcrm_id'
 		},[
 		/* dataIndex => insert intomember_setup_ColumnModel, Mapping => for initiate table column */ 
-			{name: 'trans_op_days', type: 'string', mapping: 'trans_op_days'}, 
+			{name: 'trans_op_days', type: 'string', mapping: 'trans_op_days'},
+			{name: 'mb_days', type: 'int', mapping: 'mb_days'},			
 			{name: 'trans_author', type: 'string', mapping: 'trans_author'}, 
 			{name: 'trans_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'trans_date_create'}, 
 			{name: 'trans_update', type: 'string', mapping: 'trans_update'}, 
@@ -202,7 +221,7 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'column',
 				border:false,
-				items: [ set_trans_label_transField, trans_days_Field, set_trans_label_daysField] 
+				items: [ set_trans_label_transField, trans_days_Field, set_trans_label_daysField, set_mb_labelField, mutasi_barang_days_Field, set_mb_label_daysField] 
 			}
 			],
 		buttons: [{
@@ -223,8 +242,6 @@ Ext.onReady(function(){
 		]
 	});
 	/* End  of Function*/
-	
-	
 	
 	/* Function for retrieve create Window Form */
 	transaksi_setting_saveWindow= new Ext.Window({

@@ -56,9 +56,10 @@ class M_transaksi_setting extends Model{
 		}
 		
 		//function for update record
-		function transaksi_setting_update($trans_op_days, $trans_update, $trans_date_update){
+		function transaksi_setting_update($trans_op_days, $mb_days, $trans_update, $trans_date_update){
 			$data = array(				
-				"trans_op_days"=>$trans_op_days,				
+				"trans_op_days"=>$trans_op_days,
+				"mb_days"=>$mb_days,				
 				"trans_update"=>$trans_update, 
 				"trans_date_update"=>$trans_date_update 
 			);
