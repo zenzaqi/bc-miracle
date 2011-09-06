@@ -63,11 +63,11 @@
 						$i++;
 						$total_item+=$print->drpaket_jumlah_terambil;
 						$total_back+=$print->drpaket_jumlah_diretur;
-						$total_nilai+=$print->drpaket_retur_rupiah;
+						$total_nilai+=$print->drpaket_rupiah_retur;
 						
 						$sub_item+=$print->drpaket_jumlah_terambil;
 						$sub_back+=$print->drpaket_jumlah_diretur;
-						$sub_nilai+=$print->drpaket_retur_rupiah;
+						$sub_nilai+=$print->drpaket_rupiah_retur;
 		?>
 		<tr>
         	<td><? echo $i; ?></td>
@@ -77,7 +77,7 @@
             <td><?php echo $print->paket_nama."( ".$print->paket_kode.")"; ?></td>
             <td class="numeric"><?php echo number_format($print->drpaket_jumlah_terambil,0,",","."); ?></td>
             <td class="numeric"><?php echo number_format($print->drpaket_jumlah_diretur,2,",","."); ?></td>
-            <td class="numeric"><?php echo number_format($print->drpaket_retur_rupiah,0,",","."); ?></td>
+            <td class="numeric"><?php echo number_format($print->drpaket_rupiah_retur,0,",","."); ?></td>
        </tr>
 		<?php 		}
 				}
