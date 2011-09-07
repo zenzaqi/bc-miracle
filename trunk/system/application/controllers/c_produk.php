@@ -235,6 +235,10 @@ class C_produk extends Controller {
 		$produk_harga_mta=trim(@$_POST["produk_harga_mta"]);
 		$produk_harga_lbk=trim(@$_POST["produk_harga_lbk"]);
 		$produk_harga_hr=trim(@$_POST["produk_harga_hr"]);
+		$produk_harga_tp=trim(@$_POST["produk_harga_tp"]);
+		$produk_harga_dps=trim(@$_POST["produk_harga_dps"]);
+		$produk_harga_blpn=trim(@$_POST["produk_harga_blpn"]);
+		$produk_harga_kuta=trim(@$_POST["produk_harga_kuta"]);
 		$produk_harga_corp=trim(@$_POST["produk_harga_corp"]);
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
@@ -317,7 +321,7 @@ class C_produk extends Controller {
 		
 		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 												$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,
-												$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_corp);
+												$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
 		echo $result;
 	}
 	
@@ -361,6 +365,10 @@ class C_produk extends Controller {
 		$produk_harga_mta=trim(@$_POST["produk_harga_mta"]);
 		$produk_harga_lbk=trim(@$_POST["produk_harga_lbk"]);
 		$produk_harga_hr=trim(@$_POST["produk_harga_hr"]);
+		$produk_harga_tp=trim(@$_POST["produk_harga_tp"]);
+		$produk_harga_dps=trim(@$_POST["produk_harga_dps"]);
+		$produk_harga_blpn=trim(@$_POST["produk_harga_blpn"]);
+		$produk_harga_kuta=trim(@$_POST["produk_harga_kuta"]);
 		$produk_harga_corp=trim(@$_POST["produk_harga_corp"]);
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
 		$produk_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$produk_keterangan);
@@ -425,7 +433,7 @@ class C_produk extends Controller {
 		
 		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 											$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,
-											$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg , $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_corp);
+											$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg , $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
 		echo $result;
 	}
 
