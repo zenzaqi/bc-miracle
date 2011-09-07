@@ -90,8 +90,7 @@ class M_perawatan extends Model{
 				$rs=$this->db->query($sql_dproduk);
 				$rs_rows=$rs->num_rows();
 			}
-			
-			//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+
 			$sql="select * from vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			if($query<>"" && is_numeric($query)==false){
 				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
@@ -113,11 +112,7 @@ class M_perawatan extends Model{
 				}
 			}
 			$sql.=" ORDER BY produk_id ASC";
-			/*if($query<>"")
-				$sql.=" WHERE (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%'
-							 or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";*/
-			//echo $sql;
-			
+
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			if($end!=0){
@@ -360,7 +355,7 @@ class M_perawatan extends Model{
 		//function for update record
 		function perawatan_update($rawat_id ,$rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori,$rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan,
 									$rawat_du ,$rawat_dm ,$rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
-									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_kreditrp, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
+									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_kreditrp, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif, $rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr, $rawat_harga_tp, $rawat_harga_dps, $rawat_harga_blpn, $rawat_harga_kuta){
 			if ($rawat_aktif=="")
 				$rawat_aktif = "Aktif";
 			if ($rawat_point=="")
@@ -471,6 +466,10 @@ class M_perawatan extends Model{
 				"rawat_harga_mta"=>$rawat_harga_mta,
 				"rawat_harga_lbk"=>$rawat_harga_lbk,
 				"rawat_harga_hr"=>$rawat_harga_hr,
+				"rawat_harga_tp"=>$rawat_harga_tp,
+				"rawat_harga_dps"=>$rawat_harga_dps,
+				"rawat_harga_blpn"=>$rawat_harga_blpn,
+				"rawat_harga_kuta"=>$rawat_harga_kuta,
 //				"rawat_gudang"=>$rawat_gudang, 
 				"rawat_aktif"=>$rawat_aktif, 
 				"rawat_aktif_cabang"=>$temp_aktif,
@@ -633,7 +632,7 @@ class M_perawatan extends Model{
 		//function for create new record
 		function perawatan_create($rawat_kode ,$rawat_kodelama ,$rawat_nama, $rawat_highmargin, $rawat_group ,$rawat_kategori, $rawat_kontribusi ,$rawat_jenis ,$rawat_keterangan ,
 									$rawat_du ,$rawat_dm, $rawat_dultah, $rawat_dcard, $rawat_dkolega, $rawat_dkeluarga, $rawat_downer, $rawat_dgrooming, $rawat_dwartawan, $rawat_dstaffdokter, $rawat_dstaffnondokter,
-									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_kreditrp, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr){
+									$rawat_point , $rawat_durasi, $rawat_kredit, $rawat_kreditrp, $rawat_jumlah_tindakan, $rawat_harga ,$rawat_gudang ,$rawat_aktif ,$rawat_aktif_th ,$rawat_aktif_ki ,$rawat_aktif_hr ,$rawat_aktif_tp ,$rawat_aktif_dps ,$rawat_aktif_jkt ,$rawat_aktif_mta ,$rawat_aktif_blpn ,$rawat_aktif_kuta ,$rawat_aktif_btm ,$rawat_aktif_mks ,$rawat_aktif_mdn ,$rawat_aktif_lbk ,$rawat_aktif_mnd ,$rawat_aktif_ygk,$rawat_aktif_mlg, $rawat_harga_ki,$rawat_harga_mdn,$rawat_harga_mnd,$rawat_harga_ygk,$rawat_harga_mta, $rawat_harga_lbk, $rawat_harga_hr, $rawat_harga_tp, $rawat_harga_dps, $rawat_harga_blpn, $rawat_harga_kuta){
 		if ($rawat_aktif=="")
 			
 		if ($rawat_point=="")
@@ -758,6 +757,10 @@ class M_perawatan extends Model{
 				"rawat_harga_mta"=>$rawat_harga_mta,
 				"rawat_harga_lbk"=>$rawat_harga_lbk,
 				"rawat_harga_hr"=>$rawat_harga_hr,
+				"rawat_harga_tp"=>$rawat_harga_tp,
+				"rawat_harga_dps"=>$rawat_harga_dps,
+				"rawat_harga_blpn"=>$rawat_harga_blpn,
+				"rawat_harga_kuta"=>$rawat_harga_kuta,
 				"rawat_gudang"=>$rawat_gudang,
 				"rawat_kontribusi"=>$rawat_kontribusi,
 				"rawat_aktif"=>$rawat_aktif,

@@ -90,10 +90,14 @@ var paket_dstaffdokterField;
 var paket_dstaffnondokterField;
 var paket_pointField;
 var paket_harga_kiField;
+var paket_harga_tpField;
 var paket_harga_mdnField;
 var paket_harga_mndField;
 var paket_harga_mtaField;
 var paket_harga_ygkField;
+var paket_harga_dpsField;
+var paket_harga_blpnField;
+var paket_harga_kutaField;
 var paket_hargaField;
 var paket_expiredField;
 var paket_perpanjanganField;
@@ -237,12 +241,16 @@ Ext.onReady(function(){
 				var paket_perpanjangan_create=null;
 				var paket_aktif_create=null;
 				var paket_harga_createki=null;
+				var paket_harga_createtp=null;
 				var paket_harga_createmta=null;
 				var paket_harga_createlbk=null;
 				var paket_harga_createhr=null;
 				var paket_harga_createmdn=null;
 				var paket_harga_createmnd=null;
 				var paket_harga_createygk=null;
+				var paket_harga_createdps=null;
+				var paket_harga_createblpn=null;
+				var paket_harga_createkuta=null;
 
 				if(paket_idField.getValue()!== null){paket_id_create_pk = paket_idField.getValue();}else{paket_id_create_pk=get_pk_id();}
 				if(paket_kodeField.getValue()!== null){paket_kode_create = paket_kodeField.getValue();}
@@ -267,12 +275,16 @@ Ext.onReady(function(){
 				if(paket_aktifField.getValue()!== null){paket_aktif_create = paket_aktifField.getValue();}
 				if(paket_hargaField.getValue()!== null){paket_harga_create = convertToNumber(paket_hargaField.getValue());}
 				if(paket_harga_kiField.getValue()!== null){paket_harga_createki = convertToNumber(paket_harga_kiField.getValue());}
+				if(paket_harga_tpField.getValue()!== null){paket_harga_createtp = convertToNumber(paket_harga_tpField.getValue());}
 				if(paket_harga_mdnField.getValue()!== null){paket_harga_createmdn = convertToNumber(paket_harga_mdnField.getValue());}
 				if(paket_harga_mndField.getValue()!== null){paket_harga_createmnd = convertToNumber(paket_harga_mndField.getValue());}
 				if(paket_harga_mtaField.getValue()!== null){paket_harga_createmta = convertToNumber(paket_harga_mtaField.getValue());}
 				if(paket_harga_lbkField.getValue()!== null){paket_harga_createlbk = convertToNumber(paket_harga_lbkField.getValue());}
 				if(paket_harga_hrField.getValue()!== null){paket_harga_createhr = convertToNumber(paket_harga_hrField.getValue());}
 				if(paket_harga_ygkField.getValue()!== null){paket_harga_createygk = convertToNumber(paket_harga_ygkField.getValue());}
+				if(paket_harga_dpsField.getValue()!== null){paket_harga_createdps = convertToNumber(paket_harga_dpsField.getValue());}
+				if(paket_harga_blpnField.getValue()!== null){paket_harga_createblpn = convertToNumber(paket_harga_blpnField.getValue());}
+				if(paket_harga_kutaField.getValue()!== null){paket_harga_createkuta = convertToNumber(paket_harga_kutaField.getValue());}
 				//if(paket_Field.getValue()!== null){paket_create = paket_Field.getValue();}
 
 				Ext.Ajax.request({
@@ -284,7 +296,6 @@ Ext.onReady(function(){
 						paket_kode	: paket_kode_create,
 						paket_kodelama	: paket_kodelama_create,
 						paket_nama	: paket_nama_create,
-						
 						paket_group	: paket_group_create,
 						paket_keterangan	: paket_keterangan_create,
 						paket_du		: paket_du_create,
@@ -310,6 +321,10 @@ Ext.onReady(function(){
 						paket_harga_ygk : paket_harga_createygk,
 						paket_harga_lbk : paket_harga_createlbk,
 						paket_harga_hr	: paket_harga_createhr,
+						paket_harga_tp	: paket_harga_createtp,
+						paket_harga_dps	: paket_harga_createdps,
+						paket_harga_blpn: paket_harga_createblpn,
+						paket_harga_kuta: paket_harga_createkuta,
 						//paket : paket_create,
 						paket_aktif_th : paket_aktif_thField.getValue(),
 						paket_aktif_ki : paket_aktif_kiField.getValue(),
@@ -575,7 +590,11 @@ Ext.onReady(function(){
 		paket_harga_mdnField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mdn')));
 		paket_harga_mndField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_mnd')));
 		paket_harga_ygkField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_ygk')));
-
+		paket_harga_tpField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_tp')));
+		paket_harga_dpsField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_dps')));
+		paket_harga_blpnField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_blpn')));
+		paket_harga_kutaField.setValue(CurrencyFormatted(paketListEditorGrid.getSelectionModel().getSelected().get('paket_harga_kuta')));
+		
 		//paket_Field.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket'));
 		//temp_cabang.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_aktif_cabang'));	
 			
@@ -826,7 +845,12 @@ Ext.onReady(function(){
 			{name: 'paket_harga_ygk', type: 'float', mapping: 'paket_harga_ygk'},
 			{name: 'paket_harga_mta', type: 'float', mapping: 'paket_harga_mta'},
 			{name: 'paket_harga_lbk', type: 'float', mapping: 'paket_harga_lbk'},
-			{name: 'paket_harga_hr', type: 'float', mapping: 'paket_harga_hr'}
+			{name: 'paket_harga_hr', type: 'float', mapping: 'paket_harga_hr'},
+			{name: 'paket_harga_tp', type: 'float', mapping: 'paket_harga_tp'},
+			{name: 'paket_harga_dps', type: 'float', mapping: 'paket_harga_dps'},
+			{name: 'paket_harga_blpn', type: 'float', mapping: 'paket_harga_blpn'},
+			{name: 'paket_harga_kuta', type: 'float', mapping: 'paket_harga_kuta'}
+			
 		]),
 		sortInfo:{field: 'paket_id', direction: "DESC"}
 	});
@@ -1840,8 +1864,11 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [paket_harga_thField, paket_harga_kiField,paket_harga_mdnField, paket_harga_mndField, paket_harga_ygkField, paket_harga_mtaField, paket_harga_lbkField, paket_harga_hrField]
+				items: [paket_harga_thField, paket_harga_kiField,paket_harga_hrField,paket_harga_tpField,paket_harga_dpsField, paket_harga_mtaField, paket_harga_blpnField, paket_harga_kutaField, paket_harga_mdnField, paket_harga_lbkField,paket_harga_mndField, paket_harga_ygkField]
 			}
+			
+			
+			
 		]
 	});
 	
@@ -3379,7 +3406,17 @@ Ext.onReady(function(){
 	paket_harga_hrField.on('focus',function(){ paket_harga_hrField.setValue(convertToNumber(paket_harga_hrField.getValue())); });
 	paket_harga_hrField.on('blur',function(){ paket_harga_hrField.setValue(CurrencyFormatted(paket_harga_hrField.getValue())); });
 	
+	paket_harga_tpField.on('focus',function(){ paket_harga_tpField.setValue(convertToNumber(paket_harga_tpField.getValue())); });
+	paket_harga_tpField.on('blur',function(){ paket_harga_tpField.setValue(CurrencyFormatted(paket_harga_tpField.getValue())); });
 	
+	paket_harga_dpsField.on('focus',function(){ paket_harga_dpsField.setValue(convertToNumber(paket_harga_dpsField.getValue())); });
+	paket_harga_dpsField.on('blur',function(){ paket_harga_dpsField.setValue(CurrencyFormatted(paket_harga_dpsField.getValue())); });
+	
+	paket_harga_blpnField.on('focus',function(){ paket_harga_blpnField.setValue(convertToNumber(paket_harga_blpnField.getValue())); });
+	paket_harga_blpnField.on('blur',function(){ paket_harga_blpnField.setValue(CurrencyFormatted(paket_harga_blpnField.getValue())); });
+
+	paket_harga_kutaField.on('focus',function(){ paket_harga_kutaField.setValue(convertToNumber(paket_harga_kutaField.getValue())); });
+	paket_harga_kutaField.on('blur',function(){ paket_harga_kutaField.setValue(CurrencyFormatted(paket_harga_kutaField.getValue())); });
 	
 	//event for diskon
 	paket_duField.on("keyup",function(){
