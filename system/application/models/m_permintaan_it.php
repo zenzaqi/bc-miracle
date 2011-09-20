@@ -16,30 +16,6 @@ class m_permintaan_it extends Model{
 			parent::Model();
 		}
 		
-		function sendmail(){
-		$config = Array(
-			'protocol' => 'smtp',
-			'smtp_host' => 'mail.miracle-clinic.com',
-			'smtp_port' => 25,
-			'smtp_user' => 'isaac@miracle-clinic.co,',
-			'smtp_pass' => '203675',
-		);
-		$this->load->library('email', $config);
-		$this->email->set_newline("\r\n");
-		
-		$this->email->from('isaac@miracle-clinic.com', 'IT');
-		$this->email->to('isaac@miracle-clinic.com');
-		
-		$this->email->subject(' CodeIgniter Rocks Socks ');
-		$this->email->message('Hello World');
-		
-		
-		if (!$this->email->send())
-			show_error($this->email->print_debugger());
-		else
-			echo 'Your e-mail has been sent!'; 
-		}
-		
 		function get_cabang_list(){
 			$sql="SELECT cabang_id,cabang_nama FROM cabang ";
 			$query = $this->db->query($sql);

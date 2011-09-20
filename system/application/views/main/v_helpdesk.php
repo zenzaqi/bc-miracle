@@ -76,7 +76,7 @@ Ext.onReady(function(){
 		]
 	});*/
 
-	window.open("http://192.168.1.2/mis_helpdesk/?c=main")
+	window.open("http://192.168.1.2:81/mis_helpdesk/?c=main")
 	mainPanel.remove(mainPanel.getActiveTab().getId());
 
 
