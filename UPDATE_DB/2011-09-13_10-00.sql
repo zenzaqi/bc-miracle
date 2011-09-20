@@ -1,7 +1,0 @@
-/*View utk laporan mutasi barang racikan by rekap */
-
-CREATE OR REPLACE VIEW vu_lap_mutasi_racikan as select `a`.`dmracikan_produk` AS `dmracikan_produk`,`produk`.`produk_id` AS `produk_id`,`produk`.`produk_kode` AS `produk_kode`,`produk`.`produk_nama` AS `produk_nama`,`produk`.`produk_volume` AS `produk_volume`,`satuan`.`satuan_nama` AS `satuan_nama`,(select sum(`b`.`dmracikan_jumlah`) AS `sum(dmracikan_jumlah)` from `detail_mutasi_racikan` `b` where ((`b`.`dmracikan_jenis` = 0) and (`a`.`dmracikan_id` = `b`.`dmracikan_id`)) group by `b`.`dmracikan_produk`) AS `mutasi_out_qty`,ifnull((select sum((select sum(`c`.`dmracikan_jumlah`) AS `jumlah` from `detail_mutasi_racikan` `c` where (`c`.`dmracikan_id` = `d`.`dmracikan_noref`))) AS `sum(
-						(
-							select sum(c.dmracikan_jumlah) as jumlah
-							from detail_mutasi_racikan as c where c.dmracikan_id = d.dmracikan_noref 
-						))` from `detail_mutasi_racikan` `d` where ((`d`.`dmracikan_jenis` = 1) and (`d`.`dmracikan_noref` = `a`.`dmracikan_id`)) group by `d`.`dmracikan_noref`),0) AS `mutasi_in_qty`,`master_mutasi`.`mutasi_status` AS `mutasi_status`,`master_mutasi`.`mutasi_tanggal` AS `mutasi_tanggal` from (((`detail_mutasi_racikan` `a` join `master_mutasi` on((`master_mutasi`.`mutasi_id` = `a`.`dmracikan_mutasi_id`))) join `produk` on((`produk`.`produk_id` = `a`.`dmracikan_produk`))) join `satuan` on((`satuan`.`satuan_id` = `a`.`dmracikan_satuan`))) group by `produk`.`produk_id`;
