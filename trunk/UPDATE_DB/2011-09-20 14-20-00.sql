@@ -1,4 +1,4 @@
-UPDATE `miracledb`.`menus` SET `menu_title` = 'Go to Help Desk',
+UPDATE `menus` SET `menu_title` = 'Go to Help Desk',
 `menu_link` = '?c=c_helpdesk' WHERE `menus`.`menu_id` =383 LIMIT 1 ;
 
 INSERT INTO `miracledb`.`menus` (
