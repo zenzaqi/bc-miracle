@@ -2018,7 +2018,7 @@ Ext.onReady(function(){
 	
 	fpiutang_total_cfField= new Ext.form.TextField({
 		id: 'fpiutang_total_cfField',
-		fieldLabel: '<span style="font-weight:bold">Total Piutang (Rp)</span>',
+		fieldLabel: '<span style="font-weight:bold">Total Piutang Keseluruhan(Rp)</span>',
 		allowNegatife : false,
 		enableKeyEvents: true,
 		itemCls: 'rmoney',
@@ -2029,7 +2029,7 @@ Ext.onReady(function(){
 	fpiutang_totalField= new Ext.form.NumberField({
 		id: 'fpiutang_totalField',
 		enableKeyEvents: true,
-		fieldLabel: '<span style="font-weight:bold">Total Piutang (Rp)</span>',
+		fieldLabel: '<span style="font-weight:bold">Total Piutang Keseluruhan(Rp)</span>',
 		allowBlank: true,
 		anchor: '95%',
 		readOnly: true,

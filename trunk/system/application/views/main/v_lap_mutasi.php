@@ -103,13 +103,13 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan']]
+			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk Racikan']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk']]
+			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk'],['Produk Racikan']]
 	});
 	
 	var rpt_mutasi_groupField=new Ext.form.ComboBox({

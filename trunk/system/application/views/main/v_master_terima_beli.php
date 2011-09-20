@@ -670,6 +670,26 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
 
+	/*Function for Print Only */
+	function pb_print_only(){
+		if(terima_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur PB tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
+			cetak=1;
+			master_terima_beli_create('print');
+		}
+
+		//jproduk_btn_cancel();
+	}
+
+	
+	
 	/* Function for Update Confirm */
 	function master_terima_beli_confirm_update(){
 		/* only one record is selected here */
@@ -1550,7 +1570,6 @@ Ext.onReady(function(){
         '</div></tpl>'
     );
 
-
 	var combo_produk_terima=new Ext.form.ComboBox({
 			store: cbo_produk_detailDataStore,
 			typeAhead: false,
@@ -2083,6 +2102,14 @@ Ext.onReady(function(){
 		width: 700,
 		items: [master_terima_beli_masterGroup,detail_tab_terima],
 		buttons: [
+			{
+				text: 'Print Only',
+				handler: pb_print_only
+			},
+			{
+				xtype:'spacer',
+				width: 350
+			},
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_TERIMA'))){ ?>
 			terima_button_saveprintField
 			,terima_button_saveField

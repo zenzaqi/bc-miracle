@@ -1,0 +1,8 @@
+2011-09-19 => Updated note..
+
+Update MIS 
+1. di menu Kasir, untuk field Customer , ditambahin no client card, supaya yg bukan member juga tetap ditampilkan client cardnya.. 
+2. Persediaan : fitur Print Only
+3. Appointment : fixed error ketika add customer baru
+4. Pelunasan Piutang : fixed label Total Pelunasan Piutang
+5. Laporan MB : utk produk racikan (masih berjalan di thamrin dulu)
