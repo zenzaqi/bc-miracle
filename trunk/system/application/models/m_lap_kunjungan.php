@@ -943,10 +943,16 @@ from
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
 			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
@@ -1363,10 +1369,16 @@ from
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
 			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
@@ -1744,10 +1756,16 @@ from
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
 			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
@@ -2125,10 +2143,16 @@ from
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
 			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			$cust_daftar_jproduk 	= "";
+			$cust_daftar_jrawat 	= "";
+			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
