@@ -520,7 +520,7 @@ Ext.onReady(function(){
 		if(is_appointment_form_valid()
            && ((app_customerField.getValue()!==null
                 && /^\d+$/.test(app_customerField.getValue())
-                || app_id_create_pk!=="") && (app_cust_namaBaruField.getValue()!=='' && app_cust_telpBaruField.getValue()!=='' && app_cust_hpBaruField.getValue()!==''))
+                || app_id_create_pk!=="") || (app_cust_namaBaruField.getValue()!=='' && app_cust_telpBaruField.getValue()!=='' && app_cust_hpBaruField.getValue()!==''))
            && (dmedis_record=='ada' || dnonmedis_record=='ada')){
             var app_id_create_pk=null; 
             var app_customer_create=""; 
@@ -622,7 +622,7 @@ Ext.onReady(function(){
                 }                      
             });
 		} else {
-			if(!/^\d+$/.test(app_customerField.getValue())){
+			if(!/^\d+$/.test(app_customerField.getValue()) ){
 				//Ext.MessageBox.hide();
 				appointment_createWindow.setDisabled(false);
 				Ext.MessageBox.show({
@@ -1699,7 +1699,7 @@ Ext.onReady(function(){
 	app_cust_telpBaruField=new Ext.form.TextField({
 		id: 'app_cust_telpBaruField',
 		fieldLabel: 'Telp Rumah',
-		allowBlank : false,
+		//allowBlank : false,
 		maxLength: 30,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
@@ -1709,7 +1709,7 @@ Ext.onReady(function(){
 		id: 'app_cust_hpBaruField',
 		fieldLabel: 'HP',
 		maxLength: 30,
-		allowBlank : false,
+		//allowBlank : false,
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});

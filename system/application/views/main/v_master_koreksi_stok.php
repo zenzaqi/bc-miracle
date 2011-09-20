@@ -300,6 +300,13 @@ Ext.onReady(function(){
 		detail_koreksi_stok_DataStore.setBaseParam('master_id', -1);		
 		detail_koreksi_stok_DataStore.load();
 		koreksi_button_saveprintField.setDisabled(false);
+		koreksi_idField.setDisabled(false);
+		koreksi_noField.setDisabled(false);
+		koreksi_gudangField.setDisabled(false);
+		koreksi_tanggalField.setDisabled(false);
+		koreksi_keteranganField.setDisabled(false);
+		koreksi_statusField.setDisabled(false);
+		koreksi_button_saveprintField.setDisabled(false);
 		check_gudang();
 	}
 	
@@ -491,6 +498,24 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
+	/*Function  for Print Only*/
+	function ps_print_only(){
+		if(koreksi_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur PS tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
+			koreksi_cetak=1;
+			master_koreksi_stok_create('print');
+		}
+
+		//jproduk_btn_cancel();
+	}
+	
 	/* Function for Update Confirm */
 	function master_koreksi_stok_confirm_update(){
 		/* only one record is selected here */
@@ -1406,6 +1431,14 @@ Ext.onReady(function(){
 		width: 800,        
 		items: [master_koreksi_stok_masterGroup,detail_koreksi_stokListEditorGrid],
 		buttons: [
+			{
+				text: 'Print Only',
+				handler: ps_print_only
+			},
+			{
+				xtype:'spacer',
+				width: 450
+			},
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KOREKSI'))){ ?>
 			koreksi_button_saveprintField
 			,

@@ -933,7 +933,7 @@ class M_master_jual_paket extends Model{
 			//backup: 2010-05-19 ==> $query = "SELECT jpaket_id, jpaket_nobukti, cust_nama, cust_no, cust_member, jpaket_cust, jpaket_tanggal, jpaket_diskon, jpaket_cashback, jpaket_cara, jpaket_cara2, jpaket_cara3, jpaket_bayar, IF(vu_jpaket.jpaket_totalbiaya!=0,vu_jpaket.jpaket_totalbiaya,vu_jpaket_totalbiaya.jpaket_totalbiaya) AS jpaket_totalbiaya, jpaket_keterangan, jpaket_stat_dok, jpaket_creator, jpaket_date_create, jpaket_update, jpaket_date_update, jpaket_revised FROM vu_jpaket LEFT JOIN vu_jpaket_totalbiaya ON(vu_jpaket_totalbiaya.dpaket_master=vu_jpaket.jpaket_id)";
 			$query = "SELECT jpaket_id
 					,jpaket_nobukti
-					,cust_nama
+					,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama
 					,cust_no
 					,member_no
 					,jpaket_cust
@@ -1702,7 +1702,7 @@ class M_master_jual_paket extends Model{
 					
 			$query = "SELECT jpaket_id
 					,jpaket_nobukti
-					,cust_nama
+					,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama
 					,cust_no
 					,member_no
 					,jpaket_cust
