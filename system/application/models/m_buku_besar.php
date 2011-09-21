@@ -218,7 +218,7 @@ class M_buku_besar extends Model{
 														select a.akun_debet - a.akun_kredit
 														from akun a
 														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
-													) -
+													) +
 													ifnull(sum(buku_debet), 0) - ifnull(sum(buku_kredit), 0) as buku_saldo
 												FROM vu_buku_besar
 												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
@@ -230,7 +230,7 @@ class M_buku_besar extends Model{
 														select a.akun_kredit - a.akun_debet
 														from akun a
 														where replace(a.akun_kode,'.','') like '".str_replace(".","",$akun_kode)."%'
-													) -													
+													) +													
 													ifnull(sum(buku_kredit), 0) - ifnull(sum(buku_debet), 0) as buku_saldo
 												FROM vu_buku_besar
 												WHERE replace(akun_kode,'.','') like  '".str_replace(".","",$akun_kode)."%'
