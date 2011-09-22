@@ -1725,11 +1725,13 @@ Ext.onReady(function(){
 		{
 			text: 'Add',
 			tooltip: 'Add new detail record',
+			disabled : true,
 			iconCls:'icon-adds',    				// this is defined in our styles.css
 			handler: detail_terima_beli_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
+			disabled : true,
 			iconCls:'icon-delete',
 			handler: detail_terima_beli_confirm_delete
 		}
