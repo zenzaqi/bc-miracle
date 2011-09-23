@@ -37,6 +37,7 @@ class C_master_ambil_paket extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$opsi_status=(isset($_POST['opsi_status']) ? @$_POST['opsi_status'] : @$_GET['opsi_status']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
 		
@@ -65,7 +66,7 @@ class C_master_ambil_paket extends Controller {
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
-		$data["data_print"]=$this->m_master_ambil_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["data_print"]=$this->m_master_ambil_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group);
 		
 		if(!file_exists("print")){
 			mkdir("print");

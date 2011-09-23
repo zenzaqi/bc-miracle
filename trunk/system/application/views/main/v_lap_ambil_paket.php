@@ -51,6 +51,9 @@ var rpt_apaketForm;
 var rpt_apaket_tglawalField;
 var rpt_apaket_tglakhirField;
 var rpt_apaket_rekapField;
+var rpt_apaket_adjField;
+var rpt_apaket_tertutupField;
+var rpt_apaket_batalField;
 var rpt_apaket_detailField;
 var rpt_apaket_bulanField;
 var rpt_apaket_tahunField;
@@ -216,6 +219,28 @@ Ext.onReady(function(){
 		name: 'apaket_opsi'
 	});
 	
+	// opsi status
+	rpt_apaket_tertutupField=new Ext.form.Radio({
+		id: 'rpt_apaket_tertutupField',
+		boxLabel: 'Tertutup',
+		name: 'apaket_opsistatus',
+		checked: true
+	});
+	
+	rpt_apaket_adjField=new Ext.form.Radio({
+		id: 'rpt_apaket_adjField',
+		boxLabel: 'Adjustment',
+		name: 'apaket_opsistatus',
+		checked: false
+	});
+	
+	rpt_apaket_batalField=new Ext.form.Radio({
+		id: 'rpt_apaket_batalField',
+		boxLabel: 'Batal',
+		name: 'apaket_opsistatus',
+		checked: false
+	});
+	
 	var rpt_apaket_periodeField=new Ext.form.FieldSet({
 		id:'rpt_apaket_periodeField',
 		title : 'Periode',
@@ -273,6 +298,15 @@ Ext.onReady(function(){
 		items: [rpt_apaket_rekapField ,rpt_apaket_detailField]
 	});
 	
+	// opsi status
+	var	rpt_apaket_opsistatusField=new Ext.form.FieldSet({
+		id: 'rpt_apaket_opsistatusField',
+		title: 'Opsi Status',
+		border: true,
+		anchor: '98%',
+		items: [rpt_apaket_tertutupField, rpt_apaket_adjField ,rpt_apaket_batalField]
+	});
+	
 	var	rpt_apaket_groupbyField=new Ext.form.FieldSet({
 		id: 'rpt_apaket_groupbyField',
 		title: 'Group By',
@@ -322,6 +356,13 @@ Ext.onReady(function(){
 		}
 		if(rpt_apaket_groupField.getValue()!==""){apaket_group=rpt_apaket_groupField.getValue(); }
 		if(rpt_apaket_rekapField.getValue()==true){apaket_opsi='rekap';}else{apaket_opsi='detail';}
+		if(rpt_apaket_tertutupField.getValue()==true){
+			apaket_opsi_status='tertutup';
+		}else if (rpt_apaket_adjField.getValue()==true){
+			apaket_opsi_status='adjustment';
+		}else{
+			apaket_opsi_status='batal';
+		}
 		
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
@@ -338,6 +379,7 @@ Ext.onReady(function(){
 					tgl_awal	: apaket_tglawal,
 					tgl_akhir	: apaket_tglakhir,
 					opsi		: apaket_opsi,
+					opsi_status	: apaket_opsi_status,
 					bulan		: apaket_bulan,
 					tahun		: apaket_tahun,
 					periode		: apaket_periode,
@@ -392,7 +434,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_apaket_periodeField,rpt_apaket_opsiField,rpt_apaket_groupbyField],
+		items: [rpt_apaket_periodeField,rpt_apaket_opsiField,rpt_apaket_opsistatusField,rpt_apaket_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
