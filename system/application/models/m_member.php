@@ -456,8 +456,11 @@ class M_member extends Model{
 				};
 */				//$result = $this->db->query($query);
 			}
-				$rs = $this->db->query($query);
 				
+				
+				$result = $this->db->query($query);
+				
+				$rs = $this->db->query($query);
 				$jum_baris = $rs->num_rows();
 				
 				//looping dimulai disini
@@ -468,8 +471,6 @@ class M_member extends Model{
 					$query2 = "UPDATE member SET member_status = 'Cetak', member_tglcetak='$date_now' WHERE member_no = '$data_arr'  AND member_status = 'Daftar'";
 					$rs2 = $this->db->query($query2);
 				}
-				
-				$result = $this->db->query($query);
 				return $result;
 }
 }
