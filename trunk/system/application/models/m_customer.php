@@ -603,7 +603,7 @@ class M_customer extends Model{
 				}
 				else
 				{
-					if($cust_no==''/* && $cust_aktif !='Tidak Aktif'*/){
+					if($cust_no=='' && $cust_aktif !='Tidak Aktif'){
 					//Generate Nomor Customer
 					$cust_no = $this->m_public_function->get_custno_gen('customer','cust_no','',6);
 					}

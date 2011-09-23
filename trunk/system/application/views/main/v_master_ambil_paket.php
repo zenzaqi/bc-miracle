@@ -1246,13 +1246,16 @@ Ext.onReady(function(){
 				tooltip: 'Membatalkan pengambilan paket',
 				iconCls:'icon-delete',    				// this is defined in our styles.css
 				handler: pengecekan_dokumen_untuk_batal
-			},'-',
-			{
-				text: 'Adjustment',
-				tooltip: 'Mengubah status menjadi Adj',
-				iconCls:'icon-update',    				// this is defined in our styles.css
-				handler: adj_status_update
 			}
+			<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_AMBILPAKET'))){ ?>	
+				,'-',
+				{
+					text: 'Adjustment',
+					tooltip: 'Mengubah status menjadi Adj',
+					iconCls:'icon-update',    				// this is defined in our styles.css
+					handler: adj_status_update
+				}
+			<?php } ?>
 			]
 		<?php } ?>
     });

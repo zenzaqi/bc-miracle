@@ -1,0 +1,1 @@
+- untuk penguncian tombol adjustment di informasi ambil paket, dimasukkan ke usergroup yg bagian D (Delete). jadi untuk accounting D di Informasi Pengambilan Paket harus dicentang.
