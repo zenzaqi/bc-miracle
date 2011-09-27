@@ -208,11 +208,18 @@ class M_perawatan extends Model{
 				
 			$query="";
 		   	for($i = 0; $i < sizeof($array_krawat_id); $i++){
+			
+			$sql_temp = "select konversi_satuan from satuan_konversi where konversi_produk = '".$array_krawat_produk[$i]."' and konversi_nilai = 1";
+			$result_temp = $this->db->query($sql_temp);
+			$data=$result_temp->row();
+			$krawat_satuan=$data->konversi_satuan;
+	
+			
 
 				$data = array(
 					"krawat_master"=>$krawat_master, 
 					"krawat_produk"=>$array_krawat_produk[$i], 
-					"krawat_satuan"=>$array_krawat_satuan[$i], 
+					"krawat_satuan"=>$krawat_satuan, 
 					"krawat_jumlah"=>$array_krawat_jumlah[$i]
 				);
 				
