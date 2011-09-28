@@ -40,9 +40,8 @@ function myheader($fpiutang_tanggal ,$cust_no ,$cust_nama ,$cust_alamat ,$fpiuta
           <?=$cust_nama;?></td>
       </tr>
       <tr>
-        <td align="right">Alamat</td>
-        <td>:&nbsp;&nbsp;
-          <?=$cust_alamat;?></td>
+        <td align="right">&nbsp;&nbsp;</td>
+                <td>&nbsp;&nbsp;</td>
       </tr>
     </table></td>
   </tr>

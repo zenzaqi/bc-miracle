@@ -42,8 +42,8 @@ html,body,table,tr,td{
                 <td>:&nbsp;&nbsp;<?=$cust_nama;?></td>
               </tr>
               <tr>
-                <td align="right">Alamat</td>
-                <td>:&nbsp;&nbsp;<?=$cust_alamat;?></td>
+                <td align="right">&nbsp;&nbsp;</td>
+                <td>&nbsp;&nbsp;</td>
               </tr>
             </table></td>
           </tr>
