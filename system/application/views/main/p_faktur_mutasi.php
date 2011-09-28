@@ -10,9 +10,8 @@
   <tr>
     <td height="60" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="55%" align="center"><font size="4"><center><p><b>SURAT <br/>
-          MUTASI BARANG<br><font size="3"><b><?=$info_nama;?></p></center></td>
-        <td width="45%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+	  <td width="32%">
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <!--<//?php 
 		foreach($data_print as $print) { 
 			$no_bukti=$print->no_bukti;
@@ -40,7 +39,55 @@
             <td class="clear">:&nbsp;</td>
             <td class="clear"><?=$gudang_tujuan_nama; ?></td>
           </tr>
-        </table></td>
+        </table>
+		</td>
+        <td width="28%" align="center"><font size="4"><center><p><b>SURAT <br/>
+          MUTASI BARANG<br><font size="3"><b><?=$info_nama;?></p></center></td>
+        <td width="40%">
+		<? // posisi racikan ?>
+		<?php if($data_print2<>NULL){ ?>
+		 <?php if($mutasi_racikan==1){?>
+		  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <!--<//?php 
+		foreach($data_print as $print) { 
+			$no_bukti=$print->no_bukti;
+			$tanggal=$print->tanggal;
+			$supplier_nama=$print->supplier_nama;
+		}
+		?>--><!-- by masongbee-->
+		 <?php if($status_mutasi=='mutasi out'){?>
+          <tr class="clear">
+            <td width="34%" align="right" class="clear"><strong>Racikan keluar</strong></td>
+            <td width="4%" class="clear">&nbsp;</td>
+            <td width="62%" class="clear">&nbsp;</td>
+          </tr>
+          <tr>
+            <td align="right" class="clear"><strong>Produk jadi Tujuan</strong></td>
+            <td class="clear">:&nbsp;</td>
+            <td class="clear"><?php echo $produk_nama; ?></td>
+          </tr>
+          <tr>
+            <td align="right" class="clear"><strong>Jumlah</strong></td>
+            <td class="clear">:&nbsp;</td>
+            <td class="clear"><?=$jumlah_out; ?></td>
+          </tr>
+          <?}?>
+		   <?php if($status_mutasi=='mutasi in'){?>
+		  <tr>
+		    <td align="right" class="clear"><strong>Racikan Masuk</strong></td>
+            <td class="clear">&nbsp;</td>
+            <td class="clear">&nbsp;</td>
+          </tr>
+		  <tr>
+            <td align="right" class="clear"><strong>No Ref</strong></td>
+            <td class="clear">:&nbsp;</td>
+            <td class="clear"><?=$mutasi_noref; ?></td>
+          </tr>
+		  <?}?>
+        </table>
+		 <?}?>
+		 <?}?>
+		</td>
       </tr>
     </table></td>
   </tr>

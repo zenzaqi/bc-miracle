@@ -812,9 +812,9 @@ Ext.onReady(function(){
 	keluar_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Keluar &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
 	akhir_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;Stok Akhir &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'});
 	
-	and1_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
-	and2_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
-	and3_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; AND <br> <br>'});
+	and1_Field=new Ext.form.Label({ html: '&nbsp;&nbsp; AND (<br> <br>'});
+	and2_Field=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; OR <br> <br>'});
+	and3_Field=new Ext.form.Label({ html: '&nbsp; ) AND <br> <br>'});
 
 	
 	/* Identify  jum stok Field */

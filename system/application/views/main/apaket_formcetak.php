@@ -33,8 +33,8 @@ html,body,table,tr,td{
                 <td>:&nbsp;&nbsp;<?=$jpaket_cust_nama;?></td>
               </tr>
               <tr>
-                <td align="right">Alamat</td>
-                <td>:&nbsp;&nbsp;<?=$jpaket_cust_alamat;?></td>
+                <td align="right">&nbsp;&nbsp;</td>
+                <td>&nbsp;&nbsp;</td>
               </tr>
             </table></td>
           </tr>
