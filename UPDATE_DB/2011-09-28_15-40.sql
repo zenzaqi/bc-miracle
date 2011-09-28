@@ -1,3 +1,4 @@
+/* pr_kunjungan & pr_netsales*/
 
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_kunjungan`(IN `tgl_awal` VARCHAR(12), IN `tgl_akhir` VARCHAR(12), IN `cust_jns_kelamin` ENUM('L', 'P', 'Semua'), IN `cust_member` ENUM('Lama', 'Baru', 'Non Member', 'Semua'), IN `cust_baru` ENUM('Lama', 'Baru', 'Semua'), IN `tgllahir_awal` VARCHAR(12), IN `tgllahir_akhir` VARCHAR(12), IN `umur_awal` TINYINT, IN `umur_akhir` TINYINT, IN `opsi` ENUM('Rekap', 'Detail'))
@@ -496,4 +497,134 @@ EXECUTE s1;
 DEALLOCATE PREPARE s1;
 
 END;
-DELIMITER ;
+
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_netsales`(IN `tgl_awal` DATE, IN `tgl_akhir` DATE, IN `opsi` ENUM('Detail', 'Rekap'))
+BEGIN
+/* saat ini baru opsi Rekap yg bisa*/
+
+declare vSalesTot double;
+declare vSalesNM double;
+declare vSalesM double;
+declare vSalesS double;
+declare vSalesAA double;
+declare vSalesLL double;
+declare vSalesP double;
+declare vVoucher double;
+
+SELECT
+	(SELECT  
+		ifnull(sum(subtotal), 0)
+	FROM vu_detail_jual_rawat 
+	WHERE 
+		jrawat_stat_dok='Tertutup' 
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Medis')
+	+			
+	(SELECT  
+		ifnull(sum(harga_satuan), 0)
+	FROM vu_detail_ambil_paket_rawat 
+	WHERE 
+		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Medis')
+INTO vSalesM;
+
+SELECT	
+	(SELECT  
+		ifnull(sum(subtotal), 0)
+	FROM vu_detail_jual_rawat 
+	WHERE 
+		jrawat_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Non Medis') 
+	+
+	(SELECT  
+		ifnull(sum(harga_satuan), 0)
+	FROM vu_detail_ambil_paket_rawat 
+	WHERE 
+		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Non Medis')
+INTO vSalesNM;
+
+SELECT	
+	(SELECT  
+		ifnull(sum(subtotal), 0)
+	FROM vu_detail_jual_rawat 
+	WHERE 
+		jrawat_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Surgery') 
+	+
+	(SELECT  
+		ifnull(sum(harga_satuan), 0)
+	FROM vu_detail_ambil_paket_rawat 
+	WHERE 
+		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' 
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Surgery')
+INTO vSalesS;
+
+SELECT	
+	(SELECT  
+		ifnull(sum(subtotal), 0)
+	FROM vu_detail_jual_rawat 
+	WHERE 
+		jrawat_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Anti Aging') 
+	+
+	(SELECT  
+		ifnull(sum(harga_satuan), 0)
+	FROM vu_detail_ambil_paket_rawat 
+	WHERE 
+		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama = 'Anti Aging')
+INTO vSalesAA;
+
+SELECT	
+	(SELECT  
+		ifnull(sum(subtotal), 0)
+	FROM vu_detail_jual_rawat 
+	WHERE 
+		jrawat_stat_dok='Tertutup' 
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama <> 'Medis' AND kategori_nama <> 'Non Medis' AND kategori_nama <> 'Surgery' AND kategori_nama <> 'Anti Aging') 
+	+
+	(SELECT  
+		ifnull(sum(harga_satuan), 0)
+	FROM vu_detail_ambil_paket_rawat 
+	WHERE 
+		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
+		and tanggal >= tgl_awal and tanggal <= tgl_akhir
+		and kategori_nama <> 'Medis' AND kategori_nama <> 'Non Medis' AND kategori_nama <> 'Surgery' AND kategori_nama <> 'Anti Aging')
+INTO vSalesLL;
+
+select sum(m1.jproduk_totalbiaya)
+from master_jual_produk m1
+where 
+	m1.jproduk_stat_dok = 'Tertutup'
+	and m1.jproduk_tanggal >= tgl_awal and m1.jproduk_tanggal <= tgl_akhir
+into vSalesP;
+
+select ifnull(sum(m.jrawat_cashback), 0)
+from master_jual_rawat m
+where 
+	m.jrawat_stat_dok = 'Tertutup'
+	and m.jrawat_tanggal >= tgl_awal and m.jrawat_tanggal <= tgl_akhir
+into vVoucher;
+				
+select 
+	tgl_awal, tgl_akhir,
+	vSalesM - vVoucher as Medis, 
+	vSalesNM as NonMedis,
+	vSalesS as Surgery,
+	vSalesAA as AntiAging,
+	vSalesLL as LainLain,
+	vSalesP as Produk,
+	(vSalesM - vVoucher) + vSalesNM + vSalesS + vSalesAA + vSalesP as Total;
+
+END;
+DELIMITER;
