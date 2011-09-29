@@ -1,0 +1,3 @@
+vcm_customer : menambah search tgl awal transaksi
+m_public_function : menambah cust_tglawaltrans untuk function customer_crm_generator_create_all
+
