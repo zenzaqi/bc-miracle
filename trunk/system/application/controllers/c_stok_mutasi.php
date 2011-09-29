@@ -128,6 +128,14 @@ class C_stok_mutasi extends Controller {
 		$stok_awal = trim(@$_POST["stok_awal"]);
 		$masuk = trim(@$_POST["masuk"]);
 		$stok_keluar = trim(@$_POST["stok_keluar"]);
+		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		
 		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
 		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
@@ -135,7 +143,7 @@ class C_stok_mutasi extends Controller {
 																
 		$data["data_print"]=$result=$this->m_stok_mutasi->stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, 
 																		   $opsi_satuan, $tanggal_start, $tanggal_end, 
-																		   $query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$masuk,$stok_keluar);
+																		   $query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$masuk,$stok_keluar, $bulan, $tahun, $periode, $tgl_awal);
 		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
 		$data["gudang_nama"]= $this->m_public_function->get_gudang_nama($gudang);
 		

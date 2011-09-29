@@ -415,8 +415,8 @@ Ext.onReady(function(){
 		terima_keteranganField.setDisabled(false);
 		terima_statusField.setDisabled(false);
 		
-		combo_produk_terima.setDisabled(false);
-		combo_produk_satuan.setDisabled(false);
+		//combo_produk_terima.setDisabled(false);
+		//combo_produk_satuan.setDisabled(false);
 		dterima_jumlahField.setDisabled(false);
 
 		cbo_satuan_produkDataStore.load();
@@ -519,8 +519,8 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(false);
 			terima_keteranganField.setDisabled(false);
 			terima_statusField.setDisabled(false);
-			combo_produk_terima.setDisabled(false);
-			combo_produk_satuan.setDisabled(false);
+			//combo_produk_terima.setDisabled(false);
+			//combo_produk_satuan.setDisabled(false);
 			dterima_jumlahField.setDisabled(false);
 			master_terima_beli_createForm.tbeli_savePrint.enable();
 		}
@@ -537,8 +537,8 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(true);
 			terima_keteranganField.setDisabled(true);
 			terima_statusField.setDisabled(false);
-			combo_produk_terima.setDisabled(true);
-			combo_produk_satuan.setDisabled(true);
+			//combo_produk_terima.setDisabled(true);
+			//combo_produk_satuan.setDisabled(true);
 			dterima_jumlahField.setDisabled(true);
 			if(cetak==1){
 					//jproduk_cetak(jproduk_id_for_cetak);
@@ -559,8 +559,8 @@ Ext.onReady(function(){
 			terima_tanggalField.setDisabled(true);
 			terima_keteranganField.setDisabled(true);
 			terima_statusField.setDisabled(true);
-			combo_produk_terima.setDisabled(true);
-			combo_produk_satuan.setDisabled(true);
+			//combo_produk_terima.setDisabled(true);
+			//combo_produk_satuan.setDisabled(true);
 			dterima_jumlahField.setDisabled(true);
 			master_terima_beli_createForm.tbeli_savePrint.disable();
 		}
@@ -1399,11 +1399,18 @@ Ext.onReady(function(){
 	
 	//events for field Jumlah 
 	dterima_jumlahField.on('keyup', function(){
+		/*var total_sisa = 0;
+		var sisa_field = dterima_jumlahsisaField.getValue();
+		var jumlah_field = dterima_jumlahField.getValue();
+		total_sisa = (sisa_field - jumlah_field)
+		dterima_jumlahsisaField.setValue(total_sisa);
+		*/
 		if(this.getRawValue()>dterima_jumlahsisaField.getValue()){
 			this.setRawValue(dterima_jumlahsisaField.getValue());
 		}
 	});
-	
+
+
 	
 
   	/*Fieldset Master*/
@@ -1577,6 +1584,7 @@ Ext.onReady(function(){
 			displayField: 'produk_nama',
 			valueField: 'produk_id',
 			lazyRender: false,
+			disabled : true,
 			pageSize: pageS,
 			tpl: produk_detail_tpl,
 			itemSelector: 'div.search-item',
@@ -1608,6 +1616,7 @@ Ext.onReady(function(){
 			store: cbo_satuan_produkDataStore,
 			mode: 'local',
 			typeAhead: true,
+			disabled : true,
 			displayField: 'satuan_nama',
 			valueField: 'satuan_value',
 			triggerAction: 'all',
@@ -1630,6 +1639,7 @@ Ext.onReady(function(){
 			dataIndex: 'dterima_produk',
 			width: 300,
 			sortable: true,
+			disabled : true,
 			editor: combo_produk_terima,
 			renderer: Ext.util.Format.comboRenderer(combo_produk_terima)
 		},
@@ -1637,6 +1647,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Satuan</div>',
 			dataIndex: 'dterima_satuan',
 			width: 150,
+			disabled : true,
 			sortable: true,
 			editor: combo_produk_satuan,
 			renderer: Ext.util.Format.comboRenderer(combo_produk_satuan)
