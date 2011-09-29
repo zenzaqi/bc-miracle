@@ -55,7 +55,7 @@ class M_phonegroup extends Model{
 			}
 			else{
 				if($isms_opsi=="semua"){
-					$sql="select cust_id, cust_hp from customer WHERE CONVERT(cust_hp, SIGNED INTEGER)>0";
+					$sql="select cust_id, cust_hp from customer WHERE cust_aktif='Aktif' and CONVERT(cust_hp, SIGNED INTEGER)>0";
 					$query=$this->db->query($sql);
 					foreach($query->result() as $row){
 						$sql="insert into outbox(
@@ -111,7 +111,7 @@ class M_phonegroup extends Model{
 						$sql="";
 					}
 				}elseif($isms_opsi=="group"){
-					$sql="SELECT cust_hp,cust_id from customer WHERE cust_id IN(
+					$sql="SELECT cust_hp,cust_id from customer WHERE cust_aktif='Aktif' and cust_id IN(
 						  		SELECT phonegrouped_cust FROM phonegrouped 
 								    WHERE phonegrouped_group='".$isms_dest."')
 						 		AND CONVERT(cust_hp, SIGNED INTEGER)>0";
@@ -215,7 +215,7 @@ class M_phonegroup extends Model{
 					
 					//$sql="select cust_hp from vu_member_cust WHERE cust_hp<>'' AND cust_hp is not null";
 					$sql=  "select cust_hp, cust_id from vu_customer
-							WHERE CONVERT(cust_hp, SIGNED INTEGER)>0";
+							WHERE cust_aktif='Aktif' and CONVERT(cust_hp, SIGNED INTEGER)>0";
 							
 					if($membership=="Expired"){
 						$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
