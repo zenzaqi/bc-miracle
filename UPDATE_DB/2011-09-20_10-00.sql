@@ -114,7 +114,7 @@ IF old.jrawat_stat_dok = 'Terbuka' and new.jrawat_stat_dok = 'Tertutup' THEN  in
 		and c.cust_id = new.jrawat_cust
 		and new.jrawat_stat_dok = 'Tertutup';
 END;
-DELIMITER ;
+DELIMITER;
 
 
 /* VIEW */
