@@ -245,7 +245,8 @@ Ext.onReady(function(){
 			{name: 'voucher_kadaluarsa', type: 'date', dateFormat: 'Y-m-d', mapping: 'voucher_kadaluarsa'}, 
 			{name: 'voucher_tgl', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'voucher_tgl'}, 
 			{name: 'voucher_cashback', type: 'float', mapping: 'voucher_cashback'}, 
-			{name: 'voucher_cust', type: 'string', mapping: 'voucher_cust'}
+			{name: 'voucher_cust', type: 'string', mapping: 'voucher_cust'},
+			{name: 'voucher_keterangan', type: 'string', mapping: 'voucher_keterangan'}
 		]),
 		sortInfo:{field: 'voucher_id', direction: "DESC"}
 	});
@@ -301,22 +302,22 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'voucher_tgl',
-			width: 80,
+			width: 60,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
 		},
 		{
-			header: '<div align="center">' + 'No Cust' + '</div>',
+			header: '<div align="center">' + 'Client Card' + '</div>',
 			dataIndex: 'cust_no',
-			width: 80,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		},  
 		{
 			header: '<div align="center">' + 'Nama Cust' + '</div>',
 			dataIndex: 'cust_nama',
-			width: 200,
+			width: 120,
 			sortable: true,
 			readOnly: true
 		},  
@@ -336,7 +337,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
 			dataIndex: 'voucher_nama',
-			width: 100,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		},
@@ -344,7 +345,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'voucher_point',
 			align: 'right',
-			width: 60,
+			width: 40,
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			sortable: true,
 			readOnly: true
@@ -354,21 +355,28 @@ Ext.onReady(function(){
 			dataIndex: 'voucher_cashback',
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
-			width: 100,
+			width: 60,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'No Voucher' + '</div>',
 			dataIndex: 'voucher_no',
-			width: 100,
+			width: 60,
+			sortable: true,
+			readOnly: true
+		},  
+		{
+			header: '<div align="center">' + 'Keterangan' + '</div>',
+			dataIndex: 'voucher_keterangan',
+			width: 120,
 			sortable: true,
 			readOnly: true
 		},  
 		{
 			header: '<div align="center">' + 'Kadaluarsa' + '</div>',
 			dataIndex: 'voucher_kadaluarsa',
-			width: 80,
+			width: 60,
 			sortable: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			readOnly: true
@@ -382,7 +390,7 @@ Ext.onReady(function(){
 	voucherListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'voucherListEditorGrid',
 		el: 'fp_voucher',
-		title: 'Daftar Penukaran dan Pengisian Poin Customer',
+		title: 'Daftar Penukaran, Pengisian dan Edit Poin Customer',
 		autoHeight: true,
 		store: voucher_DataStore, // DataStore
 		cm: voucher_ColumnModel, // Nama-nama Columns
@@ -410,7 +418,7 @@ Ext.onReady(function(){
 		<?php } ?>
 		*/
 		{
-			text: 'Adv Search',
+			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -488,7 +496,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	voucherListEditorGrid.addListener('rowcontextmenu', onvoucher_ListEditGridContextMenu);
-	//voucher_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
+	voucher_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
 	
 	/* Function for action list search */
 	function voucher_list_search(){
