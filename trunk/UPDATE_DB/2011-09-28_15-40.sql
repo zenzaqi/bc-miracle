@@ -1,10 +1,16 @@
 /* pr_kunjungan & pr_netsales*/
 
+drop procedure if exists  pr_kunjungan;
+drop procedure if exists  pr_netsales;
+
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_kunjungan`(IN `tgl_awal` VARCHAR(12), IN `tgl_akhir` VARCHAR(12), IN `cust_jns_kelamin` ENUM('L', 'P', 'Semua'), IN `cust_member` ENUM('Lama', 'Baru', 'Non Member', 'Semua'), IN `cust_baru` ENUM('Lama', 'Baru', 'Semua'), IN `tgllahir_awal` VARCHAR(12), IN `tgllahir_akhir` VARCHAR(12), IN `umur_awal` TINYINT, IN `umur_akhir` TINYINT, IN `opsi` ENUM('Rekap', 'Detail'))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_kunjungan`(IN `tgl_awal` VARCHAR(12), IN `tgl_akhir` VARCHAR(12), IN `cust_jns_kelamin` ENUM('L', 'P', 'Semua'), IN `cust_member` ENUM('Lama', 'Baru', 'Non Member', 'Semua'), IN `cust_baru` ENUM('Lama', 'Baru', 'Semua'), IN `tgllahir_awal` VARCHAR(12), IN `tgllahir_akhir` VARCHAR(12), IN `umur_awal` TINYINT, IN `umur_akhir` TINYINT, IN `opsi` ENUM('Rekap', 'Detail'), OUT `KunjTglAwal` VARCHAR(12), OUT `KunjTglAkhir` VARCHAR(12), OUT `KunjMedis` INT, OUT `KunjNonMedis` INT, OUT `KunjSurgery` INT, OUT `KunjAntiAging` INT, OUT `KunjProduk` INT, OUT `KunjTotal` INT)
 BEGIN
 
-DECLARE sql_utama VARCHAR(12000);
+/* jika opsi Rekap, maka hasil akan disimpan di variable OUT
+	jika opsi Detail, maka hasil tidak disimpan di variable OUT, melainkan langsung berupa row data*/
+
+DECLARE sql_utama VARCHAR(15000);
 
 declare sql_cust_baru_jrawat varchar(100);
 declare sql_cust_baru_dapaket varchar(100);
@@ -17,16 +23,21 @@ declare sql_cust_umur varchar(100);
 
 declare sql_opsi varchar(100);
 declare sql_tgl varchar(100);
+declare sql_into varchar(200);
 
-/*Query Opsi Rekap atau Detail*/
+declare vKunjTglAwal varchar(12);
+
+/*Query Opsi Detail atau Rekap*/
 case opsi
 	when 'Detail' then begin
-		set sql_tgl 	= ' tgl_tindakan, '; 
+		set sql_tgl 	= ' tgl_tindakan as tgl_awal, tgl_tindakan as tgl_akhir, '; 
 		set sql_opsi 	= ' group by tgl_tindakan ';
+		set sql_into	= ' ';
 	end;
 	else begin
 		set sql_tgl 	= concat(tgl_awal, ' as tgl_awal, ', tgl_akhir, ' as tgl_akhir, '); 
 		set sql_opsi 	= ' ';
+		set sql_into	= ' into @KunjTglAwal, @KunjTglAkhir, @KunjMedis, @KunjNonMedis, @KunjSurgery, @KunjAntiAging, @KunjProduk, @KunjTotal ';
 	end;
 end case;
 
@@ -92,12 +103,12 @@ SET sql_utama 	= CONCAT
 ('
 select ',
 	sql_tgl, ' 
-	sum(jum_cust_medis) as medis,
-	sum(jum_cust_surgery) as surgery,
-	sum(jum_cust_antiaging) as antiaging,
-	sum(jum_cust_nonmedis) as nonmedis,
-	sum(jum_cust_produk) as produk, 
-	sum(jum_total) as total
+	sum(jum_cust_medis) as KunjMedis,
+	sum(jum_cust_surgery) as KunjSurgery,
+	sum(jum_cust_antiaging) as KunjAntiAging,
+	sum(jum_cust_nonmedis) as KunjNonMedis,
+	sum(jum_cust_produk) as KunjProduk, 
+	sum(jum_total) as KunjTotal
 from
 (
 
@@ -484,11 +495,11 @@ from
 	
 )
 as table_union',
-sql_opsi
-
+sql_opsi,
+sql_into
 );
-
-/*select sql_utama;
+/*
+select sql_utama;
 */
 
 SET @sql		= sql_utama;
@@ -496,21 +507,29 @@ PREPARE s1 FROM @sql;
 EXECUTE s1;
 DEALLOCATE PREPARE s1;
 
+case opsi
+	when 'Rekap' then
+		select @KunjTglAwal, @KunjTglAkhir, @KunjMedis, @KunjNonMedis, @KunjSurgery, @KunjAntiAging, @KunjProduk, @KunjTotal 
+		into KunjTglAwal, KunjTglAkhir, KunjMedis, KunjNonMedis, KunjSurgery, KunjAntiAging, KunjProduk, KunjTotal;
+end case;
+
+
 END;
 
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_netsales`(IN `tgl_awal` DATE, IN `tgl_akhir` DATE, IN `opsi` ENUM('Detail', 'Rekap'))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_netsales`(IN `tgl_awal` DATE, IN `tgl_akhir` DATE, IN `opsi` ENUM('Detail', 'Rekap'), OUT `SalesMedis` DOUBLE, OUT `SalesNonMedis` DOUBLE, OUT `SalesSurgery` DOUBLE, OUT `SalesAntiAging` DOUBLE, OUT `SalesProduk` DOUBLE, OUT `SalesLainLain` DOUBLE, OUT `SalesTotal` DOUBLE)
 BEGIN
 /* saat ini baru opsi Rekap yg bisa*/
+/* procedure ini menghasilkan data pada variable OUT*/
 
-declare vSalesTot double;
-declare vSalesNM double;
-declare vSalesM double;
-declare vSalesS double;
-declare vSalesAA double;
-declare vSalesLL double;
-declare vSalesP double;
-declare vVoucher double;
+declare dSalesTot double;
+declare dSalesNM double;
+declare dSalesM double;
+declare dSalesS double;
+declare dSalesAA double;
+declare dSalesLL double;
+declare dSalesP double;
+declare dVoucher double;
 
 SELECT
 	(SELECT  
@@ -528,7 +547,7 @@ SELECT
 		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
 		and tanggal >= tgl_awal and tanggal <= tgl_akhir
 		and kategori_nama = 'Medis')
-INTO vSalesM;
+INTO dSalesM;
 
 SELECT	
 	(SELECT  
@@ -546,7 +565,7 @@ SELECT
 		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
 		and tanggal >= tgl_awal and tanggal <= tgl_akhir
 		and kategori_nama = 'Non Medis')
-INTO vSalesNM;
+INTO dSalesNM;
 
 SELECT	
 	(SELECT  
@@ -564,7 +583,7 @@ SELECT
 		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' 
 		and tanggal >= tgl_awal and tanggal <= tgl_akhir
 		and kategori_nama = 'Surgery')
-INTO vSalesS;
+INTO dSalesS;
 
 SELECT	
 	(SELECT  
@@ -582,7 +601,7 @@ SELECT
 		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
 		and tanggal >= tgl_awal and tanggal <= tgl_akhir
 		and kategori_nama = 'Anti Aging')
-INTO vSalesAA;
+INTO dSalesAA;
 
 SELECT	
 	(SELECT  
@@ -600,31 +619,44 @@ SELECT
 		jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'
 		and tanggal >= tgl_awal and tanggal <= tgl_akhir
 		and kategori_nama <> 'Medis' AND kategori_nama <> 'Non Medis' AND kategori_nama <> 'Surgery' AND kategori_nama <> 'Anti Aging')
-INTO vSalesLL;
+INTO dSalesLL;
 
-select sum(m1.jproduk_totalbiaya)
+select ifnull(sum(m1.jproduk_totalbiaya), 0)
 from master_jual_produk m1
 where 
 	m1.jproduk_stat_dok = 'Tertutup'
 	and m1.jproduk_tanggal >= tgl_awal and m1.jproduk_tanggal <= tgl_akhir
-into vSalesP;
+into dSalesP;
 
 select ifnull(sum(m.jrawat_cashback), 0)
 from master_jual_rawat m
 where 
 	m.jrawat_stat_dok = 'Tertutup'
 	and m.jrawat_tanggal >= tgl_awal and m.jrawat_tanggal <= tgl_akhir
-into vVoucher;
+into dVoucher;
 				
-select 
+/* menampilkan row data*/
+/*select 
 	tgl_awal, tgl_akhir,
-	vSalesM - vVoucher as Medis, 
-	vSalesNM as NonMedis,
-	vSalesS as Surgery,
-	vSalesAA as AntiAging,
-	vSalesLL as LainLain,
-	vSalesP as Produk,
-	(vSalesM - vVoucher) + vSalesNM + vSalesS + vSalesAA + vSalesP as Total;
+	dSalesM - dVoucher as SalesMedis, 
+	dSalesNM as SalesNonMedis,
+	dSalesS as SalesSurgery,
+	dSalesAA as SalesAntiAging,
+	dSalesP as SalesProduk,
+	dSalesLL as SalesLainLain,
+	(dSalesM - dVoucher) + dSalesNM + dSalesS + dSalesAA + dSalesP + dSalesLL as SalesTotal;	
+*/
+
+/*mengisikan row data pada variable OUT*/
+select 
+	dSalesM - dVoucher, 
+	dSalesNM,
+	dSalesS,
+	dSalesAA,
+	dSalesP,
+	dSalesLL,
+	(dSalesM - dVoucher) + dSalesNM + dSalesS + dSalesAA + dSalesP
+into SalesMedis, SalesNonMedis, SalesSurgery, SalesAntiAging, SalesProduk, SalesLainLain, SalesTotal;	
 
 END;
 DELIMITER;
