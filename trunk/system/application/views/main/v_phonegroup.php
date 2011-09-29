@@ -357,7 +357,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_phonegroup&m=get_action',
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST2", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST2", start: 0, limit:10000}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -627,70 +627,18 @@ Ext.onReady(function(){
 		
 		enableColLock:false,
 		frame: true,
-		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
-		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		//selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
 	  	width: 700,
-		bbar: new Ext.PagingToolbar({
+		/*bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: phonegroup_detail_DataStore,
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
-		tbar: [/*
-		<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Add',
-			tooltip: 'Add new record',
-			iconCls:'icon-adds',    				// this is defined in our styles.css
-			handler: display_form_window
-		}, '-',
-		<?php }?>
-		<?php if(eregi('U|R',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Edit',
-			tooltip: 'Edit selected record',
-			iconCls:'icon-update',
-			handler: phonegroup_confirm_update   // Confirm before updating
-		}, '-',
-		<?php } ?>
-		<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
-		{
-			text: 'Delete',
-			tooltip: 'Delete selected record',
-			iconCls:'icon-delete',
-			disabled: true,
-			handler: phonegroup_confirm_delete   // Confirm before deleting
-		}, '-',
-		<?php } ?>
-		{
-			text: 'Adv Search',
-			tooltip: 'Advanced Search',
-			iconCls:'icon-search',
-			handler: display_form_search_window
-		}, '-',*/
-			new Ext.app.SearchField({
-			store: phonegroup_detail_DataStore,
-			params: {start: 0, limit: pageS},			
-			width: 120
-		})/*,'-',{
-			text: 'Refresh',
-			tooltip: 'Refresh datagrid',
-			handler: phonegroup_reset_search,
-			iconCls:'icon-refresh'
-		}*/, '-', 
+		tbar: [
 		'<span style="color:white;"> Info : <b>Untuk menambah detail phonegroup, dapat dilakukan pada Master Customer.</b></span>'
-		/*,'-',{
-			text: 'Export Excel',
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: phonegroup_export_excel
-		}, '-',{
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: phonegroup_print
-		}*/
 		]
 	});
 	phonegroupdetailEditorGrid.render();
