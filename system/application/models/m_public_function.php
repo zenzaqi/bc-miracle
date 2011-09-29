@@ -69,6 +69,105 @@ class M_public_function extends Model{
 			return 0;
 	}
 	
+	// net sales
+	function get_laporan_netsales($tgl_awal,$tgl_akhir,$periode,$opsi){
+			$sql="";
+			if($periode=='all') {
+				$sql="SELECT 	jenis_transaksi, 
+								sum(nilai_card) as nilai_card,
+								sum(nilai_cek) as nilai_cek, 
+								sum(nilai_kredit) as nilai_kredit, 
+								sum(nilai_kwitansi) as nilai_kwitansi, 
+								sum(nilai_transfer) as nilai_transfer,
+								sum(nilai_tunai) as nilai_tunai,
+								sum(nilai_voucher) as nilai_voucher 
+					FROM 		vu_trans_terima_jual 
+					WHERE 		stat_dok='Tertutup' AND 
+								no_ref<>'' 
+					GROUP BY 	jenis_transaksi 
+					ORDER BY 	jenis_transaksi";
+			} else if($periode=='bulan') {
+				$sql="SELECT 
+					(`fn_netsales_medis`('2011-09-01', '2011-09-30')) as ns_medis, 
+					(`fn_netsales_nonmedis`('2011-09-01', '2011-09-30')) as ns_non_medis,
+					(`fn_netsales_produk`('2011-09-01', '2011-09-30')) as ns_produk,
+					(`fn_netsales_antiaging`('2011-09-01', '2011-09-30')) as ns_anti_aging,
+					(`fn_netsales_lainlain`('2011-09-01', '2011-09-30')) as ns_lainlain,
+					(`fn_netsales_surgery`('2011-09-01', '2011-09-30')) as ns_surgery";
+				$sql="SELECT 	jenis_transaksi, 
+								sum(nilai_card) as nilai_card,
+								sum(nilai_cek) as nilai_cek, 
+								sum(nilai_kredit) as nilai_kredit, 
+								sum(nilai_kwitansi) as nilai_kwitansi, 
+								sum(nilai_transfer) as nilai_transfer,
+								sum(nilai_tunai) as nilai_tunai,
+								sum(nilai_voucher) as nilai_voucher 
+					FROM 		vu_trans_terima_jual 
+					WHERE 		date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+								AND stat_dok='Tertutup'
+								AND no_ref<>''
+					GROUP BY  	jenis_transaksi 
+					ORDER BY 	jenis_transaksi";
+			} else if($periode=='tanggal') {
+				$sql="SELECT 
+					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_medis, 
+					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_non_medis,
+					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."')) as ns_produk,
+					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."')) as ns_anti_aging,
+					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."')) as ns_lainlain,
+					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_surgery";
+				/*
+				$sql="SELECT 
+					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_medis, 
+					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_non_medis,
+					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."')) as ns_produk,
+					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."')) as ns_anti_aging,
+					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."')) as ns_lainlain,
+					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_surgery,
+					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."'))+
+					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."'))+
+					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."'))+
+					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."'))+
+					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."'))+
+					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_total";
+				*/
+				/*
+				$sql="SELECT 	jenis_transaksi, 
+								sum(nilai_card) as nilai_card,
+								sum(nilai_cek) as nilai_cek, 
+								sum(nilai_kredit) as nilai_kredit, 
+								sum(nilai_kwitansi) as nilai_kwitansi, 
+								sum(nilai_transfer) as nilai_transfer,
+								sum(nilai_tunai) as nilai_tunai,
+								sum(nilai_voucher) as nilai_voucher 
+					FROM 		vu_trans_terima_jual 
+					WHERE 		date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
+								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
+								stat_dok='Tertutup' 
+					GROUP BY  	jenis_transaksi 
+					ORDER BY 	jenis_transaksi";
+				*/
+			}
+			//echo $sql;
+			
+			$result = $this->db->query($sql);
+			$nbrows = $result->num_rows();  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+			
+			//$query = $this->db->query($sql);
+			//return $query->result();
+	}
+	// eof net sales
+	
 	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
 			$sql="";
 			if($periode=='all')

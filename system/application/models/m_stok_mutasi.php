@@ -145,8 +145,14 @@ class M_stok_mutasi extends Model{
 
 		function stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, 
 										$opsi_satuan, $tanggal_start, $tanggal_end, 
-										$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar){
+										$query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar,$bulan, $tahun, $periode, $tgl_awal){
 
+			if ($periode == 'bulan'){
+				$tanggal_start	= $tahun.'-'.$bulan.'-01';
+				$tanggal_end	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
+			}							
+										
+										
 			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
