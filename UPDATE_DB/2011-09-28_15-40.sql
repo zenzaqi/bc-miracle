@@ -7,7 +7,8 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_kunjungan`(IN `tgl_awal` VARCHAR(12), IN `tgl_akhir` VARCHAR(12), IN `cust_jns_kelamin` ENUM('L', 'P', 'Semua'), IN `cust_member` ENUM('Lama', 'Baru', 'Non Member', 'Semua'), IN `cust_baru` ENUM('Lama', 'Baru', 'Semua'), IN `tgllahir_awal` VARCHAR(12), IN `tgllahir_akhir` VARCHAR(12), IN `umur_awal` TINYINT, IN `umur_akhir` TINYINT, IN `opsi` ENUM('Rekap', 'Detail'), OUT `KunjTglAwal` VARCHAR(12), OUT `KunjTglAkhir` VARCHAR(12), OUT `KunjMedis` INT, OUT `KunjNonMedis` INT, OUT `KunjSurgery` INT, OUT `KunjAntiAging` INT, OUT `KunjProduk` INT, OUT `KunjTotal` INT)
 BEGIN
 
-/* jika opsi Rekap, maka hasil akan disimpan di variable OUT
+/* contoh pengisian parameter tgl_awal & tgl_akhir = "'2011-09-01'", "'2011-09-30'"
+	jika opsi Rekap, maka hasil akan disimpan di variable OUT
 	jika opsi Detail, maka hasil tidak disimpan di variable OUT, melainkan langsung berupa row data*/
 
 DECLARE sql_utama VARCHAR(15000);
@@ -520,6 +521,8 @@ END;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `pr_netsales`(IN `tgl_awal` DATE, IN `tgl_akhir` DATE, IN `opsi` ENUM('Detail', 'Rekap'), OUT `SalesMedis` DOUBLE, OUT `SalesNonMedis` DOUBLE, OUT `SalesSurgery` DOUBLE, OUT `SalesAntiAging` DOUBLE, OUT `SalesProduk` DOUBLE, OUT `SalesLainLain` DOUBLE, OUT `SalesTotal` DOUBLE)
 BEGIN
 /* saat ini baru opsi Rekap yg bisa*/
+/* contoh pengisian parameter tgl_awal & tgl_akhir = '2011-09-01', '2011-09-30'*/
+
 /* procedure ini menghasilkan data pada variable OUT*/
 
 declare dSalesTot double;
