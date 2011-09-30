@@ -55,7 +55,7 @@ class M_master_koreksi_stok extends Model{
 				return $query->result();
 		}
 		
-		function get_stok_produk_selected($gudang,$produk_id){
+		function get_stok_produk_selected($gudang,$produk_id,$tanggal){
 			/*if($gudang==1){
 				$sql="SELECT distinct produk_id,produk_kode,produk_nama,jumlah_stok,satuan_kode,satuan_id, satuan_nama FROM vu_stok_gudang_besar_saldo 
 						WHERE produk_id='".$produk_id."'";
@@ -83,6 +83,7 @@ class M_master_koreksi_stok extends Model{
 								WHERE   produk_id='".$produk_id."'
 										AND gudang='".$gudang."'
 										AND status='Tertutup'
+										AND date_format(tanggal,'%Y-%m-%d') < '".$tanggal."'
 								GROUP BY produk_id";
 			//echo $sql;
 			

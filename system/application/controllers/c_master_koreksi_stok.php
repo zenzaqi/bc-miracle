@@ -135,7 +135,8 @@ class C_master_koreksi_stok extends Controller {
 	function get_produk_stok(){
 		$gudang = (integer) (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		$produk_id = isset($_POST['produk_id']) ? @$_POST['produk_id'] : @$_GET['produk_id'];
-		$result=$this->m_master_koreksi_stok->get_stok_produk_selected($gudang, $produk_id);
+		$tanggal=(isset($_POST['tanggal']) ? @$_POST['tanggal'] : @$_GET['tanggal']);
+		$result=$this->m_master_koreksi_stok->get_stok_produk_selected($gudang, $produk_id,$tanggal);
 
 		echo $result;
 	}
