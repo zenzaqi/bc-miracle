@@ -1,0 +1,1 @@
+vcm_koreksi_stok : menyesuaikan stok akhir sesuai dengan tanggal yang dipilih

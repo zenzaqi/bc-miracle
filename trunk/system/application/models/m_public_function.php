@@ -70,90 +70,71 @@ class M_public_function extends Model{
 	}
 	
 	// net sales
-	function get_laporan_netsales($tgl_awal,$tgl_akhir,$periode,$opsi){
-			$sql="";
-			if($periode=='all') {
-				$sql="SELECT 	jenis_transaksi, 
-								sum(nilai_card) as nilai_card,
-								sum(nilai_cek) as nilai_cek, 
-								sum(nilai_kredit) as nilai_kredit, 
-								sum(nilai_kwitansi) as nilai_kwitansi, 
-								sum(nilai_transfer) as nilai_transfer,
-								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
-					FROM 		vu_trans_terima_jual 
-					WHERE 		stat_dok='Tertutup' AND 
-								no_ref<>'' 
-					GROUP BY 	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
-			} else if($periode=='bulan') {
-				$sql="SELECT 
-					(`fn_netsales_medis`('2011-09-01', '2011-09-30')) as ns_medis, 
-					(`fn_netsales_nonmedis`('2011-09-01', '2011-09-30')) as ns_non_medis,
-					(`fn_netsales_produk`('2011-09-01', '2011-09-30')) as ns_produk,
-					(`fn_netsales_antiaging`('2011-09-01', '2011-09-30')) as ns_anti_aging,
-					(`fn_netsales_lainlain`('2011-09-01', '2011-09-30')) as ns_lainlain,
-					(`fn_netsales_surgery`('2011-09-01', '2011-09-30')) as ns_surgery";
-				$sql="SELECT 	jenis_transaksi, 
-								sum(nilai_card) as nilai_card,
-								sum(nilai_cek) as nilai_cek, 
-								sum(nilai_kredit) as nilai_kredit, 
-								sum(nilai_kwitansi) as nilai_kwitansi, 
-								sum(nilai_transfer) as nilai_transfer,
-								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
-					FROM 		vu_trans_terima_jual 
-					WHERE 		date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
-								AND stat_dok='Tertutup'
-								AND no_ref<>''
-					GROUP BY  	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
-			} else if($periode=='tanggal') {
-				$sql="SELECT 
-					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_medis, 
-					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_non_medis,
-					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."')) as ns_produk,
-					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."')) as ns_anti_aging,
-					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."')) as ns_lainlain,
-					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_surgery";
-				/*
-				$sql="SELECT 
-					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_medis, 
-					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."')) as ns_non_medis,
-					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."')) as ns_produk,
-					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."')) as ns_anti_aging,
-					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."')) as ns_lainlain,
-					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_surgery,
-					(`fn_netsales_medis`('".$tgl_awal."', '".$tgl_akhir."'))+
-					(`fn_netsales_nonmedis`('".$tgl_awal."', '".$tgl_akhir."'))+
-					(`fn_netsales_produk`('".$tgl_awal."', '".$tgl_akhir."'))+
-					(`fn_netsales_antiaging`('".$tgl_awal."', '".$tgl_akhir."'))+
-					(`fn_netsales_lainlain`('".$tgl_awal."', '".$tgl_akhir."'))+
-					(`fn_netsales_surgery`('".$tgl_awal."', '".$tgl_akhir."')) as ns_total";
-				*/
-				/*
-				$sql="SELECT 	jenis_transaksi, 
-								sum(nilai_card) as nilai_card,
-								sum(nilai_cek) as nilai_cek, 
-								sum(nilai_kredit) as nilai_kredit, 
-								sum(nilai_kwitansi) as nilai_kwitansi, 
-								sum(nilai_transfer) as nilai_transfer,
-								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
-					FROM 		vu_trans_terima_jual 
-					WHERE 		date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
-								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
-								stat_dok='Tertutup' 
-					GROUP BY  	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
-				*/
-			}
-			//echo $sql;
+	function get_laporan_netsales($tgl_awal, $tgl_akhir, $periode){
+
+		if ($periode == 'bulan'){
+			$tgl_awal	= $tahun.'-'.$bulan.'-01';
+			$tgl_akhir	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
+		}									   
+
+		//bersihkan tabel temporary sesuai tgl ybs
+		$sql_del	=  "delete t from temp_netsales t
+						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'";
+		$this->db->query($sql_del);
+		
+		
+		//mendapatkan list tanggal transaksi
+		$sql_get_tanggal = "select distinct m1.jproduk_tanggal as tgl
+							from master_jual_produk m1
+							where 
+								m1.jproduk_stat_dok = 'Tertutup'
+								and m1.jproduk_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+
+							union
+
+							select distinct m2.jrawat_tanggal as tgl
+							from master_jual_rawat m2
+							where
+								m2.jrawat_stat_dok = 'Tertutup'
+								and m2.jrawat_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+
+							union
+								
+							select distinct d.dapaket_tgl_ambil as tgl
+							from detail_ambil_paket d
+							where
+								d.dapaket_stat_dok = 'Tertutup'
+								and d.dapaket_tgl_ambil  between '".$tgl_awal."' and '".$tgl_akhir."'";
+								
+		$list_tgl = $this->db->query($sql_get_tanggal);	
+		
+		//insert ke tabel temp
+		$i = 0;
+		foreach($list_tgl->result() as $row){
+			$record = $list_tgl->row_array($i);
 			
-			$result = $this->db->query($sql);
-			$nbrows = $result->num_rows();  
-			
-			if($nbrows>0){
+			$sql_pr		=  "call pr_netsales('".$record['tgl']."', '".$record['tgl']."', 'Rekap', 
+							@SalesMedis, @SalesNonMedis, @SalesSurgery, @SalesAntiAging, @SalesProduk, @SalesLainLain, @SalesTotal)";		
+			$this->db->query($sql_pr);							
+					
+			$sql_ins	=  "insert into temp_netsales (tns_tanggal, tns_medis, tns_nonmedis, tns_surgery, tns_antiaging, tns_produk, tns_lainlain, tns_total)
+							select '".$record['tgl']."',@SalesMedis, @SalesNonMedis, @SalesSurgery, @SalesAntiAging, @SalesProduk, @SalesLainLain, @SalesTotal;";
+			$this->db->query($sql_ins);				
+							
+			//print_r($record);
+			$i++;
+		}
+		
+		//select dari tabel temp / hasilnya
+		$sql		=  "select *
+						from temp_netsales t
+						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'";
+				
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		//return $query->result();
+		
+		if($nbrows>0){
 				foreach($result->result() as $row){
 					$arr[] = $row;
 				}
@@ -162,9 +143,6 @@ class M_public_function extends Model{
 			} else {
 				return '({"total":"0", "results":""})';
 			}
-			
-			//$query = $this->db->query($sql);
-			//return $query->result();
 	}
 	// eof net sales
 	

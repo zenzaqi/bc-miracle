@@ -2403,6 +2403,7 @@ cust_tglawaltrans	:	cust_tglawaltrans_update_date,
 		var cust_referensilain_create=null;
 		var cust_keterangan_create=null;
 		var cust_terdaftar_create_date="";
+		var cust_tglawaltrans_create_date="";
 		var cust_statusnikah_create=null;
 		var cust_priority_create=null;
 		var cust_jmlanak_create=null;
