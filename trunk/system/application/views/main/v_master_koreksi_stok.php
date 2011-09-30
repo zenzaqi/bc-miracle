@@ -1180,7 +1180,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_stok_satuan)
 		},
 		{
-			header: '<div align="center">Stok Awal</div>',
+			header: '<div align="center">S Awal Sebelum</div>',
 			dataIndex: 'dkoreksi_jmlawal',
 			width: 60,
 			align: 'right',
@@ -1199,7 +1199,7 @@ Ext.onReady(function(){
 			editor: stok_terkoreksiField
 		},
 		{
-			header: '<div align="center">Stok Akhir</div>',
+			header: '<div align="center">S Awal Sesudah</div>',
 			dataIndex: 'dkoreksi_jmlsaldo',
 			width: 60,
 			align: 'right',
