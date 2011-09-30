@@ -1180,7 +1180,7 @@ Ext.onReady(function(){
 			renderer: Ext.util.Format.comboRenderer(combo_stok_satuan)
 		},
 		{
-			header: '<div align="center">Jml Awal</div>',
+			header: '<div align="center">Stok Awal</div>',
 			dataIndex: 'dkoreksi_jmlawal',
 			width: 60,
 			align: 'right',
@@ -1199,7 +1199,7 @@ Ext.onReady(function(){
 			editor: stok_terkoreksiField
 		},
 		{
-			header: '<div align="center">Jml Akhir</div>',
+			header: '<div align="center">Stok Akhir</div>',
 			dataIndex: 'dkoreksi_jmlsaldo',
 			width: 60,
 			align: 'right',
@@ -1891,6 +1891,7 @@ Ext.onReady(function(){
 		
 		cbo_stok_byprodukDataStore.setBaseParam('produk_id',combo_stok_produk.getValue());
 		cbo_stok_byprodukDataStore.setBaseParam('gudang',get_gudang_id());
+		cbo_stok_byprodukDataStore.setBaseParam('tanggal',koreksi_tanggalField.getValue().format('Y-m-d'));
 		cbo_stok_byprodukDataStore.load({
 			callback: function(r,opt,success){
 				if(success==true){
