@@ -155,7 +155,7 @@ var cust_memberSearchField;
 var cust_memberSearch2Field;
 var cust_terdaftarSearchField;
 var cust_tgldaftarSearchFieldEnd;
-var cust_tglawaltrans_SearchField;
+var cust_tglawaltransSearchField;
 var cust_tglawaltransSearchFieldEnd;
 var cust_statusnikahSearchField;
 var cust_prioritySearchField;
@@ -1881,6 +1881,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member_print=null;
 		var cust_member2_print=null;
 		var cust_terdaftar_print_date="";
+		var cust_tglawaltrans_print_date="";
 		var cust_tglawaltrans="";	
 		var cust_statusnikah_print=null;
 		var cust_priority_print=null;
@@ -1929,7 +1930,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_search_dateEnd=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 		
 		if(customer_DataStore.baseParams.cust_tglawaltrans!==""){cust_tglawaltrans_print_date = customer_DataStore.baseParams.cust_tglawaltrans;}
-		if(cust_tglawaltrans_SearchField.getValue()!==""){cust_tglawaltrans_search_date=cust_tglawaltrans_SearchField.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_search_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
 		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltrans_search_dateEnd=tglawaltrans.getValue().format('Y-m-d');}
 		
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
@@ -5522,9 +5523,9 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  cust_tglawaltrans Field */
-	cust_tglawaltrans_SearchField= new Ext.form.DateField({
+	cust_tglawaltransSearchField= new Ext.form.DateField({
 		fieldLabel: 'Tgl Awal Transaksi',
-		id: 'cust_tglawaltrans_SearchField', 
+		id: 'cust_tglawaltransSearchField', 
 		format: 'd-m-Y'
 	});
 	
@@ -5543,7 +5544,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		//border : false,
 		//frame: false,
-		items:[cust_tglawaltrans_SearchField, cust_label_tglawaltransSearchField, cust_tglawaltransSearchFieldEnd]
+		items:[cust_tglawaltransSearchField, cust_label_tglawaltransSearchField, cust_tglawaltransSearchFieldEnd]
 	});	
 	
 	/*Identify radio button utk tanggal transaksi */	
