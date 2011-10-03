@@ -1652,6 +1652,7 @@ Ext.override(Ext.form.Field, {
 			detail_jual_paketListEditorGrid.djpaket_add.enable();
 			detail_jual_paketListEditorGrid.djpaket_delete.enable();
 			<?php } ?>
+			master_jual_paket_createForm.jpaketSavePrintButton.enable();
 			combo_jual_paket.setDisabled(false);
 			dpaket_jumlahField.setDisabled(false);
 			dpaket_kadaluarsaField.setDisabled(false);
@@ -1698,6 +1699,7 @@ Ext.override(Ext.form.Field, {
 			detail_jual_paketListEditorGrid.djpaket_add.disable();
 			detail_jual_paketListEditorGrid.djpaket_delete.disable();
 			<?php } ?>
+			master_jual_paket_createForm.jpaketSavePrintButton.disable();
 			combo_jual_paket.setDisabled(true);
 			dpaket_jumlahField.setDisabled(true);
 			dpaket_kadaluarsaField.setDisabled(true);

@@ -16,6 +16,7 @@ class C_lap_netsales extends Controller {
 	//constructor
 	function C_lap_netsales(){
 		parent::Controller();
+		$this->load->model('m_lap_netsales', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
 	
@@ -28,6 +29,12 @@ class C_lap_netsales extends Controller {
 	function get_action(){
 		$task = $_POST['task'];
 		switch($task){
+			case "RECALC":
+				$this->laporan_netsales_recalc();
+				break;
+			case "RECALC2":
+				$this->laporan_netsales_search2();
+				break;
 			case "SEARCH":
 				$this->laporan_netsales_search();
 				break;
@@ -46,6 +53,18 @@ class C_lap_netsales extends Controller {
 		}
 	}
 	
+	function laporan_netsales_recalc(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+
+		$result=$this->m_lap_netsales->get_laporan_netsales_recalc($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun);
+		
+		echo $result; 
+	}
+	
 	function laporan_netsales_search(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
@@ -53,16 +72,7 @@ class C_lap_netsales extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		if($periode=="all"){
-			$data["periode"]="Semua Periode";
-		}else if($periode=="bulan"){
-			$tgl_awal=$tahun."-".$bulan;
-			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
-		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
-		}
-		
-		$result=$this->m_public_function->get_laporan_netsales($tgl_awal,$tgl_akhir,$periode);
+		$result=$this->m_lap_netsales->get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun);
 		
 		echo $result; 
 	}
@@ -74,16 +84,7 @@ class C_lap_netsales extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		if($periode=="all"){
-			$data["periode"]="Semua Periode";
-		}else if($periode=="bulan"){
-			$tgl_awal=$tahun."-".$bulan;
-			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
-		}else if($periode=="tanggal"){
-			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
-		}
-		
-		$result=$this->m_public_function->get_laporan_netsalestotal($tgl_awal,$tgl_akhir,$periode);
+		$result=$this->m_lap_netsales->get_laporan_netsalestotal($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun);
 		
 		echo $result; 
 	}

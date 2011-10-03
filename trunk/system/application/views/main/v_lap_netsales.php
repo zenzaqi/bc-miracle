@@ -127,14 +127,15 @@ Ext.onReady(function(){
 			id: ''
 		},[
 		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */
-			{name: 'tns_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_tanggal'},
+			{name: 'tns_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'tns_tanggal'},
 			{name: 'tns_medis', type: 'float', mapping: 'tns_medis'},
 			{name: 'tns_nonmedis', type: 'float', mapping: 'tns_nonmedis'},
 			{name: 'tns_produk', type: 'float', mapping: 'tns_produk'},
 			{name: 'tns_antiaging', type: 'float', mapping: 'tns_antiaging'},
 			{name: 'tns_lainlain', type: 'float', mapping: 'tns_lainlain'},
 			{name: 'tns_surgery', type: 'float', mapping: 'tns_surgery'},
-			{name: 'tns_total', type: 'float', mapping: 'tns_total'}
+			{name: 'tns_total', type: 'float', mapping: 'tns_total'},
+			{name: 'tns_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_date_create'},
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
@@ -241,6 +242,13 @@ Ext.onReady(function(){
 			readOnly: true,
 			width: 80,	//55,
 			sortable: true
+		},{
+			align : 'center',
+			header: '<div align="center">' + 'Last Recalculated' + '</div>',
+			dataIndex: 'tns_date_create',
+			width: 100,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i'),
+			sortable: true
 		}
 	]);
 	
@@ -304,11 +312,17 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Grand Total (Rp)' + '</div>',
 			dataIndex: 'tns_grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
 			width: 80,	//55,
+			sortable: true
+		},{
+			align : 'Left',
+			header: '',
+			dataIndex: '',
+			width: 100,
 			sortable: true
 		}
 	]);
@@ -329,7 +343,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940, //940,//1200,	//970,
+	  	width: 1000, //940,//1200,	//970,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -360,7 +374,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 940, //940,//1200,	//970,
+	  	width: 1000, //940,//1200,	//970,
 	});
 	net_salesTotalListEditorGrid.render();
 	/* End of DataStore */
@@ -414,15 +428,15 @@ Ext.onReady(function(){
 		id:'rpt_netsales_opsitglField',
 		boxLabel:'Tanggal',
 		width:100,
-		name: 'filter_opsi'
+		name: 'filter_opsi',
+		checked: true
 	});
 	
 	rpt_netsales_opsiblnField=new Ext.form.Radio({
 		id:'rpt_netsales_opsiblnField',
 		boxLabel:'Bulan',
 		width:100,
-		name: 'filter_opsi',
-		checked: true
+		name: 'filter_opsi'
 	});
 	
 	rpt_netsales_opsiallField=new Ext.form.Radio({
@@ -435,7 +449,7 @@ Ext.onReady(function(){
 	rpt_netsales_tglawalField= new Ext.form.DateField({
 		id: 'rpt_netsales_tglawalField',
 		fieldLabel: ' ',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		name: 'rpt_netsales_tglawalField',
         //vtype: 'daterange',
 		allowBlank: true,
@@ -459,18 +473,18 @@ Ext.onReady(function(){
 	rpt_netsales_rekapField=new Ext.form.Radio({
 		id: 'rpt_netsales_rekapField',
 		boxLabel: 'Rekap',
-		name: 'terimakas_opsi',
+		name: 'netsales_opsi',
 		checked: true
 	});
 	
 	rpt_netsales_detailField=new Ext.form.Radio({
 		id: 'rpt_netsales_detailField',
 		boxLabel: 'Detail',
-		name: 'terimakas_opsi'
+		name: 'netsales_opsi'
 	});
 	
-	var rpt_terimakas_periodeField=new Ext.form.FieldSet({
-		id:'rpt_terimakas_periodeField',
+	var rpt_netsales_periodeField=new Ext.form.FieldSet({
+		id:'rpt_netsales_periodeField',
 		title : 'Periode',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
@@ -514,16 +528,16 @@ Ext.onReady(function(){
 			}]
 	});
 	
-	var	rpt_terimakas_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_terimakas_opsiField',
+	var	rpt_netsales_opsiField=new Ext.form.FieldSet({
+		id: 'rpt_netsales_opsiField',
 		title: 'Opsi',
 		border: true,
 		anchor: '98%',
 		items: [rpt_netsales_rekapField ,rpt_netsales_detailField]
 	});
 	
-	var	rpt_terimakas_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_terimakas_groupbyField',
+	var	rpt_netsales_groupbyField=new Ext.form.FieldSet({
+		id: 'rpt_netsales_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
@@ -545,58 +559,129 @@ Ext.onReady(function(){
 		}
 	}
 	
-	/* Function for print List Grid */
-	function print_rpt_terimakas(){
+	function lap_netsales_recalc(){
+	
+		var netsales_tglawal="";
+		var netsales_tglakhir="";
+		var netsales_opsi="";
+		var netsales_bulan="";
+		var netsales_tahun="";
+		var netsales_periode="";
 		
-		var terimakas_tglawal="";
-		var terimakas_tglakhir="";
-		var terimakas_opsi="";
-		var terimakas_bulan="";
-		var terimakas_tahun="";
-		var terimakas_periode="";
-		var terimakas_group="";
-		
-		var win;               
 		if(is_valid_form()){
 			
-		if(rpt_netsales_tglawalField.getValue()!==""){terimakas_tglawal = rpt_netsales_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_netsales_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_netsales_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_netsales_bulanField.getValue()!==""){terimakas_bulan=rpt_netsales_bulanField.getValue(); }
-		if(rpt_netsales_tahunField.getValue()!==""){terimakas_tahun=rpt_netsales_tahunField.getValue(); }
+		if(rpt_netsales_tglawalField.getValue()!==""){netsales_tglawal = rpt_netsales_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_netsales_tglakhirField.getValue()!==""){netsales_tglakhir = rpt_netsales_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_netsales_bulanField.getValue()!==""){netsales_bulan=rpt_netsales_bulanField.getValue(); }
+		if(rpt_netsales_tahunField.getValue()!==""){netsales_tahun=rpt_netsales_tahunField.getValue(); }
 		if(rpt_netsales_opsitglField.getValue()==true){
-			terimakas_periode='tanggal';
+			netsales_periode='tanggal';
 		}else if(rpt_netsales_opsiblnField.getValue()==true){
-			terimakas_periode='bulan';
-		}else{
-			terimakas_periode='all';
+			netsales_periode='bulan';
 		}
-		if(rpt_netsales_groupField.getValue()!==""){terimakas_group=rpt_netsales_groupField.getValue(); }
+					
+		net_salesDataStore.baseParams = {
+					task		: 'RECALC',
+					tgl_awal	: netsales_tglawal,
+					tgl_akhir	: netsales_tglakhir,
+					bulan		: netsales_bulan,
+					tahun		: netsales_tahun,
+					periode		: netsales_periode			
+		};
+				
+		net_salesTotalDataStore.baseParams = {
+					task		: 'RECALC2',
+					tgl_awal	: netsales_tglawal,
+					tgl_akhir	: netsales_tglakhir,
+					bulan		: netsales_bulan,
+					tahun		: netsales_tahun,
+					periode		: netsales_periode			
+		};
+				
+		Ext.MessageBox.show({
+		   msg: 'Sedang Proses...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
 		
-		//if(rpt_netsales_rekapField.getValue()==true){terimakas_opsi='rekap';}else{terimakas_opsi='detail';}
+		net_salesDataStore.reload({
+			callback: function(opts, success, response){
+				if(success){
+					net_salesTotalDataStore.reload();
+					Ext.MessageBox.hide();
+					}
+				}
+		});		
 		
+		}else{
+			Ext.MessageBox.show({
+			   title: 'Warning',
+			   msg: 'Not valid form.',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.WARNING
+			});	
+		}
+
+	}
+
+	/* Function for print List Grid */
+	function lap_netsales_search(){
+		
+		var netsales_tglawal="";
+		var netsales_tglakhir="";
+		var netsales_opsi="";
+		var netsales_bulan="";
+		var netsales_tahun="";
+		var netsales_periode="";
+		
+		if(is_valid_form()){
+			
+		if(rpt_netsales_tglawalField.getValue()!==""){netsales_tglawal = rpt_netsales_tglawalField.getValue().format('Y-m-d');}
+		if(rpt_netsales_tglakhirField.getValue()!==""){netsales_tglakhir = rpt_netsales_tglakhirField.getValue().format('Y-m-d');}
+		if(rpt_netsales_bulanField.getValue()!==""){netsales_bulan=rpt_netsales_bulanField.getValue(); }
+		if(rpt_netsales_tahunField.getValue()!==""){netsales_tahun=rpt_netsales_tahunField.getValue(); }
+		if(rpt_netsales_opsitglField.getValue()==true){
+			netsales_periode='tanggal';
+		}else if(rpt_netsales_opsiblnField.getValue()==true){
+			netsales_periode='bulan';
+		}
 					
 		net_salesDataStore.baseParams = {
 					task		: 'SEARCH',
-					tgl_awal	: terimakas_tglawal,
-					tgl_akhir	: terimakas_tglakhir,
-					bulan		: terimakas_bulan,
-					tahun		: terimakas_tahun,
-					periode		: terimakas_periode			
+					tgl_awal	: netsales_tglawal,
+					tgl_akhir	: netsales_tglakhir,
+					bulan		: netsales_bulan,
+					tahun		: netsales_tahun,
+					periode		: netsales_periode			
 		};
 				
-		net_salesDataStore.load();
-		
 		net_salesTotalDataStore.baseParams = {
 					task		: 'SEARCH2',
-					tgl_awal	: terimakas_tglawal,
-					tgl_akhir	: terimakas_tglakhir,
-					bulan		: terimakas_bulan,
-					tahun		: terimakas_tahun,
-					periode		: terimakas_periode			
+					tgl_awal	: netsales_tglawal,
+					tgl_akhir	: netsales_tglakhir,
+					bulan		: netsales_bulan,
+					tahun		: netsales_tahun,
+					periode		: netsales_periode			
 		};
 				
-		net_salesTotalDataStore.load();
-				
+		Ext.MessageBox.show({
+		   msg: 'Sedang Proses...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
+		net_salesDataStore.reload({
+			callback: function(opts, success, response){
+				if(success){
+					net_salesTotalDataStore.reload();
+					Ext.MessageBox.hide();
+					}
+				}
+		});		
+		
 		}else{
 			Ext.MessageBox.show({
 			   title: 'Warning',
@@ -616,18 +701,28 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_terimakas_periodeField],
+		items: [rpt_netsales_periodeField],
 		monitorValid:true,
-		buttons: [{
-				text: 'Print',
-				formBind: true,
-				handler: print_rpt_terimakas
-			},{
-				text: 'Close',
-				handler: function(){
-					rpt_netsalesWindow.hide();
-					//mainPanel.remove(mainPanel.getActiveTab().getId());
-				}
+		buttons: 
+		[{
+			text: 'Recalculate',
+			formBind: true,
+			tooltip: 'Menghitung ulang Net Sales dari keseluruhan transaksi pada tanggal terpilih. Fungsi ini membutuhkan waktu cukup lama.',
+			handler: lap_netsales_recalc
+		},{
+			xtype:'spacer',
+			width: 140
+		},{
+			text: 'Search',
+			formBind: true,
+			tooltip: 'Menampilkan Net Sales dari perhitungan yang telah dilakukan sebelumnya pada tanggal terpilih. Fungsi ini tidak membutuhkan waktu lama.',
+			handler: lap_netsales_search
+		},{
+			text: 'Close',
+			handler: function(){
+				rpt_netsalesWindow.hide();
+				//mainPanel.remove(mainPanel.getActiveTab().getId());
+			}
 		}]
 		
 	});
