@@ -1012,7 +1012,7 @@ Ext.onReady(function(){
 			kwitansi_keteranganField.setDisabled(true);
 			kwitansi_statusField.setDisabled(false);
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_KUITANSI'))){ ?>
-			cetak_kwitansi_createForm.kwitansi_savePrint.enable();
+			cetak_kwitansi_createForm.kwitansi_savePrint.disable();
 			<?php } ?>
 			
 		}

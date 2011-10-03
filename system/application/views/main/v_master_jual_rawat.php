@@ -2340,9 +2340,26 @@ Ext.override(Ext.form.Field, {
 			}
 			
 			msg='updated';
-			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
-			master_jual_rawat_createForm.savePrintButton.enable();
-			<?php } ?>
+			
+			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Terbuka"){
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+				master_jual_rawat_createForm.savePrintButton.enable();
+				<?php } ?>
+			}
+			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Tertutup"){
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+				master_jual_rawat_createForm.savePrintButton.disable();
+				<?php } ?>
+			}
+			if(jrawat_post2db=="UPDATE" && master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok')=="Batal"){
+				<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALRAWAT'))){ ?>
+				master_jual_rawat_createForm.savePrintButton.disable();
+				<?php } ?>
+			}
+			
+		
+			
+			
             master_cara_bayarTabPanel.setDisabled(false);
 			master_jual_rawat_createWindow.show();
 		} else {
@@ -5040,7 +5057,7 @@ Ext.override(Ext.form.Field, {
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_master_jual_rawat&m=get_member_by_cust', 
 			method: 'POST'
-		}),
+		}),baseParams: {start: 0, limit: 15 },
 			reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
