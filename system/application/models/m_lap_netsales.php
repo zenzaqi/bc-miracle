@@ -121,6 +121,11 @@ class M_lap_netsales extends Model{
 	// eof net sales
 	
 	function get_laporan_netsalestotal($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun){
+
+		if ($periode == 'bulan'){
+			$tgl_awal	= $tahun.'-'.$bulan.'-01';
+			$tgl_akhir	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
+		}									   	
 			
 		$sql		=  "select 
 							sum(tns_medis) as tns_medis_total,
