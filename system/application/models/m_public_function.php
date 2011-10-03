@@ -146,6 +146,36 @@ class M_public_function extends Model{
 	}
 	// eof net sales
 	
+	function get_laporan_netsalestotal($tgl_awal, $tgl_akhir, $periode){
+			
+		$sql		=  "select 
+							sum(tns_medis) as tns_medis_total,
+							sum(tns_nonmedis) as tns_nonmedis_total,
+							sum(tns_surgery) as tns_surgery_total,
+							sum(tns_antiaging) as tns_antiaging_total,
+							sum(tns_produk) as tns_produk_total,
+							sum(tns_lainlain) as tns_lainlain_total
+						from temp_netsales t
+						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'";
+				
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		//return $query->result();
+		
+		if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+
+	
+	
+	}
+	
 	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
 			$sql="";
 			if($periode=='all')

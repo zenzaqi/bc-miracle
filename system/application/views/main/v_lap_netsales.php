@@ -127,6 +127,7 @@ Ext.onReady(function(){
 			id: ''
 		},[
 		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */
+			{name: 'tns_tanggal', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_tanggal'},
 			{name: 'tns_medis', type: 'float', mapping: 'tns_medis'},
 			{name: 'tns_nonmedis', type: 'float', mapping: 'tns_nonmedis'},
 			{name: 'tns_produk', type: 'float', mapping: 'tns_produk'},
@@ -134,6 +135,31 @@ Ext.onReady(function(){
 			{name: 'tns_lainlain', type: 'float', mapping: 'tns_lainlain'},
 			{name: 'tns_surgery', type: 'float', mapping: 'tns_surgery'},
 			{name: 'tns_total', type: 'float', mapping: 'tns_total'}
+		]),
+		//sortInfo:{field: 'tot_net', direction: "DESC"}
+	});
+	/* End of Function */
+
+	net_salesTotalDataStore = new Ext.data.Store({
+		id: 'net_salesTotalDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_netsales&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LISTTOTAL",start:0}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */
+			{name: 'tns_medis_total', type: 'float', mapping: 'tns_medis_total'},
+			{name: 'tns_nonmedis_total', type: 'float', mapping: 'tns_nonmedis_total'},
+			{name: 'tns_produk_total', type: 'float', mapping: 'tns_produk_total'},
+			{name: 'tns_antiaging_total', type: 'float', mapping: 'tns_antiaging_total'},
+			{name: 'tns_lainlain_total', type: 'float', mapping: 'tns_lainlain_total'},
+			{name: 'tns_surgery_total', type: 'float', mapping: 'tns_surgery_total'},
+			{name: 'tns_grand_total', type: 'float', mapping: 'tns_grand_total'}
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
@@ -151,6 +177,14 @@ Ext.onReady(function(){
 	
 	net_salesColumnModel = new Ext.grid.ColumnModel(
 		[
+		{
+			align : 'Left',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
+			dataIndex: 'tns_tanggal',
+			width: 80,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			sortable: true
+		}, 
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Medis (Rp)' + '</div>',
@@ -211,6 +245,76 @@ Ext.onReady(function(){
 	]);
 	
 	net_salesColumnModel.defaultSortable= true;
+
+	net_salesTotalColumnModel = new Ext.grid.ColumnModel(
+		[
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
+			dataIndex: '',
+			disabled : false,
+			width: 80			
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Medis (Rp)' + '</div>',
+			dataIndex: 'tns_medis_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Non Medis (Rp)' + '</div>',
+			dataIndex: 'tns_nonmedis_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Surgery (Rp)' + '</div>',
+			dataIndex: 'tns_surgery_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Anti Aging (Rp)' + '</div>',
+			dataIndex: 'tns_antiaging_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Produk (Rp)' + '</div>',
+			dataIndex: 'tns_produk_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Lain-lain (Rp)' + '</div>',
+			dataIndex: 'tns_lainlain_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			dataIndex: 'tns_grand_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		}
+	]);
+	
+	net_salesTotalColumnModel.defaultSortable= true;
+
 	
 	/* Declare DataStore and  show datagrid list */
 	net_salesListEditorGrid =  new Ext.grid.EditorGridPanel({
@@ -225,7 +329,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800, //940,//1200,	//970,
+	  	width: 940, //940,//1200,	//970,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -243,6 +347,24 @@ Ext.onReady(function(){
 	});
 	net_salesListEditorGrid.render();
 	/* End of DataStore */
+	
+	net_salesTotalListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'net_salesTotalListEditorGrid',
+		el: 'fp_netsalesTotal_list',
+		title: '',
+		autoHeight: true,
+		store: net_salesTotalDataStore, // DataStore
+		cm: net_salesTotalColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 940, //940,//1200,	//970,
+	});
+	net_salesTotalListEditorGrid.render();
+	/* End of DataStore */
+		
 	
 	var rpt_netsales_groupField=new Ext.form.ComboBox({
 		id:'rpt_netsales_groupField',
@@ -459,12 +581,21 @@ Ext.onReady(function(){
 					tgl_akhir	: terimakas_tglakhir,
 					bulan		: terimakas_bulan,
 					tahun		: terimakas_tahun,
-					periode		: terimakas_periode
-					
+					periode		: terimakas_periode			
 		};
-		
-		
+				
 		net_salesDataStore.load();
+		
+		net_salesTotalDataStore.baseParams = {
+					task		: 'SEARCH2',
+					tgl_awal	: terimakas_tglawal,
+					tgl_akhir	: terimakas_tglakhir,
+					bulan		: terimakas_bulan,
+					tahun		: terimakas_tahun,
+					periode		: terimakas_periode			
+		};
+				
+		net_salesTotalDataStore.load();
 				
 		}else{
 			Ext.MessageBox.show({
@@ -556,6 +687,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
 		<div id="fp_netsales_list"></div>
+        <div id="fp_netsalesTotal_list"></div>
         <div id="fp_netsales"></div>
 		<div id="elwindow_rpt_netsales"></div>
     </div>
