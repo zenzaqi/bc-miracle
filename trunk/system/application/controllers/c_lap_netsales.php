@@ -32,7 +32,7 @@ class C_lap_netsales extends Controller {
 				$this->laporan_netsales_search();
 				break;
 			case "SEARCH2":
-				$this->rekap_penjualan_search2();
+				$this->laporan_netsales_search2();
 				break;
 			case "PRINT":
 				$this->tindakan_print();
@@ -53,7 +53,6 @@ class C_lap_netsales extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		$data["jenis"]='Produk';
 		if($periode=="all"){
 			$data["periode"]="Semua Periode";
 		}else if($periode=="bulan"){
@@ -65,22 +64,30 @@ class C_lap_netsales extends Controller {
 		
 		$result=$this->m_public_function->get_laporan_netsales($tgl_awal,$tgl_akhir,$periode);
 		
-		/*
-		$data["data_print"]=$this->m_public_function->get_laporan_netsales($tgl_awal,$tgl_akhir,$periode,$opsi);
-		$data["sql"]=$this->db->last_query();
-		$print_view=$this->load->view("main/p_lap_netsales.php",$data,TRUE);
-		if(!file_exists("print")){
-			mkdir("print");
-		}
-		if($opsi=='rekap')
-			$print_file=fopen("print/report_terimakas.html","w+");
-		else
-			$print_file=fopen("print/report_terimakas.html","w+");
-			
-		fwrite($print_file, $print_view);
-		*/
 		echo $result; 
 	}
+	
+	function laporan_netsales_search2(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		if($periode=="all"){
+			$data["periode"]="Semua Periode";
+		}else if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$data["periode"]="Periode ".$tgl_awal." s/d ".$tgl_akhir;
+		}
+		
+		$result=$this->m_public_function->get_laporan_netsalestotal($tgl_awal,$tgl_akhir,$periode);
+		
+		echo $result; 
+	}
+
 	
 }
 ?>
