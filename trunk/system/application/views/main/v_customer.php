@@ -155,7 +155,7 @@ var cust_memberSearchField;
 var cust_memberSearch2Field;
 var cust_terdaftarSearchField;
 var cust_tgldaftarSearchFieldEnd;
-var cust_tglawaltransSearchField;
+var cust_tglawaltrans_SearchField;
 var cust_tglawaltransSearchFieldEnd;
 var cust_statusnikahSearchField;
 var cust_prioritySearchField;
@@ -5522,9 +5522,9 @@ Ext.onReady(function(){
 	});
 	
 	/* Identify  cust_tglawaltrans Field */
-	cust_tglawaltransSearchField= new Ext.form.DateField({
+	cust_tglawaltrans_SearchField= new Ext.form.DateField({
 		fieldLabel: 'Tgl Awal Transaksi',
-		id: 'cust_tglawaltransSearchField',
+		id: 'cust_tglawaltrans_SearchField', 
 		format: 'd-m-Y'
 	});
 	
@@ -5543,7 +5543,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		//border : false,
 		//frame: false,
-		items:[cust_tglawaltransSearchField, cust_label_tglawaltransSearchField, cust_tglawaltransSearchFieldEnd]
+		items:[cust_tglawaltrans_SearchField, cust_label_tglawaltransSearchField, cust_tglawaltransSearchFieldEnd]
 	});	
 	
 	/*Identify radio button utk tanggal transaksi */	
