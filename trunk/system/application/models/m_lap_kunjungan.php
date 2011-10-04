@@ -925,7 +925,7 @@ from
 		}		
 			
 			
-		function get_daftar_customer($lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust,$tgl_tindakan,$start,$end){
+		function get_daftar_customer($tgl_awal,$periode,$lap_kunjungan_id  ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust,$tgl_tindakan,$start,$end){
 		
 		if ($lap_kunjungan_kelamin == '' or $lap_kunjungan_kelamin == 'S')
 		{
@@ -940,6 +940,7 @@ from
 			$cust_kelamin = " and vu_customer.cust_kelamin = '$lap_kunjungan_kelamin'";			
 		}
 		
+	//untuk pencarian customer
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
@@ -949,30 +950,49 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			if ($periode == 'bulan'){
+				$cust_daftar = " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			}
+
 			$cust_daftar_jproduk 	= "";
 			$cust_daftar_jrawat 	= "";
 			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
-			$cust_daftar 			= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end'";			
+			if ($periode == 'bulan'){
+				$cust_daftar 		= " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$cust_daftar 		= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}
+			
 			$cust_daftar_jproduk 	= " and master_jual_produk.jproduk_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_jrawat 	= " and master_jual_rawat.jrawat_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";
 		}			
 		
+		//untuk pencarian berdasarkan member
 		if ($lap_kunjungan_member == '' or $lap_kunjungan_member == 'Semua')
 		{
 			$stat_member = "";
 		}
 		else if ($lap_kunjungan_member == 'Lama')
 		{
-			$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member = " and (date_format(vu_customer.member_register,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			}
 		}
 		else if($lap_kunjungan_member == 'Baru')
 		{
-			$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member 		= " and (date_format(vu_customer.member_register,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}	
 		}
 		else if($lap_kunjungan_member == 'Non Member')
 		{
@@ -998,9 +1018,10 @@ from
 		}else if ($lap_kunjungan_umurstart=='' and $lap_kunjungan_umurend==''){
 			$umur= "";
 		}
+
 		
 		///////////////
-				if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+				if($periode == 'bulan' || $periode == 'tanggal'){
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 					cust_id, cust_no, cust_nama					
 					from
@@ -1366,6 +1387,7 @@ from
 			$cust_kelamin = " and vu_customer.cust_kelamin = '$lap_kunjungan_kelamin'";			
 		}
 		
+		//untuk pencarian customer
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
@@ -1375,36 +1397,56 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			if ($periode == 'bulan'){
+				$cust_daftar = " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			}
+
 			$cust_daftar_jproduk 	= "";
 			$cust_daftar_jrawat 	= "";
 			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
-			$cust_daftar 			= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			if ($periode == 'bulan'){
+				$cust_daftar 		= " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$cust_daftar 		= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}
+			
 			$cust_daftar_jproduk 	= " and master_jual_produk.jproduk_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_jrawat 	= " and master_jual_rawat.jrawat_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";
 		}			
 		
+		//untuk pencarian berdasarkan member
 		if ($lap_kunjungan_member == '' or $lap_kunjungan_member == 'Semua')
 		{
 			$stat_member = "";
 		}
 		else if ($lap_kunjungan_member == 'Lama')
 		{
-			$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member = " and (date_format(vu_customer.member_register,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			}
 		}
 		else if($lap_kunjungan_member == 'Baru')
 		{
-			$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			if ($periode == 'bulan'){
+				$stat_member 		= " and (date_format(vu_customer.member_register,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}	
 		}
 		else if($lap_kunjungan_member == 'Non Member')
 		{
 			$stat_member = " and vu_customer.cust_member = 0";
 		}
-			
+		
+		//untuk pencarian tanggal lahir	
 		if($lap_kunjungan_tgllahir!='' and $lap_kunjungan_tgllahirend!=''){
 			$tgllahir= " and cust_tgllahir BETWEEN '$lap_kunjungan_tgllahir' AND '$lap_kunjungan_tgllahirend'";
 		}else if ($lap_kunjungan_tgllahir!='' and $lap_kunjungan_tgllahirend==''){
@@ -1415,6 +1457,7 @@ from
 			$tgllahir= "";
 		}
 
+		//untuk pencarian umur
 		if($lap_kunjungan_umurstart!='' and $lap_kunjungan_umurend!=''){
 			$umur= " and (year(now())-year(cust_tgllahir)) BETWEEN '$lap_kunjungan_umurstart' AND '$lap_kunjungan_umurend'";
 		}else if ($lap_kunjungan_umurstart!='' and $lap_kunjungan_umurend==''){
@@ -1425,7 +1468,7 @@ from
 			$umur= "";
 		}
 		
-//untuk periode
+	//untuk periode
 		if ($periode == 'bulan'){
 			$periode_produk =" (date_format(master_jual_produk.jproduk_tanggal,'%Y-%m')='".$tgl_awal."') " ;
 			$periode_paket =" (date_format(detail_ambil_paket.dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') " ;				
@@ -1437,7 +1480,7 @@ from
 		}
 		
 		
-		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+		if($periode == 'bulan' || $periode == 'tanggal'){
 			$query = "select date_format(tgl_tindakan, '%Y-%m-%d') as tgl_tindakan,
 sum(jum_cust_medis),
 sum(jum_cust_surgery),
@@ -1753,6 +1796,7 @@ from
 			$cust_kelamin = " and vu_customer.cust_kelamin = '$lap_kunjungan_kelamin'";			
 		}
 		
+		//untuk pencarian customer
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
@@ -1762,30 +1806,49 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			if ($periode == 'bulan'){
+				$cust_daftar = " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			}
+
 			$cust_daftar_jproduk 	= "";
 			$cust_daftar_jrawat 	= "";
 			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
-			$cust_daftar 			= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end'";		
+			if ($periode == 'bulan'){
+				$cust_daftar 		= " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$cust_daftar 		= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}
+			
 			$cust_daftar_jproduk 	= " and master_jual_produk.jproduk_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_jrawat 	= " and master_jual_rawat.jrawat_tanggal = vu_customer.cust_tglawaltrans ";
-			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";			
+			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";
 		}			
 		
+		//untuk pencarian berdasarkan member
 		if ($lap_kunjungan_member == '' or $lap_kunjungan_member == 'Semua')
 		{
 			$stat_member = "";
 		}
 		else if ($lap_kunjungan_member == 'Lama')
 		{
-			$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member = " and (date_format(vu_customer.member_register,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			}
 		}
 		else if($lap_kunjungan_member == 'Baru')
 		{
-			$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member 		= " and (date_format(vu_customer.member_register,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}	
 		}
 		else if($lap_kunjungan_member == 'Non Member')
 		{
@@ -1826,7 +1889,7 @@ from
 		}
 		
 		//jika ada penggantian di query ini, sesuaikan juga query di m_crm_generator, bagian FREQUENCY, SPENDING, JUMLAH TX UTAMA
-		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+		if($periode == 'bulan' || $periode == 'tanggal'){
 	
 			$query = "select
 sum(jum_cust_medis),
@@ -2140,6 +2203,7 @@ from
 			$cust_kelamin = " and vu_customer.cust_kelamin = '$lap_kunjungan_kelamin'";			
 		}
 		
+		//untuk pencarian customer
 		if ($lap_kunjungan_cust == '' or $lap_kunjungan_cust == 'Semua')
 		{
 			$cust_daftar = "";
@@ -2149,30 +2213,49 @@ from
 		}
 		else if ($lap_kunjungan_cust == 'Lama')
 		{
-			$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			if ($periode == 'bulan'){
+				$cust_daftar = " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$cust_daftar = " and ((vu_customer.cust_terdaftar not between '$trawat_tglapp_start' and '$trawat_tglapp_end') or (vu_customer.cust_terdaftar is null))";
+			}
+
 			$cust_daftar_jproduk 	= "";
 			$cust_daftar_jrawat 	= "";
 			$cust_daftar_dapaket 	= "";
 		}
 		else if($lap_kunjungan_cust == 'Baru')
 		{
-			$cust_daftar 			= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end'";	
+			if ($periode == 'bulan'){
+				$cust_daftar 		= " and (date_format(vu_customer.cust_terdaftar,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$cust_daftar 		= " and vu_customer.cust_terdaftar between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}
+			
 			$cust_daftar_jproduk 	= " and master_jual_produk.jproduk_tanggal = vu_customer.cust_tglawaltrans ";
 			$cust_daftar_jrawat 	= " and master_jual_rawat.jrawat_tanggal = vu_customer.cust_tglawaltrans ";
-			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";			
-		}	
-	
+			$cust_daftar_dapaket 	= " and detail_ambil_paket.dapaket_tgl_ambil = vu_customer.cust_tglawaltrans ";
+		}			
+		
+		//untuk pencarian berdasarkan member
 		if ($lap_kunjungan_member == '' or $lap_kunjungan_member == 'Semua')
 		{
 			$stat_member = "";
 		}
 		else if ($lap_kunjungan_member == 'Lama')
 		{
-			$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member = " and (date_format(vu_customer.member_register,'%Y-%m')<>'".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register not between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			}
 		}
 		else if($lap_kunjungan_member == 'Baru')
 		{
-			$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end'";
+			if ($periode == 'bulan'){
+				$stat_member 		= " and (date_format(vu_customer.member_register,'%Y-%m')='".$tgl_awal."') ";
+			}else{
+				$stat_member = " and vu_customer.member_register between '$trawat_tglapp_start' and '$trawat_tglapp_end' ";
+			}	
 		}
 		else if($lap_kunjungan_member == 'Non Member')
 		{
@@ -2211,7 +2294,7 @@ from
 			$periode_rawat = " (master_jual_rawat.jrawat_tanggal between '".$trawat_tglapp_start."' and '".$trawat_tglapp_end."') ";
 		}
 			
-		if($trawat_tglapp_start!='' && $trawat_tglapp_end!=''){
+		if($periode == 'bulan' || $periode == 'tanggal'){
 	
 			$query = "select
 sum(jum_cust_medis)/count(distinct tgl_tindakan),
