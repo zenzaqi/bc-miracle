@@ -152,6 +152,11 @@ class C_lap_kunjungan extends Controller {
 	function get_daftar_customer(){
 		$tgl_tindakan=trim(@$_POST["tgl_tindakan"]);
 		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$tgl_awal=$tahun."-".$bulan;
+		
 		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
@@ -185,7 +190,7 @@ class C_lap_kunjungan extends Controller {
 		//$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_kunjungan->get_daftar_customer($lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $tgl_tindakan,$start,$end);
+		$result = $this->m_lap_kunjungan->get_daftar_customer($tgl_awal,$periode,$lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $tgl_tindakan,$start,$end);
 		echo $result;
 	}
 	

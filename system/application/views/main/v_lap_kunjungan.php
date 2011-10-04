@@ -526,6 +526,9 @@ Ext.onReady(function(){
 		var lap_kunjungan_umurend_detail=null;
 		var lap_kunjungan_tgllahir_detail_date="";
 		var lap_kunjungan_tgllahir_detail_dateEnd="";
+		var lap_kunjungan_tmedis_bulan=null;
+		var lap_kunjungan_tmedis_tahun=null;
+		var lap_kunjungan_tmedis_periode=null;
 		//var lap_kunjungan_dokter_detail=null;
 
 		
@@ -540,8 +543,16 @@ Ext.onReady(function(){
 		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_detail=lap_kunjungan_umurendSearchField.getValue();}	
 		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_detail_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
 		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_detail_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		if(lap_kunjungan_bulanField.getValue()!==null){lap_kunjungan_tmedis_bulan=lap_kunjungan_bulanField.getValue();}
+		if(lap_kunjungan_tahunField.getValue()!==null){lap_kunjungan_tmedis_tahun=lap_kunjungan_tahunField.getValue();}
 	
-	
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tmedis_periode='tanggal';
+		}else if(lap_kunjungan_opsiblnField.getValue()==true){
+			lap_kunjungan_tmedis_periode='bulan';
+		}else{
+			lap_kunjungan_tmedis_periode='all';
+		}
 	
         var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
 		var today=new Date().format('Y-m-d');
@@ -556,7 +567,10 @@ Ext.onReady(function(){
 			lap_kunjungan_umurstart : lap_kunjungan_umurstart_detail,
 			lap_kunjungan_umurend : lap_kunjungan_umurend_detail,
 			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_detail_date, 
-			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode	
 			
 			}});
     });
