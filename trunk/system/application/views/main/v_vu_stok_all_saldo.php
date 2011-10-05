@@ -1022,11 +1022,11 @@ Ext.onReady(function(){
 		layout: 'form',
 		frame: false,
 		bodyStyle: 'padding: 5px;',
-		items:[/*{
+		items:[{
 			   		layout	: 'column',
 					border: false,
 					items	: [stok_produk_allField]
-			   },*/
+			   },
 			   {
 				   layout	: 'column',
 				   bodyStyle: 'padding-bottom: 5px;',
