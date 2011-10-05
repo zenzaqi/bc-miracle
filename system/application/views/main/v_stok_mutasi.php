@@ -739,7 +739,7 @@ Ext.onReady(function(){
 	
 	stok_mutasi_produk_allField=new Ext.form.Radio({
 		name:'opsi_produk',
-		boxLabel: 'Semua',
+		boxLabel: 'Semua Produk',
 		width: 100
 	});
 	
@@ -877,12 +877,12 @@ Ext.onReady(function(){
 		layout: 'form',
 		frame: false,
 		bodyStyle: 'padding: 5px;',
-		items:[/*{
+		items:[{
 			   		layout	: 'column',
 					bodyStyle: 'padding-bottom: 5px;',
 					border: false,
 					items	: [stok_mutasi_produk_allField]
-			   },*/
+			   },
 			   {
 				   layout	: 'column',
 				   bodyStyle: 'padding-bottom: 5px;',
