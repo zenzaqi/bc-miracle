@@ -339,8 +339,8 @@ Ext.onReady(function(){
 						ambil_paket_isi_perawatan_insert();
 						//Ext.MessageBox.alert(apaket_post2db+' OK','The Paket was '+msg+' successfully.');
 						
-						ambil_paket_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
-						ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
+						//ambil_paket_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
+						//ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
 						
 						//ambil_paket_DataStore.reload();
 						detail_ambil_paketStore.reload();
