@@ -411,6 +411,34 @@ class M_cetak_kwitansi extends Model{
 		
 		function cetak_kwitansi_batal($kwitansi_id ,$kwitansi_status ,$kwitansi_update ){
 			$datetime_now = date('Y-m-d H:i:s');
+			
+			$sql_cek = "SELECT vu_catatan_kwitansi.jkwitansi_id
+					,vu_catatan_kwitansi.jkwitansi_master
+					,vu_catatan_kwitansi.jkwitansi_ref
+					,vu_catatan_kwitansi.jkwitansi_nilai
+					,vu_catatan_kwitansi.customer_id
+					,customer.cust_nama AS customer_nama
+					,customer.cust_no AS customer_no
+				FROM (select
+						jkwitansi_id
+						,jkwitansi_master
+						,jkwitansi_ref
+						,jkwitansi_nilai
+						,if(jproduk_cust!='null',jproduk_cust,if(jrawat_cust!='null',jrawat_cust,jpaket_cust)) AS customer_id
+					FROM jual_kwitansi
+					LEFT JOIN master_jual_produk on(jkwitansi_ref=jproduk_nobukti)
+					LEFT JOIN master_jual_rawat on(jkwitansi_ref=jrawat_nobukti)
+					LEFT JOIN master_jual_paket ON(jkwitansi_ref=jpaket_nobukti)
+					WHERE jkwitansi_stat_dok<>'Batal') as vu_catatan_kwitansi
+				LEFT JOIN customer ON(vu_catatan_kwitansi.customer_id=customer.cust_id)
+				WHERE jkwitansi_master='$kwitansi_id'";
+			$rs_cek = $this->db->query($sql_cek);
+			if($rs_cek->num_rows()){
+			
+				return '10';
+			}
+			else
+			{
 			$sql = "SELECT kwitansi_no, kwitansi_cara FROM cetak_kwitansi WHERE kwitansi_id='".$kwitansi_id."'";
 			$rs = $this->db->query($sql);
 			if($rs->num_rows()){
@@ -473,6 +501,10 @@ class M_cetak_kwitansi extends Model{
 					}
 				}
 			}
+		
+		
+		}
+			
 		}
 		
 		function cara_bayar_tunai_insert($kwitansi_tunai_nilai

@@ -536,6 +536,7 @@ Ext.onReady(function(){
 						kwitansi_transfer_nama	:	kwitansi_transfer_nama_create,
 						kwitansi_transfer_nilai	:	kwitansi_transfer_nilai_create
 					}, 
+
 					success: function(response){             
 						var result=eval(response.responseText);
 						switch(result){
@@ -563,6 +564,7 @@ Ext.onReady(function(){
 								break;
 						}        
 					},
+
 					failure: function(response){
 						var result=response.responseText;
 						Ext.MessageBox.show({
@@ -609,20 +611,31 @@ Ext.onReady(function(){
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
-					switch(result){
-						case 0:
+							if(result==0){
+					
 							//jual_kwitansi_purge()
 							//jual_kwitansi_insert();
 							Ext.MessageBox.alert(kwitansi_post2db+' OK','Data kuitansi berhasil di-Batalkan');
 							cetak_kwitansi_DataStore.reload();
 							cetak_kwitansi_createWindow.hide();
-							break;
-						default:
+						}
+						else if(result==10){
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Data Kuitansi tidak dapat dibatal-kan, karena sudah pernah terpanggil di faktur penjualan',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							
+						}
+						else{
 							Ext.MessageBox.alert(kwitansi_post2db+' Warning','Tidak ada data yang di-Update');
 							cetak_kwitansi_DataStore.reload();
 							cetak_kwitansi_createWindow.hide();
-							break;
-					}        
+							
+						}
+					   
 				},
 				failure: function(response){
 					var result=response.responseText;
