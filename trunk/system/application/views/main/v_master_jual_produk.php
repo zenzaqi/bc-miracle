@@ -1334,16 +1334,16 @@ Ext.override(Ext.form.Field, {
 		total_field=subtotal_field*(100-diskon_field)/100;
 		
 		jproduk_jumlahField.setValue(dproduk_jumlah_field);
-		jproduk_subTotalField.setValue(Ext.util.Format.number(subtotal_field,'0,000'));
-		jproduk_subTotal_cfField.setValue(Ext.util.Format.number(subtotal_field,'0,000'));
+		jproduk_subTotalField.setValue(subtotal_field);
+		jproduk_subTotal_cfField.setValue(CurrencyFormatted(subtotal_field));
 		
 		
 		jproduk_totalField.setValue(total_field);
-		jproduk_total_cfField.setValue(Ext.util.Format.number(total_field,'0,000'));
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_field));
 		
 		hutang_temp=total_field-jproduk_bayarField.getValue();
 		jproduk_hutangField.setValue(hutang_temp);
-		jproduk_hutang_cfField.setValue(Ext.util.Format.number(hutang_temp,'0,000'));
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(hutang_temp));
 		
 		load_membership();
 		load_karyawan();
@@ -5746,14 +5746,14 @@ Ext.override(Ext.form.Field, {
 		
 		update_total_field=jproduk_subTotalField.getValue()*((100-jproduk_diskonField.getValue())/100)-jproduk_cashbackField.getValue();
 		jproduk_totalField.setValue(update_total_field);
-		jproduk_total_cfField.setValue(Ext.util.Format.number(update_total_field,'0,000'));
+		jproduk_total_cfField.setValue(CurrencyFormatted(update_total_field));
 
 		jproduk_bayarField.setValue(total_bayar);
 		jproduk_bayar_cfField.setValue(CurrencyFormatted(total_bayar));
 		
 		update_hutang_field=update_total_field-total_bayar;
 		jproduk_hutangField.setValue(update_hutang_field);
-		jproduk_hutang_cfField.setValue(Ext.util.Format.number(update_hutang_field,'0,000'));
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(update_hutang_field));
 
 		jproduk_diskonField.setValue(jproduk_diskonField.getValue());
 		jproduk_cashbackField.setValue(jproduk_cashbackField.getValue());
@@ -5812,17 +5812,17 @@ Ext.override(Ext.form.Field, {
 			sub_total_field+=detail_jual_produk_DataStore.getAt(i).data.dproduk_jumlah * detail_jual_produk_DataStore.getAt(i).data.dproduk_harga * ((100 - detail_jual_produk_DataStore.getAt(i).data.dproduk_diskon)/100);
 		}
 		jproduk_jumlahField.setValue(jumlah_item);
-		jproduk_subTotalField.setValue(Ext.util.Format.number(sub_total_field,'0,000'));
-		jproduk_subTotal_cfField.setValue(Ext.util.Format.number(sub_total_field,'0,000'));
+		jproduk_subTotalField.setValue(sub_total_field);
+		jproduk_subTotal_cfField.setValue(CurrencyFormatted(sub_total_field));
 		
 		total_biaya_field = sub_total_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jproduk_totalField.setValue(total_biaya_field);
-		jproduk_total_cfField.setValue(Ext.util.Format.number(total_biaya_field,'0,000'));
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jproduk_hutangField.setValue(total_hutang_field);
-		jproduk_hutang_cfField.setValue(Ext.util.Format.number(total_hutang_field,'0,000'));
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_biaya(){
@@ -5855,11 +5855,11 @@ Ext.override(Ext.form.Field, {
 		total_biaya_field += sub_total_biaya_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jproduk_totalField.setValue(total_biaya_field);
-		jproduk_total_cfField.setValue(Ext.util.Format.number(total_biaya_field,'0,000'));
+		jproduk_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jproduk_hutangField.setValue(total_hutang_field);
-		jproduk_hutang_cfField.setValue(Ext.util.Format.number(total_hutang_field,'0,000'));
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_bayar(){
@@ -6006,7 +6006,7 @@ Ext.override(Ext.form.Field, {
 		total_hutang_field=total_biaya_field-total_bayar_field;
 		total_hutang_field=(total_hutang_field>0?Math.round(total_hutang_field):0);
 		jproduk_hutangField.setValue(total_hutang_field);
-		jproduk_hutang_cfField.setValue(Ext.util.Format.number(total_hutang_field,'0,000'));
+		jproduk_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 		
 		if(total_bayar_field>total_biaya_field){
 			jproduk_pesanLabel.setText("Kelebihan Jumlah Bayar");

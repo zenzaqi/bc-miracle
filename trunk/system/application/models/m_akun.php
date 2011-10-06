@@ -172,11 +172,11 @@ class M_akun extends Model{
 			}
 
 			if($akun_parent!==""){
-				$sql="SELECT akun_kode,akun_level, akun_jenis FROM akun WHERE akun_id='".$akun_parent."'";
+				$sql="SELECT akun_id, akun_kode,akun_level, akun_jenis FROM akun WHERE akun_id='".$akun_parent."'";
 				$result=$this->db->query($sql);
 				if($result->num_rows()){
 					$row=$result->row();
-					$data["akun_parent"]=$row->akun_parent;
+					$data["akun_parent"]=$row->akun_id;
 					$data["akun_parent_kode"]=$row->akun_kode;
 					$data["akun_level"]=$row->akun_level+1;
 					$data["akun_jenis"]=$row->akun_jenis;
