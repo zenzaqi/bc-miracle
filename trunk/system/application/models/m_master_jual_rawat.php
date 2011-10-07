@@ -2002,31 +2002,31 @@ class M_master_jual_rawat extends Model{
 		
 		if($jrawat_tgl_start!='' && $jrawat_tgl_end!=''){
 			if(substr_count($query, " WHERE ")<2){
-				$query.=" WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
+				$query.=" WHERE date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
 			}elseif(substr_count($query, " WHERE ")>=2){
-				$query.=" AND date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
+				$query.=" AND date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
 			}
 		}else if($jrawat_tgl_start!='' && $jrawat_tgl_end==''){
 			if(substr_count($query, " WHERE ")<2){
-				$query.=" WHERE date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
+				$query.=" WHERE date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
 			}elseif(substr_count($query, " WHERE ")>=2){
-				$query.=" AND date_format(vu_jrawat_pk.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
+				$query.=" AND date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_date_create,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
 			}
 		}
 		
