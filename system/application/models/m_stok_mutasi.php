@@ -82,6 +82,9 @@ class M_stok_mutasi extends Model{
 			}elseif($stok_akhir=='> 0'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
+			}elseif($stok_akhir=='!='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir <> '0' ";
 			}
 			
 			if($stok_awal=='='){
