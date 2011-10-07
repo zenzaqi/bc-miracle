@@ -2206,7 +2206,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Sisa',
 		store:new Ext.data.SimpleStore({
 			fields:['apaket_sisa_value', 'apaket_sisa_display'],
-			data:[['0','Semua'],['1','Lebih dari 0'],['Sisa 0','Yang Sisanya 0']]
+			data:[['0','Semua'],['1','> 0'],['Sisa 0','= 0']]
 		}),
 		mode: 'local',
 		displayField: 'apaket_sisa_display',
