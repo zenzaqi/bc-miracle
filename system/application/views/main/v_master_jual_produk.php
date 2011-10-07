@@ -1304,7 +1304,7 @@ Ext.override(Ext.form.Field, {
 		jproduk_karyawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
 		jproduk_karyawan_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_id'));
 		jproduk_nikkaryawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_no'));
-		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust'));
+		jproduk_custField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust_edit'));
 		jproduk_cust_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cust_id'));
 		jproduk_tanggalField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_tanggal'));
 		jproduk_caraField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_cara'));
@@ -2143,6 +2143,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
 			{name: 'jproduk_cust', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'jproduk_cust_edit', type: 'string', mapping: 'cust_nama_edit'}, 
 			{name: 'jproduk_cust_no', type: 'string', mapping: 'cust_no'}, 
 			{name: 'jproduk_cust_member', type: 'string', mapping: 'cust_member'}, 
 			{name: 'jproduk_cust_member_no', type: 'string', mapping: 'member_no'}, 

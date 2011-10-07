@@ -1176,7 +1176,7 @@ Ext.override(Ext.form.Field, {
 		jpaket_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'));
 		jpaket_nobuktiField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'));
 		jpaket_cust_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust_id'));
-		jpaket_custField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust'));
+		jpaket_custField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust_edit'));
 		jpaket_tanggalField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'));
 		jpaket_diskonField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_diskon'));
 		jpaket_cashbackField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback'));
@@ -1849,7 +1849,8 @@ Ext.override(Ext.form.Field, {
 		},[
 			{name: 'jpaket_id', type: 'int', mapping: 'jpaket_id'}, 
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
-			{name: 'jpaket_cust', type: 'string', mapping: 'cust_nama'}, 
+			{name: 'jpaket_cust_edit', type: 'string', mapping: 'cust_nama_edit'},
+			{name: 'jpaket_cust', type: 'string', mapping: 'cust_nama'},			
 			{name: 'jpaket_cust_id', type: 'int', mapping: 'jpaket_cust'},
 			{name: 'jpaket_cust_no', type: 'string', mapping: 'cust_no'},		//additional by hendri
 			{name: 'jpaket_cust_member', type: 'string', mapping: 'cust_member'},		//additional by hendri

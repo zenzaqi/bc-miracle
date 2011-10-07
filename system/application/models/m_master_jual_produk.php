@@ -836,7 +836,8 @@ class M_master_jual_produk extends Model{
 				,jproduk_nobukti
 				,karyawan_no
 				,karyawan_nama
-				,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama
+				,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama_edit
+				,cust_nama
 				,cust_no
 				,cust_member
 				,member_no
@@ -1583,7 +1584,8 @@ class M_master_jual_produk extends Model{
 		//$query="SELECT jproduk_id, jproduk_nobukti, cust_nama, cust_no, cust_member, member_no, jproduk_cust, jproduk_tanggal, jproduk_diskon, jproduk_cashback, jproduk_cara, jproduk_cara2, jproduk_cara3, jproduk_bayar, jproduk_totalbiaya, jproduk_keterangan, jproduk_creator, jproduk_date_create, jproduk_update, jproduk_date_update, jproduk_revised, jproduk_stat_dok FROM vu_jproduk";
 		$query = "SELECT jproduk_id
 				,jproduk_nobukti
-				,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama
+				,CONCAT(cust_nama, ' (', cust_no, ')') as cust_nama_edit
+				,cust_nama
 				,cust_no
 				,cust_member
 				,member_no
