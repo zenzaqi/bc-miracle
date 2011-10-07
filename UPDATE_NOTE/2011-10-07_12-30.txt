@@ -1,0 +1,2 @@
+m_master_jual_rawat:
+	search: jrawat_date_create --> jrawat_tanggal
