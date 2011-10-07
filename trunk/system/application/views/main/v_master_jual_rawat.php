@@ -1559,7 +1559,7 @@ Ext.override(Ext.form.Field, {
 		if(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('keterangan_paket')!=='paket'){
 			jrawat_nobuktiField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_nobukti'));
 		}
-		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust'));
+		jrawat_custField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_edit'));
 		jrawat_cust_idField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_cust_id'));
 		jrawat_tanggalField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_tanggal'));
 		jrawat_diskonField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_diskon'));
@@ -2394,6 +2394,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'jrawat_grooming', type: 'int', mapping: 'jrawat_grooming'},
 			{name: 'karyawan_nama', type: 'string', mapping: 'karyawan_nama'},
 			{name: 'karyawan_no', type: 'string', mapping: 'karyawan_no'},
+			{name: 'jrawat_cust_edit', type: 'string', mapping: 'cust_nama_edit'}, 
 			{name: 'jrawat_cust', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'jrawat_cust_id', type: 'int', mapping: 'jrawat_cust'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},

@@ -1282,7 +1282,8 @@ class M_master_jual_rawat extends Model{
 				jrawat_nobukti,
 				karyawan_no,
 				karyawan_nama,
-				CONCAT(vu_jrawat_pr.cust_nama, ' (', vu_jrawat_pr.cust_no, ')') as cust_nama,
+				CONCAT(vu_jrawat_pr.cust_nama, ' (', vu_jrawat_pr.cust_no, ')') as cust_nama_edit,
+				cust_nama,
 				jrawat_cust,
 				vu_jrawat_pr.cust_no,
 				vu_jrawat_pr.cust_member,
@@ -1892,7 +1893,8 @@ class M_master_jual_rawat extends Model{
 		$query = "SELECT
 				vu_jrawat_pr.jrawat_id,
 				vu_jrawat_pr.jrawat_nobukti,
-				CONCAT(vu_jrawat_pr.cust_nama, ' (', vu_jrawat_pr.cust_no, ')') as cust_nama,
+				CONCAT(vu_jrawat_pr.cust_nama, ' (', vu_jrawat_pr.cust_no, ')') as cust_nama_edit,
+				cust_nama,
 				vu_karyawan.karyawan_no,
 				vu_karyawan.karyawan_nama,
 				vu_jrawat_pr.jrawat_cust,
@@ -1955,6 +1957,7 @@ class M_master_jual_rawat extends Model{
 		$query .= "SELECT
 				vu_jrawat_pk.jrawat_id,
 				vu_jrawat_pk.jrawat_nobukti,
+				'' as cust_nama_edit,
 				vu_jrawat_pk.cust_nama,
 				'temp' as temp,
 				'temp2' as temp2,
