@@ -824,7 +824,7 @@ Ext.onReady(function(){
 		maxLength: 50,
 		store:new Ext.data.SimpleStore({
 			fields:['stok_akhir_value', 'stok_akhir_display'],
-			data: [['S','Semua'],['<','< 0'],['=','= 0'],['> 0','> 0']]
+			data: [['S','Semua'],['<','< 0'],['=','= 0'],['> 0','> 0'],['!=','!= 0']]
 		}),
 		mode: 'local',
 		editable: false,

@@ -1,0 +1,1 @@
+vm_stok_mutasi : menambah pencarian '!=' pada laporan Stok Mutasi opsi jumlah stok akhir
