@@ -99,8 +99,16 @@ class M_perpanjang_paket extends Model{
 		//function for update record
 		function perpanjang_paket_create($perpanjang_id, $perpanjang_djpaket_id, $perpanjang_hari, $cust_point, $perpanjang_tanggal, $perpanjang_keterangan, $perpanjang_creator, $perpanjang_date_create){
 		
-			$datetime_now=date('Y-m-d H:i:s');
+		$datetime_now=date('Y-m-d H:i:s');
 		
+		$sql_check = "select * from perpanjang_paket where perpanjang_djpaket_id = '$perpanjang_djpaket_id'";
+		$rs = $this->db->query($sql_check);
+		$rs_rows = $rs->num_rows();
+		if($rs_rows>0){
+			return '2';
+		}
+		else
+		{
 			$data = array(
 				"perpanjang_id"=>$perpanjang_id,	
 				"perpanjang_djpaket_id"=>$perpanjang_djpaket_id,	
@@ -121,6 +129,7 @@ class M_perpanjang_paket extends Model{
 				return '1';
 			else
 				return '0';
+		}
 
 		}
 		
