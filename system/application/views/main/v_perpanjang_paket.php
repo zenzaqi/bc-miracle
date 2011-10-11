@@ -126,6 +126,35 @@ Ext.onReady(function(){
 				}, 
 				success: function(response){             
 					var result=eval(response.responseText);
+					if(result==1){
+						Ext.MessageBox.alert(post2db+' OK','Perpanjangan Paket berhasil dilakukan.');
+						perpanjang_paket_DataStore.reload();
+						perpanjang_paket_saveWindow.hide();
+					}
+					else if(result==2)
+					{
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Perpanjangan Paket tidak dapat dilakukan, karena sudah pernah dilakukan perpanjangan paket sebelumnya',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+						perpanjang_paket_DataStore.reload();
+						perpanjang_paket_saveWindow.hide();
+					}
+					else
+					{
+					Ext.MessageBox.show({
+						title: 'Warning',
+						msg: 'Perpanjangan Paket tidak dapat dilakukan',
+						buttons: Ext.MessageBox.OK,
+						animEl: 'save',
+						icon: Ext.MessageBox.WARNING
+					});
+					
+					}
+					/*
 					switch(result){
 						case 1:
 							Ext.MessageBox.alert(post2db+' OK','Perpanjangan Paket berhasil dilakukan.');
@@ -141,7 +170,8 @@ Ext.onReady(function(){
 							   icon: Ext.MessageBox.WARNING
 							});
 							break;
-					}        
+					}
+					*/
 				},
 				failure: function(response){
 					var result=response.responseText;
@@ -220,7 +250,7 @@ Ext.onReady(function(){
   	/* End Function */
   
 	function perpanjang_paket_confirm_save(){
-		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan perpanjangan paket ini?', perpanjang_paket_button);
+		Ext.MessageBox.confirm('Confirmation','Anda yakin untuk melakukan perpanjangan paket ini? (Perpanjangan Paket hanya dapat dilakukan 1 kali saja) ', perpanjang_paket_button);
 	}
 	
 	function perpanjang_paket_button(btn){
@@ -232,7 +262,7 @@ Ext.onReady(function(){
 	
 	/* Combobox utk menampilkan paket2 yang sisanya tidak minus / tidak 0*/ 
 	cbo_perpanjang_paket_listpaketDataStore = new Ext.data.Store({
-		id: 'ambil_paket_DataStore',
+		id: 'cbo_perpanjang_paket_listpaketDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_perpanjang_paket&m=get_paket_list', 
 			method: 'POST'
@@ -305,7 +335,7 @@ Ext.onReady(function(){
 			header: '<div align="center">Tanggal</div>',
 			dataIndex: 'perpanjang_tanggal',
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
-			width: 40,
+			width: 50,
 			sortable: true
 			
 		}, 
@@ -463,7 +493,20 @@ Ext.onReady(function(){
 		blankText: '0',
 		allowBlank : false,
 		maxLength: 11,
+		enableKeyEvents : true,
 		maskRe: /([0-9]+)$/
+	});
+	perpanjangan_hari_Field.on('keyup', function(){
+		if(this.getRawValue()>99){
+			this.setRawValue(null);
+			Ext.MessageBox.show({
+				title: 'Warning',
+				 msg: 'Maksimum hari yang diinput adalah 99',
+				 buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+				});
+		}
 	});
 	
 	
