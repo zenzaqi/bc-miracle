@@ -54,6 +54,7 @@ var ambil_paket_searchWindow;
 var ambil_paket_SelectedRow;
 var ambil_paket_ContextMenu;
 var ambil_paket_printForm;
+var ambil_paket_phonegroup_saveForm;
 //for detail data
 var ambil_paket_isi_perawatan_DataStor;
 var ambil_paket_isi_perawatanListEditorGrid;
@@ -403,6 +404,17 @@ Ext.onReady(function(){
 		apaket_kadaluarsaField.setValue(null);
 	}
  	/* End of Function */
+	
+	/* Reset form before loading */
+	function ambil_paket_phonegroup_reset_form(){
+		ambil_paket_phonegroup_namaField.reset();
+		ambil_paket_delete_phonegroupField.reset();
+		ambil_paket_phonegroup_namaField.setValue(null);
+
+		//phonenumber_DataStore.removeAll();
+		//phonegrouped_DataStore.removeAll();
+	}
+ 	/* End of Function */
   
 	/* setValue to EDIT */
 	function ambil_paket_set_form(){
@@ -550,7 +562,7 @@ Ext.onReady(function(){
 		if(!ambil_paket_print_saveWindow.isVisible()){
 
 			/*
-			post2db='CREATE';
+			apaket_post2db='CREATE';
 			msg='created';
 			phonegroup_reset_form();
 			*/
@@ -561,7 +573,20 @@ Ext.onReady(function(){
 		}
 	}
 	
-	
+	/* Function for Displaying  add to phonegroup Window Form */
+	function display_form_phonegroup(){
+		if(!ambil_paket_phonegroup_saveWindow.isVisible()){
+
+			apaket_post2db='PHONEGROUP';
+			msg='createphonegroup';
+			ambil_paket_phonegroup_reset_form();
+
+			ambil_paket_phonegroup_saveWindow.show();
+		} else {
+			ambil_paket_phonegroup_saveWindow.toFront();
+		}
+	}
+  	/* End of Function */
   
 	/* Function for Retrieve DataStore */
 	ambil_paket_DataStore = new Ext.data.Store({
@@ -902,6 +927,12 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: display_form_print_option  
+		}, '-',
+		{
+			text: 'Add to Phonegroup',
+			iconCls:'',
+			//handler: tindakan_nonmedis_print  
+			handler: display_form_phonegroup
 		}
 		]
 	});
@@ -2048,6 +2079,202 @@ Ext.onReady(function(){
 	});
 	/* End  of Function*/
 	
+	 /* Function for add and edit data form, open window form */
+	function ambil_paket_phonegroup_save(){
+
+			
+		// check if we do have some search data...
+		var searchquery_phonegroup = "";
+		var apaket_faktur_phonegroup=null;
+		var apaket_cust_phonegroup=null;
+		var apaket_paket_phonegroup=null;
+		var apaket_kadaluarsa_phonegroup=null;
+		var apaket_kadaluarsa_akhir_phonegroup=null;
+		var apakaet_sisa_phonegroup=null;
+		var apaket_tgl_faktur_phonegroup=null;
+		var apaket_tgl_faktur_akhir_phonegroup=null;
+		var win;              
+		// check if we do have some search data...
+		if(ambil_paket_DataStore.baseParams.query!==null){searchquery_phonegroup = ambil_paket_DataStore.baseParams.query;}
+		if(ambil_paket_DataStore.baseParams.apaket_faktur!==null){apaket_faktur_phonegroup = ambil_paket_DataStore.baseParams.apaket_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_cust!==null){apaket_cust_phonegroup = ambil_paket_DataStore.baseParams.apaket_cust;}
+		if(ambil_paket_DataStore.baseParams.apaket_paket!==null){apaket_paket_phonegroup = ambil_paket_DataStore.baseParams.apaket_paket;}
+		if(ambil_paket_DataStore.baseParams.apaket_sisa!==null){apaket_sisa_phonegroup = ambil_paket_DataStore.baseParams.apaket_sisa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa!==""){apaket_kadaluarsa_phonegroup = ambil_paket_DataStore.baseParams.apaket_kadaluarsa;}
+		if(ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir!==""){apaket_kadaluarsa_akhir_phonegroup = ambil_paket_DataStore.baseParams.apaket_kadaluarsa_akhir;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur!==""){apaket_tgl_faktur_phonegroup = ambil_paket_DataStore.baseParams.apaket_tgl_faktur;}
+		if(ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir!==""){apaket_tgl_faktur_akhir_phonegroup = ambil_paket_DataStore.baseParams.apaket_tgl_faktur_akhir;}
+		
+		//konfirmasi untuk menghapus data phonegroup yang telah ada	
+		if(ambil_paket_delete_phonegroupField.getValue(true)){
+			hapus_cust = 1;
+			Ext.MessageBox.confirm('Confirmation','Anda yakin untuk menghapus detail Phone Group yang sebelumnya? Detail Phone Group yang telah terhapus tidak bisa dikembalikan lagi', cust_delete_phonegroup);
+		}else{
+			hapus_cust = 0;
+			cust_delete_phonegroup('yes');
+		}
+		
+		function cust_delete_phonegroup(btn){
+			if(btn=='yes' )
+			{
+
+				Ext.Ajax.request({  
+					waitMsg: 'Please wait...',
+					url: 'index.php?c=c_master_ambil_paket&m=get_action',
+					params: {
+						task: "PHONEGROUP",
+						query: searchquery_phonegroup,  
+						hapus_cust : hapus_cust,
+						phonegroup_id : ambil_paket_phonegroup_namaField.getValue(),                  		
+						apaket_faktur			:	apaket_faktur_phonegroup, 
+						apaket_cust				:	apaket_cust_phonegroup, 
+						apaket_paket			:	apaket_paket_phonegroup, 
+						apaket_kadaluarsa		:	apaket_kadaluarsa_phonegroup,
+						apaket_kadaluarsa_akhir	:	apaket_kadaluarsa_akhir_phonegroup,
+						apaket_tgl_faktur		:	apaket_tgl_faktur_phonegroup,
+						apaket_tgl_faktur_akhir	:	apaket_tgl_faktur_akhir_phonegroup,
+						apaket_sisa				:	apaket_sisa_phonegroup,
+						currentlisting: ambil_paket_DataStore.baseParams.task // this tells us if we are searching or not
+					}, 
+					success: function(response){
+						var result=eval(response.responseText);
+						switch(result){
+							case 1:
+								Ext.MessageBox.alert(apaket_post2db+' OK','Data Phonegroup berhasil disimpan ');
+								//customer_phonegroup_DataStore.reload();
+								ambil_paket_phonegroup_saveWindow.hide();
+								break;
+							default:
+								Ext.MessageBox.show({
+								   title: 'Warning',
+								   msg: 'Data Phonegroup tidak bisa disimpan ',
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'save',
+								   icon: Ext.MessageBox.WARNING
+								});
+								break;
+						}
+					},
+					failure: function(response){
+						var result=response.responseText;
+						Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Tidak bisa terhubung dengan database server',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+						});
+					}
+				});
+				
+			}  
+			else
+				ambil_paket_delete_phonegroupField.setValue(false);
+			}
+	}
+ 	/* End of Function */
+	
+	var cbo_ambil_paket_phonegroup_DataStore = new Ext.data.Store({
+		id: 'cbo_ambil_paket_phonegroup_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_ambil_paket&m=phonegroup_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit: 10 }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'phonegroup_id'
+		},[
+			{name: 'phonegroup_id', type: 'string', mapping: 'phonegroup_id'},
+			{name: 'phonegroup_nama', type: 'string', mapping: 'phonegroup_nama'},
+		]),
+		sortInfo:{field: 'phonegroup_id', direction: "ASC"}
+	});
+	
+	var ambil_paket_phonegroup_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{phonegroup_nama}</b></span>',
+        '</div></tpl>'
+    );
+	
+	/* Identify  phonegroup_nama Field */
+	ambil_paket_phonegroup_namaField= new Ext.form.ComboBox({
+		id: 'ambil_paket_phonegroup_namaField',
+		fieldLabel: 'Nama Group',
+		store: cbo_ambil_paket_phonegroup_DataStore,
+		mode: 'remote',
+		displayField:'phonegroup_nama',
+		valueField: 'phonegroup_id',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        pageSize:10,
+        hideTrigger:false,
+        tpl: ambil_paket_phonegroup_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		anchor: '95%',
+		forceSelection: true,
+	});
+	
+	ambil_paket_delete_phonegroupField=new Ext.form.Checkbox({
+		boxLabel: 'Hapus detail Phonegroup',
+		//name: 'email_fb'
+	});
+	
+	/* Function for retrieve create Window Panel*/
+	ambil_paket_phonegroup_saveForm = new Ext.FormPanel({
+		labelAlign: 'left',
+		bodyStyle:'padding:5px',
+		autoHeight:true,
+		width: 300,
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [ambil_paket_phonegroup_namaField,ambil_paket_delete_phonegroupField]
+			}
+			],
+		buttons: [
+			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
+			{
+				text: 'Save and Close',
+				handler: ambil_paket_phonegroup_save
+			}
+			,
+			<?php } ?>
+			{
+				text: 'Cancel',
+				handler: function(){
+					ambil_paket_phonegroup_saveWindow.hide();
+				}
+			}
+		]
+	});
+	/* End  of Function*/
+	
+	/* Function for retrieve create Window Form */
+	ambil_paket_phonegroup_saveWindow= new Ext.Window({
+		id: 'ambil_paket_phonegroup_saveWindow',
+		title: apaket_post2db+' Phone Group',
+		closable:true,
+		closeAction: 'hide',
+		autoWidth: true,
+		autoHeight: true,
+		x:0,
+		y:0,
+		plain:true,
+		layout: 'fit',
+		modal: true,
+		renderTo: 'elwindow_ambil_paket_phonegroup_save',
+		items: ambil_paket_phonegroup_saveForm
+	});
+	/* End Window */
+	
+	
 	/* Function for retrieve create Window Form */
 	ambil_paket_createWindow= new Ext.Window({
 		id: 'ambil_paket_createWindow',
@@ -2633,6 +2860,7 @@ Ext.onReady(function(){
 		<div id="elwindow_print_paket_save"></div>
 		<div id="daftar_pemakai_paket"></div>
 		<div id="history_ambil_paket"></div>
+		<div id="elwindow_ambil_paket_phonegroup_save"></div>
     </div>
 </div>
 </body>

@@ -182,7 +182,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'tns_tanggal',
-			width: 80,
+			width: 70,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			sortable: true
 		}, 
@@ -196,11 +196,11 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Medis (Rp)' + '</div>',
+			header: '<div align="center">' + 'Non Med - Vcr M&NM (Rp)' + '</div>',
 			dataIndex: 'tns_nonmedis',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 110,	//55,
 			sortable: true
 		},{	
 			align : 'Right',
@@ -246,7 +246,7 @@ Ext.onReady(function(){
 			align : 'center',
 			header: '<div align="center">' + 'Last Recalculated' + '</div>',
 			dataIndex: 'tns_date_create',
-			width: 100,
+			width: 80,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i'),
 			sortable: true
 		}
@@ -261,7 +261,7 @@ Ext.onReady(function(){
 			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
 			dataIndex: '',
 			disabled : false,
-			width: 80			
+			width: 70			
 		},{	
 			align : 'Right',
 			header: '<div align="center">' + 'Medis (Rp)' + '</div>',
@@ -272,11 +272,11 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Medis (Rp)' + '</div>',
+			header: '<div align="center">' + 'Non Med - Vcr M&NM (Rp)' + '</div>',
 			dataIndex: 'tns_nonmedis_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 80,	//55,
+			width: 110,	//55,
 			sortable: true
 		},{	
 			align : 'Right',
@@ -322,7 +322,7 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '',
 			dataIndex: '',
-			width: 100,
+			width: 80,
 			sortable: true
 		}
 	]);

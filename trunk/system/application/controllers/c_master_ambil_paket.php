@@ -131,6 +131,17 @@ class C_master_ambil_paket extends Controller {
 		echo $result;
 	}
 	
+	//function fot list record
+	function phonegroup_list(){
+		
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+
+		$result=$this->m_master_ambil_paket->phonegroup_list($query,$start,$end);
+		echo $result;
+	}
+	
 	function get_paket_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
@@ -252,6 +263,9 @@ class C_master_ambil_paket extends Controller {
 			case "DELETE":
 				$this->ambil_paket_delete();
 				break;
+			case "PHONEGROUP":
+				$this->ambil_paket_phonegroup_create();
+				break;
 			case "SEARCH":
 				$this->ambil_paket_search();
 				break;
@@ -351,6 +365,36 @@ class C_master_ambil_paket extends Controller {
 		$ids = $_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_master_ambil_paket->ambil_paket_delete($pkid);
+		echo $result;
+	}
+	
+	//function for create new record
+	function ambil_paket_phonegroup_create(){
+		//POST varible here
+		//auto increment, don't accept anything from form values
+		$hapus_cust = trim(@$_POST["hapus_cust"]);
+		$phonegroup_id=trim(@$_POST["phonegroup_id"]);
+		$phonegroup_id=str_replace("/(<\/?)(p)([^>]*>)", "",$phonegroup_id);
+		$phonegroup_id=str_replace("'", "''",$phonegroup_id);
+		$apaket_faktur=trim(@$_POST["apaket_faktur"]);
+		$apaket_faktur=str_replace("/(<\/?)(p)([^>]*>)", "",$apaket_faktur);
+		$apaket_faktur=str_replace("'", "\'",$apaket_faktur);
+		$apaket_cust=trim(@$_POST["apaket_cust"]);
+		$apaket_paket=trim(@$_POST["apaket_paket"]);
+		$apaket_sisa=trim(@$_POST["apaket_sisa"]);
+		$apaket_kadaluarsa=trim(@$_POST["apaket_kadaluarsa"]);
+		$apaket_kadaluarsa_akhir=trim(@$_POST["apaket_kadaluarsa_akhir"]);
+		$apaket_tgl_faktur=trim(@$_POST["apaket_tgl_faktur"]);
+		$apaket_tgl_faktur_akhir=trim(@$_POST["apaket_tgl_faktur_akhir"]);
+		$apaket_jenis_kadaluarsa=trim(@$_POST["apaket_jenis_kadaluarsa"]);
+		
+		$option=$_POST['currentlisting'];
+		$filter=$_POST["query"];
+		//$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		//$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		
+		//$phonegroup_data=@$_POST["phonegroup_data"];
+		$result=$this->m_master_ambil_paket->ambil_paket_phonegroup_create($apaket_faktur, $apaket_cust, $apaket_paket, $apaket_kadaluarsa, $apaket_kadaluarsa_akhir, $apaket_tgl_faktur, $apaket_tgl_faktur_akhir, $apaket_sisa, $apaket_jenis_kadaluarsa, $hapus_cust,$option,$filter,$phonegroup_id);
 		echo $result;
 	}
 	
