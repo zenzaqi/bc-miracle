@@ -1,0 +1,2 @@
+m_master_jual_retur : retur jual paket, status nya adalah RETUR (semula adalah tertutup)
+2011-10-11_15-18.sql : menambah data 'RETUR' pd field dapaket_stat_dok 
