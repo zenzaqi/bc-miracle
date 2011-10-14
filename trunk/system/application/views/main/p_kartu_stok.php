@@ -32,24 +32,20 @@
         </tr>
     </thead>
 	<tbody>
-		<?php $i=0; $tanggal=""; 
-				$total_masuk=0;
-				$total_keluar=0;
-				
-		foreach($data_print as $print) { 
-				$total_masuk+=$print->masuk;	
-				$total_keluar+=$print->keluar;	
-				$i++; 
-		?>
+		<?php $i=0; $tanggal=""; $total_masuk=0; $total_keluar=0; foreach($data_print as $print) { $i++; ?>		
 		<tr>
         	<td><? echo $i; ?></td>
             <td width="10"><?php echo $print->tanggal; ?></td>
             <td><?php echo $print->no_bukti; ?></td>
 			<td><?php echo $print->keterangan; ?></td>
-            <td align="right" class="numeric"><?php echo number_format($print->keluar,2); ?></td>
-			<td align="right" class="numeric"><?php echo number_format($print->masuk,2); ?></td>
+            <td align="right" class="numeric"><?php echo number_format($print->masuk,2); ?></td>
+			<td align="right" class="numeric"><?php echo number_format($print->keluar,2); ?></td>
        </tr>
-		<?php } ?>
+		<?php 
+		$total_masuk+=($print->masuk);
+		$total_keluar+= ($print->keluar);
+		} ?>
+		
 	</tbody>
     <tfoot>
     	<tr>
@@ -62,11 +58,11 @@
         <tr>
         <tr>
         	<td> Saldo Awal </td>
-         	<td align="right" class="numeric"><b><?php echo number_format(@$saldo_awal,2); ?></b></td>
+         	<td align="right" class="numeric"><b><?php echo number_format($saldo_awal,2); ?></b></td>
             <td colspan="4" class="clear">&nbsp; </td>
         </tr>  
         <tr>
-        	<td> Jumlah Keluar </td>
+        	<td> Jumlah Masuk </td>
          	<td align="right" class="numeric"><b><?php echo number_format($total_masuk,2); ?></b></td>
             <td colspan="4" class="clear">&nbsp; </td>
         </tr>

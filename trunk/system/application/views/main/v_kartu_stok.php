@@ -971,6 +971,43 @@ Ext.onReady(function(){
 		if(kartu_stok_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = kartu_stok_DataStore.baseParams.opsi_satuan;}
 		if(kartu_stok_DataStore.baseParams.gudang!==null){gudang_print = kartu_stok_DataStore.baseParams.gudang;}
 		
+				if(kartu_stok_bulanField.getValue()!==null){kartu_stok_bulan=kartu_stok_bulanField.getValue();}
+			if(kartu_stok_tahunField.getValue()!==null){kartu_stok_tahun=kartu_stok_tahunField.getValue();}
+			
+			if(kartu_stok_opsitglField.getValue()==true){
+				kartu_stok_periode='tanggal';
+			}else if(kartu_stok_opsiblnField.getValue()==true){
+				if (kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='Januari'
+				}else if(kartu_stok_bulanField.getValue() == '02') {
+					nama_bulan='Februari'
+				}else if(kartu_stok_bulanField.getValue() == '03') {
+					nama_bulan='Maret'
+				}else if(kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='April'
+				}else if(kartu_stok_bulanField.getValue() == '05') {
+					nama_bulan='Mei'
+				}else if(kartu_stok_bulanField.getValue() == '06') {
+					nama_bulan='Juni'
+				}else if(kartu_stok_bulanField.getValue() == '07') {
+					nama_bulan='Juli'
+				}else if(kartu_stok_bulanField.getValue() == '08') {
+					nama_bulan='Agustus'
+				}else if(kartu_stok_bulanField.getValue() == '09') {
+					nama_bulan='September'
+				}else if(kartu_stok_bulanField.getValue() == '10') {
+					nama_bulan='Oktober'
+				}else if(kartu_stok_bulanField.getValue() == '11') {
+					nama_bulan='November'
+				}else if(kartu_stok_bulanField.getValue() == '12') {
+					nama_bulan='Desember'
+				}
+				
+				kartu_stok_periode='bulan';
+			}else{
+				kartu_stok_periode='all';
+			}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_kartu_stok&m=get_action',
@@ -983,6 +1020,9 @@ Ext.onReady(function(){
 			tanggal_end 	: tanggal_end_print,
 			opsi_satuan 	: opsi_satuan_print,
 			gudang 			: gudang_print,
+			bulan		: kartu_stok_bulan,
+			tahun		: kartu_stok_tahun,
+			periode		: kartu_stok_periode,
 		  	currentlisting	: kartu_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -1048,7 +1088,42 @@ Ext.onReady(function(){
 		if(kartu_stok_DataStore.baseParams.opsi_satuan!==null){opsi_satuan_print = kartu_stok_DataStore.baseParams.opsi_satuan;}
 		if(kartu_stok_DataStore.baseParams.gudang!==null){gudang_print = kartu_stok_DataStore.baseParams.gudang;}
 		
-		
+		if(kartu_stok_bulanField.getValue()!==null){kartu_stok_bulan=kartu_stok_bulanField.getValue();}
+			if(kartu_stok_tahunField.getValue()!==null){kartu_stok_tahun=kartu_stok_tahunField.getValue();}
+			
+			if(kartu_stok_opsitglField.getValue()==true){
+				kartu_stok_periode='tanggal';
+			}else if(kartu_stok_opsiblnField.getValue()==true){
+				if (kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='Januari'
+				}else if(kartu_stok_bulanField.getValue() == '02') {
+					nama_bulan='Februari'
+				}else if(kartu_stok_bulanField.getValue() == '03') {
+					nama_bulan='Maret'
+				}else if(kartu_stok_bulanField.getValue() == '01') {
+					nama_bulan='April'
+				}else if(kartu_stok_bulanField.getValue() == '05') {
+					nama_bulan='Mei'
+				}else if(kartu_stok_bulanField.getValue() == '06') {
+					nama_bulan='Juni'
+				}else if(kartu_stok_bulanField.getValue() == '07') {
+					nama_bulan='Juli'
+				}else if(kartu_stok_bulanField.getValue() == '08') {
+					nama_bulan='Agustus'
+				}else if(kartu_stok_bulanField.getValue() == '09') {
+					nama_bulan='September'
+				}else if(kartu_stok_bulanField.getValue() == '10') {
+					nama_bulan='Oktober'
+				}else if(kartu_stok_bulanField.getValue() == '11') {
+					nama_bulan='November'
+				}else if(kartu_stok_bulanField.getValue() == '12') {
+					nama_bulan='Desember'
+				}
+				
+				kartu_stok_periode='bulan';
+			}else{
+				kartu_stok_periode='all';
+			}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1062,6 +1137,9 @@ Ext.onReady(function(){
 			tanggal_end : tanggal_end_2excel,
 			opsi_satuan : opsi_satuan_2excel,
 			gudang : gudang_2excel,
+			bulan		: kartu_stok_bulan,
+			tahun		: kartu_stok_tahun,
+			periode		: kartu_stok_periode,
 		  	currentlisting: kartu_stok_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		

@@ -140,12 +140,18 @@ class C_kartu_stok extends Controller {
 		$gudang = (isset($_POST['gudang']) ? @$_POST['gudang'] : @$_GET['gudang']);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$tgl_awal=$tahun."-".$bulan;
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
 		
-		$data["data_print"] = $this->m_kartu_stok->kartu_stok_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter);
+		$data["data_print"] = $this->m_kartu_stok->kartu_stok_print($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter);
 		$data["gudang_nama"] = $this->m_public_function->get_gudang_nama($gudang);
 		$data["produk_nama"] = $this->m_public_function->get_produk_nama($produk_id);
 		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
-		$data["saldo_awal"] = $this->m_kartu_stok->kartu_stok_awal_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter);
+		$data["saldo_awal"] = $this->m_kartu_stok->kartu_stok_awal_print($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end);
 		
 		$print_view=$this->load->view("main/p_kartu_stok.php",$data,TRUE);
 		if(!file_exists("print")){
@@ -167,8 +173,14 @@ class C_kartu_stok extends Controller {
 		$gudang=trim(@$_POST["gudang"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		$query = $this->m_kartu_stok->kartu_stok_export_excel($produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter);
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$query = $this->m_kartu_stok->kartu_stok_export_excel($tgl_awal,$periode,$produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter);
 		$this->load->plugin('to_excel');
 		to_excel($query,"kartu_stok"); 
 		echo '1';
