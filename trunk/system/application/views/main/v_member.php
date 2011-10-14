@@ -779,7 +779,7 @@ Ext.onReady(function(){
 				},
 				render: function(c){
 				Ext.get(this.id).set({qtitle:'Search By'});
-				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Faktur'});
+				Ext.get(this.id).set({qtip:'- No Cust<br>- Nama Cust<br>- No Member'});
 				}
 			},
 			width: 120

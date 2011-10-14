@@ -518,8 +518,8 @@ class M_tindakan_nonmedis extends Model{
 		$rs_drawat = $this->db->query($sql_drawat);
 		if($rs_drawat->num_rows()<1){
 			//Delete master_jual_rawat ==> karena sudah tidak memiliki detail
-			$sqld_jrawat = "DELETE FROM master_jual_rawat WHERE jrawat_id='$drawat_master'";
-			$this->db->query($sqld_jrawat);
+			//$sqld_jrawat = "DELETE FROM master_jual_rawat WHERE jrawat_id='$drawat_master'";
+			//$this->db->query($sqld_jrawat);
 		}
 	}
 	/* eof detail_jual_rawat_delete */

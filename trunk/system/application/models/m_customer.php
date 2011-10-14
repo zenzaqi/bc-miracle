@@ -235,7 +235,7 @@ class M_customer extends Model{
 		}	
 		
 			//function for create new record
-		function customer_phonegroup_create($query,$phonegroup_nama ,$phonegroup_id,/*$phonegroup_data ,*/$cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tglawaltrans, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb,$cust_tgldaftarend, $cust_tglawaltransend,$cust_referensilain,$hapus_cust, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
+		function customer_phonegroup_create($query,$phonegroup_nama ,$phonegroup_id,/*$phonegroup_data ,*/$cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tglawaltrans, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb,$cust_tgldaftarend, $cust_tglawaltransend,$cust_referensilain,$hapus_cust, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $member_terdaftarstart, $member_terdaftarend){
 			
 			if($hapus_cust == 1){
 				$query_delete = "DELETE FROM phonegrouped WHERE phonegrouped_group = '$phonegroup_id'";
@@ -482,8 +482,21 @@ class M_customer extends Model{
 						}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
 							$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
 						}
-						
 					};
+					
+					/*utk Search Member Register */
+					if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+						if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+							$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+						}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+							$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+						}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+							$query.= " member_register < '".$member_terdaftarend."'";
+						}
+					};
+					
 					
 					if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
 						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1100,7 +1113,7 @@ class M_customer extends Model{
 		}
 		
 		//function for advanced search record
-		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend,$cust_tglawaltrans, $cust_tglawaltransend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
+		function customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans, $cust_tglawaltransend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
 			
 			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
 			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
@@ -1380,6 +1393,21 @@ class M_customer extends Model{
 				}
 				
 			};
+			
+			/*utk Search Member Register */
+			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+					$query.= " member_register < '".$member_terdaftarend."'";
+				}
+				
+			};
+			
 					
 			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1494,7 +1522,7 @@ class M_customer extends Model{
 		}
 		
 		//function for search label
-		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar,$cust_tgldaftarend,$cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter ,  $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
+		function customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter ,  $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end){
 			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
 			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
 			{
@@ -1725,6 +1753,22 @@ class M_customer extends Model{
 				}
 				
 			};
+			
+			/*utk Search Member Register */
+			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+					$query.= " member_register < '".$member_terdaftarend."'";
+				}
+				
+			};
+			
+			
 					
 			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -1801,7 +1845,7 @@ class M_customer extends Model{
 		$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,
 		$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,
 		$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,
-		$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftarend,$cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,
+		$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,
 		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
 		$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end,$option,$filter)
 		{
@@ -2025,6 +2069,7 @@ class M_customer extends Model{
 						$query.= " cust_member = ''";
 					}	
 				};
+				
 				if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				
@@ -2037,6 +2082,21 @@ class M_customer extends Model{
 				}
 				
 			};
+			
+			/*utk Search Member Register */
+			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+					$query.= " member_register < '".$member_terdaftarend."'";
+				}
+				
+			};
+			
 					
 			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -2107,7 +2167,7 @@ class M_customer extends Model{
 		}
 		
 		//function  for export to excel
-		function customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar,$cust_tgldaftarend ,$cust_tglawaltrans, $cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised , $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $option,$filter){
+		function customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar,$cust_tgldaftarend , $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans, $cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised , $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $option,$filter){
 			
 			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
 			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
@@ -2359,6 +2419,21 @@ class M_customer extends Model{
 				
 			};
 					
+			/*utk Search Member Register */
+			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				
+				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+					$query.= " member_register < '".$member_terdaftarend."'";
+				}
+				
+			};
+				
+						
 			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				

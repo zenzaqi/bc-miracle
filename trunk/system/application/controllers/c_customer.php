@@ -208,8 +208,13 @@ class C_customer extends Controller {
 		$cust_profesi=trim(@$_POST["cust_profesi"]);
 		$cust_profesi=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_profesi);
 		$cust_profesi=str_replace("'", '"',$cust_profesi);
+		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_tgldaftarend =(isset($_POST['cust_tgldaftarend']) ? @$_POST['cust_tgldaftarend'] : @$_GET['cust_tgldaftarend']);
 		$cust_tgldaftarend=trim(@$_POST["cust_tgldaftarend"]);
+		
+		$member_terdaftarstart=trim(@$_POST["member_terdaftarstart"]);
+		$member_terdaftarend=trim(@$_POST["member_terdaftarend"]);
+		
 		$cust_tglawaltrans=trim(@$_POST["cust_tglawaltrans"]);
 		$cust_tglawaltransend =(isset($_POST['cust_tglawaltrans_end']) ? @$_POST['cust_tglawaltrans_end'] : @$_GET['cust_tglawaltrans_end']);
 		$cust_tglawaltransend=trim(@$_POST["cust_tglawaltrans_end"]);
@@ -248,7 +253,7 @@ class C_customer extends Controller {
 		$cust_member2=trim(@$_POST["cust_member2"]);
 		$cust_member2=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_member2);
 		$cust_member2=str_replace("'", '"',$cust_member2);
-		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
+		
 		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
 		$cust_statusnikah=str_replace("/(<\/?)(p)([^>]*>)", "",$cust_statusnikah);
 		$cust_statusnikah=str_replace("'", '"',$cust_statusnikah);
@@ -304,7 +309,7 @@ class C_customer extends Controller {
 		$cust_tidak_transaksi_end=trim(@$_POST["cust_tidak_transaksi_end"]);
 		
 		//$phonegroup_data=@$_POST["phonegroup_data"];
-		$result=$this->m_customer->customer_phonegroup_create($query, $phonegroup_nama, $phonegroup_id, /*$phonegroup_data, */$cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tglawaltrans, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb,$cust_tgldaftarend ,$cust_tglawaltransend, $cust_referensilain,$hapus_cust,$cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end);
+		$result=$this->m_customer->customer_phonegroup_create($query, $phonegroup_nama, $phonegroup_id, /*$phonegroup_data, */$cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tglawaltrans, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb,$cust_tgldaftarend ,$cust_tglawaltransend, $cust_referensilain,$hapus_cust,$cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $member_terdaftarstart, $member_terdaftarend);
 		echo $result;
 	}
 	
@@ -1068,6 +1073,10 @@ class C_customer extends Controller {
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_tgldaftarend =(isset($_POST['cust_tgldaftarend']) ? @$_POST['cust_tgldaftarend'] : @$_GET['cust_tgldaftarend']);
 		$cust_tgldaftarend=trim(@$_POST["cust_tgldaftarend"]);
+		
+		$member_terdaftarstart=trim(@$_POST["member_terdaftarstart"]);
+		$member_terdaftarend=trim(@$_POST["member_terdaftarend"]);
+		
 		$cust_tglawaltrans=trim(@$_POST["cust_tglawaltrans"]);
 		$cust_tglawaltransend =(isset($_POST['cust_tglawaltrans_end']) ? @$_POST['cust_tglawaltrans_end'] : @$_GET['cust_tglawaltrans_end']);
 		$cust_tglawaltransend=trim(@$_POST["cust_tglawaltrans_end"]);
@@ -1125,7 +1134,7 @@ class C_customer extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend,$cust_tglawaltrans, $cust_tglawaltransend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end);
+		$result = $this->m_customer->customer_search($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_tgllahirend ,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans, $cust_tglawaltransend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end);
 		echo $result;
 	}
 
@@ -1216,6 +1225,10 @@ class C_customer extends Controller {
 		$cust_member2=str_replace("'", '"',$cust_member2);
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_tgldaftar_end=trim(@$_POST["cust_terdaftar_end"]);
+		
+		$member_terdaftarstart=trim(@$_POST["member_terdaftarstart"]);
+		$member_terdaftarend=trim(@$_POST["member_terdaftarend"]);
+		
 		$cust_tglawaltrans=trim(@$_POST["cust_tglawaltrans"]);
 		$cust_tglawaltransend=trim(@$_POST["cust_tglawaltrans_end"]);
 		$cust_statusnikah=trim(@$_POST["cust_statusnikah"]);
@@ -1259,7 +1272,7 @@ class C_customer extends Controller {
 		$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,
 		$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,
 		$cust_profesi,$cust_tgllahir,$cust_referensi,$cust_keterangan,
-		$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftar_end,$cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,
+		$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftar_end, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,
 		$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,
 		$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end,$option,$filter)->result();
 		
@@ -1497,6 +1510,10 @@ class C_customer extends Controller {
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_tgldaftarend =(isset($_POST['cust_terdaftar_end']) ? @$_POST['cust_terdaftar_end'] : @$_GET['cust_terdaftar_end']);
 		$cust_tgldaftarend=trim(@$_POST["cust_terdaftar_end"]);
+		
+		$member_terdaftarstart=trim(@$_POST["member_terdaftarstart"]);
+		$member_terdaftarend=trim(@$_POST["member_terdaftarend"]);
+		
 		$cust_tglawaltrans=trim(@$_POST["cust_tglawaltrans"]);
 		$cust_tglawaltransend =(isset($_POST['cust_tglawaltrans_end']) ? @$_POST['cust_tglawaltrans_end'] : @$_GET['cust_tglawaltrans_end']);
 		$cust_tglawaltransend=trim(@$_POST["cust_tglawaltrans_end"]);
@@ -1535,7 +1552,7 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_customer->customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar,$cust_tgldaftarend,$cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter,  $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end);
+		$result = $this->m_customer->customer_print_label($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir , $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi , $cust_referensilain, $cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif ,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$option,$filter,  $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end);
 		
 		$rs=$result->row();
 		$jumlah_result=$result->result();
@@ -1645,6 +1662,10 @@ class C_customer extends Controller {
 		$cust_terdaftar=trim(@$_POST["cust_terdaftar"]);
 		$cust_tgldaftarend =(isset($_POST['cust_tgldaftarend']) ? @$_POST['cust_tgldaftarend'] : @$_GET['cust_tgldaftarend']);
 		$cust_tgldaftarend=trim(@$_POST["cust_tgldaftarend"]);
+		
+		$member_terdaftarstart=trim(@$_POST["member_terdaftarstart"]);
+		$member_terdaftarend=trim(@$_POST["member_terdaftarend"]);
+		
 		$cust_tglawaltrans=trim(@$_POST["cust_tglawaltrans"]);
 		$cust_tglawaltransend =(isset($_POST['cust_tglawaltrans_end']) ? @$_POST['cust_tglawaltrans_end'] : @$_GET['cust_tglawaltrans_end']);
 		$cust_tglawaltransend=trim(@$_POST["cust_tglawaltrans_end"]);
@@ -1684,7 +1705,7 @@ class C_customer extends Controller {
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tgldaftarend,$cust_tglawaltrans,  $cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised , $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start,$cust_tidak_transaksi_end, $option,$filter);
+		$query = $this->m_customer->customer_export_excel($cust_id ,$cust_no, $cust_no_awal ,$cust_no_akhir ,$cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_alamat2 ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_telprumah2 ,$cust_telpkantor ,$cust_hp ,$cust_hp2 ,$cust_hp3 ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir ,$cust_referensi ,$cust_keterangan ,$cust_member ,$cust_member2, $cust_terdaftar ,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,  $cust_tglawaltransend,$cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif, $sortby,$cust_fretfulness,$cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised , $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start,$cust_tidak_transaksi_end, $option,$filter);
 		
 		to_excel($query,"customer"); 
 		echo '1';

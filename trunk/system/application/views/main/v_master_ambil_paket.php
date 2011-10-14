@@ -387,6 +387,11 @@ Ext.onReady(function(){
 			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id');
 		else if(apaket_post2db=='CREATE')
 			return apaket_paketField.getValue();
+		else if(apaket_post2db=='EXCEL2')
+			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id');
+		else if(apaket_post2db=='PRINT2')
+			return ambil_paketListEditorGrid.getSelectionModel().getSelected().get('dpaket_id');
+
 		else 
 			return 0;
 	}
@@ -558,20 +563,20 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
 	
-	function display_form_print_option(){
+	/*function display_form_print_option(){
 		if(!ambil_paket_print_saveWindow.isVisible()){
 
-			/*
+			
 			apaket_post2db='CREATE';
 			msg='created';
 			phonegroup_reset_form();
-			*/
+			
 
 			ambil_paket_print_saveWindow.show();
 		} else {
 			ambil_paket_print_saveWindow.toFront();
 		}
-	}
+	}*/
 	
 	/* Function for Displaying  add to phonegroup Window Form */
 	function display_form_phonegroup(){
@@ -772,8 +777,8 @@ Ext.onReady(function(){
 			dataIndex: 'jpaket_tanggal',
 			width: 70,
 			sortable: true,
-//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+	//		renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		/*{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
@@ -839,16 +844,16 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 70,
 			sortable: true,
-//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			//renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		} ,
 		{
 			header: '<div align="center">' + 'Tgl Hangus' + '</div>',
 			dataIndex: 'tanggal_hangus',
 			width: 70,
 			sortable: true,
-//			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			//renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		} 
 		]
 	);
@@ -926,7 +931,7 @@ Ext.onReady(function(){
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: display_form_print_option  
+			handler: ambil_paket_print  
 		}, '-',
 		{
 			text: 'Add to Phonegroup',
@@ -989,18 +994,6 @@ Ext.onReady(function(){
 					
 		},
 		<?php } ?>
-		{ 
-			text: 'Print',
-			tooltip: 'Print Document',
-			iconCls:'icon-print',
-			handler: ambil_paket_print 
-		},
-		{ 
-			text: 'Export Excel', 
-			tooltip: 'Export to Excel(.xls) Document',
-			iconCls:'icon-xls',
-			handler: ambil_paket_export_excel 
-		}
 		]
 	}); 
 	/* End of Declaration */
@@ -1223,7 +1216,7 @@ Ext.onReady(function(){
 			dataIndex: 'tgl_ambil',
 			width: 90,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('Y-m-d')
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
@@ -1287,6 +1280,17 @@ Ext.onReady(function(){
 					handler: adj_status_update
 				}
 			<?php } ?>
+			,'-',{
+			text: 'Export Excel',
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: daftar_ambil_paket_export_excel
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: daftar_ambil_paket_print  
+		}
 			]
 		<?php } ?>
     });
@@ -1587,9 +1591,9 @@ Ext.onReady(function(){
 			dataIndex: 'tgl_ambil',
 			width: 90,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
+			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
 			editor: new Ext.form.DateField({
-				format: 'd-m-Y'})
+				format: 'Y-m-d'})
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
@@ -2655,7 +2659,7 @@ Ext.onReady(function(){
     /* End of Function */ 
 	
 	
-	/* Function for retrieve create Window Form */
+	/* Function for retrieve create Window Form 
 	ambil_paket_print_saveWindow= new Ext.Window({
 		id: 'ambil_paket_print_saveWindow',
 		title: 'Print Pengambilan Paket',
@@ -2671,7 +2675,7 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_print_paket_save',
 		items: ambil_paket_printForm
 	});
-	/* End Window */
+	End Window */
 	
 	
 	
@@ -2774,6 +2778,76 @@ Ext.onReady(function(){
 	}
 	/* Enf Function */
 	
+	/* Function for print List Grid */
+	function daftar_ambil_paket_print(){
+		var printquery = "";
+		var rawat_nama_2print=null;
+		var dapaket_jumlah_2print=null;
+		var cust_nama_2print=null;
+		var referal_2print=null;
+		var keterangan_2print=null;
+		var dapaket_stat_dok_2print=null;
+		var tgl_ambil_2print=null;
+		var win2;  
+		apaket_post2db='PRINT2';   		
+
+		// check if we do have some search data...
+		if(detail_ambil_paketStore.baseParams.query!==null){printquery = detail_ambil_paketStore.baseParams.query;}
+		if(detail_ambil_paketStore.baseParams.rawat_nama!==null){rawat_nama_2print = detail_ambil_paketStore.baseParams.rawat_nama;}
+		if(detail_ambil_paketStore.baseParams.dapaket_jumlah!==null){dapaket_jumlah_2print = detail_ambil_paketStore.baseParams.dapaket_jumlah;}
+		if(detail_ambil_paketStore.baseParams.cust_nama!==null){cust_nama_2print = detail_ambil_paketStore.baseParams.cust_nama;}
+		if(detail_ambil_paketStore.baseParams.tgl_ambil!==null){tgl_ambil_2print = detail_ambil_paketStore.baseParams.tgl_ambil;}
+		if(detail_ambil_paketStore.baseParams.referal!==""){referal_2print = detail_ambil_paketStore.baseParams.referal;}
+		if(detail_ambil_paketStore.baseParams.keterangan!==""){keterangan_2print = detail_ambil_paketStore.baseParams.keterangan;}
+		if(detail_ambil_paketStore.baseParams.dapaket_stat_dok!==""){dapaket_stat_dok_2print = detail_ambil_paketStore.baseParams.dapaket_stat_dok;}
+
+		Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_master_ambil_paket&m=get_action',
+		params: {
+			task: "PRINT2",
+		  	query: printquery, 
+			dapaket_dpaket		: 	eval(get_pk_id()),			
+			rawat_nama			:	rawat_nama_2print, 
+			dapaket_jumlah		:	dapaket_jumlah_2print, 
+			cust_nama			:	cust_nama_2print, 
+			referal				:	referal_2print,
+			keterangan			:	keterangan_2print,
+			dapaket_stat_dok	:	dapaket_stat_dok_2print,
+			tgl_ambil			:	tgl_ambil_2print,
+		  	currentlisting: detail_ambil_paketStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win2 = window.open('./print/daftar_ambil_paketlist.html','daftar_ambil_paketlist','height=400,width=900,resizable=1,scrollbars=1, menubar=1');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+	
 	/* Function for print Export to Excel Grid */
 	function ambil_paket_export_excel(){
 		var searchquery = "";
@@ -2815,6 +2889,76 @@ Ext.onReady(function(){
 			apaket_sisa				:	apaket_sisa_2excel,
 			apaket_jenis			: apaket_jenis_2excel,
 		  	currentlisting: ambil_paket_DataStore.baseParams.task // this tells us if we are searching or not
+		},
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.location=('./export2excel.php');
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa meng-export data ke dalam format excel!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});    
+		} 	                     
+		});
+	}
+	/*End of Function */
+	
+	/* Function for print Export to Excel Grid */
+	function daftar_ambil_paket_export_excel(){
+		var excelquery = "";
+		var rawat_nama_2excel=null;
+		var dapaket_jumlah_2excel=null;
+		var cust_nama_2excel=null;
+		var tgl_ambil_2excel=null;
+		var referal_2excel=null;
+		var keterangan_2excel=null;
+		var dapaket_stat_dok_2excel=null;
+		var win;    
+		apaket_post2db='EXCEL2';        
+		
+		// check if we do have some 2excel data...
+		if(detail_ambil_paketStore.baseParams.query!==null){excelquery = detail_ambil_paketStore.baseParams.query;}
+		if(detail_ambil_paketStore.baseParams.rawat_nama!==null){rawat_nama_2excel = detail_ambil_paketStore.baseParams.rawat_nama;}
+		if(detail_ambil_paketStore.baseParams.dapaket_jumlah!==null){dapaket_jumlah_2excel = detail_ambil_paketStore.baseParams.dapaket_jumlah;}
+		if(detail_ambil_paketStore.baseParams.cust_nama!==null){cust_nama_2excel = detail_ambil_paketStore.baseParams.cust_nama;}
+		if(detail_ambil_paketStore.baseParams.tgl_ambil!==null){tgl_ambil_2excel = detail_ambil_paketStore.baseParams.tgl_ambil;}
+		if(detail_ambil_paketStore.baseParams.referal!==null){referal_2excel = detail_ambil_paketStore.baseParams.referal;}
+		if(detail_ambil_paketStore.baseParams.keterangan!==null){keterangan_2excel = detail_ambil_paketStore.baseParams.keterangan;}
+		if(detail_ambil_paketStore.baseParams.dapaket_stat_dok!==null){dapaket_stat_dok_2excel = detail_ambil_paketStore.baseParams.dapaket_stat_dok;}
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_master_ambil_paket&m=get_action',
+		params: {
+			task: "EXCEL2",
+			dapaket_dpaket	: eval(get_pk_id()),
+		  	query			: excelquery,                    		
+			rawat_nama		:	rawat_nama_2excel, 
+			dapaket_jumlah	:	dapaket_jumlah_2excel, 
+			cust_nama		:	cust_nama_2excel, 
+			tgl_ambil		:	tgl_ambil_2excel,
+			referal			:	referal_2excel,
+			keterangan		:	keterangan_2excel,
+			dapaket_stat_dok:	dapaket_stat_dok_2excel,
+		  	currentlisting	: detail_ambil_paketStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
