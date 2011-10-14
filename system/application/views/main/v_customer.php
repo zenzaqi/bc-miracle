@@ -155,6 +155,8 @@ var cust_memberSearchField;
 var cust_memberSearch2Field;
 var cust_terdaftarSearchField;
 var cust_tgldaftarSearchFieldEnd;
+var member_terdaftarSearchField;
+var member_tgldaftarSearchFieldEnd;
 var cust_tglawaltransSearchField;
 var cust_tglawaltransSearchFieldEnd;
 var cust_statusnikahSearchField;
@@ -610,6 +612,10 @@ var editor_cust_note;
 			var cust_bb_phonegroup=null;
 			var cust_terdaftar_date_phonegroup="";
 			var cust_tgldaftar_dateEnd_phonegroup="";
+			
+			var member_terdaftar_date_phonegroup="";
+			var member_tgldaftar_dateEnd_phonegroup="";
+			
 			var cust_tglawaltrans_date_phonegroup="";
 			var cust_tglawaltrans_dateEnd_phonegroup="";
 			var cust_tgl_transaksi_date_phonegroup="";
@@ -673,6 +679,9 @@ var editor_cust_note;
 			
 			if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_date_phonegroup=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 			if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_dateEnd_phonegroup=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+			
+			if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_date_phonegroup=member_terdaftarSearchField.getValue().format('Y-m-d');}
+			if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_tgldaftar_dateEnd_phonegroup=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 			
 			if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_date_phonegroup=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
 			if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltrans_dateEnd_phonegroup=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}
@@ -761,6 +770,8 @@ var editor_cust_note;
 						cust_terdaftar			:	cust_terdaftar_date_phonegroup, 
 						cust_tgldaftarend		:	cust_tgldaftar_dateEnd_phonegroup,
 						cust_tglawaltrans		:	cust_tglawaltrans_date_phonegroup,
+						member_terdaftarstart		: member_terdaftar_date_phonegroup,
+						member_terdaftarend			: member_tgldaftar_dateEnd_phonegroup,
 						cust_tglawaltrans_end		:	cust_tglawaltrans_dateEnd_phonegroup, 
 						cust_transaksi_end 		: cust_tgl_transaksi_dateEnd_phonegroup,
 						cust_transaksi_start   	: cust_tgl_transaksi_date_phonegroup,
@@ -1478,6 +1489,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member_search=null;
 		var cust_terdaftar_search_date="";
 		var cust_tgldaftar_search_dateEnd="";
+		
+		var member_terdaftar_search_date="";
+		var member_tgldaftar_search_dateEnd="";
+		
 		var cust_tglawaltrans_search_date="";
 		var cust_tglawaltrans_search_dateEnd="";
 		var cust_tgl_transaksi_search_date="";
@@ -1530,6 +1545,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(cust_memberSearch2Field.getValue()!==null){cust_member2_search=cust_memberSearch2Field.getValue();}
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_search_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_search_dateEnd=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_search_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_tgldaftar_search_dateEnd=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		
 		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_search_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
 		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltrans_search_dateEnd=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_statusnikahSearchField.getValue()!==null){cust_statusnikah_search=cust_statusnikahSearchField.getValue();}
@@ -1611,6 +1630,8 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_member2			:	cust_member2_search, 
 			cust_terdaftar			:	cust_terdaftar_search_date, 
 			cust_tgldaftarend		:	cust_tgldaftar_search_dateEnd,
+			member_terdaftarstart	:	member_terdaftar_search_date, 
+			member_terdaftarend		:	member_tgldaftar_search_dateEnd,
 			cust_tglawaltrans		:	cust_tglawaltrans_search_date,
 			cust_tglawaltrans_end		:	cust_tglawaltrans_search_dateEnd, 
 			cust_statusnikah		:	cust_statusnikah_search,
@@ -1684,6 +1705,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		cust_memberSearch2Field.reset();
 		cust_terdaftarSearchField.reset();
 		cust_tgldaftarSearchFieldEnd.reset();
+		
+		member_terdaftarSearchField.reset();
+		member_tgldaftarSearchFieldEnd.reset();
+		
 		cust_tglawaltransSearchField.reset();
 		cust_tglawaltransSearchFieldEnd.reset();
 		cust_statusnikahSearchField.reset();
@@ -1758,6 +1783,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member2_print=null;
 		var cust_terdaftar_print_date="";
 		var cust_terdaftarend_print_date="";
+		
+		var member_terdaftar_print_date="";
+		var member_terdaftarend_print_date="";
+		
 		var cust_tglawaltrans_print_date="";
 		var cust_tglawaltransend_print_date="";
 		var cust_tglawaltrans_end_print_date="";
@@ -1807,6 +1836,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		
 		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
 		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
@@ -1864,6 +1897,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_member2 : cust_member2_print,
 		  	cust_terdaftar : cust_terdaftar_print_date,
 			cust_terdaftar_end : cust_terdaftarend_print_date,
+			
+			member_terdaftarstart : member_terdaftar_print_date,
+			member_terdaftarend	 : member_terdaftarend_print_date,
+			
 			cust_tglawaltrans	: cust_tglawaltrans_print_date,	
 			cust_tglawaltrans_end	: cust_tglawaltransend_print_date,			
 			cust_statusnikah : cust_statusnikah_print,
@@ -1945,6 +1982,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member2_print=null;
 		var cust_terdaftar_print_date="";
 		var cust_terdaftarend_print_date="";
+		
+		var member_terdaftar_print_date="";
+		var member_terdaftarend_print_date="";
+		
 		var cust_tglawaltrans_print_date="";
 		var cust_tglawaltransend_print_date="";
 		var cust_statusnikah_print=null;
@@ -1997,6 +2038,9 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 		
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		
 		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
 		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}		
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
@@ -2047,6 +2091,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_member2 : cust_member2_print,
 		  	cust_terdaftar : cust_terdaftar_print_date, 
 			cust_terdaftar_end : cust_terdaftarend_print_date,
+			
+			member_terdaftarstart	 : member_terdaftar_print_date, 
+			member_terdaftarend 	: member_terdaftarend_print_date,
+			
 			cust_tglawaltrans : cust_tglawaltrans_print_date,
 			cust_tglawaltrans_end : cust_tglawaltransend_print_date,
 			cust_statusnikah : cust_statusnikah_print,
@@ -2126,6 +2174,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		var cust_member2_2excel=null;
 		var cust_terdaftar_2excel_date="";
 		var cust_terdaftarend_2excel_date="";
+		
+		var member_terdaftar_2excel_date="";
+		var member_terdaftarend_2excel_date="";
+		
 		var cust_tglawaltrans_2excel_date="";
 		var cust_tglawaltransend_2excel_date="";
 		var cust_statusnikah_2excel=null;
@@ -2187,8 +2239,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 		if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_excel_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_excel_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
 		if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_excel_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
-
 		
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_2excel_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_2excel_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -2226,6 +2280,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 			cust_member2 : cust_member2_2excel,
 		  	cust_terdaftar : cust_terdaftar_2excel_date, 
 			cust_tgldaftarend : cust_terdaftarend_2excel_date,
+			
+			member_terdaftarstart	: member_terdaftar_2excel_date,
+			member_terdaftarend		: member_terdaftarend_2excel_date,
+			
 			cust_tglawaltrans : cust_tglawaltrans_2excel_date, 
 			cust_tglawaltrans_end : cust_tglawaltransend_2excel_date,
 			cust_statusnikah : cust_statusnikah_2excel,
@@ -5591,10 +5649,12 @@ Ext.onReady(function(){
 		format: 'd-m-Y'
 	});
 	
+	
+	/*Identify cust tanggal terdaftar search field */
 	cust_label_tgldaftarSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
 	cust_tanggaldaftar_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_tanggaldaftar_opsiSearchField',
-		title: 'Tanggal Daftar',
+		title: 'Tanggal Terdaftar Customer',
 		layout: 'column',
 		boduStyle: 'padding: 5px;',
 		anchor: '95%',
@@ -5602,6 +5662,35 @@ Ext.onReady(function(){
 		//frame: false,
 		items:[cust_terdaftarSearchField, cust_label_tgldaftarSearchField, cust_tgldaftarSearchFieldEnd]
 	});
+	
+	
+	
+	/* Identify  member_terdaftar Field */
+	member_terdaftarSearchField= new Ext.form.DateField({
+		fieldLabel: 'Tgl Terdaftar',
+		id: 'member_terdaftarSearchField',
+		format: 'd-m-Y'
+	});
+	
+	member_tgldaftarSearchFieldEnd= new Ext.form.DateField({
+		fieldLabel: 's/d',
+		id: 'member_tgldaftarSearchFieldEnd',
+		format: 'd-m-Y'
+	});
+	
+	/*Identify member tanggal terdaftar search field */
+	member_label_tgldaftarSearchField=new Ext.form.Label({ html: ' &nbsp; s/d  &nbsp;'});
+	member_tanggaldaftar_opsiSearchField=new Ext.form.FieldSet({
+		id:'member_tanggaldaftar_opsiSearchField',
+		title: 'Tanggal Terdaftar Member',
+		layout: 'column',
+		boduStyle: 'padding: 5px;',
+		anchor: '95%',
+		//border : false,
+		//frame: false,
+		items:[member_terdaftarSearchField, member_label_tgldaftarSearchField, member_tgldaftarSearchFieldEnd]
+	});
+	
 	
 	/* Identify  cust_tglawaltrans Field */
 	cust_tglawaltransSearchField= new Ext.form.DateField({
@@ -5923,7 +6012,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_tanggaldaftar_opsiSearchField,  cust_tglawaltrans_opsiSearchField, cust_profesiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
+				items: [cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_tanggaldaftar_opsiSearchField, member_tanggaldaftar_opsiSearchField, cust_tglawaltrans_opsiSearchField, cust_profesiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 
 			}
 			]
 		}]

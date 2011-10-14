@@ -272,9 +272,16 @@ class C_master_ambil_paket extends Controller {
 			case "PRINT":
 				$this->ambil_paket_print();
 				break;
+			case "PRINT2":
+				$this->daftar_ambil_paket_print();
+				break;
 			case "EXCEL":
 				$this->ambil_paket_export_excel();
 				break;
+			case "EXCEL2":
+				$this->daftar_ambil_paket_export_excel();
+				break;
+				
 			case "BATAL":
 				$this->ambil_paket_batal();
 				break;
@@ -462,6 +469,38 @@ class C_master_ambil_paket extends Controller {
 		echo '1';
 	}
 	/* End Of Function */
+	
+	function daftar_ambil_paket_print(){
+  		//POST varibale here
+		$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
+		$rawat_nama=trim(@$_POST["rawat_nama"]);
+		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
+		$cust_nama=trim(@$_POST["cust_nama"]);
+		$tgl_ambil=trim(@$_POST["tgl_ambil"]);
+		$referal=trim(@$_POST["referal"]);
+		$keterangan=trim(@$_POST["keterangan"]);
+		$dapaket_stat_dok=trim(@$_POST["dapaket_stat_dok"]);
+		$option=$_POST['currentlisting'];
+		$filter=$_POST["query"];
+		
+		$data["data_print"] = $this->m_master_ambil_paket->daftar_ambil_paket_print($rawat_nama
+																	   ,$dapaket_jumlah
+																	   ,$tgl_ambil
+																	   ,$referal
+																	   ,$keterangan
+																	   ,$dapaket_stat_dok
+																	   ,$cust_nama
+																	   ,$option
+																	   ,$filter,$dapaket_dpaket);
+		$print_view=$this->load->view("main/p_daftar_ambil_paket.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/daftar_ambil_paketlist.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
+	}
+	/* End Of Function */
 
 	/* Function to Export Excel document */
 	function ambil_paket_export_excel(){
@@ -491,6 +530,35 @@ class C_master_ambil_paket extends Controller {
 																	   ,$apaket_sisa
 																	   ,$option
 																	   ,$filter);
+		
+		to_excel($query,"pengambilan_paket"); 
+		echo '1';
+			
+	}
+	
+	/* Function to Export Excel document */
+	function daftar_ambil_paket_export_excel(){
+		//POST varibale here
+		$dapaket_dpaket = isset($_POST['dapaket_dpaket']) ? $_POST['dapaket_dpaket'] : 0;
+		$rawat_nama=trim(@$_POST["rawat_nama"]);
+		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
+		$cust_nama=trim(@$_POST["cust_nama"]);
+		$tgl_ambil=trim(@$_POST["tgl_ambil"]);
+		$referal=trim(@$_POST["referal"]);
+		$keterangan=trim(@$_POST["keterangan"]);
+		$dapaket_stat_dok=trim(@$_POST["dapaket_stat_dok"]);
+		$option=$_POST['currentlisting'];
+		$filter=$_POST["query"];
+		
+		$query = $this->m_master_ambil_paket->daftar_ambil_paket_export_excel($rawat_nama
+																	   ,$dapaket_jumlah
+																	   ,$tgl_ambil
+																	   ,$referal
+																	   ,$keterangan
+																	   ,$dapaket_stat_dok
+																	   ,$cust_nama
+																	   ,$option
+																	   ,$filter,$dapaket_dpaket);
 		
 		to_excel($query,"pengambilan_paket"); 
 		echo '1';

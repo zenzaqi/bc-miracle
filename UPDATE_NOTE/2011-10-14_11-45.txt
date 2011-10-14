@@ -1,0 +1,3 @@
+Sistem baru :
+Jika ada perubahan status <> Selesai dari tindakan, maka sistem hanya akan meng-delete detail saja (dari tabel detail_jual_rawat). 
+Garis besarnya : Faktur yang sudah pernah ter-create(dari tabel master_jual_rawat) Tidak Akan pernah di Delete dari sistem. 
