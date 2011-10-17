@@ -123,7 +123,7 @@ class C_lap_jum_tindakan_dokter extends Controller {
 
 		function report_tindakan_search2(){
 		//POST varibale here
-		$report_tindakan_id=trim(@$_POST["report_tindakan_id"]);
+		//$report_tindakan_id=trim(@$_POST["report_tindakan_id"]);
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
 		else
@@ -144,7 +144,7 @@ class C_lap_jum_tindakan_dokter extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_search2($tgl_awal,$periode,$report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
+		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_search2($tgl_awal,$periode ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
 		echo $result;
 	}
 	
@@ -177,13 +177,41 @@ class C_lap_jum_tindakan_dokter extends Controller {
 		
 		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_print($tgl_awal,$periode,$report_groupby,$trawat_dokter,$trawat_tglapp_start,$trawat_tglapp_end,$option,$filter);
 		$nbrows=$result->num_rows();
+		
+		$result2 = $this->m_lap_jum_tindakan_dokter->report_tindakan_print2($tgl_awal,$periode ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby);	
+		$nbrows2 = $result->num_rows();
+		if($nbrows>0){
+			foreach($result2->result_array() as $data2);
+		}
+
+		
 		$totcolumn=8;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("tindakanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Tindakan List'><caption>TINDAKAN</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit</th><th scope='col'>Total Kredit(Rp)</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Tindakan</td></tr></tfoot><tbody>");
+		fwrite($file, "<body><table summary='Tindakan List'><caption>TINDAKAN</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
+		<tfoot>
+			<tr>		
+				<th>Grand Tot Kredit(Poin)</th>
+				<td colspan='3'>");
+					fwrite($file,  $data2['grand_total']);
+					fwrite($file, " 
+				</td>
+				<th>Grand Tot Kredit(Rp)</th>
+				<td colspan='4'>");
+					fwrite($file,  $data2['grand_total_rp']);
+					fwrite($file, " 
+				</td>
+			</tr>
+			<tr>		
+				<th scope='row'>Total</th>
+				<td colspan='$totcolumn'>");
+					fwrite($file, $nbrows);
+					fwrite($file, " Tindakan
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>");
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
