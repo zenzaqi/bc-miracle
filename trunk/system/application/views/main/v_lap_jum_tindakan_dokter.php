@@ -795,12 +795,32 @@ Ext.onReady(function(){
 	function report_tindakan_print(){
 		var searchquery = "";
 		var trawat_cust_print=null;
-		var trawat_keterangan_print=null;
 		var win;              
+		var report_tindakan_tgl_start_print=null;
+		var report_tindakan_tgl_end_print=null;
+		var report_tindakan_dokter_print=null;
+		var report_tindakan_groupby_print=null;
+		var report_tindakan_tmedis_bulan=null;
+		var report_tindakan_tmedis_tahun=null;
+		var report_tindakan_tmedis_periode=null;
+		
 		// check if we do have some search data...
 		if(report_tindakanDataStore.baseParams.query!==null){searchquery = report_tindakanDataStore.baseParams.query;}
 		if(report_tindakanDataStore.baseParams.trawat_cust!==null){trawat_cust_print = report_tindakanDataStore.baseParams.trawat_cust;}
-		if(report_tindakanDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = report_tindakanDataStore.baseParams.trawat_keterangan;}
+		if(Ext.getCmp('report_tindakan_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_print=Ext.getCmp('report_tindakan_tglStartSearchField').getValue();}
+		if(Ext.getCmp('report_tindakan_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_print=Ext.getCmp('report_tindakan_tglEndSearchField').getValue();}
+		if(report_tindakan_dokterSearchField.getValue()!==null){report_tindakan_dokter_print=report_tindakan_dokterSearchField.getValue();}
+		if(report_tindakan_groupbyField.getValue()!==null){report_tindakan_groupby_print=report_tindakan_groupbyField.getValue();}
+		if(report_tindakan_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_bulanField.getValue();}
+		if(report_tindakan_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_tahunField.getValue();}
+		
+		if(report_tindakan_opsitglField.getValue()==true){
+			report_tindakan_tmedis_periode='tanggal';
+		}else if(report_tindakan_opsiblnField.getValue()==true){
+			report_tindakan_tmedis_periode='bulan';
+		}else{
+			report_tindakan_tmedis_periode='all';
+		}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -809,8 +829,13 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			trawat_tglapp_start	: 	report_tindakan_tgl_start_print,
+			trawat_tglapp_end	: 	report_tindakan_tgl_end_print,
+			trawat_dokter	:	report_tindakan_dokter_print,
+			report_groupby	:	report_tindakan_groupby_print,
+			bulan		: report_tindakan_tmedis_bulan,
+			tahun		: report_tindakan_tmedis_tahun,
+			periode		: report_tindakan_tmedis_periode,
 		  	currentlisting: report_tindakanDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              

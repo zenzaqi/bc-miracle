@@ -367,14 +367,21 @@ Ext.onReady(function(){
 	}
 	/* End of Function  */
 
-	/*Function utk mengecek, jika Field Supplier blom diisikan, maka Detail Item akan di disabled */
+	/*Function utk mengecek, jika Field Supplier blom diisikan, maka Detail Item akan di disabled , dan field Supplier akan di disabled juga (utk keperluan last OP Price, kalau suppliernya di ganti2, nanti Last OP Price jg ikut ganti2*/
 	function check_supplier(){
 		if(order_supplierField.getValue()=="" || order_supplierField.getValue()==null){
 			detail_order_beliListEditorGrid.setDisabled(true);
 		}else{
 			detail_order_beliListEditorGrid.setDisabled(false);
 			order_supplier_idField.setValue(order_supplierField.getValue());
-			
+			order_supplierField.setDisabled(true);
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Anda baru saja memilih Supplier. Untuk kevalidan data, kolom Supplier tidak dapat dirubah lagi.',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
 		}
 	}
 	
@@ -387,6 +394,8 @@ Ext.onReady(function(){
 		order_noField.setValue('(Auto)');
 		order_supplierField.reset();
 		order_supplierField.setValue(null);
+		order_supplier_idField.reset();
+		order_supplier_idField.setValue(null);
 		order_tanggalField.setValue(today);
 		order_carabayarField.reset();
 		order_carabayarField.setValue('Kredit');
@@ -447,6 +456,9 @@ Ext.onReady(function(){
 		order_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_id'));
 		order_noField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_no'));
 		order_supplierField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier'));
+		//order_supplier_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get(''));
+		// disini mesti e ditambahin OrderSupplier_IDField, set value bla bla bla order_supplier_id / supplier_id
+		//Nanti jangan lupa, pengecekan get_last_op_price nya di get value() dari ordersupplier_idField ini.. 
 		order_supplier_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier_id'));
 		order_tanggalField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_tanggal'));
 		order_carabayarField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_carabayar'));
@@ -493,12 +505,12 @@ Ext.onReady(function(){
 
 
 		check_acc();
-		check_supplier();
+		//check_supplier();
 
 		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
 			order_idField.setDisabled(false);
 			order_noField.setDisabled(false);
-			order_supplierField.setDisabled(false);
+			order_supplierField.setDisabled(true);
 			order_tanggalField.setDisabled(false);
 			order_carabayarField.setDisabled(false);
 			order_diskonField.setDisabled(false);
@@ -1195,6 +1207,8 @@ Ext.onReady(function(){
 		maxLength: 50,
 		anchor: '95%'
 	});
+	
+	
 	/* Identify  order_supplier Field */
 	order_supplierField= new Ext.form.ComboBox({
 		id: 'order_supplierField',
@@ -2501,6 +2515,8 @@ Ext.onReady(function(){
 	});
 
 	combo_order_produk.on("select",function(){
+		//var check_supplier_id = master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier_id');
+		//order_supplier_idField.setValue(check_supplier_id);
 		cbo_order_satuanDataStore.setBaseParam('task','produk');
 		cbo_order_satuanDataStore.setBaseParam('selected_id',combo_order_produk.getValue());
 		cbo_dorder_produk_hargaDataStore.setBaseParam('task','op_last_price');

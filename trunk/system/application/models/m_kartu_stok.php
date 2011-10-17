@@ -544,7 +544,14 @@ class M_kartu_stok extends Model{
 			}
 		}
 
-		function kartu_stok_awal_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$option,$filter){
+		function kartu_stok_awal_print($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end,$filter,$start,$end){
+			if ($periode == 'bulan'){
+				$isiperiode="'%Y-%m')<'".$tgl_awal."' ";
+
+			}else if($periode == 'tanggal'){
+				$isiperiode="'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d') ";
+			}
+		
 			if($opsi_satuan=='terkecil')
 				$sql="SELECT * FROM vu_produk_satuan_terkecil WHERE produk_aktif='Aktif'";
 			else
@@ -562,14 +569,14 @@ class M_kartu_stok extends Model{
 				$sql.="	produk_kode LIKE '%".addslashes($filter)."%' OR
 						produk_nama LIKE '%".addslashes($filter)."%' ";
 			}
+
 			$sql.=" LIMIT 1";
+
+			$data[0]["stok_awal"]=0;
 
 			$result=$this->db->query($sql);
 			$nbrows=$result->num_rows();
-
-			$stok_awal=0;
-			//Stok Awal
-
+			//$this->firephp->log('sql : '.$sql);
 
 			if($nbrows>0){
 				$rowproduk=$result->row();
@@ -577,8 +584,10 @@ class M_kartu_stok extends Model{
 					$konversi=1;
 				else
 					$konversi=1/$rowproduk->konversi_nilai;
+
 				$i=0;
 
+				//Stok Saldo Awal
 				$sqlawal="SELECT 	produk_saldo_awal*konversi_nilai/".$rowproduk->konversi_nilai." as jumlah
 						FROM 	produk, satuan_konversi
 						WHERE 	konversi_produk=produk_id
@@ -600,7 +609,7 @@ class M_kartu_stok extends Model{
 
 				if($gudang==1){
 					//GUDANG UTAMA
-					$sql_stok_awal.=" - sum(jml_retur_beli*konversi_nilai/".$rowproduk->konversi_nilai.")";
+					$sql_stok_awal.="- sum(jml_retur_beli*konversi_nilai/".$rowproduk->konversi_nilai.")";
 				}elseif($gudang==4 || $gudang==3){
 					//GUDANG PERAWATAN
 					$sql_stok_awal.="- sum(jml_pakai_cabin*konversi_nilai/".$rowproduk->konversi_nilai.")";
@@ -641,7 +650,7 @@ class M_kartu_stok extends Model{
 							 WHERE     `dmm`.`dmutasi_master` = `mmm`.`mutasi_id`
 								   AND konversi_satuan = dmm.dmutasi_satuan
 								   AND konversi_produk = dmm.dmutasi_produk
-									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+									AND date_format(mutasi_tanggal,".$isiperiode."
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_tujuan='".$gudang."'
 									AND mutasi_status='Tertutup'
@@ -673,7 +682,7 @@ class M_kartu_stok extends Model{
 							 WHERE     `dmk`.`dmutasi_master` = `mmk`.`mutasi_id`
 								   AND konversi_satuan = dmk.dmutasi_satuan
 								   AND konversi_produk = dmk.dmutasi_produk
-									AND date_format(mutasi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+									AND date_format(mutasi_tanggal,".$isiperiode."
 									AND dmutasi_produk='".$rowproduk->produk_id."'
 									AND mutasi_asal='".$gudang."'
 									AND mutasi_status='Tertutup'
@@ -705,77 +714,77 @@ class M_kartu_stok extends Model{
 								   `detail_koreksi_stok` `dk`,
 								   satuan_konversi
 							 WHERE     `mk`.`koreksi_id` = `dk`.`dkoreksi_master`
-									AND konversi_satuan = dk.dkoreksi_satuan
-									AND konversi_produk = dk.dkoreksi_produk
-									AND date_format(koreksi_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+								   AND konversi_satuan = dk.dkoreksi_satuan
+								   AND konversi_produk = dk.dkoreksi_produk
+									AND date_format(koreksi_tanggal,".$isiperiode."
 									AND dkoreksi_produk='".$rowproduk->produk_id."'
 									AND koreksi_gudang='".$gudang."'
 									AND koreksi_status='Tertutup'
-
-							UNION SELECT `mt`.`terima_tanggal` AS `tanggal`,
-								   `mt`.`terima_supplier` AS `asal`,
-								   1 AS `tujuan`,
-								   `mt`.`terima_gudang_id` AS `gudang`,
-								   `mt`.`terima_no` AS `no_bukti`,
-								   _UTF8 'PB' AS `jenis_transaksi`,
-								   `mt`.`terima_status` AS `status`,
-								   `dt`.`dterima_produk` AS `produk`,
-								   `dt`.`dterima_satuan` AS `satuan`,
-								   konversi_nilai,
-								   `dt`.`dterima_jumlah` AS `jml_terima_barang`,
-								   0 AS `jml_terima_bonus`,
-								   0 AS `jml_retur_beli`,
-								   0 AS `jml_mutasi_masuk`,
-								   0 AS `jml_mutasi_keluar`,
-								   0 AS `jml_koreksi_stok`,
-								   0 AS `jml_jual_produk`,
-								   0 AS `jml_jual_grooming`,
-								   0 AS `jml_retur_produk`,
-								   0 AS `jml_retur_paket`,
-								   0 AS `jml_pakai_cabin`,
-								   _UTF8 'beli' AS `keterangan`,
-								   `dt`.`dterima_id` AS `detail_id`
-							  FROM `detail_terima_beli` `dt`, `master_terima_beli` `mt`, satuan_konversi
-							 WHERE     `dt`.`dterima_master` = `mt`.`terima_id`
-									AND konversi_satuan = dt.dterima_satuan
-									AND konversi_produk = dt.dterima_produk
-									AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
-									AND dterima_produk='".$rowproduk->produk_id."'
-									AND `mt`.`terima_gudang_id`='".$gudang."'
-									AND terima_status='Tertutup'
-
 							UNION
 							SELECT `mt`.`terima_tanggal` AS `tanggal`,
-								   `mt`.`terima_supplier` AS `asal`,
-								   1 AS `tujuan`,
-								   `mt`.`terima_gudang_id` AS `gudang`,
-								   `mt`.`terima_no` AS `no_bukti`,
-								   _UTF8 'PB' AS `jenis_transaksi`,
-								   `mt`.`terima_status` AS `status`,
-								   `db`.`dtbonus_produk` AS `produk`,
-								   `db`.`dtbonus_satuan` AS `satuan`,
-								   konversi_nilai,
-								   0 AS `jml_terima_barang`,
-								   `db`.`dtbonus_jumlah` AS `jml_terima_bonus`,
-								   0 AS `jml_retur_beli`,
-								   0 AS `jml_mutasi_masuk`,
-								   0 AS `jml_mutasi_keluar`,
-								   0 AS `jml_koreksi_stok`,
-								   0 AS `jml_jual_produk`,
-								   0 AS `jml_jual_grooming`,
-								   0 AS `jml_retur_produk`,
-								   0 AS `jml_retur_paket`,
-								   0 AS `jml_pakai_cabin`,
-								   _UTF8 'bonus' AS `keterangan`,
-								   `db`.`dtbonus_id` AS `detail_id`
-							  FROM `detail_terima_bonus` `db`, `master_terima_beli` `mt`, satuan_konversi
-							 WHERE     `db`.`dtbonus_master` = `mt`.`terima_id`
-								   AND konversi_satuan = db.dtbonus_satuan
-								   AND konversi_produk = db.dtbonus_produk
-								   AND date_format(terima_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
-									AND dtbonus_produk='".$rowproduk->produk_id."'
-									AND `mt`.`terima_gudang_id`='".$gudang."'
-									AND terima_status='Tertutup'";
+										   `mt`.`terima_supplier` AS `asal`,
+										   1 AS `tujuan`,
+										   `mt`.`terima_gudang_id` AS `gudang`,
+										   `mt`.`terima_no` AS `no_bukti`,
+										   _UTF8 'PB' AS `jenis_transaksi`,
+										   `mt`.`terima_status` AS `status`,
+										   `dt`.`dterima_produk` AS `produk`,
+										   `dt`.`dterima_satuan` AS `satuan`,
+										   konversi_nilai,
+										   `dt`.`dterima_jumlah` AS `jml_terima_barang`,
+										   0 AS `jml_terima_bonus`,
+										   0 AS `jml_retur_beli`,
+										   0 AS `jml_mutasi_masuk`,
+										   0 AS `jml_mutasi_keluar`,
+										   0 AS `jml_koreksi_stok`,
+										   0 AS `jml_jual_produk`,
+										   0 AS `jml_jual_grooming`,
+										   0 AS `jml_retur_produk`,
+										   0 AS `jml_retur_paket`,
+										   0 AS `jml_pakai_cabin`,
+										   _UTF8 'beli' AS `keterangan`,
+										   `dt`.`dterima_id` AS `detail_id`
+									  FROM `detail_terima_beli` `dt`, `master_terima_beli` `mt`, satuan_konversi
+									 WHERE     `dt`.`dterima_master` = `mt`.`terima_id`
+											AND konversi_satuan = dt.dterima_satuan
+											AND konversi_produk = dt.dterima_produk
+											AND date_format(terima_tanggal,".$isiperiode."
+											AND dterima_produk='".$rowproduk->produk_id."'
+											AND `mt`.`terima_gudang_id`='".$gudang."'
+											AND terima_status='Tertutup'
+
+									UNION
+									SELECT `mt`.`terima_tanggal` AS `tanggal`,
+										   `mt`.`terima_supplier` AS `asal`,
+										   1 AS `tujuan`,
+										   `mt`.`terima_gudang_id` AS `gudang`,
+										   `mt`.`terima_no` AS `no_bukti`,
+										   _UTF8 'PB' AS `jenis_transaksi`,
+										   `mt`.`terima_status` AS `status`,
+										   `db`.`dtbonus_produk` AS `produk`,
+										   `db`.`dtbonus_satuan` AS `satuan`,
+										   konversi_nilai,
+										   0 AS `jml_terima_barang`,
+										   `db`.`dtbonus_jumlah` AS `jml_terima_bonus`,
+										   0 AS `jml_retur_beli`,
+										   0 AS `jml_mutasi_masuk`,
+										   0 AS `jml_mutasi_keluar`,
+										   0 AS `jml_koreksi_stok`,
+										   0 AS `jml_jual_produk`,
+										   0 AS `jml_jual_grooming`,
+										   0 AS `jml_retur_produk`,
+										   0 AS `jml_retur_paket`,
+										   0 AS `jml_pakai_cabin`,
+										   _UTF8 'bonus' AS `keterangan`,
+										   `db`.`dtbonus_id` AS `detail_id`
+									  FROM `detail_terima_bonus` `db`, `master_terima_beli` `mt`, satuan_konversi
+									 WHERE     `db`.`dtbonus_master` = `mt`.`terima_id`
+											AND konversi_satuan = db.dtbonus_satuan
+											AND konversi_produk = db.dtbonus_produk
+											AND date_format(terima_tanggal,".$isiperiode."
+											AND dtbonus_produk='".$rowproduk->produk_id."'
+											AND `mt`.`terima_gudang_id`='".$gudang."'
+											AND terima_status='Tertutup'";
 
 
 				if($gudang==1){
@@ -809,7 +818,7 @@ class M_kartu_stok extends Model{
 									 WHERE     `dr`.`drbeli_master` = `mr`.`rbeli_id`
 										   AND konversi_satuan = dr.drbeli_satuan
 										   AND konversi_produk = dr.drbeli_produk
-											AND date_format(rbeli_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(rbeli_tanggal,".$isiperiode."
 											AND drbeli_produk='".$rowproduk->produk_id."'
 											AND 1='".$gudang."'
 											AND rbeli_status='Tertutup'";
@@ -843,7 +852,7 @@ class M_kartu_stok extends Model{
 									  FROM `detail_pakai_cabin` `cb`, satuan_konversi
 									 WHERE konversi_produk = cabin_produk
 											AND konversi_satuan = cabin_satuan
-											AND date_format(cabin_date_create,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+											AND date_format(cabin_date_create,".$isiperiode."
 											AND cabin_produk='".$rowproduk->produk_id."'
 											AND cabin_gudang='".$gudang."'";
 				}elseif($gudang==2){
@@ -876,7 +885,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `dj`.`dproduk_master` = `mj`.`jproduk_id`
 												   AND konversi_satuan = dj.dproduk_satuan
 												   AND konversi_produk = dj.dproduk_produk
-													AND date_format(jproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(jproduk_tanggal,".$isiperiode."
 													AND dproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND jproduk_stat_dok='Tertutup'
@@ -911,7 +920,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mjg`.`jpgrooming_id` = `djg`.`dpgrooming_master`
 												   AND konversi_satuan = djg.dpgrooming_satuan
 												   AND konversi_produk = djg.dpgrooming_produk
-													AND date_format(jpgrooming_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(jpgrooming_tanggal,".$isiperiode."
 													AND dpgrooming_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 											UNION
@@ -944,7 +953,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mrj`.`rproduk_id` = `drj`.`drproduk_master`
 												   AND konversi_satuan = drj.drproduk_satuan
 												   AND konversi_produk = drj.drproduk_produk
-													AND date_format(rproduk_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(rproduk_tanggal,".$isiperiode."
 													AND drproduk_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND rproduk_stat_dok='Tertutup'
@@ -978,7 +987,7 @@ class M_kartu_stok extends Model{
 											 WHERE     `mrp`.`rpaket_id` = `drp`.`drpaket_master`
 												   AND konversi_satuan = drpaket_satuan
 												   AND konversi_produk = drpaket_produk
-													AND date_format(rpaket_tanggal,'%Y-%m-%d')<date_format('".$tanggal_start."','%Y-%m-%d')
+													AND date_format(rpaket_tanggal,".$isiperiode."
 													AND drpaket_produk='".$rowproduk->produk_id."'
 													AND 2='".$gudang."'
 													AND rpaket_stat_dok='Tertutup'";
@@ -990,22 +999,21 @@ class M_kartu_stok extends Model{
 
 				//---END OF STOK AWAL
 
-				//$this->firephp->log('sql : '.$sql_stok_awal);
-				//echo $sql_stok_awal;
-
-				$q_stokawal=$this->db->query($sql_stok_awal);
-				if($q_stokawal->num_rows())
-				{
-					$ds_stokawal=$q_stokawal->row();
-					$stok_awal+=round(($ds_stokawal->jumlah_awal==NULL?0:$ds_stokawal->jumlah_awal)*$konversi,3);
-				}
 			}
 
-		//	$this->firephp->log('test '.$stok_awal);
-			return $stok_awal;
-
+			$result = $this->db->query($sql_stok_awal);
+			
+			//if($q_stokawal->num_rows()){
+			if($nbrows = $result->num_rows()){ //jumlah baris
+			$data = $result->row(); //ambil data 1 row
+			$jumlah_awal = $data->jumlah_awal;
+			}
+			if($nbrows>0)
+				return $jumlah_awal;
+			else
+				return NULL;
 		}
-
+		
 		function generate_kartu_stok($bulan, $tahun, $periode, $gudang, $produk_id, $opsi_satuan, $tanggal_start, $tanggal_end){
 			
 			/*if ($periode == 'bulan'){
@@ -1388,12 +1396,19 @@ class M_kartu_stok extends Model{
 		}
 
 		//function for print record
-		function kartu_stok_print($gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end ,$option,$filter){
-			$sql="SELECT * from kartu_stok
+		function kartu_stok_print($tgl_awal,$periode,$gudang, $produk_id, $opsi_satuan, $tanggal_start,$tanggal_end ,$option,$filter){
+			if ($periode == 'bulan'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' and date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."' ";
+			}else if($periode == 'tanggal'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
+					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d') ";
+			}	
+			
+			$sql="SELECT tanggal, no_bukti, keterangan, masuk, keluar
+					from kartu_stok
 				  	WHERE gudang_id='".$gudang."'
 				  	AND produk_id='".$produk_id."'
-				 	AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+				 	".$isiperiode."
 					ORDER BY tanggal ASC";
 
 			$result = $this->db->query($sql);
@@ -1405,16 +1420,20 @@ class M_kartu_stok extends Model{
 		}
 
 		//function  for export to excel
-		function kartu_stok_export_excel($produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter){
+		function kartu_stok_export_excel($tgl_awal,$periode,$produk_id ,$tanggal_start ,$tanggal_end ,$opsi_satuan ,$gudang ,$option,$filter){
 			//full query
-			$sql="SELECT kartu_stok.tanggal, kartu_stok.no_bukti, kartu_stok.keterangan, kartu_stok.masuk, kartu_stok.keluar  
+			if ($periode == 'bulan'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m')='".$tgl_awal."' and date_format(tanggal_akhir,'%Y-%m')='".$tgl_awal."' ";
+			}else if($periode == 'tanggal'){
+				$isiperiode=" AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
+					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d') ";
+			}	
+			
+			$sql="SELECT tanggal, no_bukti, keterangan, masuk, keluar
 					from kartu_stok
-					LEFT JOIN produk on (produk.produk_id=kartu_stok.produk_id)
-					LEFT JOIN satuan on (satuan.satuan_id = kartu_stok.satuan_id)
 				  	WHERE gudang_id='".$gudang."'
-				  	AND kartu_stok.produk_id='".$produk_id."'
-				 	AND date_format(tanggal_awal,'%Y-%m-%d')=date_format('".$tanggal_start."','%Y-%m-%d')
-					AND date_format(tanggal_akhir,'%Y-%m-%d')=date_format('".$tanggal_end."','%Y-%m-%d')
+				  	AND produk_id='".$produk_id."'
+				 	".$isiperiode."
 					ORDER BY tanggal ASC";
 
 			$result = $this->db->query($sql);
