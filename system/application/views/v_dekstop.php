@@ -82,6 +82,107 @@
 	
 	?>
     </style>
+	
+<script>
+ 
+var group_id=<?=$_SESSION[SESSION_GROUPID];?>;
+
+Ext.onReady(function(){
+
+/* Identify  Welcome_msg_info Field */
+	var message_infoField= new Ext.form.TextArea({
+		id: 'message_infoField',
+		maxLength: 5000,
+		anchor: '95%'
+	});
+
+	/*Data Store khusus utk menampung welcome mesage */
+	welcome_messageDataStore = new Ext.data.Store({
+		id: 'welcome_messageDataStore ',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_welcome_msg&m=get_welcome_message', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results'
+		},[
+			{name: 'welcome_id', type: 'int', mapping: 'welcome_id'},
+			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'}
+
+		]),
+		sortInfo:{field: 'welcome_id', direction: "ASC"}
+	});
+	
+	/*
+	Ext.Ajax.request({
+						waitMsg: 'Mohon  Tunggu...',
+						url: 'index.php?c=c_welcome_msg&m=get_welcome_message',
+						params:{
+							task	: "LIST"		
+						},
+						timeout: 60000,
+						success: function(response){							
+							var result=eval(response.responseText);
+							if(result!=0){
+								Ext.MessageBox.alert(result+' OK','Data penjualan paket berhasil disimpan');
+			
+							}else{
+								Ext.MessageBox.alert('Salah');
+							}
+						},
+						failure: function(response){
+							var result=response.responseText;
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: 'Could not connect to the database. retry later.',
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+			
+						}
+					});
+	*/		
+	
+	welcome_messageDataStore.load({
+				params: {task : "LIST"},
+					callback: function(opts, success, response)  {
+						  if (success) {
+							if(welcome_messageDataStore.getCount()){
+								var message = null;
+								welcome_msg_record=welcome_messageDataStore.getAt(0).data;
+								message_infoField.setValue(welcome_msg_record.welcome_msg);
+								message = message_infoField.getValue();
+								Ext.MessageBox.show({
+									title: 'Tahukah Anda?',
+									msg: message,
+									buttons: Ext.MessageBox.OK,
+									animEl: 'save',
+									icon: Ext.MessageBox.INFO
+								});
+							}
+						  }
+					  }
+				});	
+
+	//Ext.MessageBox.alert(message+' OK','Data penjualan paket berhasil disimpan');
+	/*
+	Ext.MessageBox.show({
+					title: 'Warning',
+					msg: message_infoField.getValue(),
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+	*/			
+				
+				
+	});
+
+</script> 	
+	
+	
+	
    
 	<?php $this->load->view('menus')?>
 </head>

@@ -777,8 +777,7 @@ Ext.onReady(function(){
 			dataIndex: 'jpaket_tanggal',
 			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-	//		renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		/*{
 			header: '<div align="center">' + 'No Faktur' + '</div>',
@@ -844,16 +843,14 @@ Ext.onReady(function(){
 			dataIndex: 'dpaket_kadaluarsa',
 			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			//renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		} ,
 		{
 			header: '<div align="center">' + 'Tgl Hangus' + '</div>',
 			dataIndex: 'tanggal_hangus',
 			width: 70,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
-			//renderer: Ext.util.Format.dateRenderer('d-m-Y')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		} 
 		]
 	);
@@ -1216,7 +1213,7 @@ Ext.onReady(function(){
 			dataIndex: 'tgl_ambil',
 			width: 90,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d')
+			renderer: Ext.util.Format.dateRenderer('d-m-Y')
 		}, 
 		{
 			header: '<div align="center">' + 'Perawatan' + '</div>',
@@ -1591,7 +1588,7 @@ Ext.onReady(function(){
 			dataIndex: 'tgl_ambil',
 			width: 90,
 			sortable: true,
-			renderer: Ext.util.Format.dateRenderer('Y-m-d'),
+			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
 				format: 'Y-m-d'})
 		}, 

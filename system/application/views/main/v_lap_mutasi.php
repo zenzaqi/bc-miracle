@@ -109,7 +109,7 @@ Ext.onReady(function(){
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk'],['Produk Racikan']]
+			data:[['No Bukti'],['Tanggal'],['Gudang Asal'],['Gudang Tujuan'],['Produk'],['Produk Racikan'],['Barang Keluar']]
 	});
 	
 	var rpt_mutasi_groupField=new Ext.form.ComboBox({

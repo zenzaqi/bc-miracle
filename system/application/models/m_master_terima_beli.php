@@ -297,6 +297,30 @@ class M_master_terima_beli extends Model{
 				return '({"total":"0", "results":""})';
 			}
 		}
+		
+		function get_supplier_search_list($query){
+			$sql=  "SELECT
+						supplier_id, supplier_nama, supplier_alamat, supplier_notelp
+					FROM supplier
+					WHERE supplier_aktif = 'aktif'";
+		
+			if($query<>""){
+				$sql=$sql." and (supplier_nama like '%".$query."%' or supplier_alamat like '%".$query."%' or supplier_notelp like '%".$query."%') ";
+			}
+			$sql=$sql." ORDER BY supplier_date_create desc";
+			
+			$query = $this->db->query($sql);
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
 
 
 		function get_order_beli_list($filter,$start,$end){
@@ -775,7 +799,7 @@ class M_master_terima_beli extends Model{
 		//function for advanced search record
 		function master_terima_beli_search($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
 										 $terima_surat_jalan ,$terima_pengirim ,$terima_tgl_awal,
-										 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end ,$terima_gudang){
+										 $terima_tgl_akhir ,$terima_keterangan ,$terima_status, $start,$end ,$terima_gudang,$terima_supplier){
 			//full query
 			$query="SELECT *  FROM vu_trans_terima";
 
@@ -798,6 +822,11 @@ class M_master_terima_beli extends Model{
 			if($terima_gudang!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_gudang_id LIKE '%".$terima_gudang."%'";
+			};
+				
+			if($terima_supplier!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " supplier_id LIKE '%".$terima_supplier."%'";
 				};
 			if($terima_pengirim!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -862,10 +891,10 @@ class M_master_terima_beli extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_order LIKE '%".$terima_order."%'";
 				};
-	/*			if($terima_supplier!=''){
+				if($terima_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_supplier LIKE '%".$terima_supplier."%'";
-				};*/
+					$query.= " supplier_id LIKE '%".$terima_supplier."%'";
+				};
 				if($terima_surat_jalan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
@@ -929,10 +958,10 @@ class M_master_terima_beli extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_order LIKE '%".$terima_order."%'";
 				};
-	/*			if($terima_supplier!=''){
+				if($terima_supplier!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " terima_supplier LIKE '%".$terima_supplier."%'";
-				};*/
+					$query.= " supplier_id LIKE '%".$terima_supplier."%'";
+				};
 				if($terima_surat_jalan!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " terima_surat_jalan LIKE '%".$terima_surat_jalan."%'";
