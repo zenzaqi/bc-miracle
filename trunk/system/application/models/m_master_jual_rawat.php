@@ -1330,6 +1330,7 @@ class M_master_jual_rawat extends Model{
 		$query2 = "SELECT
 				jrawat_id,
 				jrawat_nobukti,
+				CONCAT(vu_jrawat_pk.cust_nama, ' (', vu_jrawat_pk.cust_no, ')') as cust_nama_edit,
 				vu_jrawat_pk.cust_nama,
 				jrawat_cust,
 				vu_jrawat_pk.cust_no,
@@ -1484,7 +1485,7 @@ class M_master_jual_rawat extends Model{
 													,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
 													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
-													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $jrawat_grooming);
+													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan,$jrawat_grooming);
 					if($rs_jrawat=='0'){
 						/*$rs_drawat_cu = $this->detail_jual_rawat_cu($array_drawat_id ,0 ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah
 													,$array_drawat_harga ,$array_drawat_diskon ,$array_drawat_diskon_jenis ,0 ,$jrawat_cust
@@ -1957,7 +1958,7 @@ class M_master_jual_rawat extends Model{
 		$query .= "SELECT
 				vu_jrawat_pk.jrawat_id,
 				vu_jrawat_pk.jrawat_nobukti,
-				'' as cust_nama_edit,
+				CONCAT(vu_jrawat_pk.cust_nama, ' (', vu_jrawat_pk.cust_no, ')') as cust_nama_edit,
 				vu_jrawat_pk.cust_nama,
 				'temp' as temp,
 				'temp2' as temp2,
@@ -2713,6 +2714,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
 				,dapaket_tgl_ambil
 				,detail_jual_paket.dpaket_sisa_paket AS dpaket_sisa_paket
+				,dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
@@ -2741,6 +2743,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_tgl_ambil
 				,dapaket_dtrawat
 				,dpaket_sisa_paket
+				,dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)

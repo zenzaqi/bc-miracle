@@ -469,6 +469,12 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
+			align : 'right',
+			header: '<div align="center">' + 'No' + '</div>',
+			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
+			width: 4
+		},
+		{
 			header: 'Client Card',
 			dataIndex: 'cust_no',
 			width: 80,

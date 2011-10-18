@@ -1162,7 +1162,7 @@ class M_master_ambil_paket extends Model{
 				LEFT JOIN vu_karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
                 LEFT JOIN vu_karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
 				LEFT JOIN vu_karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
-				WHERE dapaket_dpaket='$dapaket_dpaket' and dapaket_stat_dok = 'Tertutup'
+				WHERE dapaket_dpaket='$dapaket_dpaket'
 				ORDER BY dapaket_tgl_ambil DESC";
 				
 			$result = $this->db->query($query);
