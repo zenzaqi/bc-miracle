@@ -345,6 +345,14 @@ class C_master_order_beli extends Controller {
 		echo $this->detail_detail_order_beli_insert($result);
 	}
 
+	function get_permission_op(){
+		//$group = (integer) (isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
+		
+		$task = (integer) (isset($_POST['task']) ? $_POST['task'] : $_GET['task']);
+		$result=$this->m_master_order_beli->get_permission_op($task);
+		echo $result;
+	}
+	
 	//function for delete selected record
 	function master_order_beli_delete(){
 		$ids = $_POST['ids']; // Get our array back and translate it :
