@@ -1,0 +1,1 @@
+usergroup : untuk hak akses order pembelian > lain-lain (harga), jika tidak tercentang maka pada Persediaan Order Pembelian tidak dapat melihat dan Simpan Harga

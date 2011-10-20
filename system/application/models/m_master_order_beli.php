@@ -25,6 +25,40 @@ class M_master_order_beli extends Model{
             return $query2; //by isaac
 		}
 		
+		//function for get list record
+		function get_permission_op($task){
+			$query = "select perm_group from vu_permissions where perm_harga = 1 and menu_id = 31";
+					
+			
+			$result = $this->db->query($query);		
+		$nbrows = $result->num_rows();
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+				
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		/*
+			$result = $this->db->query($query);
+			$nbrows = $result->num_rows();
+			$limit = $query." LIMIT ".$start.",".$end;		
+			$result = $this->db->query($limit);  
+			
+			if($nbrows>0){
+				foreach($result->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}*/
+		}
+		
 		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group,$faktur){
 			
 			switch($group){

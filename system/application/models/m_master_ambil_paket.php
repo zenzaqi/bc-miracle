@@ -944,13 +944,13 @@ class M_master_ambil_paket extends Model{
 					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 					LEFT JOIN customer ON(jpaket_cust=cust_id) 
 					LEFT JOIN paket ON(dpaket_paket=paket_id) 
-					WHERE dpaket_sisa_paket >= 0
-						AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
+					WHERE date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
 						AND jpaket_stat_dok='Tertutup' ";
 
 			if($option=='LIST'){		
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
+				$query .= " dpaket_sisa_paket > 0
+						AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

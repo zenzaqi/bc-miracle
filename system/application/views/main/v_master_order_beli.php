@@ -453,6 +453,32 @@ Ext.onReady(function(){
 
 	/* setValue to EDIT */
 	function master_order_beli_set_form(){
+		$login = <?=$_SESSION[SESSION_GROUPID];?>;   
+		
+		permission_op_DataStore.load({
+				params: {task : "LIST"},
+					callback: function(opts, success, response)  {
+						  if (success) {
+							if(permission_op_DataStore.getCount()>0){
+								for(i=0; i<permission_op_DataStore.getCount();i++){
+										var group_id = [];
+										group_id_record=permission_op_DataStore.getAt(i).data;
+										group_id_temp.setValue(group_id_record.perm_group);
+										group_id = group_id_temp.getValue();
+										
+										if(group_id == $login){
+											master_order_beli_createForm.saveHargaButton.enable();
+											save_hargaField.setValue('1');
+										}else{
+											master_order_beli_createForm.saveHargaButton.disable();
+											save_hargaField.setValue('2');
+										}										
+								}
+							}
+						  }
+					  }
+				});	
+		
 		order_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_id'));
 		order_noField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_no'));
 		order_supplierField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_supplier'));
@@ -817,6 +843,24 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 
+	/* Function for Retrieve permission DataStore */
+	permission_op_DataStore = new Ext.data.Store({
+		id: 'permission_op_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_order_beli&m=get_permission_op',
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'menu_id'
+		},[
+			{name: 'menu_id', type: 'int', mapping: 'menu_id'},
+			{name: 'perm_group', type: 'int', mapping: 'perm_group'},
+		])
+	});
+
+	
 	/* Function for Retrieve Supplier DataStore */
 	var cbo_order_produk_DataStore = new Ext.data.Store({
 		id: 'cbo_order_produk_DataStore',
@@ -1299,6 +1343,15 @@ Ext.onReady(function(){
 		maxLength: 2,
 		maskRe: /([0-9]+)$/
 	});
+	
+	
+	
+	/* Identify  order_diskon Field */
+	group_id_temp= new Ext.form.TextField({
+		id: 'group_id_temp',
+		anchor: '50%',
+		maxLength: 5
+	});
 
 	order_cashbackField= new Ext.form.TextField({
 		id: 'order_cashbackField',
@@ -1392,6 +1445,13 @@ Ext.onReady(function(){
 	});
   	/*Fieldset Master*/
 
+	//untuk menampung nilai button save harga
+	var save_hargaField= new Ext.form.TextArea({
+		id: 'message_infoField',
+		maxLength: 5,
+		anchor: '95%'
+	});
+	
 	order_button_saveField=new Ext.Button({
 		text: 'Save',
 		handler: pengecekan_dokumen2
@@ -1540,16 +1600,13 @@ Ext.onReady(function(){
 		sortInfo:{field: 'dorder_id', direction: "DESC"}
 	});
 	
-	
-	
-	
 	Ext.util.Format.comboRenderer = function(combo){
 		return function(value){
 			var record = combo.findRecord(combo.valueField, value);
 			return record ? record.get(combo.displayField) : combo.valueNotFoundText;
 		}
 	}
-
+	
 	var combo_order_produk=new Ext.form.ComboBox({
 		store: cbo_order_produk_DataStore,
 		mode: 'remote',
@@ -1649,16 +1706,15 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			editor:  order_harga_satuanField,
-			<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+		
 			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+				var harga = val;
+				if (save_hargaField.getValue()=='1'){
+					return '<span> '+Ext.util.Format.number(harga,'0,000')+'</span>';
+				}else{
+					return '<span>'+'NA'+'</span>';
+				}
 			}
-			<? } ?>
-			<? if(($_SESSION[SESSION_GROUPID]==4 || ($_SESSION[SESSION_GROUPID]==26) )){ ?>
-			renderer: function(val){
-				return '<span>'+'NA'+'</span>';
-			}
-			<? } ?>
 
 		},
 
@@ -1789,7 +1845,7 @@ Ext.onReady(function(){
         var dorder_diskon = [];
 
 		var dcount = detail_order_beli_DataStore.getCount() - 1;
-
+		
 		if(detail_order_beli_DataStore.getCount()>0){
 			 for(i=0; i<detail_order_beli_DataStore.getCount();i++){
                 if((/^\d+$/.test(detail_order_beli_DataStore.getAt(i).data.dorder_produk))
@@ -1919,6 +1975,7 @@ Ext.onReady(function(){
 			{
 				//id: 'op_save_harga',
 				text: 'Save Harga',
+				ref:'../saveHargaButton',
 				handler: detail_save_harga_insert
 			},
 			{
