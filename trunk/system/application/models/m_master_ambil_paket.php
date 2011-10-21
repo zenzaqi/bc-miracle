@@ -26,6 +26,7 @@ class M_master_ambil_paket extends Model{
 				case "Customer": $order_by=" ORDER BY cust_id";break;
 				case "No Faktur": $order_by=" ORDER BY no_bukti";break;
 				case "Paket": $order_by=" ORDER BY paket_kode";break;
+				case "Sisa Paket": $order_by=" GROUP BY no_bukti, dapaket_paket ORDER BY paket_kode";break;
 				case "Perawatan": $order_by=" ORDER BY rawat_id";break;
 				case "Perawatan Medis": $order_by="AND kategori_nama = 'Medis' ORDER BY rawat_id";break;
 				case "Perawatan Non Medis": $order_by="AND kategori_nama = 'Non Medis' ORDER BY rawat_id";break;
@@ -40,25 +41,25 @@ class M_master_ambil_paket extends Model{
 			if($opsi=='rekap'){
 				if($opsi_status=='tertutup'){
 					if($periode=='all')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup'".$order_by;
 					else if($periode=='bulan')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
 					else if($periode=='tanggal')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 				}else if($opsi_status=='adjustment'){
 					if($periode=='all')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj'".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj'".$order_by;
 					else if($periode=='bulan')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
 					else if($periode=='tanggal')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_jumlah, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Adj' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 				}else if($opsi_status=='batal'){
 					if($periode=='all')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal'".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_paket, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal'".$order_by;
 					else if($periode=='bulan')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_paket, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
 					else if($periode=='tanggal')
-						$sql="SELECT no_bukti,tanggal,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+						$sql="SELECT no_bukti,tanggal,tanggal_beli,paket_nama,paket_kode,cust_id,cust_nama,cust_no,dapaket_paket,dapaket_jumlah as jumlah, harga_satuan, total_harga_satuan, isi_paket, total_paket, pengambilan, sisa_paket, nilai_paket, nilai_ambil_paket, nilai_sisa_paket FROM vu_detail_ambil_paket_rawat WHERE jpaket_stat_dok='Tertutup' AND dapaket_stat_dok='Batal' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 				}
 			}else if($opsi=='detail'){
 				if($opsi_status=='tertutup'){
@@ -944,13 +945,13 @@ class M_master_ambil_paket extends Model{
 					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 					LEFT JOIN customer ON(jpaket_cust=cust_id) 
 					LEFT JOIN paket ON(dpaket_paket=paket_id) 
-					WHERE date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
+					WHERE dpaket_sisa_paket >= 0
+						AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
 						AND jpaket_stat_dok='Tertutup' ";
 
 			if($option=='LIST'){		
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " dpaket_sisa_paket > 0
-						AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
