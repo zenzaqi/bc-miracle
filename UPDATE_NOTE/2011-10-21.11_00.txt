@@ -1,0 +1,7 @@
+Note : 
+Utk Laporan Sisa Paket - All Clients dan Cumulative.. 
+Menampilkan nominal Rupiah dari nilai pengambilan paket dan nilai rupiah dari sisa paket clients.. 
+
+
+
+Update view : vu_detail_ambil_paket_rawat

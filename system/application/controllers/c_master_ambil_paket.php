@@ -78,6 +78,7 @@ class C_master_ambil_paket extends Controller {
 				case "Tanggal": $print_view=$this->load->view("main/p_rekap_ambil_paket_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_rekap_ambil_paket_customer.php",$data,TRUE);break;
 				case "Paket": $print_view=$this->load->view("main/p_rekap_ambil_paket_paket.php",$data,TRUE);break;
+				case "Sisa Paket": $print_view=$this->load->view("main/p_rekap_ambil_paket_sisa_paket.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_rekap_ambil_paket.php",$data,TRUE);break;
 			}
 			$print_file=fopen("print/report_ambil_paket.html","w");

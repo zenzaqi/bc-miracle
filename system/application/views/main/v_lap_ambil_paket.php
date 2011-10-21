@@ -107,7 +107,7 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Sisa Paket']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
