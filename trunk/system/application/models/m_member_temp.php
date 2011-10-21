@@ -28,8 +28,8 @@ class M_member_temp extends Model{
 			$query =   "SELECT membert_id, membert_cust, cust_no, cust_nama, membert_no, membert_register, membert_valid, membert_jenis, membert_status, membert_check_daftar,
 						member_valid
 						FROM member_temp 
-						LEFT JOIN vu_customer ON (membert_cust=cust_id) ";
-			
+						LEFT JOIN vu_customer ON (membert_cust=cust_id) 
+						WHERE member_valid <= date_format(DATE_ADD(now(), INTERVAL 3 month), '%Y-%m-%d') ";			
 			
 			// For simple search
 			if ($filter<>""){
