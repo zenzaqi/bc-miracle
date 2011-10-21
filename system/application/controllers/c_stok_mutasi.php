@@ -126,7 +126,7 @@ class C_stok_mutasi extends Controller {
 		$mutasi_jumlah = trim(@$_POST["mutasi_jumlah"]);
 		$stok_akhir	= trim(@$_POST["stok_akhir"]);
 		$stok_awal = trim(@$_POST["stok_awal"]);
-		$masuk = trim(@$_POST["masuk"]);
+		$stok_masuk = trim(@$_POST["stok_masuk"]);
 		$stok_keluar = trim(@$_POST["stok_keluar"]);
 		
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
@@ -143,7 +143,7 @@ class C_stok_mutasi extends Controller {
 																
 		$data["data_print"]=$result=$this->m_stok_mutasi->stok_mutasi_print($gudang, $produk_id, $group1_id, $opsi_produk, 
 																		   $opsi_satuan, $tanggal_start, $tanggal_end, 
-																		   $query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$masuk,$stok_keluar, $bulan, $tahun, $periode, $tgl_awal);
+																		   $query,$start,$end, $mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar, $bulan, $tahun, $periode, $tgl_awal);
 		$data["periode"]= $tanggal_start." s/d ".$tanggal_end;
 		$data["gudang_nama"]= $this->m_public_function->get_gudang_nama($gudang);
 		
@@ -174,8 +174,15 @@ class C_stok_mutasi extends Controller {
 		$stok_keluar=trim(@$_POST["stok_keluar"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
-
-		$query = $this->m_stok_mutasi->stok_mutasi_export_excel($gudang, $produk_id, $group1_id, $opsi_produk, 
+		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$query = $this->m_stok_mutasi->stok_mutasi_export_excel($bulan, $tahun, $tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, 
 																$opsi_satuan, $tanggal_start, $tanggal_end, 
 																$mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar,$option,$filter);
 		$this->load->plugin('to_excel');

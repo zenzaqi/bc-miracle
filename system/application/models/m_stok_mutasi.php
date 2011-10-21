@@ -159,9 +159,9 @@ class M_stok_mutasi extends Model{
 			$sql="select * from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
-					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
-					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
-					AND gudang_id='".$gudang."'";
+					AND (date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+								AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."')
+								AND gudang_id='".$gudang."'";
 
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -170,17 +170,7 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
-			
-		/*	if($mutasi_jumlah=='='){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir = '0' ";
-			}elseif($mutasi_jumlah=='<'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir < '0' ";
-			}elseif($mutasi_jumlah=='>'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_akhir > '0' ";
-			}*/
+
 			
 			if($stok_akhir=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -191,6 +181,9 @@ class M_stok_mutasi extends Model{
 			}elseif($stok_akhir=='> 0'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
+			}elseif($stok_akhir=='!='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir <> '0' ";
 			}
 			
 			if($stok_awal=='='){
@@ -204,28 +197,34 @@ class M_stok_mutasi extends Model{
 				$sql.="	sm.stok_awal > '0' ";
 			}
 			
-			if($stok_masuk=='='){
+			if($stok_masuk=='S'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk = '0' ";
+				$sql.="	(sm.stok_masuk like '%' ";
+			}elseif($stok_masuk=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	(sm.stok_masuk = '0' ";
 			}elseif($stok_masuk=='<'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk < '0' ";
+				$sql.="	(sm.stok_masuk < '0' ";
 			}elseif($stok_masuk=='> 0'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk > '0' ";
+				$sql.="	(sm.stok_masuk > '0' ";
 			}
 			
-			if($stok_keluar=='='){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar = '0' ";
+			if($stok_keluar=='S'){
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar like '%' )";
+			}elseif($stok_keluar=='='){
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar = '0' )";
 			}elseif($stok_keluar=='<'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar < '0' ";
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar < '0' )";
 			}elseif($stok_keluar=='> 0'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar > '0' ";
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar > '0' )";
 			}
-			
+
 			$sql.=" ORDER BY pr.produk_kode ";
 
 			$result = $this->db->query($sql);
@@ -237,17 +236,22 @@ class M_stok_mutasi extends Model{
 		}
 		
 		/* Function for Eksport 2 Excel*/
-		function stok_mutasi_export_excel($gudang, $produk_id, $group1_id, $opsi_produk, 
+		function stok_mutasi_export_excel($bulan, $tahun, $tgl_awal,$periode,$gudang, $produk_id, $group1_id, $opsi_produk, 
 																$opsi_satuan, $tanggal_start, $tanggal_end, 
 																$mutasi_jumlah, $stok_akhir	,$stok_awal,$stok_masuk,$stok_keluar,$option,$filter){
 
+			if ($periode == 'bulan'){
+				$tanggal_start	= $tahun.'-'.$bulan.'-01';
+				$tanggal_end	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
+			}
+			
 			$sql="select pr.produk_kode, pr.produk_nama, satuan.satuan_nama,
 						sm.stok_awal, sm.stok_masuk, sm.stok_keluar, sm.stok_akhir
 					from stok_mutasi sm,produk pr, satuan
 					WHERE sm.produk_id=pr.produk_id
 					AND satuan.satuan_id=sm.satuan_id
-					AND date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
-					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."'
+					AND (date_format(tanggal_awal,'%Y-%m-%d')='".$tanggal_start."'
+					AND date_format(tanggal_akhir,'%Y-%m-%d')='".$tanggal_end."')
 					AND gudang_id='".$gudang."'";
 
 			if($opsi_produk=='group1' & $group1_id!=="" & $group1_id!==0){
@@ -257,7 +261,7 @@ class M_stok_mutasi extends Model{
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	pr.produk_id='".$produk_id."' ";
 			}
-		
+
 			
 			if($stok_akhir=='='){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
@@ -268,6 +272,9 @@ class M_stok_mutasi extends Model{
 			}elseif($stok_akhir=='> 0'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
 				$sql.="	sm.stok_akhir > '0' ";
+			}elseif($stok_akhir=='!='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	sm.stok_akhir <> '0' ";
 			}
 			
 			if($stok_awal=='='){
@@ -281,26 +288,32 @@ class M_stok_mutasi extends Model{
 				$sql.="	sm.stok_awal > '0' ";
 			}
 			
-			if($stok_masuk=='='){
+			if($stok_masuk=='S'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk = '0' ";
+				$sql.="	(sm.stok_masuk like '%' ";
+			}elseif($stok_masuk=='='){
+				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
+				$sql.="	(sm.stok_masuk = '0' ";
 			}elseif($stok_masuk=='<'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk < '0' ";
+				$sql.="	(sm.stok_masuk < '0' ";
 			}elseif($stok_masuk=='> 0'){
 				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_masuk > '0' ";
+				$sql.="	(sm.stok_masuk > '0' ";
 			}
 			
-			if($stok_keluar=='='){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar = '0' ";
+			if($stok_keluar=='S'){
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar like '%' )";
+			}elseif($stok_keluar=='='){
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar = '0' )";
 			}elseif($stok_keluar=='<'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar < '0' ";
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar < '0' )";
 			}elseif($stok_keluar=='> 0'){
-				$sql.=eregi("WHERE",$sql)?" AND ":" WHERE ";
-				$sql.="	sm.stok_keluar > '0' ";
+				$sql.=eregi("WHERE",$sql)?" OR ":" WHERE ";
+				$sql.="	sm.stok_keluar > '0' )";
 			}
 			
 			$sql.=" ORDER BY pr.produk_kode ";
