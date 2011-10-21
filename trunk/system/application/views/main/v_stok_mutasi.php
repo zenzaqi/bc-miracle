@@ -1160,6 +1160,9 @@ Ext.onReady(function(){
 		var stok_mutasi_stok_awal_2excel=null;
 		var stok_mutasi_masuk_2excel=null;
 		var stok_mutasi_keluar_2excel=null;
+		var stok_mutasi_bulan=null;
+		var stok_mutasi_tahun=null;
+		var stok_mutasi_periode=null;
 		var win;              
 			
 		// check if we do have some search data...
@@ -1176,6 +1179,45 @@ Ext.onReady(function(){
 		if(stok_mutasi_DataStore.baseParams.stok_awal!==null){stok_mutasi_stok_awal_2excel=stok_mutasi_DataStore.baseParams.stok_awal;}
 		if(stok_mutasi_DataStore.baseParams.stok_masuk!==null){stok_mutasi_masuk_2excel=stok_mutasi_DataStore.baseParams.stok_masuk;}
 		if(stok_mutasi_DataStore.baseParams.stok_keluar!==null){stok_mutasi_keluar_2excel=stok_mutasi_DataStore.baseParams.stok_keluar;}
+		
+		if(stok_mutasi_bulanField.getValue()!==null){stok_mutasi_bulan=stok_mutasi_bulanField.getValue();}
+		if(stok_mutasi_tahunField.getValue()!==null){stok_mutasi_tahun=stok_mutasi_tahunField.getValue();}
+		
+		if(stok_mutasi_opsitglField.getValue()==true){
+			stok_mutasi_periode='tanggal';
+			stok_mutasi_periodeField.setValue(stok_mutasi_tanggal_startSearchField.getValue().format('Y-m-d')+ ' s/d ' + stok_mutasi_tanggal_endSearchField.getValue().format('Y-m-d'));
+		}else if(stok_mutasi_opsiblnField.getValue()==true){
+			if (stok_mutasi_bulanField.getValue() == '01') {
+				nama_bulan='Januari'
+			}else if(stok_mutasi_bulanField.getValue() == '02') {
+				nama_bulan='Februari'
+			}else if(stok_mutasi_bulanField.getValue() == '03') {
+				nama_bulan='Maret'
+			}else if(stok_mutasi_bulanField.getValue() == '04') {
+				nama_bulan='April'
+			}else if(stok_mutasi_bulanField.getValue() == '05') {
+				nama_bulan='Mei'
+			}else if(stok_mutasi_bulanField.getValue() == '06') {
+				nama_bulan='Juni'
+			}else if(stok_mutasi_bulanField.getValue() == '07') {
+				nama_bulan='Juli'
+			}else if(stok_mutasi_bulanField.getValue() == '08') {
+				nama_bulan='Agustus'
+			}else if(stok_mutasi_bulanField.getValue() == '09') {
+				nama_bulan='September'
+			}else if(stok_mutasi_bulanField.getValue() == '10') {
+				nama_bulan='Oktober'
+			}else if(stok_mutasi_bulanField.getValue() == '11') {
+				nama_bulan='November'
+			}else if(stok_mutasi_bulanField.getValue() == '12') {
+				nama_bulan='Desember'
+			}
+			
+			stok_mutasi_periode='bulan';
+			stok_mutasi_periodeField.setValue(nama_bulan + " " + stok_mutasi_tahunField.getValue());
+		}else{
+			stok_mutasi_periode='all';
+		}
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1195,6 +1237,9 @@ Ext.onReady(function(){
 			stok_awal : stok_mutasi_stok_awal_2excel,
 			stok_masuk : stok_mutasi_masuk_2excel,
 			stok_keluar : stok_mutasi_keluar_2excel,
+			bulan		: stok_mutasi_bulan,
+			tahun		: stok_mutasi_tahun,
+			periode		: stok_mutasi_periode,
 		  	currentlisting	: stok_mutasi_DataStore.baseParams.task 
 		},
 		success: function(response){              
