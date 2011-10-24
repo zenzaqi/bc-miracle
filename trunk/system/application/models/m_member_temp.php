@@ -29,7 +29,7 @@ class M_member_temp extends Model{
 						member_valid
 						FROM member_temp 
 						LEFT JOIN vu_customer ON (membert_cust=cust_id) 
-						WHERE member_valid <= date_format(DATE_ADD(now(), INTERVAL 3 month), '%Y-%m-%d') ";			
+						WHERE member_valid <= date_format(DATE_ADD(now(), INTERVAL 3 month), '%Y-%m-%d') or membert_jenis = 'baru' ";			
 			
 			// For simple search
 			if ($filter<>""){
