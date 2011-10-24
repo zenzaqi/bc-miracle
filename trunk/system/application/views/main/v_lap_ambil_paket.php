@@ -107,7 +107,7 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Sisa Paket']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Paket'],['Sisa Paket (Akumulatif)']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
@@ -498,13 +498,15 @@ Ext.onReady(function(){
 	});
 	
 	rpt_apaket_groupField.on("select",function(){
-	if(rpt_apaket_groupField.getValue()=='Sisa Paket'){
+	if(rpt_apaket_groupField.getValue()=='Sisa Paket (Akumulatif)'){
+		rpt_apaket_tglawalField.setDisabled(true);
 		rpt_apaket_tertutupField.setValue(true);
 		rpt_apaket_adjField.setDisabled(true);
 		rpt_apaket_batalField.setDisabled(true);
 	}
 	else
 	{
+		rpt_apaket_tglawalField.setDisabled(false);
 		rpt_apaket_tertutupField.setValue(true);
 		rpt_apaket_adjField.setDisabled(false);
 		rpt_apaket_batalField.setDisabled(false);
