@@ -497,6 +497,19 @@ Ext.onReady(function(){
 		}
 	});
 	
+	rpt_apaket_groupField.on("select",function(){
+	if(rpt_apaket_groupField.getValue()=='Sisa Paket'){
+		rpt_apaket_tertutupField.setValue(true);
+		rpt_apaket_adjField.setDisabled(true);
+		rpt_apaket_batalField.setDisabled(true);
+	}
+	else
+	{
+		rpt_apaket_tertutupField.setValue(true);
+		rpt_apaket_adjField.setDisabled(false);
+		rpt_apaket_batalField.setDisabled(false);
+	}
+	});
 });
 	</script>
 <body>
