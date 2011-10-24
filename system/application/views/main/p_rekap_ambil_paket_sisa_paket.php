@@ -21,7 +21,7 @@
 <body onload="window.print();">
 <table width="1201" summary='Rekap Jual'>
 	<caption>
-	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?>Group By Sisa Paket</caption>
+	Laporan Rekap Pengambilan Paket<br/><?php echo $periode; ?>Group By Sisa Paket (Akumulatif)</caption>
 	<thead>
     	<tr>
 			<th width="22" scope='col'>No</th>
