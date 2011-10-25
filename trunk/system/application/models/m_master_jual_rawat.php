@@ -2007,27 +2007,42 @@ class M_master_jual_rawat extends Model{
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'";	
 			}elseif(substr_count($query, " WHERE ")>=2){
 				$query.=" AND date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."')";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') BETWEEN '".$jrawat_tgl_start."' AND '".$jrawat_tgl_end."'";
 			}
+			
+			if($jrawat_stat_dok!=''){
+				$query.=" AND vu_jrawat_pr.jrawat_stat_dok = '".$jrawat_stat_dok."')";
+			}
+			else{
+				$query.=")";
+			}
+			
 		}else if($jrawat_tgl_start!='' && $jrawat_tgl_end==''){
 			if(substr_count($query, " WHERE ")<2){
 				$query.=" WHERE date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' ";
 			}elseif(substr_count($query, " WHERE ")>=2){
 				$query.=" AND date_format(vu_jrawat_pk.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' 
 				AND vu_jrawat_pk.jrawat_cust NOT IN(
 					SELECT vu_jrawat_pr.jrawat_cust
 					FROM vu_jrawat_pr
-					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' )";
+					WHERE date_format(vu_jrawat_pr.jrawat_tanggal,'%Y-%m-%d') = '".$jrawat_tgl_start."' ";
+			}
+			
+			if($jrawat_stat_dok!=''){
+				$query.=" AND vu_jrawat_pr.jrawat_stat_dok = '".$jrawat_stat_dok."')";
+			}
+			else{
+				$query.=")";
 			}
 		}
 		
