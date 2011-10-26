@@ -38,6 +38,7 @@ class C_master_lunas_piutang extends Controller {
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		//$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
 		$customer=(isset($_POST['customer']) ? @$_POST['customer'] : @$_GET['customer']);
+		$lunas=(isset($_POST['lunas']) ? @$_POST['lunas'] : @$_GET['lunas']);
 		
 		$data["jenis"]='Produk';
 		if($periode=="all"){
@@ -59,7 +60,13 @@ class C_master_lunas_piutang extends Controller {
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 		
-		$data["data_print"]=$this->m_master_lunas_piutang->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer);
+		if($lunas=='1'){
+			$data["pelunasan"]="(Lunas)";
+		}else{
+			$data["pelunasan"]="(Belum Lunas)";
+		}
+		
+		$data["data_print"]=$this->m_master_lunas_piutang->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer,$lunas);
 		
 		if($opsi=='rekap'){
 			$print_view=$this->load->view("main/p_rekap_piutang_customer.php",$data,TRUE);

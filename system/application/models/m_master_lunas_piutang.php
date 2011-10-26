@@ -25,7 +25,7 @@ class M_master_lunas_piutang extends Model{
 		return $query2; //by isaac
 	}
 	
-	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer){
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$customer,$lunas){
 		
 		/*switch($group){
 			case "Tanggal": $order_by=" ORDER BY tanggal";break;
@@ -34,23 +34,29 @@ class M_master_lunas_piutang extends Model{
 		}*/
 		$order_by="";
 		
+		if($lunas=='1'){
+			$query_lunas = " lpiutang_sisa = 0 AND lpiutang_stat_dok='Tertutup'";
+		}else{
+			$query_lunas = " lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka'";
+		}
+		
 		//$sql="SELECT * FROM vu_trans_piutang WHERE tanggal > '2010-07-20' AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ".$order_by;
 		if($opsi=='rekap'){
 			$order_by=" ORDER BY cust_id";
 			if($periode=='all')
-				$sql="SELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ";
+				$sql="ELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND  ".$query_lunas ." ";
 			else if($periode=='bulan')
-				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
+				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
 			else if($periode=='tanggal')
-				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
+				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
 		}else if($opsi=='detail'){
 			$order_by=" ORDER BY cust_id, no_bukti, dpiutang_nobukti";
 			if($periode=='all')
-				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ";
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." ";
 			else if($periode=='bulan')
-				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
 			else if($periode=='tanggal')
-				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
+				$sql="SELECT * FROM vu_detail_lunas_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
 		}
 		
 		if(is_numeric($customer)){

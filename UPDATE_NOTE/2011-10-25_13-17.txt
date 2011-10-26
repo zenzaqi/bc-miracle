@@ -1,0 +1,2 @@
+retur_jual_produk : 1 faktur dapat dipanggil bbrp kali, slama ada produk yg masih blm diretur dan tgl pembelian produk tidak lbh dr 7 hari
+(pengecekan apakan jumlah jual < jumlah retur)
