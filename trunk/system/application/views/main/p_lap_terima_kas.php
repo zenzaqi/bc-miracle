@@ -30,7 +30,7 @@
             <th scope='col'>Kartu Kredit</th>
             <th scope='col'>Cek/Giro</th>
             <th scope='col'>Transfer</th>
-            <th scope='col'>Voucher</th>
+            <?//<th scope='col'>Voucher</th>?>
             <th scope='col'>Total Nilai</th>
         </tr>
     </thead>
@@ -153,7 +153,7 @@
             <td  class="numeric"><?php echo number_format($produk_kredit); ?></td>
             <td  class="numeric"><?php echo number_format($produk_cek); ?></td>
             <td  class="numeric"><?php echo number_format($produk_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($produk_voucher); ?></td>
+            <?/*<td  class="numeric"><?php echo number_format($produk_voucher); ?></td>*/?>
             <td  class="numeric"><?php echo number_format($produk_total); ?></td>
        </tr>
         <tr>
@@ -164,7 +164,7 @@
             <td  class="numeric"><?php echo number_format($rawat_kredit); ?></td>
             <td  class="numeric"><?php echo number_format($rawat_cek); ?></td>
             <td  class="numeric"><?php echo number_format($rawat_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($rawat_voucher); ?></td>
+           <?/* <td  class="numeric"><?php echo number_format($rawat_voucher); ?></td>*/?>
             <td  class="numeric"><?php echo number_format($rawat_total); ?></td>
        </tr>
         <tr>
@@ -175,7 +175,7 @@
             <td  class="numeric"><?php echo number_format($paket_kredit); ?></td>
             <td  class="numeric"><?php echo number_format($paket_cek); ?></td>
             <td  class="numeric"><?php echo number_format($paket_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($paket_voucher); ?></td>
+            <?/*<td  class="numeric"><?php echo number_format($paket_voucher); ?></td>*/?>
             <td  class="numeric"><?php echo number_format($paket_total); ?></td>
        </tr>
         <tr>
@@ -186,7 +186,7 @@
             <td  class="numeric"><?php echo number_format($kwitansi_kredit); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_cek); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($kwitansi_voucher); ?></td>
+            <?/*<td  class="numeric"><?php echo number_format($kwitansi_voucher); ?></td>*/?>
             <td  class="numeric"><?php echo number_format($kwitansi_total); ?></td>
        </tr>
 	   <tr>
@@ -197,7 +197,7 @@
             <td  class="numeric"><?php echo number_format($lunas_kredit); ?></td>
             <td  class="numeric"><?php echo number_format($lunas_cek); ?></td>
             <td  class="numeric"><?php echo number_format($lunas_transfer); ?></td>
-            <td  class="numeric"><?php echo number_format($lunas_voucher); ?></td>
+            <?/*<td  class="numeric"><?php echo number_format($lunas_voucher); ?></td>*/?>
             <td  class="numeric"><?php echo number_format($lunas_total); ?></td>
        </tr>
 	</tbody>
@@ -234,11 +234,13 @@
             <td class="numeric"><?php echo number_format($total_transfer); ?></td>
             <td colspan='6' class="clear">&nbsp;</td>
         </tr>
+		<? /*
         <tr><td class="clear">&nbsp;</td>
         	<th scope='row'>Total Voucher (Rp)</th>
             <td class="numeric"><?php echo number_format($total_voucher); ?></td>
             <td colspan='6' class="clear">&nbsp;</td>
         </tr>
+		*/ ?>
         <tr><td class="clear">&nbsp;</td>
         	<th scope='row'>Total Nilai (Rp)</th>
             <td class="numeric"><?php echo number_format($total_nilai); ?></td>
