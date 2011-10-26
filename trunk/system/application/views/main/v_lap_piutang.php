@@ -174,6 +174,21 @@ Ext.onReady(function(){
 		anchor: '100%'
 	});
 	
+	rpt_piutang_lunasField=new Ext.form.ComboBox({
+		id:'rpt_piutang_lunasField',
+		fieldLabel:'Pelunasan',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['1','Lunas'],['0','Belum Lunas']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: 0,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
 	rpt_piutang_bulanField=new Ext.form.ComboBox({
 		id:'rpt_piutang_bulanField',
 		fieldLabel:' ',
@@ -329,10 +344,10 @@ Ext.onReady(function(){
 	
 	var	rpt_piutang_custbyField=new Ext.form.FieldSet({
 		id: 'rpt_piutang_custbyField',
-		title: 'Customer',
+		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_piutang_custField]
+		items: [rpt_piutang_custField,rpt_piutang_lunasField]
 	});
 	
 	function is_valid_form(){
@@ -360,6 +375,7 @@ Ext.onReady(function(){
 		var piutang_periode="";
 		//var piutang_group="";
 		var piutang_customer="";
+		var piutang_lunas="";
 		
 		var win;               
 		if(is_valid_form()){
@@ -368,6 +384,7 @@ Ext.onReady(function(){
 		if(rpt_piutang_tglakhirField.getValue()!==""){piutang_tglakhir = rpt_piutang_tglakhirField.getValue().format('Y-m-d');}
 		if(rpt_piutang_bulanField.getValue()!==""){piutang_bulan=rpt_piutang_bulanField.getValue(); }
 		if(rpt_piutang_tahunField.getValue()!==""){piutang_tahun=rpt_piutang_tahunField.getValue(); }
+		if(rpt_piutang_lunasField.getValue()!==""){piutang_lunas=rpt_piutang_lunasField.getValue();}
 		if(rpt_piutang_opsitglField.getValue()==true){
 			piutang_periode='tanggal';
 		}else if(rpt_piutang_opsiblnField.getValue()==true){
@@ -398,7 +415,8 @@ Ext.onReady(function(){
 					bulan		: piutang_bulan,
 					tahun		: piutang_tahun,
 					periode		: piutang_periode,
-					customer	: piutang_customer
+					customer	: piutang_customer,
+					lunas		: piutang_lunas
 					//group		: piutang_group
 					
 				}, 
