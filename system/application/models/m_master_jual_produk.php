@@ -39,7 +39,7 @@ class M_master_jual_produk extends Model{
 		}
 	}
 	
-	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group){
 		
 		switch($group){
 			case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
@@ -60,12 +60,21 @@ class M_master_jual_produk extends Model{
 			else if($periode=='tanggal')
 				$sql="SELECT distinct * FROM vu_trans_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		}else if($opsi=='detail'){
-			if($periode=='all')
-				$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' ".$order_by;
-			else if($periode=='bulan')
-				$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
-			else if($periode=='tanggal')
-				$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			if($opsi_status=='semua') {			
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Terbuka' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			} else if($opsi_status=='tertutup') {
+				if($periode=='all')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}
 		}
 		else if($opsi=='grooming'){
 			if($periode=='all')

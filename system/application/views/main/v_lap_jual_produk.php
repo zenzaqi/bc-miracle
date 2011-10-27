@@ -52,6 +52,8 @@ var rpt_jproduk_tglakhirField;
 var rpt_jproduk_rekapField;
 var rpt_jproduk_detailField;
 var rpt_jproduk_groomingField;
+var rpt_jproduk_semuaField;
+var rpt_jproduk_tertutupField;
 var rpt_jproduk_bulanField;
 var rpt_jproduk_tahunField;
 var rpt_jproduk_opsitglField;
@@ -227,6 +229,22 @@ Ext.onReady(function(){
 		name: 'jproduk_opsi'
 	});
 	
+	// opsi status
+	rpt_jproduk_tertutupField=new Ext.form.Radio({
+		id: 'rpt_jproduk_tertutupField',
+		boxLabel: 'Tertutup',
+		name: 'jproduk_opsi_status'
+	});
+	
+	rpt_jproduk_semuaField=new Ext.form.Radio({
+		id: 'rpt_jproduk_semuaField',
+		boxLabel: 'Semua',
+		name: 'jproduk_opsi_status'
+	});
+	
+
+	// eof opsi status
+	
 	var rpt_jproduk_periodeField=new Ext.form.FieldSet({
 		id:'rpt_jproduk_periodeField',
 		title : 'Periode',
@@ -284,6 +302,15 @@ Ext.onReady(function(){
 		items: [rpt_jproduk_rekapField ,rpt_jproduk_detailField,rpt_jproduk_groomingField]
 	});
 	
+	// opsi status
+	var	rpt_jproduk_opsistatusField=new Ext.form.FieldSet({
+		id: 'rpt_jproduk_opsistatusField',
+		title: 'Opsi Status Dok',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jproduk_tertutupField, rpt_jproduk_semuaField]
+	});
+	
 	var	rpt_jproduk_groupbyField=new Ext.form.FieldSet({
 		id: 'rpt_jproduk_groupbyField',
 		title: 'Group By',
@@ -337,6 +364,9 @@ Ext.onReady(function(){
 		if(rpt_jproduk_rekapField.getValue()==true){jproduk_opsi='rekap';}
 		if(rpt_jproduk_detailField.getValue()==true){jproduk_opsi='detail';}
 		if(rpt_jproduk_groomingField.getValue()==true){jproduk_opsi='grooming';}
+		
+		if(rpt_jproduk_semuaField.getValue()==true){jproduk_opsi_status='semua';}
+		if(rpt_jproduk_tertutupField.getValue()==true){jproduk_opsi_status='tertutup';}
 
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
@@ -353,6 +383,7 @@ Ext.onReady(function(){
 					tgl_awal	: jproduk_tglawal,
 					tgl_akhir	: jproduk_tglakhir,
 					opsi		: jproduk_opsi,
+					opsi_status	: jproduk_opsi_status,
 					bulan		: jproduk_bulan,
 					tahun		: jproduk_tahun,
 					periode		: jproduk_periode,
@@ -408,7 +439,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField, rpt_jproduk_groupbyField],
+		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField, rpt_jproduk_opsistatusField, rpt_jproduk_groupbyField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -446,6 +477,9 @@ Ext.onReady(function(){
 		rpt_jproduk_groupField.setValue('No faktur');
 		if(rpt_jproduk_rekapField.getValue()==true){
 			rpt_jproduk_groupField.bindStore(group_master_Store);
+			rpt_jproduk_semuaField.setDisabled(true);
+			rpt_jproduk_tertutupField.setDisabled(true);
+			rpt_jproduk_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jproduk_groupField.bindStore(group_detail_Store);
@@ -456,6 +490,9 @@ Ext.onReady(function(){
 		rpt_jproduk_groupField.setValue('No Faktur');
 		if(rpt_jproduk_detailField.getValue()==true){
 			rpt_jproduk_groupField.bindStore(group_detail_Store);
+			rpt_jproduk_semuaField.setDisabled(false);
+			rpt_jproduk_tertutupField.setDisabled(false);
+			rpt_jproduk_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jproduk_groupField.bindStore(group_master_Store);
@@ -477,11 +514,33 @@ Ext.onReady(function(){
 		rpt_jproduk_groupField.setValue('No faktur');
 		if(rpt_jproduk_groomingField.getValue()==true){
 			rpt_jproduk_groupField.bindStore(group_grooming_Store);
+			rpt_jproduk_semuaField.setDisabled(true);
+			rpt_jproduk_tertutupField.setDisabled(true);
+			rpt_jproduk_tertutupField.setValue(true);
 		}else if(rpt_jproduk_detailField.getValue()==true)
 		{
 			rpt_jproduk_groupField.bindStore(group_detail_Store);
 		}
 	});
+	// event opsi status
+	rpt_jproduk_groupField.on("select",function(){
+	if(rpt_jproduk_groupField.getValue()=='No Faktur' && rpt_jproduk_detailField.getValue()==true ){
+		rpt_jproduk_semuaField.setDisabled(false);
+		rpt_jproduk_tertutupField.setDisabled(false);
+		rpt_jproduk_semuaField.setValue(true);
+	}
+	else
+	{
+		rpt_jproduk_semuaField.setDisabled(true);
+		rpt_jproduk_tertutupField.setDisabled(true);
+		rpt_jproduk_tertutupField.setValue(true);
+	}
+	});
+	
+	// pertamax
+	rpt_jproduk_semuaField.setDisabled(true);
+	rpt_jproduk_tertutupField.setDisabled(true);
+	rpt_jproduk_tertutupField.setValue(true);
 
 	
 	
