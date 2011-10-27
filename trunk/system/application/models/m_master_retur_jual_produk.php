@@ -291,7 +291,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 	
 		function get_jual_produk_list($query,$start,$end){
-			/*$sql="ELECT IFNULL(SUM(detail_retur_jual_produk.drproduk_jumlah),0) as jum_produk_retur, 
+			$sql="SELECT IFNULL(SUM(detail_retur_jual_produk.drproduk_jumlah),0) as jum_produk_retur, 
 					SUM(detail_jual_produk.dproduk_jumlah) as jum_produk_jual, 
 					jproduk_id,jproduk_nobukti,
 					jproduk_tanggal,
@@ -306,9 +306,9 @@ class M_master_retur_jual_produk extends Model{
 				WHERE jproduk_cust=cust_id 
 					AND jproduk_stat_dok='Tertutup' 
 					AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')
-				GROUP BY jproduk_id HAVING(IFNULL(sum(detail_retur_jual_produk.drproduk_jumlah),0) < sum(detail_jual_produk.dproduk_jumlah))"; */
+				GROUP BY jproduk_id HAVING(IFNULL(sum(detail_retur_jual_produk.drproduk_jumlah),0) < sum(detail_jual_produk.dproduk_jumlah))";
 				
-			$sql="SELECT 
+			/*$sql="SELECT 
 					(select sum(dr.drproduk_jumlah)
 					from master_retur_jual_produk mr left join detail_retur_jual_produk dr on (dr.drproduk_master = mr.rproduk_id)
 					where mr.rproduk_nobuktijual = mj.jproduk_id) as jum_produk_retur,					
@@ -339,7 +339,7 @@ class M_master_retur_jual_produk extends Model{
 					(select sum(dp.dproduk_jumlah)
 					from detail_jual_produk dp left join master_jual_produk mj on(mj.jproduk_id = dp.dproduk_master)
 					WHERE jproduk_stat_dok='Tertutup'
-					AND date_add(date_format(mj.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d') group by dp.dproduk_master having dp.dproduk_master = mj.jproduk_id) ";
+					AND date_add(date_format(mj.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d') group by dp.dproduk_master having dp.dproduk_master = mj.jproduk_id) "; */
 	
 			if($query<>"")
 				$sql.=" and (jproduk_nobukti like '%".$query."%' or jproduk_tanggal like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or jproduk_nobukti like '%".$query."%') "; 

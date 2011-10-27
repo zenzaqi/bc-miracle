@@ -569,7 +569,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		detail_retur_jual_produk_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
 		
-		cbo_retur_produk_DataStore.load();
+		//cbo_retur_produk_DataStore.load();
 		cbo_drproduk_satuanDataStore.load();
 		if(!master_retur_jual_produk_createWindow.isVisible()){
 			
