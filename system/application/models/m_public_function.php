@@ -873,7 +873,7 @@ class M_public_function extends Model{
 			FROM cetak_kwitansi
 				LEFT JOIN jual_kwitansi ON(jkwitansi_master=kwitansi_id)
 				LEFT JOIN customer ON(kwitansi_cust=cust_id)
-			WHERE kwitansi_status<>'Batal'
+			WHERE kwitansi_status = 'Tertutup'
 				AND kwitansi_sisa>0";
 		if($query<>""){
 			$sql=$sql." and (cust_no like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or kwitansi_no like '%".$query."%')";
