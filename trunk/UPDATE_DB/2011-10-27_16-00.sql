@@ -115,7 +115,7 @@ where
 	and m1.jproduk_tanggal >= tgl_awal and m1.jproduk_tanggal <= tgl_akhir
 into dSalesP;
 
-select sum(v.total_nilai) from vu_trans_retur_produk v
+select ifnull(sum(v.total_nilai), 0) from vu_trans_retur_produk v
 where v.tanggal between tgl_awal and tgl_akhir
 into dReturP;
 
