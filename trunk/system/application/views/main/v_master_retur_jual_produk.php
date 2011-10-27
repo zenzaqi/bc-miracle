@@ -294,7 +294,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-					}else if(result==-1){
+					}/*else if(result==-1){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'No.Faktur ini sudah pernah di-Retur.',
@@ -302,7 +302,7 @@ Ext.onReady(function(){
 						   animEl: 'save',
 						   icon: Ext.MessageBox.WARNING
 						});
-					}else{
+					}*/else{
 						retur_jproduk_cetak(result);
 						detail_retur_jual_produk_purge();
 						detail_retur_jual_produk_insert();
@@ -568,6 +568,8 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		detail_retur_jual_produk_DataStore.load({params : {master_id : 0, start:0, limit:pageS}});
+		
+		cbo_retur_produk_DataStore.load();
 		cbo_drproduk_satuanDataStore.load();
 		if(!master_retur_jual_produk_createWindow.isVisible()){
 			

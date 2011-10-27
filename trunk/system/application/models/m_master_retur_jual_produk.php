@@ -291,7 +291,56 @@ class M_master_retur_jual_produk extends Model{
 		}
 	
 		function get_jual_produk_list($query,$start,$end){
-			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id, jproduk_cashback as voucher FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup' AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')";
+			/*$sql="ELECT IFNULL(SUM(detail_retur_jual_produk.drproduk_jumlah),0) as jum_produk_retur, 
+					SUM(detail_jual_produk.dproduk_jumlah) as jum_produk_jual, 
+					jproduk_id,jproduk_nobukti,
+					jproduk_tanggal,
+					cust_nama,
+					cust_alamat,
+					cust_id, 
+					jproduk_cashback as voucher 
+				FROM customer, master_jual_produk 
+					left join detail_jual_produk on (master_jual_produk.jproduk_id = detail_jual_produk.dproduk_master) 
+					left join master_retur_jual_produk on(master_jual_produk.jproduk_id = master_retur_jual_produk.rproduk_nobuktijual) 
+					left join detail_retur_jual_produk on(detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id ) 
+				WHERE jproduk_cust=cust_id 
+					AND jproduk_stat_dok='Tertutup' 
+					AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')
+				GROUP BY jproduk_id HAVING(IFNULL(sum(detail_retur_jual_produk.drproduk_jumlah),0) < sum(detail_jual_produk.dproduk_jumlah))"; */
+				
+			$sql="SELECT 
+					(select sum(dr.drproduk_jumlah)
+					from master_retur_jual_produk mr left join detail_retur_jual_produk dr on (dr.drproduk_master = mr.rproduk_id)
+					where mr.rproduk_nobuktijual = mj.jproduk_id) as jum_produk_retur,					
+					(select sum(dp.dproduk_jumlah)
+					from detail_jual_produk dp left join master_jual_produk mj on(mj.jproduk_id = dp.dproduk_master)
+					WHERE jproduk_stat_dok='Tertutup'
+					AND date_add(date_format(mj.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d') group by dp.dproduk_master having dp.dproduk_master = mj.jproduk_id) as jum_produk_jual,					
+					jproduk_id,jproduk_nobukti,
+					jproduk_tanggal,
+					cust_nama,
+					cust_alamat,
+					cust_id, 
+					jproduk_cashback as voucher 
+
+				FROM customer c, master_jual_produk mj
+					left join detail_jual_produk dp on (mj.jproduk_id = dp.dproduk_master) 
+					left join master_retur_jual_produk mr on(mj.jproduk_id = mr.rproduk_nobuktijual) 
+					left join detail_retur_jual_produk dr on(dr.drproduk_master = mr.rproduk_id ) 
+					
+				WHERE jproduk_cust=cust_id 
+					AND jproduk_stat_dok='Tertutup' 
+					AND date_add(date_format(mj.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')
+				GROUP BY jproduk_id 
+				HAVING ifnull((select sum(dr.drproduk_jumlah)
+					from master_retur_jual_produk mr left join detail_retur_jual_produk dr on (dr.drproduk_master = mr.rproduk_id)
+					where mr.rproduk_nobuktijual = mj.jproduk_id),0) 
+					<
+					(select sum(dp.dproduk_jumlah)
+					from detail_jual_produk dp left join master_jual_produk mj on(mj.jproduk_id = dp.dproduk_master)
+					WHERE jproduk_stat_dok='Tertutup'
+					AND date_add(date_format(mj.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d') group by dp.dproduk_master having dp.dproduk_master = mj.jproduk_id) ";
+	
 			if($query<>"")
 				$sql.=" and (jproduk_nobukti like '%".$query."%' or jproduk_tanggal like '%".$query."%' or cust_nama like '%".$query."%' or cust_alamat like '%".$query."%' or jproduk_nobukti like '%".$query."%') "; 
 			$query = $this->db->query($sql);
@@ -435,9 +484,9 @@ class M_master_retur_jual_produk extends Model{
 				WHERE rproduk_nobuktijual='".$rproduk_nobuktijual."'
 					AND rproduk_stat_dok<>'Batal'";
 			$this->db->query($sql);
-			if($this->db->affected_rows()){
+			/*if($this->db->affected_rows()){
 				return '-1';
-			}else{
+			}else{*/
 	//			$pattern="RFT/".date("ym")."-";
 				$pattern="RJ/".date("ym")."-";
 				$rproduk_nobukti=$this->m_public_function->get_kode_1('master_retur_jual_produk','rproduk_nobukti',$pattern,12);
@@ -479,7 +528,7 @@ class M_master_retur_jual_produk extends Model{
 					
 				}else
 					return '0';
-			}
+			/*}*/
 		}
 		
 		//fcuntion for delete record
