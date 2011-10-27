@@ -39,6 +39,7 @@ class C_master_jual_produk extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$opsi_status=(isset($_POST['opsi_status']) ? @$_POST['opsi_status'] : @$_GET['opsi_status']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		$group=(isset($_POST['group']) ? @$_POST['group'] : @$_GET['group']);
 		
@@ -66,7 +67,7 @@ class C_master_jual_produk extends Controller {
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
 		}
 
-		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group);
+		$data["data_print"]=$this->m_master_jual_produk->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group);
 		
 		if(!file_exists("print")){
 			mkdir("print");
@@ -84,14 +85,26 @@ class C_master_jual_produk extends Controller {
 			echo '1'; 
 			
 		}else if($opsi=='detail'){
-			switch($group){
-				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
-				case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
-				case "Produk": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
-				case "Sales": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
-				case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
-				default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
+			if ($opsi_status=='semua') {
+					switch($group){
+					case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
+					case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
+					case "Produk": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+					case "Sales": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
+					case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
+					default: $print_view=$this->load->view("main/p_detail_jual_semua.php",$data,TRUE);break;
+				} 
+			} else if ($opsi_status=='tertutup') {
+					switch($group){
+					case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
+					case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
+					case "Produk": $print_view=$this->load->view("main/p_detail_jual_produk.php",$data,TRUE);break;
+					case "Sales": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
+					case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
+					default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
+				}
 			}
+			
 			$print_file=fopen("print/report_jproduk.html","w");
 			fwrite($print_file, $print_view);
 			fclose($print_file);
