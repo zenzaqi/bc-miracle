@@ -701,9 +701,9 @@ Ext.onReady(function(){
 
 
 	var readColumn = new Ext.grid.CheckColumn({
-		header: "Read",
+		header: '<div align="center">' + 'Read' + '</div>',
 		dataIndex: 'perm_read',
-		width: 80,
+		width: 60,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -716,9 +716,9 @@ Ext.onReady(function(){
 	});
 
 	var createColumn = new Ext.grid.CheckColumn({
-		header: "Create",
+		header: '<div align="center">' + 'Create' + '</div>',
 		dataIndex: 'perm_create',
-		width: 80,
+		width: 60,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -731,9 +731,9 @@ Ext.onReady(function(){
 	});
 
 	var updateColumn = new Ext.grid.CheckColumn({
-		header: "Update",
+		header: '<div align="center">' + 'Write' + '</div>',
 		dataIndex: 'perm_update',
-		width: 80,
+		width: 60,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -746,9 +746,9 @@ Ext.onReady(function(){
 	});
 
 	var deleteColumn = new Ext.grid.CheckColumn({
-		header: "Delete",
+		header: '<div align="center">' + 'Delete' + '</div>',
 		dataIndex: 'perm_delete',
-		width: 80,
+		width: 60,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -761,9 +761,9 @@ Ext.onReady(function(){
 	});
 	
 	var printColumn = new Ext.grid.CheckColumn({
-		header: "Print/Excel",
+		header: '<div align="center">' + 'Print & Excel' + '</div>',
 		dataIndex: 'perm_print',
-		width: 80,
+		width: 60,
 		sortable: false,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -776,10 +776,10 @@ Ext.onReady(function(){
 	});
 	
 	var lainColumn = new Ext.grid.CheckColumn({
-		header: "Lain-lain",
+		header: '<div align="center">' + 'Lain-lain' + '</div>',
 		dataIndex: 'perm_harga',
-		width: 120,
-		sortable: false,
+		width: 60,
+		sortable: true,
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
@@ -806,12 +806,12 @@ Ext.onReady(function(){
 				cell.css = "readonlycell"; // Mengambil Value dari Class di dalam CSS
 				return value;
 				},
-			hidden: false
+			hidden: true
 		},
 		{
-			header: 'Nama Menu',
+			header: '<div align="center">' + 'Menu' + '</div>',
 			dataIndex: 'menu_title',
-			width: 200,
+			width: 160,
 			readOnly: true,
 			renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
@@ -924,7 +924,7 @@ Ext.onReady(function(){
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true, markDirty: false },
 		autoSave: true,
-	  	width: 590
+	  	width: 790
 	});
 	//permissionListEditorGrid.render();
 	/* End of DataStore */
@@ -936,7 +936,7 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 600,
+		width: 800,
 		items: [{
 			layout:'column',
 			border:false,

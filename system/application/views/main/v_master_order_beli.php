@@ -1725,7 +1725,18 @@ Ext.onReady(function(){
 			width: 100,	//150,
 			sortable: true,
 			readOnly: true,
-			<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+			
+			renderer: function(v, params, record){
+				subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
+				if (save_hargaField.getValue()=='1'){
+					return '<span> '+subtotal+'</span>';
+				}else{
+					return '<span>'+'NA'+'</span>';
+				}
+			}
+			
+			
+			/*<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
@@ -1736,7 +1747,7 @@ Ext.onReady(function(){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' +'NA'+ '</span>';
             }
-			<? } ?>
+			<? } ?>*/
 			
 		},
 		{
@@ -2532,9 +2543,15 @@ Ext.onReady(function(){
 		order_jumlahField.setValue(CurrencyFormatted(jumlah_item));
 		order_itemField.setValue(CurrencyFormatted(detail_order_beli_DataStore.getCount()));
 		<?php if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
-		order_totalField.setValue(CurrencyFormatted(total_harga));
+		
 		var diskon=convertToNumber(order_diskonField.getValue())*total_harga/100;
-		order_totalbayarField.setValue(CurrencyFormatted(total_harga+convertToNumber(order_biayaField.getValue())-convertToNumber(order_bayarField.getValue())-convertToNumber(order_cashbackField.getValue())-diskon));
+		if (save_hargaField.getValue()=='1'){
+			order_totalField.setValue(CurrencyFormatted(total_harga));
+			order_totalbayarField.setValue(CurrencyFormatted(total_harga+convertToNumber(order_biayaField.getValue())-convertToNumber(order_bayarField.getValue())-convertToNumber(order_cashbackField.getValue())-diskon));
+		}else{
+			order_totalField.setValue('NA');
+			order_totalbayarField.setValue('NA');
+		}
 		<?php } ?>
 	}
 
