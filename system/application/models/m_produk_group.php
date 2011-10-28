@@ -195,7 +195,7 @@ class M_produk_group extends Model{
 		//function for advanced search record
 		function produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end){
 			//full query
-			if($group_aktif=="")
+			if($group_aktif=="%Aktif%")
 				$group_aktif="Aktif";
 			$query="SELECT * FROM produk_group LEFT JOIN kategori ON group_kelompok=kategori_id";
 			
@@ -245,7 +245,7 @@ class M_produk_group extends Model{
 			};
 			if($group_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " group_aktif='".$group_aktif."'";
+				$query.= " group_aktif like '".$group_aktif."'";
 			};
 			if($group_dultah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
