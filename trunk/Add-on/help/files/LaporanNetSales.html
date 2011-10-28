@@ -80,26 +80,48 @@ span.rvts9 /* Font Hint Italic */
  font-style: italic;
  color: #a0a0a0;
 }
-span.rvts10 /* Font Style */
+span.rvts10
+{
+ font-weight: bold;
+}
+span.rvts11
+{
+ color: #0000ff;
+}
+span.rvts12
+{
+ font-size: 9pt;
+ font-weight: bold;
+ color: #000080;
+}
+span.rvts13
+{
+ color: #000080;
+}
+span.rvts14
+{
+ color: #800000;
+}
+span.rvts15 /* Font Style */
 {
  font-size: 16pt;
  font-family: 'Tahoma', 'Geneva', sans-serif;
  color: #ffffff;
 }
-span.rvts11 /* Font Style */
+span.rvts16 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'MS Sans Serif', 'Geneva', sans-serif;
  color: #808080;
 }
-span.rvts12 /* Font Style */
+span.rvts17 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
  font-style: italic;
  color: #c0c0c0;
 }
-a.rvts13, span.rvts13 /* Font Style */
+a.rvts18, span.rvts18 /* Font Style */
 {
  font-size: 10pt;
  font-family: 'Verdana', 'Geneva', sans-serif;
@@ -119,7 +141,11 @@ p,ul,ol /* Paragraph Style */
 {
  text-align: center;
 }
-.rvps2 /* Paragraph Style */
+.rvps2
+{
+ margin: 0px 0px 0px 48px;
+}
+.rvps3 /* Paragraph Style */
 {
  text-align: left;
  text-indent: 0px;
@@ -127,13 +153,13 @@ p,ul,ol /* Paragraph Style */
  padding: 5px 5px 2px 5px;
  margin: -5px -5px 18px -5px;
 }
-.rvps3 /* Paragraph Style */
+.rvps4 /* Paragraph Style */
 {
  text-align: center;
  background: #e4e4e4;
  margin: 20px 0px 0px 0px;
 }
-.rvps4 /* Paragraph Style */
+.rvps5 /* Paragraph Style */
 {
  border-color: #c0c0c0;
  border-style: solid;
@@ -153,8 +179,50 @@ p,ul,ol /* Paragraph Style */
 <script type="text/javascript" src="hnd.js"></script>
 <meta name="generator" content="HelpNDoc Freeware Edition"></head>
 <body>
-<h1 class=rvps2><span class=rvts0><span class=rvts10>Laporan Net Sales</span></span></h1>
+<h1 class=rvps3><span class=rvts0><span class=rvts15>Laporan Net Sales</span></span></h1>
+<p><span class=rvts10>Bagaimana Net Sales diperoleh?</span></p>
 <p><br></p>
-<p class=rvps3><span class=rvts11>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
-<p class=rvps4><span class=rvts12>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts13 href="http://www.helpndoc.com" target="_blank">Easily create HTML Help documents</a></p>
+<p><span class=rvts10>Medis: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan perawatan satuan medis (telah dikurangi diskon satuan) <span class=rvts12>(dapat dilihat di MIS: Laporan Penjualan Perawatan - Opsi Detail - Group By Perawatan Medis)</span></li>
+<li class=rvps2 style="margin-left: 0">DITAMBAHKAN Total pengambilan paket medis <span class=rvts12>(Laporan Pengambilan Paket - Opsi Detail - Group By Perawatan Medis)</span></li>
+<li class=rvps2 style="margin-left: 0">TIDAK dikurangi "Voucher / Promo"</li>
+</ul></ul></ul>
+<p><span class=rvts10>Non Medis: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan perawatan satuan non medis (telah dikurangi diskon satuan)<span class=rvts11> </span><span class=rvts12>(Laporan Penjualan Perawatan - Opsi Detail - Group By Perawatan Non Medis)</span></li>
+<li class=rvps2 style="margin-left: 0">DITAMBAHKAN Total pengambilan paket non medis <span class=rvts12>(Laporan Pengambilan Paket - Opsi Detail - Group By Perawatan Non Medis)</span></li>
+<li class=rvps2 style="margin-left: 0">DIKURANGI "Voucher / Promo" <span class=rvts11> </span><span class=rvts12>(Laporan Penjualan Perawatan - Opsi Rekap - Group By No Faktur, kolom "Vcr / Promo (Rp)")</span></li>
+</ul></ul></ul>
+<p><span class=rvts10>Surgery: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan perawatan satuan surgery (telah dikurangi diskon satuan)<span class=rvts11> </span><span class=rvts12>(Laporan Penjualan Perawatan - Opsi Detail - Group By Perawatan Surgery)</span></li>
+<li class=rvps2 style="margin-left: 0">(Surgery tidak ada penjualan paket)</li>
+<li class=rvps2 style="margin-left: 0">TIDAK dikurangi "Voucher / Promo"</li>
+</ul></ul></ul>
+<p><span class=rvts10>Anti Aging: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan perawatan satuan anti aging (telah dikurangi diskon satuan)<span class=rvts14> </span><span class=rvts12>(Laporan Penjualan Perawatan - Opsi Detail - Group By Perawatan Anti Aging)</span></li>
+<li class=rvps2 style="margin-left: 0">DITAMBAHKAN Total pengambilan paket anti aging<span class=rvts13> </span><span class=rvts12>(Laporan Pengambilan Paket - Opsi Detail - Group By Perawatan Anti Aging)</span></li>
+<li class=rvps2 style="margin-left: 0">TIDAK dikurangi "Voucher / Promo"</li>
+</ul></ul></ul>
+<p><span class=rvts10>Lain - lain: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan perawatan satuan selain medis, non medis, surgery, anti aging (telah dikurangi diskon satuan) <span class=rvts12>(Laporan Penjualan Perawatan - Opsi Detail - Group By Perawatan Lain-lain)</span></li>
+<li class=rvps2 style="margin-left: 0">DITAMBAHKAN Total pengambilan paket lain-lain (jika ada)<span class=rvts13> </span><span class=rvts12>(Laporan Pengambilan Paket - Opsi Detail - Group By Perawatan Lain-lain)</span></li>
+<li class=rvps2 style="margin-left: 0">TIDAK dikurangi "Voucher / Promo"</li>
+</ul></ul></ul>
+<p><span class=rvts10>Produk: </span></p>
+<ul style="text-indent: 0px; margin-left: 24px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;"><ul style="text-indent: 0px; margin-left: 48px; list-style-position: outside;">
+<li class=rvps2 style="margin-left: 0">Total penjualan produk (telah dikurangi diskon satuan) <span class=rvts12>(Laporan Penjualan Produk - Opsi Rekap - Group By No Faktur, kolom "Sub Total (Rp)" atau Opsi Detail - Group By No Faktur, kolom "Total (Rp)")</span></li>
+<li class=rvps2 style="margin-left: 0">DIKURANGI "Voucher / Promo"<span class=rvts12> (Laporan Penjualan Produk - Opsi Rekap - Group By No Faktur, kolom "Vcr / Promo (Rp)" atau Opsi Detail - Group By No Faktur, kolom "Total Voucher (Rp)")</span></li>
+<li class=rvps2 style="margin-left: 0">DIKURANGI Total retur penjualan produk <span class=rvts12>(Laporan Retur Penjualan Produk - Opsi Rekap - Group By No Faktur, kolom "Total Nilai (Rp)" atau Opsi Detail - Group By No Faktur, kolom "Total Nilai (Rp)")</span></li>
+</ul></ul></ul>
+<p><br></p>
+<p><span class=rvts10>Note</span>:</p>
+<p> &nbsp; &nbsp; &nbsp; &nbsp;Untuk semua "Voucher / Promo" perawatan (medis, non medis, surgery, anti aging, lain-lain) untuk saat ini dikurangkan pada Non Medis</p>
+<p><br></p>
+<p><br></p>
+<p class=rvps4><span class=rvts16>Copyright © 2010, IT Department of Miracle Aesthetic Clinic Group</span></p>
+<p class=rvps5><span class=rvts17>Created with the Freeware Edition of HelpNDoc: </span><a class=rvts18 href="http://www.helpndoc.com" target="_blank">Easily create HTML Help documents</a></p>
 </body></html>
