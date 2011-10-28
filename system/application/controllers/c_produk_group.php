@@ -224,9 +224,7 @@ class C_produk_group extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,
-															$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
-															$group_aktif ,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
+		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok, $group_aktif, $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
 		echo $result;
 	}
 
