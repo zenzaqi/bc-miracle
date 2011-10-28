@@ -196,7 +196,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Medis (-Vcr PR)' + '</div>',
+			header: '<div align="center">' + 'Non Medis (- Vcr PR)' + '</div>',
 			dataIndex: 'tns_nonmedis',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -265,7 +265,7 @@ Ext.onReady(function(){
 			width: 70			
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Medis (Rp)' + '</div>',
+			header: '<div align="center">' + 'Medis' + '</div>',
 			dataIndex: 'tns_medis_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -273,7 +273,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Med - Vcr M&NM (Rp)' + '</div>',
+			header: '<div align="center">' + 'Non Med (- Vcr PR)' + '</div>',
 			dataIndex: 'tns_nonmedis_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -281,7 +281,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Surgery (Rp)' + '</div>',
+			header: '<div align="center">' + 'Surgery' + '</div>',
 			dataIndex: 'tns_surgery_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -289,7 +289,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Anti Aging (Rp)' + '</div>',
+			header: '<div align="center">' + 'Anti Aging' + '</div>',
 			dataIndex: 'tns_antiaging_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -297,7 +297,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Produk (Rp)' + '</div>',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'tns_produk_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -305,7 +305,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Lain-lain (Rp)' + '</div>',
+			header: '<div align="center">' + 'Lain-lain' + '</div>',
 			dataIndex: 'tns_lainlain_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -313,7 +313,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Grand Total' + '</div>',
 			dataIndex: 'tns_grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
