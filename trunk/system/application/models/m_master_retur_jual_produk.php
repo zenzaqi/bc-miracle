@@ -291,22 +291,7 @@ class M_master_retur_jual_produk extends Model{
 		}
 	
 		function get_jual_produk_list($query,$start,$end){
-			$sql="SELECT IFNULL(SUM(detail_retur_jual_produk.drproduk_jumlah),0) as jum_produk_retur, 
-					SUM(detail_jual_produk.dproduk_jumlah) as jum_produk_jual, 
-					jproduk_id,jproduk_nobukti,
-					jproduk_tanggal,
-					cust_nama,
-					cust_alamat,
-					cust_id, 
-					jproduk_cashback as voucher 
-				FROM customer, master_jual_produk 
-					left join detail_jual_produk on (master_jual_produk.jproduk_id = detail_jual_produk.dproduk_master) 
-					left join master_retur_jual_produk on(master_jual_produk.jproduk_id = master_retur_jual_produk.rproduk_nobuktijual) 
-					left join detail_retur_jual_produk on(detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id ) 
-				WHERE jproduk_cust=cust_id 
-					AND jproduk_stat_dok='Tertutup' 
-					AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')
-				GROUP BY jproduk_id HAVING(IFNULL(sum(detail_retur_jual_produk.drproduk_jumlah),0) < sum(detail_jual_produk.dproduk_jumlah))";
+			$sql="SELECT jproduk_id,jproduk_nobukti,jproduk_tanggal,cust_nama,cust_alamat,cust_id, jproduk_cashback as voucher FROM master_jual_produk,customer WHERE jproduk_cust=cust_id AND jproduk_stat_dok='Tertutup' AND date_add(date_format(master_jual_produk.jproduk_tanggal,'%Y-%m-%d'),INTERVAL 7 DAY)>=date_format(now(),'%Y-%m-%d')";
 				
 			/*$sql="SELECT 
 					(select sum(dr.drproduk_jumlah)
