@@ -188,7 +188,7 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Medis (Rp)' + '</div>',
+			header: '<div align="center">' + 'Medis' + '</div>',
 			dataIndex: 'tns_medis',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -196,7 +196,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Med - Vcr M&NM (Rp)' + '</div>',
+			header: '<div align="center">' + 'Non Medis (-Vcr PR)' + '</div>',
 			dataIndex: 'tns_nonmedis',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -204,7 +204,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Surgery (Rp)' + '</div>',
+			header: '<div align="center">' + 'Surgery' + '</div>',
 			dataIndex: 'tns_surgery',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -212,7 +212,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Anti Aging (Rp)' + '</div>',
+			header: '<div align="center">' + 'Anti Aging' + '</div>',
 			dataIndex: 'tns_antiaging',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -220,7 +220,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Produk (Rp)' + '</div>',
+			header: '<div align="center">' + 'Produk' + '</div>',
 			dataIndex: 'tns_produk',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -228,7 +228,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Lain-lain (Rp)' + '</div>',
+			header: '<div align="center">' + 'Lain-lain' + '</div>',
 			dataIndex: 'tns_lainlain',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -236,7 +236,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total (Rp)' + '</div>',
+			header: '<div align="center">' + 'Total' + '</div>',
 			dataIndex: 'tns_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -248,7 +248,8 @@ Ext.onReady(function(){
 			dataIndex: 'tns_date_create',
 			width: 80,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i'),
-			sortable: true
+			sortable: true,
+			hidden: true
 		}
 	]);
 	
@@ -323,7 +324,8 @@ Ext.onReady(function(){
 			header: '',
 			dataIndex: '',
 			width: 80,
-			sortable: true
+			sortable: true,
+			hidden: true
 		}
 	]);
 	
@@ -705,18 +707,18 @@ Ext.onReady(function(){
 		monitorValid:true,
 		buttons: 
 		[{
-			text: 'Recalculate',
+			text: 'Quick Search',
 			formBind: true,
-			tooltip: 'Menghitung ulang Net Sales dari keseluruhan transaksi pada tanggal terpilih. Fungsi ini membutuhkan waktu cukup lama.',
-			handler: lap_netsales_recalc
+			tooltip: 'Menampilkan Net Sales dari perhitungan yang telah dilakukan sebelumnya. Fungsi ini tidak membutuhkan waktu lama.',
+			handler: lap_netsales_search
 		},{
 			xtype:'spacer',
 			width: 140
 		},{
 			text: 'Search',
 			formBind: true,
-			tooltip: 'Menampilkan Net Sales dari perhitungan yang telah dilakukan sebelumnya pada tanggal terpilih. Fungsi ini tidak membutuhkan waktu lama.',
-			handler: lap_netsales_search
+			tooltip: 'Menghitung Net Sales dari keseluruhan transaksi pada tanggal terpilih. Fungsi ini membutuhkan waktu cukup lama.',
+			handler: lap_netsales_recalc
 		},{
 			text: 'Close',
 			handler: function(){
