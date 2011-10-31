@@ -1253,7 +1253,8 @@ Ext.onReady(function(){
 			{name: 'drproduk_produk', type: 'int', mapping: 'drproduk_produk'}, 
 			{name: 'drproduk_satuan', type: 'int', mapping: 'drproduk_satuan'}, 
 			//{name: 'drproduk_satuan', type: 'string', mapping: 'satuan_nama'}, 
-			{name: 'drproduk_jumlah', type: 'int', mapping: 'drproduk_jumlah'}, 
+			{name: 'drproduk_jumlah', type: 'int', mapping: 'drproduk_jumlah'},
+			{name: 'sisa_produk', type: 'int', mapping: 'sisa_produk'},	
 			{name: 'drproduk_harga', type: 'float', mapping: 'drproduk_harga'} 
 	]);
 	//eof
@@ -1300,7 +1301,10 @@ Ext.onReady(function(){
 			//{name: 'drproduk_produk_satuan', type: 'string', mapping: 'satuan_kode'},
 			{name: 'drproduk_produk_satuan', type: 'int', mapping: 'satuan_id'},
 			{name: 'drproduk_produk_display', type: 'string', mapping: 'produk_nama'},
-			{name: 'drproduk_produk_jumlah', type: 'int', mapping: 'dproduk_jumlah'}
+			{name: 'drproduk_produk_jumlah', type: 'int', mapping: 'dproduk_jumlah'},
+			{name: 'drproduk_sisa_produk', type: 'int', mapping: 'sisa_produk'}
+			
+			
 		]),
 		sortInfo:{field: 'drproduk_produk_display', direction: "ASC"}
 	});
@@ -1379,9 +1383,10 @@ Ext.onReady(function(){
 		var j=cbo_drproduk_produkDataStore.findExact('drproduk_produk_value', combo_retur_produk.getValue(), 0);
 		if(cbo_drproduk_produkDataStore.getCount()){
 			combo_retur_satuan.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_satuan);
-			drproduk_jumlahField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_jumlah);
+			drproduk_jumlahField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_sisa_produk);
+			temp_drproduk_jumlahField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_sisa_produk);
 			drproduk_hargaField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_harga);
-			drproduk_subtotalField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_jumlah * cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_harga);
+			drproduk_subtotalField.setValue(cbo_drproduk_produkDataStore.getAt(j).data.drproduk_sisa_produk * cbo_drproduk_produkDataStore.getAt(j).data.drproduk_produk_harga);
 		}
 	});
 	
@@ -1396,6 +1401,15 @@ Ext.onReady(function(){
 			anchor: '95%'
 	});
 	
+	var temp_drproduk_jumlahField = new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		maxLength: 3,
+		readOnly : true,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
+	
 	var drproduk_jumlahField= new Ext.form.NumberField({
 		allowDecimals: false,
 		allowNegative: false,
@@ -1408,6 +1422,9 @@ Ext.onReady(function(){
 		var sub_total = 0;
 		sub_total = drproduk_jumlahField.getValue()*drproduk_hargaField.getValue();
 		drproduk_subtotalField.setValue(sub_total);
+		if(this.getRawValue()>temp_drproduk_jumlahField.getValue()){ ////////////ini ganti
+			this.setRawValue(temp_drproduk_jumlahField.getValue());
+		}
 	});
 	
 	var drproduk_hargaField= new Ext.form.NumberField({
@@ -1451,10 +1468,21 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			align: 'right',
-			dataIndex: 'drproduk_jumlah',
+			dataIndex: 'sisa_produk',
 			width: 60,
 			sortable: true,
-			editor: drproduk_jumlahField
+			editor: drproduk_jumlahField,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
+		{
+			header: '<div align="center">' + 'Jumlah2' + '</div>',
+			align: 'right',
+			dataIndex: 'sisa_produk',
+			width: 60,
+			sortable: true,
+			editor: temp_drproduk_jumlahField,
+			hidden : true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
@@ -1567,7 +1595,7 @@ Ext.onReady(function(){
 		var sum_subtotal_detail=0;
 		var voucher = rproduk_voucher_nilaiField.getValue();
 		for(i=0;i<detail_retur_jual_produk_DataStore.getCount();i++){
-			sum_subtotal_detail+=(detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_jumlah*detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_harga);
+			sum_subtotal_detail+=(detail_retur_jual_produk_DataStore.getAt(i).data.sisa_produk*detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_harga);
 			rproduk_kwitansi_nilaiField.setValue(sum_subtotal_detail-voucher);
 		}
 		
@@ -1585,7 +1613,7 @@ Ext.onReady(function(){
 				drproduk_master	: eval(rproduk_idField.getValue()), 
 				drproduk_produk	: detail_retur_jual_produk_record.data.drproduk_produk, 
 				drproduk_satuan	: detail_retur_jual_produk_record.data.drproduk_satuan, 
-				drproduk_jumlah	: detail_retur_jual_produk_record.data.drproduk_jumlah, 
+				drproduk_jumlah	: detail_retur_jual_produk_record.data.sisa_produk, 
 				drproduk_harga	: detail_retur_jual_produk_record.data.drproduk_harga 
 				
 				}
