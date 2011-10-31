@@ -34,18 +34,57 @@ class M_master_retur_jual_produk extends Model{
 		}
 		
 		//$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
-		$sql="SELECT produk_id
+		
+		/*$sql="select drproduk_id as produk_id
 				,produk_nama
-				,satuan_id
+				,drproduk_satuan as satuan_id
 				,satuan_kode
-				,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)) AS retur_produk_harga
+				,retur_produk_harga
 				,dproduk_jumlah
-				,master_jual_produk.jproduk_cashback as voucher
+				,voucher
+				,jumlah_sisa as sisa_produk
+			FROM vu_detail_retur_jual_produk
+			WHERE dproduk_master='$query'
+			group by produk_id";*/
+			
+		$sql_retur = "select rproduk_nobukti from master_retur_jual_produk where rproduk_nobuktijual = '$query' ";	
+		$rs_retur=$this->db->query($sql_retur);
+		$rs_rows_retur=$rs_retur->num_rows();
+			
+		if ($rs_rows_retur == null){
+			$sql="SELECT produk_id
+					,produk_nama
+					,satuan_id
+					,satuan_kode
+					,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)) AS retur_produk_harga
+					,dproduk_jumlah as sisa_produk
+					,master_jual_produk.jproduk_cashback as voucher
 			FROM detail_jual_produk
-			LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
-			LEFT JOIN produk ON(dproduk_produk=produk_id)
-			LEFT JOIN satuan ON(dproduk_satuan=satuan_id)
-			WHERE dproduk_master='$query'";
+				LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
+				LEFT JOIN produk ON(dproduk_produk=produk_id)
+				LEFT JOIN satuan ON(dproduk_satuan=satuan_id)
+			WHERE dproduk_master='$query' 
+			group by produk_id";
+		}else{
+			$sql="SELECT produk_id
+					,produk_nama
+					,satuan_id
+					,satuan_kode
+					,(produk_harga*((100-dproduk_diskon)/100)*((100-jproduk_diskon)/100)) AS retur_produk_harga
+					,dproduk_jumlah
+					,master_jual_produk.jproduk_cashback as voucher
+					,(dproduk_jumlah - ifnull(sum(detail_retur_jual_produk.drproduk_jumlah),0)) as sisa_produk
+				FROM detail_jual_produk
+				LEFT JOIN master_jual_produk ON(dproduk_master=jproduk_id)
+				LEFT JOIN produk ON(dproduk_produk=produk_id)
+				LEFT JOIN satuan ON(dproduk_satuan=satuan_id)
+				LEFT JOIN master_retur_jual_produk on (master_retur_jual_produk.rproduk_nobuktijual = master_jual_produk.jproduk_id)
+				LEFT JOIN detail_retur_jual_produk on (master_retur_jual_produk.rproduk_id = detail_retur_jual_produk.drproduk_master)
+				WHERE dproduk_master='$query' and detail_jual_produk.dproduk_produk = detail_retur_jual_produk.drproduk_produk
+				group by produk_id";
+		}
+			
+		
 		/*if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
