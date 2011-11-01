@@ -21,10 +21,14 @@ class M_neraca extends Model{
 		function neraca_search($buku_periode, $buku_tglawal, $buku_tglakhir, $buku_bulan, 
 								$buku_tahun, $buku_akun, $start,$end, $neraca_jenis){
 
-			if($neraca_jenis=='Aktiva')
-				$neraca_jenis=1;
-			else 
-				$neraca_jenis=2;
+			if($neraca_jenis=='Aktiva'){
+				$neraca_jenis	= 1;
+				$neraca_jenis3	= 1;
+			}
+			else {
+				$neraca_jenis	= 2;
+				$neraca_jenis3	= 3;
+			}
 				
 			//AKUN LEVEL 1
 			$sql="SELECT A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id, B.akun_nama as akun_parent
@@ -33,7 +37,7 @@ class M_neraca extends Model{
 					AND A.akun_parent_kode=B.akun_kode
 					AND A.akun_jenis='BS'
 					AND B.akun_level=2
-					AND A.akun_kode LIKE '__.".$neraca_jenis."%'
+					AND (A.akun_kode LIKE '__.".$neraca_jenis."%' OR A.akun_kode LIKE '__.".$neraca_jenis3."%')
 					ORDER by A.akun_kode ASC";
 
 			$master=$this->db->query($sql);
@@ -49,13 +53,25 @@ class M_neraca extends Model{
 			foreach($master->result() as $row){
 			
 				//s/d bulan ini
-				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
+				
+/*				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
 						FROM	buku_besar B, akun A
 						WHERE B.buku_akun=A.akun_id
 						AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
 						AND date_format(buku_tanggal,'%Y-%m-%d')>=date_format('".$_SESSION["periode_awal"]."','%Y-%m-%d')
 						AND date_format(buku_tanggal,'%Y-%m-%d')<=date_format('".$_SESSION["periode_akhir"]."','%Y-%m-%d')";
-
+*/
+				$sql = "SELECT 
+							A.akun_kode,
+							sum(B.buku_debet) as debet,
+							sum(B.buku_kredit) as kredit
+						FROM buku_besar B, akun A
+						WHERE 
+							B.buku_akun=A.akun_id
+							AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'
+							AND date_format(buku_tanggal,'%Y-%m-%d')>=date_format('".$_SESSION["periode_awal"]."','%Y-%m-%d')
+							AND date_format(buku_tanggal,'%Y-%m-%d')<=date_format('".$_SESSION["periode_akhir"]."','%Y-%m-%d')";
+					
 				if($buku_periode=="bulan"){
 					$sql.="	AND date_format(buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
 				}elseif($buku_periode=="tanggal"){
@@ -73,8 +89,8 @@ class M_neraca extends Model{
 							FROM	akun A
 							WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
 				
+				$rssaldo=$this->db->query($sqlsaldo);
 				
-				/*$rssaldo=$this->db->query($sqlsaldo);
 				if($rssaldo->num_rows()){
 					$rowsaldo=$rssaldo->row();
 					if($rowsaldo->akun_saldo=='Debet'){
@@ -82,8 +98,8 @@ class M_neraca extends Model{
 					}else{
 						$saldo_akhir= ($rowsaldo->kredit-$rowsaldo->debet);
 					}
-				}*/
-				$saldo_akhir=0;
+				}
+				//$saldo_akhir=0;
 				//$this->firephp->log($sqlsaldo.' '.$saldo_akhir.'<br/>');
 				//----->
 
@@ -115,7 +131,7 @@ class M_neraca extends Model{
 				}
 				
 				
-				//bulan ini
+				//bulan ini --> tidak dipakai
 				$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit
 						FROM	buku_besar B, akun A
 						WHERE B.buku_akun=A.akun_id
@@ -168,7 +184,7 @@ class M_neraca extends Model{
 				$saldo_buku=0;
 				
 				//SALDO AWAL
-				/*$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,
 									sum(A.akun_kredit) as kredit, 
 									A.akun_saldo
 							FROM	akun A
@@ -176,6 +192,7 @@ class M_neraca extends Model{
 							GROUP BY A.akun_saldo";
 				
 				$rssaldo=$this->db->query($sqlsaldo);
+				
 				if($rssaldo->num_rows()){
 					foreach($rssaldo->result() as $rs){
 							if($rs->akun_saldo=='Debet'){
@@ -188,7 +205,7 @@ class M_neraca extends Model{
 				
 				$saldo_akhir_periode=$saldo_akhir;
 				
-				$this->firephp->log($saldo_akhir);*/
+				//$this->firephp->log($saldo_akhir);
 				
 				$test="";
 				
@@ -299,7 +316,7 @@ class M_neraca extends Model{
 					
 					
 				}
-				
+
 				$data[$i]["neraca_akun"]=777;
 				$data[$i]["neraca_jenis"]='RUGI/LABA BERSIH';
 				$data[$i]["neraca_level"]=1;
@@ -310,9 +327,11 @@ class M_neraca extends Model{
 				$data[$i]["neraca_saldo_periode"]=$saldo_akhir_periode;
 							
 				//$this->firephp->log($test);
+				
 				$total_nilai+=$data[$i]["neraca_saldo"];
 				$total_nilai_periode+=$data[$i]["neraca_saldo_periode"];
-				$i++;
+				$i++;	
+				
 			}
 			
 			
