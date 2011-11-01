@@ -106,10 +106,13 @@ Ext.apply(Ext.form.VTypes, {
 /* declare function */		
 var rekap_penjualanDataStore;
 var sum_rekapDataStore;
+var sum_voucherDataStore;
 var rekap_penjualanColumnModel;
 var sum_rekapColumnModel;
+var sum_voucherColumnModel;
 var rekap_penjualanListEditorGrid;
 var rekap_penjualanListEditorGrid2;
+var rekap_penjualanListEditorGrid3;
 var rekap_penjualan_createForm;
 var rekap_penjualan_createWindow;
 var rekap_penjualan_searchForm;
@@ -233,6 +236,27 @@ Ext.onReady(function(){
 			{name: 'sum_tot_net', type: 'float', mapping: 'tot_net'},
 		]),
 		sortInfo:{field: 'sum_tot_net', direction: "DESC"}
+	});
+	/* End of Function */
+	
+	/* Function for Retrieve DataStore */
+	// rekap voucher
+	sum_voucherDataStore = new Ext.data.Store({
+		id: 'sum_voucherDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_report_rekap_penjualan&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */ 
+			{name: 'voucher', type: 'string', mapping: 'voucher'}
+		]),
+		sortInfo:{field: 'voucher', direction: "DESC"}
 	});
 	/* End of Function */
 
@@ -432,7 +456,102 @@ Ext.onReady(function(){
 	
 	sum_rekapColumnModel.defaultSortable= true;
 	
+	// rekap voucher
 	
+	sum_voucherColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 80,
+			sortable: true,
+			readOnly:true,
+	
+		}, 
+		{
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 210,//185,	//210,
+			sortable: true,
+			readOnly : true,
+		}, 
+		{
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 60,//185,	//210,
+			sortable: true,
+			readOnly : true,
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 60,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 60,	//55,
+			sortable: true
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Voucher (Rp)' + '</div>',
+			dataIndex: 'voucher',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		}
+	]);
+	
+	sum_voucherColumnModel.defaultSortable= true;
+	
+	// eof rekap voucher
+
 	/* Declare DataStore and  show datagrid list */
 	rekap_penjualanListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'rekap_penjualanListEditorGrid',
@@ -465,6 +584,27 @@ Ext.onReady(function(){
 	rekap_penjualanListEditorGrid.render();
 	/* End of DataStore */
 	
+	// rekap voucher 
+		rekap_penjualanListEditorGrid3 =  new Ext.grid.EditorGridPanel({
+		id: 'rekap_penjualanListEditorGrid3',
+		el: 'fp_rekap_penjualan3',
+		title: '',
+		autoHeight: true,
+		store: sum_voucherDataStore, // DataStore
+		cm: sum_voucherColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 1200, //940,//1200,	//970,
+	
+		/* Add Control on ToolBar */
+	
+	});
+	rekap_penjualanListEditorGrid3.render();
+	// eof rekap voucher
+	
 	rekap_penjualanListEditorGrid2 =  new Ext.grid.EditorGridPanel({
 		id: 'rekap_penjualanListEditorGrid2',
 		el: 'fp_rekap_penjualan2',
@@ -483,7 +623,6 @@ Ext.onReady(function(){
 	
 	});
 	rekap_penjualanListEditorGrid2.render();
-	
 
 	/* Create Context Menu */
 	rekap_penjualanContextMenu = new Ext.menu.Menu({
@@ -615,9 +754,19 @@ Ext.onReady(function(){
 			rekap_penjualan_group			:	group_rekap_Field_search,
 		};
 		
+		sum_voucherDataStore.baseParams = {
+			task: 'SEARCH3',
+			//variable here
+			rekap_penjualan_tglapp_start	: 	rekap_penjualan_tgl_start_app_search,
+			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
+			rekap_penjualan_jenis			:	jenis_rekap_Field_search,
+			rekap_penjualan_group			:	group_rekap_Field_search,
+		};
+		
 		// Cause the datastore to do another query : 
 		rekap_penjualanDataStore.reload({params: {start: 0, limit: pageS}});
 		sum_rekapDataStore.reload({params: {start: 0, limit: pageS}});
+		sum_voucherDataStore.reload({params: {start: 0, limit: pageS}});
 		
 		}
 		
@@ -987,6 +1136,7 @@ Ext.onReady(function(){
 	<div class="col">
 
         <div id="fp_rekap_penjualan"></div>
+		<div id="fp_rekap_penjualan3"></div>
 		<div id="fp_rekap_penjualan2"></div>
          <div id="fp_top_tindakan_medisdetail"></div>
 		 <div id="fp_top_dtindakan_jual_nonmedis"></div>

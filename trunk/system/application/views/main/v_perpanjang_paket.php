@@ -271,7 +271,7 @@ Ext.onReady(function(){
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
-			id: 'apaket_id'
+			id: 'dpaket_id'
 		},[
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
@@ -281,13 +281,15 @@ Ext.onReady(function(){
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'}, 
 			{name: 'paket_kode', type: 'string', mapping: 'paket_kode'},
+			{name: 'paket_nama_cust', type: 'string', mapping: 'paket_nama_cust'},
 			{name: 'paket_nama', type: 'string', mapping: 'paket_nama'},
 			{name: 'dpaket_id', type: 'int', mapping: 'dpaket_id'},
 			{name: 'dpaket_sisa_paket', type: 'int', mapping: 'dpaket_sisa_paket'},
 			{name: 'dpaket_jumlah', type: 'int', mapping: 'dpaket_jumlah'},
 			{name: 'dpaket_master', type: 'int', mapping: 'dpaket_master'},
 			{name: 'dpaket_paket', type: 'int', mapping: 'dpaket_paket'}
-		])
+		]),
+		sortInfo:{field: 'cust_no', direction: "ASC"}
 	});
 	//Template yang akan tampil di ComboBox
 	var perpanjang_listpaket_tpl = new Ext.XTemplate(
@@ -470,7 +472,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Paket yang akan di perpanjang',
 		store: cbo_perpanjang_paket_listpaketDataStore,
 		mode: 'remote',
-		displayField:'paket_nama',
+		displayField:'paket_nama_cust',
 		valueField: 'dpaket_id',
         typeAhead: false,
         loadingText: 'Searching...',
@@ -478,12 +480,14 @@ Ext.onReady(function(){
         hideTrigger:false,
         tpl: perpanjang_listpaket_tpl,
         itemSelector: 'div.search-item',
-		triggerAction: 'all',
+		triggerAction: 'query',
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		allowBlank: false,
 		disabled:false,
 		anchor: '90%'
+		
+		
 	});
 	
 	perpanjangan_hari_Field =  new Ext.form.NumberField({

@@ -24,6 +24,7 @@ class M_perpanjang_paket extends Model{
 					,jpaket_nobukti
 					,paket_kode
 					,paket_nama
+					,CONCAT((jpaket_nobukti),' - ',  paket_nama, ' (', cust_nama, ')') as paket_nama_cust
 					,dpaket_id
 					,dpaket_jumlah
 					,dpaket_sisa_paket
