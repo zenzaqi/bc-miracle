@@ -55,12 +55,17 @@ var master_mutasi_SelectedRow;
 var master_mutasi_ContextMenu;
 //for detail data
 var detail_mutasi_DataStore;
+var detail_mutasi_racikanDataStore;
 var detail_mutasiListEditorGrid;
+var detail_mutasi_produk_jadiListEditorGrid;
 var detail_mutasi_ColumnModel;
 var detail_mutasi_proxy;
 var detail_mutasi_writer;
 var detail_mutasi_reader;
 var editor_detail_mutasi;
+var editor_detail_mutasi_produk_jadi;
+var detail_mutasi_racikan_reader;
+var detail_mutasi_racikan_writer;
 
 //declare konstant
 var post2db = '';
@@ -68,6 +73,7 @@ var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
 var cetak=0;
+var group_id=<?=$_SESSION[SESSION_GROUPID];?>;
 
 /* declare variable here for Field*/
 var mutasi_idField;
@@ -76,12 +82,14 @@ var mutasi_asalField;
 var mutasi_tujuanField;
 var mutasi_tanggalField;
 var mutasi_keteranganField;
+var mutasi_kategori_barang_keluarField;
 var mutasi_idSearchField;
 var mutasi_asalSearchField;
 var mutasi_tujuanSearchField;
 var mutasi_tanggalSearchField;
 var mutasi_keteranganSearchField;
 var mutasi_statusSearchField;
+var mutasi_status_terima_SearchField;
 
 var mutasi_button_saveField;
 var mutasi_button_saveprintField;
@@ -150,6 +158,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				switch(result){
 						case 1:
+							cetak=0;
 							master_mutasi_create();
 						break;
 						default:
@@ -198,6 +207,13 @@ Ext.onReady(function(){
 		var mutasi_tanggal_create_date=""; 
 		var mutasi_keterangan_create=null;
 		var mutasi_status_create=null;
+		var mutasi_status_terima_create=null;
+		var mutasi_spb_create=null;
+		var racikan_produk_create = null;
+		var racikan_satuan_create = null;
+		var racikan_jumlah_create = null;
+		var racikan_dmracikan_id_create = null;
+		var mutasi_kategori_barang_keluar_create = null;
 
 		mutasi_id_create_pk=get_pk_id();
 		if(mutasi_asalField.getValue()!== null){mutasi_asal_create = mutasi_asalField.getValue();} 
@@ -205,8 +221,55 @@ Ext.onReady(function(){
 		if(mutasi_tujuanField.getValue()!== null){mutasi_tujuan_create = mutasi_tujuanField.getValue();} 
 		if(mutasi_tanggalField.getValue()!== ""){mutasi_tanggal_create_date = mutasi_tanggalField.getValue().format('Y-m-d');} 
 		if(mutasi_keteranganField.getValue()!== null){mutasi_keterangan_create = mutasi_keteranganField.getValue();} 
-		if(mutasi_statusField.getValue()!== null){mutasi_status_create = mutasi_statusField.getValue();} 
+		if(mutasi_statusField.getValue()!== null){mutasi_status_create = mutasi_statusField.getValue();}
+		if(mutasi_kategori_barang_keluarField.getValue()!== null){mutasi_kategori_barang_keluar_create = mutasi_kategori_barang_keluarField.getValue();} 
 
+		if(mutasi_status_terimaField.getValue()!== null){mutasi_status_terima_create = mutasi_status_terimaField.getValue();}
+		
+		if(mutasi_spbField.getValue()!== null){mutasi_spb_create = mutasi_spbField.getValue();}
+		if(mutasi_produkjadiField.getValue()!== null){racikan_produk_create = mutasi_produkjadiField.getValue();} 
+		if(mutasi_produkjadi_jumlahField.getValue()!== null){racikan_jumlah_create = mutasi_produkjadi_jumlahField.getValue();} 
+		if(mutasi_satuan_produkjadiField.getValue()!== null){racikan_satuan_create = mutasi_satuan_produkjadiField.getValue();} 
+		if(mutasi_norefField.getValue()!== null){racikan_dmracikan_id_create = mutasi_norefField.getValue();} 
+		
+		
+		/*Insert detail produk Jadi */
+		var dmracikan_id = [];
+        var dmracikan_produk = [];
+        var dmracikan_satuan = [];
+        var dmracikan_jumlah = [];
+      
+             var dcount = detail_mutasi_produkJadi_DataStore.getCount() - 1;
+                    
+                    if(detail_mutasi_produkJadi_DataStore.getCount()>0){
+                        for(i=0; i<detail_mutasi_produkJadi_DataStore.getCount();i++){
+                            if((/^\d+$/.test(detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_produk))
+                               && detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_produk!==undefined
+                               && detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_produk!==''
+                               && detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_produk!==0){
+                                
+                                dmracikan_id.push(detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_id);
+                                
+                                dmracikan_produk.push(detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_produk);
+								
+								dmracikan_satuan.push(detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_satuan);
+                                
+                                if((detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_jumlah==undefined) || (detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_jumlah=='') || (detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_jumlah==0)){
+                                    dmracikan_jumlah.push(1);
+                                }else{
+                                    dmracikan_jumlah.push(detail_mutasi_produkJadi_DataStore.getAt(i).data.dmracikan_jumlah);
+                                }
+  
+                            }
+                        }
+                    }
+		
+		var encoded_array_dmracikan_id = Ext.encode(dmracikan_id);
+		var encoded_array_dmracikan_produk = Ext.encode(dmracikan_produk);
+		var encoded_array_dmracikan_satuan = Ext.encode(dmracikan_satuan);
+		var encoded_array_dmracikan_jumlah = Ext.encode(dmracikan_jumlah);
+
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
@@ -219,6 +282,24 @@ Ext.onReady(function(){
 				mutasi_tanggal		: mutasi_tanggal_create_date, 
 				mutasi_keterangan	: mutasi_keterangan_create,
 				mutasi_status		: mutasi_status_create,
+				mutasi_status_terima: mutasi_status_terima_create,
+				mutasi_spb			: mutasi_spb_create,
+				mutasi_barang_keluar: mutasi_barang_keluarField.getValue(),
+				mutasi_racikan	    : mutasi_barang_racikan_title.getValue(),
+				racikan_keluar		: mutasi_barang_racikan_keluarField.getValue(),
+				racikan_masuk		: mutasi_barang_racikan_masukField.getValue(),
+				mutasi_kategori_barang_keluar : mutasi_kategori_barang_keluar_create,
+				
+				/*Insert detail produk jadi */
+				dmracikan_id		: encoded_array_dmracikan_id,
+				dmracikan_mutasi_id	: mutasi_id_create_pk, 
+				dmracikan_produk	: encoded_array_dmracikan_produk, 
+				dmracikan_satuan	: encoded_array_dmracikan_satuan, 
+				dmracikan_jumlah	: encoded_array_dmracikan_jumlah,
+				//racikan_produk		: racikan_produk_create,
+				//racikan_jumlah		: racikan_jumlah_create,
+				//racikan_satuan		: racikan_satuan_create,
+				racikan_dmracikan_id: racikan_dmracikan_id_create,
 				cetak				: cetak
 			}, 
 			success: function(response){             
@@ -304,14 +385,51 @@ Ext.onReady(function(){
 		mutasi_tanggalField.setValue(today);
 		mutasi_keteranganField.reset();
 		mutasi_keteranganField.setValue(null);
+		mutasi_kategori_barang_keluarField.reset();
+		mutasi_kategori_barang_keluarField.setValue(null);
 		mutasi_statusField.reset();
 		mutasi_statusField.setValue('Terbuka');
+		mutasi_status_terimaField.reset();
+		mutasi_status_terimaField.setValue(null);
+		mutasi_spbField.reset();
+		mutasi_spbField.setValue('(Manual Input)');
+		dmracikan_jenisField.reset();
+		dmracikan_jenisField.setValue(null);
+		mutasi_barang_racikan_title.reset();
+		mutasi_barang_racikan_title.setValue(false);
+		mutasi_racikanFieldSet.setDisabled(true);
 		
+		mutasi_produkjadiField.reset();
+		mutasi_produkjadiField.setValue(null);
+		mutasi_produkjadi_jumlahField.reset();
+		mutasi_produkjadi_jumlahField.setValue(null);
+		mutasi_satuan_produkjadiField.reset();
+		mutasi_satuan_produkjadiField.setValue(null);
+		mutasi_norefField.reset();
+		mutasi_norefField.setValue(null);
+		mutasi_barang_keluarField.reset();
+		mutasi_barang_keluarField.setValue(null);
+		
+		detail_mutasi_DataStore.removeAll();
+		mutasi_totaljumlahField.reset();
+		mutasi_totaljumlahField.setValue(null);
+		produk_jadi_totaljumlahField.reset();
+		produk_jadi_totaljumlahField.setValue(null);
+		mutasi_itemjumlahField.reset();
+		mutasi_itemjumlahField.setValue(null);
+		produk_jadi_itemjumlahField.reset();
+		produk_jadi_itemjumlahField.setValue(null);
+		
+		/*
 		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
-		cbo_mutasi_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_satuanDataStore.setBaseParam('master_id',-1);
 		cbo_mutasi_satuanDataStore.load();
 		
-		cbo_mutasi_produkDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mracikan_satuanDataStore.setBaseParam('task','detail');
+		cbo_mracikan_satuanDataStore.setBaseParam('master_id',-1);
+		cbo_mracikan_satuanDataStore.load();
+		
+		cbo_mutasi_produkDataStore.setBaseParam('master_id',-1);
 		cbo_mutasi_produkDataStore.setBaseParam('task','detail');
 		cbo_mutasi_produkDataStore.load({
 			callback: function(r,opt,success){
@@ -321,7 +439,37 @@ Ext.onReady(function(){
 				}
 			}
 		});
-		master_mutasi_createForm.mmutasi_savePrint.enable();
+	*/
+		cbo_mutasi_satuanDataStore.setBaseParam('task','all');
+		cbo_mutasi_satuanDataStore.load();
+		
+		mutasi_button_saveprintField.setDisabled(false);
+		mutasi_button_saveField.setDisabled(false);
+		
+		mutasi_barang_racikan_title.setDisabled(false);
+		mutasi_asalField.setDisabled(false);
+		mutasi_tujuanField.setDisabled(false);
+		mutasi_noField.setDisabled(false);
+		mutasi_tanggalField.setDisabled(false);
+		mutasi_keteranganField.setDisabled(false);
+		mutasi_kategori_barang_keluarField.setDisabled(true);
+		mutasi_statusField.setDisabled(false);
+		detail_mutasiListEditorGrid.setDisabled(false);
+		detail_mutasiListEditorGrid.dmutasi_add.enable();
+		detail_mutasiListEditorGrid.dmutasi_delete.enable();
+		combo_mutasi_produk.setDisabled(false);
+		combo_mutasi_satuan.setDisabled(false);
+		djumlah_mutasiField.setDisabled(false);
+		mutasi_spbField.setDisabled(false);
+		mutasi_barang_keluarField.setDisabled(false);
+		mutasi_status_terimaField.setDisabled(true);
+		
+		detail_mutasi_produk_jadiListEditorGrid.setDisabled(true);
+		
+		//detail_mutasi_produk_jadiListEditorGrid.dmutasi_add_produk_jadi.disable();
+		//detail_mutasi_produk_jadiListEditorGrid.dmutasi_delete_produk_jadi.disable();
+		//detail_mutasi_produk_jadiListEditorGrid.setDisabled(true);
+		//master_mutasi_createForm.mmutasi_savePrint.enable();
 	}
  	/* End of Function */
   
@@ -334,6 +482,29 @@ Ext.onReady(function(){
 		mutasi_tanggalField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tanggal'));
 		mutasi_keteranganField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_keterangan'));
 		mutasi_statusField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status'));
+		mutasi_status_terimaField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status_terima'));
+		mutasi_barang_keluarField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_barang_keluar'));
+		mutasi_spbField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_spb'));
+		mutasi_barang_racikan_title.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan'));
+		dmracikan_jenisField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('dmracikan_jenis'));
+		mutasi_kategori_barang_keluarField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('kbk_nama'));
+		
+		mutasi_barang_racikan_title.setDisabled(true);
+		
+		/*Jika mutasi_racikan nilainya True, maka Racikan Field Set akan di disabled, sehingga tidak bisa di Edit lagi..*/
+		if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==true)
+		{
+			mutasi_racikanFieldSet.setDisabled(true);
+			mutasi_barang_racikan_title.setDisabled(true);
+		}
+		else if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==false)
+		{
+		mutasi_barang_racikan_title.reset();
+		mutasi_barang_racikan_title.setValue(false);
+		mutasi_racikanFieldSet.setDisabled(true);
+		mutasi_barang_racikan_title.setDisabled(false);
+		
+		}
 		
 		//LOAD OF DETAIL
 		cbo_mutasi_satuanDataStore.setBaseParam('task','detail');
@@ -344,8 +515,17 @@ Ext.onReady(function(){
 		cbo_mutasi_produkDataStore.setBaseParam('task','detail');
 		cbo_mutasi_produkDataStore.setBaseParam('gudang',master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id'));
 		
-		mutasi_button_saveField.setDisabled(true);
-		mutasi_button_saveprintField.setDisabled(true);
+		cbo_mracikan_satuanDataStore.setBaseParam('task','detail');
+		cbo_mracikan_satuanDataStore.setBaseParam('master_id',get_pk_id());
+		cbo_mracikan_satuanDataStore.load();
+		
+		cbo_mutasi_produkjadi_DataSore.setBaseParam('master_id',get_pk_id());
+		cbo_mutasi_produkjadi_DataSore.setBaseParam('task','detail');
+		//cbo_mutasi_produkjadi_DataSore.setBaseParam('gudang',master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id'));
+		cbo_mutasi_produkjadi_DataSore.load();
+		
+		//mutasi_button_saveField.setDisabled(true);
+		//mutasi_button_saveprintField.setDisabled(true);
 
 		cbo_mutasi_produkDataStore.load({
 			callback: function(r,opt,success){
@@ -355,8 +535,67 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								Ext.MessageBox.hide();
-								mutasi_button_saveField.setDisabled(false);
-								mutasi_button_saveprintField.setDisabled(false);
+								
+								/*Jika dmracikan_jenis = 0 , itu tandanya racikan Keluar, maka harus mengload detail_mutasi_produkJadiDataStore, jika dmracikan_jenis =1 , maka tidak perlu load*/
+								if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('dmracikan_jenis')==0 && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==true)
+								{
+									detail_mutasi_produkJadi_DataStore.setBaseParam('master_id',get_pk_id());
+									detail_mutasi_produkJadi_DataStore.setBaseParam('task','master_id');
+									detail_mutasi_produkJadi_DataStore.load({
+									params : { master_id: get_pk_id()}
+									//callback: function(opts, success, response)  {
+									/*if (success) {
+									if(detail_mutasi_racikanDataStore.getCount()){
+										dmracikan_record=detail_mutasi_racikanDataStore.getAt(0).data;
+										mutasi_produkjadi_jumlahField.setValue(dmracikan_record.dmracikan_jumlah);
+										mutasi_produkjadiField.setValue(dmracikan_record.produk_nama);
+										mutasi_satuan_produkjadiField.setValue(dmracikan_record.satuan_nama);
+										mutasi_norefField.setValue(dmracikan_record.mutasi_no);
+										//Melakukan pengecekan, jika field Produk Jadi nilainya bukan 0 , maka dipastikan bahwa itu adalah barang Racikan Keluar 
+										if(mutasi_produkjadiField.getValue()!=0 && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==true)
+										{
+										mutasi_barang_racikan_keluarField.setValue(true);
+										mutasi_tujuanField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan'));
+										
+										}
+										//Jika Produk Jadi nya 0, maka dipastikan itu adalah Barang Racikan Masuk 
+										else if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==true && mutasi_produkjadiField.getValue()==0)
+										{
+										mutasi_produkjadi_jumlahField.setValue(null);
+										mutasi_barang_racikan_masukField.setValue(true);
+										mutasi_asalField.setValue(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal'));
+										}
+									}
+									
+									}
+									*/
+									//}
+								});
+								mutasi_barang_racikan_keluarField.setValue(true);
+								mutasi_asalField.setValue('Gudang Retail');
+								
+								}
+								else if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('dmracikan_jenis')==1 && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_racikan')==true)
+								{
+									detail_mutasi_produkJadi_DataStore.setBaseParam('no_ref',get_pk_id());
+									detail_mutasi_produkJadi_DataStore.setBaseParam('task','no_ref');
+									detail_mutasi_produkJadi_DataStore.load({
+										params : { no_ref: get_pk_id()},
+										callback: function(opts, success, response){
+											if (success) {
+												if(detail_mutasi_produkJadi_DataStore.getCount()){
+													dmracikan_record=detail_mutasi_produkJadi_DataStore.getAt(0).data;
+													mutasi_norefField.setValue(dmracikan_record.mutasi_no);
+												}
+											}
+										}
+					
+								});
+									
+								mutasi_barang_racikan_masukField.setValue(true);
+								
+								}	
+													
 							}
 						}
 					});
@@ -365,16 +604,47 @@ Ext.onReady(function(){
 		});
 		// END OF DETAIL
 		
-		
 		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Terbuka"){
-			mutasi_idField.setDisabled(false);
-			mutasi_noField.setDisabled(false);
-			mutasi_asalField.setDisabled(false);
-			mutasi_tujuanField.setDisabled(false);
-			mutasi_tanggalField.setDisabled(false);
-			mutasi_keteranganField.setDisabled(false);
-			mutasi_statusField.setDisabled(false);
-			master_mutasi_createForm.mmutasi_savePrint.enable();
+			if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_barang_keluar')==true)
+			{
+				mutasi_barang_keluarField.setDisabled(true);
+				mutasi_tujuanField.setDisabled(true);
+				mutasi_idField.setDisabled(false);
+				mutasi_noField.setDisabled(false);
+				mutasi_asalField.setDisabled(false);
+				mutasi_tanggalField.setDisabled(false);
+				mutasi_keteranganField.setDisabled(false);
+				mutasi_kategori_barang_keluarField.setDisabled(false);
+				mutasi_statusField.setDisabled(false);
+				mutasi_button_saveprintField.setDisabled(false);
+				mutasi_button_saveField.setDisabled(false);
+				//detail_mutasiListEditorGrid.setDisabled(false);
+				detail_mutasiListEditorGrid.dmutasi_add.enable();
+				detail_mutasiListEditorGrid.dmutasi_delete.enable();
+				combo_mutasi_produk.setDisabled(false);
+				combo_mutasi_satuan.setDisabled(false);
+				djumlah_mutasiField.setDisabled(false);
+			}
+			else
+			{
+				mutasi_idField.setDisabled(false);
+				mutasi_noField.setDisabled(false);
+				mutasi_asalField.setDisabled(false);
+				//mutasi_tujuanField.setDisabled(false);
+				mutasi_tanggalField.setDisabled(false);
+				mutasi_keteranganField.setDisabled(false);
+				mutasi_kategori_barang_keluarField.setDisabled(false);
+				mutasi_statusField.setDisabled(false);
+				mutasi_button_saveprintField.setDisabled(false);
+				mutasi_button_saveField.setDisabled(false);
+				//detail_mutasiListEditorGrid.setDisabled(false);
+				detail_mutasiListEditorGrid.dmutasi_add.enable();
+				detail_mutasiListEditorGrid.dmutasi_delete.enable();
+				combo_mutasi_produk.setDisabled(false);
+				combo_mutasi_satuan.setDisabled(false);
+				djumlah_mutasiField.setDisabled(false);
+			}
+			//master_mutasi_createForm.mmutasi_savePrint.enable();
 		}
 		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tertutup"){
 			mutasi_idField.setDisabled(true);
@@ -383,13 +653,67 @@ Ext.onReady(function(){
 			mutasi_tujuanField.setDisabled(true);
 			mutasi_tanggalField.setDisabled(true);
 			mutasi_keteranganField.setDisabled(true);
+			mutasi_kategori_barang_keluarField.setDisabled(true);
 			mutasi_statusField.setDisabled(false);
+			//detail_mutasiListEditorGrid.setDisabled(true);
+			combo_mutasi_produk.setDisabled(true);
+			combo_mutasi_satuan.setDisabled(true);
+			djumlah_mutasiField.setDisabled(true);
+			detail_mutasiListEditorGrid.dmutasi_add.disable();
+			detail_mutasiListEditorGrid.dmutasi_delete.disable();
+	
+			//detail_mutasiListEditorGrid.setReadOnly(true);
+			mutasi_button_saveprintField.setDisabled(true);
+			mutasi_button_saveField.setDisabled(false);
+			mutasi_spbField.setDisabled(true);
+			mutasi_barang_keluarField.setDisabled(true);
+			mutasi_status_terimaField.setDisabled(true);
 			if(cetak==1){
 					//jproduk_cetak(jproduk_id_for_cetak);
 				cetak=0;
 			}
 			
 		}
+		/*Status Tunggu utk Kasir, jika status Tunggu dan di klik Edit dan yg login adalah kasir/apoteker maka Stat Dok akan di disable, dan status_terima akan di enable */
+		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tunggu"){
+			mutasi_idField.setDisabled(true);
+			mutasi_noField.setDisabled(true);
+			mutasi_asalField.setDisabled(true);
+			mutasi_tujuanField.setDisabled(true);
+			mutasi_tanggalField.setDisabled(true);
+			mutasi_keteranganField.setDisabled(true);
+			mutasi_kategori_barang_keluarField.setDisabled(true);
+			//mutasi_statusField.setDisabled(true);
+			//detail_mutasiListEditorGrid.setDisabled(true);
+			detail_mutasiListEditorGrid.dmutasi_add.disable();
+			detail_mutasiListEditorGrid.dmutasi_delete.disable();
+			combo_mutasi_produk.setDisabled(true);
+			combo_mutasi_satuan.setDisabled(true);
+			djumlah_mutasiField.setDisabled(true);
+			mutasi_button_saveprintField.setDisabled(true);
+			mutasi_button_saveField.setDisabled(false);
+			mutasi_spbField.setDisabled(true);
+			mutasi_barang_keluarField.setDisabled(true);
+			if(cetak==1){
+				cetak=0;
+			}
+			/*Jika Gudang Tujuan sama dengan user login yg bersangkutan, maka Stat Dok akan di disable, sehingga hanya bisa meengconfirm status terima */
+		if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Retail" && group_id == 4) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Besar" && group_id == 23) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Suster" && group_id == 12) ){
+			mutasi_status_terimaField.setDisabled(false);
+			mutasi_statusField.setDisabled(true);
+		}
+			/*Jika Gudang Asal sama dgn user login yg bersangkutan, maka stat terima akan di disable, sehingga harus menunggu user dr gudang tujuan utk mengconfirm */
+		else if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Retail" && group_id == 4) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Besar" && group_id == 23) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Suster" && group_id == 12) ){
+			mutasi_status_terimaField.setDisabled(true);
+			mutasi_statusField.setDisabled(false);
+		}
+		else
+		{
+			mutasi_status_terimaField.setDisabled(false);
+			mutasi_statusField.setDisabled(false);
+		}
+		}
+		
 		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Batal"){
 			mutasi_idField.setDisabled(true);
 			mutasi_noField.setDisabled(true);
@@ -397,17 +721,29 @@ Ext.onReady(function(){
 			mutasi_tujuanField.setDisabled(true);
 			mutasi_tanggalField.setDisabled(true);
 			mutasi_keteranganField.setDisabled(true);
+			mutasi_kategori_barang_keluarField.setDisabled(true);
 			mutasi_statusField.setDisabled(true);
-			master_mutasi_createForm.mmutasi_savePrint.disable();
+			mutasi_status_terimaField.setDisabled(true);
+			mutasi_button_saveprintField.setDisabled(true);
+			mutasi_button_saveField.setDisabled(true);
+			//detail_mutasiListEditorGrid.setDisabled(true);
+			detail_mutasiListEditorGrid.dmutasi_add.disable();
+			detail_mutasiListEditorGrid.dmutasi_delete.disable();
+			combo_mutasi_produk.setDisabled(true);
+			combo_mutasi_satuan.setDisabled(true);
+			djumlah_mutasiField.setDisabled(true);
+			mutasi_spbField.setDisabled(true);
+			mutasi_barang_keluarField.setDisabled(true);
+			
 		}
 		
 		
-		mutasi_statusField.on("select",function(){
+	mutasi_statusField.on("select",function(){
 		var status_awal = master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status');
 		if(status_awal =='Terbuka' && mutasi_statusField.getValue()=='Tertutup')
 		{
 		Ext.MessageBox.show({
-			msg: 'Dokumen tidak bisa ditutup. Gunakan Save & Print untuk menutup dokumen',
+			msg: 'Dokumen hanya bisa Tertutup jika Status Terima menjadi Diterima',
 			buttons: Ext.MessageBox.OK,
 			animEl: 'save',
 			icon: Ext.MessageBox.WARNING
@@ -447,10 +783,49 @@ Ext.onReady(function(){
 			master_mutasi_createForm.tbeli_savePrint.enable();
 			<?php } ?>
         }
+		/* Peringatan utk merubah dari terbuka menjadi Tunggu*/
+		else if(status_awal =='Terbuka' && mutasi_statusField.getValue()=='Tunggu')
+		{
+		Ext.MessageBox.show({
+			msg: 'Lakukan Save and Print untuk merubah status menjadi Tunggu',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Terbuka');
+		}
+		else if(status_awal =='Tertutup' && mutasi_statusField.getValue()=='Tunggu')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tertutup tidak dapat diganti menjadi Tunggu',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Tertutup');
+		}
+		else if(status_awal =='Tunggu' && mutasi_statusField.getValue()=='Tertutup')
+		{
+		Ext.MessageBox.show({
+			msg: 'Dokumen hanya bisa Tertutup jika Status Terima menjadi Diterima (sudah diterima oleh user yang bersangkutan)',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Tunggu');
+		}
+		else if(status_awal =='Tunggu' && mutasi_statusField.getValue()=='Terbuka')
+		{
+		Ext.MessageBox.show({
+			msg: 'Status yang sudah Tunggu tidak dapat dikembalikan menjadi Terbuka',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		mutasi_statusField.setValue('Tunggu');
+		}
 		
 		});	
-		
-		
 		
 	}
 	/* End setValue to EDIT*/
@@ -460,7 +835,7 @@ Ext.onReady(function(){
 	{
 		mutasi_statusField.setValue('Batal');
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_MUTASI'))){ ?>
-        master_mutasi_createForm.mmutasi_savePrint.disable();
+       // master_mutasi_createForm.mmutasi_savePrint.disable();
 		<?php } ?>
 	}  
 	else
@@ -505,8 +880,28 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
   
+	/*Function  for Print Only*/
+	function mb_print_only(){
+		if(mutasi_idField.getValue()==''){
+			Ext.MessageBox.show({
+			msg: 'Faktur MB tidak dapat dicetak, karena data kosong',
+			buttons: Ext.MessageBox.OK,
+			animEl: 'save',
+			icon: Ext.MessageBox.WARNING
+		   });
+		}
+		else{
+			cetak=1;
+			master_mutasi_create('print');
+		}
+
+		//jproduk_btn_cancel();
+	}
+  
+  
 	/* Function for Update Confirm */
 	function master_mutasi_confirm_update(){
+		master_mutasi_reset_form();
 		/* only one record is selected here */
 		if(master_mutasiListEditorGrid.selModel.getCount() == 1) {
 			post2db='UPDATE';
@@ -591,6 +986,12 @@ Ext.onReady(function(){
 		},[
 			{name: 'mutasi_id', type: 'int', mapping: 'mutasi_id'}, 
 			{name: 'mutasi_no', type: 'string', mapping: 'mutasi_no'}, 
+			{name: 'mutasi_spb', type: 'string', mapping: 'mutasi_spb'}, 
+			{name: 'mutasi_barang_keluar', type: 'int', mapping: 'mutasi_barang_keluar'},
+			{name: 'mutasi_kategori_barang_keluar', type: 'int', mapping: 'mutasi_kategori_barang_keluar'},
+			{name: 'kbk_nama', type: 'string', mapping: 'kbk_nama'}, 
+			{name: 'mutasi_racikan', type: 'int', mapping: 'mutasi_racikan'}, 
+			{name: 'dmracikan_jenis', type: 'int', mapping: 'dmracikan_jenis'}, 
 			{name: 'mutasi_asal', type: 'string', mapping: 'gudang_asal_nama'}, 
 			{name: 'mutasi_asal_id', type: 'int', mapping: 'mutasi_asal'}, 
 			{name: 'mutasi_tujuan', type: 'string', mapping: 'gudang_tujuan_nama'},
@@ -599,6 +1000,7 @@ Ext.onReady(function(){
 			{name: 'mutasi_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'mutasi_tanggal'}, 
 			{name: 'mutasi_keterangan', type: 'string', mapping: 'mutasi_keterangan'}, 
 			{name: 'mutasi_status', type: 'string', mapping: 'mutasi_status'}, 
+			{name: 'mutasi_status_terima', type: 'string', mapping: 'mutasi_status_terima'}, 
 			{name: 'mutasi_creator', type: 'string', mapping: 'mutasi_creator'}, 
 			{name: 'mutasi_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'mutasi_date_create'}, 
 			{name: 'mutasi_update', type: 'string', mapping: 'mutasi_update'}, 
@@ -609,7 +1011,30 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
-	/* Function for Retrieve Supplier DataStore */
+	/* Data store utk auto insert ke Detail Item Mutasi melalui No Ref*/
+	var cbo_mutasi_noref_detail_DataStore=new Ext.data.Store({
+		id: 'cbo_mutasi_noref_detail_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_detail_item_by_noref',
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"},
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+			{name: 'dmracikan_id', type: 'int', mapping: 'dmracikan_id'},
+			{name: 'dmutasi_produk', type: 'int', mapping: 'dmracikan_produk'},
+			{name: 'dmutasi_satuan', type: 'int', mapping: 'dmracikan_satuan'},
+			{name: 'dmutasi_jumlah', type: 'float', mapping: 'dmracikan_jumlah'}
+			
+		]),
+		sortInfo:{field: 'dmutasi_produk', direction: "ASC"}
+	});
+	
+	
+	/* Function for Retrieve Gudang Awal DataStore, gudang ini hanya menampilkan list gudang pada user yang bersangkutan */
 	cbo_mutasi_gudang_DataSore = new Ext.data.Store({
 		id: 'cbo_mutasi_gudang_DataSore',
 		proxy: new Ext.data.HttpProxy({
@@ -627,14 +1052,148 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'mutasi_gudang_nama', direction: "ASC"}
 	});
+	
+	/* Function for Retrieve Kategori Barang Keluar DataStore*/
+	cbo_kategoribarangkeluar_DataSore = new Ext.data.Store({
+		id: 'cbo_kategoribarangkeluar_DataSore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_kategori_barang_keluar_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'kbk_id'
+		},[
+			{name: 'kbk_id', type: 'int', mapping: 'kbk_id'},
+			{name: 'kbk_nama', type: 'string', mapping: 'kbk_nama'}
+		]),
+		sortInfo:{field: 'kbk_nama', direction: "ASC"}
+	});
+	
+	/* Function for Store utk Gudang Tujuan, dimana ini menampilkan semua Gudang */
+	cbo_mutasi_gudang_all_DataStore = new Ext.data.Store({
+		id: 'cbo_mutasi_gudang_all_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_gudang_all_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'gudang_id'
+		},[
+			{name: 'mutasi_gudang_value', type: 'int', mapping: 'gudang_id'},
+			{name: 'mutasi_gudang_nama', type: 'string', mapping: 'gudang_nama'}
+		]),
+		sortInfo:{field: 'mutasi_gudang_nama', direction: "ASC"}
+	});
+	
+	/* Function utk Produk Jadi DataStore */
+	cbo_mutasi_produkjadi_DataSore = new Ext.data.Store({
+		id: 'cbo_mutasi_produkjadi_DataSore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_produk_jadi_list', 
+			method: 'POST'
+		}),
+		baseParams:{master_id :0 , aktif: 'yes', task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'produk_id'
+		},[
+			{name: 'produk_jadi_value', type: 'int', mapping: 'produk_id'},
+			{name: 'produk_jadi_nama', type: 'string', mapping: 'produk_nama'}
+		]),
+		sortInfo:{field: 'produk_jadi_nama', direction: "ASC"}
+	});
+	
+	var produk_jadi_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{produk_jadi_nama} ({produk_jadi_kode})</b><br /></span>',
+        '</div></tpl>'
+    );
+	
+	/*DataStore utk satuan yang di columnModel */
+	cbo_mutasi_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_mutasi_satuanDataStore ',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_satuan_list', 
+			method: 'POST'
+		}),baseParams: {start:0,limit:pageS, task:'all'},
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'mutasi_satuan_id'
+		},[
+			{name: 'mutasi_satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
+			{name: 'mutasi_satuan_nama', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'mutasi_satuan_nama', direction: "ASC"}
+		
+	});
     
+	/*DatasTore khusus utk Racikan */
+	cbo_mracikan_satuanDataStore = new Ext.data.Store({
+		id: 'cbo_mracikan_satuanDataStore ',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_satuan_racikan_list', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'satuan_id'
+		},[
+			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
+			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
+		]),
+		sortInfo:{field: 'satuan_kode', direction: "ASC"}
+	});
+	
+	
+	/* Function for browse No Ref DataStore */
+	cbo_racikan_noref_DataSore = new Ext.data.Store({
+		id: 'cbo_racikan_noref_DataSore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=get_racikan_noref_list', 
+			method: 'POST'
+		}),
+		baseParams:{start: 0, limit:pageS }, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+			//id: 'dmracikan_noref'
+		},[
+			{name: 'mutasi_id', type: 'int', mapping: 'mutasi_id'},
+			{name: 'dmracikan_noref', type: 'int', mapping: 'dmracikan_noref'},
+			{name: 'racikan_masuk_mb', type: 'string', mapping: 'mutasi_no'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'racikan_masuk_jumlah', type: 'string', mapping: 'dmracikan_jumlah'},
+			{name: 'racikan_masuk_satuan', type: 'string', mapping: 'satuan_nama'},
+			{name: 'racikan_masuk_keterangan', type: 'string', mapping: 'mutasi_keterangan'}
+		]),
+		sortInfo:{field: 'racikan_masuk_mb', direction: "ASC"}
+	});
+	
+	var racikan_noref_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{racikan_masuk_mb}</b><br /></span>',
+        '</div></tpl>'
+    );
+	
+	
   	/* Function for Identify of Window Column Model */
 	master_mutasi_ColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
 			header: '<div align="center">' + 'No MB' + '</div>',
 			dataIndex: 'mutasi_no',
-			width: 60,	//150,
+			width: 100,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -650,14 +1209,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">Gudang Asal</div>',
 			dataIndex: 'mutasi_asal',
-			width: 120,
+			width: 100,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">Gudang Tujuan</div>',
 			dataIndex: 'mutasi_tujuan',
-			width: 120,
+			width: 100,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -681,6 +1240,40 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
 			dataIndex: 'mutasi_status',
 			width: 60,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Stat Terima' + '</div>',
+			dataIndex: 'mutasi_status_terima',
+			width: 60,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Mutasi Racikan' + '</div>',
+			dataIndex: 'mutasi_racikan',
+			width: 10,
+			hidden : true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Racikan Jenis' + '</div>',
+			dataIndex: 'dmracikan_jenis',
+			width: 10,
+			hidden : true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Mutasi Barang Keluar' + '</div>',
+			dataIndex: 'mutasi_barang_keluar',
+			width: 10,
+			hidden : true,
+			readOnly: true
+		}, 
+		{
+			header: '<div align="center">' + 'Mutasi Kategori Barang Keluar' + '</div>',
+			dataIndex: 'mutasi_kategori_barang_keluar',
+			width: 10,
+			hidden : true,
 			readOnly: true
 		}, 
 		{
@@ -870,6 +1463,18 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
+	/* Identify  dmracikan_jenis Field */
+	dmracikan_jenisField= new Ext.form.NumberField({
+		id: 'dmracikan_jenisField',
+		allowNegatife : false,
+		//blankText: '0',
+		allowBlank: false,
+		allowDecimals: false,
+		hidden: true,
+		readOnly: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
 	
 	/* Identify  mutasi_id Field */
 	mutasi_idField= new Ext.form.NumberField({
@@ -893,6 +1498,120 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
+	/* Identify mutasi_spb Field*/
+	mutasi_spbField= new Ext.form.TextField({
+		id: 'mutasi_spbField',
+		fieldLabel: 'No SMB',
+		emptyText: '(Manual Input)',
+		//readOnly: true,
+		maxLength: 50,
+		anchor: '95%'
+	});
+	
+	/*Identify Barang Keluar checkField */
+	mutasi_barang_keluarField=new Ext.form.Checkbox({
+		id : 'mutasi_barang_keluarField',
+		boxLabel: 'Barang Keluar',
+		name: 'mutasi_barang_keluar',
+		tooltip : 'Jika ini dicentang, maka Mutasi Barang hanya akan mengurangi Gudang Asal saja (tanpa menambah ke Gudang Tujuan)',
+		anchor : '95%',
+		handler: function(node,checked){
+			if (checked) {
+				mutasi_tujuanField.reset();
+				mutasi_tujuanField.setValue(null);
+				mutasi_tujuanField.setDisabled(true);
+				//mutasi_kategori_barang_keluarField.setVisible(true);
+				mutasi_kategori_barang_keluarField.setDisabled(false);
+				//mutasi_kategori_barang_keluarField.hideLabel(false);
+				//detail_mutasi_produk_jadiListEditorGrid.setDisabled(false);
+				//mutasi_tujuanField.isValid(false);
+			}
+			else {
+				mutasi_tujuanField.setDisabled(false);
+				//mutasi_kategori_barang_keluarField.setVisible(false)
+				mutasi_kategori_barang_keluarField.setDisabled(true);
+				//detail_mutasi_produk_jadiListEditorGrid.setDisabled(true);
+			}
+		}
+	});
+	
+	mutasi_produkjadi_labelField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Produk Jadi &nbsp; : &nbsp;'});
+	mutasi_produkjadi_jumlah_labelField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Jumlah &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;'});
+	mutasi_produkjadi_satuan_labelField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Satuan &nbsp; : &nbsp;'});
+	mutasi_noref_labelField=new Ext.form.Label({ html: '&nbsp;&nbsp;&nbsp; No Ref &nbsp; : &nbsp;'});
+	
+
+	/* Identify  Produk Jadi Field */
+	mutasi_produkjadiField=new Ext.form.ComboBox({
+		store: cbo_mutasi_produkjadi_DataSore,
+		mode: 'remote',
+		displayField: 'produk_jadi_nama',
+		valueField: 'produk_jadi_value',
+		typeAhead: false,
+		loadingText: 'Searching...',
+		pageSize:pageS,
+		hideTrigger:false,
+		tpl: produk_jadi_tpl,
+		//applyTo: 'search',
+		//applyTo: 'search',
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		width : 220
+		//anchor: '100%'
+	});
+	
+	/*Identify Produk Jadi Jumlah field */
+	mutasi_produkjadi_jumlahField= new Ext.form.NumberField({
+		id: 'mutasi_produkjadi_jumlahField',
+		//name: 'setcrm_disiplin_telat_value_morethan',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> >= </span>',
+		allowNegatife : false,
+		//blankText: '15',
+		allowDecimals: false,
+		//store : detail_mutasi_racikanDataStore,
+		//dataIndex : 'dmracikan_jumlah',
+		width : 60,
+		//anchor: '35%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify Produk Jadi Satuan Field*/
+	var mutasi_satuan_produkjadiField=new Ext.form.ComboBox({
+			store: cbo_mracikan_satuanDataStore ,
+			mode: 'remote',
+			typeAhead: true,
+			displayField: 'satuan_nama',
+			valueField: 'satuan_id',
+			triggerAction: 'all',
+			lazyRender:true,
+			width : 75
+			//anchor : '50%'
+	});
+	
+	/* Identify  No. Ref Field */
+	mutasi_norefField= new Ext.form.ComboBox({
+		//id: 'mutasi_norefField',
+		tooltip : 'No Ref ini adalah browse Produk Jadi yang sudah selesai dibuat dan status nya Tertutup',
+		//fieldLabel: 'Produk Jadi',
+		store: cbo_racikan_noref_DataSore,
+		mode : 'remote',
+		//forceSelection: true,
+		displayField:'racikan_masuk_mb',
+		valueField: 'mutasi_id',
+        typeAhead: false,
+        hideTrigger:false,
+		allowBlank: false,
+		triggerAction: 'all',
+		itemSelector: 'div.search-item',
+		lazyRender:true,
+		tpl : racikan_noref_tpl,
+		listClass: 'x-combo-list-small',
+		anchor: '100%'
+		
+	});
+	
 	/* Identify  mutasi_asal Field */
 	mutasi_asalField= new Ext.form.ComboBox({
 		id: 'mutasi_asalField',
@@ -910,11 +1629,12 @@ Ext.onReady(function(){
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
+	
 	/* Identify  mutasi_tujuan Field */
 	mutasi_tujuanField= new Ext.form.ComboBox({
 		id: 'mutasi_tujuanField',
 		fieldLabel: 'Gudang Tujuan',
-		store: cbo_mutasi_gudang_DataSore,
+		store: cbo_mutasi_gudang_all_DataStore,
 		mode : 'remote',
 		forceSelection: true,
 		displayField:'mutasi_gudang_nama',
@@ -941,7 +1661,28 @@ Ext.onReady(function(){
 		anchor: '95%'
 	});
 	
-	/* Identify  order_bayar Field */
+	/* Identify  mutasi_kategori_barang_keluarField Field */
+	mutasi_kategori_barang_keluarField= new Ext.form.ComboBox({
+		id: 'mutasi_kategori_barang_keluarField',
+		fieldLabel : 'Kategori Barang Keluar',
+		//hideLabel : true,
+		store: cbo_kategoribarangkeluar_DataSore,
+		mode : 'remote',
+		forceSelection: true,
+		displayField:'kbk_nama',
+		valueField: 'kbk_id',
+        typeAhead: false,
+        hideTrigger:false,
+		allowBlank: true,
+		triggerAction: 'all',
+		lazyRender:true,
+		disabled : true,
+		hidden : false,
+		listClass: 'x-combo-list-small',
+		anchor: '75%'
+	});
+	
+	/* Identify  Jumlah Total Barang Field */
 	mutasi_totaljumlahField= new Ext.form.TextField({
 		id: 'mutasi_totaljumlahField',
 		fieldLabel: 'Jumlah Total Barang',
@@ -952,8 +1693,20 @@ Ext.onReady(function(){
 		anchor: '75%',
 	});
 	
+	/* Identify  Jumlah total barang untuk Produk Jadi Field */
+	produk_jadi_totaljumlahField= new Ext.form.TextField({
+		id: 'produk_jadi_totaljumlahField',
+		fieldLabel: 'Jumlah Total Produk Jadi',
+		blankText: '0',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '75%',
+	});
+	
 	mutasi_button_saveField=new Ext.Button({
 		text: 'Save and Close',
+		ref : '../mmutasi_saveClose',
 		handler: pengecekan_dokumen2
 	});
 	
@@ -973,6 +1726,16 @@ Ext.onReady(function(){
 		readOnly: true,
 		anchor: '75%',
 	});
+	/*Identify Jenis Item utk Produk Jadi */
+	produk_jadi_itemjumlahField= new Ext.form.TextField({
+		id: 'produk_jadi_itemjumlahField',
+		fieldLabel: 'Jumlah Jenis Produk Jadi',
+		blankText: '0',
+		valueRenderer: 'numberToCurrency',
+		itemCls: 'rmoney',
+		readOnly: true,
+		anchor: '75%',
+	});
 	
 	mutasi_statusField= new Ext.form.ComboBox({
 		id: 'mutasi_statusField',
@@ -980,7 +1743,7 @@ Ext.onReady(function(){
 		forceSelection: true,
 		store:new Ext.data.SimpleStore({
 			fields:['mutasi_status_value', 'mutasi_status_display'],
-			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal']]
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal', 'Batal'],['Tunggu','Tunggu']]
 		}),
 		mode: 'local',
 		displayField: 'mutasi_status_display',
@@ -990,6 +1753,168 @@ Ext.onReady(function(){
 		triggerAction: 'all'	
 	});
 	
+	/*Field mutasi_status_terimaField */
+	mutasi_status_terimaField= new Ext.form.ComboBox({
+		id: 'mutasi_status_terimaField',
+		fieldLabel: 'Status Terima',
+		forceSelection: true,
+		store:new Ext.data.SimpleStore({
+			fields:['mutasi_status_terima_value', 'mutasi_status_terima_display'],
+			data:[['Diterima','Diterima'],['Ditolak','Ditolak'],['Tunggu', 'Tunggu']]
+		}),
+		mode: 'local',
+		displayField: 'mutasi_status_terima_display',
+		valueField: 'mutasi_status_terima_value',
+		anchor: '80%',
+		//disabled : true,
+		allowBlank: true,
+		triggerAction: 'all'	
+	});
+	
+	/*Identify Racikan title checkField */
+	mutasi_barang_racikan_title=new Ext.form.Checkbox({
+		id : 'mutasi_barang_racikan_title',
+		boxLabel: 'Racikan',
+		name: 'mutasi_racikan',
+		tooltip : 'Khusus untuk produk Racikan',
+		anchor : '95%',
+		handler: function(node,checked){
+			if (checked) {
+				mutasi_barang_keluarField.setDisabled(true);
+				mutasi_barang_keluarField.setValue(false);
+				mutasi_asalField.reset();
+				mutasi_asalField.setValue(null);
+				mutasi_tujuanField.reset();
+				mutasi_tujuanField.setValue(null);
+				mutasi_asalField.setDisabled(true);
+				mutasi_tujuanField.setDisabled(true);
+				mutasi_racikanFieldSet.setDisabled(false);
+				mutasi_barang_racikan_keluarField.setValue(true);
+
+			}
+			else {
+				mutasi_barang_keluarField.setDisabled(false);
+				mutasi_barang_keluarField.setValue(false);
+				mutasi_asalField.reset();
+				mutasi_asalField.setValue(null);
+				mutasi_tujuanField.reset();
+				mutasi_tujuanField.setValue(null);
+				mutasi_asalField.setDisabled(false);
+				mutasi_tujuanField.setDisabled(false);
+				mutasi_barang_racikan_keluarField.reset()
+				mutasi_barang_racikan_keluarField.setValue(null);
+				mutasi_barang_racikan_masukField.reset()
+				mutasi_barang_racikan_masukField.setValue(null);		
+				mutasi_racikanFieldSet.setDisabled(true);
+				detail_mutasi_produk_jadiListEditorGrid.setDisabled(true);
+				
+			}
+		}
+	});
+	
+	/*Identify Barang Racikan Keluar checkField */
+	mutasi_barang_racikan_keluarField=new Ext.form.Radio({
+		id : 'mutasi_barang_racikan_keluarField',
+		name:'mutasi_racikanFieldSet',
+		boxLabel: 'Keluar',
+		//name: 'mutasi_barang_keluar',
+		tooltip : 'Jika ini di centang, maka Gudang Asal otomatis diarahkan ke Gudang Retail',
+		anchor : '95%',
+		value: 'selected',
+		handler: function(node,checked){
+			if (checked) {
+				mutasi_asalField.setValue('Gudang Retail');
+				mutasi_asalField.setDisabled(true);
+				mutasi_tujuanField.reset();
+				mutasi_tujuanField.setValue(null);
+				mutasi_tujuanField.setDisabled(true);
+				mutasi_barang_racikan_masukField.setValue(false);
+				mutasi_norefField.setDisabled(true);
+				mutasi_produkjadiField.setDisabled(false);
+				mutasi_produkjadi_jumlahField.setDisabled(false);
+				mutasi_satuan_produkjadiField.setDisabled(false);
+				mutasi_norefField.reset();
+				mutasi_norefField.setValue(null);
+				detail_mutasi_produk_jadiListEditorGrid.setDisabled(false);
+				detail_mutasi_DataStore.removeAll();
+				detail_mutasi_DataStore.commitChanges();
+				//detail_mutasi_total();
+				
+			}
+		}
+	});
+	
+	/*Identify Barang Racikan Masuk checkField */
+	mutasi_barang_racikan_masukField=new Ext.form.Radio({
+		id : 'mutasi_barang_racikan_masukField',
+		name:'mutasi_racikanFieldSet',
+		boxLabel: 'Masuk',
+		//name: 'mutasi_barang_keluar',
+		tooltip : 'Jika ini di centang, maka Gudang Tujuan otomatis diarahkan ke Gudang Retail',
+		anchor : '95%',
+		value: 'selected',
+		handler: function(node,checked){
+			if (checked) {
+				mutasi_asalField.reset();
+				mutasi_asalField.setValue(null);
+				mutasi_asalField.setDisabled(true);
+				mutasi_tujuanField.setValue('Gudang Retail');
+				mutasi_tujuanField.setDisabled(true);
+				mutasi_barang_racikan_masukField.setValue(true);
+				mutasi_norefField.setDisabled(false);
+				mutasi_produkjadiField.setDisabled(true);
+				mutasi_produkjadi_jumlahField.setDisabled(true);
+				mutasi_satuan_produkjadiField.setDisabled(true);
+				mutasi_produkjadiField.reset();
+				mutasi_produkjadiField.setValue();
+				mutasi_produkjadi_jumlahField.reset();
+				mutasi_produkjadi_jumlahField.setValue(null);
+				mutasi_satuan_produkjadiField.reset();
+				mutasi_satuan_produkjadiField.setValue(null);
+				detail_mutasi_produk_jadiListEditorGrid.setDisabled(true);
+				detail_mutasi_produkJadi_DataStore.removeAll();
+				detail_mutasi_produkJadi_DataStore.commitChanges();
+				//detail_mutasi_DataStore.removeAll();
+				//detail_mutasi_DataStore.commitChanges();
+				//detail_mutasi_total();
+				
+			}
+			//else {
+				//mutasi_barang_racikan_keluarField.setValue(true);
+			//}
+		}
+		
+	});
+	
+	
+	var mutasi_racikanFieldSet = new Ext.form.FieldSet({
+		//title: 'Tujuan',
+		anchor: '100%',
+		layout:'column',
+		//store : detail_mutasi_racikanDataStore,
+		frame: false,
+		border: true,
+		items:[
+				{
+					columnWidth:1,
+					layout: 'column',
+					border:false,
+					items: [mutasi_barang_racikan_keluarField, {xtype: 'spacer',height:10},{xtype: 'spacer',width:1000}, mutasi_barang_racikan_masukField,mutasi_noref_labelField,mutasi_norefField] 
+				}
+				
+				/*
+				{
+					columnWidth:0.8,
+					layout: 'column',
+					border:false,
+					//labelWidth : 1,
+					items: [mutasi_produkjadi_labelField,mutasi_produkjadiField,{ html: '<br> <br>'}, mutasi_produkjadi_jumlah_labelField,mutasi_produkjadi_jumlahField,mutasi_produkjadi_satuan_labelField,mutasi_satuan_produkjadiField, { html: '<br> <br><br> <br> <br><br><br><br>'}, mutasi_noref_labelField,{ html: '<br> <br><br> <br> <br><br><br><br>'},mutasi_norefField] 
+				}
+				*/
+				
+	
+		   ]
+	});
 	
   	/*Fieldset Master*/
 	master_mutasi_masterGroup = new Ext.form.FieldSet({
@@ -999,16 +1924,25 @@ Ext.onReady(function(){
 		layout:'column',
 		items:[
 			{
-				columnWidth:0.5,
+				columnWidth:0.4,
 				layout: 'form',
 				border:false,
-				items: [mutasi_noField, mutasi_asalField, mutasi_tujuanField, mutasi_idField] 
-			}
-			,{
-				columnWidth:0.5,
+				items: [mutasi_tanggalField,mutasi_noField, mutasi_spbField, mutasi_asalField, mutasi_tujuanField, mutasi_kategori_barang_keluarField,  mutasi_idField,mutasi_keteranganField,mutasi_statusField, mutasi_status_terimaField] 
+			},
+			{
+				columnWidth:0.2,
 				layout: 'form',
 				border:false,
-				items: [mutasi_tanggalField, mutasi_keteranganField, mutasi_statusField] 
+				labelWidth: 1,
+				items: [{xtype: 'spacer',height:110},mutasi_barang_keluarField] 
+			},
+			
+			{
+				columnWidth:0.4,
+				layout: 'form',
+				border:false,
+				labelWidth : 1,
+				items: [mutasi_barang_racikan_title,mutasi_racikanFieldSet] 
 			}
 			]
 	
@@ -1031,7 +1965,7 @@ Ext.onReady(function(){
 					layout: 'form',
 					columnWidth: 0.5,
 					border: false,
-					items:[mutasi_itemjumlahField ]
+					items:[mutasi_itemjumlahField]
 				}] 
 	
 	});
@@ -1039,11 +1973,38 @@ Ext.onReady(function(){
 		
 	/*Detail Declaration */
 		
+	// Function menampung data mapping ketika list detail mutasi racikan di tampilkan
+	var detail_mutasi_racikan_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: 'dmracikan_id'
+	},[
+			{name: 'dmracikan_id', type: 'int', mapping: 'dmracikan_id'}, 
+			{name: 'dmracikan_mutasi_id', type: 'int', mapping: 'dmracikan_mutasi_id'}, 
+			{name: 'dmracikan_jenis', type: 'int', mapping: 'dmracikan_jenis'}, 
+			{name: 'dmracikan_produk', type: 'int', mapping: 'dmracikan_produk'}, 
+			{name: 'dmracikan_jumlah', type: 'int', mapping: 'dmracikan_jumlah'},
+			{name: 'dmracikan_satuan', type: 'int', mapping: 'dmracikan_satuan'},
+			{name: 'dmracikan_noref', type: 'int', mapping: 'dmracikan_noref'},
+			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'},
+			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'},
+			{name: 'mutasi_no', type: 'string', mapping: 'mutasi_no'}			
+	]);
+	//eof
+	
+	//function for detail_mutasi_racikan_writer
+	var detail_mutasi_racikan_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	
 	// Function for json reader of detail
 	var detail_mutasi_reader=new Ext.data.JsonReader({
 		root: 'results',
 		totalProperty: 'total',
-		id: 'dmutasi_id'
+		id: ''
 	},[
 			{name: 'dmutasi_id', type: 'int', mapping: 'dmutasi_id'}, 
 			{name: 'dmutasi_master', type: 'int', mapping: 'dmutasi_master'}, 
@@ -1053,8 +2014,30 @@ Ext.onReady(function(){
 	]);
 	//eof
 	
+	// Function for json reader of detail mutasi produk jadi
+	var detail_mutasi_produk_jadi_reader=new Ext.data.JsonReader({
+		root: 'results',
+		totalProperty: 'total',
+		id: ''
+	},[
+			{name: 'dmracikan_id', type: 'int', mapping: 'dmracikan_id'}, 
+			{name: 'dmracikan_mutasi_id', type: 'int', mapping: 'dmracikan_mutasi_id'}, 
+			{name: 'dmracikan_produk', type: 'int', mapping: 'dmracikan_produk'}, 
+			{name: 'dmracikan_satuan', type: 'int', mapping: 'dmracikan_satuan'}, 
+			{name: 'dmracikan_jumlah', type: 'int', mapping: 'dmracikan_jumlah'},
+			{name: 'mutasi_no', type: 'string', mapping: 'mutasi_no'}
+	]);
+	//eof
+	
 	//function for json writer of detail
 	var detail_mutasi_writer = new Ext.data.JsonWriter({
+		encode: true,
+		writeAllFields: false
+	});
+	//eof
+	
+	//function for json writer of detail mutasi produk jadi
+	var detail_mutasi_produk_jadi_writer = new Ext.data.JsonWriter({
 		encode: true,
 		writeAllFields: false
 	});
@@ -1073,8 +2056,42 @@ Ext.onReady(function(){
 	});
 	/* End of Function */
 	
+	/* Function for Retrieve DataStore of detail mutasi produk Jadi*/
+	detail_mutasi_produkJadi_DataStore = new Ext.data.Store({
+		id: 'detail_mutasi_produkJadi_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_produk_jadi_list', 
+			method: 'POST'
+		}),
+		reader: detail_mutasi_produk_jadi_reader,
+		baseParams:{master_id: 0, start: 0, limit: pageS, no_ref : 0},
+		sortInfo:{field: 'dmracikan_produk', direction: "DESC"}
+	});
+	/* End of Function */
+	
+	
+	/* Function for Retrieve DataStore of detail*/
+	detail_mutasi_racikanDataStore = new Ext.data.Store({
+		id: 'detail_mutasi_racikanDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_racikan_list', 
+			method: 'POST'
+		}),
+		reader: detail_mutasi_racikan_reader,
+		baseParams:{master_id: 0, start: 0, limit: pageS},
+		sortInfo:{field: 'dmracikan_id', direction: "DESC"}
+	});
+	/* End of Function */
+	
+	
 	//function for editor of detail
 	var editor_detail_mutasi= new Ext.ux.grid.RowEditor({
+        saveText: 'Update'
+    });
+	//eof
+	
+	//function for editor of detail mutasi produk jadi
+	var editor_detail_mutasi_produk_jadi= new Ext.ux.grid.RowEditor({
         saveText: 'Update'
     });
 	//eof
@@ -1106,24 +2123,6 @@ Ext.onReady(function(){
 		sortInfo:{field: 'mutasi_produk_kode', direction: "ASC"}
 	});
 	
-	cbo_mutasi_satuanDataStore = new Ext.data.Store({
-		id: 'cbo_mutasi_satuanDataStore ',
-		proxy: new Ext.data.HttpProxy({
-			url: 'index.php?c=c_master_mutasi&m=get_satuan_list', 
-			method: 'POST'
-		}),
-			reader: new Ext.data.JsonReader({
-			root: 'results',
-			totalProperty: 'total',
-			id: 'satuan_id'
-		},[
-			{name: 'satuan_id', type: 'int', mapping: 'satuan_id'},
-			{name: 'satuan_kode', type: 'string', mapping: 'satuan_kode'},
-			{name: 'satuan_nama', type: 'string', mapping: 'satuan_nama'}
-		]),
-		sortInfo:{field: 'satuan_kode', direction: "ASC"}
-	});
-	
 	var produk_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
             '<span><b>{mutasi_produk_nama} ({mutasi_produk_kode})</b><br /></span>',
@@ -1149,16 +2148,29 @@ Ext.onReady(function(){
 			anchor: '95%'
 	});
 	
+	/*Identify JumlahField */
+	var djumlah_mutasiField = new Ext.form.NumberField({
+		allowDecimals: false,
+		allowNegative: false,
+		maxLength: 11,
+		enableKeyEvents: true,
+		maskRe: /([0-9]+)$/
+	});
 	
 	var combo_mutasi_satuan=new Ext.form.ComboBox({
 			store: cbo_mutasi_satuanDataStore ,
-			mode: 'remote',
+			mode: 'local',
 			typeAhead: true,
-			displayField: 'satuan_nama',
-			valueField: 'satuan_id',
+			displayField: 'mutasi_satuan_nama',
+			valueField: 'mutasi_satuan_id',
 			triggerAction: 'all',
-			lazyRender:true
-
+			lazyRender:true,
+			loadingText: 'Searching...',
+			//hideTrigger:false,
+			//itemSelector: 'div.search-item',
+			//triggerAction: 'all',
+			//listClass: 'x-combo-list-small'
+			
 	});
 	
 	//declaration of detail coloumn model
@@ -1172,6 +2184,15 @@ Ext.onReady(function(){
 			readOnly: true,
 			hidden: true
 		},
+		/*
+		{
+			header: '<div align="center">' + 'Kode Produk' + '</div>',
+			dataIndex: 'produk_kode',
+			width: 75,	//150,
+			sortable: true,
+			readOnly: true
+		}, 
+		*/
 		{
 			header: '<div align="center">Produk</div>',
 			dataIndex: 'dmutasi_produk',
@@ -1195,13 +2216,17 @@ Ext.onReady(function(){
 			sortable: true,
 			align: 'right',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor : djumlah_mutasiField
+			/*
 			editor: new Ext.form.NumberField({
 				allowDecimals: false,
 				allowNegative: false,
 				blankText: '0',
 				maxLength: 11,
+				//ref : '../dmutasi_jumlah',
 				maskRe: /([0-9]+)$/
 			})
+			*/
 		}]
 	);
 	detail_mutasi_ColumnModel.defaultSortable= true;
@@ -1215,7 +2240,7 @@ Ext.onReady(function(){
 		el: 'fp_detail_mutasi',
 		title: 'Item Mutasi',
 		height: 250,
-		width: 800,	//690,
+		width: 1100,	//690,
 		autoScroll: true,
 		store: detail_mutasi_DataStore, // DataStore
 		colModel: detail_mutasi_ColumnModel, // Nama-nama Columns
@@ -1234,11 +2259,13 @@ Ext.onReady(function(){
 			text: 'Add',
 			tooltip: 'Add new detail record',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../dmutasi_add',
 			handler: detail_mutasi_add
 		}, '-',{
 			text: 'Delete',
 			tooltip: 'Delete detail selected record',
 			iconCls:'icon-delete',
+			ref : '../dmutasi_delete',
 			handler: detail_mutasi_confirm_delete
 		}
 		]
@@ -1287,7 +2314,13 @@ Ext.onReady(function(){
 				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan!==''
 				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah>0){
 					
-					dmutasi_id.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_id);
+					if((detail_mutasi_DataStore.getAt(i).data.dmutasi_id==undefined) || (detail_mutasi_DataStore.getAt(i).data.dmutasi_id=='')){
+						dmutasi_id.push(0);
+					}else{
+						dmutasi_id.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_id);
+					}
+					
+					//dmutasi_id.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_id);
 					dmutasi_produk.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_produk);
 					dmutasi_satuan.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan);
 					dmutasi_jumlah.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah);
@@ -1322,6 +2355,61 @@ Ext.onReady(function(){
 
 	}
 	//eof
+	
+	
+	//function for insert detail mutasi produk jadi insert
+	function detail_mutasi_produk_jadi_insert(pkid, opsi){
+		
+		var dmracikan_id = [];
+        var dmracikan_produk = [];
+        var dmracikan_satuan = [];
+        var dmracikan_jumlah = [];
+
+		if(detail_mutasi_DataStore.getCount()>0){
+			for(i=0; i<detail_mutasi_DataStore.getCount();i++){
+				if((/^\d+$/.test(detail_mutasi_DataStore.getAt(i).data.dmracikan_produk))
+				   && detail_mutasi_DataStore.getAt(i).data.dmracikan_produk!==undefined
+				   && detail_mutasi_DataStore.getAt(i).data.dmracikan_produk!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmracikan_produk!==0
+				   && detail_mutasi_DataStore.getAt(i).data.dmracikan_satuan!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmracikan_jumlah>0){
+					
+					dmracikan_id.push(detail_mutasi_DataStore.getAt(i).data.dmracikan_id);
+					dmracikan_produk.push(detail_mutasi_DataStore.getAt(i).data.dmracikan_produk);
+					dmracikan_satuan.push(detail_mutasi_DataStore.getAt(i).data.dmracikan_satuan);
+					dmracikan_jumlah.push(detail_mutasi_DataStore.getAt(i).data.dmracikan_jumlah);
+				}
+			}
+		}
+		
+		var encoded_array_dmracikan_id = Ext.encode(dmracikan_id);
+		var encoded_array_dmracikan_produk = Ext.encode(dmracikan_produk);
+		var encoded_array_dmracikan_satuan = Ext.encode(dmracikan_satuan);
+		var encoded_array_dmracikan_jumlah = Ext.encode(dmracikan_jumlah);
+
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_produk_jadi_insert',
+			params:{
+			dmracikan_id		: encoded_array_dmracikan_id,
+			dmutasi_master		: pkid, 
+			dmracikan_produk	: encoded_array_dmracikan_produk, 
+			dmracikan_satuan	: encoded_array_dmracikan_satuan, 
+			dmracikan_jumlah	: encoded_array_dmracikan_jumlah
+			},
+			callback: function(opts, success, response){
+				if(success){
+						if(opsi=='print'){
+							master_mutasi_print_faktur(pkid);
+						}
+						master_mutasi_DataStore.load();
+				}
+			}
+		});
+
+	}
+	
+	
 	
 	//function for purge detail
 	function detail_mutasi_purge(pkid){
@@ -1369,6 +2457,207 @@ Ext.onReady(function(){
 	}
 	//eof
 	
+	/*Function utk melakukan insert ke tabel detail_mutasi_racikan_insert */
+	/*
+	function detail_mutasi_racikan_insert(pkid){
+		
+		var dmutasi_id = [];
+        var dmutasi_produk = [];
+        var dmutasi_satuan = [];
+        var dmutasi_jumlah = [];
+
+		if(detail_mutasi_DataStore.getCount()>0){
+			for(i=0; i<detail_mutasi_DataStore.getCount();i++){
+				if((/^\d+$/.test(detail_mutasi_DataStore.getAt(i).data.dmutasi_produk))
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==undefined
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_produk!==0
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan!==''
+				   && detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah>0){
+					
+					dmutasi_id.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_id);
+					dmutasi_produk.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_produk);
+					dmutasi_satuan.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_satuan);
+					dmutasi_jumlah.push(detail_mutasi_DataStore.getAt(i).data.dmutasi_jumlah);
+				}
+			}
+		}
+		
+		var encoded_array_dmutasi_id = Ext.encode(dmutasi_id);
+		var encoded_array_dmutasi_produk = Ext.encode(dmutasi_produk);
+		var encoded_array_dmutasi_satuan = Ext.encode(dmutasi_satuan);
+		var encoded_array_dmutasi_jumlah = Ext.encode(dmutasi_jumlah);
+
+		Ext.Ajax.request({
+			waitMsg: 'Please wait...',
+			url: 'index.php?c=c_master_mutasi&m=detail_detail_mutasi_insert',
+			params:{
+			dmutasi_id		: encoded_array_dmutasi_id,
+			dmutasi_master	: pkid, 
+			dmutasi_produk	: encoded_array_dmutasi_produk, 
+			dmutasi_satuan	: encoded_array_dmutasi_satuan, 
+			dmutasi_jumlah	: encoded_array_dmutasi_jumlah
+			},
+			callback: function(opts, success, response){
+				if(success){
+						if(opsi=='print'){
+							master_mutasi_print_faktur(pkid);
+						}
+						master_mutasi_DataStore.load();
+				}
+			}
+		});
+	}
+	*/
+	
+	//declaration of detail coloumn model for detail mutasi produk jadi
+	detail_mutasi_produk_jadiColumnModel = new Ext.grid.ColumnModel(
+		[
+		 {
+			header: '<div align="center">ID</div>',
+			dataIndex: 'dmracikan_id',
+			width: 80,
+			sortable: true,
+			readOnly: true,
+			hidden: true
+		},
+		/*
+		{
+			header: '<div align="center">' + 'Kode Produk' + '</div>',
+			dataIndex: 'produk_kode',
+			width: 75,	//150,
+			sortable: true,
+			readOnly: true
+		}, 
+		*/
+		{
+			header: '<div align="center">Produk Jadi</div>',
+			dataIndex: 'dmracikan_produk',
+			width: 200,
+			sortable: true,
+			editor: mutasi_produkjadiField,
+			renderer: Ext.util.Format.comboRenderer(mutasi_produkjadiField)
+		},
+		{
+			header: '<div align="center">Satuan</div>',
+			dataIndex: 'dmracikan_satuan',
+			width: 80,
+			sortable: true,
+			editor: mutasi_satuan_produkjadiField,
+			renderer: Ext.util.Format.comboRenderer(mutasi_satuan_produkjadiField)
+		},
+		{
+			header: '<div align="center">Jumlah</div>',
+			dataIndex: 'dmracikan_jumlah',
+			width: 60,
+			sortable: true,
+			align: 'right',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			editor : mutasi_produkjadi_jumlahField
+		}]
+	);
+	detail_mutasi_produk_jadiColumnModel.defaultSortable= true;
+	//eof
+	
+	/*List eDitor Grid Panel untuk Detail Produk Jadi */
+	detail_mutasi_produk_jadiListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'detail_mutasi_produk_jadiListEditorGrid',
+		el: 'fp_detail_mutasi_produk_jadi',
+		title: 'Racikan : Detail Produk Jadi',
+		height: 250,
+		width: 1100,	//690,
+		autoScroll: true,
+		store: detail_mutasi_produkJadi_DataStore, // DataStore
+		colModel: detail_mutasi_produk_jadiColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		region: 'center',
+        margins: '0 5 5 5',
+		plugins: [editor_detail_mutasi_produk_jadi],
+		frame: true,
+		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true}
+
+		,
+		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new detail record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			ref : '../dmutasi_add_produk_jadi',
+			handler: detail_mutasi_produk_jadi_add
+		}, '-',{
+			text: 'Delete',
+			tooltip: 'Delete detail selected record',
+			iconCls:'icon-delete',
+			ref : '../dmutasi_delete_produk_jadi',
+			handler: detail_mutasi_produk_jadi_confirm_delete
+		}
+		]
+	
+	});
+	//eof
+	
+	//function of detail add produk jadi
+	function detail_mutasi_produk_jadi_add(){
+		var edit_detail_mutasi_produk_jadi= new detail_mutasi_produk_jadiListEditorGrid.store.recordType({
+			dmracikan_id		: 0,
+			dmracikan_mutasi_id	: null,		
+			dmracikan_produk	: '',		
+			dmracikan_satuan	: '',		
+			dmracikan_jumlah	: 0		
+		});
+		editor_detail_mutasi_produk_jadi.stopEditing();
+		detail_mutasi_produkJadi_DataStore.insert(0, edit_detail_mutasi_produk_jadi);
+		//detail_mutasi_produk_jadiListEditorGrid.getView().refresh();
+		detail_mutasi_produk_jadiListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_mutasi_produk_jadi.startEditing(0);
+	}
+	
+	
+	
+	
+	/* Function for Delete Confirm of detail produk jadi */
+	function detail_mutasi_produk_jadi_confirm_delete(){
+		// only one record is selected here
+		if(detail_mutasi_produk_jadiListEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_mutasi_produk_jadi_delete);
+		} else if(detail_mutasi_produk_jadiListEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_mutasi_produk_jadi_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+	//eof
+	
+	//function for Delete of detail produk jadi
+	function detail_mutasi_produk_jadi_delete(btn){
+		if(btn=='yes'){
+			var s = detail_mutasi_produk_jadiListEditorGrid.getSelectionModel().getSelections();
+			for(var i = 0, r; r = s[i]; i++){
+				detail_mutasi_produkJadi_DataStore.remove(r);
+				detail_mutasi_produkJadi_DataStore.commitChanges();
+				detail_mutasi_produk_jadi_total();
+			}
+		} 
+		
+	}
+	//eof
+	
+	/*Tab Panel utk master mutasi form */
+	var detail_tab_master_mutasi = new Ext.TabPanel({
+		plain:true,
+		activeTab: 0,
+		autoHeight: true,
+		items: [detail_mutasiListEditorGrid,detail_mutasi_produk_jadiListEditorGrid]
+	});
+
 	//event on update of detail data store
 	//detail_mutasi_DataStore.on('update', refresh_detail_mutasi);
 	
@@ -1377,10 +2666,18 @@ Ext.onReady(function(){
 		labelAlign: 'left',
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 800,	//700,        
-		items: [master_mutasi_masterGroup,detail_mutasiListEditorGrid,master_mutasi_footGroup]
+		width: 1100,	//700,        
+		items: [master_mutasi_masterGroup,detail_tab_master_mutasi,master_mutasi_footGroup]
 		,
 		buttons: [
+			{
+				text: 'Print Only',
+				handler: mb_print_only
+			},
+			{
+				xtype:'spacer',
+				width: 750
+			},
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_MUTASI'))){ ?>
 			mutasi_button_saveprintField
 			,
@@ -1390,6 +2687,7 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					//master_mutasi_reset_form
 					master_mutasi_createWindow.hide();
 				}
 			}
@@ -1425,6 +2723,16 @@ Ext.onReady(function(){
 		mutasi_itemjumlahField.setValue(CurrencyFormatted(detail_mutasi_DataStore.getCount()));
 	}
 	
+	function detail_mutasi_produk_jadi_total(){
+		var jumlah_item_pj=0;
+		for(i=0;i<detail_mutasi_produkJadi_DataStore.getCount();i++){
+			var detail_mutasi_produk_jadi_record=detail_mutasi_produkJadi_DataStore.getAt(i);
+			jumlah_item_pj=jumlah_item_pj+detail_mutasi_produk_jadi_record.data.dmracikan_jumlah;
+		}
+		produk_jadi_totaljumlahField.setValue(CurrencyFormatted(jumlah_item_pj));
+		produk_jadi_itemjumlahField.setValue(CurrencyFormatted(detail_mutasi_produkJadi_DataStore.getCount()));
+	}
+	
 		
 	/* Function for action list search */
 	function master_mutasi_list_search(){
@@ -1437,6 +2745,7 @@ Ext.onReady(function(){
 		var mutasi_tgl_akhir_search_date="";
 		var mutasi_keterangan_search=null;
 		var mutasi_status_search=null;
+		var mutasi_status_terima_search=null;
 
 		if(mutasi_idSearchField.getValue()!==null){mutasi_id_search=mutasi_idSearchField.getValue();}
 		if(mutasi_noSearchField.getValue()!==null){mutasi_no_search=mutasi_noSearchField.getValue();}
@@ -1446,6 +2755,8 @@ Ext.onReady(function(){
 		if(mutasi_tanggal_akhirSearchField.getValue()!==""){mutasi_tgl_akhir_search_date=mutasi_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(mutasi_keteranganSearchField.getValue()!==null){mutasi_keterangan_search=mutasi_keteranganSearchField.getValue();}
 		if(mutasi_statusSearchField.getValue()!==null){mutasi_status_search=mutasi_statusSearchField.getValue();}
+		if(mutasi_status_terima_SearchField.getValue()!==null){mutasi_status_terima_search=mutasi_status_terima_SearchField.getValue();}
+
 		// change the store parameters
 		master_mutasi_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1457,7 +2768,8 @@ Ext.onReady(function(){
 			mutasi_tgl_awal		:	mutasi_tgl_awal_search_date, 
 			mutasi_tgl_akhir	:	mutasi_tgl_akhir_search_date, 
 			mutasi_keterangan	:	mutasi_keterangan_search,
-			mutasi_status		:	mutasi_status_search
+			mutasi_status		:	mutasi_status_search,
+			mutasi_status_terima: 	mutasi_status_terima_search
 		};
 		// Cause the datastore to do another query : 
 		master_mutasi_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1479,6 +2791,7 @@ Ext.onReady(function(){
 		mutasi_tanggalSearchField.reset();
 		mutasi_keteranganSearchField.reset();
 		mutasi_statusSearchField.reset();
+		mutasi_status_terima_SearchField.reset();
 	}
 	
 	
@@ -1523,7 +2836,7 @@ Ext.onReady(function(){
 	mutasi_tujuanSearchField= new Ext.form.ComboBox({
 		id: 'mutasi_tujuanSearchField',
 		fieldLabel: 'Gudang Tujuan',
-		store: cbo_mutasi_gudang_DataSore,
+		store: cbo_mutasi_gudang_all_DataStore,
 		mode : 'remote',
 		displayField:'mutasi_gudang_nama',
 		valueField: 'mutasi_gudang_value',
@@ -1562,13 +2875,31 @@ Ext.onReady(function(){
 		fieldLabel: 'Status',
 		store:new Ext.data.SimpleStore({
 			fields:['value', 'mutasi_status'],
-			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal']]
+			data:[['Terbuka','Terbuka'],['Tertutup','Tertutup'],['Batal','Batal'], ['Tunggu','Tunggu']]
 		}),
 		mode: 'local',
 		displayField: 'mutasi_status',
 		valueField: 'value',
 		anchor: '60%',
 		triggerAction: 'all'	 
+	});
+	
+	/*Field mutasi_status_terimaSearchField */
+	mutasi_status_terima_SearchField= new Ext.form.ComboBox({
+		id: 'mutasi_status_terima_SearchField',
+		fieldLabel: 'Status Terima',
+		forceSelection: true,
+		store:new Ext.data.SimpleStore({
+			fields:['mutasi_status_terima_value', 'mutasi_status_terima_display'],
+			data:[['Diterima','Diterima'],['Ditolak','Ditolak'],['Tunggu', 'Tunggu']]
+		}),
+		mode: 'local',
+		displayField: 'mutasi_status_terima_display',
+		valueField: 'mutasi_status_terima_value',
+		anchor: '80%',
+		//disabled : true,
+		allowBlank: true,
+		triggerAction: 'all'	
 	});
     
 	/* Function for retrieve search Form Panel */
@@ -1605,7 +2936,7 @@ Ext.onReady(function(){
 							
 							]
 						}
-						, mutasi_keteranganSearchField, mutasi_statusSearchField] 
+						, mutasi_keteranganSearchField, mutasi_statusSearchField, mutasi_status_terima_SearchField] 
 			}
 			]
 		}]
@@ -1829,6 +3160,8 @@ Ext.onReady(function(){
 	//EVENTS
 	detail_mutasi_DataStore.on("update",detail_mutasi_total);
 	detail_mutasi_DataStore.on("load",detail_mutasi_total);
+	detail_mutasi_produkJadi_DataStore.on("update",detail_mutasi_produk_jadi_total);
+	detail_mutasi_produkJadi_DataStore.on("load",detail_mutasi_produk_jadi_total);
 	master_mutasiListEditorGrid.addListener('rowcontextmenu', onmaster_mutasi_ListEditGridContextMenu);
 	master_mutasi_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
 	
@@ -1853,13 +3186,26 @@ Ext.onReady(function(){
 		cbo_mutasi_satuanDataStore.load();
 	});
 	
-	
 	combo_mutasi_produk.on("select",function(){
 		cbo_mutasi_satuanDataStore.setBaseParam('task','produk');
 		cbo_mutasi_satuanDataStore.setBaseParam('selected_id',combo_mutasi_produk.getValue());
 		cbo_mutasi_satuanDataStore.reload();
 	});
 	
+	/*Ketika klik Produk Jadi, maka langsung load satuan yang hanya bisa dipakai oleh produk tersebut */
+	mutasi_produkjadiField.on("select", function(){
+		cbo_mracikan_satuanDataStore.setBaseParam('task','produk');
+		cbo_mracikan_satuanDataStore.setBaseParam('selected_id',mutasi_produkjadiField.getValue());
+		cbo_mracikan_satuanDataStore.reload();
+	});
+	
+	mutasi_satuan_produkjadiField.on("focus",function(){
+		cbo_mracikan_satuanDataStore.setBaseParam('task','produk');
+		cbo_mracikan_satuanDataStore.setBaseParam('selected_id',mutasi_produkjadiField.getValue());
+		cbo_mracikan_satuanDataStore.load();
+	});
+	
+
 	detail_mutasi_DataStore.on("update",function(){
 		var	query_selected="";
 		var satuan_selected="";
@@ -1882,8 +3228,40 @@ Ext.onReady(function(){
 		cbo_mutasi_satuanDataStore.load();
 		//detail_order_beliListEditorGrid.getView().refresh();
 	});
+
 	
-	
+	/*Event ketika No Ref dipilih, maka akan menginsertkan detail produk yang sudah diinput ke Detail Data Store */
+	mutasi_norefField.on("select",function(){
+		var j=cbo_racikan_noref_DataSore.findExact('mutasi_id',mutasi_norefField.getValue());
+		
+		cbo_mutasi_noref_detail_DataStore.load({
+			params:{no_ref : mutasi_norefField.getValue()},
+			callback: function(r,opt,success){
+				if(success==true){
+					cbo_mutasi_produkDataStore.setBaseParam('task','no_ref');
+					cbo_mutasi_produkDataStore.setBaseParam('no_ref',mutasi_norefField.getValue());
+					cbo_mutasi_produkDataStore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								detail_mutasi_DataStore.removeAll();
+								for(i=0;i<cbo_mutasi_noref_detail_DataStore.getCount();i++){
+										var detail_mutasi_record=cbo_mutasi_noref_detail_DataStore.getAt(i);
+										detail_mutasi_DataStore.insert(i,detail_mutasi_record);
+								}
+								detail_mutasi_total();
+							}
+						}
+					});
+				}
+			}
+		});
+		detail_mutasi_DataStore.commitChanges();
+		detail_mutasi_total();
+		//detail_mutasiListEditorGrid.setDisabled(true);
+	});
+
+	post2db = '';
+	task = '';
 	
 });
 	</script>
@@ -1892,6 +3270,7 @@ Ext.onReady(function(){
 	<div class="col">
         <div id="fp_master_mutasi"></div>
          <div id="fp_detail_mutasi"></div>
+		 <div id="fp_detail_mutasi_produk_jadi"></div>
 		<div id="elwindow_master_mutasi_create"></div>
         <div id="elwindow_master_mutasi_search"></div>
     </div>

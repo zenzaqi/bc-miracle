@@ -439,7 +439,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField, rpt_jproduk_opsistatusField, rpt_jproduk_groupbyField],
+		items: [rpt_jproduk_periodeField,rpt_jproduk_opsiField, rpt_jproduk_groupbyField, rpt_jproduk_opsistatusField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',

@@ -61,6 +61,7 @@
             <td width="4%" class="clear">&nbsp;</td>
             <td width="62%" class="clear">&nbsp;</td>
           </tr>
+		<?php /*
           <tr>
             <td align="right" class="clear"><strong>Produk jadi Tujuan</strong></td>
             <td class="clear">:&nbsp;</td>
@@ -71,13 +72,16 @@
             <td class="clear">:&nbsp;</td>
             <td class="clear"><?=$jumlah_out; ?></td>
           </tr>
+		    */ ?>
           <?}?>
+		
 		   <?php if($status_mutasi=='mutasi in'){?>
 		  <tr>
 		    <td align="right" class="clear"><strong>Racikan Masuk</strong></td>
             <td class="clear">&nbsp;</td>
             <td class="clear">&nbsp;</td>
           </tr>
+		
 		  <tr>
             <td align="right" class="clear"><strong>No Ref</strong></td>
             <td class="clear">:&nbsp;</td>
@@ -126,11 +130,11 @@
           <p>&nbsp;</p></td>
         <td width="65%"><table width="100%" border="0" cellspacing="0" cellpadding="0">
           <tr>
-            <td width="50%" align="center" class="clear"><center><p><strong>Accounting</strong></p></center>
+            <td width="50%" align="center" class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
               <p>&nbsp;</p>
               <center>
                 <p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; )</p></center></td>
-            <td width="50%" align="center" class="clear"><center><p><strong>Dibuat Oleh</strong></p></center>
+            <td width="50%" align="center" class="clear"><center><p><strong>Penerima</strong></p></center>
               <p>&nbsp;</p>
               <center><p>( &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; )</p></center></td>
           </tr>
