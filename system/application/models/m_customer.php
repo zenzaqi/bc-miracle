@@ -1292,6 +1292,9 @@ class M_customer extends Model{
 			if($cust_tgl!='' and $cust_bulan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."'";
+			}else if($cust_tgl=='' and $cust_bulan!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " month(cust_tgllahir)='".$cust_bulan."'";
 			};
 			
 			if($cust_umurstart!='' or $cust_umurend!=''){
