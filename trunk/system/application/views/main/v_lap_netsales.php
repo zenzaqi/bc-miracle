@@ -100,6 +100,58 @@ $bulan="";
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
+  
+  
+  Ext.Ajax.request({
+				waitMsg: 'Please Wait...',
+				url: 'index.php?c=c_lap_netsales&m=get_action',
+				params: {
+					task: 'CHART',
+					method: 'POST'
+					
+				},
+				success: function(result, request){
+				  	var hasil=eval(result.responseText);
+				  	switch(hasil){
+				  	case 1:
+				  		Ext.MessageBox.hide();
+						
+						laporanNetSalesChart.render();
+						//laporanNetSalesChart.show();
+						//Ext.getCmp('laporanNetSalesChart').update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+						
+				  		//laporanNetSalesChart.update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+						
+
+						break;
+				  	default:
+				  		Ext.MessageBox.hide();
+						Ext.MessageBox.show({
+							title: 'Warning',
+							//msg: FAILED_PRINT,
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.WARNING
+						});
+						break;
+				  	}
+				},
+				failure: function(response){
+				  	Ext.MessageBox.hide();
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: FAILED_CONNECTION,
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});
+				}
+			});
+  
+  
+  
+  
+  
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
@@ -165,6 +217,9 @@ Ext.onReady(function(){
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	net_salesTotalDataStore.load();
+	net_salesDataStore.load();
 	
 	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
@@ -743,8 +798,23 @@ Ext.onReady(function(){
 		renderTo: 'elwindow_rpt_netsales',
 		items: rpt_netsalesForm
 	});
-  	rpt_netsalesWindow.show();
+  	//rpt_netsalesWindow.show();
 	
+	
+	laporanNetSalesChart =	new Ext.form.FormPanel ({
+							title: 'Grafik Laporan Net Sales',
+							resizeable: true,
+							id: 'laporanNetSalesChart',
+							el: 'netsales_chart',
+					        width: 1200,
+							height: 450,
+							collapsible: true,
+							layout: 'fit',
+							//autoLoad: 'true',
+							frame: true,
+							html: "<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>",
+							autoDestroy: true,
+							});
 	//EVENTS
 	
 	/*rpt_netsales_rekapField.on("check", function(){
@@ -783,10 +853,12 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
+		<div id="netsales_chart"></div>
 		<div id="fp_netsales_list"></div>
         <div id="fp_netsalesTotal_list"></div>
         <div id="fp_netsales"></div>
 		<div id="elwindow_rpt_netsales"></div>
+		
     </div>
 </div>
 </body>

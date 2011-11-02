@@ -91,7 +91,7 @@ class M_lap_netsales extends Model{
 			}
 	}
 
-	function get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun){
+	function get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun,$chart='false'){
 
 		if ($periode == 'bulan'){
 			$tgl_awal	= $tahun.'-'.$bulan.'-01';
@@ -108,15 +108,23 @@ class M_lap_netsales extends Model{
 		$nbrows = $result->num_rows();
 		//return $query->result();
 		
-		if($nbrows>0){
-				foreach($result->result() as $row){
-					$arr[] = $row;
+		if ($chart == 'true')
+		{ 
+	
+		  return $result->result();
+		}
+		else
+		{
+			if($nbrows>0){
+					foreach($result->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
 				}
-				$jsonresult = json_encode($arr);
-				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
-			} else {
-				return '({"total":"0", "results":""})';
-			}
+		}
 	}
 	// eof net sales
 	

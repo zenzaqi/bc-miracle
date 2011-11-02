@@ -311,7 +311,7 @@ Ext.onReady(function(){
 	/* Identify  jenis Combo*/
 	jenis_top_Field= new Ext.form.ComboBox({
 		id: 'jenis_top_Field',
-		fieldLabel: 'Jenis',
+		fieldLabel: 'Jenis Penjualan',
 		store:new Ext.data.SimpleStore({
 			fields:['jenis_value', 'jenis_display'],
 			data:[['Perawatan','Perawatan'],['Produk','Produk'],['Paket','Paket'],['Kuitansi','Kuitansi'],['Semua','Semua']]
