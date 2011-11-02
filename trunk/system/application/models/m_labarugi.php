@@ -62,12 +62,12 @@ class M_labarugi extends Model{
 				//GET SALDO BEFORE
 				$data[$i]["labarugi_saldo"]=0;
 				
-				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_kredit) as kredit, A.akun_saldo
 						FROM	akun A
 						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
-				$sqlsaldo.="GROUP BY A.akun_kode";
-				$sqlsaldo.="	ORDER BY A.akun_kode ASC";
-				
+				//$sqlsaldo.=" GROUP BY A.akun_kode ";
+				$sqlsaldo.="	ORDER BY A.akun_kode ASC ";
+								
 				$rssaldo=$this->db->query($sqlsaldo);
 				if($rssaldo->num_rows()){
 					$rowsaldo=$rssaldo->row();
@@ -76,8 +76,10 @@ class M_labarugi extends Model{
 					}else{
 						$data[$i]["labarugi_saldo"]= ($rowsaldo->kredit-$rowsaldo->debet);
 					}
+				//print_r($sqlsaldo);
 				}
 				$labarugi_tot += ($rowsaldo->kredit - $rowsaldo->debet);
+				
 				
 				//----->
 					
@@ -191,7 +193,7 @@ class M_labarugi extends Model{
 				//GET SALDO BEFORE
 				$data[$i]["labarugi_saldo"]=0;
 				
-				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_debet) as kredit, A.akun_saldo
+				$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,sum(A.akun_kredit) as kredit, A.akun_saldo
 						FROM	akun A
 						WHERE   replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%'";
 				$sqlsaldo.="GROUP BY A.akun_kode";
