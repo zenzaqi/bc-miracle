@@ -161,8 +161,9 @@ class M_neraca extends Model{
 			}
 
 			//LAPORAN LABA RUGI
+			//2011-11-02, hendri: sementara ditutup dulu, karena belum tahu kegunaannya, sepertinya sudah terwakilkan oleh neraca_jenis3 = 3
 			
-			if($neraca_jenis==2) {
+/*			if($neraca_jenis==2) {
 				$sql="SELECT	A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id,
 								B.akun_nama as akun_parent
 						FROM 	akun A, akun B
@@ -334,7 +335,7 @@ class M_neraca extends Model{
 				
 			}
 			
-			
+*/			
 			$data[$i]["neraca_akun"]=9999;
 			$data[$i]["neraca_jenis"]='TOTAL';
 			$data[$i]["neraca_level"]=2;
