@@ -44,7 +44,7 @@ class M_master_lunas_piutang extends Model{
 		if($opsi=='rekap'){
 			$order_by=" ORDER BY cust_id";
 			if($periode=='all')
-				$sql="ELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND  ".$query_lunas ." ";
+				$sql="SELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND  ".$query_lunas ." ";
 			else if($periode=='bulan')
 				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
 			else if($periode=='tanggal')
