@@ -348,6 +348,7 @@ class C_appointment extends Controller {
 		$jenis_rawat=trim(@$_POST["jenis_rawat"]);
 		$app_dokter=trim(@$_POST["app_dokter"]);
 		$app_terapis=trim(@$_POST["app_terapis"]);
+		$app_status=trim(@$_POST["app_status"]);
 		$app_rawat_medis=trim(@$_POST["app_rawat_medis"]);
 		$app_rawat_nonmedis=trim(@$_POST["app_rawat_nonmedis"]);
 		if(trim(@$_POST["app_tgl_start_reservasi"])!="")
@@ -369,7 +370,7 @@ class C_appointment extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_appointment->appointment_search($app_customer ,$app_cara ,$jenis_rawat, $app_dokter, $app_terapis, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
+		$result = $this->m_appointment->appointment_search($app_customer ,$app_cara ,$jenis_rawat, $app_dokter, $app_terapis, $app_status, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end);
 		echo $result;
 	}
 

@@ -1835,7 +1835,7 @@ class M_appointment extends Model{
 	*/
 	
 	//function for advanced search record
-	function appointment_search($app_customer ,$app_cara ,$jenis_rawat ,$app_dokter ,$app_terapis , $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end){
+	function appointment_search($app_customer ,$app_cara ,$jenis_rawat ,$app_dokter ,$app_terapis , $app_status, $app_rawat_medis, $app_rawat_nonmedis, $app_tgl_start_reservasi, $app_tgl_end_reservasi, $app_tgl_start_app, $app_tgl_end_app, $start,$end){
 		//full query
 		//$query="select * from appointment";
 		/*$query="SELECT app_id,app_customer,cust_nama,karyawan_dokter.karyawan_nama as dokter_nama,karyawan_terapis.karyawan_nama as terapis_nama,rawat_id,rawat_nama,kategori_nama,dapp_id,dapp_status,dapp_tglreservasi,dapp_jamdatang,app_tanggal,app_cara,app_keterangan,dapp_jamreservasi,app_creator,app_date_create,app_update,app_date_update,app_revised 
@@ -1880,6 +1880,10 @@ left join vu_karyawan as karyawan_dokter on appointment_detail.dapp_petugas=kary
 		if($app_terapis!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " terapis_id='".$app_terapis."'";
+		};
+		if($app_status!=''){
+			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+			$query.= " dapp_status='".$app_status."'";
 		};
 		if($app_rawat_medis!=''){
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

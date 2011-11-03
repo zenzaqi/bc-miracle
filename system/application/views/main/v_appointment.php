@@ -148,6 +148,7 @@ var app_keteranganSearchField;
 var app_kategoriSearchField;
 var app_dokterSearchField;
 var app_terapisSearchField;
+var app_statusSearchField;
 var app_tgl_startReservasiSearchField;
 var app_tgl_endReservasiSearchField
 var app_tgl_startAppSearchField;
@@ -2835,6 +2836,7 @@ Ext.onReady(function(){
 		var app_kategori_search=null;
 		var app_dokter_search=null;
 		var app_terapis_search=null;
+		var app_status_search=null;
 		var app_tgl_start_reservasi_search=null;
 		var app_tgl_end_reservasi_search=null;
 		var app_tgl_start_app_search=null;
@@ -2848,6 +2850,7 @@ Ext.onReady(function(){
 		if(app_kategoriSearchField.getValue()!==null){app_kategori_search=app_kategoriSearchField.getValue();}
 		if(app_dokterSearchField.getValue()!==null){app_dokter_search=app_dokterSearchField.getValue();}
 		if(app_terapisSearchField.getValue()!==null){app_terapis_search=app_terapisSearchField.getValue();}
+		if(app_statusSearchField.getValue()!==null){app_status_search=app_statusSearchField.getValue();}
 		if(app_perawatan_medisSearchField.getValue()!==null){app_rawat_medis_search=app_perawatan_medisSearchField.getValue();}
 		if(app_perawatan_nonmedisSearchField.getValue()!==null){app_rawat_nonmedis_search=app_perawatan_nonmedisSearchField.getValue();}
 		if(Ext.getCmp('app_tgl_startReservasiSearchField').getValue()!=""){app_tgl_start_reservasi_search=Ext.getCmp('app_tgl_startReservasiSearchField').getValue().format('Y-m-d');}
@@ -2867,6 +2870,7 @@ Ext.onReady(function(){
 			jenis_rawat	:	app_kategori_search,
 			app_dokter	:	app_dokter_search,
 			app_terapis	:	app_terapis_search,
+			app_status	:	app_status_search,
 			app_tgl_start_reservasi	: app_tgl_start_reservasi_search,
 			app_tgl_end_reservasi	: app_tgl_end_reservasi_search,
 			app_tgl_start_app	: app_tgl_start_app_search,
@@ -2987,6 +2991,23 @@ Ext.onReady(function(){
 		allowBlank: true,
 		anchor: '95%'
 	});
+	
+	/* Identify  app_status Search Field */
+	app_statusSearchField= new Ext.form.ComboBox({
+		id: 'app_statusSearchField',
+		fieldLabel: 'Status',
+		store:new Ext.data.SimpleStore({
+			fields:['value_status', 'app_status'],
+			data:[['Reservasi','Reservasi'],['Konfirmasi','Konfirmasi'],['Datang','Datang'],['Batal','Batal'],['Jadwal Ulang','Jadwal Ulang']]
+		}),
+		mode: 'local',
+		displayField: 'app_status',
+		valueField: 'value_status',
+		width: 100,
+		triggerAction: 'all'	 
+	
+	});
+	
 	app_perawatan_medisSearchField= new Ext.form.ComboBox({
 		id: 'app_perawatan_medisSearchField',
 		fieldLabel: 'Perawatan Medis',
@@ -3108,7 +3129,7 @@ Ext.onReady(function(){
 									        endDateField: 'app_tgl_startAppSearchField' // id of the end date field
 									    }] 
 								}]
-					},app_perawatan_medisSearchField ,app_perawatan_nonmedisSearchField ,app_caraSearchField, app_kategoriSearchField, app_dokterSearchField, app_terapisSearchField] 
+					},app_perawatan_medisSearchField ,app_perawatan_nonmedisSearchField ,app_caraSearchField, app_kategoriSearchField, app_dokterSearchField, app_terapisSearchField, app_statusSearchField ]
 			}
 			]
 		}]
@@ -3159,6 +3180,9 @@ Ext.onReady(function(){
 		app_dokterSearchField.setValue(null);
 		app_terapisSearchField.reset();
 		app_terapisSearchField.setValue(null);
+		
+		app_statusSearchField.reset();
+		app_statusSearchField.setValue(null);
 		/*Ext.getCmp('app_tgl_startReservasiSearchField').reset();
 		Ext.getCmp('app_tgl_startReservasiSearchField').setValue(null);
 		Ext.getCmp('app_tgl_endReservasiSearchField').reset();
