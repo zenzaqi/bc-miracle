@@ -98,6 +98,10 @@ var group_dkolegaSearchField;
 var group_dkeluargaSearchField;
 var group_downerSearchField;
 var group_dgroomingSearchField;
+var group_dkaryawanSearchField;
+var group_dstaffdokterSearchField;
+var group_dstaffnondokterSearchField;
+var group_dpromoSearchField;
 
 
 /* on ready fuction */
@@ -209,6 +213,7 @@ Ext.onReady(function(){
 		var group_dwartawan_create=null;
 		var group_dstaffdokter_create=null;	
 		var group_dstaffnondokter_create=null;
+		var group_dpromo_create=null;
 		
 
 		group_id_create_pk=get_pk_id();
@@ -232,6 +237,7 @@ Ext.onReady(function(){
 		if(group_dwartawanField.getValue()!== null){group_dwartawan_create = group_dwartawanField.getValue();}
 		if(group_dstaffdokterField.getValue()!== null){group_dstaffdokter_create = group_dstaffdokterField.getValue();}
 		if(group_dstaffnondokterField.getValue()!== null){group_dstaffnondokter_create = group_dstaffnondokterField.getValue();}
+		if(group_dpromoField.getValue()!== null){group_dpromo_create = group_dpromoField.getValue();}
 		
 		
 		
@@ -262,6 +268,7 @@ Ext.onReady(function(){
 					group_dwartawan	: group_dwartawan_create,
 					group_dstaffdokter : group_dstaffdokter_create,
 					group_dstaffnondokter	: group_dstaffnondokter_create,
+					group_dpromo	: group_dpromo_create,
 					group_opsi	: btn
 				}, 
 				success: function(response){             
@@ -387,7 +394,7 @@ Ext.onReady(function(){
 		group_dwartawanField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dwartawan'));
 		group_dstaffdokterField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dstaffdokter'));
 		group_dstaffnondokterField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dstaffnondokter'));
-		
+		group_dpromoField.setValue(produk_groupListEditorGrid.getSelectionModel().getSelected().get('group_dpromo'));
 		
 	}
 	/* End setValue to EDIT*/
@@ -530,6 +537,7 @@ Ext.onReady(function(){
 			{name: 'group_dwartawan', type: 'int', mapping: 'group_dwartawan'},
 			{name: 'group_dstaffdokter', type: 'int', mapping: 'group_dstaffdokter'},
 			{name: 'group_dstaffnondokter', type: 'int', mapping: 'group_dstaffnondokter'},
+			{name: 'group_dpromo', type: 'int', mapping: 'group_dpromo'},
 			{name: 'group_creator', type: 'string', mapping: 'group_creator'},
 			{name: 'group_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'group_date_create'},
 			{name: 'group_update', type: 'string', mapping: 'group_update'},
@@ -729,6 +737,16 @@ Ext.onReady(function(){
 		{
 			header: 'Staff Non Dokter',
 			dataIndex: 'group_dstaffnondokter',
+			width: 80,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + ' %</span>';
+			},
+			readOnly: true
+		},
+		{
+			header: 'Promo',
+			dataIndex: 'group_dpromo',
 			width: 80,
 			sortable: true,
 			renderer: function(val){
@@ -1236,6 +1254,19 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify group_dpromo Field*/
+	group_dpromoField= new Ext.form.NumberField({
+		id: 'group_dpromoField',
+		fieldLabel: 'Promo',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	group_diskon_umumFielSet = new Ext.form.FieldSet({
 		title: 'Diskon Umum (%)',
 		labelWidth: 90,
@@ -1431,6 +1462,24 @@ Ext.onReady(function(){
 			}
 			]
 	});
+	
+	/* Group utk Diskon Promo */
+	group_diskon_promoFieldset = new Ext.form.FieldSet({
+		title: 'Promo (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dpromoField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
 
 	
 	/* Function for retrieve create Window Panel*/ 
@@ -1517,6 +1566,12 @@ Ext.onReady(function(){
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_staffnondokterFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_promoFieldset]
 								   }
 								   ]
 						}
@@ -1587,6 +1642,10 @@ Ext.onReady(function(){
 		var group_downer_search=null;
 		var group_dgrooming_search=null;
 		var group_kelompok_search=null;
+		var group_dwartawan_search=null;
+		var group_dstaffdokter_search=null;	
+		var group_dstaffnondokter_search=null;
+		var group_dpromo_search=null;
 
 
 		//if(group_idSearchField.getValue()!==null){group_id_search=group_idSearchField.getValue();}
@@ -1607,6 +1666,11 @@ Ext.onReady(function(){
 		if(group_downerSearchField.getValue()!==null){group_downer_search=group_downerSearchField.getValue();}
 		if(group_dgroomingSearchField.getValue()!==null){group_kelompok_search=group_dgroomingSearchField.getValue();}
 		if(group_kelompokSearchField.getValue()!==null){group_kelompok_search=group_kelompokSearchField.getValue();}
+		if(group_dwartawanSearchField.getValue()!== null){group_dwartawan_search = group_dwartawanSearchField.getValue();}
+		if(group_dstaffdokterSearchField.getValue()!== null){group_dstaffdokter_search = group_dstaffdokterSearchField.getValue();}
+		if(group_dstaffnondokterSearchField.getValue()!== null){group_dstaffnondokter_search = group_dstaffnondokterSearchField.getValue();}
+		if(group_dpromoSearchField.getValue()!== null){group_dpromo_search = group_dpromoSearchField.getValue();}
+		
 		// change the store parameters
 		produk_group_DataStore.baseParams = {
 			task: 'SEARCH',
@@ -1630,7 +1694,11 @@ Ext.onReady(function(){
 			group_dkeluarga	: group_dkeluarga_search,
 			group_downer	: group_downer_search,
 			group_dgrooming	: group_dgrooming_search,
-			group_kelompok	:	group_kelompok_search
+			group_kelompok	:	group_kelompok_search,
+			group_dwartawan	: group_dwartawan_search,
+			group_dstaffdokter : group_dstaffdokter_search,
+			group_dstaffnondokter	: group_dstaffnondokter_search,
+			group_dpromo	: group_dpromo_search
 		};
 		// Cause the datastore to do another query : 
 		produk_group_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -1878,6 +1946,46 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify group_dstaffdokterSearchField Field*/
+	group_dstaffdokterSearchField= new Ext.form.NumberField({
+		id: 'group_dstaffdokterSearchField',
+		fieldLabel: 'Staff Dokter',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/* Identify group_dstaffnondokterSearchField Field*/
+	group_dstaffnondokterSearchField= new Ext.form.NumberField({
+		id: 'group_dstaffnondokterSearchField',
+		fieldLabel: 'Staff Non Dokter',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
+		
+	/* Identify group_dpromoSearchField Field*/
+	group_dpromoSearchField= new Ext.form.NumberField({
+		id: 'group_dpromoSearchField',
+		fieldLabel: 'Promo',
+		allowNegatife : false,
+		emptyText: '0',
+		allowDecimals: false,
+		enableKeyEvents: true,
+		maxLength: 3,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	
 	
 	
 	group_diskon_umumSearchFielSet = new Ext.form.FieldSet({
@@ -2023,6 +2131,77 @@ Ext.onReady(function(){
 			]
 	});
 
+	/* Group utk Diskon Grooming Search */
+	group_diskon_wartawanSearchFieldset = new Ext.form.FieldSet({
+		title: 'Wartawan (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dwartawanSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Grooming Search */
+	group_diskon_staffdokterSearchFieldset = new Ext.form.FieldSet({
+		title: 'Staff Dokter (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dstaffdokterSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Grooming Search */
+	group_diskon_staffnondokterSearchFieldset = new Ext.form.FieldSet({
+		title: 'Staff Non Dokter (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dstaffnondokterSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
+	
+	/* Group utk Diskon Grooming Search */
+	group_diskon_promoSearchFieldset = new Ext.form.FieldSet({
+		title: 'Promo (%)',
+		labelWidth: 90,
+		autoHeight: true,
+		collapsible: true,
+		layout:'column',
+		anchor: '95%',
+		items:[
+			{
+				columnWidth:1,
+				layout: 'form',
+				border:false,
+				items: [group_dpromoSearchField, {xtype: 'spacer',height:53}] 
+			}
+			]
+	});
 
 	/* Function for retrieve search Form Panel */
 	produk_group_searchForm = new Ext.FormPanel({
@@ -2090,7 +2269,32 @@ Ext.onReady(function(){
 									   layout: 'form',
 									   border:false,
 									   items:[group_diskon_groomingSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_wartawanSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_staffdokterSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_staffnondokterSearchFieldset]
+								   },
+								   {
+									   columnWidth:0.25,
+									   layout: 'form',
+									   border:false,
+									   items:[group_diskon_promoSearchFieldset]
 								   }
+								   
 								   ]
 						}
 						,group_kelompokSearchField,group_keteranganSearchField, group_aktifSearchField] 
@@ -2159,6 +2363,11 @@ Ext.onReady(function(){
 		var group_dkeluarga_print=null;
 		var group_downer_print=null;
 		var group_dgrooming_print=null;
+		var group_dwartawan_print=null;
+		var group_dstaffdokter_print=null;	
+		var group_dstaffnondokter_print=null;
+		var group_dpromo_print=null;
+		
 		var win;              
 		// check if we do have some search data...
 		if(produk_group_DataStore.baseParams.query!==null){searchquery = produk_group_DataStore.baseParams.query;}
@@ -2179,7 +2388,11 @@ Ext.onReady(function(){
 		if(produk_group_DataStore.baseParams.group_downer!==null){group_downer_print = produk_group_DataStore.baseParams.group_downer;}
 		if(produk_group_DataStore.baseParams.group_dgrooming!==null){group_dgrooming_print = produk_group_DataStore.baseParams.group_dgrooming;}
 		
-	
+		if(produk_group_DataStore.baseParams.group_dwartawan!==null){group_dwartawan_print = produk_group_DataStore.baseParams.group_dwartawan;}
+		if(produk_group_DataStore.baseParams.group_dstaffdokter!==null){group_dstaffdokter_print = produk_group_DataStore.baseParams.group_dstaffdokter;}
+		if(produk_group_DataStore.baseParams.group_dstaffnondokter!==null){group_dstaffnondokter_print = produk_group_DataStore.baseParams.group_dstaffnondokter;}
+		if(produk_group_DataStore.baseParams.group_dpromo!==null){group_dpromo_print = produk_group_DataStore.baseParams.group_dpromo;}
+
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_produk_group&m=get_action',
@@ -2202,6 +2415,10 @@ Ext.onReady(function(){
 			group_dkeluarga	: group_dkeluarga_print,
 			group_downer	: group_downer_print,
 			group_dgrooming	: group_dgrooming_print,
+			group_dwartawan	: group_dwartawan_print,
+			group_dstaffdokter : group_dstaffdokter_print,
+			group_dstaffnondokter	: group_dstaffnondokter_print,
+			group_dpromo	: group_dpromo_print,
 		  	currentlisting	: produk_group_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -2254,6 +2471,10 @@ Ext.onReady(function(){
 		var group_dkeluarga_2excel=null;
 		var group_downer_2excel=null;
 		var group_dgrooming_2excel=null;
+		var group_dwartawan_2excel=null;
+		var group_dstaffdokter_2excel=null;	
+		var group_dstaffnondokter_2excel=null;
+		var group_dpromo_2excel=null;
 		var win;              
 		// check if we do have some search data...
 		if(produk_group_DataStore.baseParams.query!==null){searchquery = produk_group_DataStore.baseParams.query;}
@@ -2273,7 +2494,11 @@ Ext.onReady(function(){
 		if(produk_group_DataStore.baseParams.group_dkeluarga!==null){group_dkeluarga_2excel = produk_group_DataStore.baseParams.group_dkeluarga;}
 		if(produk_group_DataStore.baseParams.group_downer!==null){group_downer_2excel = produk_group_DataStore.baseParams.group_downer;}
 		if(produk_group_DataStore.baseParams.group_dgrooming!==null){group_dgrooming_2excel = produk_group_DataStore.baseParams.group_dgrooming;}
-	
+
+		if(produk_group_DataStore.baseParams.group_dwartawan!==null){group_dwartawan_2excel = produk_group_DataStore.baseParams.group_dwartawan;}
+		if(produk_group_DataStore.baseParams.group_dstaffdokter!==null){group_dstaffdokter_2excel = produk_group_DataStore.baseParams.group_dstaffdokter;}
+		if(produk_group_DataStore.baseParams.group_dstaffnondokter!==null){group_dstaffnondokter_2excel = produk_group_DataStore.baseParams.group_dstaffnondokter;}
+		if(produk_group_DataStore.baseParams.group_dpromo!==null){group_dpromo_2excel = produk_group_DataStore.baseParams.group_dpromo;}
 	
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -2298,6 +2523,10 @@ Ext.onReady(function(){
 			group_dkeluarga	: group_dkeluarga_2excel,
 			group_downer	: group_downer_2excel,
 			group_dgrooming : group_dgrooming_2excel,
+			group_dwartawan	: group_dwartawan_2excel,
+			group_dstaffdokter : group_dstaffdokter_2excel,
+			group_dstaffnondokter	: group_dstaffnondokter_2excel,
+			group_dpromo	: group_dpromo_2excel,
 		  	currentlisting: produk_group_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

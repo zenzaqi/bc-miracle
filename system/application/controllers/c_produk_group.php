@@ -111,6 +111,7 @@ class C_produk_group extends Controller {
 		$group_dwartawan=trim(@$_POST["group_dwartawan"]);
 		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
 		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
+		$group_dpromo=trim(@$_POST["group_dpromo"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -121,7 +122,7 @@ class C_produk_group extends Controller {
 		
 		$result = $this->m_produk_group->produk_group_update($group_id , $group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat,
 															 $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-															 $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,
+															 $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,$group_dpromo,
 															 $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 															 $group_revised, $group_opsi );
 		echo $result;
@@ -160,6 +161,7 @@ class C_produk_group extends Controller {
 		$group_dwartawan=trim(@$_POST["group_dwartawan"]);
 		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
 		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
+		$group_dpromo=trim(@$_POST["group_dpromo"]);
 		$group_creator="";
 		$group_date_create="";
 		$group_update="";
@@ -169,7 +171,7 @@ class C_produk_group extends Controller {
 		
 		$result=$this->m_produk_group->produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,
 														   $group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,
-														   $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,
+														   $group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,$group_dpromo,
 														   $group_creator ,$group_date_create ,$group_update ,$group_date_update ,
 														   $group_revised, $group_opsi);
 		echo $result;
@@ -212,6 +214,10 @@ class C_produk_group extends Controller {
 		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
 		$group_downer=trim(@$_POST["group_downer"]);
 		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
+		$group_dkaryawan=trim(@$_POST["group_dkaryawan"]);
+		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
+		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
+		$group_dpromo=trim(@$_POST["group_dpromo"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -224,7 +230,7 @@ class C_produk_group extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok, $group_aktif, $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
+		$result = $this->m_produk_group->produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok, $group_aktif, $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end);
 		echo $result;
 	}
 
@@ -256,6 +262,10 @@ class C_produk_group extends Controller {
 		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
 		$group_downer=trim(@$_POST["group_downer"]);
 		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
+		$group_dkaryawan=trim(@$_POST["group_dkaryawan"]);
+		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
+		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
+		$group_dpromo=trim(@$_POST["group_dpromo"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -269,14 +279,13 @@ class C_produk_group extends Controller {
 		$filter=$_POST["query"];
 		
 		$result = $this->m_produk_group->produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,
-															$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
-															$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
+															$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=15;
+		$totcolumn=19;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("produk_grouplist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Produk_group Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Produk_group List'><caption>DAFTAR GROUP 1</caption><thead><tr><th scope='col'>No</th><th scope='col'>Nama</th><th scope='col'>DU Produk</th><th scope='col'>DM Produk</th><th scope='col'>DU Rawat</th><th scope='col'>DM Rawat</th><th scope='col'>DU Paket</th><th scope='col'>DM Paket</th><th scope='col'>Keterangan</th><th scope='col'>Group Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='Produk_group List'><caption>DAFTAR GROUP 1</caption><thead><tr><th scope='col'>No</th><th scope='col'>Nama</th><th scope='col'>DU Produk</th><th scope='col'>DM Produk</th><th scope='col'>DU Rawat</th><th scope='col'>DM Rawat</th><th scope='col'>DU Paket</th><th scope='col'>DM Paket</th><th scope='col'>Ultah</th><th scope='col'>Card</th><th scope='col'>Kolega</th><th scope='col'>Keluarga</th><th scope='col'>Owner</th><th scope='col'>Grooming</th><th scope='col'>Wartawan</th><th scope='col'>Staff Dokter</th><th scope='col'>Staff Non Dokter</th><th scope='col'>Promo</th><th scope='col'>Keterangan</th><th scope='col'>Group Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " </td></tr></tfoot><tbody>");
 		$i=0;
@@ -317,6 +326,16 @@ class C_produk_group extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_dgrooming']);
 				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dwartawan']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dstaffdokter']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dstaffnondokter']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['group_dpromo']);
+				fwrite($file,"</td><td>");
+
+
 				fwrite($file, $data['group_keterangan']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_aktif']);
@@ -357,6 +376,10 @@ class C_produk_group extends Controller {
 		$group_dkeluarga=trim(@$_POST["group_dkeluarga"]);
 		$group_downer=trim(@$_POST["group_downer"]);
 		$group_dgrooming=trim(@$_POST["group_dgrooming"]);
+		$group_dkaryawan=trim(@$_POST["group_dkaryawan"]);
+		$group_dstaffdokter=trim(@$_POST["group_dstaffdokter"]);
+		$group_dstaffnondokter=trim(@$_POST["group_dstaffnondokter"]);
+		$group_dpromo=trim(@$_POST["group_dpromo"]);
 		$group_creator=trim(@$_POST["group_creator"]);
 		$group_creator=str_replace("/(<\/?)(p)([^>]*>)", "",$group_creator);
 		$group_creator=str_replace("'", '"',$group_creator);
@@ -370,8 +393,7 @@ class C_produk_group extends Controller {
 		$filter=$_POST["query"];
 		
 		$query = $this->m_produk_group->produk_group_export_excel($group_id, $group_kode, $group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,
-																	$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,
-																	$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
+																	$group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter);
 		
 		to_excel($query,"produk_group"); 
 		echo '1';
