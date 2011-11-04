@@ -206,7 +206,7 @@ ORDER BY produk_id";
 									' ' as jumlah_out,
 									d.dmracikan_jumlah as jumlah_in
 									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_id
+									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
 									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
 									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
 									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
@@ -243,7 +243,7 @@ ORDER BY produk_id";
 									' ' as jumlah_out,
 									d.dmracikan_jumlah as jumlah_in
 									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_id
+									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
 									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
 									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
 									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
@@ -282,7 +282,7 @@ ORDER BY produk_id";
 									' ' as jumlah_out,
 									d.dmracikan_jumlah as jumlah_in
 									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_id
+									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
 									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
 									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
 									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
@@ -335,7 +335,7 @@ ORDER BY produk_id";
 		}
 		/*Jika yang login adalah Kasir / Apoteker */
 		else if($_SESSION[SESSION_GROUPID]==4 || $_SESSION[SESSION_GROUPID]==26){
-			$sql = "SELECT gudang_id,gudang_nama FROM gudang WHERE gudang_aktif='Aktif' and gudang_id = 2";
+			$sql = "SELECT gudang_id,gudang_nama FROM gudang WHERE gudang_aktif='Aktif' and (gudang_id = 2 OR gudang_id = 1)";
 		}
 		/*Jika yang login adalah administrator*/
 		else if($_SESSION[SESSION_GROUPID]==1){
@@ -1163,7 +1163,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			}
 			/*Jika yang login adalah Kasir / Apoteker */
 			else if($_SESSION[SESSION_GROUPID]==4 || $_SESSION[SESSION_GROUPID]==26){
-				$query = "SELECT * FROM vu_trans_mutasi where (mutasi_asal = 2 or mutasi_tujuan = 2)";
+				$query = "SELECT * FROM vu_trans_mutasi where (mutasi_asal = 2 or mutasi_tujuan = 2 or mutasi_asal = 1 or mutasi_tujuan = 1)";
 			}
 			else
 			$query = "SELECT * FROM vu_trans_mutasi";
@@ -1412,7 +1412,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			/*Jika yang login adalah Kasir / Apoteker */
 			else if($_SESSION[SESSION_GROUPID]==4 || $_SESSION[SESSION_GROUPID]==26){
 				$query = "SELECT * FROM vu_trans_mutasi
-							where mutasi_asal = 2
+							where mutasi_asal = 2 or mutasi_asal = 1
 							";
 			}
 			else

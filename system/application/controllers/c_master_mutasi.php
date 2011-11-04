@@ -110,6 +110,7 @@ class C_master_mutasi extends Controller {
 				case "Gudang Tujuan": $print_view=$this->load->view("main/p_detail_mutasi_tujuan.php",$data,TRUE);break;
 				case "Produk": $print_view=$this->load->view("main/p_detail_mutasi_produk.php",$data,TRUE);break;
 				case "Produk Racikan": $print_view=$this->load->view("main/p_detail_mutasi_produk_racikan.php",$data,TRUE);break;
+				case "Barang Keluar": $print_view=$this->load->view("main/p_detail_mutasi_barang_keluar.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_detail_mutasi.php",$data,TRUE);break;
 			}
 		}
