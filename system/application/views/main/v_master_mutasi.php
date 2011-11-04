@@ -2165,6 +2165,7 @@ Ext.onReady(function(){
 			valueField: 'mutasi_satuan_id',
 			triggerAction: 'all',
 			lazyRender:true,
+			allowBlank : false,
 			loadingText: 'Searching...',
 			//hideTrigger:false,
 			//itemSelector: 'div.search-item',
