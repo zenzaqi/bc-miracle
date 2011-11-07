@@ -947,14 +947,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'paket_kode',
-			width: 75,	//150,
+			width: 70,	//150,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'paket_nama',
-			width: 260,	//250,
+			width: 220,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			<?php } ?>
@@ -962,7 +962,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'paket_group',
-			width: 80,	//150,
+			width: 100,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			/*,
@@ -987,141 +987,10 @@ Ext.onReady(function(){
 			hidden: true
 		},
 		{
-			header: '<div align="center">' + 'DU' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_du',
-			width: 45,	//100,
-			sortable: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'DM' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dm',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Ultah' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dultah',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Card' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dcard',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Kolega' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dkolega',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Keluarga' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dkeluarga',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Owner' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_downer',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Grooming' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dgrooming',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Wartawan' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dwartawan',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Staff Dokter' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dstaffdokter',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Staff Non Dokter' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_dstaffnondokter',
-			width: 45,	//100,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Poin' + '</div>',
-			align: 'right',
-			dataIndex: 'paket_point',
-			width: 40,	//100,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
-			<?php } ?>
-		},
-		{
 			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_harga',
-			width: 80,	//150,
+			width: 60,	//150,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -1161,7 +1030,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Status' + '</div>',
 			dataIndex: 'paket_aktif',
-			width: 50,	//150,
+			width: 60,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
 			/*,
@@ -1179,7 +1048,138 @@ Ext.onReady(function(){
                	listClass: 'x-combo-list-small'
             })*/
 			<?php } ?>
+		},{
+			header: '<div align="center">' + 'Umum' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_du',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
 		},
+		{
+			header: '<div align="center">' + 'Member' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dm',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Ultah' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dultah',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Card' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dcard',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Kolega' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dkolega',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Klrg' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dkeluarga',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Owner' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_downer',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Groom' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dgrooming',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Wrtwn' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dwartawan',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Staf Dr' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dstaffdokter',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Staf Non Dr' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dstaffnondokter',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Poin' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_point',
+			width: 40,	//100,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		
 		{
 			header: 'Creator',
 			dataIndex: 'paket_creator',
@@ -1237,7 +1237,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,	//900,
+	  	width: 1400,	//900,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			store: paket_DataStore,
@@ -1914,7 +1914,7 @@ Ext.onReady(function(){
 	paket_duField= new Ext.form.NumberField({
 		id: 'paket_duField',
 		name: 'paket_duField',
-		fieldLabel: 'Umum(%)',
+		fieldLabel: 'Umum',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1928,7 +1928,7 @@ Ext.onReady(function(){
 	paket_dmField= new Ext.form.NumberField({
 		id: 'paket_dmField',
 		name: 'paket_dmField',
-		fieldLabel: 'Member(%)',
+		fieldLabel: 'Member',
 		allowNegatife : false,
 		emptyText: '0',
 		enableKeyEvents : true,
@@ -1942,7 +1942,7 @@ Ext.onReady(function(){
 	paket_dultahField= new Ext.form.NumberField({
 		id: 'paket_dultahField',
 		name: 'paket_dultahField',
-		fieldLabel: 'Ultah(%)',
+		fieldLabel: 'Ultah',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1955,7 +1955,7 @@ Ext.onReady(function(){
 	paket_dcardField= new Ext.form.NumberField({
 		id: 'paket_dcardField',
 		name: 'paket_dcardField',
-		fieldLabel: 'Card(%)',
+		fieldLabel: 'Card',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1968,7 +1968,7 @@ Ext.onReady(function(){
 	paket_dkolegaField= new Ext.form.NumberField({
 		id: 'paket_dkolegaField',
 		name: 'paket_dkolegaField',
-		fieldLabel: 'Kolega(%)',
+		fieldLabel: 'Kolega',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1981,7 +1981,7 @@ Ext.onReady(function(){
 	paket_dkeluargaField= new Ext.form.NumberField({
 		id: 'paket_dkeluargaField',
 		name: 'paket_dkeluargaField',
-		fieldLabel: 'Keluarga(%)',
+		fieldLabel: 'Keluarga',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1994,7 +1994,7 @@ Ext.onReady(function(){
 	paket_downerField= new Ext.form.NumberField({
 		id: 'paket_downerField',
 		name: 'paket_downerField',
-		fieldLabel: 'Owner(%)',
+		fieldLabel: 'Owner',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2007,7 +2007,7 @@ Ext.onReady(function(){
 	paket_dgroomingField= new Ext.form.NumberField({
 		id: 'paket_dgroomingField',
 		name: 'paket_dgroomingField',
-		fieldLabel: 'Grooming(%)',
+		fieldLabel: 'Grooming',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2020,7 +2020,7 @@ Ext.onReady(function(){
 	paket_dwartawanField= new Ext.form.NumberField({
 		id: 'paket_dwartawanField',
 		name: 'paket_dwartawanField',
-		fieldLabel: 'Wartawan(%)',
+		fieldLabel: 'Wartawan',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2033,7 +2033,7 @@ Ext.onReady(function(){
 	paket_dstaffdokterField= new Ext.form.NumberField({
 		id: 'paket_dstaffdokterField',
 		name: 'paket_dstaffdokterField',
-		fieldLabel: 'Staff Dokter(%)',
+		fieldLabel: 'Staf Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2046,7 +2046,7 @@ Ext.onReady(function(){
 	paket_dstaffnondokterField= new Ext.form.NumberField({
 		id: 'paket_dstaffnondokterField',
 		name: 'paket_dstaffnondokterField',
-		fieldLabel: 'Staff Non Dokter(%)',
+		fieldLabel: 'Staf Non Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2109,7 +2109,7 @@ Ext.onReady(function(){
 
 	//untuk Panel Diskon 
 	paket_diskonGroup = new Ext.form.FieldSet({
-		title: 'Jenis Diskon',
+		title: 'Jenis Diskon (%)',
 		layout:'column',
 		autoHeight: true,
 		mode: 'remote',

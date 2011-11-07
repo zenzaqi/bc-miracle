@@ -4585,6 +4585,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'dproduk_produk_dwartawan', type: 'float', mapping: 'produk_dwartawan'},
 			{name: 'dproduk_produk_dstaffdokter', type: 'float', mapping: 'produk_dstaffdokter'},
 			{name: 'dproduk_produk_dstaffnondokter', type: 'float', mapping: 'produk_dstaffnondokter'},
+			{name: 'dproduk_produk_dpromo', type: 'float', mapping: 'produk_dpromo'},
 			{name: 'dproduk_produk_display', type: 'string', mapping: 'produk_nama'}
 		]),
 		sortInfo:{field: 'dproduk_produk_display', direction: "ASC"}
@@ -4903,7 +4904,7 @@ Ext.override(Ext.form.Field, {
 	var djenis_diskonField = new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff'],['Promo']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -4962,6 +4963,10 @@ Ext.override(Ext.form.Field, {
 		}else if(djenis_diskonField.getValue()=='Staf Non Dokter'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter);
+			djumlah_diskonField.setReadOnly(true);
+		}else if(djenis_diskonField.getValue()=='Promo'){
+			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo;
+			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo);
 			djumlah_diskonField.setReadOnly(true);
 		}
 		else{

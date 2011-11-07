@@ -257,14 +257,14 @@ class M_master_jual_paket extends Model{
 			if($aktif=='yes'){
 				$sql=  "SELECT 
 						paket_id, paket_harga, paket_kode, 
-						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,
+						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,paket_dpromo,
 						paket_nama, paket_expired 
 					FROM paket 
 					WHERE paket_aktif='Aktif'";
 			}else{
 				$sql=  "SELECT 
 						paket_id, paket_harga, paket_kode, 
-						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,
+						paket_du, paket_dm, paket_dultah, paket_dcard, paket_dkolega, paket_dkeluarga, paket_downer, paket_dgrooming, paket_dwartawan, paket_dstaffdokter, paket_dstaffnondokter,paket_dpromo,
 						paket_nama, paket_expired 
 					FROM paket";
 			}

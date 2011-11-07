@@ -1059,14 +1059,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'rawat_kode',
-			width: 75,	//150,
+			width: 70,
 			sortable: true,
 			readOnly: true
 		},
 		{
 			header: '<div align="center">' + 'Nama Perawatan' + '</div>',
 			dataIndex: 'rawat_nama',
-			width: 260,	//250,
+			width: 220,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 			/*,
@@ -1079,7 +1079,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'rawat_group',
-			width: 80,
+			width: 100,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1096,7 +1096,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'rawat_jenis',
-			width: 80,
+			width: 100,
 			sortable: true,
 			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
@@ -1113,144 +1113,49 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'rawat_kategori_nama',
-			width: 80,	//150,
+			width: 70,	//150,
 			sortable: true,
 			editable: false
 		}, 
 		{
-			header: '<div align="center">' + 'DU' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_du',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
+			header: '<div align="center">' + 'Gudang' + '</div>',
+			dataIndex: 'rawat_gudang',
+			width: 80,
+			sortable: true,
+			readOnly: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			/*,
+			editor: new Ext.form.ComboBox({
+				store: cbo_rawat_gudangDataSore,
+				mode: 'remote',
+				displayField: 'rawat_gudang_display',
+				valueField: 'rawat_gudang_value',
+				triggerAction: 'all'
+			})*/
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'DM' + '</div>',
+			header: '<div align="center">' + 'Harga (Rp)' + '</div>',
+			dataIndex: 'rawat_harga',
 			align: 'right',
-			dataIndex: 'rawat_dm',
-			width: 45,	//100,
+			width: 60,	//150,
+			sortable: true,
 			readOnly: true,
 			renderer: function(val){
-				return '<span>' + val + '</span>';
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
 			}
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Ultah' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dultah',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 	
-		{
-			header: '<div align="center">' + 'Card' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dcard',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			/*,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})*/
 			<?php } ?>
 		}, 
-		{
-			header: '<div align="center">' + 'Kolega' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dkolega',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Keluarga' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dkeluarga',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Owner' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_downer',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Grooming' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dgrooming',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		
-		{
-			header: '<div align="center">' + 'Wartawan' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dwartawan',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Staff Dokter' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dstaffdokter',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Staff Non Dokter' + '</div>',
-			align: 'right',
-			dataIndex: 'rawat_dstaffnondokter',
-			width: 45,	//100,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>' + val + ' %</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
-			
 		{
 			header: '<div align="center">' + 'Poin' + '</div>',
 			dataIndex: 'rawat_point',
@@ -1270,14 +1175,194 @@ Ext.onReady(function(){
 			})*/
 			<?php } ?>
 		}, 
+		{
+			header: '<div align="center">' + 'Kr (Poin)' + '</div>',
+			dataIndex: 'rawat_kredit',
+			align: 'right',
+			width: 60,	//100,
+			sortable: true,
+			readOnly: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+		/*	,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})*/
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Kr (Rp)' + '</div>',
+			dataIndex: 'rawat_kreditrp',
+			align: 'right',
+			width: 60,	//100,
+			sortable: true,
+			readOnly: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+		/*	,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: false,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 11,
+				maskRe: /([0-9]+)$/
+			})*/
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Status' + '</div>',
+			dataIndex: 'rawat_aktif',
+			width: 60,	//150,
+			sortable: true,
+			readOnly: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Umum' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_du',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Member' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dm',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Ultah' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dultah',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 	
+		{
+			header: '<div align="center">' + 'Card' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dcard',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Kolega' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dkolega',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Klrga' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dkeluarga',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Owner' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_downer',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Groom' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dgrooming',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
 		
+		{
+			header: '<div align="center">' + 'Wrtwn' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dwartawan',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Staf Dr' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dstaffdokter',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Staf Non Dr' + '</div>',
+			align: 'right',
+			dataIndex: 'rawat_dstaffnondokter',
+			width: 45,	//100,
+			readOnly: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
+			<?php } ?>
+		}, 			
 		{
 			header: '<div align="center">' + 'Durasi' + '</div>',
 			dataIndex: 'rawat_durasi',
 			align: 'right',
 			width: 40,	//100,
 			sortable: true,
-			readOnly: true
+			readOnly: true,
+			hidden: true,
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
 			/*,
 			editor: new Ext.form.NumberField({
@@ -1289,46 +1374,7 @@ Ext.onReady(function(){
 				maskRe: /([0-9]+)$/
 			})*/
 			<?php } ?>
-		}, 
-		
-		{
-			header: '<div align="center">' + 'Kredit (Poin)' + '</div>',
-			dataIndex: 'rawat_kredit',
-			align: 'right',
-			width: 40,	//100,
-			sortable: true,
-			readOnly: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-		/*	,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
-			<?php } ?>
-		},
-		{
-			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
-			dataIndex: 'rawat_kreditrp',
-			align: 'right',
-			width: 40,	//100,
-			sortable: true,
-			readOnly: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-		/*	,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: false,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 11,
-				maskRe: /([0-9]+)$/
-			})*/
-			<?php } ?>
-		},
+		}, 		
 		/*
 		{
 			header: '<div align="center">' + 'Sat.Jml.Tindakan' + '</div>',
@@ -1345,45 +1391,6 @@ Ext.onReady(function(){
 			<?php } ?>
 		}, 
 		*/
-		{
-			header: '<div align="center">' + 'Harga(Rp)' + '</div>',
-			dataIndex: 'rawat_harga',
-			align: 'right',
-			width: 80,	//150,
-			sortable: true,
-			readOnly: true,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})*/
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Gudang' + '</div>',
-			dataIndex: 'rawat_gudang',
-			width: 80,
-			sortable: true,
-			readOnly: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			/*,
-			editor: new Ext.form.ComboBox({
-				store: cbo_rawat_gudangDataSore,
-				mode: 'remote',
-				displayField: 'rawat_gudang_display',
-				valueField: 'rawat_gudang_value',
-				triggerAction: 'all'
-			})*/
-			<?php } ?>
-		}, 
 		/*
 		{
 			header: 'Contribution',
@@ -1397,15 +1404,6 @@ Ext.onReady(function(){
 			<?php } ?>
 		}, 
 		*/
-		{
-			header: '<div align="center">' + 'Status' + '</div>',
-			dataIndex: 'rawat_aktif',
-			width: 50,	//150,
-			sortable: true,
-			readOnly: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PERAWATAN'))){ ?>
-			<?php } ?>
-		}, 
 		{
 			header: 'Creator',
 			dataIndex: 'rawat_creator',
@@ -1464,7 +1462,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1220,
+	  	width: 1600,
 		bbar: new Ext.PagingToolbar({
 			pageSize: pageS,
 			hideParent:true,
@@ -1698,7 +1696,7 @@ Ext.onReady(function(){
 	rawat_duField= new Ext.form.NumberField({
 		id: 'rawat_duField',
 		name: 'rawat_duField',
-		fieldLabel: 'Umum(%)',
+		fieldLabel: 'Umum',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1711,7 +1709,7 @@ Ext.onReady(function(){
 	rawat_dmField= new Ext.form.NumberField({
 		id: 'rawat_dmField',
 		name: 'rawat_dmField',
-		fieldLabel: 'Member(%)',
+		fieldLabel: 'Member',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1724,7 +1722,7 @@ Ext.onReady(function(){
 	rawat_dultahField= new Ext.form.NumberField({
 		id: 'rawat_dultahField',
 		name: 'rawat_dultahField',
-		fieldLabel: 'Ultah(%)',
+		fieldLabel: 'Ultah',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1737,7 +1735,7 @@ Ext.onReady(function(){
 	rawat_dcardField= new Ext.form.NumberField({
 		id: 'rawat_dcardField',
 		name: 'rawat_dcardField',
-		fieldLabel: 'Card(%)',
+		fieldLabel: 'Card',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1750,7 +1748,7 @@ Ext.onReady(function(){
 	rawat_dkolegaField= new Ext.form.NumberField({
 		id: 'rawat_dkolegaField',
 		name: 'rawat_dkolegaField',
-		fieldLabel: 'Kolega(%)',
+		fieldLabel: 'Kolega',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1763,7 +1761,7 @@ Ext.onReady(function(){
 	rawat_dkeluargaField= new Ext.form.NumberField({
 		id: 'rawat_dkeluargaField',
 		name: 'rawat_dkeluargaField',
-		fieldLabel: 'Keluarga(%)',
+		fieldLabel: 'Keluarga',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1776,7 +1774,7 @@ Ext.onReady(function(){
 	rawat_downerField= new Ext.form.NumberField({
 		id: 'rawat_downerField',
 		name: 'rawat_downerField',
-		fieldLabel: 'Owner(%)',
+		fieldLabel: 'Owner',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1789,7 +1787,7 @@ Ext.onReady(function(){
 	rawat_dgroomingField= new Ext.form.NumberField({
 		id: 'rawat_dgroomingField',
 		name: 'rawat_dgroomingField',
-		fieldLabel: 'Grooming(%)',
+		fieldLabel: 'Grooming',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1803,7 +1801,7 @@ Ext.onReady(function(){
 	rawat_dwartawanField= new Ext.form.NumberField({
 		id: 'rawat_dwartawanField',
 		name: 'rawat_dwartawanField',
-		fieldLabel: 'Wartawan(%)',
+		fieldLabel: 'Wartawan',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1817,7 +1815,7 @@ Ext.onReady(function(){
 	rawat_dstaffdokterField= new Ext.form.NumberField({
 		id: 'rawat_dstaffdokterField',
 		name: 'rawat_dstaffdokterField',
-		fieldLabel: 'Staff Dokter(%)',
+		fieldLabel: 'Staf Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -1831,7 +1829,7 @@ Ext.onReady(function(){
 	rawat_dstaffnondokterField= new Ext.form.NumberField({
 		id: 'rawat_dstaffnondokterField',
 		name: 'rawat_dstaffnondokterField',
-		fieldLabel: 'Staff Non Dokter(%)',
+		fieldLabel: 'Staf Non Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowDecimals: false,
@@ -2134,7 +2132,7 @@ Ext.onReady(function(){
 	
 	//untuk Panel Diskon 
 	rawat_diskonGroup = new Ext.form.FieldSet({
-		title: 'Jenis Diskon',
+		title: 'Jenis Diskon (%)',
 		layout:'column',
 		autoHeight: true,
 		mode: 'remote',
