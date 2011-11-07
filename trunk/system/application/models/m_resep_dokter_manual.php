@@ -95,7 +95,7 @@ class M_resep_dokter extends Model{
 		}
 		
 	function get_produk_racikan_list_by_produk_id($produk_id,$query,$start,$end){
-			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama,satuan_nama FROM vu_produk";
+			$sql="SELECT produk_id,produk_nama,produk_kode,kategori_nama FROM vu_produk";
 			if($produk_id<>"")
 				$sql.=" WHERE produk_id IN(SELECT pracikan_produk FROM produk_racikan WHERE pracikan_master='".$produk_id."')";
 			
