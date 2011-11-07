@@ -57,7 +57,7 @@ class M_akun extends Model{
 		}
 
 		function get_akun_list($filter,$start,$end){
-			$query = "SELECT * FROM akun WHERE akun_level<5 AND akun_aktif='Aktif'";
+			$query = "SELECT concat('(', a.akun_kode, ') ', a.akun_nama) as akun_kode_nama, a.* FROM akun a WHERE akun_level<5 AND akun_aktif='Aktif'";
 
 			// For simple search
 			if ($filter<>"" && $query !=""){
