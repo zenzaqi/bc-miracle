@@ -295,6 +295,33 @@ ORDER BY produk_id";
 						" .$order_by;
 	
 				}
+				// Utk opsi barang keluar
+				else if($group=='Barang Keluar'){
+					if($periode=='bulan'){
+					$sql="SELECT mutasi_no, mutasi_tanggal, dmutasi_jumlah, mutasi_id, tujuan.gudang_nama as gudang_tujuan_nama, asal.gudang_nama as gudang_asal_nama , produk_nama, satuan_nama
+					FROM detail_mutasi  
+					left join master_mutasi on (detail_mutasi.dmutasi_master = master_mutasi.mutasi_id)
+					left join kategori_barang_keluar on (master_mutasi.mutasi_kategori_barang_keluar = kategori_barang_keluar.kbk_id) 
+					LEFT JOIN produk on (produk.produk_id = detail_mutasi.dmutasi_produk)
+					LEFT JOIN satuan on (satuan.satuan_id = produk.produk_satuan)
+					LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+					LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+					WHERE mutasi_status='Tertutup' and master_mutasi.mutasi_barang_keluar = 1 and date_format(master_mutasi.mutasi_tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
+				}
+				else if($periode=='tanggal'){
+					$sql="SELECT mutasi_no, mutasi_tanggal, dmutasi_jumlah, mutasi_id, tujuan.gudang_nama as gudang_tujuan_nama, asal.gudang_nama as gudang_asal_nama , produk_nama, satuan_nama
+					FROM detail_mutasi  
+					left join master_mutasi on (detail_mutasi.dmutasi_master = master_mutasi.mutasi_id)
+					left join kategori_barang_keluar on (master_mutasi.mutasi_kategori_barang_keluar = kategori_barang_keluar.kbk_id) 
+					LEFT JOIN produk on (produk.produk_id = detail_mutasi.dmutasi_produk)
+					LEFT JOIN satuan on (satuan.satuan_id = produk.produk_satuan)
+					LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+					LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+					WHERE mutasi_status='Tertutup' and master_mutasi.mutasi_barang_keluar = 1 and date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+				}
+
+				}
+			
 				else{
 				if($periode=='all')
 					$sql="SELECT * FROM vu_detail_mutasi WHERE mutasi_status='Tertutup' ".$order_by;
