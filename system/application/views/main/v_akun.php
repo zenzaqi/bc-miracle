@@ -421,6 +421,12 @@ Ext.onReady(function(){
 		}
 	}
 
+    var akun_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>({akun_kode}) {akun_nama}<br /></span>',
+        '</div></tpl>'
+    );
+
 	var lst_akun_DataStore=new Ext.form.ComboBox({
 		store: combo_akun_DataStore,
 		mode: 'remote',
@@ -706,7 +712,12 @@ Ext.onReady(function(){
 		lazyRender:true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%',
-		hideTrigger: false
+		hideTrigger: false,
+		tpl: akun_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small'
 	});
 
 	/* Identify  dept field */
