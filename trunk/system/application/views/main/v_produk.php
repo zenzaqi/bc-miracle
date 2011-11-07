@@ -1124,14 +1124,14 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Kode Baru' + '</div>',
 			dataIndex: 'produk_kode',
-			width: 75,	//150,
+			width: 70,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
 		{
 			header: '<div align="center">' + 'Nama' + '</div>',
 			dataIndex: 'produk_nama',
-			width: 260,	//250,
+			width: 220,	//250,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1144,7 +1144,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 1' + '</div>',
 			dataIndex: 'produk_group',
-			width: 80, //150,
+			width: 100, //150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1160,7 +1160,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Group 2' + '</div>',
 			dataIndex: 'produk_jenis',
-			width: 80,	//150,
+			width: 100,	//150,
 			sortable: true
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			/*,
@@ -1176,7 +1176,7 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Jenis' + '</div>',
 			dataIndex: 'produk_kategori_nama',
-			width: 80,	//150,
+			width: 70,	//150,
 			sortable: true,
 			readOnly: true
 		}, 
@@ -1434,7 +1434,7 @@ Ext.onReady(function(){
 		clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1200,
+	  	width: 1600,
 		bbar: new Ext.PagingToolbar({
 			pageSize: 15,
 			store: produk_DataStore,
@@ -1980,7 +1980,7 @@ Ext.onReady(function(){
 	produk_duField= new Ext.form.NumberField({
 		id: 'produk_duField',
 		name: 'produk_duField',
-		fieldLabel: 'Umum(%)',
+		fieldLabel: 'Umum',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -1993,7 +1993,7 @@ Ext.onReady(function(){
 	produk_dmField= new Ext.form.NumberField({
 		id: 'produk_dmField',
 		name: 'produk_dmField',
-		fieldLabel: 'Member(%)',
+		fieldLabel: 'Member',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2006,7 +2006,7 @@ Ext.onReady(function(){
 	produk_dultahField= new Ext.form.NumberField({
 		id: 'produk_dultahField',
 		name: 'produk_dultahField',
-		fieldLabel: 'Ultah(%)',
+		fieldLabel: 'Ultah',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2019,7 +2019,7 @@ Ext.onReady(function(){
 	produk_dcardField= new Ext.form.NumberField({
 		id: 'produk_dcardField',
 		name: 'produk_dcardField',
-		fieldLabel: 'Card(%)',
+		fieldLabel: 'Card',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2032,7 +2032,7 @@ Ext.onReady(function(){
 	produk_dkolegaField= new Ext.form.NumberField({
 		id: 'produk_dkolegaField',
 		name: 'produk_dkolegaField',
-		fieldLabel: 'Kolega(%)',
+		fieldLabel: 'Kolega',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2045,7 +2045,7 @@ Ext.onReady(function(){
 	produk_dkeluargaField= new Ext.form.NumberField({
 		id: 'produk_dkeluargaField',
 		name: 'produk_dkeluargaField',
-		fieldLabel: 'Keluarga(%)',
+		fieldLabel: 'Keluarga',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2058,7 +2058,7 @@ Ext.onReady(function(){
 	produk_downerField= new Ext.form.NumberField({
 		id: 'produk_downerField',
 		name: 'produk_downerField',
-		fieldLabel: 'Owner(%)',
+		fieldLabel: 'Owner',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2071,7 +2071,7 @@ Ext.onReady(function(){
 	produk_dgroomingField= new Ext.form.NumberField({
 		id: 'produk_dgroomingField',
 		name: 'produk_dgroomingField',
-		fieldLabel: 'Grooming(%)',
+		fieldLabel: 'Grooming',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2084,7 +2084,7 @@ Ext.onReady(function(){
 	produk_dwartawanField= new Ext.form.NumberField({
 		id: 'produk_dwartawanField',
 		name: 'produk_dwartawanField',
-		fieldLabel: 'Wartawan(%)',
+		fieldLabel: 'Wartawan',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2097,7 +2097,7 @@ Ext.onReady(function(){
 	produk_dstaffdokterField= new Ext.form.NumberField({
 		id: 'produk_dstaffdokterField',
 		name: 'produk_dstaffdokterField',
-		fieldLabel: 'Staff Dokter(%)',
+		fieldLabel: 'Staf Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2110,7 +2110,7 @@ Ext.onReady(function(){
 	produk_dstaffnondokterField= new Ext.form.NumberField({
 		id: 'produk_dstaffnondokterField',
 		name: 'produk_dstaffnondokterField',
-		fieldLabel: 'Staff Non Dokter(%)',
+		fieldLabel: 'Staf Non Dokter',
 		allowNegatife : false,
 		emptyText: '0',
 		allowBlank: true,
@@ -2395,7 +2395,7 @@ Ext.onReady(function(){
 	
 	//untuk Panel Diskon 
 	produk_diskonGroup = new Ext.form.FieldSet({
-		title: 'Jenis Diskon',
+		title: 'Jenis Diskon (%)',
 		layout:'column',
 		autoHeight: true,
 		mode: 'remote',

@@ -2546,6 +2546,7 @@ class M_master_jual_rawat extends Model{
 					,rawat_dwartawan
 					,rawat_dstaffdokter
 					,rawat_dstaffnondokter
+					,rawat_dpromo
 					,rawat_nama
 				FROM perawatan
 					LEFT JOIN produk_group ON(rawat_group=group_id)

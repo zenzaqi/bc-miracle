@@ -2780,6 +2780,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'drawat_rawat_dgrooming', type: 'float', mapping: 'rawat_dgrooming'},
 			{name: 'drawat_rawat_dwartawan', type: 'float', mapping: 'rawat_dwartawan'},
 			{name: 'drawat_rawat_dstaffdokter', type: 'float', mapping: 'rawat_dstaffdokter'},
+			{name: 'drawat_rawat_dpromo', type: 'float', mapping: 'rawat_dpromo'},
 			{name: 'drawat_rawat_dstaffnondokter', type: 'float', mapping: 'rawat_dstaffnondokter'},
 			{name: 'drawat_rawat_display', type: 'string', mapping: 'rawat_nama'}
 		]),
@@ -5210,7 +5211,7 @@ Ext.override(Ext.form.Field, {
 	var drawat_jenis_diskonField= new Ext.form.ComboBox({
 		store:new Ext.data.SimpleStore({
 			fields:['diskon_jenis_value'],
-			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff']]
+			data:[['Tanpa Diskon'],['Umum'],['Member'],['Ultah'],['Card'],['Kolega'],['Owner'],['Grooming'],['Staff'],['Promo']]
 		}),
 		mode: 'local',
 		displayField: 'diskon_jenis_value',
@@ -5269,6 +5270,10 @@ Ext.override(Ext.form.Field, {
 		}else if(drawat_jenis_diskonField.getValue()=='Staf Non Dokter'){
 			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffnondokter;
 			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dstaffnondokter);
+			drawat_diskonField.setReadOnly(true);
+		}else if(drawat_jenis_diskonField.getValue()=='Promo'){
+			drawat_diskon = cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dpromo;
+			drawat_diskonField.setValue(cbo_drawat_rawatDataStore.getAt(j).data.drawat_rawat_dpromo);
 			drawat_diskonField.setReadOnly(true);
 		}
 		else{
