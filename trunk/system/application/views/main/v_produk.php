@@ -906,7 +906,6 @@ Ext.onReady(function(){
 			{name: 'produk_kontribusi', type: 'string', mapping: 'kategori2_nama'}, 
 			{name: 'produk_jenis', type: 'string', mapping: 'jenis_nama'}, 
 			{name: 'produk_nama', type: 'string', mapping: 'produk_nama'}, 
-			{name: 'produk_satuan', type: 'string', mapping: 'satuan_kode'}, 
 			{name: 'produk_du', type: 'int', mapping: 'produk_du'}, 
 			{name: 'produk_dm', type: 'int', mapping: 'produk_dm'}, 
 			{name: 'produk_dultah', type: 'int', mapping: 'produk_dultah'}, 
@@ -1180,33 +1179,55 @@ Ext.onReady(function(){
 			sortable: true,
 			readOnly: true
 		}, 
-		{
-			header: 'Satuan',
-			dataIndex: 'produk_satuan',
-			width: 45,	//150,
+				{
+			header: '<div align="center">' + 'Hrg (Rp)' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_harga',
+			width: 80,	//150,
 			sortable: true,
-			readOnly: true
+			renderer: function(val){
+				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			/*,
+			editor: new Ext.form.NumberField({
+				allowBlank: false,
+				allowDecimals: true,
+				allowNegative: false,
+				blankText: '0',
+				maxLength: 22,
+				maskRe: /([0-9]+)$/
+			})*/
+			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'DU' + '</div>',
+			header: '<div align="center">' + 'Status' + '</div>',
+			dataIndex: 'produk_aktif',
+			width: 60,	//150,
+			sortable: true
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Umum' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_du',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'DM' + '</div>',
+			header: '<div align="center">' + 'Member' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dm',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
@@ -1218,7 +1239,7 @@ Ext.onReady(function(){
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
@@ -1230,7 +1251,7 @@ Ext.onReady(function(){
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
@@ -1242,19 +1263,19 @@ Ext.onReady(function(){
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Keluarga' + '</div>',
+			header: '<div align="center">' + 'Klrg' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dkeluarga',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
@@ -1266,55 +1287,55 @@ Ext.onReady(function(){
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Grooming' + '</div>',
+			header: '<div align="center">' + 'Groom' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dgrooming',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Wartawan' + '</div>',
+			header: '<div align="center">' + 'Wrtwn' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dwartawan',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Staff Dokter' + '</div>',
+			header: '<div align="center">' + 'Staf Dr' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dstaffdokter',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
 		}, 
 		{
-			header: '<div align="center">' + 'Staff Non Dokter' + '</div>',
+			header: '<div align="center">' + 'Staf Non Dr' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dstaffnondokter',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
-				return '<span>' + val + ' %</span>';
+				return '<span>' + val + '</span>';
 			},
 			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
 			<?php } ?>
@@ -1348,35 +1369,6 @@ Ext.onReady(function(){
 			<?php } ?>
 		},
 		*/
-		{
-			header: '<div align="center">' + 'Hrg Sat Def(Rp)' + '</div>',
-			align: 'right',
-			dataIndex: 'produk_harga',
-			width: 80,	//150,
-			sortable: true,
-			renderer: function(val){
-				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
-			}
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			/*,
-			editor: new Ext.form.NumberField({
-				allowBlank: false,
-				allowDecimals: true,
-				allowNegative: false,
-				blankText: '0',
-				maxLength: 22,
-				maskRe: /([0-9]+)$/
-			})*/
-			<?php } ?>
-		}, 
-		{
-			header: '<div align="center">' + 'Status' + '</div>',
-			dataIndex: 'produk_aktif',
-			width: 50,	//150,
-			sortable: true
-			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
-			<?php } ?>
-		}, 
 		{
 			header: 'Creator',
 			dataIndex: 'produk_creator',
