@@ -499,7 +499,7 @@ class M_phonegroup extends Model{
 		
 		//function for get list record
 		function phonegrouped_list($phonegroup_id,$filter,$start,$end){
-			$query = "SELECT cust_nama, cust_no, cust_alamat, cust_kota FROM phonegrouped 
+			$query = "SELECT phonegrouped_cust, cust_nama, cust_no, cust_alamat, cust_kota FROM phonegrouped 
 					LEFT JOIN customer ON (phonegrouped_cust = cust_id)
 					WHERE phonegrouped_group='".$phonegroup_id."'";
 			
@@ -631,6 +631,22 @@ class M_phonegroup extends Model{
 				
 				$query2 = "delete from phonegrouped where phonegrouped_group = ".$pkid[0];
 				$this->db->query($query2);
+			}
+			if($this->db->affected_rows()>0)
+				return '1';
+			else
+				return '0';
+		}
+		
+		//fcuntion for delete record
+		function detail_phonegroup_delete($pkid){
+			// You could do some checkups here and return '0' or other error consts.
+			// Make a single query to delete all of the phonegroups at the same time :
+			if(sizeof($pkid)<1){
+				return '0';
+			} else if (sizeof($pkid) == 1){
+				$query = "DELETE FROM phonegrouped WHERE phonegrouped_cust = ".$pkid[0];
+				$this->db->query($query);
 			}
 			if($this->db->affected_rows()>0)
 				return '1';

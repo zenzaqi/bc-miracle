@@ -255,6 +255,25 @@ Ext.onReady(function(){
 		}
 	}
   	/* End of Function */
+	
+	/* Function for Delete Confirm */
+	function detail_phonegroup_confirm_delete(){
+		// only one phonegroup is selected here
+		if(phonegroupdetailEditorGrid.selModel.getCount() == 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data berikut?', detail_phonegroup_delete);
+		} else if(phonegroupdetailEditorGrid.selModel.getCount() > 1){
+			Ext.MessageBox.confirm('Confirmation','Apakah Anda yakin akan menghapus data-data berikut?', detail_phonegroup_delete);
+		} else {
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Tidak ada yang dipilih untuk dihapus',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+	}
+  	/* End of Function */
 
 	/* Function for Update Confirm */
 	function phonegroup_confirm_update(){
@@ -324,6 +343,53 @@ Ext.onReady(function(){
 	}
   	/* End of Function */
 
+	  /* Function for Delete Record */
+	function detail_phonegroup_delete(btn2){
+		if(btn2=='yes'){
+			var selections = phonegroupdetailEditorGrid.selModel.getSelections();
+			var prez = [];
+			for(i = 0; i< phonegroupdetailEditorGrid.selModel.getCount(); i++){
+				prez.push(selections[i].json.phonegrouped_cust);
+			}
+			var encoded_array = Ext.encode(prez);
+			Ext.Ajax.request({
+				waitMsg: 'Please Wait',
+				url: 'index.php?c=c_phonegroup&m=get_action',
+				params: { task: "DELETEDETAIL", ids2:  encoded_array },
+				success: function(response){
+					var result=eval(response.responseText);
+					switch(result){
+						case 1:  // Success : simply reload
+							phonegroup_DataStore.reload();		
+							Ext.MessageBox.alert(post2db+' OK','Detail Phonegroup berhasil dihapus ');
+							phonegroup_detail_DataStore.load();
+							break;
+						default:
+							Ext.MessageBox.show({
+								title: 'Warning',
+								msg: 'Tidak bisa menghapus data yang diplih',
+								buttons: Ext.MessageBox.OK,
+								animEl: 'save',
+								icon: Ext.MessageBox.WARNING
+							});
+							break;
+					}
+				},
+				failure: function(response){
+					var result=response.responseText;
+					Ext.MessageBox.show({
+					   title: 'Error',
+					   msg: 'Tidak bisa terhubung dengan database server',
+					   buttons: Ext.MessageBox.OK,
+					   animEl: 'database',
+					   icon: Ext.MessageBox.ERROR
+					});
+				}
+			});
+		}
+	}
+  	/* End of Function */
+	
 	/* Function for Retrieve DataStore */
 	phonegroup_DataStore = new Ext.data.Store({
 		id: 'phonegroup_DataStore',
@@ -364,7 +430,7 @@ Ext.onReady(function(){
 			id: 'phonegrouped_group'
 		},[
 			{name: 'phonegrouped_group', type: 'int', mapping: 'phonegrouped_group'},
-			{name: 'phonegrouped_cust', type: 'string', mapping: 'phonegroup_cust'},
+			{name: 'phonegrouped_cust', type: 'int', mapping: 'phonegroup_cust'},
 			{name: 'cust_nama', type: 'string', mapping: 'cust_nama'},
 			{name: 'cust_no', type: 'string', mapping: 'cust_no'},
 			{name: 'cust_alamat', type: 'string', mapping: 'cust_alamat'},
@@ -643,11 +709,20 @@ Ext.onReady(function(){
 			displayInfo: true
 		}),
 		/* Add Control on ToolBar */
-		tbar: [
+		tbar: [<?php if(eregi('D',$this->m_security->get_access_group_by_kode('MENU_PHONEGROUP'))){ ?>
+		{
+			text: 'Delete',
+			tooltip: 'Delete selected record',
+			iconCls:'icon-delete',
+			//disabled: true,
+			handler: detail_phonegroup_confirm_delete   // Confirm before deleting
+		}, '-',
+		<?php } ?>
 		'<span style="color:white;"> Info : <b>Untuk menambah detail phonegroup, dapat dilakukan pada Master Customer.</b></span>'
 		]
 	});
 	phonegroupdetailEditorGrid.render();
+	
 	
 	/* Create Context Menu */
 	phonegroup_ContextMenu = new Ext.menu.Menu({
