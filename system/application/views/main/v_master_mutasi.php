@@ -198,7 +198,19 @@ Ext.onReady(function(){
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
 			});
-		}else if(is_master_mutasi_form_valid()){	
+		}
+		else if((detail_mutasi_produkJadi_DataStore.getCount()<1) && (mutasi_barang_racikan_keluarField.getValue(true))){
+			Ext.MessageBox.show({
+				title: 'Warning',
+				msg: 'Data detail Produk Jadi harus ada minimal 1 (satu)',
+				buttons: Ext.MessageBox.OK,
+				animEl: 'save',
+				icon: Ext.MessageBox.WARNING
+			});
+		}
+		
+		
+		else if(is_master_mutasi_form_valid()){	
 		
 		var mutasi_id_create_pk=null; 
 		var mutasi_no_create=null;
@@ -519,10 +531,18 @@ Ext.onReady(function(){
 		cbo_mracikan_satuanDataStore.setBaseParam('master_id',get_pk_id());
 		cbo_mracikan_satuanDataStore.load();
 		
-		cbo_mutasi_produkjadi_DataSore.setBaseParam('master_id',get_pk_id());
-		cbo_mutasi_produkjadi_DataSore.setBaseParam('task','detail');
+		//cbo_mutasi_produkjadi_DataSore.setBaseParam('master_id',get_pk_id());
+		//cbo_mutasi_produkjadi_DataSore.setBaseParam('task','detail');
 		//cbo_mutasi_produkjadi_DataSore.setBaseParam('gudang',master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal_id'));
-		cbo_mutasi_produkjadi_DataSore.load();
+		cbo_mutasi_produkjadi_DataSore.load(
+		{
+				params: {
+					query: master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id'),
+					task : 'detail',
+					aktif : 'yes'
+				}
+		
+		});
 		
 		//mutasi_button_saveField.setDisabled(true);
 		//mutasi_button_saveprintField.setDisabled(true);
@@ -698,12 +718,12 @@ Ext.onReady(function(){
 				cetak=0;
 			}
 			/*Jika Gudang Tujuan sama dengan user login yg bersangkutan, maka Stat Dok akan di disable, sehingga hanya bisa meengconfirm status terima */
-		if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Retail" && group_id == 4) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Besar" && group_id == 23) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Suster" && group_id == 12) ){
+		if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Retail" && (group_id == 4 || group_id == 23)) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Gudang Besar" && (group_id == 23 || group_id == 4)) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_tujuan')=="Kabin Suster" && group_id == 12) ){
 			mutasi_status_terimaField.setDisabled(false);
 			mutasi_statusField.setDisabled(true);
 		}
 			/*Jika Gudang Asal sama dgn user login yg bersangkutan, maka stat terima akan di disable, sehingga harus menunggu user dr gudang tujuan utk mengconfirm */
-		else if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Retail" && group_id == 4) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Besar" && group_id == 23) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Suster" && group_id == 12) ){
+		else if((master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Retail" && (group_id == 4 || group_id == 23)) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Gudang Besar" && (group_id == 23 || group_id == 4)) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Terapis" && group_id == 7) || (master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_asal')=="Kabin Suster" && group_id == 12) ){
 			mutasi_status_terimaField.setDisabled(true);
 			mutasi_statusField.setDisabled(false);
 		}
@@ -1586,6 +1606,7 @@ Ext.onReady(function(){
 			valueField: 'satuan_id',
 			triggerAction: 'all',
 			lazyRender:true,
+			allowBlank : false,
 			width : 75
 			//anchor : '50%'
 	});
