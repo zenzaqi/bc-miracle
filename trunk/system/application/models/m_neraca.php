@@ -163,7 +163,7 @@ class M_neraca extends Model{
 			//LAPORAN LABA RUGI
 			//2011-11-02, hendri: sementara ditutup dulu, karena belum tahu kegunaannya, sepertinya sudah terwakilkan oleh neraca_jenis3 = 3
 			
-/*			if($neraca_jenis==2) {
+			if($neraca_jenis==2) {
 				$sql="SELECT	A.akun_id,A.akun_saldo,A.akun_kode,A.akun_jenis,A.akun_nama,A.akun_level,B.akun_id as akun_parent_id,
 								B.akun_nama as akun_parent
 						FROM 	akun A, akun B
@@ -206,13 +206,13 @@ class M_neraca extends Model{
 				
 				$saldo_akhir_periode=$saldo_akhir;
 				
-				//$this->firephp->log($saldo_akhir);
+				//print_r('Saldo Awal'); print_r($saldo_akhir_periode);
 				
 				$test="";
 				
 				foreach($master->result() as $row){
 					//SALDO AWAL
-					$saldo_akun=0;
+/*					$saldo_akun=0;
 					$sqlsaldo="SELECT 	A.akun_kode,sum(A.akun_debet) as debet,
 										sum(A.akun_kredit) as kredit, 
 										A.akun_saldo
@@ -245,20 +245,34 @@ class M_neraca extends Model{
 							$test.="+".$saldo_akun;
 						}
 					}
-					
+*/					
 
 					//saldo dari buku besar
-					$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit, A.akun_saldo
+					$sql="SELECT A.akun_kode,
+							sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit, A.akun_saldo
 							FROM buku_besar B, akun A
 							WHERE B.buku_akun=A.akun_id
 							AND date_format(buku_tanggal,'%Y-%m-%d')>=date_format('".$_SESSION["periode_awal"]."','%Y-%m-%d')
 							AND date_format(buku_tanggal,'%Y-%m-%d')<=date_format('".$_SESSION["periode_akhir"]."','%Y-%m-%d')
 							AND A.akun_jenis='R/L'
-							AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' 
-							GROUP BY A.akun_kode, A.akun_saldo";
+							AND replace(A.akun_kode,'.','') like  '".str_replace(".","",$row->akun_kode)."%' ";
+							/*GROUP BY A.akun_kode, A.akun_saldo";*/
+					
+					if($buku_periode=="bulan"){
+						$sql.="	AND date_format(B.buku_tanggal,'%Y-%m')<='".$buku_tahun."-".$buku_bulan."'";
+					}elseif($buku_periode=="tanggal"){
+							$sql.="	AND date_format(buku_tanggal,'%Y-%m-%d')<='".$buku_tglakhir."'";
+					}		
+								
 					$rlisi=$this->db->query($sql);
 					if($rlisi->num_rows()){
 						foreach($rlisi->result() as $rowisi){
+						
+/*					print_r($sql);
+					print_r(', akun_kode: '); print_r($rowisi->akun_kode);
+					print_r(', debet: '); print_r($rowisi->debet);
+					print_r(', kredit: '); print_r($rowisi->kredit);					
+*/					
 							if($rowisi->akun_saldo=='Debet'){
 								$saldo_buku= ($rowisi->debet-$rowisi->kredit);
 							}else{
@@ -267,8 +281,12 @@ class M_neraca extends Model{
 						}
 					}
 					
+					//print_r(', Saldo_Buku: '); print_r($saldo_buku);
 					
-					if($saldo_buku<>0){
+					$saldo_akhir = $saldo_akhir - $saldo_buku;
+
+// tidak perlu, karena sudah dihitung di atas			
+/*					if($saldo_buku<>0){
 						if($row->akun_saldo=='Debet'){
 							$saldo_akhir=$saldo_akhir-$saldo_buku;
 							$test.="-".$saldo_akun;
@@ -277,7 +295,7 @@ class M_neraca extends Model{
 							$test.="+".$saldo_akun;
 						}
 					}
-					
+*/				
 					//bulan ini
 					$saldo=0;
 					$sql="SELECT A.akun_kode,sum(B.buku_debet) as debet,sum(B.buku_kredit) as kredit, A.akun_saldo
@@ -304,8 +322,11 @@ class M_neraca extends Model{
 							}
 						}
 					}
+							
+					$saldo_akhir_periode = $saldo_akhir_periode - $saldo_buku;
 					
-					if($saldo_buku<>0){
+// tidak perlu, karena sudah dihitung di atas					
+/*					if($saldo_buku<>0){
 						if($row->akun_saldo=='Debet'){
 							$saldo_akhir_periode=$saldo_akhir_periode-$saldo_buku;
 							$test.="-".$saldo_akun;
@@ -314,7 +335,7 @@ class M_neraca extends Model{
 							$test.="+".$saldo_akun;
 						}
 					}
-					
+*/					
 					
 				}
 
@@ -335,7 +356,7 @@ class M_neraca extends Model{
 				
 			}
 			
-*/			
+			
 			$data[$i]["neraca_akun"]=9999;
 			$data[$i]["neraca_jenis"]='TOTAL';
 			$data[$i]["neraca_level"]=2;

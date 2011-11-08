@@ -61,8 +61,6 @@ class M_labarugi extends Model{
 				//$sql.="GROUP BY A.akun_kode";
 				//$sql.="	ORDER BY A.akun_kode ASC";
 				
-				//$this->firephp->log($sql);;
-				
 				//GET SALDO BEFORE
 				$data[$i]["labarugi_saldo"]=0;
 				
@@ -94,6 +92,12 @@ class M_labarugi extends Model{
 				$isi=$this->db->query($sql);
 				if($isi->num_rows()){
 					$rowisi=$isi->row();
+				
+/*					print_r($sql);
+					print_r(', akun_kode: '); print_r($rowisi->akun_kode);
+					print_r(', debet: '); print_r($rowisi->debet);
+					print_r(', kredit: '); print_r($rowisi->kredit);					
+*/				
 					$data[$i]["labarugi_akun"]=$row->akun_id;
 					$data[$i]["labarugi_jenis"]=$row->akun_parent;
 					$data[$i]["labarugi_jenis_id"]=$row->akun_parent_id;
