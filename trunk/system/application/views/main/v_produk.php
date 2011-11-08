@@ -97,6 +97,7 @@ var produk_dgroomingField;
 var produk_dwartawanField;
 var produk_dstaffdokterField;
 var produk_dstaffnondokterField;
+var produk_dpromoField;
 var produk_pointField;
 var produk_volumeField;
 var produk_hargaField;
@@ -259,6 +260,7 @@ Ext.onReady(function(){
 		var produk_dwartawan_create=null;
 		var produk_dstaffdokter_create=null;
 		var produk_dstaffnondokter_create=null;
+		var produk_dpromo_create=null;
 		var produk_point_create=null; 
 		var produk_volume_create=null; 
 		var produk_harga_create=null; 
@@ -299,6 +301,7 @@ Ext.onReady(function(){
 		if(produk_dwartawanField.getValue()!== null){produk_dwartawan_create = produk_dwartawanField.getValue();}
 		if(produk_dstaffdokterField.getValue()!== null){produk_dstaffdokter_create = produk_dstaffdokterField.getValue();}
 		if(produk_dstaffnondokterField.getValue()!== null){produk_dstaffnondokter_create = produk_dstaffnondokterField.getValue();}
+		if(produk_dpromoField.getValue()!== null){produk_dpromo_create = produk_dpromoField.getValue();}
 		if(produk_pointField.getValue()!== null){produk_point_create = produk_pointField.getValue();} 
 		if(produk_volumeField.getValue()!== null){produk_volume_create = produk_volumeField.getValue();} 
 		if(produk_hargaField.getValue()!== null){produk_harga_create = convertToNumber(produk_hargaField.getValue());} 
@@ -345,6 +348,7 @@ Ext.onReady(function(){
 				produk_dwartawan: produk_dwartawan_create,
 				produk_dstaffdokter	: produk_dstaffdokter_create,
 				produk_dstaffnondokter	: produk_dstaffnondokter_create,
+				produk_dpromo	: produk_dpromo_create,
 				produk_point	: produk_point_create, 
 				produk_volume	: produk_volume_create, 
 				produk_harga	: produk_harga_create, 
@@ -497,6 +501,8 @@ Ext.onReady(function(){
 		produk_dstaffdokterField.setValue(null);
 		produk_dstaffnondokterField.reset();
 		produk_dstaffnondokterField.setValue(null);
+		produk_dpromoField.reset();
+		produk_dpromoField.setValue(null);
 		produk_pointField.reset();
 		produk_pointField.setValue(null);
 		produk_volumeField.reset();
@@ -634,6 +640,7 @@ Ext.onReady(function(){
 		produk_dwartawanField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dwartawan'));
 		produk_dstaffdokterField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dstaffdokter'));
 		produk_dstaffnondokterField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dstaffnondokter'));
+		produk_dpromoField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dpromo'));
 		produk_pointField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_point'));
 		produk_volumeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_volume'));
 		produk_keteranganField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_keterangan'));
@@ -917,6 +924,7 @@ Ext.onReady(function(){
 			{name: 'produk_dwartawan', type: 'int', mapping: 'produk_dwartawan'},
 			{name: 'produk_dstaffdokter', type: 'int', mapping: 'produk_dstaffdokter'},
 			{name: 'produk_dstaffnondokter', type: 'int', mapping: 'produk_dstaffnondokter'},
+			{name: 'produk_dpromo', type: 'int', mapping: 'produk_dpromo'},
 			{name: 'produk_point', type: 'int', mapping: 'produk_point'}, 
 			{name: 'produk_volume', type: 'int', mapping: 'produk_volume'}, 
 			{name: 'produk_harga', type: 'float', mapping: 'produk_harga'}, 
@@ -1332,6 +1340,18 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Staf Non Dr' + '</div>',
 			align: 'right',
 			dataIndex: 'produk_dstaffnondokter',
+			width: 45,	//100,
+			sortable: true,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			},
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PRODUK'))){ ?>
+			<?php } ?>
+		}, 
+		{
+			header: '<div align="center">' + 'Promo' + '</div>',
+			align: 'right',
+			dataIndex: 'produk_dpromo',
 			width: 45,	//100,
 			sortable: true,
 			renderer: function(val){
@@ -2112,7 +2132,19 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
-	
+	/* Identify  produk_dpromo Field */
+	produk_dpromoField= new Ext.form.NumberField({
+		id: 'produk_dpromoField',
+		name: 'produk_dpromoField',
+		fieldLabel: 'Promo',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
 	
 	/* Identify  produk_point Field */
 	produk_pointField= new Ext.form.NumberField({
@@ -2399,7 +2431,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [produk_duField, produk_dmField, produk_dultahField, produk_dcardField,produk_dwartawanField]
+				items: [produk_duField, produk_dmField, produk_dultahField, produk_dcardField,produk_dwartawanField,produk_dpromoField]
 			},
 			{
 				columnWidth:0.5,
@@ -2442,7 +2474,7 @@ Ext.onReady(function(){
 			produk_dgroomingField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dgrooming);
 			produk_dwartawanField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dwartawan);
 			produk_dstaffdokterField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dstaffdokter);
-			produk_dstaffnondokterField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dstaffnondokter);
+			produk_dstaffnondokterField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dstaffnondokter);produk_dpromoField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_dpromo);
 			produk_kategoritxtField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok);
 			produk_kategoriField.setValue(cbo_produk_groupDataStore.getAt(record).data.produk_group_kelompok_id);
 		}
@@ -2582,6 +2614,7 @@ Ext.onReady(function(){
 			{name: 'rawat_produk_dwartawan', type: 'float', mapping: 'produk_dwartawan'},
 			{name: 'rawat_produk_dstaffdokter', type: 'float', mapping: 'produk_dstaffdokter'},
 			{name: 'rawat_produk_dstaffnondokter', type: 'float', mapping: 'produk_dstaffnondokter'},
+			{name: 'rawat_produk_dpromo', type: 'float', mapping: 'produk_dpromo'},
 			{name: 'rawat_produk_display', type: 'string', mapping: 'produk_nama'}
 		]),
 		sortInfo:{field: 'rawat_produk_display', direction: "ASC"}
@@ -3945,6 +3978,11 @@ Ext.onReady(function(){
 		}
 	});
 	produk_dstaffnondokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_dpromoField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}

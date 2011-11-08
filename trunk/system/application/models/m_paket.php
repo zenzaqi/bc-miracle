@@ -304,7 +304,7 @@ class M_paket extends Model{
 
 	//function for update record
 	function paket_update($paket_id ,$paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
-						$paket_du ,$paket_dm ,$paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dstaffnondokter,
+						$paket_du ,$paket_dm ,$paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dpromo,$paket_dstaffnondokter,
 						$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr,$paket_harga_tp, $paket_harga_dps, $paket_harga_blpn, $paket_harga_kuta){
 		if ($paket_aktif=="")
 			$paket_aktif = "Aktif";
@@ -438,6 +438,7 @@ class M_paket extends Model{
 			$data["paket_dgrooming"]=$rs_sql->group_dgrooming;
 			$data["paket_dwartawan"]=$rs_sql->group_dwartawan;
 			$data["paket_dstaffdokter"]=$rs_sql->group_dstaffdokter;
+			$data["paket_dpromo"]=$rs_sql->group_dpromo;
 			$data["paket_dstaffnondokter"]=$rs_sql->group_dstaffnondokter;
 		}
 
@@ -512,7 +513,11 @@ class M_paket extends Model{
 		if($rs->num_rows())
 			$data["paket_dstaffdokter"]=$paket_dstaffdokter;	
 			
-		
+		$sql="SELECT paket_dpromo FROM paket WHERE paket_dpromo!='".$paket_dpromo."' AND paket_id='".$paket_id."'";
+		$rs=$this->db->query($sql);
+		if($rs->num_rows())
+			$data["paket_dpromo"]=$paket_dpromo;
+			
 		$sql="SELECT paket_dstaffnondokter FROM paket WHERE paket_dstaffnondokter!='".$paket_dstaffnondokter."' AND paket_id='".$paket_id."'";
 		$rs=$this->db->query($sql);
 		if($rs->num_rows())
@@ -530,7 +535,7 @@ class M_paket extends Model{
 
 	//function for create new record
 	function paket_create($paket_kode ,$paket_kodelama ,$paket_nama , $paket_group ,$paket_keterangan ,
-							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dstaffnondokter,
+							$paket_du ,$paket_dm , $paket_dultah, $paket_dcard, $paket_dkolega, $paket_dkeluarga, $paket_downer, $paket_dgrooming, $paket_dwartawan, $paket_dstaffdokter, $paket_dpromo, $paket_dstaffnondokter,
 							$paket_point ,$paket_harga ,$paket_expired ,$paket_aktif ,$paket_aktif_th ,$paket_aktif_ki ,$paket_aktif_hr ,$paket_aktif_tp ,$paket_aktif_dps ,$paket_aktif_jkt ,$paket_aktif_mta ,$paket_aktif_blpn ,$paket_aktif_kuta ,$paket_aktif_btm ,$paket_aktif_mks ,$paket_aktif_mdn ,$paket_aktif_lbk ,$paket_aktif_mnd ,$paket_aktif_ygk,$paket_aktif_mlg, $paket_harga_ki,$paket_harga_mdn,$paket_harga_mnd,$paket_harga_ygk,$paket_harga_mta, $paket_harga_lbk, $paket_harga_hr, $paket_harga_tp, $paket_harga_dps, $paket_harga_blpn, $paket_harga_kuta){
 		/*if ($paket_aktif=="")
 			$paket_aktif = "Aktif";*/
@@ -644,6 +649,7 @@ class M_paket extends Model{
 			"paket_dwartawan"=>$paket_dwartawan,
 			"paket_dstaffdokter"=>$paket_dstaffdokter,
 			"paket_dstaffnondokter"=>$paket_dstaffnondokter,
+			"paket_dpromo"=>$paket_dpromo,
 			"paket_point"=>$paket_point,
 			"paket_harga"=>$paket_harga,
 			"paket_harga_ki"=>$paket_harga_ki,

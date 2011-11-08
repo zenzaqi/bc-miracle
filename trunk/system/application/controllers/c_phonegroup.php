@@ -56,6 +56,9 @@ class C_phonegroup extends Controller {
 			case "DELETE":
 				$this->phonegroup_delete();
 				break;
+			case "DELETEDETAIL":
+				$this->detail_phonegroup_delete();
+				break;
 			case "SEARCH":
 				$this->phonegroup_search();
 				break;
@@ -193,6 +196,14 @@ class C_phonegroup extends Controller {
 		$ids = @$_POST['ids']; // Get our array back and translate it :
 		$pkid = json_decode(stripslashes($ids));
 		$result=$this->m_phonegroup->phonegroup_delete($pkid);
+		echo $result;
+	}
+	
+	//function for delete selected record
+	function detail_phonegroup_delete(){
+		$ids2 = @$_POST['ids2']; // Get our array back and translate it :
+		$pkid = json_decode(stripslashes($ids2));
+		$result=$this->m_phonegroup->detail_phonegroup_delete($pkid);
 		echo $result;
 	}
 

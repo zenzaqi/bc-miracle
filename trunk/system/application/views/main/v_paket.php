@@ -88,6 +88,7 @@ var paket_dgroomingField;
 var paket_dwartawanField;
 var paket_dstaffdokterField;
 var paket_dstaffnondokterField;
+var paket_dpromoField;
 var paket_pointField;
 var paket_harga_kiField;
 var paket_harga_tpField;
@@ -235,6 +236,7 @@ Ext.onReady(function(){
 				var paket_dwartawan_create=null;
 				var paket_dstaffdokter_create=null;
 				var paket_dstaffnondokter_create=null;
+				var paket_dpromo_create=null;
 				var paket_point_create=null;
 				var paket_harga_create=null;
 				var paket_expired_create=null;
@@ -269,6 +271,7 @@ Ext.onReady(function(){
 				if(paket_dwartawanField.getValue()!== null){paket_dwartawan_create = paket_dwartawanField.getValue();}
 				if(paket_dstaffdokterField.getValue()!== null){paket_dstaffdokter_create = paket_dstaffdokterField.getValue();}
 				if(paket_dstaffnondokterField.getValue()!== null){paket_dstaffnondokter_create = paket_dstaffnondokterField.getValue();}
+				if(paket_dpromoField.getValue()!== null){paket_dpromo_create = paket_dpromoField.getValue();}
 				if(paket_pointField.getValue()!== null){paket_point_create = paket_pointField.getValue();}
 				if(paket_expiredField.getValue()!== null){paket_expired_create = paket_expiredField.getValue();}
 				if(paket_perpanjanganField.getValue()!== null){paket_perpanjangan_create = paket_perpanjanganField.getValue();}
@@ -309,6 +312,7 @@ Ext.onReady(function(){
 						paket_dwartawan	: paket_dwartawan_create,
 						paket_dstaffdokter	: paket_dstaffdokter_create,
 						paket_dstaffnondokter	: paket_dstaffnondokter_create,
+						paket_dpromo	: paket_dpromo_create,
 						paket_point	: paket_point_create,
 						paket_harga	: paket_harga_create,
 						paket_expired	: paket_expired_create,
@@ -446,6 +450,8 @@ Ext.onReady(function(){
 		paket_dstaffdokterField.setValue(null);
 		paket_dstaffnondokterField.reset();
 		paket_dstaffnondokterField.setValue(null);
+		paket_dpromoField.reset();
+		paket_dpromoField.setValue(null);
 		paket_pointField.reset();
 		paket_pointField.setValue(null);
 		paket_hargaField.reset();
@@ -575,6 +581,7 @@ Ext.onReady(function(){
 		paket_dwartawanField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dwartawan'));
 		paket_dstaffdokterField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dstaffdokter'));
 		paket_dstaffnondokterField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dstaffnondokter'));
+		paket_dpromoField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_dpromo'));
 		paket_pointField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_point'));
 		paket_expiredField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_expired'));
 		paket_perpanjanganField.setValue(paketListEditorGrid.getSelectionModel().getSelected().get('paket_perpanjangan'));
@@ -826,6 +833,7 @@ Ext.onReady(function(){
 			{name: 'paket_dwartawan', type: 'int', mapping: 'paket_dwartawan'},
 			{name: 'paket_dstaffdokter', type: 'int', mapping: 'paket_dstaffdokter'},
 			{name: 'paket_dstaffnondokter', type: 'int', mapping: 'paket_dstaffnondokter'},
+			{name: 'paket_dpromo', type: 'int', mapping: 'paket_dpromo'},
 			{name: 'paket_point', type: 'int', mapping: 'paket_point'},
 			{name: 'paket_harga', type: 'float', mapping: 'paket_harga'},
 			{name: 'paket_expired', type: 'int', mapping: 'paket_expired'},
@@ -1163,6 +1171,17 @@ Ext.onReady(function(){
 			header: '<div align="center">' + 'Staf Non Dr' + '</div>',
 			align: 'right',
 			dataIndex: 'paket_dstaffnondokter',
+			width: 45,	//100,
+			renderer: function(val){
+				return '<span>' + val + '</span>';
+			}
+			<?php if(eregi('U',$this->m_security->get_access_group_by_kode('MENU_PAKET'))){ ?>
+			<?php } ?>
+		},
+		{
+			header: '<div align="center">' + 'Promo' + '</div>',
+			align: 'right',
+			dataIndex: 'paket_dpromo',
 			width: 45,	//100,
 			renderer: function(val){
 				return '<span>' + val + '</span>';
@@ -2055,6 +2074,19 @@ Ext.onReady(function(){
 		width: 45,
 		maskRe: /([0-9]+)$/
 	});
+		/* Identify  paket_dpromo Field */
+	paket_dpromoField= new Ext.form.NumberField({
+		id: 'paket_dpromoField',
+		name: 'paket_dpromoField',
+		fieldLabel: 'Promo',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 45,
+		maskRe: /([0-9]+)$/
+	});
 	
 	
 	/* Identify  paket_point Field */
@@ -2121,7 +2153,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				labelAlign: 'left',
 				border:false,
-				items: [paket_duField, paket_dmField, paket_dultahField, paket_dcardField, paket_dwartawanField]
+				items: [paket_duField, paket_dmField, paket_dultahField, paket_dcardField, paket_dwartawanField,paket_dpromoField]
 			},
 			{
 				columnWidth:0.5,
@@ -2168,6 +2200,7 @@ Ext.onReady(function(){
 			paket_dwartawanField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dwartawan);
 			paket_dstaffdokterField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dstaffdokter);
 			paket_dstaffnondokterField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dstaffnondokter);
+			paket_dpromoField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_dpromo);
 			paket_kategoritxtField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_nama);
 			paket_kategoriField.setValue(cbo_paket_groupDataStore.getAt(record).data.paket_group_kategori_id);
 		}
@@ -3470,6 +3503,11 @@ Ext.onReady(function(){
 		}
 	});
 	paket_dstaffnondokterField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	paket_dpromoField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}

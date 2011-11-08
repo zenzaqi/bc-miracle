@@ -78,6 +78,7 @@ class M_master_mutasi extends Model{
 				case "Gudang Tujuan": $order_by=" ORDER BY mutasi_tujuan ASC";break;
 				case "Produk": $order_by=" ORDER BY produk_id";break;
 				case "Produk Racikan": $order_by=" ORDER BY produk_id";break;
+				case "Barang Keluar": $order_by=" ORDER BY mutasi_no";break;
 				default: $order_by=" ORDER BY mutasi_no ASC";break;
 			}
 			
@@ -186,9 +187,9 @@ ORDER BY produk_id";
 						(
 						(
 							select 'mutasi out' as status_mutasi,produk.produk_id as produk_id, produk.produk_kode as produk_kode , produk.produk_nama as produk_nama,satuan.satuan_nama as satuan_nama,
-														master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
-													detail_mutasi.dmutasi_jumlah as jumlah_out,
-														' ' as jumlah_in
+							master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
+							detail_mutasi.dmutasi_jumlah as jumlah_out,
+							' ' as jumlah_in
 							from detail_mutasi
 							join detail_mutasi_racikan on (detail_mutasi_racikan.dmracikan_mutasi_id = detail_mutasi.dmutasi_master)
 							join master_mutasi on (detail_mutasi_racikan.dmracikan_mutasi_id = master_mutasi.mutasi_id)
@@ -201,18 +202,18 @@ ORDER BY produk_id";
 						)
 						union
 						(
-									select 'mutasi in' as status_mutasi, produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama, master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																		
-									master_mutasi.mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
-									' ' as jumlah_out,
-									d.dmracikan_jumlah as jumlah_in
-									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
-									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
-									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
-									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
-									LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
-									LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
-									where c.dmracikan_jenis =1 and master_mutasi.mutasi_status = 'Tertutup'
+							select 'mutasi in' as status_mutasi, produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama, master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																		
+							master_mutasi.mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
+							' ' as jumlah_out,
+							d.dmracikan_jumlah as jumlah_in
+							FROM detail_mutasi_racikan c
+							LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
+							LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
+							LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
+							LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
+							LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+							LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+							where c.dmracikan_jenis =1 and master_mutasi.mutasi_status = 'Tertutup'
 						)
 						) as table_union	
 						".$order_by;
@@ -223,9 +224,9 @@ ORDER BY produk_id";
 						(
 						(
 							select 'mutasi out' as status_mutasi,produk.produk_id as produk_id, produk.produk_kode as produk_kode , produk.produk_nama as produk_nama,satuan.satuan_nama as satuan_nama,
-														master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
-													detail_mutasi.dmutasi_jumlah as jumlah_out,
-														' ' as jumlah_in
+							master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
+							detail_mutasi.dmutasi_jumlah as jumlah_out,
+							' ' as jumlah_in
 							from detail_mutasi
 							join detail_mutasi_racikan on (detail_mutasi_racikan.dmracikan_mutasi_id = detail_mutasi.dmutasi_master)
 							join master_mutasi on (detail_mutasi_racikan.dmracikan_mutasi_id = master_mutasi.mutasi_id)
@@ -238,18 +239,18 @@ ORDER BY produk_id";
 						)
 						union
 						(
-									select 'mutasi in' as status_mutasi,produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama, master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																	
-									master_mutasi.mutasi_keterangan,  master_mutasi.mutasi_no as mutasi_no,
-									' ' as jumlah_out,
-									d.dmracikan_jumlah as jumlah_in
-									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
-									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
-									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
-									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
-									LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
-									LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
-									where c.dmracikan_jenis =1 AND master_mutasi.mutasi_status = 'Tertutup' and  date_format(master_mutasi.mutasi_tanggal,'%Y-%m')='".$tgl_awal."' 
+							select 'mutasi in' as status_mutasi,produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama, master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																	
+							master_mutasi.mutasi_keterangan,  master_mutasi.mutasi_no as mutasi_no,
+							' ' as jumlah_out,
+							d.dmracikan_jumlah as jumlah_in
+							FROM detail_mutasi_racikan c
+							LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
+							LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
+							LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
+							LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
+							LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+							LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+							where c.dmracikan_jenis =1 AND master_mutasi.mutasi_status = 'Tertutup' and  date_format(master_mutasi.mutasi_tanggal,'%Y-%m')='".$tgl_awal."' 
 						)
 						) as table_union	
 						" .$order_by;
@@ -261,9 +262,9 @@ ORDER BY produk_id";
 						(
 						(
 							select 'mutasi out' as status_mutasi,produk.produk_id as produk_id, produk.produk_kode as produk_kode , produk.produk_nama as produk_nama,satuan.satuan_nama as satuan_nama,
-														master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
-													detail_mutasi.dmutasi_jumlah as jumlah_out,
-														' ' as jumlah_in
+							master_mutasi.mutasi_tanggal as mutasi_tanggal, if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal , if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,  master_mutasi.mutasi_keterangan as mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
+							detail_mutasi.dmutasi_jumlah as jumlah_out,
+							' ' as jumlah_in
 							from detail_mutasi
 							join detail_mutasi_racikan on (detail_mutasi_racikan.dmracikan_mutasi_id = detail_mutasi.dmutasi_master)
 							join master_mutasi on (detail_mutasi_racikan.dmracikan_mutasi_id = master_mutasi.mutasi_id)
@@ -277,23 +278,33 @@ ORDER BY produk_id";
 						)
 						union
 						(
-									select 'mutasi in' as status_mutasi,produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama,master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																	
-									master_mutasi.mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
-									' ' as jumlah_out,
-									d.dmracikan_jumlah as jumlah_in
-									FROM detail_mutasi_racikan c
-									LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
-									LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
-									LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
-									LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
-									LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
-									LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
-									where c.dmracikan_jenis =1 AND master_mutasi.mutasi_status = 'Tertutup' and   date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
-									AND date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'
+							select 'mutasi in' as status_mutasi,produk.produk_id as produk_id, produk_kode, produk_nama, satuan.satuan_nama as satuan_nama,master_mutasi.mutasi_tanggal,  if((asal.gudang_nama = 'Gudang Temporary'),' ', asal.gudang_nama) as gudang_asal ,  if((tujuan.gudang_nama = 'Gudang Temporary'),' ', tujuan.gudang_nama) as gudang_tujuan,																	
+							master_mutasi.mutasi_keterangan, master_mutasi.mutasi_no as mutasi_no,
+							' ' as jumlah_out,
+							d.dmracikan_jumlah as jumlah_in
+							FROM detail_mutasi_racikan c
+							LEFT JOIN detail_mutasi_racikan d on c.dmracikan_noref = d.dmracikan_mutasi_id
+							LEFT JOIN produk on produk.produk_id = d.dmracikan_produk
+							LEFT JOIN satuan on satuan.satuan_id = d.dmracikan_satuan
+							LEFT JOIN master_mutasi on master_mutasi.mutasi_id = c.dmracikan_mutasi_id
+							LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+							LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+							where c.dmracikan_jenis =1 AND master_mutasi.mutasi_status = 'Tertutup' and   date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')>='".$tgl_awal."' 
+							AND date_format(master_mutasi.mutasi_tanggal,'%Y-%m-%d')<='".$tgl_akhir."'
 						)
 						) as table_union	
 						" .$order_by;
 	
+				}else if($group=='Barang Keluar'){
+					$sql="SELECT mutasi_no, mutasi_tanggal, dmutasi_jumlah, mutasi_id, tujuan.gudang_nama as gudang_tujuan_nama, asal.gudang_nama as gudang_asal_nama , produk_nama, satuan_nama
+					FROM detail_mutasi  
+left join master_mutasi on (detail_mutasi.dmutasi_master = master_mutasi.mutasi_id)
+left join kategori_barang_keluar on (master_mutasi.mutasi_kategori_barang_keluar = kategori_barang_keluar.kbk_id) 
+LEFT JOIN produk on (produk.produk_id = detail_mutasi.dmutasi_produk)
+LEFT JOIN satuan on (satuan.satuan_id = produk.produk_satuan)
+LEFT JOIN gudang tujuan on (_utf8'' = _utf8'' and tujuan.gudang_id = master_mutasi.mutasi_tujuan)
+LEFT JOIN gudang asal on (asal.gudang_id = master_mutasi.mutasi_asal)
+WHERE mutasi_status='Tertutup' and master_mutasi.mutasi_barang_keluar = 1 ".$order_by;
 				}
 				// Utk opsi barang keluar
 				else if($group=='Barang Keluar'){
@@ -1139,29 +1150,39 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 		/*Pengecekan Dokumen utk Mutasi Barang */
 		function pengecekan_dokumen($tanggal_pengecekan){
 			
+			
+			
 			$sql_day = "SELECT mb_days from transaksi_setting";
 			$query_day= $this->db->query($sql_day);
 			$data_day= $query_day->row();
 			$day= $data_day->mb_days;
+			
+			$sql_tgl = "SELECT date_format(date_add('".$tanggal_pengecekan."',interval ".$day." day),'%Y-%m-%d') as tanggal";			
+			$query_tgl=$this->db->query($sql_tgl);
+				if($query_tgl->num_rows()){
+					$tgl=$query_tgl->row();
+					$tanggal=$tgl->tanggal;
+				}
 		
-		$date = date('Y-m-d');
+			$date = date('Y-m-d');
 			//$date_1 = '01';
 			//$date_2 = '02';
-			$date_3 = '03';
-			$month = substr($tanggal_pengecekan,5,2);
-			$year = substr($tanggal_pengecekan,0,4);
-			$begin=mktime(0,0,0,$month,1,$year);
-			$nextmonth=strtotime("+1month",$begin);
+			//$date_3 = '03';
+			//$month = substr($tanggal_pengecekan,5,2);
+			//$year = substr($tanggal_pengecekan,0,4);
+			//$begin=mktime(0,0,0,$month,1,$year);
+			//$nextmonth=strtotime("+1month",$begin);
 			
-			$month_next = substr(date("Y-m-d",$nextmonth),5,2);
-			$year_next = substr(date("Y-m-d",$nextmonth),0,4);
+			//$month_next = substr(date("Y-m-d",$nextmonth),5,2);
+			//$year_next = substr(date("Y-m-d",$nextmonth),0,4);
 			
 			//$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
 			//$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
-			$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
-            $datetime_now = date('Y-m-d H:i:s');
-     
-			if ($date <= $tanggal_3 || $tanggal_pengecekan == $date)
+			//$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
+            //$datetime_now = date('Y-m-d H:i:s');
+			//echo $query_tgl;
+			
+			if ($date <= $tanggal || $tanggal_pengecekan == $date)
 			{
 				return '1';
 			}
