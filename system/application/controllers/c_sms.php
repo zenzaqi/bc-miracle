@@ -45,6 +45,7 @@ class C_sms extends Controller {
 		$isms_crm 	= (isset($_POST['isms_crm']) ? @$_POST['isms_crm'] : @$_GET['isms_crm']);
 		
 		$isms_isi=htmlspecialchars($isms_isi,ENT_QUOTES);
+		$isms_isi=str_replace('&amp;','&',$isms_isi);
 		
 		$result=$this->m_phonegroup->sms_save($isms_dest,$isms_isi,$isms_opsi,$isms_task, $isms_jnsklm, $isms_ultah, $isms_crm);
 		
