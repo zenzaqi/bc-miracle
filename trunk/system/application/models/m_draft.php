@@ -21,13 +21,15 @@ class M_draft extends Model{
 		
 		//function for get list record
 		function draft_list($filter,$start,$end){
-			$query = "SELECT * FROM draft";
+			$query = "SELECT * FROM draft ";
 
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (draft_message LIKE '%".addslashes($filter)."%'  )";
 			}
+			
+			$query .= ' ORDER BY draft_id desc';
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
