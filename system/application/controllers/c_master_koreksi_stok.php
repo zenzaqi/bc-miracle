@@ -283,9 +283,34 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_status=str_replace(",", ",",$koreksi_status);
 		$koreksi_status=str_replace("'", '"',$koreksi_status);
 		$koreksi_cetak = trim(@$_POST["koreksi_cetak"]);
+		
+		
+		/*Tampungan utk Insert Detail Koreksi Stok */
+		$dkoreksi_id = $_POST['dkoreksi_id']; 
+        //$dkoreksi_master=trim(@$_POST["dkoreksi_master"]);
+        $dkoreksi_produk = $_POST['dkoreksi_produk']; 
+		$dkoreksi_satuan = $_POST['dkoreksi_satuan']; 
+		$dkoreksi_jmlawal = $_POST['dkoreksi_jmlawal'];
+		$dkoreksi_jmlkoreksi = $_POST['dkoreksi_jmlkoreksi'];
+		$dkoreksi_jmlsaldo = $_POST['dkoreksi_jmlsaldo'];
+		$dkoreksi_ket= $_POST['dkoreksi_ket'];
+	
+		$array_dkoreksi_id = json_decode(stripslashes($dkoreksi_id));
+		$array_dkoreksi_produk = json_decode(stripslashes($dkoreksi_produk));
+		$array_dkoreksi_satuan = json_decode(stripslashes($dkoreksi_satuan));
+		$array_dkoreksi_jmlawal = json_decode(stripslashes($dkoreksi_jmlawal));
+		$array_dkoreksi_jmlkoreksi = json_decode(stripslashes($dkoreksi_jmlkoreksi));
+		$array_dkoreksi_jmlsaldo = json_decode(stripslashes($dkoreksi_jmlsaldo));
+		$array_dkoreksi_ket = json_decode(stripslashes($dkoreksi_ket));
+		
+		
 
 		$result = $this->m_master_koreksi_stok->master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,
-																		   $koreksi_keterangan, $koreksi_status,$koreksi_cetak);
+																		   $koreksi_keterangan, $koreksi_status,$koreksi_cetak,
+																		    $array_dkoreksi_id ,$array_dkoreksi_produk ,
+																			$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+																			$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+																			$array_dkoreksi_ket );
 		echo $result;
 	}
 	
@@ -305,9 +330,31 @@ class C_master_koreksi_stok extends Controller {
 		$koreksi_status=str_replace("/(<\/?)(p)([^>]*>)", "",$koreksi_status);
 		$koreksi_status=str_replace("'", '"',$koreksi_status);
 		$koreksi_cetak = trim(@$_POST["koreksi_cetak"]);
-
+		
+		/*Tampungan utk Insert Detail Koreksi Stok */
+		$dkoreksi_id = $_POST['dkoreksi_id']; 
+        //$dkoreksi_master=trim(@$_POST["dkoreksi_master"]);
+        $dkoreksi_produk = $_POST['dkoreksi_produk']; 
+		$dkoreksi_satuan = $_POST['dkoreksi_satuan']; 
+		$dkoreksi_jmlawal = $_POST['dkoreksi_jmlawal'];
+		$dkoreksi_jmlkoreksi = $_POST['dkoreksi_jmlkoreksi'];
+		$dkoreksi_jmlsaldo = $_POST['dkoreksi_jmlsaldo'];
+		$dkoreksi_ket= $_POST['dkoreksi_ket'];
+	
+		$array_dkoreksi_id = json_decode(stripslashes($dkoreksi_id));
+		$array_dkoreksi_produk = json_decode(stripslashes($dkoreksi_produk));
+		$array_dkoreksi_satuan = json_decode(stripslashes($dkoreksi_satuan));
+		$array_dkoreksi_jmlawal = json_decode(stripslashes($dkoreksi_jmlawal));
+		$array_dkoreksi_jmlkoreksi = json_decode(stripslashes($dkoreksi_jmlkoreksi));
+		$array_dkoreksi_jmlsaldo = json_decode(stripslashes($dkoreksi_jmlsaldo));
+		$array_dkoreksi_ket = json_decode(stripslashes($dkoreksi_ket));
+		
 		$result=$this->m_master_koreksi_stok->master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, 
-																		 $koreksi_status,$koreksi_cetak);
+																		 $koreksi_status,$koreksi_cetak,
+																		 $array_dkoreksi_id ,$array_dkoreksi_produk ,
+																		$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+																		$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+																		$array_dkoreksi_ket );
 		echo $result;
 	}
 
