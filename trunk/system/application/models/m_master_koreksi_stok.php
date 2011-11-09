@@ -241,12 +241,13 @@ class M_master_koreksi_stok extends Model{
 		
 		function get_satuan_selected_list($selected_id){
 			$sql="SELECT satuan_id,satuan_kode,satuan_nama,konversi_nilai FROM vu_satuan_konversi";
+			
 			if($selected_id!=="")
 			{
 				$selected_id=substr($selected_id,0,strlen($selected_id)-1);
 				$sql.=" WHERE satuan_id IN(".$selected_id.")";
 			}
-
+			
 			$result = $this->db->query($sql);
 			$nbrows = $result->num_rows();
 			
@@ -262,7 +263,7 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		function get_satuan_detail_list($master_id){
-			$sql="SELECT satuan_id,satuan_kode,satuan_nama,konversi_nilai FROM vu_satuan_konversi";
+			$sql="SELECT satuan_id,satuan_kode,satuan_nama FROM satuan";
 			if($master_id<>"")
 				$sql.=" WHERE satuan_id IN(SELECT dkoreksi_satuan FROM detail_koreksi_stok WHERE dkoreksi_master='".$master_id."')";
 			
@@ -362,11 +363,13 @@ class M_master_koreksi_stok extends Model{
 				}
 			}
 			
+			/*
 			if($query<>""){
 				$sql="DELETE FROM detail_koreksi_stok WHERE  dkoreksi_master='".$dkoreksi_master."' AND
 						dkoreksi_id NOT IN (".$query.")";
 				$this->db->query($sql);
 			}
+			*/
 			
 			return '1';
 
@@ -403,7 +406,12 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for update record
-		function master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $koreksi_cetak){
+		function master_koreksi_stok_update($koreksi_id , $koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,
+											$koreksi_keterangan, $koreksi_status,$koreksi_cetak,
+											$array_dkoreksi_id ,$array_dkoreksi_produk ,
+											$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+											$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+											$array_dkoreksi_ket ){
 			$data = array(
 				"koreksi_id"=>$koreksi_id, 
 				"koreksi_no"=>$koreksi_no,
@@ -426,6 +434,12 @@ class M_master_koreksi_stok extends Model{
 			$this->db->where('koreksi_id', $koreksi_id);
 			$this->db->update('master_koreksi_stok', $data);
 			
+			
+			$this->detail_detail_koreksi_stok_insert($array_dkoreksi_id ,$koreksi_id ,$array_dkoreksi_produk ,
+														$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+														$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+														$array_dkoreksi_ket );
+			
 			$sql="UPDATE master_koreksi_stok SET koreksi_revised=0 WHERE koreksi_id='".$koreksi_id."' AND koreksi_revised is NULL";
 			$result = $this->db->query($sql);
 			
@@ -436,7 +450,12 @@ class M_master_koreksi_stok extends Model{
 		}
 		
 		//function for create new record
-		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, $koreksi_status, $koreksi_cetak){
+		function master_koreksi_stok_create($koreksi_no, $koreksi_gudang ,$koreksi_tanggal ,$koreksi_keterangan, 
+																		 $koreksi_status,$koreksi_cetak,
+																		 $array_dkoreksi_id ,$array_dkoreksi_produk ,
+																		$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+																		$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+																		$array_dkoreksi_ket ){
 			$koreksi_tanggal_pattern=strtotime($koreksi_tanggal);
 			$pattern="PS/".date("ym",$koreksi_tanggal_pattern)."-";
 			$koreksi_no=$this->m_public_function->get_kode_1('master_koreksi_stok','koreksi_no',$pattern,12);
@@ -460,7 +479,15 @@ class M_master_koreksi_stok extends Model{
 				
 			$this->db->insert('master_koreksi_stok', $data); 
 			if($this->db->affected_rows())
-				return $this->db->insert_id();
+			{
+			$dkoreksi_master_id = $this->db->insert_id();
+			$this->detail_detail_koreksi_stok_insert($array_dkoreksi_id ,$dkoreksi_master_id ,$array_dkoreksi_produk ,
+														$array_dkoreksi_satuan ,$array_dkoreksi_jmlawal ,
+														$array_dkoreksi_jmlkoreksi ,$array_dkoreksi_jmlsaldo ,
+														$array_dkoreksi_ket );
+			return $dkoreksi_master_id;
+				
+			}
 			else
 				return '0';
 		}
