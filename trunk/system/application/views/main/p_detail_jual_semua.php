@@ -43,7 +43,8 @@
 	$total_kuitansi=0;
 	$total_transfer=0;
 	$total_cek=0;
-	foreach($data_print as $print) { ?><?php 
+	foreach($data_print as $print) { ?><?php
+	$status = '';	
 		if($faktur!==$print->no_bukti) {
 			if ($print->jproduk_stat_dok !== 'Batal'){ 
 				$total_voucher+=$print->voucher;

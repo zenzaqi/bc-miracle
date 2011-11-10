@@ -446,13 +446,13 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			disabled : true,
-			handler: lap_lunjungan_export_excel
+			disabled : false,
+			handler: lap_kunjungan_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			disabled : true,
+			disabled : false,
 			handler: lap_kunjungan_print  
 		}
 		]
@@ -512,8 +512,7 @@ Ext.onReady(function(){
 		])
 		//, sortInfo:{field: 'no_urut', direction: "ASC"}
 	});
-	
-	////////////////////////////////
+
 	
 	lap_kunjunganListEditorGrid.on('rowclick', function (lap_kunjunganListEditorGrid, rowIndex, eventObj) {
 		var lap_kunjungan_id_detail=null;
@@ -531,8 +530,6 @@ Ext.onReady(function(){
 		var lap_kunjungan_tmedis_periode=null;
 		//var lap_kunjungan_dokter_detail=null;
 
-		
-		
 		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_detail=lap_kunjungan_memberSearchField.getValue();}
 		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_detail=lap_kunjungan_custSearchField.getValue();}
 		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_detail=lap_kunjungan_idSearchField.getValue();}
@@ -574,12 +571,7 @@ Ext.onReady(function(){
 			
 			}});
     });
-	
-	////////////////////////
-	
-	
-	
-	//////////////////////iniiii yg nggarai error
+
 	/*Grid Panel utk daftar customer */
 	var daftar_pengunjung_Panel = new Ext.grid.GridPanel({
 		id: 'daftar_pengunjung_Panel',
@@ -656,7 +648,7 @@ Ext.onReady(function(){
 			text: 'Export Excel', 
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			handler: lap_lunjungan_export_excel 
+			handler: lap_kunjungan_export_excel 
 		}
 		]
 	}); 
@@ -1259,14 +1251,44 @@ Ext.onReady(function(){
 	
 	/* Function for print List Grid */
 	function lap_kunjungan_print(){
-		var searchquery = "";
-		var trawat_cust_print=null;
-		var trawat_keterangan_print=null;
+		var searchquery = "";	
+		var lap_kunjungan_id_print=null;
+		var lap_kunjungan_tgl_start_print=null;
+		var lap_kunjungan_tgl_end_print=null;
+		var lap_kunjungan_kelamin_print=null;
+		var lap_kunjungan_member_print=null;
+		var lap_kunjungan_cust_print=null;
+		var lap_kunjungan_umurstart_print=null;
+		var lap_kunjungan_umurend_print=null;
+		var lap_kunjungan_tgllahir_date_print="";
+		var lap_kunjungan_tgllahir_dateEnd_print="";
+		var lap_kunjungan_tmedis_bulan=null;
+		var lap_kunjungan_tmedis_tahun=null;
+		var lap_kunjungan_tmedis_periode=null;
+		
 		var win;              
 		// check if we do have some search data...
 		if(lap_kunjunganDataStore.baseParams.query!==null){searchquery = lap_kunjunganDataStore.baseParams.query;}
-		if(lap_kunjunganDataStore.baseParams.trawat_cust!==null){trawat_cust_print = lap_kunjunganDataStore.baseParams.trawat_cust;}
-		if(lap_kunjunganDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = lap_kunjunganDataStore.baseParams.trawat_keterangan;}
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_print=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_print=lap_kunjungan_custSearchField.getValue();}
+		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_print=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_print=lap_kunjungan_kelaminSearchField.getValue();}
+		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_print=lap_kunjungan_tglStartSearchField.getValue();}
+		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_print=lap_kunjungan_tglEndSearchField.getValue();}
+		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_print=lap_kunjungan_umurstartSearchField.getValue();}
+		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_print=lap_kunjungan_umurendSearchField.getValue();}	
+		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_date_print=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_dateEnd_excel=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		if(lap_kunjungan_bulanField.getValue()!==null){lap_kunjungan_tmedis_bulan=lap_kunjungan_bulanField.getValue();}
+		if(lap_kunjungan_tahunField.getValue()!==null){lap_kunjungan_tmedis_tahun=lap_kunjungan_tahunField.getValue();}
+	
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tmedis_periode='tanggal';
+		}else if(lap_kunjungan_opsiblnField.getValue()==true){
+			lap_kunjungan_tmedis_periode='bulan';
+		}else{
+			lap_kunjungan_tmedis_periode='all';
+		}
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -1275,15 +1297,28 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			start:0,
+			limit:31,
+			lap_kunjungan_id	:	lap_kunjungan_id_print, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_print,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_print,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_print,
+			lap_kunjungan_member : lap_kunjungan_member_print,
+			lap_kunjungan_cust : lap_kunjungan_cust_print,
+			lap_kunjungan_umurstart : lap_kunjungan_umurstart_print,
+			lap_kunjungan_umurend : lap_kunjungan_umurend_print,
+			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_date_print, 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_dateEnd_print,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode,	
 		  	currentlisting: lap_kunjunganDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
-				win = window.open('./tindakanlist.html','tindakanlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				win = window.open('./kunjunganlist.html','kunjunganlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				
 				break;
 		  	default:
@@ -1312,22 +1347,67 @@ Ext.onReady(function(){
 	/* Enf Function */
 	
 	/* Function for print Export to Excel Grid */
-	function lap_lunjungan_export_excel(){
+	function lap_kunjungan_export_excel(){
 		var searchquery = "";
-		var tindakan_dokter_2excel=null;
+		var lap_kunjungan_id_excel=null;
+		var lap_kunjungan_tgl_start_excel=null;
+		var lap_kunjungan_tgl_end_excel=null;
+		var lap_kunjungan_kelamin_excel=null;
+		var lap_kunjungan_member_excel=null;
+		var lap_kunjungan_cust_excel=null;
+		var lap_kunjungan_umurstart_excel=null;
+		var lap_kunjungan_umurend_excel=null;
+		var lap_kunjungan_tgllahir_date_excel="";
+		var lap_kunjungan_tgllahir_dateEnd_excel="";
+		var lap_kunjungan_tmedis_bulan=null;
+		var lap_kunjungan_tmedis_tahun=null;
+		var lap_kunjungan_tmedis_periode=null;
+		
 		var win;              
 		// check if we do have some search data...
-		if(lap_kunjunganDataStore.baseParams.query!==null){searchquery = lap_kunjunganDataStore.baseParams.query;}
-		if(lap_kunjunganDataStore.baseParams.trawat_dokter!==null){tindakan_dokter_2excel = lap_kunjunganDataStore.baseParams.trawat_dokter;}
-
+	
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_excel=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_excel=lap_kunjungan_custSearchField.getValue();}
+		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_excel=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_excel=lap_kunjungan_kelaminSearchField.getValue();}
+		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_excel=lap_kunjungan_tglStartSearchField.getValue();}
+		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_excel=lap_kunjungan_tglEndSearchField.getValue();}
+		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_excel=lap_kunjungan_umurstartSearchField.getValue();}
+		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_excel=lap_kunjungan_umurendSearchField.getValue();}	
+		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_date_excel=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_dateEnd_excel=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		if(lap_kunjungan_bulanField.getValue()!==null){lap_kunjungan_tmedis_bulan=lap_kunjungan_bulanField.getValue();}
+		if(lap_kunjungan_tahunField.getValue()!==null){lap_kunjungan_tmedis_tahun=lap_kunjungan_tahunField.getValue();}
+	
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tmedis_periode='tanggal';
+		}else if(lap_kunjungan_opsiblnField.getValue()==true){
+			lap_kunjungan_tmedis_periode='bulan';
+		}else{
+			lap_kunjungan_tmedis_periode='all';
+		}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_lap_kunjungan&m=get_action',
 		params: {
 			task: "EXCEL",
+			start:0,
+			limit:31,
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
-			//if we are doing advanced search, use this
-			trawat_dokter : tindakan_dokter_2excel,
+			lap_kunjungan_id	:	lap_kunjungan_id_excel, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_excel,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_excel,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_excel,
+			lap_kunjungan_member : lap_kunjungan_member_excel,
+			lap_kunjungan_cust : lap_kunjungan_cust_excel,
+			lap_kunjungan_umurstart : lap_kunjungan_umurstart_excel,
+			lap_kunjungan_umurend : lap_kunjungan_umurend_excel,
+			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_date_excel, 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_dateEnd_excel,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode,	
 		  	currentlisting: lap_kunjunganDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
