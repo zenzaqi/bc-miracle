@@ -220,12 +220,12 @@ Ext.onReady(function(){
 		/* dataIndex => insert intolap_kunjunganColumnModel, Mapping => for initiate table column */ 
 			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
 			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
-			{name: 'avg_jum_total', type: 'float', mapping: 'sum(jum_total)/count(distinct tgl_tindakan)'},
-			{name: 'avg_jum_cust_medis', type: 'float', mapping: 'sum(jum_cust_medis)/count(distinct tgl_tindakan)'},
-			{name: 'avg_jum_cust_surgery', type: 'float', mapping: 'sum(jum_cust_surgery)/count(distinct tgl_tindakan)'},
-			{name: 'avg_jum_cust_antiaging', type: 'float', mapping: 'sum(jum_cust_antiaging)/count(distinct tgl_tindakan)'},
-			{name: 'avg_jum_cust_nonmedis', type: 'float', mapping: 'sum(jum_cust_nonmedis)/count(distinct tgl_tindakan)'},
-			{name: 'avg_jum_cust_produk', type: 'float', mapping: 'sum(jum_cust_produk)/count(distinct tgl_tindakan)'}
+			{name: 'avg_jum_total', type: 'float', mapping: 'avg_jum_total'},
+			{name: 'avg_jum_cust_medis', type: 'float', mapping: 'avg_jum_cust_medis'},
+			{name: 'avg_jum_cust_surgery', type: 'float', mapping: 'avg_jum_cust_surgery'},
+			{name: 'avg_jum_cust_antiaging', type: 'float', mapping: 'avg_jum_cust_antiaging'},
+			{name: 'avg_jum_cust_nonmedis', type: 'float', mapping: 'avg_jum_cust_nonmedis'},
+			{name: 'avg_jum_cust_produk', type: 'float', mapping: 'avg_jum_cust_produk'}
 		])
 		//sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
 	});
@@ -1290,6 +1290,13 @@ Ext.onReady(function(){
 			lap_kunjungan_tmedis_periode='all';
 		}
 
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_lap_kunjungan&m=get_action',
@@ -1318,6 +1325,7 @@ Ext.onReady(function(){
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
+				Ext.MessageBox.hide();
 				win = window.open('./kunjunganlist.html','kunjunganlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				
 				break;

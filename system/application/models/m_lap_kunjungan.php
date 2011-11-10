@@ -2293,12 +2293,12 @@ from
 		if($periode == 'bulan' || $periode == 'tanggal'){
 	
 			$query = "select
-sum(jum_cust_medis)/count(distinct tgl_tindakan),
-sum(jum_cust_surgery)/count(distinct tgl_tindakan),
-sum(jum_cust_antiaging)/count(distinct tgl_tindakan),
-sum(jum_cust_nonmedis)/count(distinct tgl_tindakan),
-sum(jum_cust_produk)/count(distinct tgl_tindakan), 
-sum(jum_total)/count(distinct tgl_tindakan)
+round(sum(jum_cust_medis)/count(distinct tgl_tindakan),2) as avg_jum_cust_medis,
+round(sum(jum_cust_surgery)/count(distinct tgl_tindakan),2) as avg_jum_cust_surgery,
+round(sum(jum_cust_antiaging)/count(distinct tgl_tindakan),2) as avg_jum_cust_antiaging,
+round(sum(jum_cust_nonmedis)/count(distinct tgl_tindakan),2) as avg_jum_cust_nonmedis,
+round(sum(jum_cust_produk)/count(distinct tgl_tindakan),2) as avg_jum_cust_produk,
+round(sum(jum_total)/count(distinct tgl_tindakan),2) as avg_jum_total
 from
 (
 	(

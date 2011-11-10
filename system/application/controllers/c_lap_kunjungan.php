@@ -339,29 +339,29 @@ class C_lap_kunjungan extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("kunjunganlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Kunjungan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Kunjungan List'><caption>Laporan Jumlah Kunjungan</caption><thead><tr><th scope='col'>Tanggal</th><th scope='col'>Medis</th><th scope='col'>Surgery</th><th scope='col'>Anti Aging</th><th scope='col'>Non Medis</th><th scope='col'>Produk</th><th scope='col'>Total</th></tr></thead>");
+		fwrite($file, "<body onload='window.print()'><table summary='Kunjungan List'><caption>Laporan Jumlah Kunjungan</caption><thead><tr><th scope='col'>Tanggal</th><th scope='col'>Medis</th><th scope='col'>Surgery</th><th scope='col'>Anti Aging</th><th scope='col'>Non Medis</th><th scope='col'>Produk</th><th scope='col'>Total</th></tr></thead>");
 
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
 				fwrite($file,'<tr');
-				if($i%1==0){
+				/*if($i%1==0){
 					fwrite($file," class='odd'");
-				}
+				}*/
 			
 				fwrite($file, "><th scope='row' id='r97'>");
 				fwrite($file, $data['tgl_tindakan']);
-				fwrite($file,"</th><td>");
+				fwrite($file,"</th><td align='right' class='numeric'>");
 				fwrite($file, $data['Medis']);
-				fwrite($file,"</td><td>");
+				fwrite($file,"</td><td align='right' class='numeric'>");
 				fwrite($file, $data['Surgery']);
-				fwrite($file, "</td><td>");
+				fwrite($file, "</td><td align='right' class='numeric'>");
 				fwrite($file, $data['Anti_Aging']);
-				fwrite($file, "</td><td>");
+				fwrite($file, "</td><td align='right' class='numeric'>");
 				fwrite($file, $data['Non_Medis']);
-				fwrite($file, "</td><td>");
+				fwrite($file, "</td><td align='right' class='numeric'>");
 				fwrite($file, $data['Produk']);
-				fwrite($file, "</td><td>");
+				fwrite($file, "</td><td align='right' class='numeric'>");
 				fwrite($file, $data['Total']);
 				fwrite($file, "</td></tr>");
 				
@@ -372,17 +372,17 @@ class C_lap_kunjungan extends Controller {
 			$tot_produk+= $data['Produk'];
 			$tot_total+= $data['Total'];
 			
-			$avg_medis= $tot_medis / $nbrows;
-			$avg_surgery= $tot_surgery / $nbrows;
-			$avg_anti= $tot_anti / $nbrows;
-			$avg_nonmedis= $tot_nonmedis / $nbrows;
-			$avg_produk= $tot_produk / $nbrows;
-			$avg_total= $tot_total / $nbrows;
+			$avg_medis= round(($tot_medis / $nbrows),2);
+			$avg_surgery= round(($tot_surgery / $nbrows),2);
+			$avg_anti= round(($tot_anti / $nbrows),2);
+			$avg_nonmedis= round(($tot_nonmedis / $nbrows),2);
+			$avg_produk= round(($tot_produk / $nbrows),2);
+			$avg_total= round(($tot_total / $nbrows),2);
 			}
 
 		}
-		fwrite($file, "<tfoot><tr><th scope='row'>Total</th><td>$tot_medis</td><td>$tot_surgery</td><td>$tot_anti</td><td>$tot_nonmedis</td><td>$tot_produk</td><td>$tot_total</td></tr>
-		<tr><th scope='row'>Avg</th><td>$avg_medis</td><td>$avg_surgery</td><td>$avg_anti</td><td>$avg_nonmedis</td><td>$avg_produk</td><td>$avg_total</td></tr>
+		fwrite($file, "<tfoot><tr><th scope='row'>Total</th><td width='70px' align='right' class='numeric'>$tot_medis</td><td width='70px' align='right' class='numeric'>$tot_surgery</td><td width='70px' align='right' class='numeric'>$tot_anti</td><td width='70px' align='right' class='numeric'>$tot_nonmedis</td><td align='right' class='numeric'>$tot_produk</td><td align='right' class='numeric'>$tot_total</td></tr>
+		<tr><th scope='row'>Avg</th><td width='70px' align='right' class='numeric'>$avg_medis</td><td width='70px' align='right' class='numeric'>$avg_surgery</td><td width='70px' align='right' class='numeric'>$avg_anti</td><td width='70px' align='right' class='numeric'>$avg_nonmedis</td><td width='70px' align='right' class='numeric'>$avg_produk</td><td width='70px' align='right' class='numeric'>$avg_total</td></tr>
 		</tfoot><tbody></tbody></table></body></html>");	
 		fclose($file);
 		echo '1';        
