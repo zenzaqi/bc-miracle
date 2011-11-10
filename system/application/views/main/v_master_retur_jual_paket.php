@@ -281,6 +281,13 @@ Ext.onReady(function(){
 					if(rpaket_stat_dokField.getValue()!= null){rpaket_stat_dok_create = rpaket_stat_dokField.getValue();} 
 					if(rpaket_voucher_nilaiField.getValue()!== null){rpaket_voucher_nilai_create = rpaket_voucher_nilaiField.getValue();} 
 					
+					Ext.MessageBox.show({
+					   msg: 'Sedang menambahkan data, mohon tunggu...',
+					   progressText: 'proses...',
+					   width:350,
+					   wait:true
+					});
+					
 					Ext.Ajax.request({  
 						waitMsg: 'Please wait...',
 						url: 'index.php?c=c_master_retur_jual_paket&m=get_action',
@@ -313,6 +320,8 @@ Ext.onReady(function(){
 								detail_retur_paket_tokwitansi_insert();
 								master_retur_jual_paket_DataStore.reload();
 								master_retur_jual_paket_createWindow.hide();
+								Ext.MessageBox.hide();
+								//Ext.MessageBox.alert('Info','Retur Penjualan Paket Berhasil Disimpan');
 							}
 						},
 						failure: function(response){
