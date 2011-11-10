@@ -1101,7 +1101,7 @@ class M_master_retur_jual_paket extends Model{
 						,dapaket_date_update='".$datetime_now."'
 						,dapaket_revised=(dapaket_revised+1)
 					WHERE dapaket_dpaket='".$row->drpaket_dpaket."'
-						AND dapaket_keterangan='retur'";
+						AND dapaket_stat_dok='Retur'";
 				$this->db->query($sqlu_dapaket);
 				
 				$sqlu_dpaket = "UPDATE detail_jual_paket
