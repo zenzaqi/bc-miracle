@@ -63,7 +63,7 @@ class C_lap_kunjungan extends Controller {
 				$this->lap_kunjungan_print();
 				break;
 			case "EXCEL":
-				$this->lap_lunjungan_export_excel();
+				$this->lap_kunjungan_export_excel();
 				break;
 			default:
 				echo "{failure:true}";
@@ -287,23 +287,60 @@ class C_lap_kunjungan extends Controller {
 	
 	function lap_kunjungan_print(){
   		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
-		$trawat_cust=trim(@$_POST["trawat_cust"]);
-		$trawat_keterangan=trim(@$_POST["trawat_keterangan"]);
-		$trawat_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$trawat_keterangan);
-		$trawat_keterangan=str_replace("'", "''",$trawat_keterangan);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+			
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
+		$lap_kunjungan_umurstart=trim(@$_POST["lap_kunjungan_umurstart"]);
+		$lap_kunjungan_umurstart=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurstart=str_replace("'", '"',$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurend=trim(@$_POST["lap_kunjungan_umurend"]);
+		$lap_kunjungan_umurend=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurend);
+		$lap_kunjungan_umurend=str_replace("'", '"',$lap_kunjungan_umurend);
+		$lap_kunjungan_tgllahir =(isset($_POST['lap_kunjungan_tgllahir']) ? @$_POST['lap_kunjungan_tgllahir'] : @$_GET['lap_kunjungan_tgllahir']);
+		$lap_kunjungan_tgllahirend =(isset($_POST['lap_kunjungan_tgllahirend']) ? @$_POST['lap_kunjungan_tgllahirend'] : @$_GET['lap_kunjungan_tgllahirend']);
+		$lap_kunjungan_tgllahirend=trim(@$_POST["lap_kunjungan_tgllahirend"]);
 		
-		$result = $this->m_tindakan_medis->lap_kunjungan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		
+		
+		$result = $this->m_lap_kunjungan->lap_kunjungan_print($tgl_awal,$periode,$lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end);
 		$nbrows=$result->num_rows();
-		$totcolumn=8;
+		$totcolumn=7;
+		$tot_medis=0;
+		$tot_surgery=0;
+		$tot_anti=0;
+		$tot_nonmedis=0;
+		$tot_produk=0;
+		$tot_total=0;
+		
    		/* We now have our array, let's build our HTML file */
-		$file = fopen("tindakanlist.html",'w');
-		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Tindakan List'><caption>TINDAKAN</caption><thead><tr><th scope='col'>Trawat Id</th><th scope='col'>Trawat Cust</th><th scope='col'>Trawat Keterangan</th><th scope='col'>Trawat Creator</th><th scope='col'>Trawat Date Create</th><th scope='col'>Trawat Update</th><th scope='col'>Trawat Date Update</th><th scope='col'>Trawat Revised</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
-		fwrite($file, $nbrows);
-		fwrite($file, " Tindakan</td></tr></tfoot><tbody>");
+		$file = fopen("kunjunganlist.html",'w');
+		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Kunjungan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
+		fwrite($file, "<body><table summary='Kunjungan List'><caption>Laporan Jumlah Kunjungan</caption><thead><tr><th scope='col'>Tanggal</th><th scope='col'>Medis</th><th scope='col'>Surgery</th><th scope='col'>Anti Aging</th><th scope='col'>Non Medis</th><th scope='col'>Produk</th><th scope='col'>Total</th></tr></thead>");
+
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
@@ -313,41 +350,90 @@ class C_lap_kunjungan extends Controller {
 				}
 			
 				fwrite($file, "><th scope='row' id='r97'>");
-				fwrite($file, $data['trawat_id']);
+				fwrite($file, $data['tgl_tindakan']);
 				fwrite($file,"</th><td>");
-				fwrite($file, $data['trawat_cust']);
+				fwrite($file, $data['Medis']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['trawat_keterangan']);
+				fwrite($file, $data['Surgery']);
+				fwrite($file, "</td><td>");
+				fwrite($file, $data['Anti_Aging']);
+				fwrite($file, "</td><td>");
+				fwrite($file, $data['Non_Medis']);
+				fwrite($file, "</td><td>");
+				fwrite($file, $data['Produk']);
+				fwrite($file, "</td><td>");
+				fwrite($file, $data['Total']);
 				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_creator']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_create']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_date_update']);
-				fwrite($file, "</td></tr>");
-				fwrite($file, $data['trawat_revised']);
-				fwrite($file, "</td></tr>");
+				
+			$tot_medis+= $data['Medis'];
+			$tot_surgery+= $data['Surgery'];
+			$tot_anti+= $data['Anti_Aging'];
+			$tot_nonmedis+= $data['Non_Medis'];
+			$tot_produk+= $data['Produk'];
+			$tot_total+= $data['Total'];
+			
+			$avg_medis= $tot_medis / $nbrows;
+			$avg_surgery= $tot_surgery / $nbrows;
+			$avg_anti= $tot_anti / $nbrows;
+			$avg_nonmedis= $tot_nonmedis / $nbrows;
+			$avg_produk= $tot_produk / $nbrows;
+			$avg_total= $tot_total / $nbrows;
 			}
+
 		}
-		fwrite($file, "</tbody></table></body></html>");	
+		fwrite($file, "<tfoot><tr><th scope='row'>Total</th><td>$tot_medis</td><td>$tot_surgery</td><td>$tot_anti</td><td>$tot_nonmedis</td><td>$tot_produk</td><td>$tot_total</td></tr>
+		<tr><th scope='row'>Avg</th><td>$avg_medis</td><td>$avg_surgery</td><td>$avg_anti</td><td>$avg_nonmedis</td><td>$avg_produk</td><td>$avg_total</td></tr>
+		</tfoot><tbody></tbody></table></body></html>");	
 		fclose($file);
 		echo '1';        
 	}
 	/* End Of Function */
 
 	/* Function to Export Excel document */
-	function lap_lunjungan_export_excel(){
+	function lap_kunjungan_export_excel(){
 		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
-		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
-		$option=$_POST['currentlisting'];
-		$filter=$_POST["query"];
+				//POST varibale here
+		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+			
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
+		$lap_kunjungan_umurstart=trim(@$_POST["lap_kunjungan_umurstart"]);
+		$lap_kunjungan_umurstart=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurstart=str_replace("'", '"',$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurend=trim(@$_POST["lap_kunjungan_umurend"]);
+		$lap_kunjungan_umurend=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurend);
+		$lap_kunjungan_umurend=str_replace("'", '"',$lap_kunjungan_umurend);
+		$lap_kunjungan_tgllahir =(isset($_POST['lap_kunjungan_tgllahir']) ? @$_POST['lap_kunjungan_tgllahir'] : @$_GET['lap_kunjungan_tgllahir']);
+		$lap_kunjungan_tgllahirend =(isset($_POST['lap_kunjungan_tgllahirend']) ? @$_POST['lap_kunjungan_tgllahirend'] : @$_GET['lap_kunjungan_tgllahirend']);
+		$lap_kunjungan_tgllahirend=trim(@$_POST["lap_kunjungan_tgllahirend"]);
 		
-		$query = $this->m_lap_kunjungan->lap_lunjungan_export_excel($trawat_id ,$trawat_dokter ,$option,$filter);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
-		to_excel($query,"tindakan"); 
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
+		
+		$query = $this->m_lap_kunjungan->lap_kunjungan_export_excel($tgl_awal,$periode,$lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $start,$end);
+		
+		to_excel($query,"kunjungan"); 
 		echo '1';
 			
 	}
