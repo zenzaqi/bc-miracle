@@ -189,7 +189,7 @@ class C_lap_jum_tindakan_dokter extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("tindakanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
+		fwrite($file, "<body onload='window.print()'><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
 		<tfoot>
 			<tr>		
 				<th>Grand Tot Kredit(Poin)</th>
