@@ -90,7 +90,7 @@ html,body,table,tr,td{
 		$j=0;
 		foreach($detail_apaket as $list => $row_apaket){ $j+=1;?>
 		<tr>
-			<td width="970px">&nbsp;<?=$j;?>.&nbsp;<?=$row_apaket->paket_nama;?>&nbsp;(<?=$row_apaket->rawat_nama;?>&nbsp;-&nbsp;<?=$row_apaket->jpaket_nobukti;?>)&nbsp;<b>Jml : </b>&nbsp;<?=$row_apaket->dapaket_jumlah;?>&nbsp;<b>Sisa : </b>&nbsp;<?=$row_apaket->dpaket_sisa_paket;?>&nbsp;- <b>Tgl Kadaluwarsa : </b>&nbsp;<?=$row_apaket->dpaket_kadaluarsa;?></td>
+			<td width="970px">&nbsp;<?=$j;?>.&nbsp;<?=$row_apaket->paket_nama;?>&nbsp;(<?=$row_apaket->rawat_nama;?>&nbsp;-&nbsp;<?=$row_apaket->jpaket_nobukti;?>)&nbsp;<b>Jml : </b>&nbsp;<?=$row_apaket->dapaket_jumlah;?>&nbsp;<b>Sisa : </b>&nbsp;<?=$row_apaket->dpaket_sisa_paket;?>&nbsp;- <b>Tgl Kadaluarsa : </b>&nbsp;<?=$row_apaket->dpaket_kadaluarsa;?></td>
 			<td width="270px" align="right">0</td>
 		</tr>
 		<?php }?>

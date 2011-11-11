@@ -921,8 +921,8 @@ Ext.onReady(function(){
     /* End of Function */ 
 	 
 	function reset_search_form(){
-		kartu_stok_gudangSearchField.reset();
-		kartu_stok_gudangSearchField.setValue(null);
+		//kartu_stok_gudangSearchField.reset();
+		//kartu_stok_gudangSearchField.setValue(null);
 		kartu_stok_satuan_defaultField.setValue(true);
 		kartu_stok_produk_allField.setValue(true);
 		//kartu_stok_produk_namaSearchField.reset();

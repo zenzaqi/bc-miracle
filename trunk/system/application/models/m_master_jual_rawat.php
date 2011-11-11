@@ -2681,7 +2681,7 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	function print_paper($jrawat_id){
-		$sql="SELECT jrawat_tanggal
+		$sql="SELECT date_format(jrawat_tanggal,'%d-%m-%Y') as jrawat_tanggal
 				,cust_no
 				,cust_nama
 				,cust_alamat
@@ -2730,7 +2730,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
 				,dapaket_tgl_ambil
 				,detail_jual_paket.dpaket_sisa_paket AS dpaket_sisa_paket
-				,dpaket_kadaluarsa
+				,date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
@@ -2759,7 +2759,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_tgl_ambil
 				,dapaket_dtrawat
 				,dpaket_sisa_paket
-				,dpaket_kadaluarsa
+				,date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)

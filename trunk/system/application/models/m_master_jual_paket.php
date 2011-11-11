@@ -1964,7 +1964,8 @@ class M_master_jual_paket extends Model{
 				jpaket_creator, 
 				jpaket_diskon, 
 				jpaket_cashback,
-				TIME(jpaket_date_create) AS jpaket_jam
+				TIME(jpaket_date_create) AS jpaket_jam,
+				date_format(dpaket_kadaluarsa,'%d-%m-%Y')  AS tgl_kadaluarsa
 			FROM detail_jual_paket 
 			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 			LEFT JOIN customer ON(jpaket_cust=cust_id) 
