@@ -646,14 +646,14 @@ class M_master_ambil_paket extends Model{
 					,cust_id
 					,cust_no
 					,cust_nama
-					,jpaket_tanggal
+					,date_format(jpaket_tanggal,'%d-%m-%Y') as jpaket_tanggal
 					,jpaket_nobukti
 					,paket_kode
 					,paket_nama
 					,dpaket_id
 					,dpaket_jumlah
 					,dpaket_sisa_paket
-					,dpaket_kadaluarsa 
+					,date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa
 					,date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) as tanggal_hangus
 				FROM detail_jual_paket 
 				LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
@@ -881,11 +881,17 @@ class M_master_ambil_paket extends Model{
 //						LEFT OUTER JOIN paket p on p.paket_id = m.apaket_paket ";
 
 			$query =   "SELECT 
-							dpaket_master, dpaket_paket, 
-							cust_id, cust_no, cust_nama, 
-							jpaket_tanggal, jpaket_nobukti, 
-							paket_kode, paket_nama, 
-							dpaket_id, dpaket_jumlah, dpaket_sisa_paket, dpaket_kadaluarsa,
+							dpaket_master, 
+							dpaket_paket, 
+							cust_id, cust_no, 
+							cust_nama, 
+							date_format(jpaket_tanggal,'%d-%m-%Y') as jpaket_tanggal, 
+							jpaket_nobukti, 
+							paket_kode, 
+							paket_nama, 
+							dpaket_id, 
+							dpaket_jumlah, dpaket_sisa_paket, 
+							date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa,
 							date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) as tanggal_hangus
 						FROM detail_jual_paket 
 						LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
@@ -997,13 +1003,13 @@ class M_master_ambil_paket extends Model{
 					LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 					LEFT JOIN customer ON(jpaket_cust=cust_id) 
 					LEFT JOIN paket ON(dpaket_paket=paket_id) 
-					WHERE dpaket_sisa_paket >= 0
-						AND date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
+					WHERE date_add(date_format(dpaket_kadaluarsa,'%Y-%m-%d'), interval 365 day) >= date_format(now(),'%Y-%m-%d')
 						AND jpaket_stat_dok='Tertutup' ";
 
 			if($option=='LIST'){		
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
+				$query .= " dpaket_sisa_paket > 0
+						AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR paket_kode LIKE '%".addslashes($filter)."%' OR paket_nama LIKE '%".addslashes($filter)."%' OR jpaket_nobukti LIKE '%".addslashes($filter)."%')";
 			} else if($option=='SEARCH'){
 				if($apaket_faktur!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";

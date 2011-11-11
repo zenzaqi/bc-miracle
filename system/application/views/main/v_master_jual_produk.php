@@ -2922,7 +2922,7 @@ Ext.override(Ext.form.Field, {
 	*/
 	jproduk_cashback_cfField= new Ext.form.TextField({
 		id: 'jproduk_cashback_cfField',
-		fieldLabel: 'Voucher / Promo (Rp)',
+		fieldLabel: 'Voucher (Rp)',
 		allowNegatife : false,
 		enableKeyEvents: true,
 		//readOnly : true,

@@ -19,7 +19,7 @@
 			<th scope='col'>Tot Item</th> 
 			<th scope='col'>Subtotal (Rp)</th> 
 			<? //<th scope='col'>Disk + (%)</th> ?>
-			<th scope='col'>Vcr / Promo (Rp)</th> <?php ?> 
+			<th scope='col'>Voucher (Rp)</th> <?php ?> 
 			<th scope='col'>Tunai (Rp)</th> 
 			<th scope='col'>Cek/Giro (Rp)</th> 
 			<th scope='col'>Transfer (Rp)</th> 
