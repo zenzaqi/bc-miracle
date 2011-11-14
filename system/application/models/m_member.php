@@ -50,8 +50,7 @@ class M_member extends Model{
 							m.*,
 							c.cust_nama, c.cust_no 
 						FROM member m
-						LEFT JOIN customer c on c.cust_id = m.member_cust
-						WHERE (member_status = 'Daftar' OR member_status = 'Cetak') ";
+						LEFT JOIN customer c on c.cust_id = m.member_cust";
 			
 			// For simple search
 			if ($filter<>""){
