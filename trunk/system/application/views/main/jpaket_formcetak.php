@@ -13,7 +13,7 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print();">
+<body onload="window.print();window.close();">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
 		<td height="10px"><table width="1240px" height="90px" border="0" cellspacing="0" cellpadding="0">
@@ -74,10 +74,8 @@ html,body,table,tr,td{
           <td width="160px" align="right">&nbsp;<?=rupiah($row->dpaket_harga);?></td>
           <td width="170px" align="right">&nbsp;<?=$row->dpaket_diskon;?></td>
           <td width="270px" align="right">&nbsp;<?=rupiah(($row->dpaket_jumlah)*($row->jumlah_subtotal));?></td>
+		  <td width="170px" align="right"><b>[&nbsp;&nbsp;Exp : <?=$row->tgl_kadaluarsa;?>&nbsp;&nbsp;]</b></td>
 		 </tr>
-		 <tr>
-		  <td align="left" colspan=2><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;Tgl Kadaluarsa : <?=$row->tgl_kadaluarsa;?>&nbsp;&nbsp;]</b></td> 
-        </tr>
 		<?php 
 			$subtotal+=(($row->dpaket_jumlah)*($row->jumlah_subtotal));
 		}

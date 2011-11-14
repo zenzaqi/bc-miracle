@@ -46,7 +46,7 @@
 	foreach($data_print as $print) { ?><?php
 	$status = '';	
 		if($faktur!==$print->no_bukti) {
-			if ($print->jproduk_stat_dok !== 'Batal'){ 
+			if ($print->status !== 'Batal'){ 
 				$total_voucher+=$print->voucher;
 				$total_bayar+=$print->bayar;
 				$total_hutang+=$print->totalbiaya-$print->bayar;
@@ -61,7 +61,7 @@
 			
 			if ($print->keterangan == ''){ 
 				$print->keterangan = '-'; }
-			if ($print->jproduk_stat_dok == 'Batal'){ 
+			if ($print->status == 'Batal'){ 
 				$status = ' [BATAL]'; }
 				?>
 				<tr>
@@ -81,7 +81,7 @@
 				foreach($data_print as $print_list) { ?><?php 
 					if($print_list->no_bukti==$print->no_bukti){ 
 						$i++; 
-						if ($print->jproduk_stat_dok !== 'Batal'){ 
+						if ($print->status !== 'Batal'){ 
 							$sub_jumlah_barang+=$print_list->jumlah_barang;
 							$sub_diskon+=$print_list->diskon_nilai;
 							$sub_total+=$print_list->subtotal;
@@ -135,7 +135,7 @@
 							<td align="right" class="numeric"><b>Voucher (Rp)</b></td> 
 							<td align="right" class="numeric"><?php echo number_format($print->voucher,0,",",","); ?></td> 
 							<td align="right" class="numeric"><b>Total (Rp)</b></td> 
-							<? if ($print->jproduk_stat_dok == 'Batal'){ 
+							<? if ($print->status == 'Batal'){ 
 							?>
 								<td align="right" class="numeric"><b><?php echo '0'; ?></b></td> 
 							<? } else { ?>
@@ -147,7 +147,7 @@
 							<td colspan="4"><b>
 								<table class="bayar">
 								<tr>
-								<? if ($print->jproduk_stat_dok == 'Batal'){ 
+								<? if ($print->status == 'Batal'){ 
 								?>
 									<td align="right" class="numeric_bayar" width="50" height="17"><?php echo '0'; ?></td> 
 									<td align="right" class="numeric_bayar" width="50" height="17"><?php echo '0'; ?></td> 
@@ -169,7 +169,7 @@
 							<td align="right" class="numeric"><b>Hutang (Rp)</b></td> 
 							<td align="right" class="numeric"><b><?php echo number_format($print->totalbiaya-$print->bayar,0,",",","); ?></b></td> 
 							<td align="right" class="numeric"><b>Tot Bayar (Rp)</b></td>
-							<? if ($print->jproduk_stat_dok == 'Batal'){ 
+							<? if ($print->status == 'Batal'){ 
 							?>
 								<td align="right" class="numeric"><b><?php echo '0'; ?></b></td>
 							<? } else { ?>

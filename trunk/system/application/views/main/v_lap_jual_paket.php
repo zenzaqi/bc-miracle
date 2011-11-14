@@ -52,6 +52,8 @@ var rpt_jpaket_tglawalField;
 var rpt_jpaket_tglakhirField;
 var rpt_jpaket_rekapField;
 var rpt_jpaket_detailField;
+var rpt_jpaket_semuaField;
+var rpt_jpaket_tertutupField;
 var rpt_jpaket_bulanField;
 var rpt_jpaket_tahunField;
 var rpt_jpaket_opsitglField;
@@ -215,6 +217,23 @@ Ext.onReady(function(){
 		name: 'jpaket_opsi'
 	});
 	
+	// opsi status
+	rpt_jpaket_semuaField=new Ext.form.Radio({
+		id: 'rpt_jpaket_semuaField',
+		boxLabel: 'Semua',
+		name: 'jpaket_opsi_status',
+		checked: false
+	});
+	
+	rpt_jpaket_tertutupField=new Ext.form.Radio({
+		id: 'rpt_jpaket_tertutupField',
+		boxLabel: 'Tertutup',
+		name: 'jpaket_opsi_status',
+		checked: true
+	});
+	// eof opsi status
+	
+	
 	var rpt_jpaket_periodeField=new Ext.form.FieldSet({
 		id:'rpt_jpaket_periodeField',
 		title : 'Periode',
@@ -272,6 +291,15 @@ Ext.onReady(function(){
 		items: [rpt_jpaket_rekapField ,rpt_jpaket_detailField]
 	});
 	
+	// opsi status
+	var	rpt_jpaket_opsistatusField=new Ext.form.FieldSet({
+		id: 'rpt_jpaket_opsistatusField',
+		title: 'Opsi Status',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jpaket_tertutupField ,rpt_jpaket_semuaField]
+	});
+	
 	var	rpt_jpaket_groupbyField=new Ext.form.FieldSet({
 		id: 'rpt_jpaket_groupbyField',
 		title: 'Group By',
@@ -300,7 +328,8 @@ Ext.onReady(function(){
 		
 		var jpaket_tglawal="";
 		var jpaket_tglakhir="";
-		var jrpdouk_opsi="";
+		var jpaket_opsi="";
+		var jpaket_opsi_status="";
 		var jpaket_bulan="";
 		var jpaket_tahun="";
 		var jpaket_periode="";
@@ -321,6 +350,8 @@ Ext.onReady(function(){
 		}
 		if(rpt_jpaket_groupField.getValue()!==""){jpaket_group=rpt_jpaket_groupField.getValue(); }
 		if(rpt_jpaket_rekapField.getValue()==true){jpaket_opsi='rekap';}else{jpaket_opsi='detail';}
+		if(rpt_jpaket_tertutupField.getValue()==true){jpaket_opsi_status='tertutup';}
+		if(rpt_jpaket_semuaField.getValue()==true){jpaket_opsi_status='semua';}
 		
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
@@ -337,6 +368,7 @@ Ext.onReady(function(){
 					tgl_awal	: jpaket_tglawal,
 					tgl_akhir	: jpaket_tglakhir,
 					opsi		: jpaket_opsi,
+					opsi_status	: jpaket_opsi_status,
 					bulan		: jpaket_bulan,
 					tahun		: jpaket_tahun,
 					periode		: jpaket_periode,
@@ -392,7 +424,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jpaket_periodeField,rpt_jpaket_opsiField,rpt_jpaket_groupbyField],
+		items: [rpt_jpaket_periodeField,rpt_jpaket_opsiField,rpt_jpaket_groupbyField, rpt_jpaket_opsistatusField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -429,6 +461,9 @@ Ext.onReady(function(){
 		rpt_jpaket_groupField.setValue('No faktur');
 		if(rpt_jpaket_rekapField.getValue()==true){
 			rpt_jpaket_groupField.bindStore(group_master_Store);
+			rpt_jpaket_semuaField.setDisabled(true);
+			rpt_jpaket_tertutupField.setDisabled(true);
+			rpt_jpaket_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jpaket_groupField.bindStore(group_detail_Store);
@@ -439,6 +474,9 @@ Ext.onReady(function(){
 		rpt_jpaket_groupField.setValue('No Faktur');
 		if(rpt_jpaket_detailField.getValue()==true){
 			rpt_jpaket_groupField.bindStore(group_detail_Store);
+			rpt_jpaket_semuaField.setDisabled(false);
+			rpt_jpaket_tertutupField.setDisabled(false);
+			rpt_jpaket_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jpaket_groupField.bindStore(group_master_Store);
@@ -454,6 +492,26 @@ Ext.onReady(function(){
 			rpt_jpaket_tglakhirField.allowBlank=true;
 		}
 	});
+	
+	// event opsi status
+	rpt_jpaket_groupField.on("select",function(){
+	if(rpt_jpaket_groupField.getValue()=='No Faktur' && rpt_jpaket_detailField.getValue()==true ){
+		rpt_jpaket_semuaField.setDisabled(false);
+		rpt_jpaket_tertutupField.setDisabled(false);
+		rpt_jpaket_semuaField.setValue(true);
+	}
+	else
+	{
+		rpt_jpaket_semuaField.setDisabled(true);
+		rpt_jpaket_tertutupField.setDisabled(true);
+		rpt_jpaket_tertutupField.setValue(true);
+	}
+	});
+		
+	// pertamax
+	rpt_jpaket_semuaField.setDisabled(true);
+	rpt_jpaket_tertutupField.setDisabled(true);
+	rpt_jpaket_tertutupField.setValue(true);
 	
 });
 	</script>

@@ -18,7 +18,7 @@ class M_master_jual_paket extends Model{
 			parent::Model();
 		}
 		
-		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+		function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group){
 			$order_by="";
 			switch($group){
 				case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
@@ -38,12 +38,21 @@ class M_master_jual_paket extends Model{
 				else if($periode=='tanggal')
 					$sql="SELECT distinct * FROM vu_trans_paket WHERE jpaket_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}else if($opsi=='detail'){
-				if($periode=='all')
-					$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' ".$order_by;
-				else if($periode=='bulan')
-					$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
-				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+				if($opsi_status=='semua') {
+					if($periode=='all')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok<>'Terbuka' ".$order_by;
+					else if($periode=='bulan')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok<>'Terbuka' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+					else if($periode=='tanggal')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok<>'Terbuka' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+				}  else if($opsi_status=='tertutup') {
+					if($periode=='all')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' ".$order_by;
+					else if($periode=='bulan')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' AND  date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+					else if($periode=='tanggal')
+						$sql="SELECT * FROM vu_detail_jual_paket WHERE jpaket_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal, '%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+				}
 			}
 			
 			//echo $sql;
@@ -1964,8 +1973,7 @@ class M_master_jual_paket extends Model{
 				jpaket_creator, 
 				jpaket_diskon, 
 				jpaket_cashback,
-				TIME(jpaket_date_create) AS jpaket_jam,
-				date_format(dpaket_kadaluarsa,'%d-%m-%Y')  AS tgl_kadaluarsa
+				TIME(jpaket_date_create) AS jpaket_jam
 			FROM detail_jual_paket 
 			LEFT JOIN master_jual_paket ON(dpaket_master=jpaket_id) 
 			LEFT JOIN customer ON(jpaket_cust=cust_id) 
