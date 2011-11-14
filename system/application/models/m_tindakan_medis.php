@@ -1630,7 +1630,8 @@ class M_tindakan_medis extends Model{
 					*/
 				}else{
 					$sql = "UPDATE tindakan_detail
-						SET dtrawat_keterangan='".$dtrawat_keterangan."'
+						SET dtrawat_perawatan='".$dtrawat_perawatan."'
+							,dtrawat_keterangan='".$dtrawat_keterangan."'
 							,dtrawat_jumlah='".$dtrawat_jumlah."'
 							,dtrawat_update='".@$_SESSION[SESSION_USERID]."'
 							,dtrawat_date_update='".$datetime_now."'

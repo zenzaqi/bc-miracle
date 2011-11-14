@@ -4034,8 +4034,8 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-dpaket_jumlahdiskonField.getValue())/100)*dpaket_subtotalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		dpaket_subtotalnetField.setValue(sub_total_net);
-		if(this.getRawValue()>25 && dpaket_jenisdiskonField.getValue()=='Card'){
-			this.setRawValue(25);
+		if(this.getRawValue()>15 && dpaket_jenisdiskonField.getValue()=='Card'){
+			this.setRawValue(15);
 		}
 	});
 	//declaration of detail coloumn model

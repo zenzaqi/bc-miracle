@@ -4993,8 +4993,8 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-djumlah_diskonField.getValue())/100)*dsub_totalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		dsub_total_netField.setValue(sub_total_net);
-		if(this.getRawValue()>25 && djenis_diskonField.getValue()=='Card'){
-			this.setRawValue(25);
+		if(this.getRawValue()>15 && djenis_diskonField.getValue()=='Card'){
+			this.setRawValue(15);
 		}
 	});
 	
