@@ -5310,8 +5310,8 @@ Ext.override(Ext.form.Field, {
 		var sub_total_net = ((100-drawat_diskonField.getValue())/100)*drawat_subtotalField.getValue();
 		sub_total_net = (sub_total_net>0?Math.round(sub_total_net):0);
 		drawat_subtotal_netField.setValue(sub_total_net);
-		if(this.getRawValue()>25 && drawat_jenis_diskonField.getValue()=='Card'){
-			this.setRawValue(25);
+		if(this.getRawValue()>15 && drawat_jenis_diskonField.getValue()=='Card'){
+			this.setRawValue(15);
 		}
 	});
 	
