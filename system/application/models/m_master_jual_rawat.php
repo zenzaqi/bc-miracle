@@ -39,7 +39,7 @@ class M_master_jual_rawat extends Model{
 		}
 	}
 	
-	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$group){
+	function get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group){
 		
 		switch($group){
 			case "Tanggal": $order_by=" ORDER BY tanggal ASC";break;
@@ -57,7 +57,7 @@ class M_master_jual_rawat extends Model{
 			default: $order_by=" ORDER BY no_bukti ASC";break;
 		}
 		
-		if($opsi=='rekap'){
+		if($opsi=='rekap'){		
 			if($periode=='all')
 				$sql="SELECT distinct * FROM vu_trans_rawat WHERE jrawat_stat_dok='Tertutup'  ".$order_by;
 			else if($periode=='bulan')
@@ -65,12 +65,21 @@ class M_master_jual_rawat extends Model{
 			else if($periode=='tanggal')
 				$sql="SELECT distinct * FROM vu_trans_rawat WHERE jrawat_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 		}else if($opsi=='detail'){
-			if($periode=='all')
-				$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' ".$order_by;
-			else if($periode=='bulan')
-				$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
-			else if($periode=='tanggal')
-				$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			if($opsi_status=='semua') {
+				if($periode=='all')
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Terbuka' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Terbuka' AND date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')	
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}  else if($opsi_status=='tertutup') {
+				if($periode=='all')
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' ".$order_by;
+				else if($periode=='bulan')
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' AND date_format(tanggal, '%Y-%m')='".$tgl_awal."' ".$order_by;
+				else if($periode=='tanggal')
+					$sql="SELECT  * FROM vu_detail_jual_rawat WHERE jrawat_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+			}		
 		}
 		else if($opsi=='grooming'){
 			if($periode=='all')
@@ -2681,7 +2690,7 @@ class M_master_jual_rawat extends Model{
 	}
 	
 	function print_paper($jrawat_id){
-		$sql="SELECT date_format(jrawat_tanggal,'%d-%m-%Y') as jrawat_tanggal
+		$sql="SELECT jrawat_tanggal
 				,cust_no
 				,cust_nama
 				,cust_alamat
@@ -2730,7 +2739,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_customer.cust_alamat AS dapaket_cust_alamat
 				,dapaket_tgl_ambil
 				,detail_jual_paket.dpaket_sisa_paket AS dpaket_sisa_paket
-				,date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa
+				,dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)
@@ -2759,7 +2768,7 @@ class M_master_jual_rawat extends Model{
 				,dapaket_tgl_ambil
 				,dapaket_dtrawat
 				,dpaket_sisa_paket
-				,date_format(dpaket_kadaluarsa,'%d-%m-%Y') as dpaket_kadaluarsa
+				,dpaket_kadaluarsa
 			FROM detail_ambil_paket
 			LEFT JOIN master_jual_paket ON(dapaket_jpaket=jpaket_id)
 			LEFT JOIN paket ON(dapaket_paket=paket_id)

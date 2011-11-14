@@ -53,6 +53,8 @@ var rpt_jrawat_tglakhirField;
 var rpt_jrawat_rekapField;
 var rpt_jrawat_detailField;
 var rpt_jrawat_groomingField;
+var rpt_jrawat_tertutupField;
+var rpt_jrawat_semuaField;
 var rpt_jrawat_bulanField;
 var rpt_jrawat_tahunField;
 var rpt_jrawat_opsitglField;
@@ -228,6 +230,22 @@ Ext.onReady(function(){
 		name: 'jrawat_opsi'
 	});
 	
+	// opsi status
+	rpt_jrawat_tertutupField=new Ext.form.Radio({
+		id: 'rpt_jrawat_tertutupField',
+		boxLabel: 'Tertutup',
+		name: 'jrawat_opsi_status',
+		checked: true
+	});
+	
+	rpt_jrawat_semuaField=new Ext.form.Radio({
+		id: 'rpt_jrawat_semuaField',
+		boxLabel: 'Semua',
+		name: 'jrawat_opsi_status',
+		checked: false
+	});
+	// eof opsi status
+	
 	var rpt_jrawat_periodeField=new Ext.form.FieldSet({
 		id:'rpt_jrawat_periodeField',
 		title : 'Periode',
@@ -285,6 +303,15 @@ Ext.onReady(function(){
 		items: [rpt_jrawat_rekapField ,rpt_jrawat_detailField, rpt_jrawat_groomingField]
 	});
 	
+	// opsi status
+	var	rpt_jrawat_opsistatusField=new Ext.form.FieldSet({
+		id: 'rpt_jrawat_opsistatusField',
+		title: 'Opsi_Status',
+		border: true,
+		anchor: '98%',
+		items: [rpt_jrawat_tertutupField ,rpt_jrawat_semuaField]
+	});
+	
 	var	rpt_jrawat_groupbyField=new Ext.form.FieldSet({
 		id: 'rpt_jrawat_groupbyField',
 		title: 'Group By',
@@ -313,7 +340,8 @@ Ext.onReady(function(){
 		
 		var jrawat_tglawal="";
 		var jrawat_tglakhir="";
-		var jrpdouk_opsi="";
+		var jrawat_opsi="";
+		var jrawat_opsi_status="";
 		var jrawat_bulan="";
 		var jrawat_tahun="";
 		var jrawat_periode="";
@@ -338,6 +366,9 @@ Ext.onReady(function(){
 		if(rpt_jrawat_detailField.getValue()==true){jrawat_opsi='detail';}
 		if(rpt_jrawat_groomingField.getValue()==true){jrawat_opsi='grooming';}
 		
+		if(rpt_jrawat_tertutupField.getValue()==true){jrawat_opsi_status='tertutup';}
+		if(rpt_jrawat_semuaField.getValue()==true){jrawat_opsi_status='semua';}
+		
 		Ext.MessageBox.show({
 		   msg: 'Sedang memproses data, mohon tunggu...',
 		   progressText: 'proses...',
@@ -356,7 +387,8 @@ Ext.onReady(function(){
 					bulan		: jrawat_bulan,
 					tahun		: jrawat_tahun,
 					periode		: jrawat_periode,
-					group		: jrawat_group
+					group		: jrawat_group,
+					opsi_status	: jrawat_opsi_status
 					
 				}, 
 				success: function(response){              
@@ -408,7 +440,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_jrawat_periodeField,rpt_jrawat_opsiField,rpt_jrawat_groupbyField],
+		items: [rpt_jrawat_periodeField,rpt_jrawat_opsiField,rpt_jrawat_groupbyField, rpt_jrawat_opsistatusField],
 		monitorValid:true,
 		buttons: [{
 				text: 'Print',
@@ -446,6 +478,9 @@ Ext.onReady(function(){
 		rpt_jrawat_groupField.setValue('No faktur');
 		if(rpt_jrawat_rekapField.getValue()==true){
 			rpt_jrawat_groupField.bindStore(group_master_Store);
+			rpt_jrawat_semuaField.setDisabled(true);
+			rpt_jrawat_tertutupField.setDisabled(true);
+			rpt_jrawat_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jrawat_groupField.bindStore(group_detail_Store);
@@ -456,6 +491,9 @@ Ext.onReady(function(){
 		rpt_jrawat_groupField.setValue('No Faktur');
 		if(rpt_jrawat_detailField.getValue()==true){
 			rpt_jrawat_groupField.bindStore(group_detail_Store);
+			rpt_jrawat_semuaField.setDisabled(false);
+			rpt_jrawat_tertutupField.setDisabled(false);
+			rpt_jrawat_tertutupField.setValue(true);
 		}else
 		{
 			rpt_jrawat_groupField.bindStore(group_master_Store);
@@ -466,6 +504,9 @@ Ext.onReady(function(){
 		rpt_jrawat_groupField.setValue('No Faktur');
 		if(rpt_jrawat_groomingField.getValue()==true){
 			rpt_jrawat_groupField.bindStore(group_grooming_Store);
+			rpt_jrawat_semuaField.setDisabled(true);
+			rpt_jrawat_tertutupField.setDisabled(true);
+			rpt_jrawat_tertutupField.setValue(true);
 		}else if(rpt_jrawat_detailField.getValue()==true)
 		{
 			rpt_jrawat_groupField.bindStore(group_detail_Store);
@@ -482,6 +523,28 @@ Ext.onReady(function(){
 			rpt_jrawat_tglakhirField.allowBlank=true;
 		}
 	});
+	
+	// event opsi status
+	rpt_jrawat_groupField.on("select",function(){
+	if(rpt_jrawat_groupField.getValue()=='No Faktur' && rpt_jrawat_detailField.getValue()==true ){
+		rpt_jrawat_semuaField.setDisabled(false);
+		rpt_jrawat_tertutupField.setDisabled(false);
+		rpt_jrawat_semuaField.setValue(true);
+	}
+	else
+	{
+		rpt_jrawat_semuaField.setDisabled(true);
+		rpt_jrawat_tertutupField.setDisabled(true);
+		rpt_jrawat_tertutupField.setValue(true);
+	}
+	});
+	
+	// pertamax
+	rpt_jrawat_semuaField.setDisabled(true);
+	rpt_jrawat_tertutupField.setDisabled(true);
+	rpt_jrawat_tertutupField.setValue(true);
+	
+	
 	
 });
 	</script>

@@ -80,6 +80,7 @@ html,body,table,tr,td{
           <td width="160px" align="right">&nbsp;<?=rupiah($row->dpaket_harga);?></td>
           <td width="170px" align="right">&nbsp;<?=$row->dpaket_diskon;?></td>
           <td width="270px" align="right">&nbsp;<?=rupiah(($row->dpaket_jumlah)*($row->jumlah_subtotal));?></td>
+		  <td width="170px" align="right"><b>[&nbsp;&nbsp;Exp : <?=$row->tgl_kadaluarsa;?>&nbsp;&nbsp;]</b></td>
         </tr>
 		<?php 
 			$subtotal+=(($row->dpaket_jumlah)*($row->jumlah_subtotal));
