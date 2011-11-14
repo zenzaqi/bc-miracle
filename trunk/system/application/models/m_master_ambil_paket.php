@@ -74,7 +74,7 @@ class M_master_ambil_paket extends Model{
 						".$tanggal."
 				)";
 				break;
-				case "Perawatan": $order_by=" ORDER BY rawat_id";break;
+				case "Perawatan Semua": $order_by=" ORDER BY rawat_id";break;
 				case "Perawatan Medis": $order_by="AND kategori_nama = 'Medis' ORDER BY rawat_id";break;
 				case "Perawatan Non Medis": $order_by="AND kategori_nama = 'Non Medis' ORDER BY rawat_id";break;
 				case "Perawatan Anti Aging": $order_by="AND kategori_nama = 'Anti Aging' ORDER BY rawat_id";break;
