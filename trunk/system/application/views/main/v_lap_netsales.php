@@ -251,11 +251,11 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Medis (- Vcr PR)' + '</div>',
+			header: '<div align="center">' + 'Non Mds (- Vcr PR)' + '</div>',
 			dataIndex: 'tns_nonmedis',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 110,	//55,
+			width: 90,	//55,
 			sortable: true
 		},{	
 			align : 'Right',
@@ -328,11 +328,11 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Non Med (- Vcr PR)' + '</div>',
+			header: '<div align="center">' + 'Non Mds (- Vcr PR)' + '</div>',
 			dataIndex: 'tns_nonmedis_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 110,	//55,
+			width: 90,
 			sortable: true
 		},{	
 			align : 'Right',
@@ -400,7 +400,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1000, //940,//1200,	//970,
+	  	width: 900,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -431,7 +431,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 1000, //940,//1200,	//970,
+	  	width: 900,
 	});
 	net_salesTotalListEditorGrid.render();
 	/* End of DataStore */
