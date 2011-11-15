@@ -300,7 +300,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{
 			align : 'center',
-			header: '<div align="center">' + 'Last Recalculated' + '</div>',
+			header: '<div align="center">' + 'Last Calculated' + '</div>',
 			dataIndex: 'tns_date_create',
 			width: 80,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i'),
