@@ -316,7 +316,6 @@ Ext.onReady(function(){
 			{name: 'tns_surgery', type: 'float', mapping: 'tns_surgery'},
 			{name: 'tns_total', type: 'float', mapping: 'tns_total'},
 			{name: 'tns_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_date_create'},
-			{name: 'tns_source', type: 'string', mapping: 'tns_source'},
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
@@ -367,7 +366,9 @@ Ext.onReady(function(){
 			{name: 'tns_antiaging', type: 'float', mapping: 'tns_antiaging'},
 			{name: 'tns_lainlain', type: 'float', mapping: 'tns_lainlain'},
 			{name: 'tns_surgery', type: 'float', mapping: 'tns_surgery'},
-			{name: 'tns_total', type: 'float', mapping: 'tns_total'}
+			{name: 'tns_total', type: 'float', mapping: 'tns_total'},
+			{name: 'tns_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_date_create'},
+			{name: 'tns_source', type: 'string', mapping: 'tns_source'},
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
@@ -606,6 +607,14 @@ Ext.onReady(function(){
 			readOnly: true,
 			width: 80,	//55,
 			sortable: true
+		},{
+			align : 'center',
+			header: '<div align="center">' + 'Last Calculated' + '</div>',
+			dataIndex: 'tns_date_create',
+			width: 80,
+			renderer: Ext.util.Format.dateRenderer('d-m-Y H:i'),
+			sortable: true,
+			hidden: true
 		},{	
 			align : 'Center',
 			header: '<div align="center">' + 'Sumber' + '</div>',

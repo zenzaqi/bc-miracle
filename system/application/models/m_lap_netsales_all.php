@@ -131,7 +131,8 @@ class M_lap_netsales_all extends Model{
 							v.tns_produk,
 							v.tns_lainlain,
 							v.tns_total,
-							v.tns_source
+							v.tns_source,
+							v.tns_date_create
 						from vu_netsales_all v
 						where v.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
 						and v.cabang_kode = ".$cabang;
