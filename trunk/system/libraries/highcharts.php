@@ -579,6 +579,7 @@ class Highcharts {
 		{
 			if (count($this->shared_opts) > 0 AND $i === 1)
       {
+	  //print_r($this->shared_opts);
         $embed .= 'Highcharts.setOptions('.$this->encode($this->shared_opts).');'."\n";
       }
 

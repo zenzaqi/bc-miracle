@@ -341,7 +341,7 @@ Ext.onReady(function(){
 			dataIndex: 'tns_nonmedis_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
-			width: 90,
+			width: 90,	//55,
 			sortable: true
 		},{	
 			align : 'Right',
@@ -377,7 +377,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total' + '</div>',
+			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
 			dataIndex: 'tns_grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -409,7 +409,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 900, //940,//1200,	//970,
 		/* Add Control on ToolBar */
 		tbar: [
 		{
@@ -440,7 +440,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 900,
+	  	width: 900, //940,//1200,	//970,
 	});
 	net_salesTotalListEditorGrid.render();
 	/* End of DataStore */
@@ -670,16 +670,69 @@ Ext.onReady(function(){
 		   width:350,
 		   wait:true
 		});
-		
+				
 		net_salesDataStore.reload({
 			callback: function(opts, success, response){
 				if(success){
 					net_salesTotalDataStore.reload();
+					
+					//CHART
+					Ext.Ajax.request({
+						waitMsg: 'Please Wait...',
+						url: 'index.php?c=c_lap_netsales&m=get_action',
+						params: {
+							task: 'CHART_SEARCH',
+							tgl_awal	: netsales_tglawal,
+							tgl_akhir	: netsales_tglakhir,
+							bulan		: netsales_bulan,
+							tahun		: netsales_tahun,
+							periode		: netsales_periode,
+							method: 'POST'
+							
+						},
+						success: function(result, request){
+							var hasil=eval(result.responseText);
+							switch(hasil){
+							case 1:
+								Ext.MessageBox.hide();
+								
+								//laporanNetSalesChart.render();
+								laporanNetSalesChart.show();
+								//Ext.getCmp('laporanNetSalesChart').update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+								
+								laporanNetSalesChart.update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+								
+
+								break;
+							default:
+								Ext.MessageBox.hide();
+								Ext.MessageBox.show({
+									title: 'Warning',
+									//msg: FAILED_PRINT,
+									buttons: Ext.MessageBox.OK,
+									animEl: 'save',
+									icon: Ext.MessageBox.WARNING
+								});
+								break;
+							}
+						},
+						failure: function(response){
+							Ext.MessageBox.hide();
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: FAILED_CONNECTION,
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+						}
+					});					
+					
 					Ext.MessageBox.hide();
 					}
 				}
-		});		
-		
+		});			
+	
 		}else{
 			Ext.MessageBox.show({
 			   title: 'Warning',
@@ -862,11 +915,11 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
-		<div id="netsales_chart"></div>
 		<div id="fp_netsales_list"></div>
         <div id="fp_netsalesTotal_list"></div>
-        <div id="fp_netsales"></div>
+        <!--<div id="fp_netsales"></div>-->
 		<div id="elwindow_rpt_netsales"></div>
+		<div id="netsales_chart"></div>
 		
     </div>
 </div>

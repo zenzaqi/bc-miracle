@@ -2,7 +2,7 @@
 /* 	These code was generated using phpCIGen v 0.1.b (21/04/2009)
 	#zaqi 		zaqi.smart@gmail.com,http://zenzaqi.blogspot.com, 
 	
-	+ Module  		: jual_bank Controller
+	+ Module  		: netsales Controller
 	+ Description	: For record controller process back-end
 	+ Filename 		: C_lap_netsales.php
  	+ Author  		: Zainal, Mukhlison
@@ -10,14 +10,13 @@
 	
 */
 
-//class of jual_bank
+//class of netsales
 class C_lap_netsales extends Controller {
 
 	//constructor
 	function C_lap_netsales(){
 		parent::Controller();
 		$this->load->model('m_lap_netsales', '', TRUE);
-		//$this->load->plugin('to_excel');
 		$this->load->helper('url');
 	}
 	
@@ -56,6 +55,10 @@ class C_lap_netsales extends Controller {
 				break;
 			case "CHART":
 				$this->laporan_netsales_chart();
+				break;
+			case "CHART_SEARCH":
+				$search= true;
+				$this->laporan_netsales_chart($search);
 				break;
 			default:
 				echo "{failure:true}";
@@ -124,43 +127,52 @@ class C_lap_netsales extends Controller {
 		echo $result; 
 	}
 	
-	function laporan_netsales_chart()
-	{	/*	
-	    $tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
-		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
-		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
-		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
-		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']); */
-		
-		/**
-		 * We are going to use these statements until we have figured the update method out in view section.
-		 * These statements force to grab a month netsales data whatever date condition met.
+	function laporan_netsales_chart($search=false)
+	{	
+		$this->load->library('highcharts');
+		$title = "";
+		$subtitle = "";
+	    /**
+		 * Mengelompokkan data apakah berasal dari proses search atau tampilan awal
 		 */
-		 /*
-        if ($periode == "bulan")
+		if ($search == false)
 		{
-		  $tgl =  strtotime("01-".$bulan."-".$tahun);
+		  $tgl_awal="";
+		  $tgl_akhir="";
+		  $tahun=date("Y");
+		  $bulan=date("m");
+		 		
+		  $periode="bulan";
+		  $subtitle = "";
+		  $bulan_title = date("F",strtotime("01-".$bulan."-".$tahun));
 		}
-		else if ($periode == "tanggal")
-		{
-		  $tmp = explode("-",$tgl_awal);
-		  $tgl = strtotime($tmp[2]."-".$tmp[1]."-".$tmp[0]);
-		  $bulan = $tmp[1];
-		  $tahun = $tmp[0];
-		  $periode = "bulan";
-		} */
-		$tgl_awal="";
-		$tgl_akhir="";
-		$tahun=date("Y");
-		$bulan=date("m")-1;
-		//echo "01".$bulan."-".$tahun;
-		$bulan_title = date("M",strtotime("01-".$bulan."-".$tahun));
+		else
+		{   
+			$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+			$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+			$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+			$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+			$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']); 
+			if ($periode == "tanggal")
+			{
+			  $tmp = explode("-",$tgl_awal);
+			  $tgl = strtotime($tmp[2]."-".$tmp[1]."-".$tmp[0]);
+			  $bulan = $tmp[1];
+			  $tahun = $tmp[0];
+			  //$periode = "bulan";
+			  //$bulan_title = " ".substr($tgl_awal,8,2)."-".substr($tgl_akhir,8,2)." ".date("F",strtotime("01-".$bulan."-".$tahun));
+			  $bulan_title = " ".date("d F Y",strtotime($tgl_awal))." - ".date("d F Y",strtotime($tgl_akhir));
+			}
+			else
+			{
+				$bulan_title = date("F",strtotime("01-".$bulan."-".$tahun));
+			}
+		}
 		
-		$periode="bulan";
 
-		$title = "Laporan Net Sales Bulan ".$bulan_title;
-		$subtitle = "Trial version. Chart only shows net sales data for previous one month.";
+		$title = "Laporan Net Sales ".$bulan_title;
 		
+		// data array untuk Y Axis
 		$netsales_type = array("tns_tanggal" => "Tanggal",
 							   "tns_medis" => "Medis",
 							   "tns_nonmedis" => "Non Medis",
@@ -171,18 +183,38 @@ class C_lap_netsales extends Controller {
 							   "tns_total" => "Total");
 		
 		$result=$this->m_lap_netsales->get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun,$chart='true');
-		//print_r($result);
 		
-		$this->load->library('highcharts');
+		$page_count = 0;
+		$page_line = file('print/lap_netsales_graph.log');
+		if ($search == false)
+		{
+			$page_count = count($page_line)+1;
+		}
+		else
+		{
+			$page_count = count($page_line);
+		}
+		
+		if ($page_count == 1)
+		{
+			$time = "time";
+		}
+		else
+		{
+			$time = "times";
+		}
+		$page_label = "this page has been viewed for {$page_count} {$time}";
+		$opt_array = array('credits' => array('enabled'=> true,
+										'text'	=> $page_label,
+										'href' => '#'));
 		
 		$this->highcharts->set_type('line'); // chart type
 		$this->highcharts->set_title($title, $subtitle); // set chart title: title, subtitle(optional)
 		$this->highcharts->set_axis_titles('Bulan', 'Nominal'); // axis titles: x axis,  y axis
-		
+		$this->highcharts->set_global_options($opt_array);
 		
 		$data_axis['categories'] = array();
 		
-		//for($x=0; $x<count($netsales_type); $x++)
 		$x=0;
 		foreach($netsales_type as $type_idx => $type_name)
 		{
@@ -223,6 +255,7 @@ class C_lap_netsales extends Controller {
 		
 		$this->highcharts->set_xAxis($data['axis']);
 		$this->highcharts->set_dimensions(1170,380);
+		
 		$graph_data = $this->highcharts->render();
 		
 		$data['charts'] = $graph_data;
@@ -233,13 +266,21 @@ class C_lap_netsales extends Controller {
 			mkdir("print");
 		}
 		$filename = "print/lap_netsales_graph.php";
+		$log_file = "print/lap_netsales_graph.log";
 		if(file_exists($filename)){
 			unlink($filename);
 			$this->clearBrowserCache();
 		}
 	
 		$print_file=fopen("print/lap_netsales_graph.php","w+");
-		fwrite($print_file, $print_view);
+		
+		$fwrite = fwrite($print_file, $print_view);
+		if ($fwrite !== false && $search == false)
+		{
+		    $log_print = $_SERVER['REMOTE_ADDR']."\n";
+			$log_file_open=fopen("print/lap_netsales_graph.log","a+");
+			fwrite($log_file_open,$log_print);
+		}
 		echo '1';
 	}
 	

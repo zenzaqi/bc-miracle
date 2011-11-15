@@ -1441,14 +1441,20 @@ Ext.override(Ext.form.Field, {
 		jrawat_cashback_cfField.setValue(null);
 		jrawat_subTotalField.reset();
 		jrawat_subTotalField.setValue(null);
+		jrawat_subTotal_cfField.reset();
+		jrawat_subTotal_cfField.setValue(null);
 		jrawat_totalField.reset();
 		jrawat_totalField.setValue(null);
+		jrawat_total_cfField.reset();
+		jrawat_total_cfField.setValue(null);
 		jrawat_bayarField.reset();
 		jrawat_bayarField.setValue(null);
 		jrawat_bayar_cfField.reset();
 		jrawat_bayar_cfField.setValue(null);
 		jrawat_hutangField.reset();
 		jrawat_hutangField.setValue(null);
+		jrawat_hutang_cfField.reset();
+		jrawat_hutang_cfField.setValue(null);
 		jrawat_pesanLabel.setText("");
 		jrawat_lunasLabel.setText("");
 
@@ -1575,7 +1581,6 @@ Ext.override(Ext.form.Field, {
 		jrawat_bayarField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_bayar'));
 		jrawat_bayar_cfField.setValue(CurrencyFormatted(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_bayar')));
 		
-
 		jrawat_keteranganField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_keterangan'));
 		jrawat_ket_diskField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_ket_disk'));
 		jrawat_stat_dokField.setValue(master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_stat_dok'));
@@ -1594,11 +1599,14 @@ Ext.override(Ext.form.Field, {
 		
 		jrawat_jumlahField.setValue(drawat_jumlah_field);
 		jrawat_subTotalField.setValue(subtotal_field);
+		jrawat_subTotal_cfField.setValue(CurrencyFormatted(subtotal_field));
 		jrawat_totalField.setValue(total_field);
+		jrawat_total_cfField.setValue(CurrencyFormatted(total_field));
 		
 		//hutang_temp=total_field-jrawat_bayarField.getValue();
 		hutang_temp=total_field-master_jual_rawatListEditorGrid.getSelectionModel().getSelected().get('jrawat_bayar');
 		jrawat_hutangField.setValue(hutang_temp);
+		jrawat_hutang_cfField.setValue(CurrencyFormatted(hutang_temp));
 		
 		
 		load_membership();
@@ -4799,7 +4807,20 @@ Ext.override(Ext.form.Field, {
 		maskRe: /([0-9]+)$/
 	});
 	
-	jrawat_subTotalField= new Ext.ux.form.CFTextField({
+	
+	jrawat_subTotal_cfField= new Ext.form.TextField({
+		id: 'jrawat_subTotal_cfField',
+		fieldLabel: 'Sub Total (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	jrawat_subTotalField= new Ext.form.NumberField({
 		id: 'jrawat_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -4809,16 +4830,51 @@ Ext.override(Ext.form.Field, {
 		width: 120
 	});
 
-	jrawat_totalField= new Ext.ux.form.CFTextField({
-		id: 'jrawat_totalField',
+	jrawat_total_cfField= new Ext.form.TextField({
+		id: 'jrawat_total_cfField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
-		valueRenderer: 'numberToCurrency',
-		readOnly: true,
+		allowNegatife : false,
 		enableKeyEvents: true,
-		itemCls: 'rmoney_b',
-		width: 120
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
 	});
 	
+	jrawat_totalField= new Ext.form.NumberField({
+		id: 'jrawat_totalField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		//valueRenderer: 'numberToCurrency',
+		readOnly: true,
+		enableKeyEvents: true,
+		//itemCls: 'rmoney_b',
+		width: 120,
+		allowBlank: true
+
+	});
+	/*
+	jproduk_totalField= new Ext.form.NumberField({
+		id: 'jproduk_totalField',
+		enableKeyEvents: true,
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	jproduk_total_cfField= new Ext.form.TextField({
+		id: 'jproduk_total_cfField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	*/
+
 	jrawat_bayarField= new Ext.form.NumberField({
 		id: 'jrawat_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
@@ -4848,7 +4904,7 @@ Ext.override(Ext.form.Field, {
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});*/
-	jrawat_hutangField= new Ext.ux.form.CFTextField({
+	jrawat_hutangField= new Ext.form.NumberField({
 		id: 'jrawat_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -4859,6 +4915,19 @@ Ext.override(Ext.form.Field, {
 		//maskRe: new RegExp('[0123456789.km ]'),
 		//hiddenName: 'length'
 	});
+	
+	jrawat_hutang_cfField= new Ext.form.TextField({
+		id: 'jrawat_hutang_cfField',
+		fieldLabel: 'Hutang (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
 	jrawat_pesanLabel= new Ext.form.Label({
 		style: {
 			marginLeft: '100px',
@@ -4931,7 +5000,7 @@ Ext.override(Ext.form.Field, {
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jrawat_jumlahField, jrawat_subTotalField, jrawat_cashback_cfField, jrawat_ket_diskField, {xtype: 'spacer',height:10},jrawat_totalField, jrawat_bayar_cfField,jrawat_hutangField,jrawat_pesanLabel,jrawat_lunasLabel] 
+				items: [jrawat_jumlahField, jrawat_subTotal_cfField, jrawat_cashback_cfField, jrawat_ket_diskField, {xtype: 'spacer',height:10},jrawat_total_cfField, jrawat_bayar_cfField, jrawat_hutang_cfField, jrawat_pesanLabel,jrawat_lunasLabel] 
 			}
 			]
 	
@@ -5843,11 +5912,12 @@ Ext.override(Ext.form.Field, {
 		}
 		jrawat_jumlahField.setValue(jumlah_item);
 		jrawat_subTotalField.setValue(subtotal_harga);
+		jrawat_subTotal_cfField.setValue(CurrencyFormatted(subtotal_harga));
 		total_harga=subtotal_harga*(100-jrawat_diskonField.getValue())/100 - jrawat_cashbackField.getValue();
 		total_harga=(total_harga>0?Math.round(total_harga):0);
 		//jrawat_subTotalField.setValue(total_harga);
 		jrawat_totalField.setValue(total_harga);
-
+		jrawat_total_cfField.setValue(CurrencyFormatted(total_harga));
 		
 
 		transfer_nilai=jrawat_transfer_nilaiField.getValue();
@@ -5969,6 +6039,7 @@ Ext.override(Ext.form.Field, {
 		
 		total_hutang=(total_hutang>0?Math.round(total_hutang):0);
 		jrawat_hutangField.setValue(total_hutang);
+		jrawat_hutang_cfField.setValue(CurrencyFormatted(total_hutang));
 		
 		if(total_bayar>total_harga){
 			jrawat_pesanLabel.setText("Kelebihan Jumlah Bayar");
@@ -6015,13 +6086,16 @@ Ext.override(Ext.form.Field, {
 		}
 		jrawat_jumlahField.setValue(jumlah_item);
 		jrawat_subTotalField.setValue(sub_total_field);
+		jrawat_subTotal_cfField.setValue(CurrencyFormatted(sub_total_field));
 		
 		total_biaya_field = sub_total_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jrawat_totalField.setValue(total_biaya_field);
+		jrawat_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jrawat_hutangField.setValue(total_hutang_field);
+		jrawat_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_biaya(){
@@ -6054,9 +6128,11 @@ Ext.override(Ext.form.Field, {
 		total_biaya_field += sub_total_biaya_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jrawat_totalField.setValue(total_biaya_field);
+		jrawat_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jrawat_hutangField.setValue(total_hutang_field);
+		jrawat_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	
 	function load_total_bayar(){
@@ -6203,6 +6279,7 @@ Ext.override(Ext.form.Field, {
 		total_hutang_field=total_biaya_field-total_bayar_field;
 		total_hutang_field=(total_hutang_field>0?Math.round(total_hutang_field):0);
 		jrawat_hutangField.setValue(total_hutang_field);
+		jrawat_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 		
 		if(total_bayar_field>total_biaya_field){
 			jrawat_pesanLabel.setText("Kelebihan Jumlah Bayar");

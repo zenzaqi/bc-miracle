@@ -11,6 +11,10 @@ $config['shared_options'] = array(
 			)
 		),
 		'shadow' => true
+	),
+	'tooltip' => array(
+		//formatter => "function",
+		'shared' => false
 	)
 );
 

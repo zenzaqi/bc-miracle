@@ -17,6 +17,14 @@ class C_summary_report_setup extends Controller {
 		$this->load->model('m_summary_report_setup', '', TRUE);
 	}
 	
+	function get_tahun_list(){
+		//ID dokter pada tabel departemen adalah 8
+		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$result=$this->m_summary_report_setup->get_tahun_list($query);
+		echo $result;
+	}
+	
+	
 	
 	function get_customer_list(){
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
@@ -71,10 +79,11 @@ class C_summary_report_setup extends Controller {
 	function sr_setup_list(){
 		
 		$query = isset($_POST['query']) ? $_POST['query'] : "";
+		$tahun = isset($_POST['tahun']) ? $_POST['tahun'] : "";
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 
-		$result=$this->m_summary_report_setup->sr_setup_list($query,$start,$end);
+		$result=$this->m_summary_report_setup->sr_setup_list($query,$start,$end,$tahun);
 		echo $result;
 	}
 	

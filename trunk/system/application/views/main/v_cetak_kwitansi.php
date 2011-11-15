@@ -723,8 +723,12 @@ Ext.onReady(function(){
 		
 		kwitansi_total_nilaiField.reset();
 		kwitansi_total_nilaiField.setValue(0);
+		kwitansi_total_nilai_cfField.reset();
+		kwitansi_total_nilai_cfField.setValue(null);
 		kwitansi_total_bayarField.reset();
 		kwitansi_total_bayarField.setValue(0);
+		kwitansi_total_bayar_cfField.reset();
+		kwitansi_total_bayar_cfField.setValue(null);
 		
 		kwitansi_status_lunasLabel.setText("");
 		kwitansi_status_lunasField.reset();
@@ -842,7 +846,9 @@ Ext.onReady(function(){
 								
 								//load_pembayaran();
 								kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+								kwitansi_total_nilai_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 								kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+								kwitansi_total_bayar_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
 								if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
 									kwitansi_status_lunasLabel.setText("LUNAS");
 									kwitansi_status_lunasField.setValue("LUNAS");
@@ -871,7 +877,9 @@ Ext.onReady(function(){
 									
 									//load_pembayaran();
 									kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+									kwitansi_total_nilai_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 									kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+									kwitansi_total_bayar_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
 									if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
 										kwitansi_status_lunasLabel.setText("LUNAS");
 										kwitansi_status_lunasField.setValue("LUNAS");
@@ -898,7 +906,9 @@ Ext.onReady(function(){
 										
 										//load_pembayaran();
 										kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+										kwitansi_total_nilai_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 										kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+										kwitansi_total_bayar_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
 										if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
 											kwitansi_status_lunasLabel.setText("LUNAS");
 											kwitansi_status_lunasField.setValue("LUNAS");
@@ -923,7 +933,9 @@ Ext.onReady(function(){
 										
 										//load_pembayaran();
 										kwitansi_total_nilaiField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+										kwitansi_total_nilai_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 										kwitansi_total_bayarField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
+										kwitansi_total_bayar_cfField.setValue(cetak_kwitansiListEditorGrid.getSelectionModel().getSelected().get('kwitansi_bayar'));
 										if(kwitansi_total_nilaiField.getValue()==kwitansi_total_bayarField.getValue() && kwitansi_total_bayarField.getValue()!=0){
 											kwitansi_status_lunasLabel.setText("LUNAS");
 											kwitansi_status_lunasField.setValue("LUNAS");
@@ -1772,7 +1784,32 @@ Ext.onReady(function(){
 		anchor: '95%',
 		triggerAction: 'all'	
 	});
+
+	kwitansi_total_nilai_cfField= new Ext.form.TextField({
+		id: 'kwitansi_total_nilai_cfField',
+		fieldLabel: '<b>Total (Rp)</b>',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	kwitansi_total_nilaiField= new Ext.form.NumberField({
+		id: 'kwitansi_total_nilaiField',
+		enableKeyEvents: true,
+		fieldLabel: '<b>Total (Rp)</b>',
+		allowBlank: true,
+		width : 120,
+		readOnly : true,
+		itemCls : 'rmoney',
+		maskRe: /([0-9]+)$/
+	});
+	
 	/* Identify  kwitansi_total_nilai Field */
+	/*
 	kwitansi_total_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'kwitansi_total_nilaiField',
 		fieldLabel: '<b>Total (Rp)</b>',
@@ -1781,6 +1818,8 @@ Ext.onReady(function(){
 		itemCls: 'rmoney',
 		width: 120
 	});
+	*/
+	
 	
 	/*Identify kwitansi_tanggal Field  */
 	kwitansi_tanggalField= new Ext.form.DateField({
@@ -1789,7 +1828,34 @@ Ext.onReady(function(){
 		format : 'd-m-Y'
 	});
 	
+	
+	kwitansi_total_bayar_cfField= new Ext.form.TextField({
+		id: 'kwitansi_total_bayar_cfField',
+		fieldLabel: 'Total Bayar (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	kwitansi_total_bayarField= new Ext.form.NumberField({
+		id: 'kwitansi_total_bayarField',
+		enableKeyEvents: true,
+		fieldLabel: 'Total Bayar (Rp)',
+		allowBlank: true,
+		width : 120,
+		readOnly : true,
+		itemCls : 'rmoney',
+		maskRe: /([0-9]+)$/
+	});
+	
+	
+	
 	/* Identify  kwitansi_total_bayar Field */
+	/*
 	kwitansi_total_bayarField= new Ext.ux.form.CFTextField({
 		id: 'kwitansi_total_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
@@ -1798,6 +1864,9 @@ Ext.onReady(function(){
 		itemCls: 'rmoney',
 		width: 120
 	});
+	*/
+	
+	
 	kwitansi_status_lunasLabel= new Ext.form.Label({
 		ctCls: 'status_lunas'
 	});
@@ -2260,6 +2329,7 @@ Ext.onReady(function(){
 		total_bayar=kwitansi_tunai_nilai+kwitansi_card_nilai+kwitansi_cek_nilai+kwitansi_transfer_nilai;
 		total_bayar=(total_bayar>0?Math.round(total_bayar):0);
 		kwitansi_total_bayarField.setValue(total_bayar);
+		kwitansi_total_bayar_cfField.setValue(CurrencyFormatted(total_bayar));
 		if(kwitansi_total_nilaiField.getValue()==total_bayar && total_bayar!=0){
 			kwitansi_status_lunasLabel.setText("LUNAS");
 			kwitansi_status_lunasField.setValue("LUNAS");

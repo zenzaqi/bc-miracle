@@ -412,6 +412,8 @@ Ext.onReady(function(){
 		rproduk_voucher_nilaiField.setValue(null);
 		rproduk_kwitansi_nilaiField.reset();
 		rproduk_kwitansi_nilaiField.setValue(null);
+		rproduk_kwitansi_nilai_cfField.reset();
+		rproduk_kwitansi_nilai_cfField.setValue(null);
 		rproduk_nobuktijualField.setDisabled(false);
 		rproduk_custField.setDisabled(false);
 		rproduk_tanggalField.setDisabled(false);
@@ -448,6 +450,7 @@ Ext.onReady(function(){
 		rproduk_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_keterangan'));
 		rproduk_stat_dokField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_stat_dok'));
 		rproduk_kwitansi_nilaiField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
+		rproduk_kwitansi_nilai_cfField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_nilai'));
 		rproduk_voucher_nilaicfField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('rproduk_voucher'));
 		rproduk_kwitansi_keteranganField.setValue(master_retur_jual_produkListEditorGrid.getSelectionModel().getSelected().get('kwitansi_keterangan'));
 		rproduk_nobuktijualField.setDisabled(true);
@@ -1171,6 +1174,7 @@ Ext.onReady(function(){
 	rproduk_voucher_nilaiField= new Ext.form.NumberField({
 		id: 'rproduk_voucher_nilaiField',
 		fieldLabel: 'Nilai Voucher (Rp)',
+		enableKeyEvents: true,
 		//valueRenderer: 'numberToCurrency',
 		//allowNegatife : false,
 		//blankText: '0',
@@ -1191,6 +1195,31 @@ Ext.onReady(function(){
 		anchor: '95%',
 		maskRe: /([0-9]+)$/
 	});*/
+	
+	rproduk_kwitansi_nilai_cfField= new Ext.form.TextField({
+		id: 'rproduk_kwitansi_nilai_cfField',
+		fieldLabel: 'Nilai Kuitansi (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	rproduk_kwitansi_nilaiField= new Ext.form.NumberField({
+		id: 'rproduk_kwitansi_nilaiField',
+		enableKeyEvents: true,
+		fieldLabel: 'Nilai Kuitansi (Rp)',
+		allowBlank: true,
+		anchor : '95%',
+		readOnly : true,
+		itemCls : 'rmoney',
+		maskRe: /([0-9]+)$/
+	});
+	
+	/*
 	rproduk_kwitansi_nilaiField= new Ext.ux.form.CFTextField({
 		id: 'rproduk_kwitansi_nilaiField',
 		fieldLabel: 'Nilai Kuitansi (Rp)',
@@ -1198,6 +1227,9 @@ Ext.onReady(function(){
 		readOnly: true,
 		anchor: '95%'
 	});
+	*/
+	
+	
 	rproduk_kwitansi_keteranganField= new Ext.form.TextArea({
 		id: 'rproduk_kwitansi_keteranganField',
 		fieldLabel: 'Keterangan Kuitansi',
@@ -1209,9 +1241,9 @@ Ext.onReady(function(){
 		var j=cbo_retur_produk_DataStore.findExact('retur_produk_value',rproduk_nobuktijualField.getValue(),0);
 		if(cbo_retur_produk_DataStore.getCount()){
 			rproduk_custField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_nama_customer);
-			rproduk_custidField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_customer_id);
-			rproduk_voucher_nilaicfField.setValue(CurrencyFormatted(cbo_retur_produk_DataStore.getAt(j).data.voucher));
+			rproduk_custidField.setValue(cbo_retur_produk_DataStore.getAt(j).data.retur_produk_customer_id);	
 			rproduk_voucher_nilaiField.setValue(cbo_retur_produk_DataStore.getAt(j).data.voucher);
+			rproduk_voucher_nilaicfField.setValue(CurrencyFormatted(cbo_retur_produk_DataStore.getAt(j).data.voucher));
 			cbo_drproduk_produkDataStore.load({params: {query: rproduk_nobuktijualField.getValue()}});
 		}
 	});
@@ -1597,6 +1629,7 @@ Ext.onReady(function(){
 		for(i=0;i<detail_retur_jual_produk_DataStore.getCount();i++){
 			sum_subtotal_detail+=(detail_retur_jual_produk_DataStore.getAt(i).data.sisa_produk*detail_retur_jual_produk_DataStore.getAt(i).data.drproduk_harga);
 			rproduk_kwitansi_nilaiField.setValue(sum_subtotal_detail-voucher);
+			rproduk_kwitansi_nilai_cfField.setValue(CurrencyFormatted(sum_subtotal_detail-voucher));
 		}
 		
 	}
@@ -1675,7 +1708,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [rproduk_voucher_nilaicfField,rproduk_kwitansi_nilaiField] 
+				items: [rproduk_voucher_nilaicfField,rproduk_kwitansi_nilai_cfField] 
 			}
 			,{
 				columnWidth:0.5,

@@ -4325,6 +4325,7 @@ Ext.override(Ext.form.Field, {
 		allowDecimals : false,
 		itemCls: 'rmoney',
 		width: 120,
+		readOnly : true,
 		maskRe: /([0-9]+)$/ 
 	});
 	jproduk_totalField= new Ext.form.NumberField({
@@ -4352,6 +4353,7 @@ Ext.override(Ext.form.Field, {
 		enableKeyEvents: true,
 		itemCls: 'rmoney',
 		width: 120,
+		readOnly : true,
 		maskRe: /([0-9]+)$/ 
 	});
 	jproduk_bayarField= new Ext.form.NumberField({

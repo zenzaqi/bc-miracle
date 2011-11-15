@@ -13,6 +13,21 @@ class M_summary_report_setup extends Model{
 			parent::Model();
 		}
 		
+	function get_tahun_list($query){
+		$sql=  "select distinct setsr_tahun as tahun from sr_setup";
+		$query = $this->db->query($sql);
+		$nbrows = $query->num_rows();
+		if($nbrows>0){
+			foreach($query->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+		
 		
 	function get_customer_list2($query,$start,$end){
 		$sql="SELECT cust_id,cust_no,cust_nama,cust_tgllahir,cust_alamat,cust_telprumah,cust_point FROM customer WHERE cust_aktif='Aktif'";
@@ -53,16 +68,15 @@ class M_summary_report_setup extends Model{
 		
 
 		//function for get list record
-		function sr_setup_list($filter,$start,$end){
+		function sr_setup_list($filter,$start,$end,$tahun){
 		
-			$query = "SELECT * FROM sr_setup";
+			$query = "SELECT * FROM sr_setup WHERE setsr_tahun='".$tahun."'";
 			
 			// For simple search
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
 				$query .= " (setsr_jenis LIKE '%".addslashes($filter)."%' OR setsr_cabang LIKE '%".addslashes($filter)."%' OR setsr_id LIKE '%".addslashes($filter)."%' OR setsr_tahun LIKE '%".addslashes($filter)."%' )";
 			}
-			
 			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
@@ -420,7 +434,7 @@ class M_summary_report_setup extends Model{
 				"setsr_date_create"=>date('Y-m-d H:i:s')
 			);
 			$this->db->insert('sr_setup', $data13);
-			
+			/*
 			$data14 = array(
 				"setsr_id"=>$setsr_id,
 				"setsr_cabang"=>$setsr_cabang,
@@ -508,7 +522,7 @@ class M_summary_report_setup extends Model{
 				"setsr_date_create"=>date('Y-m-d H:i:s')
 			);
 			$this->db->insert('sr_setup', $data17);
-				
+			*/	
 				
 			}
 			
