@@ -384,6 +384,8 @@ Ext.onReady(function(){
 	}
   	/* End Function */
 	
+	var netsales_all_periodeField=new Ext.form.TextField({ width: 160, readOnly : true });
+	
 	netsales_allColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
@@ -520,7 +522,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total' + '</div>',
+			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
 			dataIndex: 'tns_grand_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -597,7 +599,7 @@ Ext.onReady(function(){
 			sortable: true
 		},{	
 			align : 'Right',
-			header: '<div align="center">' + 'Grand Total' + '</div>',
+			header: '<div align="center">' + 'Total' + '</div>',
 			dataIndex: 'tns_total',
 			renderer: Ext.util.Format.numberRenderer('0,000'),
 			readOnly: true,
@@ -636,7 +638,11 @@ Ext.onReady(function(){
 			tooltip: 'Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
-		}/*, '-',{
+		},
+		'-',
+		'<b>Periode : </b>',
+		netsales_all_periodeField,
+		/*, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
@@ -918,6 +924,8 @@ Ext.onReady(function(){
 		var netsales_all_ygk	= "''";
 				
 		if(is_valid_form()){
+		
+		
 			
 		if(rpt_netsales_all_tglawalField.getValue()!==""){netsales_all_tglawal = rpt_netsales_all_tglawalField.getValue().format('Y-m-d');}
 		if(rpt_netsales_all_tglakhirField.getValue()!==""){netsales_all_tglakhir = rpt_netsales_all_tglakhirField.getValue().format('Y-m-d');}
@@ -925,8 +933,35 @@ Ext.onReady(function(){
 		if(rpt_netsales_all_tahunField.getValue()!==""){netsales_all_tahun=rpt_netsales_all_tahunField.getValue(); }
 		if(rpt_netsales_all_opsitglField.getValue()==true){
 			netsales_all_periode='tanggal';
+			netsales_all_periodeField.setValue(rpt_netsales_all_tglawalField.getValue().format('d-m-Y')+ ' s/d ' + rpt_netsales_all_tglakhirField.getValue().format('d-m-Y'));
 		}else if(rpt_netsales_all_opsiblnField.getValue()==true){
 			netsales_all_periode='bulan';
+			if (rpt_netsales_all_bulanField.getValue() == '01') {
+				nama_bulan='Januari'
+			}else if(rpt_netsales_all_bulanField.getValue() == '02') {
+				nama_bulan='Februari'
+			}else if(rpt_netsales_all_bulanField.getValue() == '03') {
+				nama_bulan='Maret'
+			}else if(rpt_netsales_all_bulanField.getValue() == '04') {
+				nama_bulan='April'
+			}else if(rpt_netsales_all_bulanField.getValue() == '05') {
+				nama_bulan='Mei'
+			}else if(rpt_netsales_all_bulanField.getValue() == '06') {
+				nama_bulan='Juni'
+			}else if(rpt_netsales_all_bulanField.getValue() == '07') {
+				nama_bulan='Juli'
+			}else if(rpt_netsales_all_bulanField.getValue() == '08') {
+				nama_bulan='Agustus'
+			}else if(rpt_netsales_all_bulanField.getValue() == '09') {
+				nama_bulan='September'
+			}else if(rpt_netsales_all_bulanField.getValue() == '10') {
+				nama_bulan='Oktober'
+			}else if(rpt_netsales_all_bulanField.getValue() == '11') {
+				nama_bulan='November'
+			}else if(rpt_netsales_all_bulanField.getValue() == '12') {
+				nama_bulan='Desember'
+			}
+			netsales_all_periodeField.setValue(nama_bulan + " " + rpt_netsales_all_tahunField.getValue());
 		}
 		if(cabang_thField.getValue() == true) {netsales_all_th = "'TH'";}
 		if(cabang_kiField.getValue() == true) {netsales_all_ki = "'KI'";}
