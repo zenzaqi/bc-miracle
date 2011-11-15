@@ -27,7 +27,7 @@ class M_lap_netsales extends Model{
 		$sql_del	=  "delete t from temp_netsales t
 						where 
 							t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
-							and t.tns_source <> 'Manual' ";
+							and (t.tns_source <> 'Manual' or t.tns_source is null) ";
 		$this->db->query($sql_del);
 		
 		//mendapatkan list tanggal transaksi, yg belum pernah ada penginputan Manual
