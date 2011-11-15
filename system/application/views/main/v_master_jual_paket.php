@@ -1079,10 +1079,16 @@ Ext.override(Ext.form.Field, {
 		jpaket_stat_dokField.setValue('Terbuka');
 		jpaket_subTotalField.reset();
 		jpaket_subTotalField.setValue(null);
+		jpaket_subTotal_cfField.reset();
+		jpaket_subTotal_cfField.setValue(null);
 		jpaket_totalField.reset();
 		jpaket_totalField.setValue(null);
+		jpaket_total_cfField.reset();
+		jpaket_total_cfField.setValue(null);
 		jpaket_hutangField.reset();
 		jpaket_hutangField.setValue(null);
+		jpaket_hutang_cfField.reset();
+		jpaket_hutang_cfField.setValue(null);
 		jpaket_jumlahField.reset();
 		jpaket_jumlahField.setValue(null);
 		jpaket_pesanLabel.setText('');
@@ -1109,6 +1115,8 @@ Ext.override(Ext.form.Field, {
 		update_group_carabayar3_jual_paket();
 		jpaket_bayarField.reset();
 		jpaket_bayarField.setValue(null);
+		jpaket_bayar_cfField.reset();
+		jpaket_bayar_cfField.setValue(null);
 		/* Enable if jpaket_post2db="CREATE" */
 		jpaket_custField.setDisabled(false);
 		jpaket_tanggalField.setDisabled(false);
@@ -1185,6 +1193,7 @@ Ext.override(Ext.form.Field, {
 		jpaket_cara2Field.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cara2'));
 		jpaket_cara3Field.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cara3'));
 		jpaket_bayarField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
+		jpaket_bayar_cfField.setValue(CurrencyFormatted(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar')));
 		jpaket_keteranganField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_keterangan'));
 		jpaket_ket_diskField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_ket_disk'));
 		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
@@ -1201,9 +1210,13 @@ Ext.override(Ext.form.Field, {
 		total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
 		jpaket_jumlahField.setValue(dpaket_jumlah_field);
 		jpaket_subTotalField.setValue(subtotal_field);
+		jpaket_subTotal_cfField.setValue(CurrencyFormatted(subtotal_field));
+		
 		jpaket_totalField.setValue(total_field);
+		jpaket_total_cfField.setValue(CurrencyFormatted(total_field));
 		hutang_temp=total_field-jpaket_bayarField.getValue();
 		jpaket_hutangField.setValue(hutang_temp);
+		jpaket_hutang_cfField.setValue(CurrencyFormatted(hutang_temp));
 	
 		load_membership();
 		update_group_carabayar_jual_paket();
@@ -3599,7 +3612,8 @@ Ext.override(Ext.form.Field, {
 		maxLength: 50,
 		maskRe: /([0-9]+)$/
 	});
-	jpaket_subTotalField= new Ext.ux.form.CFTextField({
+	
+	jpaket_subTotalField= new Ext.form.NumberField({
 		id: 'jpaket_subTotalField',
 		fieldLabel: 'Sub Total (Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -3607,15 +3621,65 @@ Ext.override(Ext.form.Field, {
 		itemCls: 'rmoney',
 		width: 120
 	});
-	jpaket_totalField= new Ext.ux.form.CFTextField({
+	jpaket_subTotal_cfField= new Ext.form.TextField({
+		id: 'jpaket_subTotal_cfField',
+		fieldLabel: 'Sub Total (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	jpaket_totalField= new Ext.form.NumberField({
 		id: 'jpaket_totalField',
 		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
-		valueRenderer: 'numberToCurrency',
+		//valueRenderer: 'numberToCurrency',
 		readOnly: true,
-		itemCls: 'rmoney_b',
-		width: 120
+		//itemCls: 'rmoney_b',
+		width: 120,
+		enableKeyEvents: true,
+		allowBlank: true,
+		//anchor: '95%',
+		maskRe: /([0-9]+)$/
 	});
-	jpaket_bayarField= new Ext.ux.form.CFTextField({
+	jpaket_total_cfField= new Ext.form.TextField({
+		id: 'jpaket_total_cfField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+
+	/*
+	jproduk_totalField= new Ext.form.NumberField({
+		id: 'jproduk_totalField',
+		enableKeyEvents: true,
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowBlank: true,
+		anchor: '95%',
+		maskRe: /([0-9]+)$/
+	});
+	jproduk_total_cfField= new Ext.form.TextField({
+		id: 'jproduk_total_cfField',
+		fieldLabel: '<span style="font-weight:bold">Total (Rp)</span>',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	*/
+		
+	jpaket_bayarField= new Ext.form.NumberField({
 		id: 'jpaket_bayarField',
 		fieldLabel: 'Total Bayar (Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -3623,7 +3687,19 @@ Ext.override(Ext.form.Field, {
 		itemCls: 'rmoney',
 		width: 120
 	});
-	jpaket_hutangField= new Ext.ux.form.CFTextField({
+	jpaket_bayar_cfField= new Ext.form.TextField({
+		id: 'jpaket_bayar_cfField',
+		fieldLabel: 'Total Bayar (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
+	jpaket_hutangField= new Ext.form.NumberField({
 		id: 'jpaket_hutangField',
 		fieldLabel: 'Hutang (Rp)',
 		valueRenderer: 'numberToCurrency',
@@ -3631,6 +3707,18 @@ Ext.override(Ext.form.Field, {
 		itemCls: 'rmoney',
 		width: 120
 	});
+	jpaket_hutang_cfField= new Ext.form.TextField({
+		id: 'jpaket_hutang_cfField',
+		fieldLabel: 'Hutang (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		allowDecimals : false,
+		itemCls: 'rmoney',
+		width: 120,
+		readOnly : true,
+		maskRe: /([0-9]+)$/ 
+	});
+	
 	jpaket_pesanLabel= new Ext.form.Label({
 		style: {
 			marginLeft: '100px',
@@ -3696,7 +3784,7 @@ Ext.override(Ext.form.Field, {
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jpaket_jumlahField, jpaket_subTotalField, jpaket_cashback_cfField, jpaket_ket_diskField, {xtype: 'spacer',height:10},jpaket_totalField, jpaket_bayarField,jpaket_hutangField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
+				items: [jpaket_jumlahField, jpaket_subTotal_cfField, jpaket_cashback_cfField, jpaket_ket_diskField, {xtype: 'spacer',height:10},jpaket_total_cfField, jpaket_bayar_cfField,jpaket_hutang_cfField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
 			}
 			]
 	});
@@ -4898,9 +4986,15 @@ Ext.override(Ext.form.Field, {
 		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
 		update_total_field=jpaket_subTotalField.getValue()*((100-jpaket_diskonField.getValue())/100)-jpaket_cashbackField.getValue();
 		jpaket_totalField.setValue(update_total_field);
+		jpaket_total_cfField.setValue(CurrencyFormatted(update_total_field));
+
 		jpaket_bayarField.setValue(total_bayar);
+		jpaket_bayar_cfField.setValue(CurrencyFormatted(total_bayar));
+		
 		update_hutang_field=update_total_field-total_bayar;
 		jpaket_hutangField.setValue(update_hutang_field);
+		jpaket_hutang_cfField.setValue(CurrencyFormatted(update_hutang_field));
+		
 		jpaket_diskonField.setValue(jpaket_diskonField.getValue());
 		jpaket_cashbackField.setValue(jpaket_cashbackField.getValue());
 		jpaket_cashback_cfField.setValue(CurrencyFormatted(jpaket_cashbackField.getValue()));
@@ -4946,11 +5040,15 @@ Ext.override(Ext.form.Field, {
 		}
 		jpaket_jumlahField.setValue(jumlah_item);
 		jpaket_subTotalField.setValue(sub_total_field);
+		jpaket_subTotal_cfField.setValue(CurrencyFormatted(sub_total_field));
 		total_biaya_field = sub_total_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jpaket_totalField.setValue(total_biaya_field);
+		jpaket_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jpaket_hutangField.setValue(total_hutang_field);
+		jpaket_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
+		
 	}
 	function load_total_biaya(){
 		/*
@@ -4978,8 +5076,10 @@ Ext.override(Ext.form.Field, {
 		total_biaya_field += sub_total_biaya_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jpaket_totalField.setValue(total_biaya_field);
+		jpaket_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
 		total_hutang_field = total_biaya_field - total_bayar_field;
 		jpaket_hutangField.setValue(total_hutang_field);
+		jpaket_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 	}
 	function load_total_bayar(){
 		/*
@@ -5102,9 +5202,12 @@ Ext.override(Ext.form.Field, {
 					 +tunai_nilai3);
 		total_bayar_field=(total_bayar_field>0?Math.round(total_bayar_field):0);
 		jpaket_bayarField.setValue(total_bayar_field);
+		jpaket_bayar_cfField.setValue(CurrencyFormatted(total_bayar_field));
+		
 		total_hutang_field=total_biaya_field-total_bayar_field;
 		total_hutang_field=(total_hutang_field>0?Math.round(total_hutang_field):0);
 		jpaket_hutangField.setValue(total_hutang_field);
+		jpaket_hutang_cfField.setValue(CurrencyFormatted(total_hutang_field));
 		if(total_bayar_field>total_biaya_field){
 			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
 		}else if(total_bayar_field<total_biaya_field || total_bayar_field==total_biaya_field){

@@ -52,7 +52,7 @@ var sr_setup_tahunField;
 //declare konstant
 var post2db = 'CREATE';
 var msg = '';
-var pageS=17;
+var pageS=13;
 
 /* declare variable here for Field*/
 
@@ -194,6 +194,7 @@ Ext.onReady(function(){
 							Ext.MessageBox.alert(post2db+' OK','Summary Report Setup berhasil dilakukan.');
 							sr_setup_DataStore.reload();
 							sr_setup_saveWindow.hide();
+							tahunDataStore.load();
 							break;
 						default:
 							Ext.MessageBox.show({
@@ -281,6 +282,27 @@ Ext.onReady(function(){
 			sr_setup_save();
 		}
 	}
+	
+	tahunDataStore = new Ext.data.Store({
+		id: 'tahunDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_summary_report_setup&m=get_tahun_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 20 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+			{name: 'tahun', type: 'string', mapping: 'tahun'},
+		]),
+		//sortInfo:{field: 'dokter_display', direction: "ASC"}
+	});
+	
+	var tahun_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+			'<span>{tahun}',
+        '</div></tpl>'
+    );
 
 	sr_setup_DataStore = new Ext.data.Store({
 		id: 'sr_setup_DataStore',
@@ -316,6 +338,7 @@ Ext.onReady(function(){
 		sortInfo:{field: 'setsr_id', direction: "ASC"}
 	});
 	/* End of Function */
+
 	
 	sr_setup_ColumnModel = new Ext.grid.ColumnModel(
 		[
@@ -568,7 +591,27 @@ Ext.onReady(function(){
 			tooltip: 'Add new record',
 			iconCls:'icon-adds',
 			handler: display_form_search_window 
-		},'-', /*{
+		},
+		'-',
+		{
+			'text':'Tahun : '
+		},{
+			xtype: 'combo',
+			id: 'cbo_tahun',
+			text: 'Pilih Tahun',
+			emptyText: 'Pilih Tahun',
+			width: 100,
+			store: tahunDataStore,
+            fieldLabel: 'ComboBox Tahun',
+            mode: 'remote',
+			tpl: tahun_tpl,
+			displayField: 'tahun',
+			valueField: 'tahun',
+			loadingText: 'Searching...',
+			itemSelector: 'div.search-item',
+			triggerAction: 'all'
+		}
+		/*{
 			text: 'Refresh',
 			tooltip: 'Refresh datagrid',
 			iconCls:'icon-refresh',
@@ -595,7 +638,30 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	sr_setupListEditorGrid.addListener('rowcontextmenu', onsr_setup_ListEditGridContextMenu);
-	sr_setup_DataStore.load({params: {start: 0, limit: pageS}});
+	//sr_setup_DataStore.load({params: {start: 0, limit: pageS}});
+	Ext.getCmp('cbo_tahun').on('select', function(){
+		Ext.MessageBox.show({
+			msg:   'Sedang mencari data, mohon tunggu...',
+			progressText: 'proses...',
+			width:350,
+			wait:true
+		});
+		sr_setup_DataStore.setBaseParam('query',Ext.getCmp('cbo_tahun').getValue());
+		sr_setup_DataStore.load({
+			params: {
+				task: 'LIST',
+				start: 0,
+				limit: pageS,
+				query: '',
+				tahun: Ext.getCmp('cbo_tahun').getValue()
+			},
+			callback: function(r,opt,success){
+				if(success==true){
+					Ext.MessageBox.hide();
+				}
+			}
+		});		
+	});
 	sr_setupListEditorGrid.on('afteredit', sr_setup_update); 
 	
 	/* Identify  setsr_id Field */
@@ -668,6 +734,7 @@ Ext.onReady(function(){
 	/* End Window */
 	
 	//sr_setup_saveWindow.show();
+	//tahunDataStore.reload();
 	
 });
 	</script>
