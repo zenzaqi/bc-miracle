@@ -23,34 +23,45 @@ class M_lap_netsales extends Model{
 			$tgl_akhir	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
 		}									   
 	
-		//bersihkan tabel temporary sesuai tgl ybs
+		//bersihkan tabel temporary sesuai tgl ybs dan bukan penginputan Manual
 		$sql_del	=  "delete t from temp_netsales t
-						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'";
+						where 
+							t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+							and t.tns_source <> 'Manual' ";
 		$this->db->query($sql_del);
 		
-		//mendapatkan list tanggal transaksi
-		$sql_get_tanggal = "select distinct m1.jproduk_tanggal as tgl
-							from master_jual_produk m1
-							where 
-								m1.jproduk_stat_dok = 'Tertutup'
-								and m1.jproduk_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+		//mendapatkan list tanggal transaksi, yg belum pernah ada penginputan Manual
+		$sql_get_tanggal = "select *
+							from
+							(
+								select distinct m1.jproduk_tanggal as tgl
+								from master_jual_produk m1
+								where 
+									m1.jproduk_stat_dok = 'Tertutup'
+									and m1.jproduk_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
 
-							union
+								union
 
-							select distinct m2.jrawat_tanggal as tgl
-							from master_jual_rawat m2
-							where
-								m2.jrawat_stat_dok = 'Tertutup'
-								and m2.jrawat_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+								select distinct m2.jrawat_tanggal as tgl
+								from master_jual_rawat m2
+								where
+									m2.jrawat_stat_dok = 'Tertutup'
+									and m2.jrawat_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
 
-							union
-								
-							select distinct d.dapaket_tgl_ambil as tgl
-							from detail_ambil_paket d
-							where
-								d.dapaket_stat_dok = 'Tertutup'
-								and d.dapaket_tgl_ambil  between '".$tgl_awal."' and '".$tgl_akhir."'";
-								
+								union
+									
+								select distinct d.dapaket_tgl_ambil as tgl
+								from detail_ambil_paket d
+								where
+									d.dapaket_stat_dok = 'Tertutup'
+									and d.dapaket_tgl_ambil  between '".$tgl_awal."' and '".$tgl_akhir."'
+							) as tabel_tgl 
+							where tgl not in 
+							(
+								select t.tns_tanggal
+								from  temp_netsales t
+								where t.tns_source = 'Manual'
+							)";
 		$list_tgl = $this->db->query($sql_get_tanggal);	
 		
 		//insert ke tabel temp

@@ -316,6 +316,7 @@ Ext.onReady(function(){
 			{name: 'tns_surgery', type: 'float', mapping: 'tns_surgery'},
 			{name: 'tns_total', type: 'float', mapping: 'tns_total'},
 			{name: 'tns_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_date_create'},
+			{name: 'tns_source', type: 'string', mapping: 'tns_source'},
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
@@ -605,11 +606,12 @@ Ext.onReady(function(){
 			readOnly: true,
 			width: 80,	//55,
 			sortable: true
-		},{
-			align : 'Left',
-			header: '',
-			dataIndex: '',
-			width: 80,
+		},{	
+			align : 'Center',
+			header: '<div align="center">' + 'Sumber' + '</div>',
+			dataIndex: 'tns_source',
+			readOnly: true,
+			width: 80,	//55,
 			sortable: true,
 			hidden: true
 		}
