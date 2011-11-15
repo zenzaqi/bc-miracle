@@ -546,10 +546,12 @@ Ext.onReady(function(){
 												stok_masuk=rounding(data_resume.data.stok_masuk,2);
 												stok_keluar=rounding(data_resume.data.stok_keluar,2);
 												
-												kartu_stok_awalField.setValue(CurrencyFormatted(stok_awal));
+												//kartu_stok_awalField.setValue(CurrencyFormatted(stok_awal));
+												kartu_stok_awalField.setValue(stok_awal);
 												stok_akhir=rounding((stok_awal+stok_masuk-stok_keluar),2);
 										
-												kartu_stok_saldoField.setValue(CurrencyFormatted(stok_akhir));
+												//kartu_stok_saldoField.setValue(CurrencyFormatted(stok_akhir));
+												kartu_stok_saldoField.setValue(stok_akhir);
 												Ext.MessageBox.hide(); 
 												kartu_stok_searchWindow.hide();
 												
