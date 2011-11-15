@@ -400,7 +400,7 @@ Ext.onReady(function(){
 	net_salesListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'net_salesListEditorGrid',
 		el: 'fp_netsales_list',
-		title: 'Laporan Net Sales',
+		title: 'Laporan Net Sales [+Graph]',
 		autoHeight: true,
 		store: net_salesDataStore, // DataStore
 		cm: net_salesColumnModel, // Nama-nama Columns
