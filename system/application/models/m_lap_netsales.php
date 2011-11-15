@@ -73,8 +73,8 @@ class M_lap_netsales extends Model{
 							@SalesMedis, @SalesNonMedis, @SalesSurgery, @SalesAntiAging, @SalesProduk, @SalesLainLain, @SalesTotal)";		
 			$this->db->query($sql_pr);							
 					
-			$sql_ins	=  "insert into temp_netsales (tns_tanggal, tns_medis, tns_nonmedis, tns_surgery, tns_antiaging, tns_produk, tns_lainlain, tns_total)
-							select '".$record['tgl']."',@SalesMedis, @SalesNonMedis, @SalesSurgery, @SalesAntiAging, @SalesProduk, @SalesLainLain, @SalesTotal;";
+			$sql_ins	=  "insert into temp_netsales (tns_tanggal, tns_medis, tns_nonmedis, tns_surgery, tns_antiaging, tns_produk, tns_lainlain, tns_total, tns_source)
+							select '".$record['tgl']."',@SalesMedis, @SalesNonMedis, @SalesSurgery, @SalesAntiAging, @SalesProduk, @SalesLainLain, @SalesTotal, 'MIS';";
 			$this->db->query($sql_ins);				
 							
 			//print_r($record);
