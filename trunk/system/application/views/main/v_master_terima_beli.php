@@ -286,6 +286,12 @@ Ext.onReady(function(){
 
        	}
 		
+		Ext.MessageBox.show({
+			msg:   'Sedang memproses data, mohon tunggu hingga proses ini selesai agar keamanan data anda terjaga...',
+			progressText: 'proses...',
+			width:350,
+			wait:true
+		});
 		
 		Ext.Ajax.request({
 			waitMsg: 'Please wait...',
@@ -330,9 +336,17 @@ Ext.onReady(function(){
 						if(opsi=='print'){
 							master_terima_beli_cetak_faktur(result);
 						}
-						master_terima_beli_DataStore.reload();
-						cbo_tbeli_orderbeli_DataSore.reload();
-						Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+						master_terima_beli_DataStore.load();
+						cbo_tbeli_orderbeli_DataSore.load({
+						callback: function(r,opt,success){
+							if(success==true){
+								Ext.MessageBox.hide();
+								Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+							}
+						}			
+						});
+
+						
 						//cbo_terima_gudang_DataStore.reload();
 						master_terima_beli_createWindow.hide();
 				}

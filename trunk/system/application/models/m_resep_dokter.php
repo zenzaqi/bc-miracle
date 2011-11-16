@@ -86,7 +86,7 @@ class M_resep_dokter extends Model{
 		$sql="select * from vu_produk WHERE (produk_aktif='Aktif' and produk_racikan=1)";
 		if($query<>"" && is_numeric($query)==false){
 			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
-			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or satuan_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' or kategori_nama like '%".$query."%' or group_nama like '%".$query."%') ";
 		}else{
 			if($rs_rows){
 				$filter="";

@@ -295,9 +295,10 @@ class M_member extends Model{
 				LEFT JOIN customer on customer.cust_id = member.member_cust";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (member_status = 'Daftar' OR member_status = 'Cetak') AND (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
+				$query .= " (cust_nama LIKE '%".addslashes($filter)."%' OR cust_no LIKE '%".addslashes($filter)."%' OR member_no LIKE '%".addslashes($filter)."%')";
 				//$query .= " ORDER BY member_jenis";
 				//$result = $this->db->query($query);
+				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($member_cust!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -345,9 +346,10 @@ class M_member extends Model{
 				};
 */				//$query .= " ORDER BY member_jenis";
 				//$result = $this->db->query($query);
+				$result = $this->db->query($query);
 			}
-				$rs = $this->db->query($query);
 				
+				$rs = $this->db->query($query);
 				$jum_baris = $rs->num_rows();
 				
 				//looping dimulai disini
@@ -359,7 +361,7 @@ class M_member extends Model{
 					$rs2 = $this->db->query($query2);
 				}
 				
-				$result = $this->db->query($query);
+				
 				return $result->result();
 		}
 		

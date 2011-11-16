@@ -2000,6 +2000,7 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
+					post2db='CREATE';
 					master_order_beli_createWindow.hide();
 				}
 			}
