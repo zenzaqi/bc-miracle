@@ -546,6 +546,10 @@ var editor_cust_note;
 			}
 		});
 */		
+
+
+
+
 		cust_note_DataStore.load({
 			params:{cust_id: customerListEditorGrid.getSelectionModel().getSelected().get('cust_id'), start: 0, limit: pageS }
 		});
@@ -826,6 +830,13 @@ var editor_cust_note;
  	/* End of Function */
   
   function get_umur(){
+
+		if(customerListEditorGrid.getSelectionModel().getSelected().get('cust_tgllahir').format('Y-m-d') == "00-1-11-30"){
+		cust_umurField.setValue('0');
+		
+		}
+		else
+		{
 		var datDate1=cust_tgllahirField.getValue();
 		var getBlnLahir=datDate1.getMonth()+1;
 		var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
@@ -837,6 +848,7 @@ var editor_cust_note;
 			getSelisihBln=tempBln+(-(getSelisihBln));
 		}*/
 		
+		
 		if((getBlnLahir) < (dt.getMonth()+1)){
 			getUmur=getUmur+1;
 		}
@@ -844,6 +856,8 @@ var editor_cust_note;
 		//+getSelisihBln+" Bln";
 		
 		cust_umurField.setValue(umur);
+		
+		}
 	}
   
   function cust_crm_generator_save(){
@@ -1223,7 +1237,10 @@ else if(cust_bulan_opsiField.getValue()==true){
 			post2db='UPDATE';
 			msg='updated';
 			customer_set_form();
-			//get_umur();
+			
+			get_umur();
+			
+		
 			
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			cust_update_confirmField.setVisible(true);
@@ -4359,7 +4376,7 @@ Ext.onReady(function(){
 		format : 'd-m-Y',
 		anchor: '50%',
 		//allowBlank: false,
-		enableKeyEvents: 'true',
+		enableKeyEvents: true,
 		listeners:{
 			keyup: function(){
 				var datDate1=cust_tgllahirField.getValue();
@@ -4394,7 +4411,6 @@ Ext.onReady(function(){
 		var getBlnLahir=datDate1.getMonth()+1;
 		var getSelisihBln=(dt.getMonth()+1)-getBlnLahir;
 		var getUmur=(dt.getFullYear())-(datDate1.getFullYear());
-		
 		var tempBln=0;
 		/*if(getSelisihBln<0){
 			tempBln=12-getBlnLahir;
