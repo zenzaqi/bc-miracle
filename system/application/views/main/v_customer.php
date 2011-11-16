@@ -1223,7 +1223,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 			post2db='UPDATE';
 			msg='updated';
 			customer_set_form();
-			get_umur();
+			//get_umur();
 			
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_CUSTOMER'))){ ?>
 			cust_update_confirmField.setVisible(true);
