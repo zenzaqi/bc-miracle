@@ -72,8 +72,9 @@ class C_lap_netsales extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$groupby	= (isset($_POST['groupby']) ? @$_POST['groupby'] : @$_GET['groupby']);
 
-		$result=$this->m_lap_netsales->get_laporan_netsales_recalc($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun);
+		$result=$this->m_lap_netsales->get_laporan_netsales_recalc($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun, $groupby);
 		
 		echo $result; 
 	}
@@ -84,8 +85,9 @@ class C_lap_netsales extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$groupby	= (isset($_POST['groupby']) ? @$_POST['groupby'] : @$_GET['groupby']);
 		
-		$result=$this->m_lap_netsales->get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun);
+		$result=$this->m_lap_netsales->get_laporan_netsales($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun, $groupby);
 		
 		echo $result; 
 	}

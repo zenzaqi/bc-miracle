@@ -16,7 +16,7 @@ class M_lap_netsales extends Model{
 		}
 		
 	// net sales
-	function get_laporan_netsales_recalc($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun){
+	function get_laporan_netsales_recalc($tgl_awal, $tgl_akhir, $periode, $bulan, $tahun, $groupby){
 
 		if ($periode == 'bulan'){
 			$tgl_awal	= $tahun.'-'.$bulan.'-01';
@@ -82,10 +82,27 @@ class M_lap_netsales extends Model{
 		}
 		
 		//select dari tabel temp / hasilnya
-		$sql		=  "select *
+		if ($groupby == 'daily') {
+			$sql	=  "select *
 						from temp_netsales t
 						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
 						order by t.tns_tanggal asc";
+		} else if ($groupby = 'monthly') {
+			$sql	=  "select
+							substring(t.tns_tanggal, 6, 2) as tns_tanggal,
+							sum(t.tns_medis) as tns_medis, 
+							sum(t.tns_nonmedis) as tns_nonmedis, 
+							sum(t.tns_surgery) as tns_surgery, 
+							sum(t.tns_antiaging) as tns_antiaging, 
+							sum(t.tns_antiaging) as tns_antiaging, 
+							sum(t.tns_produk) as tns_produk, 
+							sum(t.tns_lainlain) as tns_lainlain, 
+							sum(t.tns_total) as tns_total		
+						from temp_netsales t
+						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+						group by substring(t.tns_tanggal, 6, 2)
+						order by t.tns_tanggal asc";
+		}
 				
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
