@@ -56,7 +56,6 @@ var rpt_netsales_tahunField;
 var rpt_netsales_opsitglField;
 var rpt_netsales_opsiblnField;
 var rpt_netsales_opsiallField;
-var rpt_netsales_groupField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -400,7 +399,7 @@ Ext.onReady(function(){
 	net_salesListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'net_salesListEditorGrid',
 		el: 'fp_netsales_list',
-		title: 'Laporan Net Sales [+Graph]',
+		title: 'Laporan Net Sales',
 		autoHeight: true,
 		store: net_salesDataStore, // DataStore
 		cm: net_salesColumnModel, // Nama-nama Columns
@@ -445,20 +444,6 @@ Ext.onReady(function(){
 	net_salesTotalListEditorGrid.render();
 	/* End of DataStore */
 		
-	
-	var rpt_netsales_groupField=new Ext.form.ComboBox({
-		id:'rpt_netsales_groupField',
-		fieldLabel:'Kelompokkan',
-		store: group_master_Store,
-		mode: 'local',
-		displayField: 'group',
-		valueField: 'group',
-		value: 'No Faktur',
-		width: 100,
-		triggerAction: 'all',
-		typeAhead: true,
-		lazyRender: true
-	});
 	
 	rpt_netsales_bulanField=new Ext.form.ComboBox({
 		id:'rpt_netsales_bulanField',
@@ -602,12 +587,32 @@ Ext.onReady(function(){
 		items: [rpt_netsales_rekapField ,rpt_netsales_detailField]
 	});
 	
+	rpt_netsales_dailyField=new Ext.form.Radio({
+		id: 'rpt_netsales_dailyField',
+		boxLabel: 'Daily',
+		name: 'netsales_opsi',
+		checked: true
+	});
+	
+	rpt_netsales_monthlyField=new Ext.form.Radio({
+		id: 'rpt_netsales_monthlyField',
+		boxLabel: 'Monthly',
+		name: 'netsales_opsi'
+	});
+
+	rpt_netsales_yearlyField=new Ext.form.Radio({
+		id: 'rpt_netsales_yearlyField',
+		boxLabel: 'Yearly',
+		name: 'netsales_opsi',
+		disabled: true
+	});
+
 	var	rpt_netsales_groupbyField=new Ext.form.FieldSet({
 		id: 'rpt_netsales_groupbyField',
 		title: 'Group By',
 		border: true,
 		anchor: '98%',
-		items: [rpt_netsales_groupField]
+		items: [rpt_netsales_dailyField, rpt_netsales_monthlyField, rpt_netsales_yearlyField]
 	});
 	
 	function is_valid_form(){
@@ -633,6 +638,7 @@ Ext.onReady(function(){
 		var netsales_bulan="";
 		var netsales_tahun="";
 		var netsales_periode="";
+		var netsales_groupby = "";
 		
 		if(is_valid_form()){
 			
@@ -645,6 +651,14 @@ Ext.onReady(function(){
 		}else if(rpt_netsales_opsiblnField.getValue()==true){
 			netsales_periode='bulan';
 		}
+		
+		if (rpt_netsales_dailyField.getValue() == true) {
+			netsales_groupby	= 'daily';
+		} else if (rpt_netsales_monthlyField.getValue() == true) {
+			netsales_groupby	= 'monthly';
+		} else if (rpt_netsales_yearlyField.getValue() == true) {
+			netsales_groupby	= 'yearly';
+		}
 					
 		net_salesDataStore.baseParams = {
 					task		: 'RECALC',
@@ -652,7 +666,8 @@ Ext.onReady(function(){
 					tgl_akhir	: netsales_tglakhir,
 					bulan		: netsales_bulan,
 					tahun		: netsales_tahun,
-					periode		: netsales_periode			
+					periode		: netsales_periode,
+					groupby		: netsales_groupby
 		};
 				
 		net_salesTotalDataStore.baseParams = {
@@ -820,7 +835,7 @@ Ext.onReady(function(){
 		y:0,
 		width: 400, 
 		autoHeight: true,
-		items: [rpt_netsales_periodeField],
+		items: [rpt_netsales_periodeField, rpt_netsales_groupbyField],
 		monitorValid:true,
 		buttons: 
 		[{
@@ -877,50 +892,17 @@ Ext.onReady(function(){
 							html: "<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>",
 							autoDestroy: true,
 							});
-	//EVENTS
-	
-	/*rpt_netsales_rekapField.on("check", function(){
-		rpt_netsales_groupField.setValue('No faktur');
-		if(rpt_netsales_rekapField.getValue()==true){
-			rpt_netsales_groupField.bindStore(group_master_Store);
-		}else
-		{
-			rpt_netsales_groupField.bindStore(group_detail_Store);
-		}
-	});
-	
-	rpt_netsales_detailField.on("check", function(){
-		rpt_netsales_groupField.setValue('No Faktur');
-		if(rpt_netsales_detailField.getValue()==true){
-			rpt_netsales_groupField.bindStore(group_detail_Store);
-		}else
-		{
-			rpt_netsales_groupField.bindStore(group_master_Store);
-		}
-	});*/
-	
-	/*rpt_netsales_opsitglField.on("check",function(){
-		if(rpt_netsales_opsitglField.getValue()==true){
-			rpt_netsales_tglawalField.allowBlank=false;
-			rpt_netsales_tglakhirField.allowBlank=false;
-		}else{
-			rpt_netsales_tglawalField.allowBlank=true;
-			rpt_netsales_tglakhirField.allowBlank=true;
-		}
-		
-	});*/
 	
 });
 	</script>
 <body>
 <div>
 	<div class="col">
+		<div id="netsales_chart"></div>
 		<div id="fp_netsales_list"></div>
         <div id="fp_netsalesTotal_list"></div>
         <!--<div id="fp_netsales"></div>-->
 		<div id="elwindow_rpt_netsales"></div>
-		<div id="netsales_chart"></div>
-		
     </div>
 </div>
 </body>
