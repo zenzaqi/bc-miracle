@@ -652,7 +652,7 @@ class M_stok_mutasi extends Model{
 										   _UTF8 'Tertutup' AS `status`,
 										   `cb`.`cabin_produk` AS `produk`,
 										   `cb`.`cabin_satuan` AS `satuan`,
-										   konversi_satuan,
+										   konversi_nilai,
 										   0 AS `jml_terima_barang`,
 										   0 AS `jml_terima_bonus`,
 										   0 AS `jml_retur_beli`,
