@@ -1430,7 +1430,7 @@ Ext.onReady(function(){
 	function master_retur_beli_reset_search(){
 		master_retur_beli_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_retur_beli_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_retur_beli_searchWindow.close();
+		//master_retur_beli_searchWindow.close();
 	};
 	/* End of Fuction */
 	

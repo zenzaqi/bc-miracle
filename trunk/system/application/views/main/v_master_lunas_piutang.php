@@ -2582,7 +2582,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		master_lunas_piutang_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_lunas_piutang_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_lunas_piutang_searchWindow.close();
+		//master_lunas_piutang_searchWindow.close();
 	};
 	/* End of Fuction */
 	

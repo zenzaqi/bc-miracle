@@ -1606,7 +1606,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		master_koreksi_stok_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_koreksi_stok_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_koreksi_stok_searchWindow.close();
+		//master_koreksi_stok_searchWindow.close();
 	};
 	/* End of Fuction */
 	

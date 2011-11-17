@@ -2248,7 +2248,7 @@ Ext.onReady(function(){
 		master_terima_beli_DataStore.baseParams = { task: 'LIST',start:0,limit:15  };
 		master_terima_beli_DataStore.load({params: {start: 0, limit: 15}});
 		cbo_terima_gudang_DataStore.reload();
-		master_terima_beli_searchWindow.close();
+		//master_terima_beli_searchWindow.close();
 	};
 	/* End of Fuction */
 

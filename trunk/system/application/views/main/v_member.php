@@ -1183,7 +1183,7 @@ Ext.onReady(function(){
 		member_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		member_DataStore.reload({params: {start: 0, limit: pageS}});
-		member_searchWindow.close();
+		//member_searchWindow.close();
 	};
 	/* End of Fuction */
 

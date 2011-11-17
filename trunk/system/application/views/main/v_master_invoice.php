@@ -1577,7 +1577,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		master_invoice_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_invoice_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_invoice_searchWindow.close();
+		//master_invoice_searchWindow.close();
 	};
 	/* End of Fuction */
 

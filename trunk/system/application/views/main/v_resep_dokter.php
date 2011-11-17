@@ -2337,7 +2337,7 @@ Ext.onReady(function(){
 		resep_dokterDataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		resep_dokterDataStore.reload({params: {start: 0, limit: pageS}});
-		resep_dokter_searchWindow.close();
+		//resep_dokter_searchWindow.close();
 	};
 	/* End of Fuction */
 	
