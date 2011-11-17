@@ -597,7 +597,8 @@ Ext.onReady(function(){
 	rpt_netsales_monthlyField=new Ext.form.Radio({
 		id: 'rpt_netsales_monthlyField',
 		boxLabel: 'Monthly',
-		name: 'netsales_opsi'
+		name: 'netsales_opsi',
+		disabled: true
 	});
 
 	rpt_netsales_yearlyField=new Ext.form.Radio({

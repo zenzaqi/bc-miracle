@@ -614,7 +614,7 @@ Ext.onReady(function(){
 			//{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
 			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
 			//{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
-			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'dpaket_kadaluarsa'}, 
+			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'d-m-Y', mapping: 'dpaket_kadaluarsa'}, 
 			{name: 'tanggal_hangus', type: 'date', dateFormat:'Y-m-d', mapping: 'tanggal_hangus'}, 
 			//{name: 'apaket_cust', type: 'int', mapping: 'apaket_cust'}, 
 //			{name: 'apaket_cust_no', type: 'string', mapping: 'apaket_cust_no'}, 
