@@ -40,6 +40,11 @@ class C_lap_terima_kas extends Controller {
 		}
 	}
 
+	function get_cabang_list(){
+		$result=$this->m_public_function->get_cabang_list();
+		echo $result;
+	}
+
 	function laporan_terimakas_search(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
