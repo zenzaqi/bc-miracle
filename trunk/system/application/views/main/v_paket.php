@@ -2910,7 +2910,7 @@ Ext.onReady(function(){
 		paket_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query :
 		paket_DataStore.reload({params: {start: 0, limit: pageS}});
-		paket_searchWindow.close();
+		//paket_searchWindow.close();
 	};
 	/* End of Fuction */
 

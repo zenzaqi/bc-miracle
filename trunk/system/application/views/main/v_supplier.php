@@ -1207,7 +1207,7 @@ Ext.onReady(function(){
 		supplier_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		supplier_DataStore.reload({params: {start: 0, limit: pageS}});
-		supplier_searchWindow.close();
+		//supplier_searchWindow.close();
 	};
 	/* End of Fuction */
 	

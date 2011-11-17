@@ -759,7 +759,7 @@ Ext.onReady(function(){
 		departemen_DataStore.baseParams = { task: 'LIST',start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		departemen_DataStore.reload({params: {start: 0, limit: pageS}});
-		departemen_searchWindow.close();
+		//departemen_searchWindow.close();
 	};
 	/* End of Fuction */
 	

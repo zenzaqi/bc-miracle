@@ -688,7 +688,7 @@ Ext.onReady(function(){
 		golongan_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		golongan_DataStore.reload({params: {start: 0, limit: pageS}});
-		golongan_searchWindow.close();
+		//golongan_searchWindow.close();
 	};
 	/* End of Fuction */
 	

@@ -935,7 +935,7 @@ Ext.onReady(function(){
 		bank_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		bank_DataStore.reload({params: {start: 0, limit: pageS}});
-		bank_searchWindow.close();
+		//bank_searchWindow.close();
 	};
 	/* End of Fuction */
 	

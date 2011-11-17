@@ -6938,7 +6938,7 @@ Ext.onReady(function(){
 		cbo_karyawan_bank_DataStore.reload();
 		cbo_karyawan_atasan_DataStore.reload();
 
-		karyawan_searchWindow.close();
+		//karyawan_searchWindow.close();
 	};
 	/* End of Fuction */
 	

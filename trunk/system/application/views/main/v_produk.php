@@ -3266,7 +3266,7 @@ Ext.onReady(function(){
 		produk_DataStore.baseParams = { task: 'LIST',start:0,limit:15 };
 		// Cause the datastore to do another query : 
 		produk_DataStore.reload({params: {start: 0, limit: 15}});
-		produk_searchWindow.close();
+		//produk_searchWindow.close();
 	};
 	/* End of Fuction */
 	

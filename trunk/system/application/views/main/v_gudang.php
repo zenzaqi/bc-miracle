@@ -752,7 +752,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		gudang_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		gudang_DataStore.reload({params: {start: 0, limit: pageS}});
-		gudang_searchWindow.close();
+		//gudang_searchWindow.close();
 	};
 	/* End of Fuction */
 	

@@ -781,7 +781,7 @@ Ext.onReady(function(){
 		kategori_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		kategori_DataStore.reload({params: {start: 0, limit: pageS}});
-		kategori_searchWindow.close();
+		//kategori_searchWindow.close();
 	};
 	/* End of Fuction */
 	

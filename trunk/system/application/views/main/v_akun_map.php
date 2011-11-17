@@ -772,7 +772,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		akun_map_DataStore.baseParams = { task: 'LIST', start:0, limit: pageS };
 		akun_map_DataStore.reload({params: {start: 0, limit: pageS}});
-		akun_map_searchWindow.close();
+		//akun_map_searchWindow.close();
 	};
 	/* End of Fuction */
 	

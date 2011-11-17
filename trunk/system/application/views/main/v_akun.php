@@ -925,7 +925,7 @@ Ext.onReady(function(){
 		akun_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		akun_DataStore.reload({params: {start: 0, limit: pageS}});
 		cbo_akun_departemen_DataStore.reload();
-		akun_searchWindow.close();
+		//akun_searchWindow.close();
 	};
 	/* End of Fuction */
 

@@ -730,7 +730,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		alat_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		alat_DataStore.reload({params: {start: 0, limit: pageS}});
-		alat_searchWindow.close();
+		//alat_searchWindow.close();
 	};
 	/* End of Fuction */
 	

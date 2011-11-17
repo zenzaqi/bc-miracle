@@ -3330,7 +3330,7 @@ Ext.onReady(function(){
 		perawatan_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		perawatan_DataStore.reload({params: {start: 0, limit: pageS}});
-		perawatan_searchWindow.close();
+		//perawatan_searchWindow.close();
 	};
 	/* End of Fuction */
 	

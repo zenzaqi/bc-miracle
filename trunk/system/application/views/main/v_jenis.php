@@ -827,7 +827,7 @@ Ext.onReady(function(){
 		jenis_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		// Cause the datastore to do another query : 
 		jenis_DataStore.reload({params: {start: 0, limit: pageS}});
-		jenis_searchWindow.close();
+		//jenis_searchWindow.close();
 	};
 	/* End of Fuction */
 	
