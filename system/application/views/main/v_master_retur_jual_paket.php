@@ -1871,7 +1871,7 @@ Ext.onReady(function(){
 		master_retur_jual_paket_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		master_retur_jual_paket_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_retur_jual_paket_searchWindow.close();
+		//master_retur_jual_paket_searchWindow.close();
 	};
 	/* End of Fuction */
 	

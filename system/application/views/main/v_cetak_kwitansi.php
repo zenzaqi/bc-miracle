@@ -2807,7 +2807,7 @@ Ext.onReady(function(){
 		cetak_kwitansi_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		cetak_kwitansi_DataStore.reload({params: {start: 0, limit: pageS}});
-		cetak_kwitansi_searchWindow.close();
+		//cetak_kwitansi_searchWindow.close();
 	};
 	/* End of Fuction */
 	

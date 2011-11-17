@@ -2340,7 +2340,7 @@ Ext.onReady(function(){
 		// Cause the datastore to do another query : 
 		ambil_paket_DataStore.reload({params: {start: 0, limit: pageS}});
 		ambil_paket_searchWindow.close();
-		detail_ambil_paketStore.reload();
+		//detail_ambil_paketStore.reload();
 	};
 	/* End of Fuction */
 	

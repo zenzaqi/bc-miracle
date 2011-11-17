@@ -2073,7 +2073,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		master_order_beli_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		master_order_beli_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_order_beli_searchWindow.close();
+		//master_order_beli_searchWindow.close();
 	};
 	/* End of Fuction */
 
