@@ -50,6 +50,9 @@ class C_lap_kunjungan extends Controller {
 			case "DELETE":
 				$this->report_tindakan_delete();
 				break;*/
+			case "DELETEDETAIL":
+				$this->detail_kunjungan_delete();
+				break;
 			case "SEARCH":
 				$this->lap_kunjungan_search();
 				break;
@@ -61,6 +64,9 @@ class C_lap_kunjungan extends Controller {
 				break;
 			case "PRINT":
 				$this->lap_kunjungan_print();
+				break;
+			case "PRINT2":
+				$this->detail_kunjungan_print();
 				break;
 			case "EXCEL":
 				$this->lap_kunjungan_export_excel();
@@ -100,7 +106,59 @@ class C_lap_kunjungan extends Controller {
 		echo $result;
 	}
 	
-	
+	function detail_kunjungan_print(){
+  		//POST varibale here
+		$tgl_tindakan=trim(@$_POST["tgl_tindakan"]);
+		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$tgl_awal=$tahun."-".$bulan;
+		
+		$lap_kunjungan_id=trim(@$_POST["lap_kunjungan_id"]);
+		if(trim(@$_POST["trawat_tglapp_start"])!="")
+			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
+		else
+			$trawat_tglapp_start="";
+		if(trim(@$_POST["trawat_tglapp_end"])!="")
+			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
+		else
+			$trawat_tglapp_end="";
+			
+		$lap_kunjungan_kelamin=trim(@$_POST["lap_kunjungan_kelamin"]);
+		$lap_kunjungan_kelamin=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_kelamin);
+		$lap_kunjungan_kelamin=str_replace("'", '"',$lap_kunjungan_kelamin);
+		$lap_kunjungan_member=trim(@$_POST["lap_kunjungan_member"]);
+		$lap_kunjungan_member=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_member);
+		$lap_kunjungan_member=str_replace("'", '"',$lap_kunjungan_member);
+		$lap_kunjungan_cust=trim(@$_POST["lap_kunjungan_cust"]);
+		$lap_kunjungan_cust=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_cust);
+		$lap_kunjungan_cust=str_replace("'", '"',$lap_kunjungan_cust);
+		$lap_kunjungan_umurstart=trim(@$_POST["lap_kunjungan_umurstart"]);
+		$lap_kunjungan_umurstart=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurstart=str_replace("'", '"',$lap_kunjungan_umurstart);
+		$lap_kunjungan_umurend=trim(@$_POST["lap_kunjungan_umurend"]);
+		$lap_kunjungan_umurend=str_replace("/(<\/?)(p)([^>]*>)", "",$lap_kunjungan_umurend);
+		$lap_kunjungan_umurend=str_replace("'", '"',$lap_kunjungan_umurend);
+		$lap_kunjungan_tgllahir =(isset($_POST['lap_kunjungan_tgllahir']) ? @$_POST['lap_kunjungan_tgllahir'] : @$_GET['lap_kunjungan_tgllahir']);
+		$lap_kunjungan_tgllahirend =(isset($_POST['lap_kunjungan_tgllahirend']) ? @$_POST['lap_kunjungan_tgllahirend'] : @$_GET['lap_kunjungan_tgllahirend']);
+		$lap_kunjungan_tgllahirend=trim(@$_POST["lap_kunjungan_tgllahirend"]);
+
+		$option=$_POST['currentlisting'];
+		$filter=$_POST["query"];
+		
+		$data["periode"]="$tgl_tindakan";
+		$data["data_print"] = $this->m_lap_kunjungan->detail_kunjungan_print($tgl_awal,$periode,$lap_kunjungan_id ,$lap_kunjungan_tgllahir, $lap_kunjungan_tgllahirend,$lap_kunjungan_umurstart, $lap_kunjungan_umurend,$trawat_tglapp_start ,$trawat_tglapp_end ,$lap_kunjungan_kelamin, $lap_kunjungan_member,$lap_kunjungan_cust, $tgl_tindakan,$option,$filter);
+		$print_view=$this->load->view("main/p_detail_kunjungan.php",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$print_file=fopen("print/detail_kunjungan_list.html","w+");
+		fwrite($print_file, $print_view);
+		echo '1';
+	}
+	/* End Of Function */
+
 
 	//function for advanced search
 	function lap_kunjungan_search(){

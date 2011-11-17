@@ -588,6 +588,15 @@ Ext.onReady(function(){
         autoHeight: true,
 		style: 'margin-top: 10px',
         width: 600,//940	//800
+		tbar: [
+		{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			//disabled: true,
+			handler: detail_kunjungan_print 
+		}
+		]
 		/*bbar: new Ext.PagingToolbar({
 			//pageSize: 5,
 			disabled:true,
@@ -1328,6 +1337,111 @@ Ext.onReady(function(){
 				Ext.MessageBox.hide();
 				win = window.open('./kunjunganlist.html','kunjunganlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+	
+	/* Function for print List Grid */
+	function detail_kunjungan_print(){
+		var printquery = "";
+		/*var cust_id_2print=null;
+		var cust_no_2print=null;
+		var cust_nama_2print=null;*/
+		var lap_kunjungan_id_detail=null;
+		var lap_kunjungan_tgl_start_detail=null;
+		var lap_kunjungan_tgl_end_detail=null;
+		var lap_kunjungan_kelamin_detail=null;
+		var lap_kunjungan_member_detail=null;
+		var lap_kunjungan_cust_detail=null;
+		var lap_kunjungan_umurstart_detail=null;
+		var lap_kunjungan_umurend_detail=null;
+		var lap_kunjungan_tgllahir_detail_date="";
+		var lap_kunjungan_tgllahir_detail_dateEnd="";
+		var lap_kunjungan_tmedis_bulan=null;
+		var lap_kunjungan_tmedis_tahun=null;
+		var lap_kunjungan_tmedis_periode=null;
+
+		var win2;  
+		post2db='PRINT2';   		
+
+
+		if(lap_kunjungan_memberSearchField.getValue()!==null){lap_kunjungan_member_detail=lap_kunjungan_memberSearchField.getValue();}
+		if(lap_kunjungan_custSearchField.getValue()!==null){lap_kunjungan_cust_detail=lap_kunjungan_custSearchField.getValue();}
+		if(lap_kunjungan_idSearchField.getValue()!==null){lap_kunjungan_id_detail=lap_kunjungan_idSearchField.getValue();}
+		if(lap_kunjungan_kelaminSearchField.getValue()!==null){lap_kunjungan_kelamin_detail=lap_kunjungan_kelaminSearchField.getValue();}
+		if(lap_kunjungan_tglStartSearchField.getValue()!==null){lap_kunjungan_tgl_start_detail=lap_kunjungan_tglStartSearchField.getValue();}
+		if(lap_kunjungan_tglEndSearchField.getValue()!==null){lap_kunjungan_tgl_end_detail=lap_kunjungan_tglEndSearchField.getValue();}
+		if(lap_kunjungan_umurstartSearchField.getValue()!==null){lap_kunjungan_umurstart_detail=lap_kunjungan_umurstartSearchField.getValue();}
+		if(lap_kunjungan_umurendSearchField.getValue()!==null){lap_kunjungan_umurend_detail=lap_kunjungan_umurendSearchField.getValue();}	
+		if(lap_kunjungan_tgllahirSearchField.getValue()!==""){lap_kunjungan_tgllahir_detail_date=lap_kunjungan_tgllahirSearchField.getValue().format('Y-m-d');}
+		if(lap_kunjungan_tgllahirSearchFieldEnd.getValue()!==""){lap_kunjungan_tgllahir_detail_dateEnd=lap_kunjungan_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		if(lap_kunjungan_bulanField.getValue()!==null){lap_kunjungan_tmedis_bulan=lap_kunjungan_bulanField.getValue();}
+		if(lap_kunjungan_tahunField.getValue()!==null){lap_kunjungan_tmedis_tahun=lap_kunjungan_tahunField.getValue();}
+	
+		if(lap_kunjungan_opsitglField.getValue()==true){
+			lap_kunjungan_tmedis_periode='tanggal';
+		}else if(lap_kunjungan_opsiblnField.getValue()==true){
+			lap_kunjungan_tmedis_periode='bulan';
+		}else{
+			lap_kunjungan_tmedis_periode='all';
+		}
+	
+        var recordMaster = lap_kunjunganListEditorGrid.getSelectionModel().getSelected();
+		var today=new Date().format('Y-m-d');
+
+		Ext.Ajax.request({   
+		waitMsg: 'Mohon tunggu...',
+		url: 'index.php?c=c_lap_kunjungan&m=get_action',
+		params: {
+			task: "PRINT2",
+		  	query: printquery, 
+			//dapaket_dpaket	: 	eval(get_pk_id()),			
+			/*cust_id		:	cust_id_2print, 
+			cust_no		:	cust_no_2print, 
+			cust_nama	:	cust_nama_2print, */
+			tgl_tindakan : recordMaster.get("tgl_tindakan").format('Y-m-d'),
+			lap_kunjungan_id	:	lap_kunjungan_id_detail, 
+			trawat_tglapp_start	: 	lap_kunjungan_tgl_start_detail,
+			trawat_tglapp_end	: 	lap_kunjungan_tgl_end_detail,
+			lap_kunjungan_kelamin : lap_kunjungan_kelamin_detail,
+			lap_kunjungan_member : lap_kunjungan_member_detail,
+			lap_kunjungan_cust : lap_kunjungan_cust_detail,
+			lap_kunjungan_umurstart : lap_kunjungan_umurstart_detail,
+			lap_kunjungan_umurend : lap_kunjungan_umurend_detail,
+			lap_kunjungan_tgllahir	:	lap_kunjungan_tgllahir_detail_date, 
+			lap_kunjungan_tgllahirend	:	lap_kunjungan_tgllahir_detail_dateEnd,
+			bulan		: lap_kunjungan_tmedis_bulan,
+			tahun		: lap_kunjungan_tmedis_tahun,
+			periode		: lap_kunjungan_tmedis_periode,	
+		  	currentlisting: detail_customerStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win2 = window.open('./print/detail_kunjungan_list.html','detail_kunjungan_list','height=400,width=900,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({

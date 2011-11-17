@@ -741,7 +741,7 @@ Ext.onReady(function(){
 		jabatan_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		jabatan_DataStore.reload({params: {start: 0, limit: pageS}});
-		jabatan_searchWindow.close();
+		//jabatan_searchWindow.close();
 	};
 	/* End of Fuction */
 	

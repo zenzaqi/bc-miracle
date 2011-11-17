@@ -930,7 +930,7 @@ Ext.onReady(function(){
 		cabang_DataStore.baseParams = { task: 'LIST',start: 0, limit: pageS };
 		// Cause the datastore to do another query : 
 		cabang_DataStore.reload({params: {start: 0, limit: pageS}});
-		cabang_searchWindow.close();
+		//cabang_searchWindow.close();
 	};
 	/* End of Fuction */
 	

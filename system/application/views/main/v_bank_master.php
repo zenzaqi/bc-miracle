@@ -739,7 +739,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		bank_master_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		bank_master_DataStore.reload({params: {start: 0, limit: pageS}});
-		bank_master_searchWindow.close();
+		//bank_master_searchWindow.close();
 	};
 	/* End of Fuction */
 

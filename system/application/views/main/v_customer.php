@@ -1684,7 +1684,7 @@ else if(cust_bulan_opsiField.getValue()==true){
 		//cbo_cust_profesi_DataStore.reload();
 		//cbo_cust_hobi_DataStore.reload();
 		//cbo_cust_cabang_DataStore.reload();
-		customer_searchWindow.close();
+		//customer_searchWindow.close();
 	};
 	/* End of Fuction */
 

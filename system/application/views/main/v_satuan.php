@@ -730,7 +730,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		satuan_DataStore.baseParams = { task: 'LIST', start:0, limit:pageS };
 		satuan_DataStore.reload({params: {start: 0, limit: pageS}});
-		satuan_searchWindow.close();
+		//satuan_searchWindow.close();
 	};
 	/* End of Fuction */
 	
