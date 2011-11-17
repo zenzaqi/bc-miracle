@@ -26,7 +26,7 @@
         	<th scope='col'>No</th>
             <th scope='col'>Jenis Transaksi</th>
             <th scope='col'>Tunai</th>
-            <th scope='col'>Kwitansi</th>
+            <th scope='col'>Kuitansi</th>
             <th scope='col'>Kartu Kredit</th>
             <th scope='col'>Cek/Giro</th>
             <th scope='col'>Transfer</th>
@@ -88,7 +88,7 @@
 			$i=0; 
 			foreach($data_print as $print) { 
 				$i++;
-				if($print->jenis_transaksi=="jual_produk")
+				if($print->jenis_transaksi=="Penjualan Produk")
 				{
 					$produk_tunai=$print->nilai_tunai;
 					$produk_kwitansi=$print->nilai_kwitansi;
@@ -97,7 +97,7 @@
 					$produk_transfer=$print->nilai_transfer;
 					$produk_voucher=$print->nilai_voucher;
 					$produk_total=$produk_tunai+$produk_kwitansi+$produk_kredit+$produk_cek+$produk_transfer+$produk_voucher;
-				}elseif($print->jenis_transaksi=="jual_rawat")
+				}elseif($print->jenis_transaksi=="Penjualan Perawatan")
 				{
 					$rawat_tunai=$print->nilai_tunai;
 					$rawat_kwitansi=$print->nilai_kwitansi;
@@ -106,7 +106,7 @@
 					$rawat_transfer=$print->nilai_transfer;
 					$rawat_voucher=$print->nilai_voucher;
 					$rawat_total=$rawat_tunai+$rawat_kwitansi+$rawat_kredit+$rawat_cek+$rawat_transfer+$rawat_voucher;
-				}elseif($print->jenis_transaksi=="jual_paket")
+				}elseif($print->jenis_transaksi=="Penjualan Paket")
 				{
 					$paket_tunai=$print->nilai_tunai;
 					$paket_kwitansi=$print->nilai_kwitansi;
@@ -115,7 +115,7 @@
 					$paket_transfer=$print->nilai_transfer;
 					$paket_voucher=$print->nilai_voucher;
 					$paket_total=$paket_tunai+$paket_kwitansi+$paket_kredit+$paket_cek+$paket_transfer+$paket_voucher;
-				}elseif($print->jenis_transaksi=="jual_kwitansi")
+				}elseif($print->jenis_transaksi=="Penjualan Kuitansi")
 				{
 					$kwitansi_tunai=$print->nilai_tunai;
 					$kwitansi_kwitansi=$print->nilai_kwitansi;
@@ -124,7 +124,7 @@
 					$kwitansi_transfer=$print->nilai_transfer;
 					$kwitansi_voucher=$print->nilai_voucher;
 					$kwitansi_total=$kwitansi_tunai+$kwitansi_kwitansi+$kwitansi_kredit+$kwitansi_cek+$kwitansi_transfer+$kwitansi_voucher;	
-				}elseif($print->jenis_transaksi=="jual_lunas")
+				}elseif($print->jenis_transaksi=="Pelunasan Piutang")
 				{
 					$lunas_tunai=$print->nilai_tunai;
 					$lunas_kwitansi=$print->nilai_kwitansi;
@@ -180,7 +180,7 @@
        </tr>
         <tr>
         	<td>4.</td>
-            <td>Penjualan Kwitansi</td>
+            <td>Penjualan Kuitansi</td>
             <td  class="numeric"><?php echo number_format($kwitansi_tunai); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_kwitansi); ?></td>
             <td  class="numeric"><?php echo number_format($kwitansi_kredit); ?></td>
@@ -215,7 +215,7 @@
             <td colspan='6' class="clear">&nbsp;</td>
         </tr>
         <tr><td class="clear">&nbsp;</td>
-        	<th scope='row'>Diskon Kwitansi (Rp)</th>
+        	<th scope='row'>Diskon Kuitansi (Rp)</th>
             <td class="numeric"><?php echo number_format($total_kwitansi); ?></td>
             <td colspan='6' class="clear">&nbsp;</td>
         </tr>

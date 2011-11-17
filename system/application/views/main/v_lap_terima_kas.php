@@ -45,18 +45,11 @@
 <script>
 
 var rpt_terimakasWindow;
-var rpt_terimakasForm;
 
 var rpt_terimakas_tglawalField;
 var rpt_terimakas_tglakhirField;
-var rpt_terimakas_rekapField;
-var rpt_terimakas_detailField;
 var rpt_terimakas_bulanField;
 var rpt_terimakas_tahunField;
-var rpt_terimakas_opsitglField;
-var rpt_terimakas_opsiblnField;
-var rpt_terimakas_opsiallField;
-var rpt_terimakas_groupField;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -100,32 +93,223 @@ $bulan="";
 Ext.onReady(function(){
   Ext.QuickTips.init();
 
-	var group_master_Store= new Ext.data.SimpleStore({
-			id: 'group_master_Store',
-			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer']]
+	rpt_terimakasDataStore = new Ext.data.Store({
+		id: 'rpt_terimakasDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_terima_kas&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+		/* dataIndex => insert into rekap_penjualanColumnModel, Mapping => for initiate table column */
+			{name: 'jenis_transaksi', type: 'string', mapping: 'jenis_transaksi'},
+			{name: 'nilai_card', type: 'float', mapping: 'nilai_card'},
+			{name: 'nilai_cek', type: 'float', mapping: 'nilai_cek'},
+			{name: 'nilai_kredit', type: 'float', mapping: 'nilai_kredit'},
+			{name: 'nilai_kwitansi', type: 'float', mapping: 'nilai_kwitansi'},
+			{name: 'nilai_transfer', type: 'float', mapping: 'nilai_transfer'},
+			{name: 'nilai_tunai', type: 'float', mapping: 'nilai_tunai'},
+			{name: 'nilai_voucher', type: 'float', mapping: 'nilai_voucher'},
+			{name: 'nilai_total', type: 'float', mapping: 'nilai_total'},
+		]),
+		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
 	
-	var group_detail_Store= new Ext.data.SimpleStore({
-			id: 'group_detail_Store',
-			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon']]
+	rpt_terimakas_totalDataStore = new Ext.data.Store({
+		id: 'rpt_terimakas_totalDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_terima_kas&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+			{name: 'nilai_card_total', type: 'float', mapping: 'nilai_card_total'},
+			{name: 'nilai_cek_total', type: 'float', mapping: 'nilai_cek_total'},
+			{name: 'nilai_kredit_total', type: 'float', mapping: 'nilai_kredit_total'},
+			{name: 'nilai_kwitansi_total', type: 'float', mapping: 'nilai_kwitansi_total'},
+			{name: 'nilai_transfer_total', type: 'float', mapping: 'nilai_transfer_total'},
+			{name: 'nilai_tunai_total', type: 'float', mapping: 'nilai_tunai_total'},
+			{name: 'nilai_voucher_total', type: 'float', mapping: 'nilai_voucher_total'},
+			{name: 'nilai_grand_total', type: 'float', mapping: 'nilai_grand_total'},
+		]),
+		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
+
+	rpt_terimakasColumnModel = new Ext.grid.ColumnModel(
+		[{	
+			align : 'Left',
+			header: '<div align="center">' + 'Jenis Transaksi' + '</div>',
+			dataIndex: 'jenis_transaksi',
+			readOnly: true,
+			width: 140,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tunai' + '</div>',
+			dataIndex: 'nilai_tunai',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kuitansi' + '</div>',
+			dataIndex: 'nilai_kwitansi',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kartu Kredit' + '</div>',
+			dataIndex: 'nilai_card',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Cek / Giro' + '</div>',
+			dataIndex: 'nilai_cek',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Transfer' + '</div>',
+			dataIndex: 'nilai_transfer',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Total' + '</div>',
+			dataIndex: 'nilai_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		}
+	]);
 	
-	var rpt_terimakas_groupField=new Ext.form.ComboBox({
-		id:'rpt_terimakas_groupField',
-		fieldLabel:'Kelompokkan',
-		store: group_master_Store,
+	rpt_terimakasColumnModel.defaultSortable= true;
+
+	rpt_terimakas_totalColumnModel = new Ext.grid.ColumnModel(
+		[{	
+			align : 'Left',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			readOnly: true,
+			width: 140,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Tunai' + '</div>',
+			dataIndex: 'nilai_tunai_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kuitansi' + '</div>',
+			dataIndex: 'nilai_kwitansi_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kartu Kredit' + '</div>',
+			dataIndex: 'nilai_card_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Cek / Giro' + '</div>',
+			dataIndex: 'nilai_cek_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + 'Transfer' + '</div>',
+			dataIndex: 'nilai_transfer_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + '<span style="font-weight:bold">Grand Total</span>' + '</div>',
+			dataIndex: 'nilai_grand_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 80,	//55,
+			sortable: true
+		}
+	]);
+	
+	rpt_terimakas_totalColumnModel.defaultSortable= true;
+
+	tbar_periodeField= new Ext.form.ComboBox({
+		id: 'tbar_periodeField',
+		store:new Ext.data.SimpleStore({
+			fields:['tbar_periode_value', 'tbar_periode_display'],
+			data:[['Tanggal','Tanggal'],['Bulan','Bulan']]
+		}),
 		mode: 'local',
-		displayField: 'group',
-		valueField: 'group',
-		value: 'No Faktur',
-		width: 100,
-		triggerAction: 'all',
-		typeAhead: true,
-		lazyRender: true
+		displayField: 'tbar_periode_display',
+		valueField: 'tbar_periode_value',
+		listeners:{
+			render: function(c){
+			Ext.get(this.id).set({qtip:'Pilihan Periode'});
+			}
+		},
+		editable:false,
+		width: 76,
+		triggerAction: 'all'	
 	});
 	
+	rpt_terimakas_tglawalField= new Ext.form.DateField({
+		id: 'rpt_terimakas_tglawalField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'rpt_terimakas_tglawalField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		//width: 100,
+        //endDateField: 'rpt_terimakas_tglakhirField'
+		emptyText: 'Tgl Awal',
+		//value: today
+	});
+	
+	rpt_terimakas_tglakhirField= new Ext.form.DateField({
+		id: 'rpt_terimakas_tglakhirField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'rpt_terimakas_tglakhirField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		//width: 100,
+        //startDateField: 'rpt_terimakas_tglawalField',
+		emptyText: 'Tgl Awal',
+		//value: today
+	});
+
 	rpt_terimakas_bulanField=new Ext.form.ComboBox({
 		id:'rpt_terimakas_bulanField',
 		fieldLabel:' ',
@@ -152,132 +336,150 @@ Ext.onReady(function(){
 		displayField: 'tahun',
 		valueField: 'tahun',
 		value: thisyear,
-		width: 100,
+		width: 60,
 		triggerAction: 'all'
 	});
+
 	
-	rpt_terimakas_opsitglField=new Ext.form.Radio({
-		id:'rpt_terimakas_opsitglField',
-		boxLabel:'Tanggal',
-		width:100,
-		name: 'filter_opsi'
+	function lap_terimakas_search(){
+		
+		var terimakas_tglawal="";
+		var terimakas_tglakhir="";
+		var terimakas_opsi="";
+		var terimakas_bulan="";
+		var terimakas_tahun="";
+		var terimakas_periode="";
+		
+		if(is_valid_form()){
+			
+			if(rpt_terimakas_tglawalField.getValue()!==""){terimakas_tglawal = rpt_terimakas_tglawalField.getValue().format('Y-m-d');}
+			if(rpt_terimakas_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_terimakas_tglakhirField.getValue().format('Y-m-d');}
+			if(rpt_terimakas_bulanField.getValue()!==""){terimakas_bulan=rpt_terimakas_bulanField.getValue(); }
+			if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }
+			if (tbar_periodeField.getValue() == 'Tanggal') {
+				terimakas_periode = 'tanggal';
+			}else if (tbar_periodeField.getValue() == 'Bulan') {
+				terimakas_periode = 'bulan';
+			}
+
+			rpt_terimakasDataStore.baseParams = {
+						task		: 'SEARCH',
+						tgl_awal	: terimakas_tglawal,
+						tgl_akhir	: terimakas_tglakhir,
+						bulan		: terimakas_bulan,
+						tahun		: terimakas_tahun,
+						periode		: terimakas_periode,
+						opsi		: 'columnmodel'
+			};
+					
+			rpt_terimakas_totalDataStore.baseParams = {
+						task		: 'SEARCH2',
+						tgl_awal	: terimakas_tglawal,
+						tgl_akhir	: terimakas_tglakhir,
+						bulan		: terimakas_bulan,
+						tahun		: terimakas_tahun,
+						periode		: terimakas_periode,						
+			};
+			
+			Ext.MessageBox.show({
+			   msg: 'Sedang Proses...',
+			   progressText: 'proses...',
+			   width:350,
+			   wait:true
+			});
+			
+			rpt_terimakasDataStore.reload({
+				callback: function(opts, success, response){
+				if(success){
+					rpt_terimakas_totalDataStore.reload();
+					Ext.MessageBox.hide();
+					}
+				}
+			});		
+		
+		}else{
+			Ext.MessageBox.show({
+			   title: 'Warning',
+			   msg: 'Form Anda belum lengkap',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.WARNING
+			});	
+		}
+	}
+	
+	rpt_terimakasListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'rpt_terimakasListEditorGrid',
+		el: 'fp_rpt_terimakas_list',
+		title: 'Laporan Penerimaan Kas',
+		autoHeight: true,
+		store: rpt_terimakasDataStore, // DataStore
+		cm: rpt_terimakasColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800, 
+		/* Add Control on ToolBar */
+		tbar: [
+		'<b>Periode : </b>', tbar_periodeField, '-', rpt_terimakas_tglawalField, '-', rpt_terimakas_tglakhirField, '-', rpt_terimakas_bulanField, '-', rpt_terimakas_tahunField, '-', 
+		{
+			text: 'Search',
+			tooltip: 'Search',
+			iconCls:'icon-search',
+			handler: lap_terimakas_search
+		}, '-',{
+			text: 'Print',
+			tooltip: 'Print Document',
+			iconCls:'icon-print',
+			handler: print_rpt_terimakas  
+		}
+		]
 	});
-	
-	rpt_terimakas_opsiblnField=new Ext.form.Radio({
-		id:'rpt_terimakas_opsiblnField',
-		boxLabel:'Bulan',
-		width:100,
-		name: 'filter_opsi',
-		checked: true
+	rpt_terimakasListEditorGrid.render();
+
+	rpt_terimakas_totalListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'rpt_terimakas_totalListEditorGrid',
+		el: 'fp_terimakas_total_list',
+		title: '',
+		autoHeight: true,
+		store: rpt_terimakas_totalDataStore, // DataStore
+		cm: rpt_terimakas_totalColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800,
 	});
+	rpt_terimakas_totalListEditorGrid.render();
+
 	
-	rpt_terimakas_opsiallField=new Ext.form.Radio({
-		id:'rpt_terimakas_opsiallField',
-		boxLabel:'Semua',
-		name: 'filter_opsi',
-		checked: true
+	// inisialisasi awal
+	tbar_periodeField.setValue('Tanggal');
+	rpt_terimakas_tglawalField.setVisible(true);
+	rpt_terimakas_tglakhirField.setVisible(true);
+	rpt_terimakas_bulanField.setVisible(false);
+	rpt_terimakas_tahunField.setVisible(false);			
+
+	tbar_periodeField.on('select', function(){
+		if (tbar_periodeField.getValue() == 'Tanggal'){
+			rpt_terimakas_tglawalField.setVisible(true);
+			rpt_terimakas_tglakhirField.setVisible(true);
+			rpt_terimakas_bulanField.setVisible(false);
+			rpt_terimakas_tahunField.setVisible(false);			
+		} else if (tbar_periodeField.getValue() == 'Bulan'){
+			rpt_terimakas_tglawalField.setVisible(false);
+			rpt_terimakas_tglakhirField.setVisible(false);
+			rpt_terimakas_bulanField.setVisible(true);
+			rpt_terimakas_tahunField.setVisible(true);			
+		}
 	});
-	
-	rpt_terimakas_tglawalField= new Ext.form.DateField({
-		id: 'rpt_terimakas_tglawalField',
-		fieldLabel: ' ',
-		format : 'Y-m-d',
-		name: 'rpt_terimakas_tglawalField',
-        //vtype: 'daterange',
-		allowBlank: true,
-		width: 100,
-        //endDateField: 'rpt_terimakas_tglakhirField'
-		value: today
-	});
-	
-	rpt_terimakas_tglakhirField= new Ext.form.DateField({
-		id: 'rpt_terimakas_tglakhirField',
-		fieldLabel: 's/d',
-		format : 'Y-m-d',
-		name: 'rpt_terimakas_tglakhirField',
-        //vtype: 'daterange',
-		allowBlank: true,
-		width: 100,
-        //startDateField: 'rpt_terimakas_tglawalField',
-		value: today
-	});
-	
-	rpt_terimakas_rekapField=new Ext.form.Radio({
-		id: 'rpt_terimakas_rekapField',
-		boxLabel: 'Rekap',
-		name: 'terimakas_opsi',
-		checked: true
-	});
-	
-	rpt_terimakas_detailField=new Ext.form.Radio({
-		id: 'rpt_terimakas_detailField',
-		boxLabel: 'Detail',
-		name: 'terimakas_opsi'
-	});
-	
-	var rpt_terimakas_periodeField=new Ext.form.FieldSet({
-		id:'rpt_terimakas_periodeField',
-		title : 'Periode',
-		layout: 'form',
-		bodyStyle:'padding: 0px 0px 0',
-		frame: false,
-		bolder: false,
-		anchor: '98%',
-		items:[{
-				layout: 'column',
-				border: false,
-				items:[rpt_terimakas_opsitglField, {
-					   		layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							items:[rpt_terimakas_tglawalField]
-					   },{
-					   		layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
-							items:[rpt_terimakas_tglakhirField]
-					   }]
-			},{
-				layout: 'column',
-				border: false,
-				items:[rpt_terimakas_opsiblnField,{
-					   		layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							items:[rpt_terimakas_bulanField]
-					   },{
-					   		layout: 'form',
-							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
-							items:[rpt_terimakas_tahunField]
-					   }]
-			}]
-	});
-	
-	var	rpt_terimakas_opsiField=new Ext.form.FieldSet({
-		id: 'rpt_terimakas_opsiField',
-		title: 'Opsi',
-		border: true,
-		anchor: '98%',
-		items: [rpt_terimakas_rekapField ,rpt_terimakas_detailField]
-	});
-	
-	var	rpt_terimakas_groupbyField=new Ext.form.FieldSet({
-		id: 'rpt_terimakas_groupbyField',
-		title: 'Group By',
-		border: true,
-		anchor: '98%',
-		items: [rpt_terimakas_groupField]
-	});
-	
+
+				
 	function is_valid_form(){
-		if(rpt_terimakas_opsitglField.getValue()==true){
+		if(tbar_periodeField.getValue() == 'Tanggal'){
 			rpt_terimakas_tglawalField.allowBlank=false;
 			rpt_terimakas_tglakhirField.allowBlank=false;
 			if(rpt_terimakas_tglawalField.isValid() && rpt_terimakas_tglakhirField.isValid())
@@ -308,17 +510,12 @@ Ext.onReady(function(){
 		if(rpt_terimakas_tglawalField.getValue()!==""){terimakas_tglawal = rpt_terimakas_tglawalField.getValue().format('Y-m-d');}
 		if(rpt_terimakas_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_terimakas_tglakhirField.getValue().format('Y-m-d');}
 		if(rpt_terimakas_bulanField.getValue()!==""){terimakas_bulan=rpt_terimakas_bulanField.getValue(); }
-		if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }
-		if(rpt_terimakas_opsitglField.getValue()==true){
-			terimakas_periode='tanggal';
-		}else if(rpt_terimakas_opsiblnField.getValue()==true){
-			terimakas_periode='bulan';
-		}else{
-			terimakas_periode='all';
-		}
-		if(rpt_terimakas_groupField.getValue()!==""){terimakas_group=rpt_terimakas_groupField.getValue(); }
-		
-		//if(rpt_terimakas_rekapField.getValue()==true){terimakas_opsi='rekap';}else{terimakas_opsi='detail';}
+		if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }		
+		if (tbar_periodeField.getValue() == 'Tanggal') {
+				terimakas_periode = 'tanggal';
+			}else if (tbar_periodeField.getValue() == 'Bulan') {
+				terimakas_periode = 'bulan';
+			}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
@@ -326,7 +523,7 @@ Ext.onReady(function(){
 				params: {
 					tgl_awal	: terimakas_tglawal,
 					tgl_akhir	: terimakas_tglakhir,
-					/*opsi		: terimakas_opsi,*/
+					opsi		: terimakas_opsi,
 					bulan		: terimakas_bulan,
 					tahun		: terimakas_tahun,
 					periode		: terimakas_periode
@@ -364,7 +561,7 @@ Ext.onReady(function(){
 		}else{
 			Ext.MessageBox.show({
 			   title: 'Warning',
-			   msg: 'Not valid form.',
+			   msg: 'Form Anda belum lengkap',
 			   buttons: Ext.MessageBox.OK,
 			   animEl: 'database',
 			   icon: Ext.MessageBox.WARNING
@@ -372,86 +569,16 @@ Ext.onReady(function(){
 		}
 	}
 	/* Enf Function */
-	
-	rpt_terimakasForm = new Ext.FormPanel({
-		labelAlign: 'left',
-		bodyStyle:'padding:5px',
-		x:0,
-		y:0,
-		width: 400, 
-		autoHeight: true,
-		items: [rpt_terimakas_periodeField],
-		monitorValid:true,
-		buttons: [{
-				text: 'Print',
-				formBind: true,
-				handler: print_rpt_terimakas
-			},{
-				text: 'Close',
-				handler: function(){
-					rpt_terimakasWindow.hide();
-					mainPanel.remove(mainPanel.getActiveTab().getId());
-				}
-		}]
-		
-	});
-	
-	/* Form Advanced Search */
-	rpt_terimakasWindow = new Ext.Window({
-		title: 'Laporan Penerimaan Kas',
-		closable:false,
-		closeAction: 'hide',
-		resizable: false,
-		plain:true,
-		layout: 'fit',
-		x: 0,
-		y: 0,
-		modal: true,
-		renderTo: 'elwindow_rpt_terimakas',
-		items: rpt_terimakasForm
-	});
-  	rpt_terimakasWindow.show();
-	
-	//EVENTS
-	
-	/*rpt_terimakas_rekapField.on("check", function(){
-		rpt_terimakas_groupField.setValue('No faktur');
-		if(rpt_terimakas_rekapField.getValue()==true){
-			rpt_terimakas_groupField.bindStore(group_master_Store);
-		}else
-		{
-			rpt_terimakas_groupField.bindStore(group_detail_Store);
-		}
-	});
-	
-	rpt_terimakas_detailField.on("check", function(){
-		rpt_terimakas_groupField.setValue('No Faktur');
-		if(rpt_terimakas_detailField.getValue()==true){
-			rpt_terimakas_groupField.bindStore(group_detail_Store);
-		}else
-		{
-			rpt_terimakas_groupField.bindStore(group_master_Store);
-		}
-	});*/
-	
-	/*rpt_terimakas_opsitglField.on("check",function(){
-		if(rpt_terimakas_opsitglField.getValue()==true){
-			rpt_terimakas_tglawalField.allowBlank=false;
-			rpt_terimakas_tglakhirField.allowBlank=false;
-		}else{
-			rpt_terimakas_tglawalField.allowBlank=true;
-			rpt_terimakas_tglakhirField.allowBlank=true;
-		}
-		
-	});*/
-	
+				
 });
 	</script>
 <body>
 <div>
 	<div class="col">
-        <div id="fp_info"></div>
-		<div id="elwindow_rpt_terimakas"></div>
+        <div id="fp_info"></div>	
+		<div id="fp_rpt_terimakas_list"></div> 
+		<div id="fp_terimakas_total_list"></div> 
+<!--		<div id="elwindow_rpt_terimakas"></div>	-->
     </div>
 </div>
 </body>

@@ -71,54 +71,131 @@ class M_public_function extends Model{
 		
 	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
 			$sql="";
-			if($periode=='all')
-				$sql="SELECT 	jenis_transaksi, 
+			if($periode=='bulan')
+				$sql=	   "SELECT 		
+								case jenis_transaksi
+									when 'jual_kwitansi' then 'Penjualan Kuitansi'
+									when 'jual_lunas' then 'Pelunasan Piutang'
+									when 'jual_paket' then 'Penjualan Paket'
+									when 'jual_produk' then 'Penjualan Produk'
+									when 'jual_rawat' then 'Penjualan Perawatan'
+								end as jenis_transaksi,
+								case jenis_transaksi
+									when 'jual_kwitansi' then 4
+									when 'jual_lunas' then 5
+									when 'jual_paket' then 3
+									when 'jual_produk' then 1
+									when 'jual_rawat' then 2
+								end as urutan,
 								sum(nilai_card) as nilai_card,
 								sum(nilai_cek) as nilai_cek, 
 								sum(nilai_kredit) as nilai_kredit, 
 								sum(nilai_kwitansi) as nilai_kwitansi, 
 								sum(nilai_transfer) as nilai_transfer,
 								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
-					FROM 		vu_trans_terima_jual 
-					WHERE 		stat_dok='Tertutup' AND 
-								no_ref<>'' 
-					GROUP BY 	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
-			else if($periode=='bulan')
-				$sql="SELECT 	jenis_transaksi, 
-								sum(nilai_card) as nilai_card,
-								sum(nilai_cek) as nilai_cek, 
-								sum(nilai_kredit) as nilai_kredit, 
-								sum(nilai_kwitansi) as nilai_kwitansi, 
-								sum(nilai_transfer) as nilai_transfer,
-								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
-					FROM 		vu_trans_terima_jual 
-					WHERE 		date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+								sum(nilai_voucher) as nilai_voucher,
+								sum(nilai_card+nilai_cek+nilai_kwitansi+nilai_transfer+nilai_tunai) as nilai_total
+							FROM vu_trans_terima_jual 
+							WHERE date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
 								AND stat_dok='Tertutup'
 								AND no_ref<>''
-					GROUP BY  	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
+							GROUP BY jenis_transaksi 
+							ORDER BY urutan";
 			else if($periode=='tanggal')
-				$sql="SELECT 	jenis_transaksi, 
+				$sql="SELECT 
+								case jenis_transaksi
+									when 'jual_kwitansi' then 'Penjualan Kuitansi'
+									when 'jual_lunas' then 'Pelunasan Piutang'
+									when 'jual_paket' then 'Penjualan Paket'
+									when 'jual_produk' then 'Penjualan Produk'
+									when 'jual_rawat' then 'Penjualan Perawatan'
+								end as jenis_transaksi,
+								case jenis_transaksi
+									when 'jual_kwitansi' then 4
+									when 'jual_lunas' then 5
+									when 'jual_paket' then 3
+									when 'jual_produk' then 1
+									when 'jual_rawat' then 2
+								end as urutan,
 								sum(nilai_card) as nilai_card,
 								sum(nilai_cek) as nilai_cek, 
 								sum(nilai_kredit) as nilai_kredit, 
 								sum(nilai_kwitansi) as nilai_kwitansi, 
 								sum(nilai_transfer) as nilai_transfer,
 								sum(nilai_tunai) as nilai_tunai,
-								sum(nilai_voucher) as nilai_voucher 
+								sum(nilai_voucher) as nilai_voucher,
+								sum(nilai_card+nilai_cek+nilai_kwitansi+nilai_transfer+nilai_tunai) as nilai_total
 					FROM 		vu_trans_terima_jual 
 					WHERE 		date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
 								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
 								stat_dok='Tertutup' 
 					GROUP BY  	jenis_transaksi 
-					ORDER BY 	jenis_transaksi";
+					ORDER BY 	urutan";
 
 			//echo $sql;
 			$query = $this->db->query($sql);
-			return $query->result();
+			
+			if ($opsi == 'columnmodel') {
+				$nbrows = $query->num_rows();
+				if($nbrows>0){
+					foreach($query->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				} else {
+					return '({"total":"0", "results":""})';
+				}				
+			} 
+			else {			
+				return $query->result();
+			}			
+	}
+	
+	function get_laporan_terima_kas_total($tgl_awal,$tgl_akhir,$periode){
+			$sql="";
+			if($periode=='bulan')
+				$sql=	   "SELECT 									
+								sum(nilai_card) as nilai_card_total,
+								sum(nilai_cek) as nilai_cek_total, 
+								sum(nilai_kredit) as nilai_kredit_total, 
+								sum(nilai_kwitansi) as nilai_kwitansi_total, 
+								sum(nilai_transfer) as nilai_transfer_total,
+								sum(nilai_tunai) as nilai_tunai_total,
+								sum(nilai_voucher) as nilai_voucher_total,
+								sum(nilai_card+nilai_cek+nilai_kwitansi+nilai_transfer+nilai_tunai) as nilai_grand_total
+					FROM 		vu_trans_terima_jual 
+					WHERE 		date_format(tanggal,'%Y-%m')='".$tgl_awal."' 
+								AND stat_dok='Tertutup'
+								AND no_ref<>''";
+			else if($periode=='tanggal')
+				$sql=	   "SELECT 				
+								sum(nilai_card) as nilai_card_total,
+								sum(nilai_cek) as nilai_cek_total, 
+								sum(nilai_kredit) as nilai_kredit_total, 
+								sum(nilai_kwitansi) as nilai_kwitansi_total, 
+								sum(nilai_transfer) as nilai_transfer_total,
+								sum(nilai_tunai) as nilai_tunai_total,
+								sum(nilai_voucher) as nilai_voucher_total,
+								sum(nilai_card+nilai_cek+nilai_kwitansi+nilai_transfer+nilai_tunai) as nilai_grand_total
+							FROM vu_trans_terima_jual 
+							WHERE date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND 
+								date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' AND 
+								stat_dok='Tertutup'";
+
+			//echo $sql;
+			$query = $this->db->query($sql);
+						
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}						
 	}
 			
 	function get_order_beli_detail_by_order_id($orderid){
