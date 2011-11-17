@@ -265,6 +265,76 @@ Ext.onReady(function(){
 	
 	rpt_terimakas_totalColumnModel.defaultSortable= true;
 
+	cbo_cabangDataStore = new Ext.data.Store({
+		id: 'cbo_cabangDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_terima_kas&m=get_cabang_list', 
+			method: 'POST'
+		}),baseParams: {start: 0, limit: 15 },
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total'
+		},[
+		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
+			{name: 'cabang_display', type: 'string', mapping: 'cabang_nama'},
+			{name: 'cabang_value', type: 'int', mapping: 'cabang_id'},
+		]),
+		sortInfo:{field: 'cabang_display', direction: "ASC"}
+	});
+
+	var cabang_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span>{cabang_display}</span>',
+        '</div></tpl>'
+    );
+
+	cabangField= new Ext.form.ComboBox({
+		id: 'cabangField',
+		fieldLabel: 'Cabang',
+		store: cbo_cabangDataStore,
+		mode: 'remote',
+		displayField:'cabang_display',
+		valueField: 'cabang_value',
+        typeAhead: false,
+        loadingText: 'Searching...',
+        //pageSize:10,
+        hideTrigger:false,
+        tpl: cabang_tpl,
+        itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		lazyRender:true,
+		listClass: 'x-combo-list-small',
+		allowBlank: true,
+		disabled:false,
+		anchor: '95%'
+	});
+
+	function online_confirm(){
+		Ext.MessageBox.confirm('Confirmation', 'Fitur Online mungkin akan membutuhkan waktu cukup lama. Anda yakin untuk melanjutkan?', online_yes);
+	}
+	
+	function online_yes(btn){
+		if(btn=='yes'){
+		
+		
+		
+			Ext.Msg.alert('Status', 'Changes saved successfully.');
+		}
+	}
+	
+	onlineField=new Ext.form.Checkbox({
+		id : 'onlineField',
+		boxLabel: '',
+		name: 'online',
+		handler: function(node,checked){
+			if (checked) {
+				online_confirm();
+			}else{
+				
+			}
+		}
+	});
+	
 	tbar_periodeField= new Ext.form.ComboBox({
 		id: 'tbar_periodeField',
 		store:new Ext.data.SimpleStore({
@@ -423,7 +493,14 @@ Ext.onReady(function(){
 	  	width: 800, 
 		/* Add Control on ToolBar */
 		tbar: [
-		'<b>Periode : </b>', tbar_periodeField, '-', rpt_terimakas_tglawalField, '-', rpt_terimakas_tglakhirField, '-', rpt_terimakas_bulanField, '-', rpt_terimakas_tahunField, '-', 
+			'<b><font color=white>Periode : </b>', tbar_periodeField, 
+			'-', rpt_terimakas_tglawalField, 
+			'-', rpt_terimakas_tglakhirField, 
+			'-', rpt_terimakas_bulanField, 
+			'-', rpt_terimakas_tahunField, 
+			'-', cabangField,
+			'-', onlineField, '<b><font color=white>Online</b>',
+			'-', 
 		{
 			text: 'Search',
 			tooltip: 'Search',
@@ -462,6 +539,7 @@ Ext.onReady(function(){
 	rpt_terimakas_tglakhirField.setVisible(true);
 	rpt_terimakas_bulanField.setVisible(false);
 	rpt_terimakas_tahunField.setVisible(false);			
+	cabangField.setValue('Miracle Thamrin');
 
 	tbar_periodeField.on('select', function(){
 		if (tbar_periodeField.getValue() == 'Tanggal'){
@@ -507,15 +585,15 @@ Ext.onReady(function(){
 		var win;               
 		if(is_valid_form()){
 			
-		if(rpt_terimakas_tglawalField.getValue()!==""){terimakas_tglawal = rpt_terimakas_tglawalField.getValue().format('Y-m-d');}
-		if(rpt_terimakas_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_terimakas_tglakhirField.getValue().format('Y-m-d');}
-		if(rpt_terimakas_bulanField.getValue()!==""){terimakas_bulan=rpt_terimakas_bulanField.getValue(); }
-		if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }		
-		if (tbar_periodeField.getValue() == 'Tanggal') {
-				terimakas_periode = 'tanggal';
-			}else if (tbar_periodeField.getValue() == 'Bulan') {
-				terimakas_periode = 'bulan';
-			}
+			if(rpt_terimakas_tglawalField.getValue()!==""){terimakas_tglawal = rpt_terimakas_tglawalField.getValue().format('Y-m-d');}
+			if(rpt_terimakas_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_terimakas_tglakhirField.getValue().format('Y-m-d');}
+			if(rpt_terimakas_bulanField.getValue()!==""){terimakas_bulan=rpt_terimakas_bulanField.getValue(); }
+			if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }		
+			if (tbar_periodeField.getValue() == 'Tanggal') {
+					terimakas_periode = 'tanggal';
+				}else if (tbar_periodeField.getValue() == 'Bulan') {
+					terimakas_periode = 'bulan';
+				}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
