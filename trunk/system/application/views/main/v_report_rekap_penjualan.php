@@ -46,7 +46,7 @@ Ext.ux.plugin.triggerfieldTooltip = function(config){
 var group_produk_Store= new Ext.data.SimpleStore({
 		id: 'group_produk_Store',
 		fields:['group_value','group_display'],
-		data:[['Semua','Semua']],
+		data:[['Semua','Semua'],['Group','Group']],
 		emptyText: 'Semua'
 });
 	
@@ -121,6 +121,7 @@ var rekap_penjualanSelectedRow;
 var rekap_penjualanContextMenu;
 var jenis_rekap_Field;
 var group_rekap_Field;
+var group_group_Field;
 //var jumlahField;
 //for detail data
 
@@ -178,6 +179,37 @@ Ext.onReady(function(){
 		}
 	}
   
+	cbo_groupDataStore = new Ext.data.Store({
+		id: 'cbo_groupDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_report_rekap_penjualan&m=get_group_produk_list', 
+			method: 'POST'
+		}),
+		//baseParams:{task: "LIST"}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'group_id'
+		},[
+		/* dataIndex => insert intocustomer_note_ColumnModel, Mapping => for initiate table column */ 
+			{name: 'group_group_value', type: 'int', mapping: 'group_id'},
+			{name: 'group_group_display', type: 'string', mapping: 'group_nama'}
+			/*
+			{name: 'produk_group_duproduk', type: 'int', mapping: 'group_duproduk'},
+			{name: 'produk_group_dmproduk', type: 'int', mapping: 'group_dmproduk'},
+			{name: 'produk_group_dultah', type: 'int', mapping: 'group_dultah'},
+			{name: 'produk_group_dcard', type: 'int', mapping: 'group_dcard'},
+			{name: 'produk_group_dkolega', type: 'int', mapping: 'group_dkolega'},
+			{name: 'produk_group_dkeluarga', type: 'int', mapping: 'group_dkeluarga'},
+			{name: 'produk_group_downer', type: 'int', mapping: 'group_downer'},
+			{name: 'produk_group_dgrooming', type: 'int', mapping: 'group_dgrooming'},
+			{name: 'produk_group_kelompok', type: 'string', mapping: 'kategori_nama'},
+			{name: 'produk_group_kelompok_id', type: 'int', mapping: 'kategori_id'}
+			*/
+		]),
+		sortInfo:{field: 'group_group_display', direction: "ASC"}
+	});
+	
 	/* Function for Retrieve DataStore */
 	//isc_datastore
 	rekap_penjualanDataStore = new Ext.data.Store({
@@ -682,6 +714,20 @@ Ext.onReady(function(){
 		width: 120,
 		triggerAction: 'all'	
 	});
+	
+	/* Identify  jenis Combo*/
+	group_group_Field= new Ext.form.ComboBox({
+		id: 'group_group_Field',
+		fieldLabel: 'Group 1',
+		store: cbo_groupDataStore,
+		mode: 'remote',
+		editable:false,
+		displayField: 'group_group_display',
+		valueField: 'group_group_value',
+		width: 120,
+		disabled: true,
+		triggerAction: 'all'	
+	});
 
 	/* Identify  jumlah Combo*/
 	/*
@@ -730,11 +776,13 @@ Ext.onReady(function(){
 		var rekap_penjualan_tgl_end_app_search=null;
 		var jenis_rekap_Field_search=null;
 		var group_rekap_Field_search=null;
+		var group_group_Field_search=null;
 
 		if(Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue()!==null){rekap_penjualan_tgl_start_app_search=Ext.getCmp('rekap_penjualan_tglStartSearchField').getValue();}
 		if(Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue()!==null){rekap_penjualan_tgl_end_app_search=Ext.getCmp('rekap_penjualan_tglEndSearchField').getValue();}
 		if(jenis_rekap_Field.getValue()!==null){jenis_rekap_Field_search=jenis_rekap_Field.getValue();}
 		if(group_rekap_Field.getValue()!==null){group_rekap_Field_search=group_rekap_Field.getValue();}
+		if(group_group_Field.getValue()!==null){group_group_Field_search=group_group_Field.getValue();}
 		// change the store parameters
 		rekap_penjualanDataStore.baseParams = {
 			task: 'SEARCH',
@@ -743,6 +791,7 @@ Ext.onReady(function(){
 			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
 			rekap_penjualan_jenis			:	jenis_rekap_Field_search,
 			rekap_penjualan_group			:	group_rekap_Field_search,
+			rekap_penjualan_group_1			:	group_group_Field_search,
 		};
 		
 		sum_rekapDataStore.baseParams = {
@@ -752,6 +801,7 @@ Ext.onReady(function(){
 			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
 			rekap_penjualan_jenis			:	jenis_rekap_Field_search,
 			rekap_penjualan_group			:	group_rekap_Field_search,
+			rekap_penjualan_group_1			:	group_group_Field_search,
 		};
 		
 		sum_voucherDataStore.baseParams = {
@@ -761,6 +811,7 @@ Ext.onReady(function(){
 			rekap_penjualan_tglapp_end		: 	rekap_penjualan_tgl_end_app_search,
 			rekap_penjualan_jenis			:	jenis_rekap_Field_search,
 			rekap_penjualan_group			:	group_rekap_Field_search,
+			rekap_penjualan_group_1			:	group_group_Field_search,
 		};
 		
 		// Cause the datastore to do another query : 
@@ -851,7 +902,7 @@ Ext.onReady(function(){
 							        startDateField: 'rekap_penjualan_tglStartSearchField' // id of the end date field
 							    }] 
 						}]},
-						jenis_rekap_Field, group_rekap_Field]
+						jenis_rekap_Field, group_rekap_Field, group_group_Field]
 			}
 			]
 		}]
@@ -875,6 +926,8 @@ Ext.onReady(function(){
 		jenis_rekap_Field.setValue(null);
 		group_rekap_Field.reset();
 		group_rekap_Field.setValue(null);
+		group_group_Field.reset();
+		group_group_Field.setValue(null);
 		//jumlahField.reset();
 		//jumlahField.setValue(null);
 		Ext.getCmp('rekap_penjualan_tglStartSearchField').reset();
@@ -1107,6 +1160,17 @@ Ext.onReady(function(){
 		}
 		else if(jenis_rekap_Field_group=='Pengambilan_Paket'){
 			group_rekap_Field.bindStore(group_perawatan_Store);
+		}
+	});
+	
+	group_rekap_Field.on("select", function(){
+		jenis_rekap_Field_group=jenis_rekap_Field.getValue();
+		group_rekap_Field_group=group_rekap_Field.getValue();
+		if(group_rekap_Field_group=='Group'){
+			group_group_Field.setDisabled(false);	
+		} else {
+			group_group_Field.setDisabled(true);
+			group_group_Field.setValue('Semua');
 		}
 	});
 	/*

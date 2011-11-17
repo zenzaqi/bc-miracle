@@ -25,6 +25,11 @@ class C_report_rekap_penjualan extends Controller {
 		$this->load->view('main/v_report_rekap_penjualan');
 	}
 	
+	function get_group_produk_list(){
+		$result=$this->m_public_function->get_group_produk_list();
+		echo $result;
+	}
+	
 	//event handler action
 	function get_action(){
 		$task = $_POST['task'];
@@ -65,11 +70,12 @@ class C_report_rekap_penjualan extends Controller {
 
 		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
 		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		$rekap_penjualan_group_1=trim(@$_POST["rekap_penjualan_group_1"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		//$result = $this->m_report_top_spender->top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
-		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end);
+		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $rekap_penjualan_group_1, $start,$end);
 		echo $result;
 	}
 	
@@ -87,11 +93,12 @@ class C_report_rekap_penjualan extends Controller {
 			
 		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
 		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		$rekap_penjualan_group_1=trim(@$_POST["rekap_penjualan_group_1"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		//$result = $this->m_report_top_spender->top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
-		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search2($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end);
+		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search2($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $rekap_penjualan_group_1, $start,$end);
 		echo $result;
 	}
 	
@@ -109,11 +116,12 @@ class C_report_rekap_penjualan extends Controller {
 			
 		$rekap_penjualan_jenis=trim(@$_POST["rekap_penjualan_jenis"]);
 		$rekap_penjualan_group=trim(@$_POST["rekap_penjualan_group"]);
+		$rekap_penjualan_group_1=trim(@$_POST["rekap_penjualan_group_1"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		//$result = $this->m_report_top_spender->top_spender_search($trawat_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter ,$start,$end);
-		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search3($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end);
+		$result = $this->m_report_rekap_penjualan->rekap_penjualan_search3($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group,$rekap_penjualan_group_1, $start,$end);
 		echo $result;
 	}
 

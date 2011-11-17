@@ -61,7 +61,7 @@ class M_report_rekap_penjualan extends Model{
 	/* eof history_ambil_paket_insert */
 
 	//function for advanced search record
-	function rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $start,$end){
+	function rekap_penjualan_search($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $rekap_penjualan_group_1, $start,$end){
 			//full query
 			if ($rekap_penjualan_jenis == '')
 				$rekap_penjualan_jenis = 'Produk';
@@ -97,41 +97,41 @@ class M_report_rekap_penjualan extends Model{
 			else if ($rekap_penjualan_jenis == 'Produk')
 			{
 				$query = "SELECT produk.produk_id AS produk_id, produk.produk_kode AS kode, produk.produk_nama AS nama, 
-	SUM(detail_jual_produk.dproduk_jumlah) AS total_jumlah,
+					SUM(detail_jual_produk.dproduk_jumlah) AS total_jumlah,
 
-	SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) AS subtotal,
+					SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) AS subtotal,
 
-	SUM((master_jual_produk.jproduk_diskon * ((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100) AS diskon_tambahan,
+					SUM((master_jual_produk.jproduk_diskon * ((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100) AS diskon_tambahan,
 
-	(SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) - 
-	SUM((master_jual_produk.jproduk_diskon *((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100)) AS grand_total,
+					(SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) - 
+					SUM((master_jual_produk.jproduk_diskon *((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100)) AS grand_total,
 
-	IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah) 
-	 FROM detail_retur_jual_produk
-	LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
-	WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS jum_retur, 
+					IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah) 
+					 FROM detail_retur_jual_produk
+					LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
+					WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS jum_retur, 
 
-	IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah*detail_retur_jual_produk.drproduk_harga) 
-	FROM detail_retur_jual_produk 
-	LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
-	WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_retur,
+					IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah*detail_retur_jual_produk.drproduk_harga) 
+					FROM detail_retur_jual_produk 
+					LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
+					WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_retur,
 
-	SUM(detail_jual_produk.dproduk_jumlah)-
-	IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah)  
-	FROM detail_retur_jual_produk
-	LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
-	WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_jum_item,
+					SUM(detail_jual_produk.dproduk_jumlah)-
+					IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah)  
+					FROM detail_retur_jual_produk
+					LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
+					WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_jum_item,
 
-	(SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) - 
-	SUM((master_jual_produk.jproduk_diskon *((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100)) -
-	IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah*detail_retur_jual_produk.drproduk_harga) 
-	FROM detail_retur_jual_produk
-	LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
-	WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_net
-	
-	FROM detail_jual_produk
-	LEFT JOIN master_jual_produk ON detail_jual_produk.dproduk_master = master_jual_produk.jproduk_id
-	LEFT JOIN produk ON detail_jual_produk.dproduk_produk = produk.produk_id";
+					(SUM((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100)) - 
+					SUM((master_jual_produk.jproduk_diskon *((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)-((detail_jual_produk.dproduk_jumlah * detail_jual_produk.dproduk_harga)*detail_jual_produk.dproduk_diskon/100))) /100)) -
+					IFNULL ((SELECT SUM(detail_retur_jual_produk.drproduk_jumlah*detail_retur_jual_produk.drproduk_harga) 
+					FROM detail_retur_jual_produk
+					LEFT JOIN master_retur_jual_produk ON detail_retur_jual_produk.drproduk_master = master_retur_jual_produk.rproduk_id
+					WHERE detail_retur_jual_produk.drproduk_produk = produk_id AND master_retur_jual_produk.rproduk_tanggal BETWEEN '".$rekap_penjualan_tglapp_start."' AND '".$rekap_penjualan_tglapp_end."' AND master_retur_jual_produk.rproduk_stat_dok = 'Tertutup' GROUP BY detail_retur_jual_produk.drproduk_produk ),0) AS tot_net
+					
+					FROM detail_jual_produk
+					LEFT JOIN master_jual_produk ON detail_jual_produk.dproduk_master = master_jual_produk.jproduk_id
+					LEFT JOIN produk ON detail_jual_produk.dproduk_produk = produk.produk_id";
 				
 				if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end!=''){
 					//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -139,6 +139,10 @@ class M_report_rekap_penjualan extends Model{
 				}else if($rekap_penjualan_tglapp_start!='' && $rekap_penjualan_tglapp_end==''){
 					//$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " WHERE master_jual_produk.jproduk_tanggal='".$rekap_penjualan_tglapp_start."' AND master_jual_produk.jproduk_stat_dok = 'Tertutup'";
+				}
+				if($rekap_penjualan_group_1!='Semua' && $rekap_penjualan_group_1!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk.produk_group='".$rekap_penjualan_group_1."'";
 				}
 				$query.="GROUP BY detail_jual_produk.dproduk_produk ORDER BY Grand_Total DESC";
 			}
@@ -219,7 +223,7 @@ class M_report_rekap_penjualan extends Model{
 			}
 		}
 		
-		function rekap_penjualan_search2($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group,$start,$end){
+		function rekap_penjualan_search2($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $rekap_penjualan_group_1,$start,$end){
 			//full query
 			$voucher = 0;
 			if ($rekap_penjualan_jenis == '')
@@ -410,7 +414,7 @@ class M_report_rekap_penjualan extends Model{
 			}
 		}
 		
-		function rekap_penjualan_search3($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group,$start,$end){
+		function rekap_penjualan_search3($rekap_penjualan_tglapp_start ,$rekap_penjualan_tglapp_end ,$rekap_penjualan_jenis, $rekap_penjualan_group, $rekap_penjualan_group_1, $start,$end){
 			//full query
 			if ($rekap_penjualan_jenis == '')
 				$rekap_penjualan_jenis = 'Produk';
