@@ -25,6 +25,54 @@ class C_lap_terima_kas extends Controller {
 		$this->load->view('main/v_lap_terima_kas');
 	}
 	
+	function get_action(){
+		$task = $_POST['task'];
+		switch($task){
+			case "SEARCH":
+				$this->laporan_terimakas_search();
+				break;
+			case "SEARCH2":
+				$this->laporan_terimakas_search2();
+				break;
+			default:
+				echo "{failure:true}";
+				break;
+		}
+	}
+
+	function laporan_terimakas_search(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+		}
+		
+		$result=$this->m_public_function->get_laporan_terima_kas($tgl_awal, $tgl_akhir, $periode, $opsi);
+		
+		echo $result; 
+	}
+
+	function laporan_terimakas_search2(){
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+		}
+		
+		$result=$this->m_public_function->get_laporan_terima_kas_total($tgl_awal, $tgl_akhir, $periode);
+		
+		echo $result; 
+	}
+	
 	function print_laporan(){
 		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
 		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);
