@@ -5598,7 +5598,7 @@ Ext.override(Ext.form.Field, {
 	function master_jual_paket_reset_search(){
 		master_jual_paket_DataStore.baseParams = { task: 'LIST' };
 		master_jual_paket_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_jual_paket_searchWindow.close();
+		//master_jual_paket_searchWindow.close();
 	};
 	/* End of Fuction */
 	function master_jual_paket_reset_SearchForm(){

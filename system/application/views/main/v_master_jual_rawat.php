@@ -6611,7 +6611,7 @@ Ext.override(Ext.form.Field, {
 		master_jual_rawat_DataStore.baseParams = { task: 'LIST' };
 		// Cause the datastore to do another query : 
 		master_jual_rawat_DataStore.reload({params: {start: 0, limit: pageS}});
-		master_jual_rawat_searchWindow.close();
+		//master_jual_rawat_searchWindow.close();
 	};
 	/* End of Fuction */
 
