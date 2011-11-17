@@ -499,7 +499,8 @@ Ext.onReady(function(){
 			'-', rpt_terimakas_bulanField, 
 			'-', rpt_terimakas_tahunField, 
 			'-', cabangField,
-			'-', onlineField, '<b><font color=white>Online</b>',
+			//ditutup sementara, belum bisa soalnya
+			//'-', onlineField, '<b><font color=white>Online</b>',
 			'-', 
 		{
 			text: 'Search',
@@ -540,6 +541,11 @@ Ext.onReady(function(){
 	rpt_terimakas_bulanField.setVisible(false);
 	rpt_terimakas_tahunField.setVisible(false);			
 	cabangField.setValue('Miracle Thamrin');
+	
+	//ditutup sementara, belum bisa soalnya
+	cabangField.setVisible(false);
+	onlineField.setVisible(false);
+	
 
 	tbar_periodeField.on('select', function(){
 		if (tbar_periodeField.getValue() == 'Tanggal'){
