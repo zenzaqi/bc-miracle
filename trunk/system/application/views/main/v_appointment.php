@@ -2892,7 +2892,7 @@ Ext.onReady(function(){
 		appointment_DataStore.groupBy('dokter_username');
 		// Cause the datastore to do another query : 
 		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
-		appointment_searchWindow.close();
+		//appointment_searchWindow.close();
 	};
 	/* End of Fuction */
 	
