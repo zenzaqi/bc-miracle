@@ -1466,43 +1466,47 @@ Ext.onReady(function(){
 	drpaket_tokwitansiColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
-			header: 'Paket',
+			header: '<div align="center">' + 'Paket' + '</div>',
 			dataIndex: 'drpaket_dpaket',
-			width: 380,
+			width: 335,
 			sortable: false,
 			editor: combo_dpaket_byjpaket_retur,
 			renderer: Ext.util.Format.comboRenderer(combo_dpaket_byjpaket_retur)
 		},
 		{
-			header: 'Jumlah Diambil',
+			header: '<div align="center">' + 'Jml Diambil' + '</div>',
 			dataIndex: 'drpaket_jumlah_terambil',
+			align: 'Right',
 			width: 80,
 			sortable: false,
 			editor: dpaket_total_ambilField
 		},
 		{
-			header: 'Harga per Satu',
+			header: '<div align="center">' + 'Harga Satuan' + '</div>',
 			dataIndex: 'drpaket_harga_satu',
-			width: 150,
+			align: 'Right',
+			width: 140,
 			sortable: false,
 			editor: dpaket_harga_per_satuField,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
-			header: 'Rupiah di-Retur',
-			dataIndex: 'drpaket_rupiah_retur',
-			width: 150,
-			sortable: false,
-			editor: dpaket_rupiah_returField,
-			renderer: Ext.util.Format.numberRenderer('0,000')
-		},
-		{
-			header: 'Jumlah di-Retur',
+			header: '<div align="center">' + 'Jml Diretur' + '</div>',
 			dataIndex: 'drpaket_jumlah_diretur',
+			align: 'Right',
 			width: 80,
 			sortable: false,
 			hidden: false,
 			editor: dpaket_total_sisaField
+		},
+		{
+			header: '<div align="center">' + 'Rupiah Diretur' + '</div>',
+			dataIndex: 'drpaket_rupiah_retur',
+			align: 'Right',
+			width: 140,
+			sortable: false,
+			editor: dpaket_rupiah_returField,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{
 			header: 'Paket ID',
@@ -1522,7 +1526,7 @@ Ext.onReady(function(){
 	drpaketListEditorGrid =  new Ext.grid.GridPanel({
 		id: 'drpaketListEditorGrid',
 		el: 'fp_drpaket',
-		title: 'Detail Paket yang di-Retur',
+		title: 'Detail Paket yang Diretur',
 		height: 250,
 		width: 790,
 		autoScroll: false,

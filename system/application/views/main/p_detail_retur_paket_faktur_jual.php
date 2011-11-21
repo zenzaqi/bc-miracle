@@ -28,8 +28,8 @@
             <th scope='col'>No Faktur</th>
             <th scope='col'>Customer</th>
             <th scope='col'>Paket</th>
+            <th scope='col'>Jumlah Diambil</th>
             <th scope='col'>Jumlah Diretur</th>
-            <th scope='col'>Jumlah Terambil</th>
             <th scope='col'>Nilai Retur (Rp)</th>
         </tr>
     </thead>
