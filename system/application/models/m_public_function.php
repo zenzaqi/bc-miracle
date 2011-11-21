@@ -2403,8 +2403,9 @@ class M_public_function extends Model{
 				,cust_nama
 				,cust_no
 				,sum(lpiutang_total) AS lpiutang_total
-				,(sum(lpiutang_total)) - ifnull(sum(vu_piutang_total_lunas.total_pelunasan),0) AS lpiutang_sisa
-			FROM master_lunas_piutang
+				/*,(sum(lpiutang_total)) - ifnull(sum(vu_piutang_total_lunas.total_pelunasan),0) AS lpiutang_sisa*/
+				,sum(lpiutang_sisa) as lpiutang_sisa
+			FROM master_lunas_piutang 
 				LEFT JOIN vu_piutang_total_lunas ON(vu_piutang_total_lunas.dpiutang_master=master_lunas_piutang.lpiutang_id)
 				LEFT JOIN customer ON(cust_id=master_lunas_piutang.lpiutang_cust)
 				WHERE master_lunas_piutang.lpiutang_stat_dok = 'Terbuka' AND lpiutang_faktur_tanggal > '2010-07-20' ";
