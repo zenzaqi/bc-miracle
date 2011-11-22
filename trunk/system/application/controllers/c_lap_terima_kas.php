@@ -16,6 +16,7 @@ class C_lap_terima_kas extends Controller {
 	//constructor
 	function C_lap_terima_kas(){
 		parent::Controller();
+		session_start();
 		$this->load->plugin('to_excel');
 	}
 	
@@ -33,6 +34,9 @@ class C_lap_terima_kas extends Controller {
 				break;
 			case "SEARCH2":
 				$this->laporan_terimakas_search2();
+				break;
+			case "CONN":
+				$this->laporan_terimakas_conn();
 				break;
 			default:
 				echo "{failure:true}";
@@ -52,12 +56,13 @@ class C_lap_terima_kas extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		if($periode=="bulan"){
 			$tgl_awal=$tahun."-".$bulan;
 		}
 		
-		$result=$this->m_public_function->get_laporan_terima_kas($tgl_awal, $tgl_akhir, $periode, $opsi);
+		$result=$this->m_public_function->get_laporan_terima_kas($tgl_awal, $tgl_akhir, $periode, $opsi, $cabang);
 		
 		echo $result; 
 	}
@@ -68,12 +73,13 @@ class C_lap_terima_kas extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		if($periode=="bulan"){
 			$tgl_awal=$tahun."-".$bulan;
 		}
 		
-		$result=$this->m_public_function->get_laporan_terima_kas_total($tgl_awal, $tgl_akhir, $periode);
+		$result=$this->m_public_function->get_laporan_terima_kas_total($tgl_awal, $tgl_akhir, $periode, $cabang);
 		
 		echo $result; 
 	}

@@ -1149,9 +1149,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 		
 		/*Pengecekan Dokumen utk Mutasi Barang */
 		function pengecekan_dokumen($tanggal_pengecekan){
-			
-			
-			
+
 			$sql_day = "SELECT mb_days from transaksi_setting";
 			$query_day= $this->db->query($sql_day);
 			$data_day= $query_day->row();
@@ -1163,7 +1161,11 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 					$tgl=$query_tgl->row();
 					$tanggal=$tgl->tanggal;
 				}
-		
+				
+			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and mutasi_status_terima = 'Tunggu'";			
+			$query_status=$this->db->query($sql_status);
+			$nbrows_status = $query_status->num_rows();
+
 			$date = date('Y-m-d');
 			//$date_1 = '01';
 			//$date_2 = '02';
@@ -1182,9 +1184,12 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
             //$datetime_now = date('Y-m-d H:i:s');
 			//echo $query_tgl;
 			
-			if ($date <= $tanggal || $tanggal_pengecekan == $date)
+			if ($date <= $tanggal || $tanggal_pengecekan == $date) 
 			{
-				return '1';
+				if ($nbrows_status <> 0)
+					return '2';
+				else
+					return '1';
 			}
 			else
 			{

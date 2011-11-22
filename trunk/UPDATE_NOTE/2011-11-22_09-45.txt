@@ -1,0 +1,2 @@
+mutasi barang tidak bisa create jika Status Terima group ybs masih ada yang 'Tunggu'
+2011-11-22_09-50.sql : menambah group_id pd vu_trans_mutasi

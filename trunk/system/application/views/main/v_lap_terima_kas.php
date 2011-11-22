@@ -50,6 +50,7 @@ var rpt_terimakas_tglawalField;
 var rpt_terimakas_tglakhirField;
 var rpt_terimakas_bulanField;
 var rpt_terimakas_tahunField;
+//var acc_group=<?=$_SESSION[SESSION_USERID];?>;
 
 var today=new Date().format('Y-m-d');
 var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
@@ -277,7 +278,7 @@ Ext.onReady(function(){
 		},[
 		/* dataIndex => insert intotbl_usersColumnModel, Mapping => for initiate table column */ 
 			{name: 'cabang_display', type: 'string', mapping: 'cabang_nama'},
-			{name: 'cabang_value', type: 'int', mapping: 'cabang_id'},
+			{name: 'cabang_value', type: 'string', mapping: 'cabang_kode'},
 		]),
 		sortInfo:{field: 'cabang_display', direction: "ASC"}
 	});
@@ -315,10 +316,10 @@ Ext.onReady(function(){
 	
 	function online_yes(btn){
 		if(btn=='yes'){
-		
-		
-		
-			Ext.Msg.alert('Status', 'Changes saved successfully.');
+			
+		}
+		else {
+			onlineField.reset();
 		}
 	}
 	
@@ -409,7 +410,6 @@ Ext.onReady(function(){
 		width: 60,
 		triggerAction: 'all'
 	});
-
 	
 	function lap_terimakas_search(){
 		
@@ -419,6 +419,7 @@ Ext.onReady(function(){
 		var terimakas_bulan="";
 		var terimakas_tahun="";
 		var terimakas_periode="";
+		var cabang_conn	= '';
 		
 		if(is_valid_form()){
 			
@@ -426,6 +427,12 @@ Ext.onReady(function(){
 			if(rpt_terimakas_tglakhirField.getValue()!==""){terimakas_tglakhir = rpt_terimakas_tglakhirField.getValue().format('Y-m-d');}
 			if(rpt_terimakas_bulanField.getValue()!==""){terimakas_bulan=rpt_terimakas_bulanField.getValue(); }
 			if(rpt_terimakas_tahunField.getValue()!==""){terimakas_tahun=rpt_terimakas_tahunField.getValue(); }
+			if(cabangField.getValue()=='Miracle Thamrin') {cabang_conn = 'default';}
+			else {
+				cabang_conn=cabangField.getValue(); 
+				if (onlineField.getValue() == true) {cabang_conn = cabang_conn + '2';}
+			}
+			
 			if (tbar_periodeField.getValue() == 'Tanggal') {
 				terimakas_periode = 'tanggal';
 			}else if (tbar_periodeField.getValue() == 'Bulan') {
@@ -439,7 +446,8 @@ Ext.onReady(function(){
 						bulan		: terimakas_bulan,
 						tahun		: terimakas_tahun,
 						periode		: terimakas_periode,
-						opsi		: 'columnmodel'
+						opsi		: 'columnmodel',
+						cabang		: cabang_conn
 			};
 					
 			rpt_terimakas_totalDataStore.baseParams = {
@@ -448,7 +456,8 @@ Ext.onReady(function(){
 						tgl_akhir	: terimakas_tglakhir,
 						bulan		: terimakas_bulan,
 						tahun		: terimakas_tahun,
-						periode		: terimakas_periode,						
+						periode		: terimakas_periode,
+						cabang		: cabang_conn						
 			};
 			
 			Ext.MessageBox.show({
@@ -497,10 +506,11 @@ Ext.onReady(function(){
 			'-', rpt_terimakas_tglawalField, 
 			'-', rpt_terimakas_tglakhirField, 
 			'-', rpt_terimakas_bulanField, 
-			'-', rpt_terimakas_tahunField, 
-			'-', cabangField,
-			//ditutup sementara, belum bisa soalnya
-			//'-', onlineField, '<b><font color=white>Online</b>',
+			'-', rpt_terimakas_tahunField,
+			<?php if(eregi('H',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>	
+				'-', cabangField, 
+				'-', onlineField, '<b><font color=white>Online</b>',
+			<?  } ?>			
 			'-', 
 		{
 			text: 'Search',
@@ -541,12 +551,8 @@ Ext.onReady(function(){
 	rpt_terimakas_bulanField.setVisible(false);
 	rpt_terimakas_tahunField.setVisible(false);			
 	cabangField.setValue('Miracle Thamrin');
-	
-	//ditutup sementara, belum bisa soalnya
-	cabangField.setVisible(false);
-	onlineField.setVisible(false);
-	
-
+				
+				
 	tbar_periodeField.on('select', function(){
 		if (tbar_periodeField.getValue() == 'Tanggal'){
 			rpt_terimakas_tglawalField.setVisible(true);

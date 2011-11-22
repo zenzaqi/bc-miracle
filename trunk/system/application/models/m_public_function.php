@@ -68,8 +68,10 @@ class M_public_function extends Model{
 		}else
 			return 0;
 	}
-		
-	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi){
+				
+	function get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi, $cabang){
+			$this->cabang = $this->load->database($cabang, TRUE);
+			
 			$sql="";
 			if($periode=='bulan')
 				$sql=	   "SELECT 		
@@ -133,7 +135,7 @@ class M_public_function extends Model{
 					ORDER BY 	urutan";
 
 			//echo $sql;
-			$query = $this->db->query($sql);
+			$query = $this->cabang->query($sql);
 			
 			if ($opsi == 'columnmodel') {
 				$nbrows = $query->num_rows();
@@ -152,7 +154,9 @@ class M_public_function extends Model{
 			}			
 	}
 	
-	function get_laporan_terima_kas_total($tgl_awal,$tgl_akhir,$periode){
+	function get_laporan_terima_kas_total($tgl_awal,$tgl_akhir,$periode, $cabang){
+			$this->cabang = $this->load->database($cabang, TRUE);
+			
 			$sql="";
 			if($periode=='bulan')
 				$sql=	   "SELECT 									
@@ -184,7 +188,7 @@ class M_public_function extends Model{
 								stat_dok='Tertutup'";
 
 			//echo $sql;
-			$query = $this->db->query($sql);
+			$query = $this->cabang->query($sql);
 						
 			$nbrows = $query->num_rows();
 			if($nbrows>0){
@@ -1002,7 +1006,7 @@ class M_public_function extends Model{
 	
 	
 	function get_cabang_list(){
-		$sql="SELECT cabang_id,cabang_nama FROM cabang where cabang_aktif='Aktif'";
+		$sql="SELECT cabang_id, cabang_nama, cabang_kode FROM cabang where cabang_aktif='Aktif'";
 		$query = $this->db->query($sql);
 		$nbrows = $query->num_rows();
 		if($nbrows>0){

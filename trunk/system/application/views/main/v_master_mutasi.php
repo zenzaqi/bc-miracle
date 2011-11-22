@@ -116,6 +116,18 @@ Ext.onReady(function(){
 							cetak=1;
 							master_mutasi_create('print');
 						break;
+						case 2:
+
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Tidak dapat melanjutkan, ada Status Terima yang masih "Tunggu" ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+
+						break
 						default:
 						Ext.MessageBox.show({
 						   title: 'Warning',

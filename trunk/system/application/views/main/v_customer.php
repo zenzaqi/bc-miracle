@@ -1021,18 +1021,25 @@ var editor_cust_note;
 if(customer_DataStore.baseParams.cust_umurstart!==null){cust_umurstart_crm=customer_DataStore.baseParams.cust_umurstart;}
 if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_DataStore.baseParams.cust_umurend;}	
 
-if(cust_tgl_opsiField.getValue()==true){
-	if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_crm_tgllahir_date=customer_DataStore.baseParams.cust_tgllahir.format('Y-m-d');}
-	if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_crm_tgllahir_dateEnd=customer_DataStore.baseParams.cust_tgllahirend.format('Y-m-d');}
-}		
-else if(cust_bulan_opsiField.getValue()==true){
+//if(cust_tgl_opsiField.getValue()==true){
+	//if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_crm_tgllahir_date=customer_DataStore.baseParams.cust_tgllahir.format('Y-m-d');}
+	//if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_crm_tgllahir_dateEnd=customer_DataStore.baseParams.cust_tgllahirend.format('Y-m-d');}
+//}		
+//else if(cust_bulan_opsiField.getValue()==true){
 	if(customer_DataStore.baseParams.cust_tgl!==null){cust_tgl_crm=customer_DataStore.baseParams.cust_tgl;}
 	if(customer_DataStore.baseParams.cust_bulan!==null){cust_bulan_crm=customer_DataStore.baseParams.cust_bulan;}
-}
-										
+//}
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});		
+		
 			Ext.Ajax.request({  
 				waitMsg: 'Please wait...',
 				url: 'index.php?c=c_customer&m=get_action',
+				timeout: 3600000,
 				params: {
 	
 					task: 'CRMVAL2',
