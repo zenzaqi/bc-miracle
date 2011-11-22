@@ -787,6 +787,10 @@ Ext.onReady(function(){
 					params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>Harga';
 				}
+				else if(record.data.menu_id==86){//cek apakah menu = lap penerimaan kas
+					params.css = ' x-grid3-check-col-td';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>Online';
+				}
 				else{
 				   	params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
