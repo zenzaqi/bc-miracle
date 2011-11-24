@@ -351,6 +351,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_order=trim(@$_POST["terima_order"]);
+		$terima_order_id=trim(@$_POST["terima_order_id"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
@@ -363,7 +364,7 @@ class C_master_terima_beli extends Controller {
 		$terima_status=trim(@$_POST["terima_status"]);
 		$cetak=trim(@$_POST["cetak"]);
 		
-		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order ,$terima_supplier ,
+		$result = $this->m_master_terima_beli->master_terima_beli_update($terima_id ,$terima_no ,$terima_order , $terima_order_id,$terima_supplier ,
 																		 $terima_surat_jalan ,$terima_pengirim ,$terima_tanggal ,
 																		 $terima_keterangan, $terima_status,$cetak, $terima_gudang  );
 		$this->detail_detail_terima_bonus_insert($result);
@@ -378,6 +379,7 @@ class C_master_terima_beli extends Controller {
 		$terima_no=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_no);
 		$terima_gudang=trim(@$_POST["terima_gudang"]);
 		$terima_order=trim(@$_POST["terima_order"]);
+		$terima_order_id=trim(@$_POST["terima_order_id"]);
 		$terima_supplier=trim(@$_POST["terima_supplier"]);
 		$terima_surat_jalan=trim(@$_POST["terima_surat_jalan"]);
 		$terima_surat_jalan=str_replace("/(<\/?)(p)([^>]*>)", "",$terima_surat_jalan);
@@ -390,7 +392,7 @@ class C_master_terima_beli extends Controller {
 		$terima_status=trim(@$_POST["terima_status"]);
 		$cetak=trim(@$_POST["cetak"]);
 		
-		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_supplier ,$terima_surat_jalan ,
+		$result=$this->m_master_terima_beli->master_terima_beli_create($terima_no ,$terima_order ,$terima_order_id, $terima_supplier ,$terima_surat_jalan ,
 																	   $terima_pengirim ,$terima_tanggal ,$terima_keterangan, $terima_status, $cetak, $terima_gudang);
 		$this->detail_detail_terima_bonus_insert($result);
 		$result=$this->detail_detail_terima_beli_insert($result);

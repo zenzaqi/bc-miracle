@@ -417,7 +417,7 @@ class M_summary_report_setup extends Model{
 				"setsr_id"=>$setsr_id,
 				"setsr_cabang"=>$setsr_cabang,
 				"setsr_tahun"=>$setsr_tahun,
-				"setsr_jenis"=>'Jum Hari',
+				"setsr_jenis"=>'Jum Hari Kerja',
 				"setsr_jan"=>$setsr_jan,
 				"setsr_feb"=>$setsr_feb,
 				"setsr_mar"=>$setsr_mar,

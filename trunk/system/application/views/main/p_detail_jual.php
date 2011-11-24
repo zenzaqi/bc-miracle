@@ -8,7 +8,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Detail Jual'>
-<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?> <br/>Group By No Faktur</caption>
+<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?> <br/>Group By No Faktur, Opsi by <?php echo $opsi; ?></caption>
 <thead> 
 	<tr> 
 		<?//<td scope='col'></td>?>
@@ -268,6 +268,13 @@
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Total Hutang (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_hutang,0,",",","); ?></td> 
+	<td colspan="7" class="foot">&nbsp;</td> 
+</tr> 
+<tr> 
+	<?//<td></td>?>
+	<td class="foot">&nbsp;</td> 
+	<th scope='row' nowrap="nowrap">Total Net Sales Produk (Rp)</th> 
+	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_nilai-$total_voucher,0,",",","); ?></td> 
 	<td colspan="7" class="foot">&nbsp;</td> 
 </tr> 
 

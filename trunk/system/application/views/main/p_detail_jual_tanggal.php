@@ -6,7 +6,7 @@
 </head>
 <body onload="window.print();">
 	<table summary='Detail Jual'>
-	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By Tanggal</caption>
+	<caption>Laporan Detail Penjualan <?php echo $jenis; ?><br/><?php echo $periode; ?><br/>Group By Tanggal, Opsi by <?php echo $opsi; ?></caption>
 	<thead> 
 		<tr> 
 			<th scope='col'>No</th>
