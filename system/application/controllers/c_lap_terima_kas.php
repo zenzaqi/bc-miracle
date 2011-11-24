@@ -91,6 +91,8 @@ class C_lap_terima_kas extends Controller {
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$opsi=(isset($_POST['opsi']) ? @$_POST['opsi'] : @$_GET['opsi']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
+		
 		
 		$data["jenis"]='Produk';
 		if($periode=="all"){
@@ -103,7 +105,7 @@ class C_lap_terima_kas extends Controller {
 		}
 		
 		
-		$data["data_print"]=$this->m_public_function->get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi);
+		$data["data_print"]=$this->m_public_function->get_laporan_terima_kas($tgl_awal,$tgl_akhir,$periode,$opsi, $cabang);
 		$data["sql"]=$this->db->last_query();
 		$print_view=$this->load->view("main/p_lap_terima_kas.php",$data,TRUE);
 		if(!file_exists("print")){

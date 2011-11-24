@@ -616,16 +616,16 @@ var editor_cust_note;
 			var cust_bb_phonegroup=null;
 			var cust_terdaftar_date_phonegroup="";
 			var cust_tgldaftar_dateEnd_phonegroup="";
-			
 			var member_terdaftar_date_phonegroup="";
-			var member_tgldaftar_dateEnd_phonegroup="";
-			
+			var member_tgldaftar_dateEnd_phonegroup="";			
 			var cust_tglawaltrans_date_phonegroup="";
 			var cust_tglawaltrans_dateEnd_phonegroup="";
 			var cust_tgl_transaksi_date_phonegroup="";
 			var cust_tgl_transaksi_dateEnd_phonegroup="";
 			var cust_tidak_tgl_transaksi_date_phonegroup="";
 			var cust_tidak_tgl_transaksi_dateEnd_phonegroup="";
+			var cust_tgllahir_phonegroup_date="";
+			var cust_tgllahir_phonegroup_dateEnd="";
 			
 			// check if we do have some search data...
 			if(customer_DataStore.baseParams.query!==null){phonegroupquery = customer_DataStore.baseParams.query;}
@@ -671,16 +671,6 @@ var editor_cust_note;
 			if(customer_DataStore.baseParams.cust_fretfulness!==null){cust_fretfulness_phonegroup = customer_DataStore.baseParams.cust_fretfulness;}
 			if(customer_DataStore.baseParams.cust_umurstart!==null){cust_umurstart_phonegroup=customer_DataStore.baseParams.cust_umurstart;}
 			if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_phonegroup=customer_DataStore.baseParams.cust_umurend;}	
-
-			if(cust_tgl_opsiField.getValue()==true){
-				if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_phonegroup_tgllahir_date=customer_DataStore.baseParams.cust_tgllahir.format('Y-m-d');}
-				if(customer_DataStore.baseParams.cust_tgllahirend!==""){cust_phonegroup_tgllahir_dateEnd=customer_DataStore.baseParams.cust_tgllahirend.format('Y-m-d');}
-			}		
-			else if(cust_bulan_opsiField.getValue()==true){
-				if(customer_DataStore.baseParams.cust_tgl!==null){cust_tgl_phonegroup=customer_DataStore.baseParams.cust_tgl;}
-				if(customer_DataStore.baseParams.cust_bulan!==null){cust_bulan_phonegroup=customer_DataStore.baseParams.cust_bulan;}
-			}
-			
 			if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_date_phonegroup=cust_terdaftarSearchField.getValue().format('Y-m-d');}
 			if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_tgldaftar_dateEnd_phonegroup=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 			
@@ -699,6 +689,17 @@ var editor_cust_note;
 			if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_dateEnd_phonegroup=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
 		//}
 		
+		//if(cust_tgl_opsiField.getValue()==true){			
+			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_phonegroup_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_phonegroup_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		//}		
+		//else if(cust_bulan_opsiField.getValue()==true){
+			if(cust_tglSearchField.getValue()!==null){cust_tgl_phonegroup=cust_tglSearchField.getValue();}
+			if(cust_bulanSearchField.getValue()!==null){cust_bulan_phonegroup=cust_bulanSearchField.getValue();}
+			if(cust_tglSearchFieldEnd.getValue()!==null){cust_tgl_phonegroupEnd=cust_tglSearchFieldEnd.getValue();}
+			if(cust_bulanSearchFieldEnd.getValue()!==null){cust_bulan_phonegroupEnd=cust_bulanSearchFieldEnd.getValue();}
+		//}
+
 		//konfirmasi untuk menghapus data phonegroup yang telah ada	
 		if(cust_delete_phonegroupField.getValue(true)){
 			hapus_cust = 1;
@@ -743,8 +744,8 @@ var editor_cust_note;
 						cust_agama: cust_phonegroup_agama,
 						cust_pendidikan:cust_phonegroup_pendidikan,
 						cust_profesi :cust_phonegroup_profesi,
-						cust_tgllahir:cust_phonegroup_tgllahir_date,
-						cust_tgllahirend:cust_phonegroup_tgllahir_dateEnd,
+						cust_tgllahir:cust_tgllahir_phonegroup_date,
+						cust_tgllahirend:cust_tgllahir_phonegroup_dateEnd,
 						// cust_hobi:
 						cust_referensi: cust_phonegroup_referensi,
 						cust_keterangan: cust_phonegroup_keterangan,
@@ -762,6 +763,8 @@ var editor_cust_note;
 						cust_umurend : cust_umurend_phonegroup,
 						cust_tgl	: cust_tgl_phonegroup,
 						cust_bulan	: cust_bulan_phonegroup,
+						cust_tglEnd	: cust_tgl_phonegroupEnd,
+						cust_bulanEnd	: cust_bulan_phonegroupEnd,
 						/*cust_hobi_baca : cust_hobi_bacacrm.getValue(),
 						cust_hobi_olah : cust_hobi_olahcrm.getValue(),
 						cust_hobi_masak : cust_hobi_masakcrm.getValue(),
@@ -1534,6 +1537,8 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		var cust_umurend_search=null;
 		var cust_tgl_search=null;
 		var cust_bulan_search=null;
+		var cust_tgl_searchEnd=null;
+		var cust_bulan_searchEnd=null;
 		var cust_bb_search=null;
 
 
@@ -1598,12 +1603,16 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 	
 		
 		if(cust_tgl_opsiField.getValue()==true){
+			
 			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_search_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
 			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_search_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
 		}		
 		else if(cust_bulan_opsiField.getValue()==true){
+
 			if(cust_tglSearchField.getValue()!==null){cust_tgl_search=cust_tglSearchField.getValue();}
 			if(cust_bulanSearchField.getValue()!==null){cust_bulan_search=cust_bulanSearchField.getValue();}
+			if(cust_tglSearchFieldEnd.getValue()!==null){cust_tgl_searchEnd=cust_tglSearchFieldEnd.getValue();}
+			if(cust_bulanSearchFieldEnd.getValue()!==null){cust_bulan_searchEnd=cust_bulanSearchFieldEnd.getValue();}
 		}
 		
 		// change the store parameters
@@ -1669,6 +1678,8 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 			cust_umurend 			: cust_umurend_search,
 			cust_tgl				: cust_tgl_search,
 			cust_bulan				: cust_bulan_search,
+			cust_tglEnd				: cust_tgl_searchEnd,
+			cust_bulanEnd				: cust_bulan_searchEnd,
 			cust_transaksi_end 		: cust_tgl_transaksi_search_dateEnd,
 			cust_transaksi_start   	: cust_tgl_transaksi_search_date,
 			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_search_date,
@@ -1758,6 +1769,14 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		cust_tidak_tgl_transaksiSearchFieldEnd.reset();
 		cust_tgl_transaksiSearchFieldStart.reset();
 		cust_tgl_transaksiSearchFieldEnd.reset();
+		
+		cust_tglSearchField.disable();
+		cust_bulanSearchField.disable();
+		cust_tglSearchFieldEnd.disable();
+		cust_bulanSearchFieldEnd.disable();
+		
+		cust_tgllahirSearchField.enable();
+		cust_tgllahirSearchFieldEnd.enable();
 	}
 
 	
@@ -1799,35 +1818,40 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		var cust_agama_print=null;
 		var cust_pendidikan_print=null;
 		var cust_profesi_print=null;
-		var cust_tgllahir_print_date="";
-		//var cust_hobi_print=null;
 		var cust_referensi_print=null;
+		var cust_referensilain_print=null;
 		var cust_keterangan_print=null;
 		var cust_member_print=null;
 		var cust_member2_print=null;
-		var cust_terdaftar_print_date="";
-		var cust_terdaftarend_print_date="";
-		
-		var member_terdaftar_print_date="";
-		var member_terdaftarend_print_date="";
-		
-		var cust_tglawaltrans_print_date="";
-		var cust_tglawaltransend_print_date="";
-		var cust_tglawaltrans_end_print_date="";
 		var cust_statusnikah_print=null;
 		var cust_priority_print=null;
 		var cust_jmlanak_print=null;
 		var cust_unit_print=null;
 		var cust_aktif_print=null;
+		var cust_bb_print=null;
 		var sortby_print=null;
-		var fretfulness_print=null;
-		
+		var fretfulness_print=null;		
 		var cust_tgl_transaksi_print_date="";
 		var cust_tgl_transaksi_print_dateEnd="";
 		var cust_tidak_tgl_transaksi_print_date="";
-		var cust_tidak_tgl_transaksi_print_dateEnd="";
-		
+		var cust_tidak_tgl_transaksi_print_dateEnd="";		
+		var cust_tgl_print=null;
+		var cust_bulan_print=null;
+		var cust_tgl_printEnd=null;
+		var cust_bulan_printEnd=null;
+		var cust_umurstart_print=null;
+		var cust_umurend_print=null;
+		var cust_tgllahir_print_date="";
+		var cust_tgllahir_print_dateEnd="";
+		var cust_terdaftar_print_date="";
+		var cust_terdaftarend_print_date="";		
+		var member_terdaftar_print_date="";
+		var member_terdaftarend_print_date="";		
+		var cust_tglawaltrans_print_date="";
+		var cust_tglawaltransend_print_date="";
+		var cust_tglawaltrans_end_print_date="";		
 		var win;              
+		
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
 		if(customer_DataStore.baseParams.cust_no!==null){cust_no_print = customer_DataStore.baseParams.cust_no;}
@@ -1852,20 +1876,11 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(customer_DataStore.baseParams.cust_agama!==null){cust_agama_print = customer_DataStore.baseParams.cust_agama;}
 		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_print = customer_DataStore.baseParams.cust_pendidikan;}
 		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_print = customer_DataStore.baseParams.cust_profesi;}
-		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_print_date = customer_DataStore.baseParams.cust_tgllahir;}
-		//if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
+		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_print=cust_referensilainSearchField.getValue();}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
-		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
-		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
-		
-		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
-		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
-		
-		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
-		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
 		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_print = customer_DataStore.baseParams.cust_jmlanak;}
@@ -1873,72 +1888,99 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_print = customer_DataStore.baseParams.cust_aktif;}
 		if(sortby_SearchField.getValue()!==null){sortby_print=sortby_SearchField.getValue();}
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_print=fretfulness_SearchField.getValue();}
-		
-		//if(cust_tgltransaksi_opsiField.getValue()==true){
-			if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_print_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
-			if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_print_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
-		//}
-		//else if(cust_tidak_tgltransaksi_opsiField.getValue()==true){
-			if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_print_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
-			if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_print_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
-		//}
-		
+		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_print=cust_umurstartSearchField.getValue();}
+		if(cust_umurendSearchField.getValue()!==null){cust_umurend_print=cust_umurendSearchField.getValue();}
+		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}		
+		if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_print_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+		if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_print_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_print_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+		if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_print_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+
+		if(cust_tgl_opsiField.getValue()==true){			
+			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_print_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_print_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		}		
+		else if(cust_bulan_opsiField.getValue()==true){
+			if(cust_tglSearchField.getValue()!==null){cust_tgl_print=cust_tglSearchField.getValue();}
+			if(cust_bulanSearchField.getValue()!==null){cust_bulan_print=cust_bulanSearchField.getValue();}
+			if(cust_tglSearchFieldEnd.getValue()!==null){cust_tgl_printEnd=cust_tglSearchFieldEnd.getValue();}
+			if(cust_bulanSearchFieldEnd.getValue()!==null){cust_bulan_printEnd=cust_bulanSearchFieldEnd.getValue();}
+		}
 
 		Ext.Ajax.request({   
 //		waitMsg: 'Please Wait...',
 		waitMsg: 'Silahkan tunggu...',
 		url: 'index.php?c=c_customer&m=get_action',
 		params: {
-			task: "PRINT",
-		  	query: searchquery,                    		
-			cust_no : cust_no_print,
-			cust_nolama : cust_nolama_print,
-			cust_no_awal : cust_no_awal_print,
-			cust_no_akhir : cust_no_akhir_print,
-			cust_nama : cust_nama_print,
-			cust_kelamin : cust_kelamin_print,
-			cust_alamat : cust_alamat_print,
-			cust_alamat2 : cust_alamat2_print,
-			cust_kota : cust_kota_print,
-			cust_kodepos : cust_kodepos_print,
-			cust_propinsi : cust_propinsi_print,
-			cust_negara : cust_negara_print,
-			cust_telprumah : cust_telprumah_print,
-			cust_telprumah2 : cust_telprumah2_print,
-			cust_telpkantor : cust_telpkantor_print,
-			cust_hp : cust_hp_print,
-			cust_hp2 : cust_hp2_print,
-			cust_hp3 : cust_hp3_print,
-			cust_email : cust_email_print,
-			cust_agama : cust_agama_print,
-			cust_pendidikan : cust_pendidikan_print,
-			cust_profesi : cust_profesi_print,
-		  	cust_tgllahir : cust_tgllahir_print_date, 
-			//cust_hobi : cust_hobi_print,
-			cust_referensi : cust_referensi_print,
-			cust_keterangan : cust_keterangan_print,
-			cust_member : cust_member_print,
-			cust_member2 : cust_member2_print,
-		  	cust_terdaftar : cust_terdaftar_print_date,
-			cust_terdaftar_end : cust_terdaftarend_print_date,
-			
-			member_terdaftarstart : member_terdaftar_print_date,
-			member_terdaftarend	 : member_terdaftarend_print_date,
-			
-			cust_tglawaltrans	: cust_tglawaltrans_print_date,	
+			task					: "PRINT",
+		  	query					: searchquery,                    		
+			cust_no 				: cust_no_print,
+			cust_nolama 			: cust_nolama_print,
+			cust_no_awal 			: cust_no_awal_print,
+			cust_no_akhir 			: cust_no_akhir_print,
+			cust_nama 				: cust_nama_print,
+			cust_kelamin 			: cust_kelamin_print,
+			cust_alamat 			: cust_alamat_print,
+			cust_alamat2 			: cust_alamat2_print,
+			cust_kota 				: cust_kota_print,
+			cust_kodepos 			: cust_kodepos_print,
+			cust_propinsi 			: cust_propinsi_print,
+			cust_negara 			: cust_negara_print,
+			cust_telprumah 			: cust_telprumah_print,
+			cust_telprumah2 		: cust_telprumah2_print,
+			cust_telpkantor 		: cust_telpkantor_print,
+			cust_hp 				: cust_hp_print,
+			cust_hp2 				: cust_hp2_print,
+			cust_hp3 				: cust_hp3_print,
+			cust_email 				: cust_email_print,
+			cust_agama 				: cust_agama_print,
+			cust_pendidikan 		: cust_pendidikan_print,
+			cust_profesi 			: cust_profesi_print,
+		  	cust_tgllahir 			: cust_tgllahir_print_date, 
+			cust_tgllahirend		:	cust_tgllahir_print_dateEnd, 
+			cust_hobi_baca 			: cust_hobi_bacaSearchField.getValue(),
+			cust_hobi_olah 			: cust_hobi_olahSearchField.getValue(),
+			cust_hobi_masak 		: cust_hobi_masakSearchField.getValue(),
+			cust_hobi_travel 		: cust_hobi_travelSearchField.getValue(),
+			cust_hobi_foto 			: cust_hobi_fotoSearchField.getValue(),
+			cust_hobi_lukis 		: cust_hobi_lukisSearchField.getValue(),
+			cust_hobi_nari 			: cust_hobi_nariSearchField.getValue(),
+			cust_hobi_lain 			: cust_hobi_lainSearchField.getValue(),
+			cust_referensilain		:	cust_referensilain_print, 
+			cust_referensi 			: cust_referensi_print,
+			cust_bb					:	cust_bb_print, 
+			cust_umurstart 			: cust_umurstart_print,
+			cust_umurend 			: cust_umurend_print,
+			cust_tgl				: cust_tgl_print,
+			cust_bulan				: cust_bulan_print,
+			cust_tglEnd				: cust_tgl_printEnd,
+			cust_bulanEnd			: cust_bulan_printEnd,
+			cust_keterangan 		: cust_keterangan_print,
+			cust_member 			: cust_member_print,
+			cust_member2 			: cust_member2_print,
+		  	cust_terdaftar 			: cust_terdaftar_print_date,
+			cust_terdaftar_end 		: cust_terdaftarend_print_date,			
+			member_terdaftarstart 	: member_terdaftar_print_date,
+			member_terdaftarend	 	: member_terdaftarend_print_date,			
+			cust_tglawaltrans		: cust_tglawaltrans_print_date,	
 			cust_tglawaltrans_end	: cust_tglawaltransend_print_date,			
-			cust_statusnikah : cust_statusnikah_print,
-			cust_priority : cust_priority_print,
-			cust_jmlanak : cust_jmlanak_print,
-			cust_unit : cust_unit_print,
-			cust_aktif : cust_aktif_print,
-			sortby		:	sortby_print,
-			cust_fretfulness : fretfulness_print,
-			cust_transaksi_start : cust_tgl_transaksi_print_date,
-			cust_transaksi_end : cust_tgl_transaksi_print_dateEnd,
+			cust_statusnikah 		: cust_statusnikah_print,
+			cust_priority 			: cust_priority_print,
+			cust_jmlanak 			: cust_jmlanak_print,
+			cust_unit 				: cust_unit_print,
+			cust_aktif 				: cust_aktif_print,
+			sortby					:	sortby_print,
+			cust_fretfulness 		: fretfulness_print,
+			cust_transaksi_start 	: cust_tgl_transaksi_print_date,
+			cust_transaksi_end 		: cust_tgl_transaksi_print_dateEnd,
 			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_print_date,
 			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_print_dateEnd,
-		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
+		  	currentlisting			: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
 		  	var result=eval(response.responseText);
@@ -1976,9 +2018,9 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 	function customer_print_label(){
 		var searchquery = "";
 		var cust_no_print=null;
+		var cust_nolama_print=null;
 		var cust_no_awal_print=null;
 		var cust_no_akhir_print=null;
-		var cust_nolama_print=null;
 		var cust_nama_print=null;
 		var cust_kelamin_print=null;
 		var cust_alamat_print=null;
@@ -1997,42 +2039,46 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		var cust_agama_print=null;
 		var cust_pendidikan_print=null;
 		var cust_profesi_print=null;
-		var cust_tgllahir_print_date="";
-		var cust_hobi_print=null;
 		var cust_referensi_print=null;
 		var cust_referensilain_print=null;
 		var cust_keterangan_print=null;
 		var cust_member_print=null;
 		var cust_member2_print=null;
-		var cust_terdaftar_print_date="";
-		var cust_terdaftarend_print_date="";
-		
-		var member_terdaftar_print_date="";
-		var member_terdaftarend_print_date="";
-		
-		var cust_tglawaltrans_print_date="";
-		var cust_tglawaltransend_print_date="";
 		var cust_statusnikah_print=null;
 		var cust_priority_print=null;
 		var cust_jmlanak_print=null;
 		var cust_unit_print=null;
 		var cust_aktif_print=null;
+		var cust_bb_print=null;
+		var sortby_print=null;
+		var fretfulness_print=null;		
 		var cust_tgl_transaksi_print_date="";
 		var cust_tgl_transaksi_print_dateEnd="";
 		var cust_tidak_tgl_transaksi_print_date="";
-		var cust_tidak_tgl_transaksi_print_dateEnd="";
-		//var cust_terdaftar_search_date="";
-		//var cust_tgldaftar_search_dateEnd="";
-		//var cust_tglawaltrans_search_date;
-		//var cust_tglawaltrans_search_dateEnd;
-		var win;              
+		var cust_tidak_tgl_transaksi_print_dateEnd="";		
+		var cust_tgl_print=null;
+		var cust_bulan_print=null;
+		var cust_tgl_printEnd=null;
+		var cust_bulan_printEnd=null;
+		var cust_umurstart_print=null;
+		var cust_umurend_print=null;
+		var cust_tgllahir_print_date="";
+		var cust_tgllahir_print_dateEnd="";
+		var cust_terdaftar_print_date="";
+		var cust_terdaftarend_print_date="";		
+		var member_terdaftar_print_date="";
+		var member_terdaftarend_print_date="";		
+		var cust_tglawaltrans_print_date="";
+		var cust_tglawaltransend_print_date="";
+		var cust_tglawaltrans_end_print_date="";	
+		var win;          
 		
-		
+		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
 		if(customer_DataStore.baseParams.cust_no!==null){cust_no_print = customer_DataStore.baseParams.cust_no;}
+		if(customer_DataStore.baseParams.cust_nolama!==null){cust_nolama_print = customer_DataStore.baseParams.cust_nolama;}
 		if(customer_DataStore.baseParams.cust_no_awal!==null){cust_no_awal_print = customer_DataStore.baseParams.cust_no_awal;}
 		if(customer_DataStore.baseParams.cust_no_akhir!==null){cust_no_akhir_print = customer_DataStore.baseParams.cust_no_akhir;}
-		if(customer_DataStore.baseParams.cust_nolama!==null){cust_nolama_print = customer_DataStore.baseParams.cust_nolama;}
 		if(customer_DataStore.baseParams.cust_nama!==null){cust_nama_print = customer_DataStore.baseParams.cust_nama;}
 		if(customer_DataStore.baseParams.cust_kelamin!==null){cust_kelamin_print = customer_DataStore.baseParams.cust_kelamin;}
 		if(customer_DataStore.baseParams.cust_alamat!==null){cust_alamat_print = customer_DataStore.baseParams.cust_alamat;}
@@ -2051,32 +2097,41 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(customer_DataStore.baseParams.cust_agama!==null){cust_agama_print = customer_DataStore.baseParams.cust_agama;}
 		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_print = customer_DataStore.baseParams.cust_pendidikan;}
 		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_print = customer_DataStore.baseParams.cust_profesi;}
-		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_print_date = customer_DataStore.baseParams.cust_tgllahir;}
-		if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_print = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_print = customer_DataStore.baseParams.cust_referensi;}
-		if(customer_DataStore.baseParams.cust_referensilain!==null){cust_referensilain_print = customer_DataStore.baseParams.cust_referensilain;}
+		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_print=cust_referensilainSearchField.getValue();}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_print = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_print = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_print = customer_DataStore.baseParams.cust_member2;}
-		
-		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
-		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
-		
-		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
-		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
-		
-		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
-		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}		
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_print = customer_DataStore.baseParams.cust_statusnikah;}
 		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_print = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_print = customer_DataStore.baseParams.cust_jmlanak;}
 		if(customer_DataStore.baseParams.cust_unit!==null){cust_unit_print = customer_DataStore.baseParams.cust_unit;}
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_print = customer_DataStore.baseParams.cust_aktif;}
+		if(sortby_SearchField.getValue()!==null){sortby_print=sortby_SearchField.getValue();}
+		if(fretfulness_SearchField.getValue()!==null){fretfulness_print=fretfulness_SearchField.getValue();}
+		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_print=cust_umurstartSearchField.getValue();}
+		if(cust_umurendSearchField.getValue()!==null){cust_umurend_print=cust_umurendSearchField.getValue();}
+		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_print_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_print_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_print_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_print_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_print_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_print_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}		
 		if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_print_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
 		if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_print_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
 		if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_print_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
 		if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_print_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
 
+		if(cust_tgl_opsiField.getValue()==true){			
+			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_print_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_print_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		}		
+		else if(cust_bulan_opsiField.getValue()==true){
+			if(cust_tglSearchField.getValue()!==null){cust_tgl_print=cust_tglSearchField.getValue();}
+			if(cust_bulanSearchField.getValue()!==null){cust_bulan_print=cust_bulanSearchField.getValue();}
+			if(cust_tglSearchFieldEnd.getValue()!==null){cust_tgl_printEnd=cust_tglSearchFieldEnd.getValue();}
+			if(cust_bulanSearchFieldEnd.getValue()!==null){cust_bulan_printEnd=cust_bulanSearchFieldEnd.getValue();}
+		}
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Silahkan tunggu ...',
@@ -2084,54 +2139,67 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		params: {
 			task: "PRINT_LABEL",
 		  	query: searchquery,                    		
-			cust_no : cust_no_print,
-			cust_no_awal : cust_no_awal_print,
-			cust_no_akhir : cust_no_akhir_print,
-			cust_nolama : cust_nolama_print,
-			cust_nama : cust_nama_print,
-			cust_kelamin : cust_kelamin_print,
-			cust_alamat : cust_alamat_print,
-			cust_alamat2 : cust_alamat2_print,
-			cust_kota : cust_kota_print,
-			cust_kodepos : cust_kodepos_print,
-			cust_propinsi : cust_propinsi_print,
-			cust_negara : cust_negara_print,
-			cust_telprumah : cust_telprumah_print,
-			cust_telprumah2 : cust_telprumah2_print,
-			cust_telpkantor : cust_telpkantor_print,
-			cust_hp : cust_hp_print,
-			cust_hp2 : cust_hp2_print,
-			cust_hp3 : cust_hp3_print,
-			cust_email : cust_email_print,
-			cust_agama : cust_agama_print,
-			cust_pendidikan : cust_pendidikan_print,
-			cust_profesi : cust_profesi_print,
-		  	cust_tgllahir : cust_tgllahir_print_date, 
-			cust_hobi : cust_hobi_print,
-			cust_referensi : cust_referensi_print,
-			cust_referensilain : cust_referensilain_print,
-			cust_keterangan : cust_keterangan_print,
-			cust_member : cust_member_print,
-			cust_member2 : cust_member2_print,
-		  	cust_terdaftar : cust_terdaftar_print_date, 
-			cust_terdaftar_end : cust_terdaftarend_print_date,
-			
-			member_terdaftarstart	 : member_terdaftar_print_date, 
-			member_terdaftarend 	: member_terdaftarend_print_date,
-			
-			cust_tglawaltrans : cust_tglawaltrans_print_date,
-			cust_tglawaltrans_end : cust_tglawaltransend_print_date,
-			cust_statusnikah : cust_statusnikah_print,
-			cust_priority : cust_priority_print,
-			cust_jmlanak : cust_jmlanak_print,
-			cust_unit : cust_unit_print,
-			cust_aktif : cust_aktif_print,
-			cust_transaksi_start : cust_tgl_transaksi_print_date,
-			cust_transaksi_end : cust_tgl_transaksi_print_dateEnd,
+			cust_no 				: cust_no_print,
+			cust_nolama 			: cust_nolama_print,
+			cust_no_awal 			: cust_no_awal_print,
+			cust_no_akhir 			: cust_no_akhir_print,
+			cust_nama 				: cust_nama_print,
+			cust_kelamin 			: cust_kelamin_print,
+			cust_alamat 			: cust_alamat_print,
+			cust_alamat2 			: cust_alamat2_print,
+			cust_kota 				: cust_kota_print,
+			cust_kodepos 			: cust_kodepos_print,
+			cust_propinsi 			: cust_propinsi_print,
+			cust_negara 			: cust_negara_print,
+			cust_telprumah 			: cust_telprumah_print,
+			cust_telprumah2 		: cust_telprumah2_print,
+			cust_telpkantor 		: cust_telpkantor_print,
+			cust_hp 				: cust_hp_print,
+			cust_hp2 				: cust_hp2_print,
+			cust_hp3 				: cust_hp3_print,
+			cust_email 				: cust_email_print,
+			cust_agama 				: cust_agama_print,
+			cust_pendidikan 		: cust_pendidikan_print,
+			cust_profesi 			: cust_profesi_print,
+		  	cust_tgllahir 			: cust_tgllahir_print_date, 
+			cust_tgllahirend		:	cust_tgllahir_print_dateEnd, 
+			cust_hobi_baca 			: cust_hobi_bacaSearchField.getValue(),
+			cust_hobi_olah 			: cust_hobi_olahSearchField.getValue(),
+			cust_hobi_masak 		: cust_hobi_masakSearchField.getValue(),
+			cust_hobi_travel 		: cust_hobi_travelSearchField.getValue(),
+			cust_hobi_foto 			: cust_hobi_fotoSearchField.getValue(),
+			cust_hobi_lukis 		: cust_hobi_lukisSearchField.getValue(),
+			cust_hobi_nari 			: cust_hobi_nariSearchField.getValue(),
+			cust_hobi_lain 			: cust_hobi_lainSearchField.getValue(),
+			cust_referensilain		:	cust_referensilain_print, 
+			cust_referensi 			: cust_referensi_print,
+			cust_bb					:	cust_bb_print, 
+			cust_umurstart 			: cust_umurstart_print,
+			cust_umurend 			: cust_umurend_print,
+			cust_tgl				: cust_tgl_print,
+			cust_bulan				: cust_bulan_print,
+			cust_tglEnd				: cust_tgl_printEnd,
+			cust_bulanEnd			: cust_bulan_printEnd,
+			cust_keterangan 		: cust_keterangan_print,
+			cust_member 			: cust_member_print,
+			cust_member2 			: cust_member2_print,
+		  	cust_terdaftar 			: cust_terdaftar_print_date,
+			cust_terdaftar_end 		: cust_terdaftarend_print_date,			
+			member_terdaftarstart 	: member_terdaftar_print_date,
+			member_terdaftarend	 	: member_terdaftarend_print_date,			
+			cust_tglawaltrans		: cust_tglawaltrans_print_date,	
+			cust_tglawaltrans_end	: cust_tglawaltransend_print_date,			
+			cust_statusnikah 		: cust_statusnikah_print,
+			cust_priority 			: cust_priority_print,
+			cust_jmlanak 			: cust_jmlanak_print,
+			cust_unit 				: cust_unit_print,
+			cust_aktif 				: cust_aktif_print,
+			sortby					:	sortby_print,
+			cust_fretfulness 		: fretfulness_print,
+			cust_transaksi_start 	: cust_tgl_transaksi_print_date,
+			cust_transaksi_end 		: cust_tgl_transaksi_print_dateEnd,
 			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_print_date,
 			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_print_dateEnd,
-			//cust_terdaftar_start : cust_terdaftar_search_date,
-			//cust_tgldaftar_end : cust_tgldaftar_search_dateEnd,
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -2190,32 +2258,40 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		var cust_agama_2excel=null;
 		var cust_pendidikan_2excel=null;
 		var cust_profesi_2excel=null;
-		var cust_tgllahir_2excel_date="";
-		//var cust_hobi_2excel=null;
 		var cust_referensi_2excel=null;
+		var cust_referensilain_2excel=null;
 		var cust_keterangan_2excel=null;
 		var cust_member_2excel=null;
 		var cust_member2_2excel=null;
-		var cust_terdaftar_2excel_date="";
-		var cust_terdaftarend_2excel_date="";
-		
-		var member_terdaftar_2excel_date="";
-		var member_terdaftarend_2excel_date="";
-		
-		var cust_tglawaltrans_2excel_date="";
-		var cust_tglawaltransend_2excel_date="";
 		var cust_statusnikah_2excel=null;
 		var cust_priority_2excel=null;
 		var cust_jmlanak_2excel=null;
 		var cust_unit_2excel=null;
 		var cust_aktif_2excel=null;
+		var cust_bb_2excel=null;
 		var sortby_2excel=null;
-		var fretfulness_2excel=null;
-		var cust_tgl_transaksi_excel_date="";
-		var cust_tgl_transaksi_excel_dateEnd="";
-		var cust_tidak_tgl_transaksi_excel_date="";
-		var cust_tidak_tgl_transaksi_excel_dateEnd="";
+		var fretfulness_2excel=null;		
+		var cust_tgl_transaksi_2excel_date="";
+		var cust_tgl_transaksi_2excel_dateEnd="";
+		var cust_tidak_tgl_transaksi_2excel_date="";
+		var cust_tidak_tgl_transaksi_2excel_dateEnd="";		
+		var cust_tgl_2excel=null;
+		var cust_bulan_2excel=null;
+		var cust_tgl_2excelEnd=null;
+		var cust_bulan_2excelEnd=null;
+		var cust_umurstart_2excel=null;
+		var cust_umurend_2excel=null;
+		var cust_tgllahir_2excel_date="";
+		var cust_tgllahir_2excel_dateEnd="";
+		var cust_terdaftar_2excel_date="";
+		var cust_terdaftarend_2excel_date="";		
+		var member_terdaftar_2excel_date="";
+		var member_terdaftarend_2excel_date="";		
+		var cust_tglawaltrans_2excel_date="";
+		var cust_tglawaltransend_2excel_date="";
+		var cust_tglawaltrans_end_2excel_date="";	
 		var win;              
+		
 		// check if we do have some search data...
 		if(customer_DataStore.baseParams.query!==null){searchquery = customer_DataStore.baseParams.query;}
 		if(customer_DataStore.baseParams.cust_no!==null){cust_no_2excel = customer_DataStore.baseParams.cust_no;}
@@ -2240,17 +2316,11 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(customer_DataStore.baseParams.cust_agama!==null){cust_agama_2excel = customer_DataStore.baseParams.cust_agama;}
 		if(customer_DataStore.baseParams.cust_pendidikan!==null){cust_pendidikan_2excel = customer_DataStore.baseParams.cust_pendidikan;}
 		if(customer_DataStore.baseParams.cust_profesi!==null){cust_profesi_2excel = customer_DataStore.baseParams.cust_profesi;}
-		if(customer_DataStore.baseParams.cust_tgllahir!==""){cust_tgllahir_2excel_date = customer_DataStore.baseParams.cust_tgllahir;}
-		//if(customer_DataStore.baseParams.cust_hobi!==null){cust_hobi_2excel = customer_DataStore.baseParams.cust_hobi;}
 		if(customer_DataStore.baseParams.cust_referensi!==null){cust_referensi_2excel = customer_DataStore.baseParams.cust_referensi;}
+		if(cust_referensilainSearchField.getValue()!==null){cust_referensilain_2excel=cust_referensilainSearchField.getValue();}
 		if(customer_DataStore.baseParams.cust_keterangan!==null){cust_keterangan_2excel = customer_DataStore.baseParams.cust_keterangan;}
 		if(customer_DataStore.baseParams.cust_member!==null){cust_member_2excel = customer_DataStore.baseParams.cust_member;}
 		if(customer_DataStore.baseParams.cust_member2!==null){cust_member2_2excel = customer_DataStore.baseParams.cust_member2;}
-		if(customer_DataStore.baseParams.cust_terdaftar!==""){cust_terdaftar_2excel_date = customer_DataStore.baseParams.cust_terdaftar;}
-		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_2excel_date = cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
-		
-		if(customer_DataStore.baseParams.cust_tglawaltrans!==""){cust_tglawaltrans_2excel_date = customer_DataStore.baseParams.cust_tglawaltrans;}
-		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_2excel_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}
 		if(customer_DataStore.baseParams.cust_statusnikah!==null){cust_statusnikah_2excel = customer_DataStore.baseParams.cust_statusnikah;}
 		if(customer_DataStore.baseParams.cust_priority!==null){cust_priority_2excel = customer_DataStore.baseParams.cust_priority;}
 		if(customer_DataStore.baseParams.cust_jmlanak!==null){cust_jmlanak_2excel = customer_DataStore.baseParams.cust_jmlanak;}
@@ -2258,16 +2328,30 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(customer_DataStore.baseParams.cust_aktif!==null){cust_aktif_2excel = customer_DataStore.baseParams.cust_aktif;}
 		if(sortby_SearchField.getValue()!==null){sortby_2excel=sortby_SearchField.getValue();}
 		if(fretfulness_SearchField.getValue()!==null){fretfulness_2excel=fretfulness_SearchField.getValue();}
-		
-		if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_excel_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
-		if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_excel_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
-		if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_excel_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
-		if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_excel_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
-		
+		if(cust_umurstartSearchField.getValue()!==null){cust_umurstart_2excel=cust_umurstartSearchField.getValue();}
+		if(cust_umurendSearchField.getValue()!==null){cust_umurend_2excel=cust_umurendSearchField.getValue();}
+		if(cust_terdaftarSearchField.getValue()!==""){cust_terdaftar_2excel_date=cust_terdaftarSearchField.getValue().format('Y-m-d');}
+		if(cust_tgldaftarSearchFieldEnd.getValue()!==""){cust_terdaftarend_2excel_date=cust_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
 		if(member_terdaftarSearchField.getValue()!==""){member_terdaftar_2excel_date=member_terdaftarSearchField.getValue().format('Y-m-d');}
 		if(member_tgldaftarSearchFieldEnd.getValue()!==""){member_terdaftarend_2excel_date=member_tgldaftarSearchFieldEnd.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchField.getValue()!==""){cust_tglawaltrans_2excel_date=cust_tglawaltransSearchField.getValue().format('Y-m-d');}
+		if(cust_tglawaltransSearchFieldEnd.getValue()!==""){cust_tglawaltransend_2excel_date=cust_tglawaltransSearchFieldEnd.getValue().format('Y-m-d');}		
+		if(cust_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tgl_transaksi_2excel_date=cust_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+		if(cust_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tgl_transaksi_2excel_dateEnd=cust_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
+		if(cust_tidak_tgl_transaksiSearchFieldStart.getValue()!==""){cust_tidak_tgl_transaksi_2excel_date=cust_tidak_tgl_transaksiSearchFieldStart.getValue().format('Y-m-d');}
+		if(cust_tidak_tgl_transaksiSearchFieldEnd.getValue()!==""){cust_tidak_tgl_transaksi_2excel_dateEnd=cust_tidak_tgl_transaksiSearchFieldEnd.getValue().format('Y-m-d');}
 
-
+		if(cust_tgl_opsiField.getValue()==true){			
+			if(cust_tgllahirSearchField.getValue()!==""){cust_tgllahir_2excel_date=cust_tgllahirSearchField.getValue().format('Y-m-d');}
+			if(cust_tgllahirSearchFieldEnd.getValue()!==""){cust_tgllahir_2excel_dateEnd=cust_tgllahirSearchFieldEnd.getValue().format('Y-m-d');}
+		}		
+		else if(cust_bulan_opsiField.getValue()==true){
+			if(cust_tglSearchField.getValue()!==null){cust_tgl_2excel=cust_tglSearchField.getValue();}
+			if(cust_bulanSearchField.getValue()!==null){cust_bulan_2excel=cust_bulanSearchField.getValue();}
+			if(cust_tglSearchFieldEnd.getValue()!==null){cust_tgl_2excelEnd=cust_tglSearchFieldEnd.getValue();}
+			if(cust_bulanSearchFieldEnd.getValue()!==null){cust_bulan_2excelEnd=cust_bulanSearchFieldEnd.getValue();}
+		}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_customer&m=get_action',
@@ -2276,51 +2360,67 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
 			cust_no : cust_no_2excel,
-			cust_nolama : cust_nolama_2excel,
-			cust_no_awal : cust_no_awal_2excel,
-			cust_no_akhir : cust_no_akhir_2excel,
-			cust_nama : cust_nama_2excel,
-			cust_kelamin : cust_kelamin_2excel,
-			cust_alamat : cust_alamat_2excel,
-			cust_alamat2 : cust_alamat2_2excel,
-			cust_kota : cust_kota_2excel,
-			cust_kodepos : cust_kodepos_2excel,
-			cust_propinsi : cust_propinsi_2excel,
-			cust_negara : cust_negara_2excel,
-			cust_telprumah : cust_telprumah_2excel,
-			cust_telprumah2 : cust_telprumah2_2excel,
-			cust_telpkantor : cust_telpkantor_2excel,
-			cust_hp : cust_hp_2excel,
-			cust_hp2 : cust_hp2_2excel,
-			cust_hp3 : cust_hp3_2excel,
-			cust_email : cust_email_2excel,
-			cust_agama : cust_agama_2excel,
-			cust_pendidikan : cust_pendidikan_2excel,
-			cust_profesi : cust_profesi_2excel,
-		  	cust_tgllahir : cust_tgllahir_2excel_date, 
-			cust_referensi : cust_referensi_2excel,
-			cust_keterangan : cust_keterangan_2excel,
-			cust_member : cust_member_2excel,
-			cust_member2 : cust_member2_2excel,
-		  	cust_terdaftar : cust_terdaftar_2excel_date, 
-			cust_tgldaftarend : cust_terdaftarend_2excel_date,
-			
-			member_terdaftarstart	: member_terdaftar_2excel_date,
-			member_terdaftarend		: member_terdaftarend_2excel_date,
-			
-			cust_tglawaltrans : cust_tglawaltrans_2excel_date, 
-			cust_tglawaltrans_end : cust_tglawaltransend_2excel_date,
-			cust_statusnikah : cust_statusnikah_2excel,
-			cust_priority : cust_priority_2excel,
-			cust_jmlanak : cust_jmlanak_2excel,
-			cust_unit : cust_unit_2excel,
-			cust_aktif : cust_aktif_2excel,
-			sortby		:	sortby_2excel,
-			cust_fretfulness : fretfulness_2excel,
-			cust_transaksi_start : cust_tgl_transaksi_excel_date,
-			cust_transaksi_end : cust_tgl_transaksi_excel_dateEnd,
-			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_excel_date,
-			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_excel_dateEnd,
+			cust_no 				: cust_no_2excel,
+			cust_nolama 			: cust_nolama_2excel,
+			cust_no_awal 			: cust_no_awal_2excel,
+			cust_no_akhir 			: cust_no_akhir_2excel,
+			cust_nama 				: cust_nama_2excel,
+			cust_kelamin 			: cust_kelamin_2excel,
+			cust_alamat 			: cust_alamat_2excel,
+			cust_alamat2 			: cust_alamat2_2excel,
+			cust_kota 				: cust_kota_2excel,
+			cust_kodepos 			: cust_kodepos_2excel,
+			cust_propinsi 			: cust_propinsi_2excel,
+			cust_negara 			: cust_negara_2excel,
+			cust_telprumah 			: cust_telprumah_2excel,
+			cust_telprumah2 		: cust_telprumah2_2excel,
+			cust_telpkantor 		: cust_telpkantor_2excel,
+			cust_hp 				: cust_hp_2excel,
+			cust_hp2 				: cust_hp2_2excel,
+			cust_hp3 				: cust_hp3_2excel,
+			cust_email 				: cust_email_2excel,
+			cust_agama 				: cust_agama_2excel,
+			cust_pendidikan 		: cust_pendidikan_2excel,
+			cust_profesi 			: cust_profesi_2excel,
+		  	cust_tgllahir 			: cust_tgllahir_2excel_date, 
+			cust_tgllahirend		:	cust_tgllahir_2excel_dateEnd, 
+			cust_hobi_baca 			: cust_hobi_bacaSearchField.getValue(),
+			cust_hobi_olah 			: cust_hobi_olahSearchField.getValue(),
+			cust_hobi_masak 		: cust_hobi_masakSearchField.getValue(),
+			cust_hobi_travel 		: cust_hobi_travelSearchField.getValue(),
+			cust_hobi_foto 			: cust_hobi_fotoSearchField.getValue(),
+			cust_hobi_lukis 		: cust_hobi_lukisSearchField.getValue(),
+			cust_hobi_nari 			: cust_hobi_nariSearchField.getValue(),
+			cust_hobi_lain 			: cust_hobi_lainSearchField.getValue(),
+			cust_referensilain		:	cust_referensilain_2excel, 
+			cust_referensi 			: cust_referensi_2excel,
+			cust_bb					:	cust_bb_2excel, 
+			cust_umurstart 			: cust_umurstart_2excel,
+			cust_umurend 			: cust_umurend_2excel,
+			cust_tgl				: cust_tgl_2excel,
+			cust_bulan				: cust_bulan_2excel,
+			cust_tglEnd				: cust_tgl_2excelEnd,
+			cust_bulanEnd			: cust_bulan_2excelEnd,
+			cust_keterangan 		: cust_keterangan_2excel,
+			cust_member 			: cust_member_2excel,
+			cust_member2 			: cust_member2_2excel,
+		  	cust_terdaftar 			: cust_terdaftar_2excel_date,
+			cust_terdaftar_end 		: cust_terdaftarend_2excel_date,			
+			member_terdaftarstart 	: member_terdaftar_2excel_date,
+			member_terdaftarend	 	: member_terdaftarend_2excel_date,			
+			cust_tglawaltrans		: cust_tglawaltrans_2excel_date,	
+			cust_tglawaltrans_end	: cust_tglawaltransend_2excel_date,			
+			cust_statusnikah 		: cust_statusnikah_2excel,
+			cust_priority 			: cust_priority_2excel,
+			cust_jmlanak 			: cust_jmlanak_2excel,
+			cust_unit 				: cust_unit_2excel,
+			cust_aktif 				: cust_aktif_2excel,
+			sortby					:	sortby_2excel,
+			cust_fretfulness 		: fretfulness_2excel,
+			cust_transaksi_start 	: cust_tgl_transaksi_2excel_date,
+			cust_transaksi_end 		: cust_tgl_transaksi_2excel_dateEnd,
+			cust_tidak_transaksi_start : cust_tidak_tgl_transaksi_2excel_date,
+			cust_tidak_transaksi_end   : cust_tidak_tgl_transaksi_2excel_dateEnd,
 		  	currentlisting: customer_DataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
@@ -2478,7 +2578,7 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 				cust_referensilain	:cust_referensilain_update,		
 				cust_keterangan	:cust_keterangan_update,		
 				cust_terdaftar	: cust_terdaftar_update_date,	
-cust_tglawaltrans	:	cust_tglawaltrans_update_date,			
+				cust_tglawaltrans	:	cust_tglawaltrans_update_date,			
 				cust_statusnikah:cust_statusnikah_update,
 				//cust_priority	:cust_priority_update,
 				cust_jmlanak	:cust_jmlanak_update,			
@@ -5352,12 +5452,9 @@ Ext.onReady(function(){
 		format : 'Y-m-d',
 		anchor: '50%'
 	});*/
-	
-	// Identify  cust_hobi Field 
+
 	cust_tglSearchField= new Ext.form.ComboBox({
 		id: 'cust_tglSearchField',
-		//fieldLabel: 'Hobi',
-		//maxLength: 500,
 		store:new Ext.data.SimpleStore({
 			fields:['cust_tgl_display'],
 			data: [['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['10'],['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
@@ -5365,7 +5462,7 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'cust_tgl_display',
 		valueField: 'cust_tgl_display',
-		anchor: '80%',
+		anchor: '55%',
 		triggerAction: 'all',
 		
 	});
@@ -5380,8 +5477,39 @@ Ext.onReady(function(){
 		mode: 'local',
 		displayField: 'display',
 		valueField: 'value',
-		value: thismonth,
-		width: 100,
+		//value: thismonth,
+		width: 90,
+		triggerAction: 'all'
+	});
+	
+	cust_label_tglSearchField=new Ext.form.Label({ html: ' &nbsp; &nbsp; s/d'});
+	
+	cust_tglSearchFieldEnd= new Ext.form.ComboBox({
+		id: 'cust_tglSearchFieldEnd',
+		store:new Ext.data.SimpleStore({
+			fields:['cust_tgl_displayEnd'],
+			data: [['1'],['2'],['3'],['4'],['5'],['6'],['7'],['8'],['9'],['10'],['11'],['12'],['13'],['14'],['15'],['16'],['17'],['18'],['19'],['20'],['21'],['22'],['23'],['24'],['25'],['26'],['27'],['28'],['29'],['30'],['31']]
+		}),	
+		mode: 'local',
+		displayField: 'cust_tgl_displayEnd',
+		valueField: 'cust_tgl_displayEnd',
+		anchor: '55%',
+		triggerAction: 'all',
+		
+	});
+	
+	cust_bulanSearchFieldEnd=new Ext.form.ComboBox({
+		id:'cust_bulanSearchFieldEnd',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		//value: thismonth,
+		width: 90,
 		triggerAction: 'all'
 	});
 	
@@ -5410,15 +5538,23 @@ Ext.onReady(function(){
 		boxLabel:'Antara Tanggal',
 		width:100,
 		name: 'filter_lahir',
-		checked: true
-		/*handler: function(node,checked){
+		checked: true,
+		handler: function(node,checked){
 		if(cust_tgl_opsiField.checked==true){
-			cust_tgllahirSearchField.disabled=false;
-			cust_tgllahirSearchFieldEnd.disabled=false;
+			cust_tglSearchField.disable();
+			cust_bulanSearchField.disable();
+			cust_tglSearchFieldEnd.disable();
+			cust_bulanSearchFieldEnd.disable();			
+			cust_tgllahirSearchField.enable();
+			cust_tgllahirSearchFieldEnd.enable();
 		}else{
-			cust_tgllahirSearchField.disabled=true;
-			cust_tgllahirSearchFieldEnd.disabled=true;
-		}}*/
+			cust_tglSearchField.enable();
+			cust_bulanSearchField.enable();
+			cust_tglSearchFieldEnd.enable();
+			cust_bulanSearchFieldEnd.enable();			
+			cust_tgllahirSearchField.disable();
+			cust_tgllahirSearchFieldEnd.disable();
+		}}
 	});
 	
 	cust_bulan_opsiField=new Ext.form.Radio({
@@ -5434,8 +5570,8 @@ Ext.onReady(function(){
 	cust_tanggal_opsiSearchField=new Ext.form.FieldSet({
 		id:'cust_tanggal_opsiSearchField',
 		title: 'Tanggal Lahir',
-		layout: 'column',
-		boduStyle: 'padding: 5px;',
+		layout: 'form',
+		//bodyStyle: 'padding: 5px;',
 		anchor: '95%',
 		//border : false,
 		//frame: false,
@@ -5468,16 +5604,31 @@ Ext.onReady(function(){
 				items:[cust_bulan_opsiField,{
 					   		layout: 'form',
 							border: false,
-							labelWidth: 15,
-							bodyStyle:'padding:3px',
+							labelWidth: 5,
+							//bodyStyle:'padding:3px',
 							items:[cust_tglSearchField]
 					   },{
 					   		layout: 'form',
 							border: false,
 							labelWidth: 15,
-							bodyStyle:'padding:3px',
-							labelSeparator: ' ', 
+							//bodyStyle:'padding:3px',
+							labelSeparator: '', 
 							items:[cust_bulanSearchField]
+					   },
+					   cust_label_tglSearchField,
+					   {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 5,
+							//bodyStyle:'padding:3px',
+							items:[cust_tglSearchFieldEnd]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							//bodyStyle:'padding:3px',
+							labelSeparator: '', 
+							items:[cust_bulanSearchFieldEnd]
 					   }]
 			}]
 	});
@@ -6020,19 +6171,19 @@ Ext.onReady(function(){
 		labelWidth:120,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 900,        
+		width: 1000,        
 		items: [{
 			layout:'column',
 			border:false,
 			items:[
 			{
-				columnWidth:0.5,
+				columnWidth:0.45,
 				layout: 'form',
 				border:false,
 				items: [cust_nocust_opsiSearchField, cust_memberSearchField, cust_memberSearch2Field, cust_namaSearchField, cust_panggilanSearchField, cust_alamat_groupSearch, cust_kontak_groupSearch, cust_hobiSearchField,cust_kelaminSearchField, cust_agamaSearchField, cust_pendidikanSearchField, cust_tanggaltransaksi_opsiSearchField] 
 			}
 			,{
-				columnWidth:0.5,
+				columnWidth:0.55,
 				layout: 'form',
 				border:false,
 				items: [cust_tanggal_opsiSearchField, cust_umur_groupSearch, cust_tanggaldaftar_opsiSearchField, member_tanggaldaftar_opsiSearchField, cust_tglawaltrans_opsiSearchField, cust_profesiSearchField, cust_referensiSearchField, cust_referensilainSearchField, cust_keteranganSearchField, cust_statusnikahSearchField, cust_prioritySearchField, cust_jmlanakSearchField, cust_unitSearchField, fretfulness_SearchField, cust_aktifSearchField,sortby_SearchField] 

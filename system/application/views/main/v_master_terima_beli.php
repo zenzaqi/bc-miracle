@@ -200,6 +200,7 @@ Ext.onReady(function(){
 		var terima_id_create_pk=null;
 		var terima_no_create=null;
 		var terima_order_create=null;
+		var terima_order_id_create=null;
 		var terima_gudang_create=null;
 		var terima_supplier_create=null;
 		var terima_surat_jalan_create=null;
@@ -211,6 +212,7 @@ Ext.onReady(function(){
 		if(terima_idField.getValue()!== null){terima_id_create_pk = terima_idField.getValue();}else{terima_id_create_pk=get_pk_id();}
 		if(terima_noField.getValue()!== null){terima_no_create = terima_noField.getValue();}
 		if(terima_orderField.getValue()!== null){terima_order_create = terima_orderField.getValue();}
+		if(terima_order_idField.getValue()!== null){terima_order_id_create = terima_order_idField.getValue();}
 		if(terima_gudangField.getValue()!== null){terima_gudang_create = terima_gudangField.getValue();}
 		if(terima_supplierField.getValue()!== null){terima_supplier_create = terima_supplier_idField.getValue();}
 		if(terima_surat_jalanField.getValue()!== null){terima_surat_jalan_create = terima_surat_jalanField.getValue();}
@@ -301,6 +303,7 @@ Ext.onReady(function(){
 				terima_id			: terima_id_create_pk,
 				terima_no			: terima_no_create,
 				terima_order		: terima_order_create,
+				terima_order_id		: terima_order_id_create,
 				terima_supplier		: terima_supplier_create,
 				terima_surat_jalan	: terima_surat_jalan_create,
 				terima_pengirim		: terima_pengirim_create,
@@ -323,7 +326,7 @@ Ext.onReady(function(){
 			},
 			success: function(response){
 				var result=eval(response.responseText);
-				if(result==99){
+				if(result=='-99'){
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'No OP tidak ditemukan dalam system !.',

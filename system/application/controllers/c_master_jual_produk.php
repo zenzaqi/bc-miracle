@@ -74,7 +74,7 @@ class C_master_jual_produk extends Controller {
 		}
 		
 		if($opsi=='rekap'){
-		
+			$data["opsi"]='Rekap';
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_rekap_jual_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
@@ -85,6 +85,7 @@ class C_master_jual_produk extends Controller {
 			echo '1'; 
 			
 		}else if($opsi=='detail'){
+			$data["opsi"]='Detail';
 			if ($opsi_status=='semua') {
 					switch($group){
 					case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
@@ -111,6 +112,7 @@ class C_master_jual_produk extends Controller {
 			echo '1'; 
 		}
 		else if($opsi=='grooming'){
+			$data["opsi"]='Grooming';
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
 				case "Karyawan": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;

@@ -606,6 +606,11 @@ Ext.onReady(function(){
 				}else if (tbar_periodeField.getValue() == 'Bulan') {
 					terimakas_periode = 'bulan';
 				}
+			if(cabangField.getValue()=='Miracle Thamrin') {cabang_conn = 'default';}
+			else {
+				cabang_conn=cabangField.getValue(); 
+				if (onlineField.getValue() == true) {cabang_conn = cabang_conn + '2';}
+			}
 		
 			Ext.Ajax.request({   
 				waitMsg: 'Please Wait...',
@@ -616,8 +621,8 @@ Ext.onReady(function(){
 					opsi		: terimakas_opsi,
 					bulan		: terimakas_bulan,
 					tahun		: terimakas_tahun,
-					periode		: terimakas_periode
-					
+					periode		: terimakas_periode,
+					cabang		: cabang_conn
 				}, 
 				success: function(response){              
 					var result=eval(response.responseText);
