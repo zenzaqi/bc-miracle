@@ -454,30 +454,23 @@ Ext.onReady(function(){
 	/* setValue to EDIT */
 	function master_order_beli_set_form(){
 		$login = <?=$_SESSION[SESSION_GROUPID];?>;   
-		
-		permission_op_DataStore.load({
-				params: {task : "LIST"},
-					callback: function(opts, success, response)  {
-						  if (success) {
-							if(permission_op_DataStore.getCount()>0){
-								for(i=0; i<permission_op_DataStore.getCount();i++){
-										var group_id = [];
-										group_id_record=permission_op_DataStore.getAt(i).data;
-										group_id_temp.setValue(group_id_record.perm_group);
-										group_id = group_id_temp.getValue();
-										
-										if(group_id == $login){
-											master_order_beli_createForm.saveHargaButton.enable();
-											save_hargaField.setValue('1');
-										}else{
-											master_order_beli_createForm.saveHargaButton.disable();
-											save_hargaField.setValue('2');
-										}										
-								}
-							}
-						  }
-					  }
-				});	
+		Ext.Ajax.request({
+			url: 'index.php?c=c_master_order_beli&m=get_permission_op',
+			params: {id : $login},
+			timeout: 60000,
+			success: function(response){
+				var result=eval(response.responseText);
+			switch(result){
+			case 1 :
+				master_order_beli_createForm.saveHargaButton.enable();
+				save_hargaField.setValue('1');
+				break;
+			default :
+				master_order_beli_createForm.saveHargaButton.disable();
+				save_hargaField.setValue('2');
+			};
+			}
+		});
 		
 		order_idField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_id'));
 		order_noField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_no'));
@@ -1708,7 +1701,7 @@ Ext.onReady(function(){
 			editor:  order_harga_satuanField,
 		
 			renderer: function(val){
-				var harga = val;
+				harga = val;
 				if (save_hargaField.getValue()=='1'){
 					return '<span> '+Ext.util.Format.number(harga,'0,000')+'</span>';
 				}else{
@@ -1728,6 +1721,7 @@ Ext.onReady(function(){
 			
 			renderer: function(v, params, record){
 				subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
+				
 				if (save_hargaField.getValue()=='1'){
 					return '<span> '+subtotal+'</span>';
 				}else{
@@ -1736,7 +1730,7 @@ Ext.onReady(function(){
 			}
 			
 			
-			/*<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
+		/*	<? if(($_SESSION[SESSION_GROUPID]==9 || ($_SESSION[SESSION_GROUPID]==1) || ($_SESSION[SESSION_GROUPID]==29))){ ?>
 			renderer: function(v, params, record){
 					subtotal=Ext.util.Format.number((record.data.dorder_harga * record.data.dorder_jumlah*(100-record.data.dorder_diskon)/100),"0,000");
                     return '<span>' + subtotal+ '</span>';
@@ -2545,6 +2539,7 @@ Ext.onReady(function(){
 		order_itemField.setValue(CurrencyFormatted(detail_order_beli_DataStore.getCount()));
 		<?php if(($_SESSION[SESSION_GROUPID]==9) || ($_SESSION[SESSION_GROUPID]==1)){ ?>
 		
+
 		var diskon=convertToNumber(order_diskonField.getValue())*total_harga/100;
 		if (save_hargaField.getValue()=='1'){
 			order_totalField.setValue(CurrencyFormatted(total_harga));
