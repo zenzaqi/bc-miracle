@@ -727,6 +727,54 @@ WHERE mutasi_status='Tertutup' and master_mutasi.mutasi_barang_keluar = 1 ".$ord
 		}
 	}
 	
+	/* Function tempp*/
+	function get_produk_jadi_detail_list2($query,$aktif){
+		$rs_rows=0;
+		if(is_numeric($query)==true){
+			$sql_dproduk="SELECT dmracikan_produk FROM detail_mutasi_racikan WHERE dmracikan_mutasi_id='$query'";
+			$rs=$this->db->query($sql_dproduk);
+			$rs_rows=$rs->num_rows();
+		}
+		
+		if($aktif=='yes'){
+			$sql="select * from vu_produk WHERE produk_aktif='Aktif'";
+		}else{
+			$sql="select * from vu_produk";
+		}
+		
+		if($query<>"" && is_numeric($query)==false){
+			$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+			$sql.=" (produk_kode like '%".$query."%' or produk_nama like '%".$query."%' ) ";
+		}else{
+			if($rs_rows){
+				$filter="";
+				$sql.=eregi("WHERE",$sql)? " AND ":" WHERE ";
+				foreach($rs->result() as $row_dproduk){
+					
+					$filter.="OR produk_id='".$row_dproduk->dmracikan_produk."' ";
+				}
+				$sql=$sql."(".substr($filter,2,strlen($filter)).")";
+			}
+		}
+		
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		if(($aktif<>'yesno')){
+			
+			$result = $this->db->query($sql);
+		}
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	}
+	
+	
 	/*Function utk mengload detail produk jadi list ketika form EDIT */
 	function get_produk_jadi_detail_list($master_id,$query){
 
@@ -1162,7 +1210,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 					$tanggal=$tgl->tanggal;
 				}
 				
-			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and mutasi_status_terima = 'Tunggu'";			
+			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' OR mutasi_status = 'Tunggu')";			
 			$query_status=$this->db->query($sql_status);
 			$nbrows_status = $query_status->num_rows();
 
