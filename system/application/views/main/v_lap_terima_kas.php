@@ -468,10 +468,20 @@ Ext.onReady(function(){
 			});
 			
 			rpt_terimakasDataStore.reload({
-				callback: function(opts, success, response){
-				if(success){
-					rpt_terimakas_totalDataStore.reload();
-					Ext.MessageBox.hide();
+				callback: function(r, opt, success){
+					if(success == true){
+						rpt_terimakas_totalDataStore.reload();
+						Ext.MessageBox.hide();
+					}
+					else if (success == false){
+						Ext.MessageBox.hide();
+						Ext.MessageBox.show({
+							title: 'Error',
+							msg: 'Tidak bisa terhubung dengan database server',
+							buttons: Ext.MessageBox.OK,
+							animEl: 'database',
+							icon: Ext.MessageBox.ERROR
+						});	
 					}
 				}
 			});		
