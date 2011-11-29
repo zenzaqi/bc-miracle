@@ -135,7 +135,8 @@ class M_lap_netsales_all extends Model{
 							v.tns_date_create
 						from vu_netsales_all v
 						where v.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
-						and v.cabang_kode = ".$cabang;
+						and v.cabang_kode = ".$cabang."
+						order by v.tns_tanggal asc";
 				
 		$result = $this->db->query($sql);
 		$nbrows = $result->num_rows();
