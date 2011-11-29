@@ -266,6 +266,27 @@ Ext.onReady(function(){
 	
 	rpt_terimakas_totalColumnModel.defaultSortable= true;
 
+	rpt_terimakas_targetColumnModel = new Ext.grid.ColumnModel(
+		[{	
+			align : 'Left',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			readOnly: true,
+			width: 540,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + '<span style="font-weight:bold">YES Target 2011</span>' + '</div>',
+			dataIndex: 'nilai_grand_total',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 85,	//55,
+			sortable: true
+		}
+	]);
+	
+	rpt_terimakas_targetColumnModel.defaultSortable= true;
+
 	cbo_cabangDataStore = new Ext.data.Store({
 		id: 'cbo_cabangDataStore',
 		proxy: new Ext.data.HttpProxy({
@@ -553,6 +574,21 @@ Ext.onReady(function(){
 	});
 	rpt_terimakas_totalListEditorGrid.render();
 
+	rpt_terimakas_targetListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'rpt_terimakas_targetListEditorGrid',
+		el: 'fp_terimakas_target_list',
+		title: '',
+		autoHeight: true,
+		store: rpt_terimakas_totalDataStore, // DataStore
+		cm: rpt_terimakas_targetColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800,
+	});
+	rpt_terimakas_targetListEditorGrid.render();
 	
 	// inisialisasi awal
 	tbar_periodeField.setValue('Tanggal');
@@ -683,6 +719,9 @@ Ext.onReady(function(){
         <div id="fp_info"></div>	
 		<div id="fp_rpt_terimakas_list"></div> 
 		<div id="fp_terimakas_total_list"></div> 
+		<?php if(eregi('H',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+		<div id="fp_terimakas_target_list"></div> 
+		<?  } ?>
 <!--		<div id="elwindow_rpt_terimakas"></div>	-->
     </div>
 </div>

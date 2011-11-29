@@ -167,25 +167,29 @@ Ext.onReady(function(){
 	cabang_thField=new Ext.form.Checkbox({
 		id : 'cabang_thField',
 		boxLabel: 'TH',
-		name: 'cabang_th'
+		name: 'cabang_th',
+		checked: true
 	});
 				
 	cabang_kiField=new Ext.form.Checkbox({
 		id : 'cabang_kiField',
 		boxLabel: 'KI',
-		name: 'cabang_ki'
+		name: 'cabang_ki',
+		checked: true
 	});
 
 	cabang_hrField=new Ext.form.Checkbox({
 		id : 'cabang_hrField',
 		boxLabel: 'HR',
-		name: 'cabang_hr'
+		name: 'cabang_hr',
+		checked: true
 	});
 
 	cabang_tpField=new Ext.form.Checkbox({
 		id : 'cabang_tpField',
 		boxLabel: 'TP',
-		name: 'cabang_tp'
+		name: 'cabang_tp',
+		checked: true
 	});
 
 	cabang_mlgField=new Ext.form.Checkbox({
@@ -198,7 +202,8 @@ Ext.onReady(function(){
 	cabang_dpsField=new Ext.form.Checkbox({
 		id : 'cabang_dpsField',
 		boxLabel: 'DPS',
-		name: 'cabang_dps'
+		name: 'cabang_dps',
+		checked: true
 	});
 
 	cabang_jktField=new Ext.form.Checkbox({
@@ -211,7 +216,8 @@ Ext.onReady(function(){
 	cabang_mtaField=new Ext.form.Checkbox({
 		id : 'cabang_mtaField',
 		boxLabel: 'MTA',
-		name: 'cabang_mta'
+		name: 'cabang_mta',
+		checked: true
 	});
 
 	cabang_blpnField=new Ext.form.Checkbox({
@@ -245,25 +251,29 @@ Ext.onReady(function(){
 	cabang_mdnField=new Ext.form.Checkbox({
 		id : 'cabang_mdnField',
 		boxLabel: 'MDN',
-		name: 'cabang_mdn'
+		name: 'cabang_mdn',
+		checked: true
 	});
 
 	cabang_lbkField=new Ext.form.Checkbox({
 		id : 'cabang_lbkField',
 		boxLabel: 'LBK',
-		name: 'cabang_lbk'
+		name: 'cabang_lbk',
+		checked: true
 	});
 
 	cabang_mndField=new Ext.form.Checkbox({
 		id : 'cabang_mndField',
 		boxLabel: 'MND',
-		name: 'cabang_mnd'
+		name: 'cabang_mnd',
+		checked: true
 	});
 
 	cabang_ygkField=new Ext.form.Checkbox({
 		id : 'cabang_ygkField',
 		boxLabel: 'YGK',
-		name: 'cabang_ygk'
+		name: 'cabang_ygk',
+		checked: true	
 	});
 
 	cabangGroup = new Ext.form.FieldSet({
@@ -809,7 +819,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		width: 100,
         //endDateField: 'rpt_netsales_all_tglakhirField'
-		value: today
+		value: yesterday
 	});
 	
 	rpt_netsales_all_tglakhirField= new Ext.form.DateField({
@@ -821,7 +831,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		width: 100,
         //startDateField: 'rpt_netsales_all_tglawalField',
-		value: today
+		value: yesterday
 	});
 	
 	rpt_netsales_all_rekapField=new Ext.form.Radio({
@@ -839,7 +849,7 @@ Ext.onReady(function(){
 	
 	var rpt_netsales_all_periodeField=new Ext.form.FieldSet({
 		id:'rpt_netsales_all_periodeField',
-		title : 'Periode',
+		title : 'Periode (maks H-1)',
 		layout: 'form',
 		bodyStyle:'padding: 0px 0px 0',
 		frame: false,
@@ -1023,6 +1033,7 @@ Ext.onReady(function(){
 					cabang_ygk	: netsales_all_ygk					
 		};
 				
+		
 		Ext.MessageBox.show({
 		   msg: 'Sedang Proses...',
 		   progressText: 'proses...',
@@ -1034,6 +1045,66 @@ Ext.onReady(function(){
 			callback: function(opts, success, response){
 				if(success){
 					netsales_allTotalDataStore.reload();
+					
+					Ext.Ajax.request({
+						waitMsg: 'Please Wait...',
+						url: 'index.php?c=c_lap_netsales_all&m=get_action',
+						params: {
+							task: 'CHART',						
+							tgl_awal	: netsales_all_tglawal,
+							tgl_akhir	: netsales_all_tglakhir,
+							bulan		: netsales_all_bulan,
+							tahun		: netsales_all_tahun,
+							periode		: netsales_all_periode,
+							cabang_th	: netsales_all_th,
+							cabang_ki	: netsales_all_ki,
+							cabang_hr	: netsales_all_hr,
+							cabang_tp	: netsales_all_tp,
+							cabang_dps	: netsales_all_dps,
+							cabang_mta	: netsales_all_mta,
+							cabang_mdn	: netsales_all_mdn,
+							cabang_lbk	: netsales_all_lbk,
+							cabang_mnd	: netsales_all_mnd,
+							cabang_ygk	: netsales_all_ygk,
+							method: 'POST'
+							
+						},
+						success: function(result, request){
+							var hasil=eval(result.responseText);
+							switch(hasil){
+							case 1:
+								Ext.MessageBox.hide();
+								
+								laporannetsales_allChart.render();
+								laporannetsales_allChart.update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_all_graph.php'></iframe>");
+								
+
+								break;
+							default:
+								Ext.MessageBox.hide();
+								Ext.MessageBox.show({
+									title: 'Warning',
+									//msg: FAILED_PRINT,
+									buttons: Ext.MessageBox.OK,
+									animEl: 'save',
+									icon: Ext.MessageBox.WARNING
+								});
+								break;
+							}
+						},
+						failure: function(response){
+							Ext.MessageBox.hide();
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: FAILED_CONNECTION,
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+						}
+					});
+					
+					
 					Ext.MessageBox.hide();
 					}
 				}
@@ -1095,12 +1166,12 @@ Ext.onReady(function(){
 	});
   	rpt_netsales_allWindow.show();
 	
-	/*
+	
 	laporannetsales_allChart =	new Ext.form.FormPanel ({
-							title: 'Grafik Laporan Net Sales',
+							title: 'Grafik Laporan Net Sales Semua Cabang',
 							resizeable: true,
 							id: 'laporannetsales_allChart',
-							el: '',
+							el: 'div_chart_laporan_netsales_all',
 					        width: 1200,
 							height: 450,
 							collapsible: true,
@@ -1110,7 +1181,7 @@ Ext.onReady(function(){
 							html: "<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_all_graph.php'></iframe>",
 							autoDestroy: true,
 							});
-	*/
+	
 	//EVENTS
 	
 	/*rpt_netsales_all_rekapField.on("check", function(){
@@ -1150,6 +1221,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
 		<div id=""></div>
+		<div id="div_chart_laporan_netsales_all"></div>
 		<div id="fp_netsales_all_list"></div>
         <div id="fp_netsales_allTotal_list"></div>
         <div id="fp_netsales_all"></div>

@@ -479,7 +479,7 @@ Ext.onReady(function(){
 	setcrm_recency_lessthan_Field= new Ext.form.NumberField({
 		id: 'setcrm_recency_lessthan_Field',
 		name: 'setcrm_recency_value_lessthan',
-		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> < </span>',
+		fieldLabel: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold"> <= </span>',
 		allowNegatife : false,
 		blankText: '7,5',
 		allowDecimals: true,
