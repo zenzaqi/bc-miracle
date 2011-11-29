@@ -1215,22 +1215,6 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			$nbrows_status = $query_status->num_rows();
 
 			$date = date('Y-m-d');
-			//$date_1 = '01';
-			//$date_2 = '02';
-			//$date_3 = '03';
-			//$month = substr($tanggal_pengecekan,5,2);
-			//$year = substr($tanggal_pengecekan,0,4);
-			//$begin=mktime(0,0,0,$month,1,$year);
-			//$nextmonth=strtotime("+1month",$begin);
-			
-			//$month_next = substr(date("Y-m-d",$nextmonth),5,2);
-			//$year_next = substr(date("Y-m-d",$nextmonth),0,4);
-			
-			//$tanggal_1 = $year_next.'-'.$month_next.'-'.$date_1;
-			//$tanggal_2 = $year_next.'-'.$month_next.'-'.$date_2;
-			//$tanggal_3 = $year_next.'-'.$month_next.'-'.$date_3;
-            //$datetime_now = date('Y-m-d H:i:s');
-			//echo $query_tgl;
 			
 			if ($date <= $tanggal || $tanggal_pengecekan == $date) 
 			{
@@ -1243,9 +1227,41 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			{
 				return '0';
 			}
-		
 		}
 		
+		/*Pengecekan Dokumen2 utk Save and Close */
+		function pengecekan_dokumen2($tanggal_pengecekan,$no_mb){
+
+			$sql_day = "SELECT mb_days from transaksi_setting";
+			$query_day= $this->db->query($sql_day);
+			$data_day= $query_day->row();
+			$day= $data_day->mb_days;
+			
+			$sql_tgl = "SELECT date_format(date_add('".$tanggal_pengecekan."',interval ".$day." day),'%Y-%m-%d') as tanggal";			
+			$query_tgl=$this->db->query($sql_tgl);
+				if($query_tgl->num_rows()){
+					$tgl=$query_tgl->row();
+					$tanggal=$tgl->tanggal;
+				}
+				
+			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu') and mutasi_id <> '".$no_mb."'";			
+			$query_status=$this->db->query($sql_status);
+			$nbrows_status = $query_status->num_rows();
+
+			$date = date('Y-m-d');
+			
+			if ($date <= $tanggal || $tanggal_pengecekan == $date) 
+			{
+				if ($nbrows_status <> 0)
+					return '2';
+				else
+					return '1';
+			}
+			else
+			{
+				return '0';
+			}
+		}
 		
 		//function for get list record
 		function master_mutasi_list($filter,$start,$end){

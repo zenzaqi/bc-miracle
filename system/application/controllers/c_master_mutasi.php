@@ -317,7 +317,10 @@ class C_master_mutasi extends Controller {
 				break;
 			case "CEK":
 				$this->master_mutasi_pengecekan();
-				break;	
+				break;
+			case "CEK2":
+				$this->master_mutasi_pengecekan2();
+				break;				
 			case "CREATE":
 				$this->master_mutasi_create();
 				break;
@@ -459,6 +462,15 @@ class C_master_mutasi extends Controller {
 		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
 	
 		$result=$this->m_master_mutasi->pengecekan_dokumen($tanggal_pengecekan);
+		echo $result;
+	}
+	
+	function master_mutasi_pengecekan2(){
+	
+		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+		$no_mb=trim(@$_POST["no_mb"]);
+	
+		$result=$this->m_master_mutasi->pengecekan_dokumen2($tanggal_pengecekan,$no_mb);
 		echo $result;
 	}
 	

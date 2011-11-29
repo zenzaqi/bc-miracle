@@ -107,7 +107,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
 				task: "CEK",
-				tanggal_pengecekan	: mutasi_tanggal_create_date	
+				tanggal_pengecekan	: mutasi_tanggal_create_date
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -162,8 +162,9 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
-				task: "CEK",
-				tanggal_pengecekan	: mutasi_tanggal_create_date
+				task: "CEK2",
+				tanggal_pengecekan	: mutasi_tanggal_create_date,
+				no_mb : master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id')
 		
 			}, 
 			success: function(response){							
@@ -173,6 +174,18 @@ Ext.onReady(function(){
 							cetak=0;
 							master_mutasi_create();
 						break;
+						case 2:
+
+						Ext.MessageBox.show({
+						   title: 'Warning',
+						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
+						   msg: 'Tidak dapat melanjutkan, ada Status Terima yang masih "Tunggu" ',
+						   buttons: Ext.MessageBox.OK,
+						   animEl: 'save',
+						   icon: Ext.MessageBox.WARNING
+						});
+
+						break
 						default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
