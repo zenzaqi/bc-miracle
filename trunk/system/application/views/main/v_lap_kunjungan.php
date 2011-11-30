@@ -924,9 +924,7 @@ Ext.onReady(function(){
 		boduStyle: 'padding: 5px;',
 		anchor: '95%',
 		items:[{
-				layout: 'column',
-				border: false,
-				items:[{
+
 					   		layout: 'form',
 							border: false,
 							bodyStyle:'padding:3px',
@@ -938,7 +936,7 @@ Ext.onReady(function(){
 							bodyStyle:'padding:3px',
 							labelSeparator: ' ', 
 							items:[lap_kunjungan_tgllahirSearchFieldEnd]
-					   }]
+
 			}]
 	});
 	
