@@ -201,7 +201,35 @@ class M_public_function extends Model{
 				return '({"total":"0", "results":""})';
 			}						
 	}
-			
+
+	function get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang){
+			$sql="";
+			if($periode=='bulan')
+				$sql = "SELECT 0 as tt_rp";
+			else if($periode=='tanggal')
+				$sql = "SELECT 				
+							tt_rp
+						FROM temp_target
+						WHERE date_format(tt_tgl_awal,'%Y-%m-%d') = '".$tgl_awal."' 
+							AND date_format(tt_tgl_akhir,'%Y-%m-%d') ='".$tgl_akhir."'
+							AND tt_cabang_kode = '".$cabang."'";
+
+			//echo $sql;
+			$query = $this->db->query($sql);
+						
+			$nbrows = $query->num_rows();
+			if($nbrows>0){
+				foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			} else {
+				return '({"total":"0", "results":""})';
+			}						
+	}
+
+	
 	function get_order_beli_detail_by_order_id($orderid){
 		$sql="SELECT detail_order_beli.dorder_produk as dorder_produk,detail_order_beli.dorder_satuan as dorder_satuan,
 							detail_order_beli.dorder_jumlah as jumlah_order,
