@@ -97,6 +97,7 @@ class C_lap_terima_kas extends Controller {
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
 		
 		$result=$this->m_public_function->get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang);
+		//$result=$this->m_public_function->get_laporan_terima_kas_target();
 		
 		echo $result; 
 	}
@@ -155,6 +156,7 @@ class C_lap_terima_kas extends Controller {
 		}
 		
 		$result=$this->m_public_function->get_laporan_terima_kas_total($tgl_awal, $tgl_akhir, $periode, $cabang);
+		$result_target=$this->m_public_function->get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang);
 		
 			if ($periode == "tanggal")
 			{
@@ -168,18 +170,30 @@ class C_lap_terima_kas extends Controller {
 		
 
 		$title = "Laporan Penerimaan Kas ".$bulan_title;
-		
+		//print_r($result_target);
 		// data array untuk Y Axis
 		$terimakas_type = array("nilai_grand_total" => "Total");
-		
 		
 		$result_data = explode(",",$result,2);
 		$count = strlen($result_data[1]) - 1;
 	
-	
-		$data_parse = json_decode("{".substr($result_data[1],0,$count),true);
-		//print_r($data_parse);
-		echo $data_parse['results'][0]['nilai_grand_total'];
+		if ($result_target==1)
+			echo 1;
+		else {
+		
+			$result_data_target = explode(",",$result_target,2);
+			$count_target = strlen($result_data_target[1]) - 1;
+		
+			$data_parse = json_decode("{".substr($result_data[1],0,$count),true);
+			$data_parse_target = json_decode("{".substr($result_data_target[1],0,$count_target),true);
+			
+			
+			//print_r($data_parse_target);
+			//if ($data_parse_target['results'][0]['tt_rp'] > 0) {
+			
+			echo $data_parse['results'][0]['nilai_grand_total'] / $data_parse_target['results'][0]['tt_rp'];
+		}
+		//exit;
 		//echo 76;
 		/*
 		//print_r($result_data[1]);

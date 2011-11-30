@@ -149,9 +149,9 @@ Ext.onReady(function(){
 		id: 'rpt_terimakas_targetDataStore',
 		proxy: new Ext.data.HttpProxy({
 			url: 'index.php?c=c_lap_terima_kas&m=get_action', 
-			method: 'POST'
+			method: 'POST',
 		}),
-		baseParams:{task: "LIST",start:0}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "TARGET",start:0}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -161,7 +161,7 @@ Ext.onReady(function(){
 		]),
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
-	
+	rpt_terimakas_targetDataStore.load();
 	rpt_terimakasColumnModel = new Ext.grid.ColumnModel(
 		[{	
 			align : 'Left',
@@ -690,7 +690,7 @@ Ext.onReady(function(){
 	rpt_terimakas_bulanField.setVisible(false);
 	rpt_terimakas_tahunField.setVisible(false);			
 	cabangField.setValue('Miracle Thamrin');
-				
+		
 				
 	tbar_periodeField.on('select', function(){
 		if (tbar_periodeField.getValue() == 'Tanggal'){
@@ -815,7 +815,7 @@ Ext.onReady(function(){
 							layout: 'fit',
 							//autoLoad: 'true',
 							frame: true,
-							html: "<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai=10'></iframe>",
+							html: "<iframe frameborder='0' width='100%' height='100%' src=''></iframe>",
 							autoDestroy: true,
 							});
 });
