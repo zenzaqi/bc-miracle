@@ -416,12 +416,12 @@ Ext.onReady(function(){
 			tooltip: 'Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
-		}/*, '-',{
+		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			handler: produk_print  
-		}*/
+			handler: net_sales_print  
+		}
 		]
 	});
 	net_salesListEditorGrid.render();
@@ -762,6 +762,71 @@ Ext.onReady(function(){
 	}
 
 	/* Function for print List Grid */
+	function net_sales_print(){
+		//var searchquery = "";
+	
+		var netsales_tglawal_print="";
+		var netsales_tglakhir_print="";
+		var netsales_bulan_print="";
+		var netsales_tahun_print="";
+		var netsales_periode_print="";
+		var netsales_groupby_print = "";      	
+		// check if we do have some search data...
+		if(net_salesDataStore.baseParams.tgl_awal!==null){netsales_tglawal_print = net_salesDataStore.baseParams.tgl_awal;}
+		if(net_salesDataStore.baseParams.tgl_akhir!==null){netsales_tglakhir_print = net_salesDataStore.baseParams.tgl_akhir;}
+		if(net_salesDataStore.baseParams.bulan!==null){netsales_bulan_print = net_salesDataStore.baseParams.bulan;}
+		if(net_salesDataStore.baseParams.tahun!==null){netsales_tahun_print = net_salesDataStore.baseParams.tahun;}
+		if(net_salesDataStore.baseParams.periode!==null){netsales_periode_print = net_salesDataStore.baseParams.periode;}
+		if(net_salesDataStore.baseParams.groupby!==null){netsales_groupby_print = net_salesDataStore.baseParams.groupby;}
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_lap_netsales&m=get_action',
+		params: {
+			task: "PRINT",
+			tgl_awal	: netsales_tglawal_print,
+			tgl_akhir	: netsales_tglakhir_print,
+			bulan		: netsales_bulan_print,
+			tahun		: netsales_tahun_print,
+			periode		: netsales_periode_print,
+			groupby		: netsales_groupby_print,
+		  	//query		: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+		  	currentlisting: net_salesDataStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/lap_netsales.html','lap_netsales','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+
+	/* Function for print List Grid */
 	function lap_netsales_search(){
 		
 		var netsales_tglawal="";
@@ -812,6 +877,59 @@ Ext.onReady(function(){
 			callback: function(opts, success, response){
 				if(success){
 					net_salesTotalDataStore.reload();
+					
+					//CHART
+					Ext.Ajax.request({
+						waitMsg: 'Please Wait...',
+						url: 'index.php?c=c_lap_netsales&m=get_action',
+						params: {
+							task: 'CHART_SEARCH',
+							tgl_awal	: netsales_tglawal,
+							tgl_akhir	: netsales_tglakhir,
+							bulan		: netsales_bulan,
+							tahun		: netsales_tahun,
+							periode		: netsales_periode,
+							method: 'POST'
+							
+						},
+						success: function(result, request){
+							var hasil=eval(result.responseText);
+							switch(hasil){
+							case 1:
+								Ext.MessageBox.hide();
+								
+								//laporanNetSalesChart.render();
+								laporanNetSalesChart.show();
+								//Ext.getCmp('laporanNetSalesChart').update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+								
+								laporanNetSalesChart.update("<iframe frameborder='0' width='100%' height='100%' src='<?=base_url();?>print/lap_netsales_graph.php'></iframe>");
+								
+
+								break;
+							default:
+								Ext.MessageBox.hide();
+								Ext.MessageBox.show({
+									title: 'Warning',
+									//msg: FAILED_PRINT,
+									buttons: Ext.MessageBox.OK,
+									animEl: 'save',
+									icon: Ext.MessageBox.WARNING
+								});
+								break;
+							}
+						},
+						failure: function(response){
+							Ext.MessageBox.hide();
+							Ext.MessageBox.show({
+							   title: 'Error',
+							   msg: FAILED_CONNECTION,
+							   buttons: Ext.MessageBox.OK,
+							   animEl: 'database',
+							   icon: Ext.MessageBox.ERROR
+							});
+						}
+					});	
+					
 					Ext.MessageBox.hide();
 					}
 				}
