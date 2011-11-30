@@ -331,7 +331,7 @@ Ext.onReady(function(){
 			text: 'Search',
 			tooltip: 'Search',
 			iconCls:'icon-search',
-			handler: display_form_search_window 
+			handler: display_form_search_window_all
 		}, '-', 
 			{
 			text: 'Export Excel',
@@ -697,13 +697,13 @@ Ext.onReady(function(){
 		x: 0,
 		y: 0,
 		modal: true,
-		renderTo: 'elwindow_report_tindakan_search',
+		renderTo: 'elwindow_report_tindakan_all_search',
 		items: report_tindakan_all_searchForm
 	});
     /* End of Function */ 
 	 
   	/* Function for Displaying  Search Window Form */
-	function display_form_search_window(){
+	function display_form_search_window_all(){
 		if(!report_tindakan_all_searchWindow.isVisible()){
 			report_tindakan_reset_formSearch();
 			report_tindakan_all_searchWindow.show();
@@ -906,7 +906,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_report_tindakan_all"></div>
-        <div id="elwindow_report_tindakan_search"></div>
+        <div id="elwindow_report_tindakan_all_search"></div>
     </div>
 </div>
 </body>
