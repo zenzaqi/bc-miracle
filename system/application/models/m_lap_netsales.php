@@ -137,8 +137,7 @@ class M_lap_netsales extends Model{
 		//return $query->result();
 		
 		if ($chart == 'true')
-		{ 
-	
+		{ 	
 		  return $result->result();
 		}
 		else
@@ -186,11 +185,34 @@ class M_lap_netsales extends Model{
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
 				return '({"total":"0", "results":""})';
-			}
-
-	
-	
+			}	
 	}
 
+	//function for print record
+	function laporan_netsales_print($tgl_awal, $tgl_akhir, $bulan, $tahun, $periode, $groupby){
+	//full query
+		if ($periode == '' && $groupby == ''){
+			$periode = 'bulan';
+			$tahun = date('Y');
+			$bulan = date('m');
+		} 
+		if ($periode == 'bulan'){
+			$tgl_awal	= $tahun.'-'.$bulan.'-01';
+			$tgl_akhir	= $tahun.'-'.$bulan.'-'.cal_days_in_month(CAL_GREGORIAN, $bulan, $tahun); //mengetahui jumlah hari dlm bulan itu
+		}
+			
+		//select dari tabel temp / hasilnya
+		$sql		=  "select *
+						from temp_netsales t
+						where t.tns_tanggal between '".$tgl_awal."' and '".$tgl_akhir."'
+						order by t.tns_tanggal asc";
+				
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+
+		return $result;
+	}
+
+	
 }
 ?>
