@@ -308,7 +308,7 @@ Ext.onReady(function(){
 	/* Declare DataStore and  show datagrid list */
 	report_tindakan_allListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'report_tindakan_allListEditorGrid',
-		el: 'fp_report_tindakan',
+		el: 'fp_report_tindakan_all',
 		title: 'Laporan Jumlah Tindakan Semua Dokter',
 		autoHeight: true,
 		store: report_tindakan_allDataStore, // DataStore
@@ -394,7 +394,16 @@ Ext.onReady(function(){
 		width: 75
 	});
 	
-
+	function headerSettingLabel(daftarNamaDokter){
+	//alert('here');
+	
+		var i=2;
+		daftarNamaDokter.each(function(nama){
+		//alert(nama.get("karyawan_nama"));
+			report_tindakan_allColumnModel.setColumnHeader(i, nama.get("karyawan_nama"));
+			i++;
+		});
+	}
 	/* Function for action list search */
 	function report_tindakan_search(){
 		// render according to a SQL date format.
@@ -439,6 +448,35 @@ Ext.onReady(function(){
 		// Cause the datastore to do another query : 
 		report_tindakan_allDataStore.reload({params: {start: 0, limit: pageS}});
 		//report_tindakan_allColumnModel.setColumnHeader(2, 'abc');
+		
+		var daftarNamaDokter = new Ext.data.JsonStore({
+				url: 'index.php?c=c_lap_jum_tindakan_all_dokter&m=get_action',
+				baseParams:{
+					task: 'LIST_DOKTER',
+					method: 'POST',
+					//variable here
+					report_tindakan_id	: report_tindakan_id_search, 
+					trawat_tglapp_start	: report_tindakan_tgl_start_search,
+					trawat_tglapp_end	: report_tindakan_tgl_end_search,
+					report_groupby		: report_tindakan_groupby_search,
+					bulan				: report_tindakan_tmedis_bulan,
+					tahun				: report_tindakan_tmedis_tahun,
+					periode				: report_tindakan_tmedis_periode,
+					start:0,
+					limit:pageS
+				},
+				root: 'results',
+				fields: [
+					{name: 'dokter_id', mapping: 'dokter_id'},
+					{name:'karyawan_nama', mapping:'karyawan_nama'}
+				],
+				listeners: {
+				load: headerSettingLabel
+				}	
+			});
+			daftarNamaDokter.load();
+		
+		
 		
 		}
 		else {
@@ -867,7 +905,7 @@ Ext.onReady(function(){
 <body>
 <div>
 	<div class="col">
-        <div id="fp_report_tindakan"></div>
+        <div id="fp_report_tindakan_all"></div>
         <div id="elwindow_report_tindakan_search"></div>
     </div>
 </div>
