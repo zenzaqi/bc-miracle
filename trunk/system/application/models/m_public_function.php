@@ -204,20 +204,31 @@ class M_public_function extends Model{
 
 	function get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang){
 			$sql="";
+			
 			if($periode=='bulan')
-				$sql = "SELECT 0 as tt_rp";
+				$sql = "SELECT 1 as tt_rp";
 			else if($periode=='tanggal')
+			{			
 				$sql = "SELECT 				
 							tt_rp
 						FROM temp_target
 						WHERE date_format(tt_tgl_awal,'%Y-%m-%d') = '".$tgl_awal."' 
 							AND date_format(tt_tgl_akhir,'%Y-%m-%d') ='".$tgl_akhir."'
-							AND tt_cabang_kode = '".$cabang."'";
+							AND tt_cabang_kode = '".$cabang."'"; 
+			
+			}
+
 
 			//echo $sql;
 			$query = $this->db->query($sql);
+			/*
+			foreach($query->result() as $row){
+					$arr[] = $row;
+				}
+			return $arr; */
 						
 			$nbrows = $query->num_rows();
+			
 			if($nbrows>0){
 				foreach($query->result() as $row){
 					$arr[] = $row;
@@ -225,7 +236,8 @@ class M_public_function extends Model{
 				$jsonresult = json_encode($arr);
 				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
 			} else {
-				return '({"total":"0", "results":""})';
+				
+				return 1;//'({"total":"0", "results":""})';
 			}						
 	}
 
