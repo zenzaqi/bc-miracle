@@ -414,6 +414,7 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 			$nbrows = $result_temp->num_rows();
 			
 			$limit = $query_temp." LIMIT ".$start.",".$end;		
+			
 			$result_temp = $this->db->query($limit);    
 			
 			if($nbrows>0){
@@ -427,6 +428,76 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 			}
 		}
 		
+	//function for advanced search record
+	function report_daftar_dokter($tgl_awal,$periode,$report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end){
+			//full query
+			if ($periode == 'bulan'){
+				$isiperiode=" (date_format(jrawat_tanggal,'%Y-%m')='".$tgl_awal."') and " ;
+				$tglpaket=" (date_format(dapaket_tgl_ambil,'%Y-%m')='".$tgl_awal."') and " ;
+			}else if($periode == 'tanggal'){
+				$isiperiode=" (jrawat_tanggal BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and ";
+				$tglpaket=" (dapaket_tgl_ambil BETWEEN '".$trawat_tglapp_start."' AND '".$trawat_tglapp_end."') and " ;
+			}
+			
+			// testing lap format all dokter
+			
+				//$sql_del = "delete from temp_jml_tindakan";
+				//$this->db->query($sql_del);
+				
+			
+				$sql_dokter =  "select t.dokter_id, k.karyawan_nama
+								from
+								(
+								select 
+									ifnull(t1.dtrawat_petugas1, d1.drawat_sales) as dokter_id
+								from detail_jual_rawat d1
+								left join master_jual_rawat m1 on m1.jrawat_id = d1.drawat_master
+								left join tindakan_detail t1 on t1.dtrawat_id = d1.drawat_dtrawat
+								left join karyawan as dokter on t1.dtrawat_petugas1 = dokter.karyawan_id
+								left join karyawan as referal on d1.drawat_sales = referal.karyawan_id
+								where 
+									".$isiperiode."
+									m1.jrawat_stat_dok = 'Tertutup'
+									and t1.dtrawat_petugas1 <> 0 and t1.dtrawat_petugas1 <> 5 /*suster*/ and t1.dtrawat_petugas1 <> 60 /*available dr*/
+									
+								union
+
+								select
+									ifnull(t2.dtrawat_petugas1, d2.dapaket_referal) as dokter_id
+								from detail_ambil_paket d2
+								left join tindakan_detail t2 on t2.dtrawat_id = d2.dapaket_dtrawat
+								left join karyawan as dokter on t2.dtrawat_petugas1 = dokter.karyawan_id
+								left join karyawan as referal on d2.dapaket_referal = referal.karyawan_id
+								where 
+									".$tglpaket."
+									d2.dapaket_stat_dok = 'Tertutup'
+									and t2.dtrawat_petugas1 <> 0 and t2.dtrawat_petugas1 <> 5 /*suster*/ and t2.dtrawat_petugas1 <> 60 /*available dr*/
+								)
+								as t
+								left join karyawan k on k.karyawan_id = t.dokter_id
+								order by k.karyawan_nama
+								";
+				$res_dokter = $this->db->query($sql_dokter);
+				//echo $sql_dokter;
+				
+				
+			$nbrows = $res_dokter->num_rows();
+			
+			$limit = $sql_dokter." LIMIT ".$start.",".$end;		
+			
+			$res_dokter = $this->db->query($limit);    
+			
+			if($nbrows>0){
+				foreach($res_dokter->result() as $row){
+					$arr[] = $row;
+				}
+				$jsonresult = json_encode($arr);
+				return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				//return $jsonresult;
+			} else {
+				return '({"total":"0", "results":""})';
+			}
+		}
 	//function for advanced search record
 	function report_tindakan_search2($tgl_awal,$periode ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end){
 			//full query
