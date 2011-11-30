@@ -35,6 +35,9 @@ class C_lap_terima_kas extends Controller {
 			case "SEARCH2":
 				$this->laporan_terimakas_search2();
 				break;
+			case "TARGET":
+				$this->laporan_terimakas_target();
+				break;
 			case "CONN":
 				$this->laporan_terimakas_conn();
 				break;
@@ -83,6 +86,17 @@ class C_lap_terima_kas extends Controller {
 		}
 		
 		$result=$this->m_public_function->get_laporan_terima_kas_total($tgl_awal, $tgl_akhir, $periode, $cabang);
+		
+		echo $result; 
+	}
+	
+	function laporan_terimakas_target(){
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
+		$tgl_awal=(isset($_POST['tgl_awal']) ? @$_POST['tgl_awal'] : @$_GET['tgl_awal']);
+		$tgl_akhir=(isset($_POST['tgl_akhir']) ? @$_POST['tgl_akhir'] : @$_GET['tgl_akhir']);				
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
+		$result=$this->m_public_function->get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang);
 		
 		echo $result; 
 	}

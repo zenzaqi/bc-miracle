@@ -145,6 +145,23 @@ Ext.onReady(function(){
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
 
+	rpt_terimakas_targetDataStore = new Ext.data.Store({
+		id: 'rpt_terimakas_targetDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_terima_kas&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST",start:0}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: ''
+		},[
+			{name: 'tt_rp', type: 'float', mapping: 'tt_rp'},
+		]),
+		//sortInfo:{field: 'tot_net', direction: "DESC"}
+	});
+	
 	rpt_terimakasColumnModel = new Ext.grid.ColumnModel(
 		[{	
 			align : 'Left',
@@ -283,6 +300,27 @@ Ext.onReady(function(){
 		]),
 		sortInfo:{field: 'cabang_display', direction: "ASC"}
 	});
+
+	rpt_terimakas_targetColumnModel = new Ext.grid.ColumnModel(
+		[{	
+			align : 'Left',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			readOnly: true,
+			width: 540,	//55,
+			sortable: true
+		},{	
+			align : 'Right',
+			header: '<div align="center">' + '<span style="font-weight:bold">YES Target 2011</span>' + '</div>',
+			dataIndex: 'tt_rp',
+			renderer: Ext.util.Format.numberRenderer('0,000'),
+			readOnly: true,
+			width: 85,	//55,
+			sortable: true
+		}
+	]);
+	
+	rpt_terimakas_targetColumnModel.defaultSortable= true;
 
 	var cabang_tpl = new Ext.XTemplate(
         '<tpl for="."><div class="search-item">',
@@ -461,6 +499,7 @@ Ext.onReady(function(){
 						cabang		: cabang_conn						
 			};
 			
+			
 			Ext.MessageBox.show({
 			   msg: 'Sedang Proses...',
 			   progressText: 'proses...',
@@ -474,64 +513,76 @@ Ext.onReady(function(){
 						rpt_terimakas_totalDataStore.reload();
 						//terimakasChart.render();
 						//terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai=80'></iframe>");
-								
+						
+							
+						<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+
+						rpt_terimakas_targetDataStore.baseParams = {
+							task		: 'TARGET',		
+							tgl_awal	: terimakas_tglawal,
+							tgl_akhir	: terimakas_tglakhir,	
+							periode		: terimakas_periode,
+							cabang		: cabang_conn						
+						};
+						
+						rpt_terimakas_targetDataStore.reload();
 						
 						Ext.Ajax.request({
-						waitMsg: 'Please Wait...',
-						url: 'index.php?c=c_lap_terima_kas&m=get_action',
-						params: {
-							task: 'CHART',						
-							tgl_awal	: terimakas_tglawal,
-							tgl_akhir	: terimakas_tglakhir,
-							bulan		: terimakas_bulan,
-							tahun		: terimakas_tahun,
-							periode		: terimakas_periode,
-							opsi		: 'columnmodel',
-							cabang		: cabang_conn,
-							method: 'POST'
-							
-						},
-						success: function(result, request){
-							var hasil=eval(result.responseText);
-							if (hasil > 0 )
-							{
-								terimakasChart.render();
-								terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
+							waitMsg: 'Please Wait...',
+							url: 'index.php?c=c_lap_terima_kas&m=get_action',
+							params: {
+								task: 'CHART',						
+								tgl_awal	: terimakas_tglawal,
+								tgl_akhir	: terimakas_tglakhir,
+								bulan		: terimakas_bulan,
+								tahun		: terimakas_tahun,
+								periode		: terimakas_periode,
+								opsi		: 'columnmodel',
+								cabang		: cabang_conn,
+								method: 'POST'
 								
-							}
-							/*
-							switch(hasil){
-							case 1:
-								Ext.MessageBox.hide();
-								
-								laporannetsales_allChart.render();
-								laporannetsales_allChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart'></iframe>");
-								break;
-							default:
+							},
+							success: function(result, request){
+								var hasil=eval(result.responseText);
+								if (hasil > 0 )
+								{
+									terimakasChart.render();
+									terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
+									
+								}
+								/*
+								switch(hasil){
+								case 1:
+									Ext.MessageBox.hide();
+									
+									laporannetsales_allChart.render();
+									laporannetsales_allChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart'></iframe>");
+									break;
+								default:
+									Ext.MessageBox.hide();
+									Ext.MessageBox.show({
+										title: 'Warning',
+										//msg: FAILED_PRINT,
+										buttons: Ext.MessageBox.OK,
+										animEl: 'save',
+										icon: Ext.MessageBox.WARNING
+									});
+									break;
+								} */
+							},
+							failure: function(response){
 								Ext.MessageBox.hide();
 								Ext.MessageBox.show({
-									title: 'Warning',
-									//msg: FAILED_PRINT,
-									buttons: Ext.MessageBox.OK,
-									animEl: 'save',
-									icon: Ext.MessageBox.WARNING
+								   title: 'Error',
+								   msg: FAILED_CONNECTION,
+								   buttons: Ext.MessageBox.OK,
+								   animEl: 'database',
+								   icon: Ext.MessageBox.ERROR
 								});
-								break;
-							} */
-						},
-						failure: function(response){
-							Ext.MessageBox.hide();
-							Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: FAILED_CONNECTION,
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-							});
-						}
-					}); 
+							}
+						}); 
 						
-						
+						<?  } ?>
 						
 						
 						Ext.MessageBox.hide();
@@ -616,6 +667,21 @@ Ext.onReady(function(){
 	});
 	rpt_terimakas_totalListEditorGrid.render();
 
+	rpt_terimakas_targetListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'rpt_terimakas_targetListEditorGrid',
+		el: 'fp_terimakas_target_list',
+		title: '',
+		autoHeight: true,
+		store: rpt_terimakas_targetDataStore, // DataStore
+		cm: rpt_terimakas_targetColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 800,
+	});
+	rpt_terimakas_targetListEditorGrid.render();
 	
 	// inisialisasi awal
 	tbar_periodeField.setValue('Tanggal');
@@ -743,8 +809,8 @@ Ext.onReady(function(){
 							resizeable: true,
 							id: 'terimakasChart',
 							el: 'elwindow_chart_terimakas',
-					        width: 1200,
-							height: 450,
+					        width: 800,
+							height: 300,
 							collapsible: true,
 							layout: 'fit',
 							//autoLoad: 'true',
@@ -760,6 +826,9 @@ Ext.onReady(function(){
         <div id="fp_info"></div>	
 		<div id="fp_rpt_terimakas_list"></div> 
 		<div id="fp_terimakas_total_list"></div> 
+		<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+			<div id="fp_terimakas_target_list"></div> 
+		<?  } ?>
 		<div id="elwindow_chart_terimakas"></div>	
 
     </div>
