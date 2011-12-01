@@ -1821,8 +1821,16 @@ class M_tindakan_medis extends Model{
 				}
 			}
 			
+			
 			$jsonresult = json_encode($arr);
-			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+			
+			//print_r($arr);
+			
+			$nbrows_total = $nbrows + $nbrows2 + $nbrows3 + $nbrows4 + $nbrows5;
+			//$temp = 20;
+			//print_r($nbrows_total);
+			
+			return '({"total":"'.$nbrows_total.'","results":'.$jsonresult.'})';
 		} else {
 			return '({"total":"0", "results":""})';
 		}
