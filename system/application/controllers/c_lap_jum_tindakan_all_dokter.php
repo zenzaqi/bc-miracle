@@ -38,21 +38,6 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 	function get_action(){
 		$task = $_POST['task'];
 		switch($task){
-			case "LIST":
-				$this->report_tindakan_list();
-				break;
-			case "LIST2":
-				$this->report_tindakan_list2();
-				break;
-			/*case "UPDATE":
-				$this->report_tindakan_update();
-				break;
-			case "CREATE":
-				$this->report_tindakan_create();
-				break;
-			case "DELETE":
-				$this->report_tindakan_delete();
-				break;*/
 			case "SEARCH":
 				$this->report_tindakan_search();
 				break;
@@ -74,25 +59,6 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		}
 	}
 	
-	//function fot list record
-	function report_tindakan_list(){
-		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_lap_jum_tindakan_all_dokter->report_tindakan_list($query,$start,$end);
-		echo $result;
-	}
-	
-	//function fot list record
-	function report_tindakan_list2(){
-		
-		$query = isset($_POST['query']) ? $_POST['query'] : "";
-		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
-		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result=$this->m_lap_jum_tindakan_all_dokter->report_tindakan_list2($query,$start,$end);
-		echo $result;
-	}
 
 	//function for advanced search
 	function report_tindakan_search(){
@@ -152,6 +118,7 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		$result = $this->m_lap_jum_tindakan_all_dokter->report_daftar_dokter($tgl_awal,$periode,$report_tindakan_id ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
 		echo $result;
 	}
+	
 		function report_tindakan_search2(){
 		//POST varibale here
 		//$report_tindakan_id=trim(@$_POST["report_tindakan_id"]);
