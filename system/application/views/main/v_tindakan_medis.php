@@ -120,7 +120,7 @@ var today=new Date().format('d-m-Y');
 
 var tmedis_post2db = '';
 var msg = '';
-var pageS=15;
+var pageS_tmedis=100;
 
 /* declare variable here for Field*/
 var trawat_medis_idField;
@@ -718,7 +718,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		if(!tindakan_medis_createWindow.isVisible()){
 			tindakan_medis_detail_DataStore.load({
-				params: {master_id:0, start:0, limit:pageS}
+				params: {master_id:0, start:0, limit:pageS_tmedis}
 			});
 			tindakan_medisreset_form();
 			tmedis_post2db='CREATE';
@@ -761,7 +761,7 @@ Ext.onReady(function(){
 				params:{query:get_trawat_id},
 				callback: function(opts, success, response){
 					if(success){
-						tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+						tindakan_medis_detail_DataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS_tmedis}});
 					}
 				}
 			});
@@ -769,7 +769,7 @@ Ext.onReady(function(){
 				params:{query:get_trawat_id},
 				callback: function(opts, success, response){
 					if(success){
-						dtindakan_jual_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS}});
+						dtindakan_jual_nonmedisDataStore.load({params : {master_id : eval(get_pk_id()), start:0, limit:pageS_tmedis}});
 					}
 				}
 			});
@@ -854,7 +854,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_tindakan_medis&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS_tmedis}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1371,7 +1371,7 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 1200,	//970,
 		bbar: new Ext.PagingToolbar({
-			//pageSize: pageS,
+			pageSize: pageS_tmedis,
 			disabled:true,
 			store: tindakan_medisDataStore,
 			displayInfo: true
@@ -1394,11 +1394,11 @@ Ext.onReady(function(){
 		}, '-', 
 			new Ext.app.SearchField({
 			store: tindakan_medisDataStore,
-			params: {task: 'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS_tmedis},
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
-						tindakan_medisDataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						tindakan_medisDataStore.baseParams={task:'LIST',start: 0, limit: pageS_tmedis};
 		            }
 				},
 				render: function(c){
@@ -1509,7 +1509,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	tindakanListEditorGrid.addListener('rowcontextmenu', ontindakan_medisListEditGridContextMenu);
-	tindakan_medisDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	tindakan_medisDataStore.load({params: {start: 0, limit: pageS_tmedis}});	// load DataStore
 	tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	trawat_cust_idField= new Ext.form.NumberField();
@@ -2575,15 +2575,15 @@ Ext.onReady(function(){
 			trawat_status	:	trawat_status_search
 		};
 		// Cause the datastore to do another query : 
-		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
+		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS_tmedis}});
 	}
 		
 	/* Function for reset search result */
 	function tindakan_medisreset_search(){
 		// reset the store parameters
-		tindakan_medisDataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
+		tindakan_medisDataStore.baseParams = { task: 'LIST',start:0,limit:pageS_tmedis };
 		// Cause the datastore to do another query : 
-		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
+		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS_tmedis}});
 		//tindakan_medis_searchWindow.close();
 	};
 	/* End of Fuction */
