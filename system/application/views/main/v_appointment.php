@@ -131,7 +131,7 @@ var editor_appointment_detail_nonmedis;
 //declare konstant
 var app_post2db = '';
 var msg = '';
-var pageS=100;
+var pageS_app=100;
 var dmedis_record='';
 var dnonmedis_record='';
 
@@ -767,7 +767,7 @@ Ext.onReady(function(){
 		if(!appointment_createWindow.isVisible()){
 			app_post2db='CREATE';
 			appointment_detail_medisDataStore.load({
-				params : {master_id : 0, start:0, limit:pageS}/*,
+				params : {master_id : 0, start:0, limit:pageS_app}/*,
 				callback: function(opts, success, response)  {
 					  if (success) {
 						  appointment_detail_medis_add();
@@ -775,7 +775,7 @@ Ext.onReady(function(){
 				}*/
 			});
 			appointment_detail_nonmedisDataStore.load({
-				params : {master_id : 0, start:0, limit:pageS}/*,
+				params : {master_id : 0, start:0, limit:pageS_app}/*,
 				callback: function(opts, success, response)  {
 					  if (success) {
 						  appointment_detail_nonmedis_add();
@@ -813,7 +813,7 @@ Ext.onReady(function(){
 				callback: function(opts, success, response){
 					if(success){
 						appointment_detail_medisDataStore.load({
-							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS_app},
 							callback: function(opts, success, response){
 								if(success){
 									appointment_set_form();
@@ -828,7 +828,7 @@ Ext.onReady(function(){
 				callback: function(opts, success, response){
 					if(success){
 						appointment_detail_nonmedisDataStore.load({
-							params : {master_id : eval(get_pk_id()), start:0, limit:pageS},
+							params : {master_id : eval(get_pk_id()), start:0, limit:pageS_app},
 							callback: function(opts, success, response){
 								if(success){
 									appointment_set_form();
@@ -862,7 +862,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_appointment&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS_app}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total'//,
@@ -1324,7 +1324,7 @@ Ext.onReady(function(){
 	  	width: 1220,
 	  	//autoWidth: true,
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: pageS_app,
 			store: appointment_DataStore,
 			displayInfo: true
 		}),
@@ -1355,7 +1355,7 @@ Ext.onReady(function(){
 			new Ext.app.SearchField({
 			id: 'simpleSearch',
 			store: appointment_DataStore,
-			params: {task: 'LIST',start: 0, limit: pageS},
+			params: {task: 'LIST',start: 0, limit: pageS_app},
 			listeners:{
 				specialkey: function(f,e){
 					if(e.getKey() == e.ENTER){
@@ -1372,7 +1372,7 @@ Ext.onReady(function(){
 						appointment_DataStore.setBaseParam('jenis_rawat','');
 						appointment_DataStore.setBaseParam('tgl_app','');
 						appointment_DataStore.setBaseParam('dokter_id','');
-						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS};
+						appointment_DataStore.baseParams={task:'LIST',start: 0, limit: pageS_app};
 						appointment_DataStore.groupBy('dokter_username');
 		            }
 				},
@@ -1453,7 +1453,7 @@ Ext.onReady(function(){
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
-				limit: pageS,
+				limit: pageS_app,
 				jenis_rawat: tbar_jenis_rawatField.getValue()
 			}});
 			appointment_DataStore.groupBy('dokter_username');
@@ -1473,7 +1473,7 @@ Ext.onReady(function(){
 			appointment_DataStore.load({params: {
 				task: 'LIST',
 				start: 0,
-				limit: pageS,
+				limit: pageS_app,
 				jenis_rawat: tbar_jenis_rawatField.getValue()
 			}});
 			appointment_DataStore.groupBy('dapp_tglreservasi');
@@ -1487,7 +1487,7 @@ Ext.onReady(function(){
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
-			limit: pageS,
+			limit: pageS_app,
 			query: '',
 			dokter_id: Ext.getCmp('cbo_dokter').getValue(),
 			tgl_app: tbar_dokter_tglField.getValue()
@@ -1505,7 +1505,7 @@ Ext.onReady(function(){
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
-			limit: pageS
+			limit: pageS_app
 		}});
 	});
 	
@@ -1519,7 +1519,7 @@ Ext.onReady(function(){
 		appointment_DataStore.load({params: {
 			task: 'LIST',
 			start: 0,
-			limit: pageS
+			limit: pageS_app
 		}});
 	});
      
@@ -1571,7 +1571,7 @@ Ext.onReady(function(){
   	
 	appointmentListEditorGrid.addListener('rowcontextmenu', onappointment_ListEditGridContextMenu);
 	appointment_DataStore.setBaseParam('jenis_rawat',tbar_jenis_rawatField.getValue());
-	appointment_DataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	appointment_DataStore.load({params: {start: 0, limit: pageS_app}});	// load DataStore
 	appointmentListEditorGrid.on('afteredit', appointment_update); // inLine Editing Record
 	
 	/* Identify  app_id Field */
@@ -2020,7 +2020,7 @@ Ext.onReady(function(){
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
 		,
 		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: pageS_app,
 			store: appointment_detail_medisDataStore,
 			displayInfo: true
 		}),*/
@@ -2488,7 +2488,7 @@ Ext.onReady(function(){
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_APP'))){ ?>
 		,
 		/*bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: pageS_app,
 			store: appointment_detail_nonmedisDataStore,
 			displayInfo: true
 		}),*/
@@ -2861,7 +2861,7 @@ Ext.onReady(function(){
 		appointment_DataStore.baseParams = {
 			task: 'SEARCH',
 			start: 0,
-			limit: pageS,
+			limit: pageS_app,
 			//variable here
 			app_customer	:	app_customer_search,
 			app_rawat_medis	: app_rawat_medis_search,
@@ -2878,7 +2878,7 @@ Ext.onReady(function(){
 			
 		};
 		// Cause the datastore to do another query : 
-		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
+		appointment_DataStore.reload({params: {start: 0, limit: pageS_app}});
 	}
 		
 	/* Function for reset search result */
@@ -2888,10 +2888,10 @@ Ext.onReady(function(){
 		Ext.getCmp('cbo_dokter').reset();
 		tbar_dokter_tglField.reset();
 		// reset the store parameters
-		appointment_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
+		appointment_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS_app };
 		appointment_DataStore.groupBy('dokter_username');
 		// Cause the datastore to do another query : 
-		appointment_DataStore.reload({params: {start: 0, limit: pageS}});
+		appointment_DataStore.reload({params: {start: 0, limit: pageS_app}});
 		//appointment_searchWindow.close();
 	};
 	/* End of Fuction */
