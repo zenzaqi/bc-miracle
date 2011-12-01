@@ -119,7 +119,7 @@ var today=new Date().format('d-m-Y');
 
 var tnonmedis_post2db = '';
 var msg = '';
-var pageS=15;
+var pageS=100;
 var bts_group=<?=$_SESSION[SESSION_GROUPID];?>;
 
 /* declare variable here for Field*/
