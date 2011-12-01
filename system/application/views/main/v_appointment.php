@@ -2073,7 +2073,7 @@ Ext.onReady(function(){
 	function appointment_detail_medis_insert(){
         var cbo_customer_master = 0;
 		if(app_post2db=="CREATE"){
-            if(app_cust_namaBaruField!==''){
+            if(app_cust_namaBaruField.getValue()!==''){
                 cbo_customer_master = '';
             }else{
                 cbo_customer_master = app_customerField.getValue();
@@ -2543,7 +2543,7 @@ Ext.onReady(function(){
 	function appointment_detail_nonmedis_insert(){
         var cbo_customer_master = 0;
 		if(app_post2db=="CREATE"){
-            if(app_cust_namaBaruField!==''){
+            if(app_cust_namaBaruField.getValue()!==''){
                 cbo_customer_master = '';
             }else{
                 cbo_customer_master = app_customerField.getValue();
