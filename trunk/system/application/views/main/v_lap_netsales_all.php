@@ -1035,7 +1035,7 @@ Ext.onReady(function(){
 				
 		
 		Ext.MessageBox.show({
-		   msg: 'Sedang Proses...',
+		   msg: 'Mohon Tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true

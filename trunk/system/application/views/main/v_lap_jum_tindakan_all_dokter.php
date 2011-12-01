@@ -108,7 +108,7 @@ var thisyear=new Date().format('Y');
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=250;
+var pageS_alldr=250;
 
 /* declare variable here for Field*/
 //var report_tindakan_idField;
@@ -148,7 +148,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_jum_tindakan_all_dokter&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS_alldr, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -203,98 +203,98 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 1' + '</div>',
+			header: '<div align="left">' + 'Dokter 1' + '</div>',
 			dataIndex: 'tjt_ref0',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 2' + '</div>',
+			header: '<div align="left">' + 'Dokter 2' + '</div>',
 			dataIndex: 'tjt_ref1',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 3' + '</div>',
+			header: '<div align="left">' + 'Dokter 3' + '</div>',
 			dataIndex: 'tjt_ref2',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 4' + '</div>',
+			header: '<div align="left">' + 'Dokter 4' + '</div>',
 			dataIndex: 'tjt_ref3',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 5' + '</div>',
+			header: '<div align="left">' + 'Dokter 5' + '</div>',
 			dataIndex: 'tjt_ref4',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 6' + '</div>',
+			header: '<div align="left">' + 'Dokter 6' + '</div>',
 			dataIndex: 'tjt_ref5',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 7' + '</div>',
+			header: '<div align="left">' + 'Dokter 7' + '</div>',
 			dataIndex: 'tjt_ref6',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 8' + '</div>',
+			header: '<div align="left">' + 'Dokter 8' + '</div>',
 			dataIndex: 'tjt_ref7',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 9' + '</div>',
+			header: '<div align="left">' + 'Dokter 9' + '</div>',
 			dataIndex: 'tjt_ref8',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 10' + '</div>',
+			header: '<div align="left">' + 'Dokter 10' + '</div>',
 			dataIndex: 'tjt_ref9',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 11' + '</div>',
+			header: '<div align="left">' + 'Dokter 11' + '</div>',
 			dataIndex: 'tjt_ref10',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 12' + '</div>',
+			header: '<div align="left">' + 'Dokter 12' + '</div>',
 			dataIndex: 'tjt_ref11',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 13' + '</div>',
+			header: '<div align="left">' + 'Dokter 13' + '</div>',
 			dataIndex: 'tjt_ref12',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="center">' + 'Dokter 14' + '</div>',
+			header: '<div align="left">' + 'Dokter 14' + '</div>',
 			dataIndex: 'tjt_ref13',
 			width: 70,	//55,
 			sortable: false
@@ -320,7 +320,7 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 1220, //940,//1200,	//970,
 		bbar: new Ext.PagingToolbar({
-			//pageSize: pageS,
+			pageSize: pageS_alldr,
 			disabled:false,
 			store: report_tindakan_allDataStore,
 			displayInfo: true
@@ -384,7 +384,7 @@ Ext.onReady(function(){
   	/* End of Function */
 		
 	report_tindakan_allListEditorGrid.addListener('rowcontextmenu', onreport_tindakan_allListEditGridContextMenu);
-	//report_tindakan_allDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//report_tindakan_allDataStore.load({params: {start: 0, limit: pageS_alldr}});	// load DataStore
 	//report_tindakan_allListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	var checkColumn = new Ext.grid.CheckColumn({
@@ -400,7 +400,7 @@ Ext.onReady(function(){
 		var i=2;
 		daftarNamaDokter.each(function(nama){
 		//alert(nama.get("karyawan_nama"));
-			report_tindakan_allColumnModel.setColumnHeader(i, nama.get("karyawan_nama"));
+			report_tindakan_allColumnModel.setColumnHeader(i, '<div align="left">' + nama.get("karyawan_username") + '</div>');
 			i++;
 		});
 	}
@@ -445,10 +445,23 @@ Ext.onReady(function(){
 			tahun		: report_tindakan_tmedis_tahun,
 			periode		: report_tindakan_tmedis_periode
 		};
-		// Cause the datastore to do another query : 
-		report_tindakan_allDataStore.reload({params: {start: 0, limit: pageS}});
-		//report_tindakan_allColumnModel.setColumnHeader(2, 'abc');
 		
+		Ext.MessageBox.show({
+		   msg: 'Mohon Tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});
+		
+		report_tindakan_allDataStore.reload({
+			params: {start: 0, limit: pageS_alldr},
+			callback: function(opts, success, response){
+				if(success){
+					Ext.MessageBox.hide();
+				}
+			}
+		});
+			
 		var daftarNamaDokter = new Ext.data.JsonStore({
 				url: 'index.php?c=c_lap_jum_tindakan_all_dokter&m=get_action',
 				baseParams:{
@@ -463,12 +476,13 @@ Ext.onReady(function(){
 					tahun				: report_tindakan_tmedis_tahun,
 					periode				: report_tindakan_tmedis_periode,
 					start:0,
-					limit:pageS
+					limit:pageS_alldr
 				},
 				root: 'results',
 				fields: [
 					{name: 'dokter_id', mapping: 'dokter_id'},
-					{name:'karyawan_nama', mapping:'karyawan_nama'}
+					{name:'karyawan_nama', mapping:'karyawan_nama'},
+					{name:'karyawan_username', mapping:'karyawan_username'}
 				],
 				listeners: {
 				load: headerSettingLabel
@@ -513,7 +527,7 @@ Ext.onReady(function(){
 		}),
 		mode: 'local',
 		editable:false,
-		//emptyText: 'Semua',
+		emptyText: 'Semua',
 		displayField: 'group_display',
 		valueField: 'group_value',
 		width: 200,
@@ -701,7 +715,9 @@ Ext.onReady(function(){
 		items: report_tindakan_all_searchForm
 	});
     /* End of Function */ 
-	 
+
+	report_tindakan_all_searchWindow.show();
+	
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window_all(){
 		if(!report_tindakan_all_searchWindow.isVisible()){
