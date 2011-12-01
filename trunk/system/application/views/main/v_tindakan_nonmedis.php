@@ -1954,7 +1954,7 @@ Ext.onReady(function(){
 		tindakan_nonmedis_DataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		tindakan_nonmedis_DataStore.reload({params: {start: 0, limit: pageS}});
-		tindakan_nonmedis_searchWindow.close();
+		//tindakan_nonmedis_searchWindow.close();
 	};
 	/* End of Fuction */
 	
