@@ -97,7 +97,21 @@ var mutasi_button_saveprintField;
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
-  
+	
+  /* Function for Retrieve permission DataStore */
+	mutasi_no_DataStore = new Ext.data.Store({
+		id: 'mutasi_no_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_master_mutasi&m=master_mutasi_pengecekan',
+			method: 'POST'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'results'
+		},[
+				{name: 'mutasi_no', type: 'string', mapping: 'mutasi_no'}
+		])
+	});
+	
 	/*Function for pengecekan _dokumen untuk save n print */		
 	function pengecekan_dokumen(){
 		var mutasi_tanggal_create_date = "";
@@ -107,7 +121,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
 				task: "CEK",
-				tanggal_pengecekan	: mutasi_tanggal_create_date
+				tanggal_pengecekan	: mutasi_tanggal_create_date	
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -116,19 +130,7 @@ Ext.onReady(function(){
 							cetak=1;
 							master_mutasi_create('print');
 						break;
-						case 2:
-
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Tidak dapat melanjutkan, ada Status Terima yang masih "Tunggu" ',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-
-						break
-						default:
+						case 0:
 						Ext.MessageBox.show({
 						   title: 'Warning',
 						   msg: 'Data Penerimaan Barang tidak bisa disimpan, karena telah melebihi batas hari yang diperbolehkan ',
@@ -138,6 +140,29 @@ Ext.onReady(function(){
 						  // master_mutasi_create('print')
 						});
 						//jproduk_btn_cancel();
+						break
+						default:
+						
+						mutasi_no_DataStore.load({
+						params: {tanggal_pengecekan	: mutasi_tanggal_create_date},
+							callback: function(opts, success, response)  {
+								  if (success) {
+									if(mutasi_no_DataStore.getCount()!=0){
+										var mutasi_no = null;
+										mutasi_no_record=mutasi_no_DataStore.getAt(0).data;
+										mutasi_no_temp.setValue(mutasi_no_record.mutasi_no);
+										mutasi_no = mutasi_no_temp.getValue();
+										Ext.MessageBox.show({
+											title: 'Warning',
+											msg: 'Tidak dapat melanjutkan, ada Status Terima yang masih "Tunggu" '+'<br> No MB : '+mutasi_no,
+											buttons: Ext.MessageBox.OK,
+											animEl: 'save',
+											icon: Ext.MessageBox.INFO
+										});
+									}
+								  }
+							  }
+						});
 						break;
 				}
 			},
@@ -166,7 +191,7 @@ Ext.onReady(function(){
 				tanggal_pengecekan	: mutasi_tanggal_create_date,
 				no_mb : master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id')
 		
-			}, 
+			},  
 			success: function(response){							
 				var result=eval(response.responseText);
 				switch(result){
@@ -992,6 +1017,8 @@ Ext.onReady(function(){
 		}  
 	}
   	/* End of Function */
+	
+	
   
 	/* Function for Retrieve DataStore */
 	master_mutasi_DataStore = new Ext.data.Store({
@@ -1485,6 +1512,12 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
+	mutasi_no_temp= new Ext.form.TextField({
+		id: 'mutasi_no_temp',
+		maxLength: 50,
+		anchor: '95%'
+	});
+	
 	/* Identify  dmracikan_jenis Field */
 	dmracikan_jenisField= new Ext.form.NumberField({
 		id: 'dmracikan_jenisField',
