@@ -1210,26 +1210,30 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 					$tanggal=$tgl->tanggal;
 				}
 				
-			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu')";			
+			$sql_status = "SELECT mutasi_no from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu')";			
 			$query_status=$this->db->query($sql_status);
-			$nbrows_status = $query_status->num_rows();
+			$nbrows = $query_status->num_rows();
 
 			$date = date('Y-m-d');
 			
 			if ($date <= $tanggal || $tanggal_pengecekan == $date) 
 			{
-				if ($nbrows_status <> 0)
-					return '2';
-				else
+				if ($nbrows <> 0){
+					//return $query_status;
+					foreach($query_status->result() as $row){
+						$arr[] = $row;
+					}
+					$jsonresult = json_encode($arr);
+					return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+				}else
 					return '1';
-			}
-			else
+			
+			}else
 			{
 				return '0';
 			}
 		}
 		
-		/*Pengecekan Dokumen2 utk Save and Close */
 		function pengecekan_dokumen2($tanggal_pengecekan,$no_mb){
 
 			$sql_day = "SELECT mb_days from transaksi_setting";

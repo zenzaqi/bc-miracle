@@ -317,10 +317,10 @@ class C_master_mutasi extends Controller {
 				break;
 			case "CEK":
 				$this->master_mutasi_pengecekan();
-				break;
+				break;	
 			case "CEK2":
 				$this->master_mutasi_pengecekan2();
-				break;				
+				break;
 			case "CREATE":
 				$this->master_mutasi_create();
 				break;
