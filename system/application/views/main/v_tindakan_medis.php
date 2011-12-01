@@ -2584,7 +2584,7 @@ Ext.onReady(function(){
 		tindakan_medisDataStore.baseParams = { task: 'LIST',start:0,limit:pageS };
 		// Cause the datastore to do another query : 
 		tindakan_medisDataStore.reload({params: {start: 0, limit: pageS}});
-		tindakan_medis_searchWindow.close();
+		//tindakan_medis_searchWindow.close();
 	};
 	/* End of Fuction */
 	
