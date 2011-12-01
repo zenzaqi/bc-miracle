@@ -5026,14 +5026,14 @@ Ext.onReady(function(){
 				]
 			},{
 				border:false,
-				frame: true,
+//				frame: true,  	// di versi ExtJS 3 no prob, tetapi 3.4 tidak muncul.
 				anchor: '95%',
 //				title: 'History Membership',
 				title: 'Membership',
 				items: cust_memberListEditorGrid
 			},{
 				border:false,
-				frame: true,
+//				frame: true, // di versi ExtJS 3 no prob, tetapi 3.4 tidak muncul.
 				anchor: '95%',
 //				title: 'History Catatan',
 				title: 'Catatan Customer',
