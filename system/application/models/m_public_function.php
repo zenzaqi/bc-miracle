@@ -212,9 +212,9 @@ class M_public_function extends Model{
 				$sql = "SELECT 				
 							tt_rp
 						FROM temp_target
-						WHERE date_format(tt_tgl_awal,'%Y-%m-%d') = '".$tgl_awal."' 
+						WHERE /*date_format(tt_tgl_awal,'%Y-%m-%d') = '".$tgl_awal."' 
 							AND date_format(tt_tgl_akhir,'%Y-%m-%d') ='".$tgl_akhir."'
-							AND tt_cabang_kode = '".$cabang."'"; 
+							AND*/ tt_cabang_kode = '".$cabang."'"; 
 			
 			}
 

@@ -447,7 +447,7 @@ Ext.onReady(function(){
 		};
 		
 		Ext.MessageBox.show({
-		   msg: 'Mohon Tunggu...',
+		   msg: 'Mohon tunggu...',
 		   progressText: 'proses...',
 		   width:350,
 		   wait:true
