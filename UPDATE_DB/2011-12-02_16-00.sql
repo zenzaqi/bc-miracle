@@ -1,0 +1,1 @@
+ALTER TABLE `detail_pakai_cabin`  CHANGE COLUMN `cabin_dtrawat` `cabin_dtrawat` INT(11) NOT NULL AUTO_INCREMENT FIRST;
