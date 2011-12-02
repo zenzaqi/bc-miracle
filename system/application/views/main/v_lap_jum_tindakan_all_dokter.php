@@ -112,7 +112,6 @@ var pageS_alldr=250;
 
 /* declare variable here for Field*/
 //var report_tindakan_idField;
-var report_tindakan_all_idSearchField;
 var report_tindakan_all_groupbyField;
 
 <?
@@ -155,16 +154,8 @@ Ext.onReady(function(){
 			id: 'dtrawat_id'
 		},[
 		/* dataIndex => insert intoreport_tindakanColumnModel, Mapping => for initiate table column */ 
-			{name: 'dtrawat_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'dtrawat_date_create'},
-			{name: 'tindakan_dokter', type: 'string', mapping: 'karyawan_username'}, 
 			{name: 'tindakan_perawatan', type: 'string', mapping: 'rawat_nama'},
 			{name: 'rawat_kode', type: 'string', mapping: 'rawat_kode'},
-			{name: 'dtrawat_id', type: 'int', mapping: 'dtrawat_id'},
-			{name: 'dtrawat_edit', type: 'string', mapping: 'Jumlah_rawat'},
-			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
-			{name: 'dtrawat_skreditrp', type: 'string', mapping: 'rawat_kreditrp'},
-			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_kredit'},
-			{name: 'dtrawat_jkreditrp', type: 'string', mapping: 'Total_kreditrp'},
 			{name: 'tjt_ref0', type: 'int', mapping: 'tjt_ref0'},
 			{name: 'tjt_ref1', type: 'int', mapping: 'tjt_ref1'},
 			{name: 'tjt_ref2', type: 'int', mapping: 'tjt_ref2'},
@@ -178,12 +169,40 @@ Ext.onReady(function(){
 			{name: 'tjt_ref10', type: 'int', mapping: 'tjt_ref10'},
 			{name: 'tjt_ref11', type: 'int', mapping: 'tjt_ref11'},
 			{name: 'tjt_ref12', type: 'int', mapping: 'tjt_ref12'},
-			{name: 'tjt_ref13', type: 'int', mapping: 'tjt_ref13'},
-			{name: 'tjt_ref14', type: 'int', mapping: 'tjt_ref14'},
-		]),
-		sortInfo:{field: 'tindakan_dokter', direction: "DESC"}
+			{name: 'tjt_ref13', type: 'string', mapping: 'tjt_ref13'}
+		])
 	});
-	/* End of Function */
+
+	report_tindakan_alltotalDataStore = new Ext.data.Store({
+		id: 'report_tindakan_alltotalDataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_jum_tindakan_all_dokter&m=get_action', 
+			method: 'POST'
+		}),
+		baseParams:{task: "TOTAL",start:0,limit:pageS_alldr, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'dtrawat_id'
+		},[
+		/* dataIndex => insert intoreport_tindakanColumnModel, Mapping => for initiate table column */ 
+			{name: 'tjt_total_ref0', type: 'int', mapping: 'tjt_total_ref0'},
+			{name: 'tjt_total_ref1', type: 'int', mapping: 'tjt_total_ref1'},
+			{name: 'tjt_total_ref2', type: 'int', mapping: 'tjt_total_ref2'},
+			{name: 'tjt_total_ref3', type: 'int', mapping: 'tjt_total_ref3'},
+			{name: 'tjt_total_ref4', type: 'int', mapping: 'tjt_total_ref4'},
+			{name: 'tjt_total_ref5', type: 'int', mapping: 'tjt_total_ref5'},
+			{name: 'tjt_total_ref6', type: 'int', mapping: 'tjt_total_ref6'},
+			{name: 'tjt_total_ref7', type: 'int', mapping: 'tjt_total_ref7'},
+			{name: 'tjt_total_ref8', type: 'int', mapping: 'tjt_total_ref8'},
+			{name: 'tjt_total_ref9', type: 'int', mapping: 'tjt_total_ref9'},
+			{name: 'tjt_total_ref10', type: 'int', mapping: 'tjt_total_ref10'},
+			{name: 'tjt_total_ref11', type: 'int', mapping: 'tjt_total_ref11'},
+			{name: 'tjt_total_ref12', type: 'int', mapping: 'tjt_total_ref12'},
+			{name: 'tjt_total_ref13', type: 'int', mapping: 'tjt_total_ref13'},
+			{name: 'tjt_total_ref14', type: 'int', mapping: 'tjt_total_ref14'},
+		])	
+	});
 	
    
 	/* Function for Identify of Window Column Model */
@@ -203,104 +222,218 @@ Ext.onReady(function(){
 		}, 
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 1' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref0',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 2' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref1',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 3' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref2',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 4' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref3',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 5' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref4',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 6' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref5',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 7' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref6',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 8' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref7',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 9' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref8',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 10' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref9',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 11' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref10',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 12' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref11',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 13' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref12',
 			width: 70,	//55,
 			sortable: false
 		},
 		{
 			align : 'Right',
-			header: '<div align="left">' + 'Dokter 14' + '</div>',
+			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_ref13',
 			width: 70,	//55,
 			sortable: false
-		},
-		
+		},		
 	]);
+	
+	report_tindakan_alltotalColumnModel = new Ext.grid.ColumnModel(
+		[
+		{
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 100,//185,	//210,
+			sortable: true,
+		}, 
+		{
+			header: '<div align="center">' + '<span style="font-weight:bold">TOTAL</span>' + '</div>',
+			dataIndex: '',
+			width: 260,//185,	//210,
+			sortable: true,
+		}, 
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref0',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref1',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref2',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref3',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref4',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref5',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref6',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref7',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref8',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref9',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref10',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref11',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref12',
+			width: 70,	//55,
+			sortable: false
+		},
+		{
+			align : 'Right',
+			header: '<div align="left">' + '' + '</div>',
+			dataIndex: 'tjt_total_ref13',
+			width: 70,	//55,
+			sortable: false
+		},		
+	]);
+
 	
 	report_tindakan_allColumnModel.defaultSortable= true;
 	/* End of Function */
@@ -349,7 +482,23 @@ Ext.onReady(function(){
 		]
 	});
 	report_tindakan_allListEditorGrid.render();
-	/* End of DataStore */
+	
+		/* Declare DataStore and  show datagrid list */
+	report_tindakan_alltotalListEditorGrid =  new Ext.grid.EditorGridPanel({
+		id: 'report_tindakan_alltotalListEditorGrid',
+		el: 'fp_report_tindakan_alltotal',
+		title: '',
+		autoHeight: true,
+		store: report_tindakan_alltotalDataStore, // DataStore
+		cm: report_tindakan_alltotalColumnModel, // Nama-nama Columns
+		enableColLock:false,
+		frame: true,
+		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
+		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
+		viewConfig: { forceFit:true },
+	  	width: 1220, //940,//1200,	//970,
+	});
+	report_tindakan_alltotalListEditorGrid.render();
 	
 	
 	/* Create Context Menu */
@@ -401,8 +550,17 @@ Ext.onReady(function(){
 		daftarNamaDokter.each(function(nama){
 		//alert(nama.get("karyawan_nama"));
 			report_tindakan_allColumnModel.setColumnHeader(i, '<div align="left">' + nama.get("karyawan_username") + '</div>');
+			report_tindakan_allColumnModel.setHidden(i, false);
+			report_tindakan_alltotalColumnModel.setColumnHeader(i, '<div align="left">' + nama.get("karyawan_username") + '</div>');
+			report_tindakan_alltotalColumnModel.setHidden(i, false);
 			i++;
 		});
+		
+		for(i2=i;i2<=15;i2++){
+			report_tindakan_allColumnModel.setHidden(i2, true);
+			report_tindakan_alltotalColumnModel.setHidden(i2, true);
+		}
+		
 	}
 	/* Function for action list search */
 	function report_tindakan_search(){
@@ -417,7 +575,6 @@ Ext.onReady(function(){
 		var report_tindakan_tmedis_tahun=null;
 		var report_tindakan_tmedis_periode=null;
 
-		if(report_tindakan_all_idSearchField.getValue()!==null){report_tindakan_id_search=report_tindakan_all_idSearchField.getValue();}
 		if(report_tindakan_all_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_all_bulanField.getValue();}
 		if(report_tindakan_all_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_all_tahunField.getValue();}
 		if(Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue().format('Y-m-d');}
@@ -437,7 +594,17 @@ Ext.onReady(function(){
 		report_tindakan_allDataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			report_tindakan_id	:	report_tindakan_id_search, 
+			trawat_tglapp_start	: 	report_tindakan_tgl_start_search,
+			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
+			report_groupby	:	report_tindakan_groupby_search,
+			bulan		: report_tindakan_tmedis_bulan,
+			tahun		: report_tindakan_tmedis_tahun,
+			periode		: report_tindakan_tmedis_periode
+		};
+		
+		report_tindakan_alltotalDataStore.baseParams = {
+			task: 'SEARCHTOTAL',
+			//variable here
 			trawat_tglapp_start	: 	report_tindakan_tgl_start_search,
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
 			report_groupby	:	report_tindakan_groupby_search,
@@ -457,6 +624,7 @@ Ext.onReady(function(){
 			params: {start: 0, limit: pageS_alldr},
 			callback: function(opts, success, response){
 				if(success){
+					report_tindakan_alltotalDataStore.reload();
 					Ext.MessageBox.hide();
 				}
 			}
@@ -504,19 +672,6 @@ Ext.onReady(function(){
 		}
 	}
 		
-	/* Field for search */
-	/* Identify  report_tindakan_id Search Field */
-	report_tindakan_all_idSearchField= new Ext.form.NumberField({
-		id: 'report_tindakan_all_idSearchField',
-		fieldLabel: 'Id',
-		allowNegatife : false,
-		blankText: '0',
-		allowDecimals: false,
-		anchor: '95%',
-		maskRe: /([0-9]+)$/
-	
-	});
-
 	/* Identify  Group_byField*/
 	report_tindakan_all_groupbyField= new Ext.form.ComboBox({
 		id: 'report_tindakan_all_groupbyField',
@@ -689,8 +844,6 @@ Ext.onReady(function(){
     /* End of Function */ 
     
 	function report_tindakan_reset_formSearch(){
-		report_tindakan_all_idSearchField.reset();
-		report_tindakan_all_idSearchField.setValue(null);
 		report_tindakan_all_groupbyField.reset();
 		report_tindakan_all_groupbyField.setValue('Semua');
 		Ext.getCmp('report_tindakan_all_tglStartSearchField').reset();
@@ -922,6 +1075,7 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_report_tindakan_all"></div>
+        <div id="fp_report_tindakan_alltotal"></div>
         <div id="elwindow_report_tindakan_all_search"></div>
     </div>
 </div>
