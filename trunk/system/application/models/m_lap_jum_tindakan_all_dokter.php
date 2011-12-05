@@ -159,43 +159,72 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 								as tb_union";
 				$this->db->query($sql_rawat);
 			
-				$sql_dokter =  "select t.dokter_id, k.karyawan_nama
+				$sql_dokter =  "select dokter_id, karyawan_nama
 								from
 								(
 								select 
-									ifnull(t1.dtrawat_petugas1, d1.drawat_sales) as dokter_id
+									distinct t1.dtrawat_petugas1 as dokter_id, k1.karyawan_nama
 								from detail_jual_rawat d1
+								left join perawatan r1 on r1.rawat_id = d1.drawat_rawat
 								left join master_jual_rawat m1 on m1.jrawat_id = d1.drawat_master
 								left join tindakan_detail t1 on t1.dtrawat_id = d1.drawat_dtrawat
-								left join karyawan as dokter on t1.dtrawat_petugas1 = dokter.karyawan_id
-								left join karyawan as referal on d1.drawat_sales = referal.karyawan_id
+								left join karyawan as k1 on t1.dtrawat_petugas1 = k1.karyawan_id
 								where 
 									".$isiperiode."
 									m1.jrawat_stat_dok = 'Tertutup'
-									and t1.dtrawat_petugas1 <> 0 and t1.dtrawat_petugas1 <> 5 /*suster*/ and t1.dtrawat_petugas1 <> 60 /*available dr*/
+									and (r1.rawat_kategori = 2 or r1.rawat_kategori = 4 or r1.rawat_kategori = 16)
+									and t1.dtrawat_petugas1 <> 0 and t1.dtrawat_petugas1 <> 5 /*suster*/ and k1.karyawan_nama not like '%available%' /*available dr*/
+									
+								union
+								
+								select 
+									distinct d2.drawat_sales as dokter_id, k2.karyawan_nama
+								from detail_jual_rawat d2
+								left join perawatan r2 on r2.rawat_id = d2.drawat_rawat
+								left join master_jual_rawat m2 on m2.jrawat_id = d2.drawat_master
+								left join karyawan k2 on d2.drawat_sales = k2.karyawan_id
+								where 
+									 ".$isiperiode."
+									m2.jrawat_stat_dok = 'Tertutup'
+									and (r2.rawat_kategori = 2 or r2.rawat_kategori = 4 or r2.rawat_kategori = 16)
+									and d2.drawat_sales <> 5 /*suster*/ and k2.karyawan_nama not like '%available%' /*available dr*/
 									
 								union
 
 								select
-									ifnull(t2.dtrawat_petugas1, d2.dapaket_referal) as dokter_id
-								from detail_ambil_paket d2
-								left join tindakan_detail t2 on t2.dtrawat_id = d2.dapaket_dtrawat
-								left join karyawan as dokter on t2.dtrawat_petugas1 = dokter.karyawan_id
-								left join karyawan as referal on d2.dapaket_referal = referal.karyawan_id
+									distinct t3.dtrawat_petugas1 as dokter_id, k3.karyawan_nama
+								from detail_ambil_paket d3
+								left join perawatan r3 on r3.rawat_id = d3.dapaket_item
+								left join tindakan_detail t3 on t3.dtrawat_id = d3.dapaket_dtrawat
+								left join karyawan k3 on t3.dtrawat_petugas1 = k3.karyawan_id
 								where 
 									".$tglpaket."
-									d2.dapaket_stat_dok = 'Tertutup'
-									and t2.dtrawat_petugas1 <> 0 and t2.dtrawat_petugas1 <> 5 /*suster*/ and t2.dtrawat_petugas1 <> 60 /*available dr*/
+									d3.dapaket_stat_dok = 'Tertutup'
+									and (r3.rawat_kategori = 2 or r3.rawat_kategori = 4 or r3.rawat_kategori = 16)
+									and t3.dtrawat_petugas1 <> 0 and t3.dtrawat_petugas1 <> 5 /*suster*/ and k3.karyawan_nama not like '%available%' /*available dr*/
+
+								union
+								
+								select
+									distinct d4.dapaket_referal as dokter_id, k4.karyawan_nama
+								from detail_ambil_paket d4
+								left join perawatan r4 on r4.rawat_id = d4.dapaket_item
+								left join karyawan k4 on d4.dapaket_referal = k4.karyawan_id
+								where 
+									".$tglpaket."
+									d4.dapaket_stat_dok = 'Tertutup'
+									and (r4.rawat_kategori = 2 or r4.rawat_kategori = 4 or r4.rawat_kategori = 16)
+									and d4.dapaket_referal <> 5 /*suster*/ and k4.karyawan_nama not like '%available%' /*available dr*/
 								)
 								as t
-								left join karyawan k on k.karyawan_id = t.dokter_id
-								order by k.karyawan_nama
+								order by karyawan_nama
 								";
 				$res_dokter = $this->db->query($sql_dokter);
 				
 				$i = 0;
 				foreach($res_dokter->result() as $row_dokter){
 					$row = $res_dokter->row($i);		
+					//print_r($row->dokter_id); print_r(' ');
 					$this->report_tindakan_update_temp($isiperiode, $tglpaket, $row->dokter_id, $report_groupby, $i);
 					$i++;
 				}
@@ -281,37 +310,65 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 				//$this->db->query($sql_del);
 				
 			
-				$sql_dokter =  "select t.dokter_id, k.karyawan_nama, karyawan_username
+				$sql_dokter =  "select dokter_id, karyawan_nama, karyawan_username
 								from
 								(
 								select 
-									ifnull(t1.dtrawat_petugas1, d1.drawat_sales) as dokter_id
+									distinct t1.dtrawat_petugas1 as dokter_id, k1.karyawan_nama, k1.karyawan_username
 								from detail_jual_rawat d1
+								left join perawatan r1 on r1.rawat_id = d1.drawat_rawat
 								left join master_jual_rawat m1 on m1.jrawat_id = d1.drawat_master
 								left join tindakan_detail t1 on t1.dtrawat_id = d1.drawat_dtrawat
-								left join karyawan as dokter on t1.dtrawat_petugas1 = dokter.karyawan_id
-								left join karyawan as referal on d1.drawat_sales = referal.karyawan_id
+								left join karyawan as k1 on t1.dtrawat_petugas1 = k1.karyawan_id
 								where 
 									".$isiperiode."
 									m1.jrawat_stat_dok = 'Tertutup'
-									and t1.dtrawat_petugas1 <> 0 and t1.dtrawat_petugas1 <> 5 /*suster*/ and t1.dtrawat_petugas1 <> 60 /*available dr*/
+									and (r1.rawat_kategori = 2 or r1.rawat_kategori = 4 or r1.rawat_kategori = 16)
+									and t1.dtrawat_petugas1 <> 0 and t1.dtrawat_petugas1 <> 5 /*suster*/ and k1.karyawan_nama not like '%available%' /*available dr*/
+									
+								union
+								
+								select 
+									distinct d2.drawat_sales as dokter_id, k2.karyawan_nama, k2.karyawan_username
+								from detail_jual_rawat d2
+								left join perawatan r2 on r2.rawat_id = d2.drawat_rawat
+								left join master_jual_rawat m2 on m2.jrawat_id = d2.drawat_master
+								left join karyawan k2 on d2.drawat_sales = k2.karyawan_id
+								where 
+									 ".$isiperiode."
+									m2.jrawat_stat_dok = 'Tertutup'
+									and (r2.rawat_kategori = 2 or r2.rawat_kategori = 4 or r2.rawat_kategori = 16)
+									and d2.drawat_sales <> 5 /*suster*/ and k2.karyawan_nama not like '%available%' /*available dr*/
 									
 								union
 
 								select
-									ifnull(t2.dtrawat_petugas1, d2.dapaket_referal) as dokter_id
-								from detail_ambil_paket d2
-								left join tindakan_detail t2 on t2.dtrawat_id = d2.dapaket_dtrawat
-								left join karyawan as dokter on t2.dtrawat_petugas1 = dokter.karyawan_id
-								left join karyawan as referal on d2.dapaket_referal = referal.karyawan_id
+									distinct t3.dtrawat_petugas1 as dokter_id, k3.karyawan_nama, k3.karyawan_username
+								from detail_ambil_paket d3
+								left join perawatan r3 on r3.rawat_id = d3.dapaket_item
+								left join tindakan_detail t3 on t3.dtrawat_id = d3.dapaket_dtrawat
+								left join karyawan k3 on t3.dtrawat_petugas1 = k3.karyawan_id
 								where 
 									".$tglpaket."
-									d2.dapaket_stat_dok = 'Tertutup'
-									and t2.dtrawat_petugas1 <> 0 and t2.dtrawat_petugas1 <> 5 /*suster*/ and t2.dtrawat_petugas1 <> 60 /*available dr*/
+									d3.dapaket_stat_dok = 'Tertutup'
+									and (r3.rawat_kategori = 2 or r3.rawat_kategori = 4 or r3.rawat_kategori = 16)
+									and t3.dtrawat_petugas1 <> 0 and t3.dtrawat_petugas1 <> 5 /*suster*/ and k3.karyawan_nama not like '%available%' /*available dr*/
+
+								union
+								
+								select
+									distinct d4.dapaket_referal as dokter_id, k4.karyawan_nama, k4.karyawan_username
+								from detail_ambil_paket d4
+								left join perawatan r4 on r4.rawat_id = d4.dapaket_item
+								left join karyawan k4 on d4.dapaket_referal = k4.karyawan_id
+								where 
+									".$tglpaket."
+									d4.dapaket_stat_dok = 'Tertutup'
+									and (r4.rawat_kategori = 2 or r4.rawat_kategori = 4 or r4.rawat_kategori = 16)
+									and d4.dapaket_referal <> 5 /*suster*/ and k4.karyawan_nama not like '%available%' /*available dr*/
 								)
 								as t
-								left join karyawan k on k.karyawan_id = t.dokter_id
-								order by k.karyawan_nama
+								order by karyawan_nama
 								";
 				$res_dokter = $this->db->query($sql_dokter);
 				//echo $sql_dokter;
