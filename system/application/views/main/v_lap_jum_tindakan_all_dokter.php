@@ -209,6 +209,11 @@ Ext.onReady(function(){
 	report_tindakan_allColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			align : 'right',
+			header: '<div align="center">' + 'No' + '</div>',
+			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
+			width: 10
+		},{
 			header: '<div align="center">' + 'Kode' + '</div>',
 			dataIndex: 'rawat_kode',
 			width: 100,//185,	//210,
@@ -323,58 +328,55 @@ Ext.onReady(function(){
 	report_tindakan_alltotalColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			align : 'right',
+			header: '<div align="center">' + '' + '</div>',
+			dataIndex: '',
+			width: 10
+		},{
 			header: '<div align="center">' + '' + '</div>',
 			dataIndex: '',
 			width: 100,//185,	//210,
-			sortable: true,
 		}, 
 		{
 			header: '<div align="center">' + '<span style="font-weight:bold">TOTAL</span>' + '</div>',
 			dataIndex: '',
 			width: 260,//185,	//210,
-			sortable: true,
 		}, 
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref0',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref1',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref2',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref3',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref4',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref5',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
@@ -388,49 +390,42 @@ Ext.onReady(function(){
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref7',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref8',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref9',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref10',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref11',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref12',
 			width: 70,	//55,
-			sortable: false
 		},
 		{
 			align : 'Right',
 			header: '<div align="left">' + '' + '</div>',
 			dataIndex: 'tjt_total_ref13',
 			width: 70,	//55,
-			sortable: false
 		},		
 	]);
 
@@ -443,7 +438,8 @@ Ext.onReady(function(){
 		id: 'report_tindakan_allListEditorGrid',
 		el: 'fp_report_tindakan_all',
 		title: 'Laporan Jumlah Tindakan Semua Dokter',
-		autoHeight: true,
+		autoHeight: false,
+		height: 444,
 		store: report_tindakan_allDataStore, // DataStore
 		cm: report_tindakan_allColumnModel, // Nama-nama Columns
 		enableColLock:false,
@@ -546,7 +542,7 @@ Ext.onReady(function(){
 	function headerSettingLabel(daftarNamaDokter){
 	//alert('here');
 	
-		var i=2;
+		var i=3;
 		daftarNamaDokter.each(function(nama){
 		//alert(nama.get("karyawan_nama"));
 			report_tindakan_allColumnModel.setColumnHeader(i, '<div align="left">' + nama.get("karyawan_username") + '</div>');
@@ -556,7 +552,7 @@ Ext.onReady(function(){
 			i++;
 		});
 		
-		for(i2=i;i2<=15;i2++){
+		for(i2=i;i2<=16;i2++){
 			report_tindakan_allColumnModel.setHidden(i2, true);
 			report_tindakan_alltotalColumnModel.setHidden(i2, true);
 		}
