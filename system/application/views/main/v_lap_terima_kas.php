@@ -547,7 +547,7 @@ Ext.onReady(function(){
 								if (hasil > 0 )
 								{
 									terimakasChart.render();
-									terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
+									terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://192.168.1.2:81/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
 									
 								}
 								/*
