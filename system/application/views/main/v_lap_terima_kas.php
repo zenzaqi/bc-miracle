@@ -416,7 +416,7 @@ Ext.onReady(function(){
 		allowBlank: true,
 		//width: 100,
         //startDateField: 'rpt_terimakas_tglawalField',
-		emptyText: 'Tgl Awal',
+		emptyText: 'Tgl Akhir',
 		//value: today
 	});
 
