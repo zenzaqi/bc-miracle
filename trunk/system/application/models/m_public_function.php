@@ -205,10 +205,11 @@ class M_public_function extends Model{
 	function get_laporan_terima_kas_target($tgl_awal, $tgl_akhir, $periode, $cabang){
 			$sql="";
 			
-			if($periode=='bulan')
+			/*if($periode=='bulan')
 				$sql = "SELECT 1 as tt_rp";
 			else if($periode=='tanggal')
-			{			
+			{	
+			*/
 				$sql = "SELECT 				
 							tt_rp
 						FROM temp_target
@@ -216,7 +217,7 @@ class M_public_function extends Model{
 							AND date_format(tt_tgl_akhir,'%Y-%m-%d') ='".$tgl_akhir."'
 							AND*/ tt_cabang_kode = '".$cabang."'"; 
 			
-			}
+			//}
 
 
 			//echo $sql;

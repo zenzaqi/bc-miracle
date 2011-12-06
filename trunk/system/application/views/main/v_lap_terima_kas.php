@@ -681,8 +681,11 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 800,
 	});
-	rpt_terimakas_targetListEditorGrid.render();
 	
+	<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+		rpt_terimakas_targetListEditorGrid.render();
+	<?  } ?>
+		
 	// inisialisasi awal
 	tbar_periodeField.setValue('Tanggal');
 	rpt_terimakas_tglawalField.setVisible(true);
@@ -826,9 +829,7 @@ Ext.onReady(function(){
         <div id="fp_info"></div>	
 		<div id="fp_rpt_terimakas_list"></div> 
 		<div id="fp_terimakas_total_list"></div> 
-		<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
-			<div id="fp_terimakas_target_list"></div> 
-		<?  } ?>
+		<div id="fp_terimakas_target_list"></div> 
 		<div id="elwindow_chart_terimakas"></div>	
 
     </div>
