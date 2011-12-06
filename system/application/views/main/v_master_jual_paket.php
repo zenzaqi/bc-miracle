@@ -3958,10 +3958,12 @@ Ext.override(Ext.form.Field, {
 					dpaket_jenisdiskonField.setValue('Member');
 					dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
 					dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
+					dpaket_jumlahdiskonField.setDisabled(true); 
 			}else{
 					dpaket_jenisdiskonField.setValue('Umum');
 					dpaket_jumlah_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
 					dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
+					dpaket_jumlahdiskonField.setDisabled(true);
 			}
 			var DayLength=1*24*60*60*1000;
 			var Days=cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_expired;
@@ -4053,51 +4055,63 @@ Ext.override(Ext.form.Field, {
 		if(dpaket_jenisdiskonField.getValue()=='Umum'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_du);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Member'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dm);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Ultah'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dultah;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dultah);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Card'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dcard;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dcard);
-			dpaket_jumlahdiskonField.setReadOnly(false);
+			//dpaket_jumlahdiskonField.setReadOnly(false);
+			dpaket_jumlahdiskonField.setDisabled(false);
 		}else if(dpaket_jenisdiskonField.getValue()=='Kolega'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dkolega;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dkolega);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Keluarga'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dkeluarga;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dkeluarga);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Owner'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_downer;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_downer);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Grooming'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dgrooming;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dgrooming);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Wartawan'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dwartawan;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dwartawan);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Staff'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffdokter;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffdokter);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Staf Non Dokter'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffnondokter;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dstaffnondokter);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}else if(dpaket_jenisdiskonField.getValue()=='Promo'){
 			dpaket_jenis_diskon = cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dpromo;
 			dpaket_jumlahdiskonField.setValue(cbo_dpaket_paketDataStore.getAt(j).data.dpaket_paket_dpromo);
-			dpaket_jumlahdiskonField.setReadOnly(true);
+			//dpaket_jumlahdiskonField.setReadOnly(true);
+			dpaket_jumlahdiskonField.setDisabled(true);
 		}
 		else{
 			dpaket_jumlahdiskonField.setValue(0);

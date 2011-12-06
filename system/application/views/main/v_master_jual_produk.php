@@ -4743,10 +4743,12 @@ Ext.override(Ext.form.Field, {
 					djenis_diskonField.setValue('Member');
 					djumlah_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
 					djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm);
+					djumlah_diskonField.setDisabled(true);
 			}else{
 					djenis_diskonField.setValue('Umum');
 					djumlah_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
 					djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du);
+					djumlah_diskonField.setDisabled(true);
 			}
 			
 			cbo_dproduk_satuanDataStore.load({
@@ -4925,55 +4927,70 @@ Ext.override(Ext.form.Field, {
 		if(djenis_diskonField.getValue()=='Umum'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_du);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Member'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dm);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Ultah'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dultah;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dultah);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Card'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dcard;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dcard);
-			djumlah_diskonField.setReadOnly(false);
+			//djumlah_diskonField.setReadOnly(false);
+			djumlah_diskonField.setDisabled(false);
 		}else if(djenis_diskonField.getValue()=='Kolega'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkolega;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkolega);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Keluarga'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkeluarga;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dkeluarga);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Owner'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_downer;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_downer);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Grooming'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dgrooming;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dgrooming);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Wartawan'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dwartawan);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Staff'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffdokter);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Staf Non Dokter'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dstaffnondokter);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}else if(djenis_diskonField.getValue()=='Promo'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setDisabled(true); //default
+			/*untuk YESS*/djumlah_diskonField.setDisabled(false); /*eof YESS*/ 
+			
 		}
 		else{
 			djumlah_diskonField.setValue(0);
-			djumlah_diskonField.setReadOnly(true);
+			//djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true);
 		}
 		dtotal_net_field = ((100-djenis_diskon)/100) * (djumlah_beli_produk*cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_harga);
 		dtotal_net_field = (dtotal_net_field>0?Math.round(dtotal_net_field):0);
@@ -4997,7 +5014,9 @@ Ext.override(Ext.form.Field, {
 		dsub_total_netField.setValue(sub_total_net);
 		if(this.getRawValue()>15 && djenis_diskonField.getValue()=='Card'){
 			this.setRawValue(15);
-		}
+		}/*untuk YESS*/else if(this.getRawValue()>20 && djenis_diskonField.getValue()=='Promo'){
+			this.setRawValue(20);
+		}/*eof YESS*/
 	});
 	
 	var djumlah_beli_produkField = new Ext.form.NumberField({
@@ -5248,7 +5267,8 @@ Ext.override(Ext.form.Field, {
 	
 	//function of detail add
 	function detail_jual_produk_add(){
-		djumlah_diskonField.setReadOnly(true);
+		//djumlah_diskonField.setReadOnly(true);
+		djumlah_diskonField.setDisabled(true);
 		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
 			dproduk_id	:0,
 			dproduk_produk	:'',
