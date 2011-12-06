@@ -168,6 +168,7 @@ Ext.onReady(function(){
 	net_salesDataStore = new Ext.data.Store({
 		id: 'net_salesDataStore',
 		proxy: new Ext.data.HttpProxy({
+			timeout: 120000,
 			url: 'index.php?c=c_lap_netsales&m=get_action', 
 			method: 'POST'
 		}),
@@ -189,6 +190,7 @@ Ext.onReady(function(){
 			{name: 'tns_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'tns_date_create'},
 			{name: 'tns_source', type: 'string', mapping: 'tns_source'},
 		]),
+		
 		//sortInfo:{field: 'tot_net', direction: "DESC"}
 	});
 	/* End of Function */
