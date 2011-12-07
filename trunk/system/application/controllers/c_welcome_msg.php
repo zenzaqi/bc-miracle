@@ -24,7 +24,8 @@ class C_welcome_msg extends Controller {
 	
 	 function get_welcome_message(){	 
 		$task = $_POST['task'];
-		$result=$this->m_welcome_msg->get_welcome_message($task);
+		$menu_id = $_POST['menu_id'];
+		$result=$this->m_welcome_msg->get_welcome_message($task, $menu_id);
 		echo $result;
 	 }
 	

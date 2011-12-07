@@ -209,6 +209,40 @@ Ext.override(Ext.form.Field, {
     }
 });	
 	
+	/*Data Store khusus utk menampung welcome mesage */
+	jproduk_welcome_msgDataStore = new Ext.data.Store({
+		id: 'jproduk_welcome_msgDataStore ',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_welcome_msg&m=get_welcome_message', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results'
+		},[
+			{name: 'welcome_id', type: 'int', mapping: 'welcome_id'},
+			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'},
+			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'}
+		]),
+		sortInfo:{field: 'welcome_id', direction: "ASC"}
+	});
+
+	jproduk_welcome_msgDataStore.load({
+		params: {task : "LIST", menu_id : 37},
+			callback: function(opts, success, response)  {
+				if (success) {
+					if(jproduk_welcome_msgDataStore.getCount()){
+						Ext.MessageBox.show({
+							title: jproduk_welcome_msgDataStore.getAt(0).data.welcome_title,
+							msg: jproduk_welcome_msgDataStore.getAt(0).data.welcome_msg,
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: Ext.MessageBox.INFO
+						});
+					}
+				}
+			}
+	});	
+	
 	var total_sub_temp=0;
 	
 	function jproduk_cetak(master_id){ 
