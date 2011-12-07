@@ -1376,7 +1376,7 @@ Ext.override(Ext.form.Field, {
 		if(jproduk_cashbackField.getValue()!==""){
 			cashback_field=jproduk_cashbackField.getValue();
 		}
-		total_field=subtotal_field*(100-diskon_field)/100;
+		total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
 		
 		jproduk_jumlahField.setValue(dproduk_jumlah_field);
 		jproduk_subTotalField.setValue(subtotal_field);
