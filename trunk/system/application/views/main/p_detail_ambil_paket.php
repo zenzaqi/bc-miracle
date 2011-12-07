@@ -92,8 +92,8 @@
     	<tfoot>
 		<tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row'>Total</th>
-            <td colspan='4'>&nbsp;</td> 
+        	<th scope='row' colspan='2'>Total Net Sales</th>
+            <td colspan='3'>&nbsp;</td> 
 			<td><?php echo $jum_all; ?></td>
 			<td> </td>
 			<td align="right" class="numeric_bayar"><?php echo number_format($total,0,",",","); ?></td>

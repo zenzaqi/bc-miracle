@@ -298,6 +298,7 @@
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_hutang,0,",",","); ?></td> 
 	<td colspan="7" class="foot">&nbsp;</td> 
 </tr> 
+<? if ($jenis <> 'Paket') { ?>
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
@@ -305,6 +306,7 @@
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_nilai-$total_voucher,0,",",","); ?></td> 
 	<td colspan="7" class="foot">&nbsp;</td> 
 </tr>
+<? } ?>
 
 <? //</tfoot> ?>
 </table>
