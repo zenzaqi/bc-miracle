@@ -221,7 +221,8 @@ Ext.override(Ext.form.Field, {
 		},[
 			{name: 'welcome_id', type: 'int', mapping: 'welcome_id'},
 			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'},
-			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'}
+			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'},
+			{name: 'welcome_icon', type: 'string', mapping: 'welcome_icon'}
 		]),
 		sortInfo:{field: 'welcome_id', direction: "ASC"}
 	});
@@ -230,13 +231,23 @@ Ext.override(Ext.form.Field, {
 		params: {task : "LIST", menu_id : 37},
 			callback: function(opts, success, response)  {
 				if (success) {
+					if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'INFO') {
+						var jproduk_icon = Ext.MessageBox.INFO;
+					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'WARNING'){
+						var jproduk_icon = Ext.MessageBox.WARNING;
+					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
+						var jproduk_icon = Ext.MessageBox.QUESTION;
+					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'ERROR'){
+						var jproduk_icon = Ext.MessageBox.ERROR;
+					}
+					
 					if(jproduk_welcome_msgDataStore.getCount()){
 						Ext.MessageBox.show({
 							title: jproduk_welcome_msgDataStore.getAt(0).data.welcome_title,
 							msg: jproduk_welcome_msgDataStore.getAt(0).data.welcome_msg,
 							buttons: Ext.MessageBox.OK,
 							animEl: 'save',
-							icon: Ext.MessageBox.INFO
+							icon: jproduk_icon
 						});
 					}
 				}
