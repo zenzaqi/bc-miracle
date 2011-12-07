@@ -230,18 +230,18 @@ Ext.override(Ext.form.Field, {
 	jproduk_welcome_msgDataStore.load({
 		params: {task : "LIST", menu_id : 37},
 			callback: function(opts, success, response)  {
-				if (success) {
-					if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'INFO') {
-						var jproduk_icon = Ext.MessageBox.INFO;
-					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'WARNING'){
-						var jproduk_icon = Ext.MessageBox.WARNING;
-					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
-						var jproduk_icon = Ext.MessageBox.QUESTION;
-					} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'ERROR'){
-						var jproduk_icon = Ext.MessageBox.ERROR;
-					}
-					
+				if (success) {					
 					if(jproduk_welcome_msgDataStore.getCount()){
+						if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'INFO') {
+							var jproduk_icon = Ext.MessageBox.INFO;
+						} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'WARNING'){
+							var jproduk_icon = Ext.MessageBox.WARNING;
+						} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
+							var jproduk_icon = Ext.MessageBox.QUESTION;
+						} else if (jproduk_welcome_msgDataStore.getAt(0).data.welcome_icon == 'ERROR'){
+							var jproduk_icon = Ext.MessageBox.ERROR;
+						}
+					
 						Ext.MessageBox.show({
 							title: jproduk_welcome_msgDataStore.getAt(0).data.welcome_title,
 							msg: jproduk_welcome_msgDataStore.getAt(0).data.welcome_msg,

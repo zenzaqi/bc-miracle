@@ -108,18 +108,18 @@ Ext.onReady(function(){
 	welcome_messageDataStore.load({
 				params: {task : "LIST", menu_id: 0},
 					callback: function(opts, success, response)  {
-						if (success) {
-							if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'INFO') {
-								var icon = Ext.MessageBox.INFO;
-							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'WARNING'){
-								var icon = Ext.MessageBox.WARNING;
-							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
-								var icon = Ext.MessageBox.QUESTION;
-							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'ERROR'){
-								var icon = Ext.MessageBox.ERROR;
-							}
-							
+						if (success) {							
 							if(welcome_messageDataStore.getCount()){
+								if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'INFO') {
+									var icon = Ext.MessageBox.INFO;
+								} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'WARNING'){
+									var icon = Ext.MessageBox.WARNING;
+								} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
+									var icon = Ext.MessageBox.QUESTION;
+								} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'ERROR'){
+									var icon = Ext.MessageBox.ERROR;
+								}
+							
 								Ext.MessageBox.show({
 									title: welcome_messageDataStore.getAt(0).data.welcome_title,
 									msg: welcome_messageDataStore.getAt(0).data.welcome_msg,
