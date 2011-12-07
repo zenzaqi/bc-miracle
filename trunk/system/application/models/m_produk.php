@@ -973,7 +973,7 @@ class M_produk extends Model{
 							ifnull(produk_volume,'-') AS vol,
 							ifnull(produk_harga,'-') AS harga,
 							produk_aktif AS aktif,
-							produk_keterangan,
+							produk_keterangan
 
 					from 	vu_produk";
 					
