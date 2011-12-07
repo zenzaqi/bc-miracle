@@ -121,7 +121,9 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
 				task: "CEK",
-				tanggal_pengecekan	: mutasi_tanggal_create_date	
+				tanggal_pengecekan	: mutasi_tanggal_create_date,
+				mutasi_asal		: mutasi_asalField.getValue(),
+				mutasi_tujuan	: mutasi_tujuanField.getValue()
 			}, 
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -144,7 +146,9 @@ Ext.onReady(function(){
 						default:
 						
 						mutasi_no_DataStore.load({
-						params: {tanggal_pengecekan	: mutasi_tanggal_create_date},
+						params: {tanggal_pengecekan	: mutasi_tanggal_create_date,
+									mutasi_asal		: mutasi_asalField.getValue(),
+									mutasi_tujuan	: mutasi_tujuanField.getValue()},
 							callback: function(opts, success, response)  {
 								  if (success) {
 									if(mutasi_no_DataStore.getCount()!=0){
@@ -179,18 +183,22 @@ Ext.onReady(function(){
 		});   
 	}
 	
-	/*Function for pengecekan _dokumen untuk save*/
-	function pengecekan_dokumen2(){
+	/*Function for pengecekan _dokumen untuk save and close*/
+	function pengecekan_dokumen_saveclose(){
 		var mutasi_tanggal_create_date = "";
+		var mutasi_id_create_pk=null;
+		mutasi_id_create_pk=get_pk_id();
+		
 		if(mutasi_tanggalField.getValue()!== ""){mutasi_tanggal_create_date = mutasi_tanggalField.getValue().format('Y-m-d');} 
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
-				task: "CEK2",
+				task: "CEKSAVECLOSE",
 				tanggal_pengecekan	: mutasi_tanggal_create_date,
-				no_mb : master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id')
-		
+				no_mb : mutasi_id_create_pk,
+				mutasi_asal		: mutasi_asalField.getValue(),
+				mutasi_tujuan	: mutasi_tujuanField.getValue()
 			},  
 			success: function(response){							
 				var result=eval(response.responseText);
@@ -199,18 +207,6 @@ Ext.onReady(function(){
 							cetak=0;
 							master_mutasi_create();
 						break;
-						case 2:
-
-						Ext.MessageBox.show({
-						   title: 'Warning',
-						   //msg: 'We could\'t not '+msg+' the Master_order_beli.',
-						   msg: 'Tidak dapat melanjutkan, ada Status Terima yang masih "Tunggu" ',
-						   buttons: Ext.MessageBox.OK,
-						   animEl: 'save',
-						   icon: Ext.MessageBox.WARNING
-						});
-
-						break
 						default:
 						Ext.MessageBox.show({
 						   title: 'Warning',
@@ -1763,7 +1759,7 @@ Ext.onReady(function(){
 	mutasi_button_saveField=new Ext.Button({
 		text: 'Save and Close',
 		ref : '../mmutasi_saveClose',
-		handler: pengecekan_dokumen2
+		handler: pengecekan_dokumen_saveclose
 	});
 	
 	mutasi_button_saveprintField=new Ext.Button({

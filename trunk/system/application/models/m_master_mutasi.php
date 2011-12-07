@@ -1196,7 +1196,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 		}
 		
 		/*Pengecekan Dokumen utk Mutasi Barang */
-		function pengecekan_dokumen($tanggal_pengecekan){
+		function pengecekan_dokumen($tanggal_pengecekan,$mutasi_asal ,$mutasi_tujuan){
 
 			$sql_day = "SELECT mb_days from transaksi_setting";
 			$query_day= $this->db->query($sql_day);
@@ -1210,7 +1210,10 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 					$tanggal=$tgl->tanggal;
 				}
 				
-			$sql_status = "SELECT mutasi_no from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu')";			
+			//$sql_status = "SELECT mutasi_no from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu')";			
+			
+			$sql_status = "SELECT mutasi_no from vu_trans_mutasi where (mutasi_asal = '".$mutasi_asal."' or gudang_asal_nama= '".$mutasi_asal."') and (mutasi_tujuan = '".$mutasi_tujuan."'  or gudang_tujuan_nama = '".$mutasi_tujuan."') and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu')";			
+
 			$query_status=$this->db->query($sql_status);
 			$nbrows = $query_status->num_rows();
 
@@ -1234,7 +1237,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			}
 		}
 		
-		function pengecekan_dokumen2($tanggal_pengecekan,$no_mb){
+		function master_mutasi_pengecekan_saveclose($tanggal_pengecekan,$no_mb,$mutasi_asal ,$mutasi_tujuan){
 
 			$sql_day = "SELECT mb_days from transaksi_setting";
 			$query_day= $this->db->query($sql_day);
@@ -1248,7 +1251,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 					$tanggal=$tgl->tanggal;
 				}
 				
-			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where group_id = '".$_SESSION[SESSION_GROUPID]."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu') and mutasi_id <> '".$no_mb."'";			
+			$sql_status = "SELECT mutasi_id from vu_trans_mutasi where mutasi_asal = '".$mutasi_asal."' and mutasi_tujuan = '".$mutasi_tujuan."' and (mutasi_status_terima = 'Tunggu' AND mutasi_status = 'Tunggu') and mutasi_id <> '".$no_mb."'";			
 			$query_status=$this->db->query($sql_status);
 			$nbrows_status = $query_status->num_rows();
 
@@ -1256,9 +1259,6 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 			
 			if ($date <= $tanggal || $tanggal_pengecekan == $date) 
 			{
-				if ($nbrows_status <> 0)
-					return '2';
-				else
 					return '1';
 			}
 			else

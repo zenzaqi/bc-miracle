@@ -318,8 +318,8 @@ class C_master_mutasi extends Controller {
 			case "CEK":
 				$this->master_mutasi_pengecekan();
 				break;	
-			case "CEK2":
-				$this->master_mutasi_pengecekan2();
+			case "CEKSAVECLOSE":
+				$this->master_mutasi_pengecekan_saveclose();
 				break;
 			case "CREATE":
 				$this->master_mutasi_create();
@@ -460,17 +460,21 @@ class C_master_mutasi extends Controller {
 	function master_mutasi_pengecekan(){
 	
 		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
+		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
+		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
 	
-		$result=$this->m_master_mutasi->pengecekan_dokumen($tanggal_pengecekan);
+		$result=$this->m_master_mutasi->pengecekan_dokumen($tanggal_pengecekan,$mutasi_asal ,$mutasi_tujuan);
 		echo $result;
 	}
 	
-	function master_mutasi_pengecekan2(){
+	function master_mutasi_pengecekan_saveclose(){
 	
 		$tanggal_pengecekan=trim(@$_POST["tanggal_pengecekan"]);
 		$no_mb=trim(@$_POST["no_mb"]);
+		$mutasi_asal=trim(@$_POST["mutasi_asal"]);
+		$mutasi_tujuan=trim(@$_POST["mutasi_tujuan"]);
 	
-		$result=$this->m_master_mutasi->pengecekan_dokumen2($tanggal_pengecekan,$no_mb);
+		$result=$this->m_master_mutasi->master_mutasi_pengecekan_saveclose($tanggal_pengecekan,$no_mb,$mutasi_asal ,$mutasi_tujuan);
 		echo $result;
 	}
 	
