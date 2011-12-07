@@ -723,7 +723,10 @@ Ext.onReady(function(){
 		renderer: function(v,params,record){
 				if(record.data.menu_parent==0)
 					return '';
-				else{
+				else  if((record.data.menu_id==437) /*cek apakah menu = Lap Net Sales*/ || (record.data.menu_id==86)) /*Lap Penerimaan Kas*/{
+					params.css = ' x-gridcheck-col-td';
+            		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>Graph';
+				}else{
 				   params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
@@ -731,7 +734,7 @@ Ext.onReady(function(){
 	});
 
 	var updateColumn = new Ext.grid.CheckColumn({
-		header: '<div align="center">' + 'Write' + '</div>',
+		header: '<div align="center">' + 'Update' + '</div>',
 		dataIndex: 'perm_update',
 		width: 60,
 		sortable: false,
@@ -742,6 +745,7 @@ Ext.onReady(function(){
 				   params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
 				}
+				
 			}
 	});
 
