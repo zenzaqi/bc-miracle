@@ -804,11 +804,33 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var trawat_cust_print=null;
 		var trawat_keterangan_print=null;
+		var lap_jum_tindakan_terapis_id_print=null;
+		var lap_jum_tindakan_terapis_tgl_start_print=null;
+		var lap_jum_tindakan_terapis_tgl_end_print=null;
+		var lap_jum_tindakan_terapis_dokter_print=null;
+		var lap_jum_tindakan_terapis_groupby_print=null;
+		var lap_jum_tindakan_tmedis_bulan=null;
+		var lap_jum_tindakan_tmedis_tahun=null;
+		var lap_jum_tindakan_tmedis_periode=null;
 		var win;              
 		// check if we do have some search data...
-		if(lap_jum_tindakan_terapisDataStore.baseParams.query!==null){searchquery = lap_jum_tindakan_terapisDataStore.baseParams.query;}
-		if(lap_jum_tindakan_terapisDataStore.baseParams.trawat_cust!==null){trawat_cust_print = lap_jum_tindakan_terapisDataStore.baseParams.trawat_cust;}
-		if(lap_jum_tindakan_terapisDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = lap_jum_tindakan_terapisDataStore.baseParams.trawat_keterangan;}
+		
+		if(lap_jum_tindakan_terapis_idSearchField.getValue()!==null){lap_jum_tindakan_terapis_id_print=lap_jum_tindakan_terapis_idSearchField.getValue();}
+		if(lap_jum_tindakan_bulanField.getValue()!==null){lap_jum_tindakan_tmedis_bulan=lap_jum_tindakan_bulanField.getValue();}
+		if(lap_jum_tindakan_tahunField.getValue()!==null){lap_jum_tindakan_tmedis_tahun=lap_jum_tindakan_tahunField.getValue();}
+		if(Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_start_print=Ext.getCmp('lap_jum_tindakan_tglStartSearchField').getValue().format('Y-m-d');}
+		if(Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue()!==null){lap_jum_tindakan_terapis_tgl_end_print=Ext.getCmp('lap_jum_tindakan_tglEndSearchField').getValue().format('Y-m-d');}
+		if(lap_jum_tindakan_terapis_dokterSearchField.getValue()!==null){lap_jum_tindakan_terapis_dokter_print=lap_jum_tindakan_terapis_dokterSearchField.getValue();}
+		if(lap_jum_tindakan_terapis_groupbyField.getValue()!==null){lap_jum_tindakan_terapis_groupby_print=lap_jum_tindakan_terapis_groupbyField.getValue();}
+
+		if(lap_jum_tindakan_opsitglField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='tanggal';
+		}else if(lap_jum_tindakan_opsiblnField.getValue()==true){
+			lap_jum_tindakan_tmedis_periode='bulan';
+		}else{
+			lap_jum_tindakan_tmedis_periode='all';
+		}
+		
 
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -817,8 +839,18 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			
+			lap_jum_tindakan_id	:	lap_jum_tindakan_terapis_id_print, 
+			lapjum_tglapp_start	: 	lap_jum_tindakan_terapis_tgl_start_print,
+			lapjum_tglapp_end	: 	lap_jum_tindakan_terapis_tgl_end_print,
+			terapis_id	:	lap_jum_tindakan_terapis_dokter_print,
+			lapjum_groupby	: lap_jum_tindakan_terapis_groupby_print,
+			bulan		: lap_jum_tindakan_tmedis_bulan,
+			tahun		: lap_jum_tindakan_tmedis_tahun,
+			periode		: lap_jum_tindakan_tmedis_periode,
+			
+
+
 		  	currentlisting: lap_jum_tindakan_terapisDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
