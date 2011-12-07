@@ -175,6 +175,40 @@ class C_lap_jum_tindakan_dokter extends Controller {
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
+		if ($periode == 'bulan'){
+			if($bulan==1){
+				$bulan_label = "Januari ";
+			}elseif($bulan==2){ 
+				$bulan_label = "Februari ";
+			}elseif($bulan==3){
+				$bulan_label = "Maret ";
+			}elseif($bulan==4){ 
+				$bulan_label = "April ";
+			}elseif($bulan==5){ 
+				$bulan_label = "Mei ";
+			}elseif($bulan==6){ 
+				$bulan_label = "Juni ";
+			}elseif($bulan==7){ 
+				$bulan_label = "Juli ";
+			}elseif($bulan==8){ 
+				$bulan_label = "Agustus ";
+			}elseif($bulan==9){ 
+				$bulan_label = "September ";
+			}elseif($bulan==10){ 
+				$bulan_label = "Oktober ";
+			}elseif ($bulan==11){ 
+				$bulan_label = "November ";
+			}elseif($bulan==12){ 
+				$bulan_label = "Desember ";	
+			}	
+
+			$periode_label = "Periode ".$bulan_label.$tahun;
+		}else{
+			$trawat_tglapp_start_label = date('d-m-Y', strtotime($trawat_tglapp_start));
+			$trawat_tglapp_end_label = date('d-m-Y', strtotime($trawat_tglapp_end));
+			$periode_label = "Periode ".$trawat_tglapp_start_label." s/d ".$trawat_tglapp_end_label;
+		}
+		
 		$result = $this->m_lap_jum_tindakan_dokter->report_tindakan_print($tgl_awal,$periode,$report_groupby,$trawat_dokter,$trawat_tglapp_start,$trawat_tglapp_end,$option,$filter);
 		$nbrows=$result->num_rows();
 		
@@ -189,7 +223,7 @@ class C_lap_jum_tindakan_dokter extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("tindakanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
+		fwrite($file, "<body onload='window.print()'><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER <br> $periode_label </caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
 		<tfoot>
 			<tr>		
 				<th>Grand Tot Kredit(Poin)</th>
