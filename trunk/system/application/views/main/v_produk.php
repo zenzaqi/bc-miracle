@@ -99,6 +99,7 @@ var produk_dstaffdokterField;
 var produk_dstaffnondokterField;
 var produk_dpromoField;
 var produk_pointField;
+var produk_kreditField
 var produk_volumeField;
 var produk_hargaField;
 var produk_harga_kiField;
@@ -137,6 +138,7 @@ var produk_dkeluargaSearchField;
 var produk_downerSearchField;
 var produk_dgroomingSearchField;
 var produk_pointSearchField;
+var produk_kreditSearchField;
 var produk_volumeSearchField;
 var produk_hargaSearchField;
 var produk_keteranganSearchField;
@@ -160,6 +162,7 @@ Ext.onReady(function(){
 		var produk_du_update=null;
 		var produk_dm_update=null;
 		var produk_point_update=null;
+		var produk_kredit_update=null;
 		var produk_volume_update=null;
 		var produk_harga_update=null;
 		var produk_keterangan_update=null;
@@ -177,6 +180,7 @@ Ext.onReady(function(){
 		if(oGrid_event.record.data.produk_du!== null){produk_du_update = oGrid_event.record.data.produk_du;}
 		if(oGrid_event.record.data.produk_dm!== null){produk_dm_update = oGrid_event.record.data.produk_dm;}
 		if(oGrid_event.record.data.produk_point!== null){produk_point_update = oGrid_event.record.data.produk_point;}
+		if(oGrid_event.record.data.produk_kredit!== null){produk_kredit_update = oGrid_event.record.data.produk_kredit;}
 		if(oGrid_event.record.data.produk_volume!== null){produk_volume_update = oGrid_event.record.data.produk_volume;}
 		if(oGrid_event.record.data.produk_harga!== null){produk_harga_update = oGrid_event.record.data.produk_harga;}
 		if(oGrid_event.record.data.produk_keterangan!== null){produk_keterangan_update = oGrid_event.record.data.produk_keterangan;}
@@ -199,6 +203,7 @@ Ext.onReady(function(){
 				produk_du	:produk_du_update,  
 				produk_dm	:produk_dm_update,  
 				produk_point	:produk_point_update,  
+				produk_kredit	:produk_kredit_update, 
 				produk_volume	:produk_volume_update,  
 				produk_harga	:produk_harga_update,  
 				produk_keterangan	:produk_keterangan_update,  
@@ -262,6 +267,7 @@ Ext.onReady(function(){
 		var produk_dstaffnondokter_create=null;
 		var produk_dpromo_create=null;
 		var produk_point_create=null; 
+		var produk_kredit_create=null;
 		var produk_volume_create=null; 
 		var produk_harga_create=null; 
 		var produk_keterangan_create=null; 
@@ -303,6 +309,7 @@ Ext.onReady(function(){
 		if(produk_dstaffnondokterField.getValue()!== null){produk_dstaffnondokter_create = produk_dstaffnondokterField.getValue();}
 		if(produk_dpromoField.getValue()!== null){produk_dpromo_create = produk_dpromoField.getValue();}
 		if(produk_pointField.getValue()!== null){produk_point_create = produk_pointField.getValue();} 
+		if(produk_kreditField.getValue()!== null){produk_kredit_create = produk_kreditField.getValue();} 
 		if(produk_volumeField.getValue()!== null){produk_volume_create = produk_volumeField.getValue();} 
 		if(produk_hargaField.getValue()!== null){produk_harga_create = convertToNumber(produk_hargaField.getValue());} 
 		if(produk_harga_kiField.getValue()!== null){produk_harga_createki = convertToNumber(produk_harga_kiField.getValue());}
@@ -349,7 +356,8 @@ Ext.onReady(function(){
 				produk_dstaffdokter	: produk_dstaffdokter_create,
 				produk_dstaffnondokter	: produk_dstaffnondokter_create,
 				produk_dpromo	: produk_dpromo_create,
-				produk_point	: produk_point_create, 
+				produk_point	: produk_point_create,
+				produk_kredit	: produk_kredit_create,
 				produk_volume	: produk_volume_create, 
 				produk_harga	: produk_harga_create, 
 				produk_keterangan	: produk_keterangan_create, 
@@ -505,6 +513,8 @@ Ext.onReady(function(){
 		produk_dpromoField.setValue(null);
 		produk_pointField.reset();
 		produk_pointField.setValue(null);
+		produk_kreditField.reset();
+		produk_kreditField.setValue(null);
 		produk_volumeField.reset();
 		produk_volumeField.setValue(null);
 		produk_hargaField.reset();
@@ -642,6 +652,7 @@ Ext.onReady(function(){
 		produk_dstaffnondokterField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dstaffnondokter'));
 		produk_dpromoField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_dpromo'));
 		produk_pointField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_point'));
+		produk_kreditField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_kredit'));
 		produk_volumeField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_volume'));
 		produk_keteranganField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_keterangan'));
 		produk_aktifField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_aktif'));
@@ -926,6 +937,7 @@ Ext.onReady(function(){
 			{name: 'produk_dstaffnondokter', type: 'int', mapping: 'produk_dstaffnondokter'},
 			{name: 'produk_dpromo', type: 'int', mapping: 'produk_dpromo'},
 			{name: 'produk_point', type: 'int', mapping: 'produk_point'}, 
+			{name: 'produk_kredit', type: 'int', mapping: 'produk_kredit'}, 
 			{name: 'produk_volume', type: 'int', mapping: 'produk_volume'}, 
 			{name: 'produk_harga', type: 'float', mapping: 'produk_harga'}, 
 			{name: 'produk_keterangan', type: 'string', mapping: 'produk_keterangan'}, 
@@ -2158,6 +2170,21 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
+	
+	/* Identify  produk_kredit Field */
+	produk_kreditField= new Ext.form.NumberField({
+		id: 'produk_kreditField',
+		name: 'produk_kreditField',
+		fieldLabel: 'Kredit (%)',
+		allowNegatife : false,
+		emptyText: '0',
+		allowBlank: true,
+		allowDecimals: false,
+		enableKeyEvents : true,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
+	
 	/* Identify  produk_volume Field */
 	produk_volumeField= new Ext.form.TextField({
 		id: 'produk_volumeField',
@@ -2498,7 +2525,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_pointField, produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_idField, produk_aktifGroup] 
+				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_pointField, produk_kreditField,produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_idField, produk_aktifGroup] 
 			}
 			]
 	
@@ -3198,6 +3225,7 @@ Ext.onReady(function(){
 		var produk_downer_search=null;
 		var produk_dgrooming_search=null;
 		var produk_point_search=null;
+		var produk_kredit_search=null;
 		var produk_volume_search=null;
 		var produk_kontribusi_search=null;
 		var produk_harga_search=null;
@@ -3221,6 +3249,7 @@ Ext.onReady(function(){
 		if(produk_downerSearchField.getValue()!==null){produk_downer_search=produk_downerSearchField.getValue();}
 		if(produk_dgroomingSearchField.getValue()!==null){produk_dgrooming_search=produk_dgroomingSearchField.getValue();}
 		if(produk_pointSearchField.getValue()!==null){produk_point_search=produk_pointSearchField.getValue();}
+		if(produk_kreditSearchField.getValue()!==null){produk_kredit_search=produk_kreditSearchField.getValue();}
 		if(produk_kontribusiSearchField.getValue()!==null){produk_kontribusi_search=produk_kontribusiSearchField.getValue();}
 		if(produk_volumeSearchField.getValue()!==null){produk_volume_search=produk_volumeSearchField.getValue();}
 		if(produk_hargaSearchField.getValue()!==null){produk_harga_search=produk_hargaSearchField.getValue();}
@@ -3250,6 +3279,7 @@ Ext.onReady(function(){
 			produk_downer	: produk_downer_search,
 			produk_dgrooming: produk_dgrooming_search,
 			produk_point	:	produk_point_search, 
+			produk_kredit	:	produk_kredit_search, 
 			kategori2_nama	:	produk_kontribusi_search,
 			produk_volume	:	produk_volume_search,
 			produk_harga	:	produk_harga_search, 
@@ -3305,6 +3335,8 @@ Ext.onReady(function(){
 		produk_dgroomingSearchField.setValue(null);
 		produk_pointSearchField.reset();
 		produk_pointSearchField.setValue(null);
+		produk_kreditSearchField.reset();
+		produk_kreditSearchField.setValue(null);
 		produk_kontribusiSearchField.reset();
 		produk_kontribusiSearchField.setValue(null);
 		produk_volumeSearchField.reset();
@@ -3314,7 +3346,7 @@ Ext.onReady(function(){
 		produk_keteranganSearchField.reset();
 		produk_keteranganSearchField.setValue(null);
 		produk_aktifSearchField.reset();
-		produk_aktifSearchField.setValue(null);
+		produk_aktifSearchField.setValue('Aktif');
 	}
 	
 	/* Field for search */
@@ -3507,6 +3539,17 @@ Ext.onReady(function(){
 		width: 60,
 		maskRe: /([0-9]+)$/
 	});
+	/* Identify  produk_kredit Field */
+	produk_kreditSearchField= new Ext.form.NumberField({
+		id: 'produk_kreditSearchField',
+		name: 'produk_kreditField',
+		fieldLabel: 'Kredit (x)',
+		allowNegatife : false,
+		emptyText: '1',
+		allowDecimals: false,
+		width: 60,
+		maskRe: /([0-9]+)$/
+	});
 	/* Identify  produk_volume Field */
 	produk_volumeSearchField= new Ext.form.TextField({
 		id: 'produk_volumeSearchField',
@@ -3566,7 +3609,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_pointSearchField, produk_volumeSearchField, produk_kontribusiSearchField, produk_keteranganSearchField, produk_aktifSearchField, produk_idSearchField] 
+				items: [produk_pointSearchField, produk_kreditSearchField, produk_volumeSearchField, produk_kontribusiSearchField, produk_keteranganSearchField, produk_aktifSearchField, produk_idSearchField] 
 			}
 			]
 		}]
@@ -3631,6 +3674,7 @@ Ext.onReady(function(){
 		var produk_downer_print=null;
 		var produk_dgrooming_print=null;
 		var produk_point_print=null;
+		var produk_kredit_print=null;
 		var produk_volume_print=null;
 		var produk_harga_print=null;
 		var produk_keterangan_print=null;
@@ -3654,6 +3698,7 @@ Ext.onReady(function(){
 		if(produk_DataStore.baseParams.produk_downer!==null){produk_downer_print = produk_DataStore.baseParams.produk_downer;}
 		if(produk_DataStore.baseParams.produk_dgrooming!==null){produk_dgrooming_print = produk_DataStore.baseParams.produk_dgrooming;}
 		if(produk_DataStore.baseParams.produk_point!==null){produk_point_print = produk_DataStore.baseParams.produk_point;}
+		if(produk_DataStore.baseParams.produk_kredit!==null){produk_kredit_print = produk_DataStore.baseParams.produk_kredit;}
 		if(produk_DataStore.baseParams.produk_volume!==null){produk_volume_print = produk_DataStore.baseParams.produk_volume;}
 		if(produk_DataStore.baseParams.produk_harga!==null){produk_harga_print = produk_DataStore.baseParams.produk_harga;}
 		if(produk_DataStore.baseParams.produk_keterangan!==null){produk_keterangan_print = produk_DataStore.baseParams.produk_keterangan;}
@@ -3682,6 +3727,7 @@ Ext.onReady(function(){
 			produk_downer	: produk_downer_print,
 			produk_dgrooming: produk_dgrooming_print,
 			produk_point : produk_point_print,
+			produk_kredit : produk_kredit_print,
 			produk_volume : produk_volume_print,
 			produk_harga : produk_harga_print,
 			produk_keterangan : produk_keterangan_print,
@@ -3739,6 +3785,7 @@ Ext.onReady(function(){
 		var produk_downer_2excel=null;
 		var produk_dgrooming_2excel=null;
 		var produk_point_2excel=null;
+		var produk_kredit_2excel=null;
 		var produk_volume_2excel=null;
 		var produk_harga_2excel=null;
 		var produk_keterangan_2excel=null;
@@ -3762,6 +3809,7 @@ Ext.onReady(function(){
 		if(produk_DataStore.baseParams.produk_downer!==null){produk_downer_2excel = produk_DataStore.baseParams.produk_downer;}
 		if(produk_DataStore.baseParams.produk_dgrooming!==null){produk_dgrooming_2excel = produk_DataStore.baseParams.produk_dgrooming;}
 		if(produk_DataStore.baseParams.produk_point!==null){produk_point_2excel = produk_DataStore.baseParams.produk_point;}
+		if(produk_DataStore.baseParams.produk_kredit!==null){produk_kredit_2excel = produk_DataStore.baseParams.produk_kredit;}
 		if(produk_DataStore.baseParams.produk_volume!==null){produk_volume_2excel = produk_DataStore.baseParams.produk_volume;}
 		if(produk_DataStore.baseParams.produk_harga!==null){produk_harga_2excel = produk_DataStore.baseParams.produk_harga;}
 		if(produk_DataStore.baseParams.produk_keterangan!==null){produk_keterangan_2excel = produk_DataStore.baseParams.produk_keterangan;}
@@ -3790,6 +3838,7 @@ Ext.onReady(function(){
 			produk_downer	: produk_downer_2excel,
 			produk_dgrooming: produk_dgrooming_2excel,
 			produk_point : produk_point_2excel,
+			produk_kredit : produk_kredit_2excel,
 			produk_volume : produk_volume_2excel,
 			produk_harga : produk_harga_2excel,
 			produk_keterangan : produk_keterangan_2excel,
@@ -3983,6 +4032,11 @@ Ext.onReady(function(){
 		}
 	});
 	produk_dpromoField.on("keyup",function(){
+		if(this.getRawValue()>100){
+			this.setRawValue(100);
+		}
+	});
+	produk_pointField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}

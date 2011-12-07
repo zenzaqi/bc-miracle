@@ -1,0 +1,1 @@
+ALTER TABLE `produk`  ADD COLUMN `produk_kredit` INT(11) NOT NULL AFTER `produk_point`;

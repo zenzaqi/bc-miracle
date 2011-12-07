@@ -227,6 +227,7 @@ class C_produk extends Controller {
 		$produk_dstaffnondokter=trim(@$_POST["produk_dstaffnondokter"]);
 		$produk_dpromo=trim(@$_POST["produk_dpromo"]);
 		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_kredit=trim(@$_POST["produk_kredit"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
 		$produk_harga_ki=trim(@$_POST["produk_harga_ki"]);
@@ -322,7 +323,7 @@ class C_produk extends Controller {
 		
 		$result = $this->m_produk->produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 												$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,
-												$produk_dpromo, $produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
+												$produk_dpromo, $produk_point ,$produk_kredit,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
 		echo $result;
 	}
 	
@@ -357,7 +358,8 @@ class C_produk extends Controller {
 		$produk_dstaffdokter=trim(@$_POST["produk_dstaffdokter"]);
 		$produk_dstaffnondokter=trim(@$_POST["produk_dstaffnondokter"]);
 		$produk_dpromo=trim(@$_POST["produk_dpromo"]);
-		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_point=trim(@$_POST["produk_point"]);		
+		$produk_kredit=trim(@$_POST["produk_kredit"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
 		$produk_harga_ki=trim(@$_POST["produk_harga_ki"]);
@@ -435,7 +437,7 @@ class C_produk extends Controller {
 		
 		$result=$this->m_produk->produk_create($produk_kode, $produk_kodelama ,$produk_group ,$produk_kategori ,$produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 											$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,$produk_dpromo,
-											$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg , $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
+											$produk_point ,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif, $produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg , $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp);
 		echo $result;
 	}
 
@@ -474,6 +476,7 @@ class C_produk extends Controller {
 		$produk_downer=trim(@$_POST["produk_downer"]);
 		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_kredit=trim(@$_POST["produk_kredit"]);
 		$produk_kontribusi=trim(@$_POST["produk_kontribusi"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
@@ -488,7 +491,7 @@ class C_produk extends Controller {
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
 		$result = $this->m_produk->produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 												$produk_du ,$produk_dm, $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-												$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama);
+												$produk_point ,$produk_kredit,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama);
 		echo $result;
 	}
 
@@ -518,6 +521,7 @@ class C_produk extends Controller {
 		$produk_downer=trim(@$_POST["produk_downer"]);
 		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_kredit=trim(@$_POST["produk_kredit"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
@@ -531,13 +535,13 @@ class C_produk extends Controller {
 		
 		$result = $this->m_produk->produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 												$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-												$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
+												$produk_point ,$produk_kredit,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
 		$nbrows=$result->num_rows();
-		$totcolumn=16;
+		$totcolumn=24;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("produklist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Produk Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Produk List'><caption>DAFTAR PRODUK</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Kode Lama</th><th scope='col'>Group</th><th scope='col'>Kategori</th><th scope='col'>Jenis</th><th scope='col'>Nama</th><th scope='col'>Satuan</th><th scope='col'>DU</th><th scope='col'>DM</th><th scope='col'>Point</th><th scope='col'>Volume</th><th scope='col'>Produk Harga</th><th scope='col'>Keterangan</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='Produk List'><caption>DAFTAR PRODUK</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Nama</th><th scope='col'>Satuan</th><th scope='col'>Volume</th><th scope='col'>Group</th><th scope='col'>Group2</th><th scope='col'>Jenis</th><th scope='col'>Harga</th><th scope='col'>Point</th><th scope='col'>Kredit</th><th scope='col'>Produk Aktif</th><th scope='col'>DU</th><th scope='col'>DM</th><th scope='col'>Ultah</th><th scope='col'>Card</th><th scope='col'>Kolega</th><th scope='col'>Klrg</th><th scope='col'>Owner</th><th scope='col'>Groom</th><th scope='col'>Wrtwn</th><th scope='col'>Staff Dr</th><th scope='col'>Staff Non Dr</th><th scope='col'>Promo</th><th scope='col'>Keterangan</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Produk</td></tr></tfoot><tbody>");
 		$i=0;
@@ -554,18 +558,26 @@ class C_produk extends Controller {
 				fwrite($file,"</th><td>");
 				fwrite($file, $data['produk_kode']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_kodelama']);
+				fwrite($file, $data['produk_nama']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['satuan_nama']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_volume']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
+				fwrite($file, $data['jenis_nama']);
+				fwrite($file,"</td><td>");
 				fwrite($file, $data['kategori_nama']);
+				fwrite($file,"</td><td>");				
+				fwrite($file, number_format($data['produk_harga']));
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_jenis']);
+				fwrite($file, $data['produk_point']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_nama']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_satuan']);
-				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_kredit']);
+				fwrite($file,"</td><td>");								
+				fwrite($file, $data['produk_aktif']);
+				fwrite($file,"</td><td>");				
 				fwrite($file, $data['produk_du']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_dm']);
@@ -580,17 +592,17 @@ class C_produk extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_downer']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_dgrooming']);
+				fwrite($file, $data['produk_dgrooming']);		
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_point']);
+				fwrite($file, $data['produk_dwartawan']);		
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_volume']);
+				fwrite($file, $data['produk_dstaffdokter']);		
 				fwrite($file,"</td><td>");
-				fwrite($file, number_format($data['produk_harga']));
+				fwrite($file, $data['produk_dstaffnondokter']);		
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['produk_dpromo']);		
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['produk_keterangan']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['produk_aktif']);
 				fwrite($file, "</td></tr>");
 				// fwrite($file, $data['produk_creator']);
 				// fwrite($file, "</td></tr>");
@@ -636,6 +648,7 @@ class C_produk extends Controller {
 		$produk_downer=trim(@$_POST["produk_downer"]);
 		$produk_dgrooming=trim(@$_POST["produk_dgrooming"]);
 		$produk_point=trim(@$_POST["produk_point"]);
+		$produk_kredit=trim(@$_POST["produk_kredit"]);
 		$produk_volume=trim(@$_POST["produk_volume"]);
 		$produk_harga=trim(@$_POST["produk_harga"]);
 		$produk_keterangan=trim(@$_POST["produk_keterangan"]);
@@ -649,7 +662,7 @@ class C_produk extends Controller {
 		
 		$query = $this->m_produk->produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 													$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-													$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
+													$produk_point ,$produk_kredit,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter);
 		$this->load->plugin('to_excel');
 		to_excel($query,"produk"); 
 		echo '1';

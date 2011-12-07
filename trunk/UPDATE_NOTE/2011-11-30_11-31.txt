@@ -1,0 +1,3 @@
+vcm_produk : menambah kredit dalam % pada master produk (create, update, search, print, excel)
+2011-11-30_11-29.sql : vu_produk (menambah satuan_nama)
+2011-11-30_09-30.sql : menambah field produk_kredit pada table produk

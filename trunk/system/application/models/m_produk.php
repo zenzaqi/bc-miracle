@@ -265,7 +265,7 @@ class M_produk extends Model{
 		//function for update record
 		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,$produk_dpromo,
-								$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp ){
+								$produk_point,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp ){
 		
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
@@ -368,6 +368,7 @@ class M_produk extends Model{
 				"produk_kodelama"=>$produk_kodelama, 
 				"produk_nama"=>$produk_nama, 
 				"produk_point"=>$produk_point, 
+				"produk_kredit"=>$produk_kredit, 
 				"produk_volume"=>$produk_volume, 
 				"produk_harga"=>$produk_harga,
 				"produk_harga_ki"=>$produk_harga_ki,
@@ -487,7 +488,7 @@ class M_produk extends Model{
 		//function for create new record
 		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,$produk_dpromo,
-								$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr,$produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp){
+								$produk_point ,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr,$produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp){
 		/*if ($produk_aktif=="")
 			$produk_aktif = "Aktif";*/
 		if($produk_harga=="")
@@ -610,6 +611,7 @@ class M_produk extends Model{
 				"produk_dstaffnondokter"=>$produk_dstaffnondokter, 
 				"produk_dpromo"=>$produk_dpromo, 
 				"produk_point"=>$produk_point, 
+				"produk_kredit"=>$produk_kredit, 
 				"produk_volume"=>$produk_volume, 
 				"produk_harga"=>$produk_harga,
 				"produk_harga_ki"=>$produk_harga_ki,
@@ -719,7 +721,7 @@ class M_produk extends Model{
 		//function for advanced search record
 		function produk_search($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm ,$produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-								$produk_point ,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama){
+								$produk_point ,$produk_kredit,$produk_kontribusi ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$start,$end, $kategori2_nama){
 			//full query
 			if($produk_aktif=="")
 				$produk_aktif="Aktif";
@@ -797,6 +799,10 @@ class M_produk extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_point LIKE '%".$produk_point."%'";
 			};
+			if($produk_kredit!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " produk_kredit LIKE '%".$produk_kredit."%'";
+			};
 			if($produk_kontribusi!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " produk_kontribusi='".$produk_kontribusi."'";
@@ -837,12 +843,12 @@ class M_produk extends Model{
 		//function for print record
 		function produk_print($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-								$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
+								$produk_point ,$produk_kredit,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
 			$query="select * from vu_produk";
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' )";
+				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_kredit LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($produk_id!=''){
@@ -913,6 +919,10 @@ class M_produk extends Model{
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_point LIKE '%".$produk_point."%'";
 				};
+				if($produk_kredit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_kredit LIKE '%".$produk_kredit."%'";
+				};
 				if($produk_volume!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_volume LIKE '%".$produk_volume."%'";
@@ -937,7 +947,7 @@ class M_produk extends Model{
 		//function  for export to excel
 		function produk_export_excel($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 										$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming,
-										$produk_point ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
+										$produk_point ,$produk_kredit, $produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif ,$option,$filter){
 			//full query
 			$query="SELECT	if(produk_kodelama='','-',ifnull(produk_kodelama,'-')) AS kode_lama,
 							ifnull(produk_kode,'-') AS kode_baru,
@@ -945,7 +955,7 @@ class M_produk extends Model{
 							ifnull(group_nama,'-') AS group_1,
 							ifnull(jenis_nama,'-') AS group_2,
 							ifnull(kategori_nama,'-') AS jenis,
-							ifnull(satuan_kode,'-') AS satuan,
+							ifnull(satuan_nama,'-') AS satuan,
 							ifnull(produk_du,'-') AS 'DU (%)',
 							ifnull(produk_dm,'-') AS 'DM (%)',
 							ifnull(produk_dultah,'-') AS 'dultah (%)',
@@ -954,16 +964,22 @@ class M_produk extends Model{
 							ifnull(produk_dkeluarga,'-') AS 'dkeluarga (%)',
 							ifnull(produk_downer,'-') AS 'downer (%)',
 							ifnull(produk_dgrooming,'-') AS 'dgrooming (%)',
+							ifnull(produk_dwartawan,'-') AS 'dwartawan (%)',
+							ifnull(produk_dstaffdokter,'-') AS 'dstaffdokter (%)',
+							ifnull(produk_dstaffnondokter,'-') AS 'dstaffnondokter (%)',
+							ifnull(produk_dpromo,'-') AS 'dpromo (%)',
 							ifnull(produk_point,'-') AS point,
+							ifnull(produk_kredit,'-') AS kredit,
 							ifnull(produk_volume,'-') AS vol,
 							ifnull(produk_harga,'-') AS harga,
-							produk_aktif AS aktif
+							produk_aktif AS aktif,
+							produk_keterangan,
 
 					from 	vu_produk";
 					
 			if($option=='LIST'){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif = '".addslashes($filter)."' )";
+				$query .= " (produk_id LIKE '%".addslashes($filter)."%' OR produk_kode LIKE '%".addslashes($filter)."%' OR produk_kodelama LIKE '%".addslashes($filter)."%' OR produk_group LIKE '%".addslashes($filter)."%' OR produk_kategori LIKE '%".addslashes($filter)."%' OR produk_jenis LIKE '%".addslashes($filter)."%' OR produk_nama LIKE '%".addslashes($filter)."%' OR produk_satuan LIKE '%".addslashes($filter)."%' OR produk_du LIKE '%".addslashes($filter)."%' OR produk_dm LIKE '%".addslashes($filter)."%' OR produk_point LIKE '%".addslashes($filter)."%' OR produk_kredit LIKE '%".addslashes($filter)."%' OR produk_volume LIKE '%".addslashes($filter)."%' OR produk_harga LIKE '%".addslashes($filter)."%' OR produk_keterangan LIKE '%".addslashes($filter)."%' OR produk_aktif = '".addslashes($filter)."' )";
 				$result = $this->db->query($query);
 			} else if($option=='SEARCH'){
 				if($produk_id!=''){
@@ -1033,6 +1049,10 @@ class M_produk extends Model{
 				if($produk_point!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " produk_point LIKE '%".$produk_point."%'";
+				};
+				if($produk_kredit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " produk_kredit LIKE '%".$produk_kredit."%'";
 				};
 				if($produk_volume!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
