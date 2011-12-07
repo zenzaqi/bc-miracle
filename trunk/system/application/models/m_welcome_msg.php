@@ -12,7 +12,7 @@ class M_welcome_msg extends Model{
 	function get_welcome_message($task, $menu_id){
 		$tgl_now	= date('Y-m-d');
 		$query 		=  "SELECT 
-							welcome_id, welcome_msg, welcome_title
+							welcome_id, welcome_msg, welcome_title, welcome_icon
 						FROM welcome_msg 
 						WHERE 
 							welcome_group = '".$_SESSION[SESSION_GROUPID]."'

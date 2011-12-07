@@ -85,16 +85,7 @@
 	
 <script>
  
-var group_id=<?=$_SESSION[SESSION_GROUPID];?>;
-
 Ext.onReady(function(){
-
-/* Identify  Welcome_msg_info Field */
-	var message_infoField= new Ext.form.TextArea({
-		id: 'message_infoField',
-		maxLength: 5000,
-		anchor: '95%'
-	});
 
 	/*Data Store khusus utk menampung welcome mesage */
 	welcome_messageDataStore = new Ext.data.Store({
@@ -107,75 +98,39 @@ Ext.onReady(function(){
 			root: 'results'
 		},[
 			{name: 'welcome_id', type: 'int', mapping: 'welcome_id'},
-			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'}
-
+			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'},
+			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'},
+			{name: 'welcome_icon', type: 'string', mapping: 'welcome_icon'}
 		]),
 		sortInfo:{field: 'welcome_id', direction: "ASC"}
 	});
 	
-	/*
-	Ext.Ajax.request({
-						waitMsg: 'Mohon  Tunggu...',
-						url: 'index.php?c=c_welcome_msg&m=get_welcome_message',
-						params:{
-							task	: "LIST"		
-						},
-						timeout: 60000,
-						success: function(response){							
-							var result=eval(response.responseText);
-							if(result!=0){
-								Ext.MessageBox.alert(result+' OK','Data penjualan paket berhasil disimpan');
-			
-							}else{
-								Ext.MessageBox.alert('Salah');
-							}
-						},
-						failure: function(response){
-							var result=response.responseText;
-							Ext.MessageBox.show({
-							   title: 'Error',
-							   msg: 'Could not connect to the database. retry later.',
-							   buttons: Ext.MessageBox.OK,
-							   animEl: 'database',
-							   icon: Ext.MessageBox.ERROR
-							});
-			
-						}
-					});
-	*/		
-	
 	welcome_messageDataStore.load({
-				params: {task : "LIST"},
+				params: {task : "LIST", menu_id: 0},
 					callback: function(opts, success, response)  {
-						  if (success) {
+						if (success) {
+							if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'INFO') {
+								var icon = Ext.MessageBox.INFO;
+							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'WARNING'){
+								var icon = Ext.MessageBox.WARNING;
+							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
+								var icon = Ext.MessageBox.QUESTION;
+							} else if (welcome_messageDataStore.getAt(0).data.welcome_icon == 'ERROR'){
+								var icon = Ext.MessageBox.ERROR;
+							}
+							
 							if(welcome_messageDataStore.getCount()){
-								var message = null;
-								welcome_msg_record=welcome_messageDataStore.getAt(0).data;
-								message_infoField.setValue(welcome_msg_record.welcome_msg);
-								message = message_infoField.getValue();
 								Ext.MessageBox.show({
-									title: 'Tahukah Anda?',
-									msg: message,
+									title: welcome_messageDataStore.getAt(0).data.welcome_title,
+									msg: welcome_messageDataStore.getAt(0).data.welcome_msg,
 									buttons: Ext.MessageBox.OK,
 									animEl: 'save',
-									icon: Ext.MessageBox.INFO
+									icon: icon
 								});
 							}
 						  }
 					  }
 				});	
-
-	//Ext.MessageBox.alert(message+' OK','Data penjualan paket berhasil disimpan');
-	/*
-	Ext.MessageBox.show({
-					title: 'Warning',
-					msg: message_infoField.getValue(),
-					buttons: Ext.MessageBox.OK,
-					animEl: 'save',
-					icon: Ext.MessageBox.WARNING
-				});
-	*/			
-				
 				
 	});
 
