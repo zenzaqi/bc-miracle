@@ -26,7 +26,8 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 											select 
 												ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 												sum(detail_jual_rawat.drawat_jumlah) as Jumlah_rawat,
-												perawatan.rawat_id as perawatan_id						
+												perawatan.rawat_id as perawatan_id,
+												'satuan' as status
 											from detail_jual_rawat
 											left join master_jual_rawat on (master_jual_rawat.jrawat_id=detail_jual_rawat.drawat_master)
 											left join perawatan on (perawatan.rawat_id=detail_jual_rawat.drawat_rawat)
@@ -45,7 +46,8 @@ class m_lap_jum_tindakan_all_dokter extends Model{
 											select
 												ifnull(if((tindakan_detail.dtrawat_petugas1 = 0),if((tindakan_detail.dtrawat_petugas2 = 0),NULL,terapis.karyawan_username),dokter.karyawan_username),referal.karyawan_username) AS karyawan_username,
 												sum(detail_ambil_paket.dapaket_jumlah) as Jumlah_rawat,
-												perawatan.rawat_id as perawatan_id
+												perawatan.rawat_id as perawatan_id,
+												'paket' as status
 											from detail_ambil_paket
 											left join perawatan on (perawatan.rawat_id=detail_ambil_paket.dapaket_item)
 											left join tindakan_detail on (tindakan_detail.dtrawat_id=detail_ambil_paket.dapaket_dtrawat)
