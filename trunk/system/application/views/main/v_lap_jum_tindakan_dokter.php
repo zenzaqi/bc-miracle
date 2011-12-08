@@ -351,8 +351,8 @@ Ext.onReady(function(){
 		},
 		report_tindakan_dokterField,
 		{
-			text: 'Adv Search',
-			tooltip: 'Advanced Search',
+			text: 'Search',
+			tooltip: 'Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
 		}, '-', 
@@ -722,7 +722,7 @@ Ext.onReady(function(){
 		}]
 		,
 		buttons: [{
-				text: 'Adv Search',
+				text: 'Search',
 				handler: report_tindakan_search
 			},{
 				text: 'Close',
