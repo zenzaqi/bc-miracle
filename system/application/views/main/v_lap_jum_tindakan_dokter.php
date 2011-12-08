@@ -113,7 +113,7 @@ var thisyear=new Date().format('Y');
 //declare konstant
 var post2db = '';
 var msg = '';
-var pageS=15;
+var pageS_dr = 250;
 
 /* declare variable here for Field*/
 //var report_tindakan_idField;
@@ -153,7 +153,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST",start:0,limit:pageS, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST",start:0,limit:pageS_dr, trawat_dokter : 0}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -182,7 +182,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_lap_jum_tindakan_dokter&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST2",start:0,limit:pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST2",start:0,limit:pageS_dr}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -233,6 +233,11 @@ Ext.onReady(function(){
 	report_tindakanColumnModel = new Ext.grid.ColumnModel(
 		[
 		{
+			align : 'right',
+			header: '<div align="center">' + 'No' + '</div>',
+			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
+			width: 10
+		},{
 			header: '<div align="center">' + 'Kode' + '</div>',
 			dataIndex: 'rawat_kode',
 			width: 100,//185,	//210,
@@ -246,9 +251,9 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 70,	//55,
+			width: 60,	//55,
 			sortable: false
 		},
 		{	
@@ -262,7 +267,7 @@ Ext.onReady(function(){
 			align : 'Right',
 			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
 			dataIndex: 'dtrawat_skreditrp',
-			width: 80,	//55,
+			width: 120,	//55,
 			sortable: false,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -270,16 +275,16 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit (Poin)' + '</div>',
+			header: '<div align="center">' + 'Tot Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_jkredit',
-			width: 120,	//55,
+			width: 100,	//55,
 			sortable: true
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Kredit (Rp)' + '</div>',
 			dataIndex: 'dtrawat_jkreditrp',
-			width: 90,	//55,
+			width: 120,	//55,
 			sortable: true,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -304,16 +309,16 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Grand Total Kredit (Poin)' + '</div>',
+			header: '<div align="right">' + 'Grand Tot Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_kredit',
-			width: 675,	//55,
+			width: 780,	//55,
 			sortable: false
 		},
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Grand Total Kredit (Rp)' + '</div>',
+			header: '<div align="right">' + 'Grand Tot Kredit (Rp)' + '</div>',
 			dataIndex: 'dtrawat_kreditrp',
-			width: 125,	//55,
+			width: 120,	//55,
 			sortable: false,
 			renderer: function(val){
 				return '<span>'+Ext.util.Format.number(val,'0,000')+'</span>';
@@ -329,7 +334,8 @@ Ext.onReady(function(){
 		id: 'report_tindakanListEditorGrid',
 		el: 'fp_report_tindakan',
 		title: 'Laporan Jumlah Tindakan Dokter',
-		autoHeight: true,
+		autoHeight: false,
+		height: 444,
 		store: report_tindakanDataStore, // DataStore
 		cm: report_tindakanColumnModel, // Nama-nama Columns
 		enableColLock:false,
@@ -337,9 +343,9 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800, //940,//1200,	//970,
+	  	width: 900,
 		bbar: new Ext.PagingToolbar({
-			//pageSize: pageS,
+			pageSize: pageS_dr,
 			disabled:false,
 			store: report_tindakanDataStore,
 			displayInfo: true
@@ -384,7 +390,7 @@ Ext.onReady(function(){
 		//clicksToEdit:2, // 2xClick untuk bisa meng-Edit inLine Data
 		selModel: new Ext.grid.RowSelectionModel({singleSelect:false}),
 		viewConfig: { forceFit:true },
-	  	width: 800, //940,//1200,	//970,
+	  	width: 900,
 	
 		/* Add Control on ToolBar */
 	
@@ -423,7 +429,7 @@ Ext.onReady(function(){
   	/* End of Function */
 		
 	report_tindakanListEditorGrid.addListener('rowcontextmenu', onreport_tindakanListEditGridContextMenu);
-	//report_tindakanDataStore.load({params: {start: 0, limit: pageS}});	// load DataStore
+	//report_tindakanDataStore.load({params: {start: 0, limit: pageS_dr}});	// load DataStore
 	//report_tindakanListEditorGrid.on('afteredit', tindakan_medis_update); // inLine Editing Record
 	
 	/*Detail Declaration */	
@@ -517,13 +523,13 @@ Ext.onReady(function(){
 			periode		: report_tindakan_tmedis_periode
 		};
 		// Cause the datastore to do another query : 
-		report_tindakanDataStore.reload({params: {start: 0, limit: pageS}});
-		sum_kreditDataStore.reload({params: {start: 0, limit: pageS}});
+		report_tindakanDataStore.reload({params: {start: 0, limit: pageS_dr}});
+		sum_kreditDataStore.reload({params: {start: 0, limit: pageS_dr}});
 		}
 		else {
 			Ext.MessageBox.show({
 				title: 'Warning',
-				msg: 'Tanggal atau Dokter belum diisi',
+				msg: 'Form Anda belum lengkap.',
 				buttons: Ext.MessageBox.OK,
 				animEl: 'save',
 				icon: Ext.MessageBox.WARNING
@@ -763,7 +769,10 @@ Ext.onReady(function(){
 		items: report_tindakan_searchForm
 	});
     /* End of Function */ 
-	 
+	
+	report_tindakan_searchWindow.show();
+	report_tindakan_reset_formSearch();
+	
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
 		if(!report_tindakan_searchWindow.isVisible()){
@@ -978,9 +987,6 @@ Ext.onReady(function(){
 <div>
 	<div class="col">
         <div id="fp_report_tindakan"></div>
-         <div id="fp_report_tindakan_detail"></div>
-		 <div id="fp_dreport_tindakan"></div>
-		<div id="elwindow_report_tindakan_create"></div>
         <div id="elwindow_report_tindakan_search"></div>
     </div>
 </div>
