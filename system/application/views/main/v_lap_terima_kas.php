@@ -546,29 +546,11 @@ Ext.onReady(function(){
 								var hasil=eval(result.responseText);
 								if (hasil > 0 )
 								{
+									<? $info=$this->m_public_function->get_info();?>
+									//alert(<?$info->info_nama;?>);
 									terimakasChart.render();
-									terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://192.168.1.2:81/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
-									
+									terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://"+"<? echo $_SERVER['SERVER_ADDR'].":".$_SERVER['SERVER_PORT']?>"+"/mis2/index.php?c=c_gauge_chart&n=total&nilai="+hasil+"'></iframe>");
 								}
-								/*
-								switch(hasil){
-								case 1:
-									Ext.MessageBox.hide();
-									
-									laporannetsales_allChart.render();
-									laporannetsales_allChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart'></iframe>");
-									break;
-								default:
-									Ext.MessageBox.hide();
-									Ext.MessageBox.show({
-										title: 'Warning',
-										//msg: FAILED_PRINT,
-										buttons: Ext.MessageBox.OK,
-										animEl: 'save',
-										icon: Ext.MessageBox.WARNING
-									});
-									break;
-								} */
 							},
 							failure: function(response){
 								Ext.MessageBox.hide();
