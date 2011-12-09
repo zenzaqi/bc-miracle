@@ -37,18 +37,36 @@ class M_master_lunas_piutang extends Model{
 		if($lunas=='1'){
 			$query_lunas = " lpiutang_sisa = 0 AND lpiutang_stat_dok='Tertutup'";
 		}else{
-			$query_lunas = " lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka'";
+			$query_lunas = " lpiutang_sisa >0 AND lpiutang_stat_dok='Terbuka'";
 		}
 		
 		//$sql="SELECT * FROM vu_trans_piutang WHERE tanggal > '2010-07-20' AND lpiutang_sisa>0 AND lpiutang_stat_dok='Terbuka' ".$order_by;
 		if($opsi=='rekap'){
 			$order_by=" ORDER BY cust_id";
 			if($periode=='all')
-				$sql="SELECT * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND  ".$query_lunas ." ";
+				$sql="SELECT vu_trans_piutang.*,
+					sum(vu_trans_piutang.lpiutang_total) AS piutang_total,
+					sum(vu_trans_piutang.lpiutang_sisa) AS piutang_sisa,
+					sum(vu_trans_piutang.piutang_tunai) AS piutang_tunai,
+					sum(vu_trans_piutang.piutang_card) AS piutang_card,
+					sum(vu_trans_piutang.piutang_cek) AS piutang_cek,
+					sum(vu_trans_piutang.piutang_transfer) AS piutang_transfer FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND  ".$query_lunas." GROUP BY vu_trans_piutang.lpiutang_cust   ";
 			else if($periode=='bulan')
-				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
+				$sql="SELECT vu_trans_piutang.*,
+					sum(vu_trans_piutang.lpiutang_total) AS piutang_total,
+					sum(vu_trans_piutang.lpiutang_sisa) AS piutang_sisa,
+					sum(vu_trans_piutang.piutang_tunai) AS piutang_tunai,
+					sum(vu_trans_piutang.piutang_card) AS piutang_card,
+					sum(vu_trans_piutang.piutang_cek) AS piutang_cek,
+					sum(vu_trans_piutang.piutang_transfer) AS piutang_transfer FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ";
 			else if($periode=='tanggal')
-				$sql="SELECT distinct * FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
+				$sql="SELECT vu_trans_piutang.*,
+					sum(vu_trans_piutang.lpiutang_total) AS piutang_total,
+					sum(vu_trans_piutang.lpiutang_sisa) AS piutang_sisa,
+					sum(vu_trans_piutang.piutang_tunai) AS piutang_tunai,
+					sum(vu_trans_piutang.piutang_card) AS piutang_card,
+					sum(vu_trans_piutang.piutang_cek) AS piutang_cek,
+					sum(vu_trans_piutang.piutang_transfer) AS piutang_transfer FROM vu_trans_piutang WHERE (tanggal > '2010-07-20') AND ".$query_lunas ." AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ";
 		}else if($opsi=='detail'){
 			$order_by=" ORDER BY cust_id, no_bukti, dpiutang_nobukti";
 			if($periode=='all')

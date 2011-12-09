@@ -24,8 +24,8 @@
 	<thead>
        	<tr>
         	<th rowspan="2" scope='col'>No</th>
-            <th rowspan="2" scope='col'>No Faktur</th>           
-            <th rowspan="2" scope='col'>Tanggal</th>
+            <th rowspan="2" scope='col'>Customer</th>           
+            <? //<th rowspan="2" scope='col'>Tanggal</th> ?>
 			<th rowspan="2" scope='col'>Piutang (Rp)</th>
             <th colspan="4" scope='col' align="center">Pelunasan</th>
             <th rowspan="2" scope='col'>Sisa (Rp)</th>
@@ -51,109 +51,74 @@
 			<?php if($cust!==$print->cust_id) { ?>
            <tr>
                 <td><b><? $j++; echo $j; ?></b></td>
-                <td colspan="9"><b><?php echo $print->cust_nama." (".$print->cust_no.")";?></b></td>
-           </tr>
-           <?php 
-				$sub_tunai=0;
-				$sub_cek=0;
-				$sub_transfer=0;
-				$sub_kuitansi=0;
-				$sub_card=0;
-				$sub_kredit=0;
-				$sub_piutang=0;
-				$sub_sisa=0;
-
+                <td><?php echo $print->cust_nama." (".$print->cust_no.")";?></td>
+           
+			<?php 
 				$i=0; 
+				$total_piutang+=$print->piutang_total;
+				$total_sisa+=$print->piutang_sisa;
+				$total_tunai+=$print->piutang_tunai;
+				$total_card+=$print->piutang_card;
+				$total_cek+=$print->piutang_cek;
+				$total_transfer+=$print->piutang_transfer;
 			?>
-           <?php foreach($data_print as $print_list) {  
-		   ?>
-           <?php if($print_list->cust_id==$print->cust_id){ $i++;
-		   			$total_piutang+=$print_list->lpiutang_total;
-					$total_sisa+=$print_list->lpiutang_sisa;
-					$total_tunai+=$print_list->piutang_tunai;
-					$total_card+=$print_list->piutang_card;
-					$total_cek+=$print_list->piutang_cek;
-					$total_transfer+=$print_list->piutang_transfer;
-					
-					$sub_piutang+=$print_list->lpiutang_total;
-					$sub_sisa+=$print_list->lpiutang_sisa;
-					$sub_tunai+=$print_list->piutang_tunai;
-					$sub_card+=$print_list->piutang_card;
-					$sub_cek+=$print_list->piutang_cek;
-					$sub_transfer+=$print_list->piutang_transfer;
-					
-		   ?>
-            <tr>
-                <td><? echo $i; ?></td>
-                <td><?php echo $print->no_bukti; ?></td>
-                <td><?php echo $print->tanggal; ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->lpiutang_total,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->piutang_tunai,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->piutang_card,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->piutang_cek,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->piutang_transfer,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($print_list->lpiutang_sisa,0,",",","); ?></td>
-           </tr>
-           <?php } ?>
-           <?php } ?>
-           <tr>
-                <td colspan="3">&nbsp;</td>
-                <td align="right" class="numeric"><?php echo number_format($sub_piutang,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($sub_tunai,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($sub_card,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($sub_cek,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($sub_transfer,0,",",","); ?></td>
-                <td align="right" class="numeric"><?php echo number_format($sub_sisa,0,",",","); ?></td>
+           
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_total,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_tunai,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_card,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_cek,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_transfer,0,",",","); ?></td>
+                <td align="right" class="numeric"><?php echo number_format($print->piutang_sisa,0,",",","); ?></td>
            </tr>
            <?php } $cust=$print->cust_id; ?>
 		<?php } ?>
 	</tbody>
     <tfoot>
     	<tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row'>Total</th>
             <td colspan='7'><?php echo count($data_print); ?> data</td>
         </tr>
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' colspan="8">Summary</th>
         </tr>
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Piutang (Rp)</th>
-            <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_piutang,0,",",","); ?></td>
-            <td colspan='6' class="clear">&nbsp;</td>
+            <td nowrap="nowrap" align="right" class="numeric foot"><?php echo number_format($total_piutang,0,",",","); ?></td>
+            <td colspan='6' class="foot">&nbsp;</td>
         </tr>
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Tunai (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_tunai,0,",",","); ?></td>
-             <td colspan='6' class="clear" >&nbsp;</td>
+            <td scope='row' nowrap="nowrap" align="right" class="numeric foot"><?php echo number_format($total_tunai,0,",",","); ?></td>
+            <td colspan='6' class="foot">&nbsp;</td>
         </tr>
 		<tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Card (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_card,0,",",","); ?></td>
-             <td colspan='6' class="clear">&nbsp;</td>
+            <td class="numeric foot" nowrap="nowrap"><?php echo number_format($total_card,0,",",","); ?></td>
+             <td colspan='6' class="foot">&nbsp;</td>
         </tr>
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Cek (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_cek,0,",",","); ?></td>
-             <td colspan='6' class="clear">&nbsp;</td>
+            <td  nowrap="nowrap" align="right" class="numeric foot"><?php echo number_format($total_cek,0,",",","); ?></td>
+             <td colspan='6' class="foot">&nbsp;</td>
         </tr>
 
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Transfer (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_transfer,0,",",","); ?></td>
-             <td colspan='6' class="clear" >&nbsp;</td>
+            <td  nowrap="nowrap" align="right" class="numeric foot"><?php echo number_format($total_transfer,0,",",","); ?></td>
+             <td colspan='6' class="foot" >&nbsp;</td>
         </tr>
         <tr>
-        	<td class="clear">&nbsp;</td>
+        	<td class="foot">&nbsp;</td>
         	<th scope='row' nowrap="nowrap">Total Sisa (Rp)</th>
-            <td  nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_sisa,0,",",","); ?></td>
-             <td colspan='6' class="clear" >&nbsp;</td>
+            <td  nowrap="nowrap" align="right" class="numeric foot"><?php echo number_format($total_sisa,0,",",","); ?></td>
+             <td colspan='6' class="foot" >&nbsp;</td>
         </tr>
 	</tfoot>
 </table>
