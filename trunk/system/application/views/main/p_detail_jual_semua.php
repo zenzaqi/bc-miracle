@@ -43,6 +43,14 @@
 	$total_kuitansi=0;
 	$total_transfer=0;
 	$total_cek=0;
+	
+	if ($jenis == 'Produk')
+		$label_total = 'Total Penjualan Produk (Rp)';
+	else if ($jenis == 'Perawatan')
+		$label_total = 'Total Penjualan Perawatan (Rp)';
+	if ($jenis == 'Paket')
+		$label_total = 'Total Penjualan Paket (Rp)';
+	
 	foreach($data_print as $print) { ?><?php
 	$status = '';	
 		if($faktur!==$print->no_bukti) {
@@ -261,6 +269,7 @@
 	<td class="numeric foot" nowrap="nowrap" colspan="2"><?php echo number_format($total_tunai,0,",",","); ?></td>
 	<td class="foot" colspan="3">&nbsp;</td>
 </tr>
+<? /*
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
@@ -270,7 +279,8 @@
 	<th scope='row' nowrap="nowrap">Kuitansi (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" colspan="2"><?php echo number_format($total_kuitansi,0,",",","); ?></td>
 	<td class="foot" colspan="3">&nbsp;</td>
-</tr> 
+</tr>
+*/ ?>
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
@@ -302,9 +312,13 @@
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
-	<th scope='row' nowrap="nowrap">Total Net Sales (Rp)</th> 
+	<th scope='row' nowrap="nowrap"><? echo $label_total; ?></th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_nilai-$total_voucher,0,",",","); ?></td> 
-	<td colspan="7" class="foot">&nbsp;</td> 
+	<? if ($jenis == 'Produk') { ?>
+		<th scope='row' nowrap="nowrap" colspan="7">&nbsp;&nbsp;&nbsp;&nbsp;Total Penjualan belum termasuk Net Sales karena belum terhitung Total Retur Penjualan&nbsp;&nbsp;&nbsp;&nbsp;</th> 
+	<? } else { ?>
+		<td colspan="7" class="foot">&nbsp;</td> 
+	<? } ?>
 </tr>
 <? } ?>
 
