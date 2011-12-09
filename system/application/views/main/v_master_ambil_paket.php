@@ -612,7 +612,7 @@ Ext.onReady(function(){
 			//{name: 'apaket_faktur', type: 'string', mapping: 'apaket_faktur'}, 
 			{name: 'jpaket_nobukti', type: 'string', mapping: 'jpaket_nobukti'}, 
 			//{name: 'apaket_faktur_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_faktur_tanggal'}, 	// by hendri
-			{name: 'jpaket_tanggal', type: 'date', dateFormat:'Y-m-d', mapping: 'jpaket_tanggal'},
+			{name: 'jpaket_tanggal', type: 'date', dateFormat:'d-m-Y', mapping: 'jpaket_tanggal'},
 			//{name: 'apaket_kadaluarsa', type: 'date', dateFormat:'Y-m-d', mapping: 'apaket_kadaluarsa'}, 
 			{name: 'dpaket_kadaluarsa', type: 'date', dateFormat:'d-m-Y', mapping: 'dpaket_kadaluarsa'}, 
 			{name: 'tanggal_hangus', type: 'date', dateFormat:'Y-m-d', mapping: 'tanggal_hangus'}, 
