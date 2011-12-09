@@ -541,7 +541,8 @@ Ext.override(Ext.form.Field, {
 				if((jproduk_kwitansi_noField.getValue()!=="") && (jproduk_post2db=='CREATE')){
 					jproduk_kwitansi_nomor_create = jproduk_kwitansi_noField.getValue();
 				}else if(jproduk_post2db=='UPDATE'){
-					jproduk_kwitansi_nomor_create = jproduk_kwitansi_idField.getValue();
+					jproduk_kwitansi_nomor_create = jproduk_kwitansi_noField.getValue();
+					//jproduk_kwitansi_nomor_create = jproduk_kwitansi_idField.getValue();
 				}
 				if(jproduk_kwitansi_namaField.getValue()!== ""){jproduk_kwitansi_nama_create = jproduk_kwitansi_namaField.getValue();} 
 				if(jproduk_kwitansi_nilaiField.getValue()!== null){jproduk_kwitansi_nilai_create = jproduk_kwitansi_nilaiField.getValue();} 
@@ -4737,6 +4738,7 @@ Ext.override(Ext.form.Field, {
 		itemSelector: 'div.search-item',
 		triggerAction: 'all',
 		lazyRender:true,
+		enableKeyEvents: true,
 		listClass: 'x-combo-list-small',
 		anchor: '95%'
 	});
@@ -4773,9 +4775,10 @@ Ext.override(Ext.form.Field, {
 	dproduk_idField=new Ext.form.NumberField();
 	djproduk_satuan_nilaiField=new Ext.form.NumberField();
 	
+
 	combo_jual_produk.on('select',function(){
 		var j=cbo_dproduk_produkDataStore.findExact('dproduk_produk_value',combo_jual_produk.getValue(),0);
-		if(cbo_dproduk_produkDataStore.getCount()){
+
             //Untuk me-lock screen sementara, menunggu data selesai di-load ==> setelah selesai di-load, hide Ext.MessageBox.show() di bawah ini
 			detail_jual_produkListEditorGrid.setDisabled(true);
 			editor_detail_jual_produk.disable();
@@ -4857,7 +4860,7 @@ Ext.override(Ext.form.Field, {
                     }
 				}
 			});	
-		}
+	
 	});
 
 	temp_konv_nilai=new Ext.form.NumberField({
