@@ -86,7 +86,7 @@ class C_master_jual_produk extends Controller {
 			
 		}else if($opsi=='detail'){
 			$data["opsi"]='Detail';
-			if ($opsi_status=='semua') {
+			//if ($opsi_status=='semua') {
 					switch($group){
 					case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
 					case "Customer": $print_view=$this->load->view("main/p_detail_jual_customer.php",$data,TRUE);break;
@@ -94,7 +94,7 @@ class C_master_jual_produk extends Controller {
 					case "Sales": $print_view=$this->load->view("main/p_detail_jual_sales.php",$data,TRUE);break;
 					case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
 					default: $print_view=$this->load->view("main/p_detail_jual_semua.php",$data,TRUE);break;
-				} 
+			/*	} 
 			} else if ($opsi_status=='tertutup') {
 					switch($group){
 					case "Tanggal": $print_view=$this->load->view("main/p_detail_jual_tanggal.php",$data,TRUE);break;
@@ -104,7 +104,9 @@ class C_master_jual_produk extends Controller {
 					case "Jenis Diskon": $print_view=$this->load->view("main/p_detail_jual_diskon.php",$data,TRUE);break;
 					default: $print_view=$this->load->view("main/p_detail_jual.php",$data,TRUE);break;
 				}
+			*/
 			}
+			
 			
 			$print_file=fopen("print/report_jproduk.html","w");
 			fwrite($print_file, $print_view);

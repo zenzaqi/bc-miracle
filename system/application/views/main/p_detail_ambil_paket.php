@@ -92,7 +92,7 @@
     	<tfoot>
 		<tr>
         	<td class="clear">&nbsp;</td>
-        	<th scope='row' colspan='2'>Total Net Sales</th>
+        	<th scope='row' colspan='2'>Total Net Sales Pengambilan Paket (Rp)</th>
             <td colspan='3'>&nbsp;</td> 
 			<td><?php echo $jum_all; ?></td>
 			<td> </td>
