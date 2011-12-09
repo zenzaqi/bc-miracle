@@ -664,7 +664,8 @@ Ext.override(Ext.form.Field, {
                         if(/^\d+$/.test(jrawat_kwitansi_noField.getValue())){
                             jrawat_kwitansi_nomor_create = jrawat_kwitansi_noField.getValue();
                         }else{
-                            jrawat_kwitansi_nomor_create = jrawat_kwitansi_no_idField.getValue();
+                            jrawat_kwitansi_nomor_create = jrawat_kwitansi_noField.getValue();
+							//jrawat_kwitansi_nomor_create = jrawat_kwitansi_no_idField.getValue();
                         }
                     }
                     
@@ -3416,7 +3417,6 @@ Ext.override(Ext.form.Field, {
 	});
 	
 	dpaket_idField= new Ext.form.NumberField();
-	
 	
 	master_jual_rawat_voucherGroup= new Ext.form.FieldSet({
 		title: 'Voucher',

@@ -517,7 +517,8 @@ Ext.override(Ext.form.Field, {
 				if((jpaket_kwitansi_noField.getValue()!=="") && (jpaket_post2db=='CREATE')){
 					jpaket_kwitansi_nomor_create = jpaket_kwitansi_noField.getValue();
 				}else if(jpaket_post2db=='UPDATE'){
-					jpaket_kwitansi_nomor_create = jpaket_kwitansi_idField.getValue();
+					jpaket_kwitansi_nomor_create = jpaket_kwitansi_noField.getValue();
+					//jpaket_kwitansi_nomor_create = jpaket_kwitansi_idField.getValue();
 				}
 				if(jpaket_kwitansi_namaField.getValue()!==""){jpaket_kwitansi_nama_create = jpaket_kwitansi_namaField.getValue();} 
 				if(jpaket_kwitansi_nilaiField.getValue()!== null){jpaket_kwitansi_nilai_create = jpaket_kwitansi_nilaiField.getValue();} 
