@@ -397,7 +397,7 @@ Ext.onReady(function(){
 	rpt_terimakas_tglawalField= new Ext.form.DateField({
 		id: 'rpt_terimakas_tglawalField',
 		fieldLabel: ' ',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		name: 'rpt_terimakas_tglawalField',
         //vtype: 'daterange',
 		allowBlank: true,
@@ -410,7 +410,7 @@ Ext.onReady(function(){
 	rpt_terimakas_tglakhirField= new Ext.form.DateField({
 		id: 'rpt_terimakas_tglakhirField',
 		fieldLabel: 's/d',
-		format : 'Y-m-d',
+		format : 'd-m-Y',
 		name: 'rpt_terimakas_tglakhirField',
         //vtype: 'daterange',
 		allowBlank: true,
