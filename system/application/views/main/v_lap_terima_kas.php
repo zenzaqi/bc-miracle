@@ -350,7 +350,7 @@ Ext.onReady(function(){
 	});
 
 	function online_confirm(){
-		Ext.MessageBox.confirm('Confirmation', 'Fitur Online mungkin akan membutuhkan waktu cukup lama. Anda yakin untuk melanjutkan?', online_yes);
+		Ext.MessageBox.confirm('Confirmation', 'Fitur Online hanya dapat diakses di MIS Thamrin dan mungkin akan membutuhkan waktu cukup lama. Anda yakin untuk melanjutkan?', online_yes);
 	}
 	
 	function online_yes(btn){
