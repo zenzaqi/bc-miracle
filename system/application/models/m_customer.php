@@ -2341,7 +2341,7 @@ class M_customer extends Model{
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
-			//$query = "SELECT v.* FROM vu_customer v";
+			//isi query di bawah ini TIDAK BOLEH DIGANTI sembarangan, karena ada field2 yg tidak boleh diambil oleh user
 			$query="select
 						if(cust_no='','-',ifnull(cust_no,'-')) AS no_cust,
 						if(cust_nama='','-',ifnull(cust_nama,'-')) AS nama_lengkap,
