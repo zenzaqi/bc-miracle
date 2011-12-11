@@ -2341,8 +2341,23 @@ class M_customer extends Model{
 			if ($cust_aktif=="")
 				$cust_aktif = "Aktif";
 
-			$query = "SELECT v.*
-						FROM vu_customer v";
+			//$query = "SELECT v.* FROM vu_customer v";
+			$query="select
+						if(cust_no='','-',ifnull(cust_no,'-')) AS no_cust,
+						if(cust_nama='','-',ifnull(cust_nama,'-')) AS nama_lengkap,
+						if(member_no='','-',ifnull(member_no,'-')) AS no_member,
+						if(member_valid='','-',ifnull(member_valid,'-')) AS tgl_valid,
+						if(cust_kelamin='','-',ifnull(cust_kelamin,'-')) AS 'L/P',
+						if(cust_alamat='','-',ifnull(cust_alamat,'-')) AS alamat,
+						if(cust_kota='','-',ifnull(cust_kota,'-')) AS kota,
+						/*if(cust_telprumah='','-',ifnull(cust_telprumah,'-')) AS telp_rumah,
+						if(cust_hp='','-',ifnull(cust_hp,'-')) AS no_ponsel,*/
+						if(cust_email='','-',ifnull(cust_email,'-')) AS email,
+						if(cust_tgllahir='','-',ifnull(cust_tgllahir,'-')) AS tgl_lahir,
+						if(cust_statusnikah='','-',ifnull(cust_statusnikah,'-')) AS status_nikah,
+						/*if(cust_priority='','-',ifnull(cust_priority,'-')) AS priority,*/
+						cust_aktif AS status
+					from vu_customer";
 
 			if($cust_id!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
