@@ -222,14 +222,14 @@ var editor_cust_note;
 		cust_tgllahirField.reset();
 		//cust_hobiField.reset();
 		//cust_hobitxtField.reset();
-		cust_hobi_bacaField.reset(),
-		cust_hobi_olahField.reset(),
-		cust_hobi_masakField.reset(),
-		cust_hobi_travelField.reset(),
-		cust_hobi_fotoField.reset(),
-		cust_hobi_lukisField.reset(),
-		cust_hobi_nariField.reset(),
-		cust_hobi_lainField.reset(),
+		cust_hobi_bacaField.reset();
+		cust_hobi_olahField.reset();
+		cust_hobi_masakField.reset();
+		cust_hobi_travelField.reset();
+		cust_hobi_fotoField.reset();
+		cust_hobi_lukisField.reset();
+		cust_hobi_nariField.reset();
+		cust_hobi_lainField.reset();
 		cust_referensiField.reset();
 		cust_referensilainField.reset();
 		//cust_referensilaintxtField.reset();
@@ -301,6 +301,16 @@ var editor_cust_note;
 		cust_tgllahirField.setValue(null);
 		//cust_hobiField.setValue(null);
 		//cust_hobitxtField.setValue(null);
+		cust_hobi_bacaField.setValue(null);
+		cust_hobi_olahField.setValue(null);
+		cust_hobi_masakField.setValue(null);
+		cust_hobi_travelField.setValue(null);
+		cust_hobi_fotoField.setValue(null);
+		cust_hobi_lukisField.setValue(null);
+		cust_hobi_nariField.setValue(null);
+		cust_hobi_lainField.setValue(null);
+		cust_referensiField.setValue(null);
+		cust_referensilainField.setValue(null);
 		cust_referensiField.setValue(null);
 		cust_referensilainField.setValue(null);
 		//cust_referensilaintxtField.setValue(null);
@@ -443,6 +453,7 @@ var editor_cust_note;
   
 	/* setValue to EDIT */
 	function customer_set_form(){
+		customer_reset_form();
 		cust_noField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_no'));
 		//cust_nolamaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nolama'));
 		cust_namaField.setValue(customerListEditorGrid.getSelectionModel().getSelected().get('cust_nama'));
@@ -2733,6 +2744,13 @@ if(customer_DataStore.baseParams.cust_umurend!==null){cust_umurend_crm=customer_
 		if(cust_cpField.getValue()!== null){cust_cp_create = cust_cpField.getValue();}
 		if(cust_cptelpField.getValue()!== null){cust_cptelp_create = cust_cptelpField.getValue();}
 
+		Ext.MessageBox.show({
+		   msg: 'Sedang menyimpan data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});	
+		
 			Ext.Ajax.request({  
 //				waitMsg: 'Please wait...',
 				waitMsg: 'Silahkan tunggu...',
@@ -4625,7 +4643,7 @@ Ext.onReady(function(){
 		anchor: '95%',
 		layout:'column',
 		autoHeight: true,
-		collapsed: true,
+		collapsed: false,
 		collapsible: true,
 		items:[
 			{
