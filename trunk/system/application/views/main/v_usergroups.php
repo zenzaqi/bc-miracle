@@ -791,7 +791,7 @@ Ext.onReady(function(){
 					params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>Harga';
 				}
-				else if(record.data.menu_id==86){//cek apakah menu = lap penerimaan kas
+				else if((record.data.menu_id==86) || (record.data.menu_id==441)) {//cek apakah menu = lap penerimaan kas / lap jum tind semua dr
 					params.css = ' x-grid3-check-col-td';
             		return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>Online';
 				}
