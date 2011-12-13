@@ -336,6 +336,14 @@ Ext.override(Ext.form.Field, {
 		var jproduk_tanggal_create_date = "";
 	
 		if(jproduk_tanggalField.getValue()!== ""){jproduk_tanggal_create_date = jproduk_tanggalField.getValue().format('Y-m-d');} 
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});	
+				
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_jual_produk&m=get_action',
@@ -792,6 +800,7 @@ Ext.override(Ext.form.Field, {
 									dproduk_karyawan: encoded_array_dproduk_karyawan
 								}, 
 								success: function(response){
+									Ext.MessageBox.hide();
 									var result=eval(response.responseText);
 									if(result==0){
 										jproduk_btn_cancel();
