@@ -335,6 +335,14 @@ Ext.override(Ext.form.Field, {
 		var jrawat_tanggal_create_date = "";
 	
 		if(jrawat_tanggalField.getValue()!== ""){jrawat_tanggal_create_date = jrawat_tanggalField.getValue().format('Y-m-d');} 
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});	
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_jual_rawat&m=get_action',
@@ -829,7 +837,8 @@ Ext.override(Ext.form.Field, {
                     var encoded_array_drawat_diskon_jenis = Ext.encode(drawat_diskon_jenis);
                     var encoded_array_drawat_sales = Ext.encode(drawat_sales);
                     var encoded_array_drawat_karyawan = Ext.encode(drawat_karyawan);
-                    
+            
+					
                     Ext.Ajax.request({  
                         waitMsg: 'Please wait...',
                         waitMsg: 'Mohon tunggu...',
@@ -944,6 +953,7 @@ Ext.override(Ext.form.Field, {
                         },
                         callback: function(opts, success, response){
                             if(success){
+								Ext.MessageBox.hide();
                                 var result=eval(response.responseText);
                                 if(result==0){
                                     //mode 'Save'

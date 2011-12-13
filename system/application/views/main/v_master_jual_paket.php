@@ -269,6 +269,14 @@ Ext.override(Ext.form.Field, {
 	function pengecekan_dokumen(){
 		var jpaket_tanggal_create_date = "";
 		if(jpaket_tanggalField.getValue()!== ""){jpaket_tanggal_create_date = jpaket_tanggalField.getValue().format('Y-m-d');} 
+		
+		Ext.MessageBox.show({
+		   msg: 'Sedang memproses data, mohon tunggu...',
+		   progressText: 'proses...',
+		   width:350,
+		   wait:true
+		});	
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_jual_paket&m=get_action',
@@ -681,7 +689,8 @@ Ext.override(Ext.form.Field, {
 						jpaket_transfer_nama3	:	jpaket_transfer_nama3_create,
 						jpaket_transfer_nilai3	:	jpaket_transfer_nilai3_create
 					}, 
-					success: function(response){             
+					success: function(response){ 
+						Ext.MessageBox.hide();
 						var result=eval(response.responseText);
 						switch(result){
 							case 1:
