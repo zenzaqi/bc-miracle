@@ -1653,6 +1653,9 @@ class M_master_jual_produk extends Model{
 			$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 			$query.= " jproduk_stat_dok LIKE '%".$jproduk_stat_dok."%'";
 		};
+		
+		$query .= " ORDER BY jproduk_nobukti DESC";
+		
 		$result = $this->db->query($query);
 		$nbrows = $result->num_rows();
 		
