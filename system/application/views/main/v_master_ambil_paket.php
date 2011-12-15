@@ -1370,7 +1370,7 @@ Ext.onReady(function(){
 	
 	function detail_ambil_paket_batal(){
 		if(history_ambil_paketPanel.selModel.getSelected().get('dapaket_stat_dok')!=='Batal' && history_ambil_paketPanel.selModel.getCount() == 1){
-			Ext.MessageBox.confirm('Batal','Anda yakin mem-Batal-kan pengambilan paket ini?', function(btn){
+			Ext.MessageBox.confirm('Batal','Anda yakin untuk membatalkan pengambilan paket ini? Pengambilan paket yang telah dibatalkan tidak bisa dikembalikan lagi.', function(btn){
 				if(btn=='yes'){
 					if(history_ambil_paketPanel.selModel.getSelected().get('keterangan')=='retur'){
 						Ext.MessageBox.show({
