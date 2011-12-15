@@ -1767,6 +1767,9 @@ class M_master_jual_paket extends Model{
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " jpaket_stat_dok LIKE '%".$jpaket_stat_dok."%'";
 			};
+			
+			$query .= " ORDER BY jpaket_nobukti DESC ";
+			
 			$result = $this->db->query($query);
 			$nbrows = $result->num_rows();
 			
