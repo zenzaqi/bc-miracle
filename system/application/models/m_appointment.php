@@ -68,6 +68,36 @@ class M_appointment extends Model{
 	}
 	
 	function get_terapis_list($query, $tgl_app, $karyawan_jabatan){
+		$sql="select karyawan_id,karyawan_no,karyawan_nama,karyawan_username,jabatan_nama 
+				from vu_karyawan,jabatan 
+				where 	jabatan_id=karyawan_jabatan and 
+						karyawan_aktif='Aktif' and 
+						karyawan_jabatan='7' and
+						(karyawan_cabang = (SELECT info_cabang FROM info limit 1)
+					OR substring(karyawan_cabang2,
+					(select cabang_value 
+						from cabang
+						left join info on (cabang.cabang_id = info.info_cabang)
+						where info.info_cabang = cabang.cabang_id),1) = '1')";
+		if($query!=="")
+			$sql.=" and (karyawan_id like '%".$query."%' or karyawan_no like '%".$query."%' or karyawan_nama like '%".$query."%'
+						 or jabatan_nama like '%".$query."%')";
+	
+		$result = $this->db->query($sql);
+		$nbrows = $result->num_rows();
+		//$limit = $sql." LIMIT ".$start.",".$end;			
+		//$result = $this->db->query($limit); 
+		if($nbrows>0){
+			foreach($result->result() as $row){
+				$arr[] = $row;
+			}
+			$jsonresult = json_encode($arr);
+			return '({"total":"'.$nbrows.'","results":'.$jsonresult.'})';
+		} else {
+			return '({"total":"0", "results":""})';
+		}
+	
+		/*
 		$this->db->where('absensi_shift',"");
 		$this->db->delete('absensi');
 		$date_now=date('Y-m-d');
@@ -78,9 +108,10 @@ class M_appointment extends Model{
 		}elseif($tgl_app!=""){
 			$bln_filter=date('Y-m', strtotime($tgl_app));
 		}
-		
+		*/
 		/* Mencari Terapis yang sudah memiliki Jadwal di db.absensi WHERE db.absensi.absensi_shift = 'P' */
 		//$sql="SELECT karyawan_id,karyawan_no,karyawan_nama,karyawan_username,reportt_jmltindakan,ab.absensi_shift FROM vu_karyawan INNER JOIN jabatan ON(karyawan_jabatan=jabatan_id) INNER JOIN (SELECT absensi_karyawan_id,absensi_tgl,absensi_shift FROM absensi WHERE absensi_shift='P') as ab ON(vu_karyawan.karyawan_id=ab.absensi_karyawan_id) LEFT JOIN (SELECT * FROM report_tindakan WHERE date_format(reportt_bln,'%Y-%m')='$bln_filter') as rt ON(karyawan_id=rt.reportt_karyawan_id) WHERE karyawan_jabatan=jabatan_id AND jabatan_nama='$karyawan_jabatan' AND karyawan_aktif='Aktif'";
+		/*
 		$sql=  "SELECT 
 					vu_karyawan.karyawan_id,karyawan_no,karyawan_nama,karyawan_username,
 					vu_report_tindakan_terapis.terapis_count+tindakan_adjust.adj_count as new_count,ab.absensi_shift 
@@ -108,8 +139,10 @@ class M_appointment extends Model{
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 		}
+		
 		if($tgl_app<>""){ /* Query pada $sql akan di AND ab.absensi_tgl=$tgl_app Jika $tgl_app<>'' */
-			$tgl_app = date('Y-m-d', strtotime($tgl_app));
+		/*
+		$tgl_app = date('Y-m-d', strtotime($tgl_app));
 			$sql .=eregi("WHERE",$sql)? " AND ":" WHERE ";
 			$sql .= " (ab.absensi_tgl='".addslashes($tgl_app)."')";
 		}
@@ -285,6 +318,7 @@ class M_appointment extends Model{
 				$sql5 .=eregi("WHERE",$sql5)? " AND ":" WHERE ";
 				$sql5 .= " (karyawan_nama LIKE '%".addslashes($query)."%')";
 			}*/
+		/*
 			$query7 = $this->db->query($sql7);
 			$nbrows7 = $query7->num_rows();
 		}
@@ -331,6 +365,7 @@ class M_appointment extends Model{
 		} else {
 			return '({"total":"0", "results":""})';
 		}
+		*/
 	}
 	
 	//function for detail

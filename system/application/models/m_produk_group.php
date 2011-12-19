@@ -49,7 +49,7 @@ class M_produk_group extends Model{
 		
 		//function for update record
 		function produk_group_update($group_id ,$group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,
-									 $group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,
+									 $group_dupaket ,$group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_kredit,
 									 $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter,$group_dpromo,
 									 $group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised, $group_opsi ){
 		if ($group_aktif=="")
@@ -67,6 +67,7 @@ class M_produk_group extends Model{
 				//"group_kelompok"=>$group_kelompok,
 				"group_keterangan"=>$group_keterangan,			
 				"group_aktif"=>$group_aktif,	
+				"group_kredit"=>$group_kredit,	
 				"group_dultah"=>$group_dultah,
 				"group_dcard"=>$group_dcard,
 				"group_dkolega"=>$group_dkolega,
@@ -103,7 +104,7 @@ class M_produk_group extends Model{
 			
 			if($group_opsi=='yes'){
 				//UPDATE PRODUK
-				$sql="UPDATE produk SET produk_du='".$group_duproduk."', produk_dm='".$group_dmproduk."', produk_dultah='".$group_dultah."', produk_dcard='".$group_dcard."', produk_dkolega='".$group_dkolega."', produk_dkeluarga='".$group_dkeluarga."', produk_downer='".$group_downer."', produk_dgrooming='".$group_dgrooming."', produk_dwartawan = '".$group_dwartawan."' , produk_dstaffdokter = '".$group_dstaffdokter."' , produk_dstaffnondokter = '".$group_dstaffnondokter."', produk_dpromo = '".$group_dpromo."'
+				$sql="UPDATE produk SET produk_du='".$group_duproduk."', produk_dm='".$group_dmproduk."', produk_dultah='".$group_dultah."', produk_dcard='".$group_dcard."', produk_dkolega='".$group_dkolega."', produk_dkeluarga='".$group_dkeluarga."', produk_downer='".$group_downer."', produk_dgrooming='".$group_dgrooming."', produk_dwartawan = '".$group_dwartawan."' , produk_dstaffdokter = '".$group_dstaffdokter."' , produk_dstaffnondokter = '".$group_dstaffnondokter."', produk_dpromo = '".$group_dpromo."', produk_kredit = '".$group_kredit."'
 					WHERE produk_group='".$group_id."'";
 				$this->db->query($sql);
 				//UPDATE PERAWATAN
@@ -122,7 +123,7 @@ class M_produk_group extends Model{
 		
 		//function for create new record
 		function produk_group_create($group_kode, $group_nama , $group_treatment_utama, $group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,
-									 $group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,
+									 $group_dmpaket ,$group_kelompok ,$group_keterangan ,$group_aktif ,$group_kredit,
 									 $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dwartawan, $group_dstaffdokter, $group_dstaffnondokter, $group_dpromo,
 									 $group_creator ,$group_date_create ,
 									 $group_update ,$group_date_update ,$group_revised, $group_opsi ){
@@ -140,6 +141,7 @@ class M_produk_group extends Model{
 				"group_kelompok"=>$group_kelompok,	
 				"group_keterangan"=>$group_keterangan,	
 				"group_aktif"=>$group_aktif,
+				"group_kredit"=>$group_kredit,
 				"group_dultah"=>$group_dultah,
 				"group_dcard"=>$group_dcard,
 				"group_dkolega"=>$group_dkolega,
@@ -195,7 +197,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for advanced search record
-		function produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,  $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end){
+		function produk_group_search($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_kelompok ,$group_aktif ,$group_kredit, $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,  $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$start,$end){
 			//full query
 			if($group_aktif=="%Aktif%")
 				$group_aktif="Aktif";
@@ -248,6 +250,10 @@ class M_produk_group extends Model{
 			if($group_aktif!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " group_aktif like '".$group_aktif."'";
+			};
+			if($group_kredit!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " group_kredit = '".$group_kredit."'";
 			};
 			if($group_dultah!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -308,7 +314,7 @@ class M_produk_group extends Model{
 		}
 		
 		//function for print record
-		function produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
+		function produk_group_print($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_kredit , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming, $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
 			//full query
 			$query="SELECT * FROM produk_group LEFT JOIN kategori ON group_kelompok=kategori_id";
 			if($option=='LIST'){
@@ -359,6 +365,10 @@ class M_produk_group extends Model{
 				if($group_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_aktif LIKE '%".$group_aktif."%'";
+				};
+				if($group_kredit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " group_kredit='".$group_kredit."'";
 				};
 				if($group_dultah!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
@@ -426,11 +436,12 @@ class M_produk_group extends Model{
 		}
 		
 		//function  for export to excel
-		function produk_group_export_excel($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,  $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
+		function produk_group_export_excel($group_id, $group_kode ,$group_nama ,$group_duproduk ,$group_dmproduk ,$group_durawat ,$group_dmrawat ,$group_dupaket ,$group_dmpaket ,$group_keterangan ,$group_aktif ,$group_kredit , $group_dultah, $group_dcard, $group_dkolega, $group_dkeluarga, $group_downer, $group_dgrooming,  $group_dkaryawan,$group_dstaffdokter,$group_dstaffnondokter,$group_dpromo,$group_creator ,$group_date_create ,$group_update ,$group_date_update ,$group_revised ,$option,$filter){
 			//full query
 			$query="select 
 					group_kode AS kode,
 					group_nama as nama,
+					group_kredit as kredit,
 					group_duproduk as dU_produk,
 					group_dmproduk as dM_produk,
 					group_durawat as dU_rawat,
@@ -501,6 +512,10 @@ class M_produk_group extends Model{
 				if($group_aktif!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 					$query.= " group_aktif LIKE '%".$group_aktif."%'";
+				};
+				if($group_kredit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " group_kredit='".$group_kredit."'";
 				};
 				if($group_dultah!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
