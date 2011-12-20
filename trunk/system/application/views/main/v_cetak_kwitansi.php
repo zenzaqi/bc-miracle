@@ -2781,21 +2781,27 @@ Ext.onReady(function(){
 		// render according to a SQL date format.
 		var kwitansi_no_search=null;
 		var kwitansi_cust_search=null;
+		var kwitansi_tanggal_start_search="";
+		var kwitansi_tanggal_end_search="";
 		var kwitansi_keterangan_search=null;
 		var kwitansi_status_search=null;
 
 		if(kwitansi_noSearchField.getValue()!==null){kwitansi_no_search=kwitansi_noSearchField.getValue();}
 		if(kwitansi_custSearchField.getValue()!==null){kwitansi_cust_search=kwitansi_custSearchField.getValue();}
+		if(kwitansi_tanggalSearchField.getValue()!==""){kwitansi_tanggal_start_search=kwitansi_tanggalSearchField.getValue().format('Y-m-d');}
+		if(kwitansi_tanggal_akhirSearchField.getValue()!==""){kwitansi_tanggal_end_search=kwitansi_tanggal_akhirSearchField.getValue().format('Y-m-d');}
 		if(kwitansi_keteranganSearchField.getValue()!==null){kwitansi_keterangan_search=kwitansi_keteranganSearchField.getValue();}
 		if(kwitansi_statusSearchField.getValue()!==null){kwitansi_status_search=kwitansi_statusSearchField.getValue();}
 		// change the store parameters
 		cetak_kwitansi_DataStore.baseParams = {
 			task: 'SEARCH',
 			//variable here
-			kwitansi_no	:	kwitansi_no_search, 
-			kwitansi_cust	:	kwitansi_cust_search, 
-			kwitansi_keterangan	:	kwitansi_keterangan_search, 
-			kwitansi_status	:	kwitansi_status_search
+			kwitansi_no				:	kwitansi_no_search,
+			kwitansi_cust			:	kwitansi_cust_search,
+			kwitansi_tanggal_start	:	kwitansi_tanggal_start_search,
+			kwitansi_tanggal_end	:	kwitansi_tanggal_end_search,
+			kwitansi_keterangan		:	kwitansi_keterangan_search,
+			kwitansi_status			:	kwitansi_status_search
 		};
 		// Cause the datastore to do another query : 
 		cetak_kwitansi_DataStore.reload({params: {start: 0, limit: pageS}});
@@ -2858,8 +2864,20 @@ Ext.onReady(function(){
 		fieldLabel: 'Keterangan',
 		maxLength: 500,
 		anchor: '95%'
-	
 	});
+	
+	/* Identify  kwitansi_tanggal Search Field */
+	kwitansi_tanggalSearchField= new Ext.form.DateField({
+		id: 'kwitansi_tanggalSearchField',
+		fieldLabel: 'Tanggal',
+		format : 'd-m-Y',
+	});
+	kwitansi_tanggal_akhirSearchField= new Ext.form.DateField({
+		id: 'kwitansi_tanggal_akhirSearchField',
+		fieldLabel: 's/d',
+		format : 'd-m-Y',
+	});
+	
 	/* Identify  kwitansi_status Search Field */
 	kwitansi_statusSearchField= new Ext.form.ComboBox({
 		id: 'kwitansi_statusSearchField',
@@ -2882,7 +2900,7 @@ Ext.onReady(function(){
 		labelWidth: 100,
 		bodyStyle:'padding:5px',
 		autoHeight:true,
-		width: 400,
+		width: 500,
 		items: [{
 			layout:'column',
 			border:false,
@@ -2891,8 +2909,38 @@ Ext.onReady(function(){
 				columnWidth:1,
 				layout: 'form',
 				border:false,
-				items: [kwitansi_noSearchField, kwitansi_custSearchField, kwitansi_keteranganSearchField, kwitansi_statusSearchField] 
-			}
+				items: [kwitansi_noSearchField, kwitansi_custSearchField,
+					
+				{
+						layout:'column',
+						border:false,
+						items:[
+						{
+							columnWidth:0.45,
+							layout: 'form',
+							border:false,
+							defaultType: 'datefield',
+							items: [						
+								kwitansi_tanggalSearchField
+							]
+						},
+						{
+							columnWidth:0.30,
+							layout: 'form',
+							border:false,
+							labelWidth:30,
+							defaultType: 'datefield',
+							items: [						
+								kwitansi_tanggal_akhirSearchField
+							]
+						}						
+								
+				        ]
+					},
+
+
+			kwitansi_keteranganSearchField, kwitansi_statusSearchField] 
+			}			
 			]
 		}]
 		,
@@ -2931,25 +2979,30 @@ Ext.onReady(function(){
 		kwitansi_noSearchField.setValue(null);
 		kwitansi_custSearchField.reset();
 		kwitansi_custSearchField.setValue(null);
+		kwitansi_tanggalSearchField.reset();
+		kwitansi_tanggalSearchField.setValue(null);
+		kwitansi_tanggal_akhirSearchField.reset();
+		kwitansi_tanggal_akhirSearchField.setValue(null);
 		kwitansi_keteranganSearchField.reset();
 		kwitansi_keteranganSearchField.setValue(null);
 		kwitansi_statusSearchField.reset();
 		kwitansi_statusSearchField.setValue(null);
 	}
 	 
-	 
 	 function cetak_kwitansi_reset_search_form(){
 		kwitansi_noSearchField.reset();
 		kwitansi_noSearchField.setValue(null);
 		kwitansi_custSearchField.reset();
 		kwitansi_custSearchField.setValue(null);
+		kwitansi_tanggalSearchField.reset();
+		kwitansi_tanggalSearchField.setValue(null);
+		kwitansi_tanggal_akhirSearchField.reset();
+		kwitansi_tanggal_akhirSearchField.setValue(null);
 		kwitansi_keteranganSearchField.reset();
 		kwitansi_keteranganSearchField.setValue(null);
 		kwitansi_statusSearchField.reset();
 		kwitansi_statusSearchField.setValue(null);
 	 }
-	 
-	 
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){

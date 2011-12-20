@@ -370,6 +370,8 @@ class C_cetak_kwitansi extends Controller {
 		$kwitansi_no=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_no);
 		$kwitansi_no=str_replace("'", "''",$kwitansi_no);
 		$kwitansi_cust=trim(@$_POST["kwitansi_cust"]);
+		$kwitansi_tanggal_start=trim(@$_POST["kwitansi_tanggal_start"]);
+		$kwitansi_tanggal_end=trim(@$_POST["kwitansi_tanggal_end"]);
 		$kwitansi_keterangan=trim(@$_POST["kwitansi_keterangan"]);
 		$kwitansi_keterangan=str_replace("/(<\/?)(p)([^>]*>)", "",$kwitansi_keterangan);
 		$kwitansi_keterangan=str_replace("'", "''",$kwitansi_keterangan);
@@ -379,7 +381,7 @@ class C_cetak_kwitansi extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_cetak_kwitansi->cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end);
+		$result = $this->m_cetak_kwitansi->cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust , $kwitansi_tanggal_start, $kwitansi_tanggal_end,$kwitansi_keterangan ,$kwitansi_status ,$start,$end);
 		echo $result;
 	}
 
