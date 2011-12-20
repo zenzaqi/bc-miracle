@@ -63,7 +63,7 @@ var detail_koreksi_stok_reader;
 var editor_detail_koreksi_stok;
 
 //declare konstant
-var post2db = '';
+var koreksi_post2db = '';
 var msg = '';
 var pageS=15;
 var koreksi_cetak=0;
@@ -247,11 +247,19 @@ Ext.onReady(function(){
 		
 		}
 		
+		Ext.MessageBox.show({
+			msg:   'Sedang memproses data, mohon tunggu hingga proses ini selesai agar keamanan data anda terjaga...',
+			progressText: 'proses...',
+			width:350,
+			wait:true
+		});
+		
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_koreksi_stok&m=get_action',
 			params: {
-				task				: post2db,
+				task				: koreksi_post2db,
 				koreksi_id			: koreksi_id_create_pk, 
 				koreksi_no			: koreksi_no_create,
 				koreksi_gudang		: koreksi_gudang_create, 
@@ -279,11 +287,11 @@ Ext.onReady(function(){
 						}
 						master_koreksi_stok_DataStore.reload();
 						//cbo_tbeli_orderbeli_DataSore.reload();
-						Ext.MessageBox.alert(post2db+' OK','Data Koreksi Stok berhasil disimpan');
+						Ext.MessageBox.alert(koreksi_post2db+' OK','Data Koreksi Stok berhasil disimpan');
 						//cbo_terima_gudang_DataStore.reload();
 						master_koreksi_stok_createWindow.hide();
 						
-						//Ext.MessageBox.alert(post2db+' OK','Data Penyesuaian Stok berhasil disimpan');
+						//Ext.MessageBox.alert(koreksi_post2db+' OK','Data Penyesuaian Stok berhasil disimpan');
 						//detail_koreksi_stok_insert(result,opsi);
 						//master_koreksi_stok_createWindow.hide();
 				}else{
@@ -322,7 +330,7 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(koreksi_post2db=='UPDATE')
 			return master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_id');
 		else 
 			return 0;
@@ -434,7 +442,7 @@ Ext.onReady(function(){
 		check_gudang();
 		//END OF DETAIL
 		
-		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Terbuka"){
+		if(koreksi_post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Terbuka"){
 			koreksi_idField.setDisabled(false);
 			koreksi_noField.setDisabled(false);
 			koreksi_gudangField.setDisabled(false);
@@ -450,7 +458,7 @@ Ext.onReady(function(){
 			detail_koreksi_stokListEditorGrid.dkoreksi_add.enable();
 			
 		}
-		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Tertutup"){
+		if(koreksi_post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Tertutup"){
 			koreksi_idField.setDisabled(true);
 			koreksi_noField.setDisabled(true);
 			koreksi_gudangField.setDisabled(true);
@@ -469,7 +477,7 @@ Ext.onReady(function(){
 			detail_koreksi_stokListEditorGrid.dkoreksi_add.disable();
 			
 		}
-		if(post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Batal"){
+		if(koreksi_post2db=="UPDATE" && master_koreksi_stokListEditorGrid.getSelectionModel().getSelected().get('koreksi_status')=="Batal"){
 			koreksi_idField.setDisabled(true);
 			koreksi_noField.setDisabled(true);
 			koreksi_gudangField.setDisabled(true);
@@ -559,7 +567,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_koreksi_stok_createWindow.isVisible()){
-			post2db='CREATE';
+			koreksi_post2db='CREATE';
 			msg='created';
 			master_koreksi_stok_reset_form();
 			master_koreksi_stok_createWindow.show();
@@ -611,7 +619,7 @@ Ext.onReady(function(){
 		/* only one record is selected here */
 		if(master_koreksi_stokListEditorGrid.selModel.getCount() == 1) {
 			
-			post2db='UPDATE';
+			koreksi_post2db='UPDATE';
 			msg='updated';
 			master_koreksi_stok_set_form();
 			master_koreksi_stok_createWindow.show();
@@ -1555,7 +1563,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_koreksi_stok_createWindow= new Ext.Window({
 		id: 'master_koreksi_stok_createWindow',
-		title: post2db+' Penyesuaian Stok',
+		title: koreksi_post2db+' Penyesuaian Stok',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,

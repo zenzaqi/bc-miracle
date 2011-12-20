@@ -177,7 +177,8 @@ class M_lap_jum_penj_produk extends Model{
 			{
 			$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 						master_jual_produk.jproduk_tanggal as tanggal,
-						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
+						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+						((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
 					from detail_jual_produk
 					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
 					left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
@@ -278,66 +279,76 @@ class M_lap_jum_penj_produk extends Model{
 		}
 
 	//function for print record
-	function report_tindakan_print($trawat_id ,$trawat_cust ,$trawat_keterangan ,$option,$filter){
-			//full query
-			$query="select * from tindakan";
-			if($option=='LIST'){
-				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
-				$query .= " (trawat_id LIKE '%".addslashes($filter)."%' OR trawat_cust LIKE '%".addslashes($filter)."%' OR trawat_keterangan LIKE '%".addslashes($filter)."%' )";
-				$result = $this->db->query($query);
-			} else if($option=='SEARCH'){
-				if($trawat_id!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_id LIKE '%".$trawat_id."%'";
-				};
-				if($trawat_cust!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_cust LIKE '%".$trawat_cust."%'";
-				};
-				if($trawat_keterangan!=''){
-					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " trawat_keterangan LIKE '%".$trawat_keterangan."%'";
-				};
-				$result = $this->db->query($query);
-			}
-			return $result;
+	function report_tindakan_print($ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,$ljpp_groupby, $option, $filter){
+		//full query
+		if ($ljpp_groupby == 'Semua')
+		{
+		$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
+					master_jual_produk.jproduk_tanggal as tanggal,
+					sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+					((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
+				from detail_jual_produk
+				left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
+				left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
+				left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
+					where master_jual_produk.jproduk_stat_dok = 'Tertutup'
+					and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
+					and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
+					group by vu_karyawan.karyawan_username, produk.produk_nama
+						";
+						
 		}
+	
+		else if ($ljpp_groupby == 'Perawatan')
+		{
+
+		}
+	
+		else if ($ljpp_groupby == 'Pengambilan_Paket')
+		{
+
+		}
+	 
+		$result = $this->db->query($query);  
+		return $result;
+	}
 		
 	//function  for export to excel
-	function lap_jum_penj_produk_exportExcel($trawat_id ,$ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
+	function lap_jum_penj_produk_exportExcel($ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
 										$ljpp_groupby, $option, $filter){
 			//full query
 				
-			if ($ljpp_groupby == 'Semua')
-			{
-			$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
-						master_jual_produk.jproduk_tanggal as tanggal,
-						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
-					from detail_jual_produk
-					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
-					left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
-					left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
-						where master_jual_produk.jproduk_stat_dok = 'Tertutup'
-						and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
-						and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
-						group by vu_karyawan.karyawan_username, produk.produk_nama
-							";
-							
-			}
-		
-			else if ($ljpp_groupby == 'Perawatan')
-			{
-
-			}
-		
-			else if ($ljpp_groupby == 'Pengambilan_Paket')
-			{
-
-			}
-		 
-			$result = $this->db->query($query);  
-			return $result;
+		if ($ljpp_groupby == 'Semua')
+		{
+		$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
+					master_jual_produk.jproduk_tanggal as tanggal,
+					sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+					((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
+				from detail_jual_produk
+				left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
+				left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
+				left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
+					where master_jual_produk.jproduk_stat_dok = 'Tertutup'
+					and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
+					and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
+					group by vu_karyawan.karyawan_username, produk.produk_nama
+						";
+						
 		}
+	
+		else if ($ljpp_groupby == 'Perawatan')
+		{
+
+		}
+	
+		else if ($ljpp_groupby == 'Pengambilan_Paket')
+		{
+
+		}
+	 
+		$result = $this->db->query($query);  
+		return $result;
+	}
 		
 }
 ?>
