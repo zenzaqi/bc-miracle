@@ -63,7 +63,7 @@ var editor_detail_order_beli;
 var today=new Date().format('Y-m-d');
 var firstday=(new Date().format('Y-m'))+'-01';
 //declare konstant
-var post2db = '';
+var orderbeli_post2db = '';
 var msg = '';
 var pageS=15;
 var cetak_order=0;
@@ -275,14 +275,20 @@ Ext.onReady(function(){
 			var encoded_array_dorder_harga = Ext.encode(dorder_harga);
 			var encoded_array_dorder_diskon = Ext.encode(dorder_diskon);
 			
-			
 	    }
 	    
+		Ext.MessageBox.show({
+			msg:   'Sedang memproses data, mohon tunggu hingga proses ini selesai agar keamanan data anda terjaga...',
+			progressText: 'proses...',
+			width:350,
+			wait:true
+		});
+		
 		Ext.Ajax.request({
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_order_beli&m=get_action',
 			params: {
-				task				: post2db,
+				task				: orderbeli_post2db,
 				order_id			: order_id_create_pk,
 				order_no			: order_no_create,
 				order_supplier		: order_supplier_create,
@@ -316,7 +322,7 @@ Ext.onReady(function(){
 					order_statusField.setValue(master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status'));
 					
 				} else if(result!==0){
-						Ext.MessageBox.alert(post2db+' OK','Data Order Pembelian berhasil disimpan');
+						Ext.MessageBox.alert(orderbeli_post2db+' OK','Data Order Pembelian berhasil disimpan');
 						if(opsi=='print'){
 							master_order_beli_cetak_faktur(result);
 						}
@@ -358,9 +364,9 @@ Ext.onReady(function(){
 
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(orderbeli_post2db=='UPDATE')
 			return master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_id');
-		else if(post2db=='CREATE')
+		else if(orderbeli_post2db=='CREATE')
 			return order_idField.getValue();
 		else
 			return -1;
@@ -526,7 +532,7 @@ Ext.onReady(function(){
 		check_acc();
 		//check_supplier();
 
-		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
+		if(orderbeli_post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Terbuka"){
 			order_idField.setDisabled(false);
 			order_noField.setDisabled(false);
 			order_supplierField.setDisabled(true);
@@ -544,7 +550,7 @@ Ext.onReady(function(){
 			order_jumlah_barangField.setDisabled(false);
 			master_order_beli_createForm.obeli_savePrint.enable();
 		}
-		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Tertutup"){
+		if(orderbeli_post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Tertutup"){
 			order_idField.setDisabled(true);
 			order_noField.setDisabled(true);
 			order_supplierField.setDisabled(true);
@@ -566,7 +572,7 @@ Ext.onReady(function(){
 			}
 
 		}
-		if(post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Batal"){
+		if(orderbeli_post2db=="UPDATE" && master_order_beliListEditorGrid.getSelectionModel().getSelected().get('order_status')=="Batal"){
 			order_idField.setDisabled(true);
 			order_noField.setDisabled(true);
 			order_supplierField.setDisabled(true);
@@ -661,7 +667,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_order_beli_createWindow.isVisible()){
-			post2db='CREATE';
+			orderbeli_post2db='CREATE';
 			msg='created';
 			master_order_beli_reset_form();
 			master_order_beli_createWindow.show();
@@ -728,7 +734,7 @@ Ext.onReady(function(){
 	function master_order_beli_confirm_update(){
 		/* only one record is selected here */
 		if(master_order_beliListEditorGrid.selModel.getCount() == 1) {
-			post2db='UPDATE';
+			orderbeli_post2db='UPDATE';
 			msg='updated';
 			master_order_beli_set_form();
 			master_order_beli_createWindow.show();
@@ -1994,7 +2000,7 @@ Ext.onReady(function(){
 			{
 				text: 'Cancel',
 				handler: function(){
-					post2db='CREATE';
+					orderbeli_post2db='CREATE';
 					master_order_beli_createWindow.hide();
 				}
 			}
@@ -2006,7 +2012,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_order_beli_createWindow= new Ext.Window({
 		id: 'master_order_beli_createWindow',
-		title: post2db+'Order Pembelian',
+		title: orderbeli_post2db+'Order Pembelian',
 		closable:true,
 		closeAction: 'hide',
 		width: 940,

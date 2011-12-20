@@ -64,6 +64,7 @@ class C_master_ambil_paket extends Controller {
 			//$tgl_awal_show = date("d-m-Y");
 			//$tgl_akhir_show = date("d-m-Y");
 			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show.", ";
+			$data["tanggal_akhir"]="Periode : Awal s/d ".$tgl_akhir_show.", ";
 		}
 		
 		$data["data_print"]=$this->m_master_ambil_paket->get_laporan($tgl_awal,$tgl_akhir,$periode,$opsi,$opsi_status,$group);

@@ -154,6 +154,7 @@ Ext.onReady(function(){
 			{name: 'jumlah_produk', type: 'string', mapping: 'Jumlah_produk'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
 			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_jumlah'},
+			{name: 'komisi', type: 'float', mapping: 'komisi'}
 		]),
 		sortInfo:{field: 'karyawan_username', direction: "DESC"}
 	});
@@ -250,6 +251,14 @@ Ext.onReady(function(){
 			hidden : true,
 			sortable: true
 		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Komisi (Rp)' + '</div>',
+			dataIndex: 'komisi',
+			width: 80,	//55,
+			sortable: true,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		}
 	]);
 	
 	lap_jum_penj_produk_ColumnModel.defaultSortable= true;
@@ -613,24 +622,28 @@ Ext.onReady(function(){
 
 	/* Function for print List Grid */
 	function lap_jum_penj_produk_print(){
-		var searchquery = "";
+		var printquery = "";
 		var trawat_cust_print=null;
 		var trawat_keterangan_print=null;
 		var win;              
 		// check if we do have some search data...
-		if(lap_jum_penj_produkDataStore.baseParams.query!==null){searchquery = lap_jum_penj_produkDataStore.baseParams.query;}
-		if(lap_jum_penj_produkDataStore.baseParams.trawat_cust!==null){trawat_cust_print = lap_jum_penj_produkDataStore.baseParams.trawat_cust;}
-		if(lap_jum_penj_produkDataStore.baseParams.trawat_keterangan!==null){trawat_keterangan_print = lap_jum_penj_produkDataStore.baseParams.trawat_keterangan;}
-
+		if(lap_jum_penj_produkDataStore.baseParams.query!==null){printquery = lap_jum_penj_produkDataStore.baseParams.query;}
+		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_print=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
+		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_print=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
+		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_print=lap_jum_penj_produk_karyawanSearchField.getValue();}
+		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_print=lap_jum_penj_produk_groupbyField.getValue();}
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_lap_jum_penj_produk&m=get_action',
 		params: {
 			task: "PRINT",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+		  	query: printquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_cust : trawat_cust_print,
-			trawat_keterangan : trawat_keterangan_print,
+			ljpp_tgl_start	: 	ljpp_tgl_start_print,
+			ljpp_tgl_end	: 	ljpp_tgl_end_print,
+			ljpp_karyawan_id	:	ljpp_karyawan_print,
+			ljpp_groupby	:	ljpp_groupby_print,
 		  	currentlisting: lap_jum_penj_produkDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -667,7 +680,7 @@ Ext.onReady(function(){
 	
 	/* Function for print Export to Excel Grid */
 	function lap_jum_penj_produk_export_excel(){
-		var searchquery = "";
+		var excelquery = "";
 		var tindakan_dokter_2excel=null;
 		var rawat_kode_2excel=null;
 		var tindakan_perawatan_2excel=null;
@@ -676,14 +689,14 @@ Ext.onReady(function(){
 		var dtrawat_jkredit_2excel=null;
 		//var dtrawat_kredit_2excel=null;
 		
-		var ljpp_tgl_start_search=null;
-		var ljpp_tgl_end_search=null;
-		var ljpp_karyawan_search=null;
-		var ljpp_groupby_search=null;
+		var ljpp_tgl_start_excel=null;
+		var ljpp_tgl_end_excel=null;
+		var ljpp_karyawan_excel=null;
+		var ljpp_groupby_excel=null;
 		
 		var win;              
 		// check if we do have some search data...
-		if(lap_jum_penj_produkDataStore.baseParams.query!==null){searchquery = lap_jum_penj_produkDataStore.baseParams.query;}
+		if(lap_jum_penj_produkDataStore.baseParams.query!==null){excelquery = lap_jum_penj_produkDataStore.baseParams.query;}
 		//if(lap_jum_penj_produkDataStore.baseParams.ljpp_karyawan_id!==null){tindakan_dokter_2excel = lap_jum_penj_produkDataStore.baseParams.ljpp_karyawan_id;}
 		//if(lap_jum_penj_produkDataStore.baseParams.tindakan_perawatan!==null){tindakan_perawatan_2excel = lap_jum_penj_produkDataStore.baseParams.tindakan_perawatan;}
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_edit!==null){dtrawat_edit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_edit;}
@@ -691,10 +704,10 @@ Ext.onReady(function(){
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_jkredit!==null){dtrawat_jkredit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_jkredit;}
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_kredit!==null){dtrawat_kredit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_kredit;}
 		
-		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_search=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
-		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_search=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
-		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_search=lap_jum_penj_produk_karyawanSearchField.getValue();}
-		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_search=lap_jum_penj_produk_groupbyField.getValue();}
+		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_excel=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
+		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_excel=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
+		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_excel=lap_jum_penj_produk_karyawanSearchField.getValue();}
+		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_excel=lap_jum_penj_produk_groupbyField.getValue();}
 		
 		
 
@@ -703,12 +716,12 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_lap_jum_penj_produk&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+		  	query: excelquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			ljpp_tgl_start	: 	ljpp_tgl_start_search,
-			ljpp_tgl_end	: 	ljpp_tgl_end_search,
-			ljpp_karyawan_id	:	ljpp_karyawan_search,
-			ljpp_groupby	:	ljpp_groupby_search,
+			ljpp_tgl_start	: 	ljpp_tgl_start_excel,
+			ljpp_tgl_end	: 	ljpp_tgl_end_excel,
+			ljpp_karyawan_id	:	ljpp_karyawan_excel,
+			ljpp_groupby	:	ljpp_groupby_excel,
 		  	currentlisting: lap_jum_penj_produkDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              

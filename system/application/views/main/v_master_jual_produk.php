@@ -5039,9 +5039,9 @@ Ext.override(Ext.form.Field, {
 		}else if(djenis_diskonField.getValue()=='Promo'){
 			djenis_diskon = cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo;
 			djumlah_diskonField.setValue(cbo_dproduk_produkDataStore.getAt(j).data.dproduk_produk_dpromo);
-			//djumlah_diskonField.setReadOnly(true);
-			//djumlah_diskonField.setDisabled(true); //default
-			/*untuk YESS*/djumlah_diskonField.setDisabled(false); /*eof YESS*/ 
+			djumlah_diskonField.setReadOnly(true);
+			djumlah_diskonField.setDisabled(true); //default
+			/*untuk YESS*///djumlah_diskonField.setDisabled(false); /*eof YESS*/ 
 			
 		}
 		else{

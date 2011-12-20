@@ -68,7 +68,7 @@ var detail_mutasi_racikan_reader;
 var detail_mutasi_racikan_writer;
 
 //declare konstant
-var post2db = '';
+var mutasi_post2db = '';
 var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
@@ -328,11 +328,18 @@ Ext.onReady(function(){
 		var encoded_array_dmracikan_jumlah = Ext.encode(dmracikan_jumlah);
 
 		
+		Ext.MessageBox.show({
+			msg:   'Sedang memproses data, mohon tunggu hingga proses ini selesai agar keamanan data anda terjaga...',
+			progressText: 'proses...',
+			width:350,
+			wait:true
+		});
+		
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
 			url: 'index.php?c=c_master_mutasi&m=get_action',
 			params: {
-				task				: post2db,
+				task				: mutasi_post2db,
 				mutasi_id			: mutasi_id_create_pk, 
 				mutasi_no			: mutasi_no_create,
 				mutasi_asal			: mutasi_asal_create, 
@@ -364,7 +371,7 @@ Ext.onReady(function(){
 				var result=eval(response.responseText);
 				if(result!==0){
 						detail_mutasi_insert(result,opsi);
-						Ext.MessageBox.alert(post2db+' OK','Data Mutasi Barang berhasil disimpan');
+						Ext.MessageBox.alert(mutasi_post2db+' OK','Data Mutasi Barang berhasil disimpan');
 						master_mutasi_createWindow.hide();
 				}else{
 						Ext.MessageBox.show({
@@ -402,9 +409,9 @@ Ext.onReady(function(){
   
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(mutasi_post2db=='UPDATE')
 			return master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_id');
-		else if(post2db=='CREATE')
+		else if(mutasi_post2db=='CREATE')
 			return mutasi_idField.getValue();
 		else 
 			return 0;
@@ -633,7 +640,7 @@ Ext.onReady(function(){
 		});
 		// END OF DETAIL
 		
-		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Terbuka"){
+		if(mutasi_post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Terbuka"){
 			if(master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_barang_keluar')==true)
 			{
 				mutasi_barang_keluarField.setDisabled(true);
@@ -682,7 +689,7 @@ Ext.onReady(function(){
 			}
 			//master_mutasi_createForm.mmutasi_savePrint.enable();
 		}
-		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tertutup"){
+		if(mutasi_post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tertutup"){
 			mutasi_idField.setDisabled(true);
 			mutasi_noField.setDisabled(true);
 			mutasi_asalField.setDisabled(true);
@@ -714,7 +721,7 @@ Ext.onReady(function(){
 			
 		}
 		/*Status Tunggu utk Kasir, jika status Tunggu dan di klik Edit dan yg login adalah kasir/apoteker maka Stat Dok akan di disable, dan status_terima akan di enable */
-		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tunggu"){
+		if(mutasi_post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Tunggu"){
 			mutasi_idField.setDisabled(true);
 			mutasi_noField.setDisabled(true);
 			mutasi_asalField.setDisabled(true);
@@ -757,7 +764,7 @@ Ext.onReady(function(){
 		}
 		}
 		
-		if(post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Batal"){
+		if(mutasi_post2db=="UPDATE" && master_mutasiListEditorGrid.getSelectionModel().getSelected().get('mutasi_status')=="Batal"){
 			mutasi_idField.setDisabled(true);
 			mutasi_noField.setDisabled(true);
 			mutasi_asalField.setDisabled(true);
@@ -894,7 +901,7 @@ Ext.onReady(function(){
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
 		if(!master_mutasi_createWindow.isVisible()){
-			post2db='CREATE';
+			mutasi_post2db='CREATE';
 			msg='created';
 			master_mutasi_reset_form();
 			master_mutasi_createWindow.show();
@@ -947,7 +954,7 @@ Ext.onReady(function(){
 		master_mutasi_reset_form();
 		/* only one record is selected here */
 		if(master_mutasiListEditorGrid.selModel.getCount() == 1) {
-			post2db='UPDATE';
+			mutasi_post2db='UPDATE';
 			msg='updated';
 			master_mutasi_set_form();
 			master_mutasi_createWindow.show();
@@ -2751,7 +2758,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_mutasi_createWindow= new Ext.Window({
 		id: 'master_mutasi_createWindow',
-		title: post2db+' Mutasi Barang',
+		title: mutasi_post2db+' Mutasi Barang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -3313,7 +3320,7 @@ Ext.onReady(function(){
 		//detail_mutasiListEditorGrid.setDisabled(true);
 	});
 
-	post2db = '';
+	mutasi_post2db = '';
 	task = '';
 	
 });

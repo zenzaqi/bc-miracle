@@ -63,7 +63,7 @@ var detail_terima_beli_reader;
 var editor_detail_terima_beli;
 
 //declare konstant
-var post2db = '';
+var terimabeli_post2db = '';
 var task = '';
 var today=new Date().format('Y-m-d');
 var msg = '';
@@ -299,7 +299,7 @@ Ext.onReady(function(){
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_terima_beli&m=get_action',
 			params: {
-				task				: post2db,
+				task				: terimabeli_post2db,
 				terima_id			: terima_id_create_pk,
 				terima_no			: terima_no_create,
 				terima_order		: terima_order_create,
@@ -344,12 +344,10 @@ Ext.onReady(function(){
 						callback: function(r,opt,success){
 							if(success==true){
 								Ext.MessageBox.hide();
-								Ext.MessageBox.alert(post2db+' OK','Data Penerimaan Barang berhasil disimpan');
+								Ext.MessageBox.alert(terimabeli_post2db+' OK','Data Penerimaan Barang berhasil disimpan');
 							}
 						}			
 						});
-
-						
 						//cbo_terima_gudang_DataStore.reload();
 						master_terima_beli_createWindow.hide();
 				}
@@ -388,9 +386,9 @@ Ext.onReady(function(){
 
   	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='UPDATE')
+		if(terimabeli_post2db=='UPDATE')
 			return master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_id');
-		else if(post2db=='CREATE')
+		else if(terimabeli_post2db=='CREATE')
 			return terima_idField.getValue();
 		else
 			return 0;
@@ -523,7 +521,7 @@ Ext.onReady(function(){
 		});
 		//END OF DETAIL
 
-		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
+		if(terimabeli_post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Terbuka"){
 			terima_idField.setDisabled(false);
 			terima_noField.setDisabled(false);
 			terima_gudangField.setDisabled(false);
@@ -541,7 +539,7 @@ Ext.onReady(function(){
 			dterima_jumlahField.setDisabled(false);
 			master_terima_beli_createForm.tbeli_savePrint.enable();
 		}
-		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
+		if(terimabeli_post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Tertutup"){
 			terima_idField.setDisabled(true);
 			terima_noField.setDisabled(true);
 			terima_gudangField.setDisabled(true);
@@ -563,7 +561,7 @@ Ext.onReady(function(){
 			}
 			
 		}
-		if(post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Batal"){
+		if(terimabeli_post2db=="UPDATE" && master_terima_beliListEditorGrid.getSelectionModel().getSelected().get('terima_status')=="Batal"){
 			terima_idField.setDisabled(true);
 			terima_noField.setDisabled(true);
 			terima_gudangField.setDisabled(true);
@@ -658,7 +656,7 @@ Ext.onReady(function(){
 	function display_form_window(){
 		cbo_terima_gudang_DataStore.load();
 		if(!master_terima_beli_createWindow.isVisible()){
-			post2db='CREATE';
+			terimabeli_post2db='CREATE';
 			msg='created';
 			master_terima_beli_reset_form();
 			master_terima_beli_createWindow.show();
@@ -711,7 +709,7 @@ Ext.onReady(function(){
 	function master_terima_beli_confirm_update(){
 		/* only one record is selected here */
 		if(master_terima_beliListEditorGrid.selModel.getCount() == 1) {
-			post2db='UPDATE';
+			terimabeli_post2db='UPDATE';
 			msg='updated';
 			master_terima_beli_set_form();
 			cbo_terima_gudang_DataStore.load();
@@ -2189,7 +2187,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	master_terima_beli_createWindow= new Ext.Window({
 		id: 'master_terima_beli_createWindow',
-		title: post2db+' Penerimaan Barang',
+		title: terimabeli_post2db+' Penerimaan Barang',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
@@ -2824,7 +2822,7 @@ Ext.onReady(function(){
 	});
 
 	
-	post2db = '';
+	terimabeli_post2db = '';
 	task = '';
 	
 	
