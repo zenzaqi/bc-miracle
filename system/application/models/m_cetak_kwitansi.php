@@ -824,7 +824,7 @@ class M_cetak_kwitansi extends Model{
 		}
 		
 		//function for advanced search record
-		function cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust ,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
+		function cetak_kwitansi_search($kwitansi_no ,$kwitansi_cust , $kwitansi_tanggal_start, $kwitansi_tanggal_end,$kwitansi_keterangan ,$kwitansi_status ,$start,$end){
 			//full query
 			//$query="select * from cetak_kwitansi";
 			$query = "SELECT kwitansi_id
@@ -857,6 +857,14 @@ class M_cetak_kwitansi extends Model{
 			if($kwitansi_cust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
 				$query.= " kwitansi_cust = '".$kwitansi_cust."'";
+			};
+			if($kwitansi_tanggal_start!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " kwitansi_tanggal>= '".$kwitansi_tanggal_start."'";
+			};
+			if($kwitansi_tanggal_end!=''){
+				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+				$query.= " kwitansi_tanggal<= '".$kwitansi_tanggal_end."'";
 			};
 			if($kwitansi_keterangan!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
