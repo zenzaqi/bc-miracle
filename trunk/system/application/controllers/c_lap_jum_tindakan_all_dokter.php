@@ -14,6 +14,7 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 	//constructor
 	function c_lap_jum_tindakan_all_dokter(){
 		parent::Controller();
+		session_start();
 		$this->load->model('m_lap_jum_tindakan_all_dokter', '', TRUE);
 		$this->load->plugin('to_excel');
 	}
@@ -59,6 +60,10 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		}
 	}
 	
+	function get_cabang_list(){
+		$result=$this->m_public_function->get_cabang_list();
+		echo $result;
+	}
 
 	//function for advanced search
 	function report_tindakan_search(){
@@ -77,14 +82,14 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
-		
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_search($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $start,$end);
+		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_search($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $start, $end, $cabang);
 		echo $result;
 	}
 
@@ -104,12 +109,12 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
-		
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
 		
-		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_searchtotal($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby);
+		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_searchtotal($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $cabang);
 		echo $result;
 	}
 
@@ -130,14 +135,14 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
-		
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_tindakan_all_dokter->report_daftar_dokter($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end);
+		$result = $this->m_lap_jum_tindakan_all_dokter->report_daftar_dokter($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby, $start,$end, $cabang);
 		echo $result;
 	}
 	
