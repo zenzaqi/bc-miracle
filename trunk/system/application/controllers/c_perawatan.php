@@ -595,13 +595,38 @@ class C_perawatan extends Controller {
 													,$rawat_aktif 
 													,$option
 													,$filter);
-		$this->firephp->log($result, 'result');
+		//$this->firephp->log($result, 'result');
 		$nbrows=$result->num_rows();
-		$totcolumn=17;
+		$totcolumn=23;
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("perawatanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Perawatan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Perawatan List'><caption>DAFTAR PERAWATAN</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode Lama</th><th scope='col'>Kode Baru</th><th scope='col'>Nama Perawatan</th><th scope='col'>Group1</th><th scope='col'>Group2</th><th scope='col'>Jenis</th><th scope='col'>DU(%)</th><th scope='col'>DM(%)</th><th scope='col'>Point</th><th scope='col'>Kredit</th><th scope='col'>Harga(Rp)</th><th scope='col'>Gudang</th><th scope='col'>Aktif</th></tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
+		fwrite($file, "<body onload='window.print()'><table summary='Perawatan List'><caption>DAFTAR PERAWATAN</caption><thead><tr>
+		<th scope='col'>No</th>
+		<th scope='col'>Kode Baru</th>
+		<th scope='col'>Nama Perawatan</th>
+		<th scope='col'>Group1</th>
+		<th scope='col'>Group2</th>
+		<th scope='col'>Jenis</th>
+		<th scope='col'>Gudang</th>
+		<th scope='col'>Harga(Rp)</th>
+		<th scope='col'>Poin</th>
+		<th scope='col'>Kr(Poin)</th>
+		<th scope='col'>Kr(Rp)</th>
+		<th scope='col'>Status</th>
+		<th scope='col'>DU(%)</th>
+		<th scope='col'>DM(%)</th>
+		<th scope='col'>Ultah</th>
+		<th scope='col'>Card</th>
+		<th scope='col'>Kolega</th>
+		<th scope='col'>Klrga</th>
+		<th scope='col'>Owner</th>
+		<th scope='col'>Groom</th>
+		<th scope='col'>Wrtwn</th>
+		<th scope='col'>Staf Dr</th>
+		<th scope='col'>Staf Non</th>
+		<th scope='col'>Promo</th>
+		</tr></thead><tfoot><tr><th scope='row'>Total</th><td colspan='$totcolumn'>");
 		fwrite($file, $nbrows);
 		fwrite($file, " Perawatan</td></tr></tfoot><tbody>");
 		$i=0;
@@ -615,8 +640,6 @@ class C_perawatan extends Controller {
 			
 				fwrite($file, "><th scope='row' id='r97'>");
 				fwrite($file, $i);
-				fwrite($file,"</th><td>");
-				fwrite($file, $data['rawat_kodelama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_kode']);
 				fwrite($file,"</td><td>");
@@ -624,9 +647,21 @@ class C_perawatan extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['group_nama']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_kontribusi']);
+				fwrite($file, $data['jenis_nama']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['kategori_nama']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['gudang_nama']);
+				fwrite($file,"</td><td style=\"text-align:right\">");
+				fwrite($file, number_format($data['rawat_harga']));
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_point']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_kredit']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_kreditrp']);
+				fwrite($file,"</td><td>");
+				fwrite($file, $data['rawat_aktif']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_du']);
 				fwrite($file,"</td><td>");
@@ -644,30 +679,14 @@ class C_perawatan extends Controller {
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_dgrooming']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_point']);
+				fwrite($file, $data['rawat_dwartawan']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_durasi']);
+				fwrite($file, $data['rawat_dstaffdokter']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_kredit']);
-				// fwrite($file,"</td><td>");
-				// fwrite($file, $data['rawat_jumlah_tindakan']);
-				fwrite($file,"</td><td style=\"text-align:right\">");
-				fwrite($file, number_format($data['rawat_harga']));
+				fwrite($file, $data['rawat_dstaffnondokter']);
 				fwrite($file,"</td><td>");
-				fwrite($file, $data['gudang_nama']);
-				fwrite($file,"</td><td>");
-				fwrite($file, $data['rawat_aktif']);
+				fwrite($file, $data['rawat_dpromo']);
 				fwrite($file, "</td></tr>");
-				// fwrite($file, $data['rawat_creator']);
-				// fwrite($file, "</td></tr>");
-				// fwrite($file, $data['rawat_date_create']);
-				// fwrite($file, "</td></tr>");
-				// fwrite($file, $data['rawat_update']);
-				// fwrite($file, "</td></tr>");
-				// fwrite($file, $data['rawat_date_update']);
-				// fwrite($file, "</td></tr>");
-				// fwrite($file, $data['rawat_revised']);
-				// fwrite($file, "</td></tr>");
 			}
 		}
 		fwrite($file, "</tbody></table></body></html>");	

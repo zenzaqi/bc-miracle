@@ -154,6 +154,7 @@ Ext.onReady(function(){
 			{name: 'jumlah_produk', type: 'string', mapping: 'Jumlah_produk'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
 			{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_jumlah'},
+			{name: 'komisi_satuan', type: 'float', mapping: 'komisi_satuan'},
 			{name: 'komisi', type: 'float', mapping: 'komisi'}
 		]),
 		sortInfo:{field: 'karyawan_username', direction: "DESC"}
@@ -227,20 +228,20 @@ Ext.onReady(function(){
 			dataIndex: 'produk_nama',
 			width: 300,//185,	//210,
 			sortable: true,
-		}, 
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kredit Satuan(Rp)' + '</div>',
+			dataIndex: 'komisi_satuan',
+			width: 80,	//55,
+			sortable: false,
+			renderer: Ext.util.Format.numberRenderer('0,000')
+		},
 		{	
 			align : 'Right',
 			header: '<div align="center">' + 'Jumlah' + '</div>',
 			dataIndex: 'jumlah_produk',
 			width: 80,	//55,
-			sortable: false
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Kredit (Satuan)' + '</div>',
-			dataIndex: 'dtrawat_skredit',
-			width: 80,	//55,
-			hidden : true,
 			sortable: false
 		},
 		{	
@@ -253,7 +254,7 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Komisi (Rp)' + '</div>',
+			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
 			dataIndex: 'komisi',
 			width: 80,	//55,
 			sortable: true,
