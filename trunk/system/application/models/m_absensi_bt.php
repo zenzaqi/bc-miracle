@@ -105,7 +105,7 @@ class M_absensi_bt extends Model{
 					SELECT absensi_bt.*, vu_karyawan.karyawan_nama as absensi_karyawan_nama FROM absensi_bt
 					left join vu_karyawan on (vu_karyawan.karyawan_id = absensi_bt.absensi_karyawan_id)
 					WHERE
-						absensi_bulan = ".$bulan." and absensi_tahun = ".$tahun."
+						absensi_bulan = ".$bulan." and absensi_tahun = ".$tahun." and karyawan_aktif = 'Aktif'
 					";
 			
 			// For simple search
@@ -197,7 +197,7 @@ class M_absensi_bt extends Model{
 		// jika tahun dan bulan yang dipilih sudah ada
 			$query_bt = "select karyawan_id from vu_karyawan 
 						where 
-							karyawan_jabatan = 7 and
+							karyawan_jabatan = 7 and karyawan_aktif = 'Aktif' and
 							karyawan_cabang = (select info.info_cabang from info)";
 			$result_bt = $this->db->query($query_bt);
 			$i=0;
@@ -283,7 +283,7 @@ class M_absensi_bt extends Model{
 			$i=0;
 			$query_bt = "select * from vu_karyawan 
 						where 
-							karyawan_jabatan = 7 and
+							karyawan_jabatan = 7 and karyawan_aktif = 'Aktif' and
 							karyawan_cabang = (select info.info_cabang from info)";
 			$result_bt = $this->db->query($query_bt);
 			foreach($result_bt->result() as $row){
