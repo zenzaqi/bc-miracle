@@ -515,7 +515,7 @@ Ext.onReady(function(){
 						//terimakasChart.update("<iframe frameborder='0' width='100%' height='100%' src='http://localhost/mis2/index.php?c=c_gauge_chart&n=total&nilai=80'></iframe>");
 						
 							
-						<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+						<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
 
 						rpt_terimakas_targetDataStore.baseParams = {
 							task		: 'TARGET',		
@@ -664,7 +664,7 @@ Ext.onReady(function(){
 	  	width: 800,
 	});
 	
-	<?php if(eregi('H|C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
+	<?php if(eregi('C',$this->m_security->get_access_group_by_kode('MENU_LAPTERIMAKAS'))){ ?>
 		rpt_terimakas_targetListEditorGrid.render();
 	<?  } ?>
 		
