@@ -178,6 +178,7 @@ class M_lap_jum_penj_produk extends Model{
 			$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 						master_jual_produk.jproduk_tanggal as tanggal,
 						sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+						(produk.produk_kredit/100) * produk.produk_harga as komisi_satuan,
 						((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
 					from detail_jual_produk
 					left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
@@ -286,6 +287,7 @@ class M_lap_jum_penj_produk extends Model{
 		$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 					master_jual_produk.jproduk_tanggal as tanggal,
 					sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+					(produk.produk_kredit/100) * produk.produk_harga as komisi_satuan,
 					((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
 				from detail_jual_produk
 				left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
@@ -323,6 +325,7 @@ class M_lap_jum_penj_produk extends Model{
 		$query="select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 					master_jual_produk.jproduk_tanggal as tanggal,
 					sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+					(produk.produk_kredit/100) * produk.produk_harga as komisi_satuan,
 					((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
 				from detail_jual_produk
 				left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
