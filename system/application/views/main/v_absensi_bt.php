@@ -51,9 +51,9 @@ var absensi_bt_bulanField;
 
 
 //declare konstant
-var post2db = 'CREATE';
+var absensi_bt_post2db = 'CREATE';
 var msg = '';
-var pageS=100;
+var absensi_bt_pageS=100;
 
 /* declare variable here for Field*/
 
@@ -235,7 +235,7 @@ Ext.onReady(function(){
 			params: {
 				task: 'LIST',
 				start: 0,
-				limit: pageS,
+				limit: absensi_bt_pageS,
 				query: '',
 				tahun: Ext.getCmp('cbo_tahun').getValue(),
 				bulan: Ext.getCmp('cbo_bulan').getValue()
@@ -275,7 +275,7 @@ Ext.onReady(function(){
 					var result=eval(response.responseText);
 					switch(result){
 						case 1:
-							Ext.MessageBox.alert(post2db+' OK','Daftar Absensi berhasil ditambahkan.');
+							Ext.MessageBox.alert(absensi_bt_post2db+' OK','Daftar Absensi berhasil ditambahkan.');
 							//absensi_bt_DataStore.reload();
 							absensi_bt_saveWindow.hide();
 							tahunDataStore.load();
@@ -322,7 +322,7 @@ Ext.onReady(function(){
     
 	/* Function for get PK field */
 	function get_pk_id(){
-		if(post2db=='CREATE')
+		if(absensi_bt_post2db=='CREATE')
 			return absensi_btListEditorGrid.getSelectionModel().getSelected().get('absensi_id');
 		else 
 			return 0;
@@ -405,7 +405,7 @@ Ext.onReady(function(){
 			url: 'index.php?c=c_absensi_bt&m=get_action', 
 			method: 'POST'
 		}),
-		baseParams:{task: "LIST", start:0, limit: pageS}, // parameter yang di $_POST ke Controller
+		baseParams:{task: "LIST", start:0, limit: absensi_bt_pageS}, // parameter yang di $_POST ke Controller
 		reader: new Ext.data.JsonReader({
 			root: 'results',
 			totalProperty: 'total',
@@ -1249,7 +1249,7 @@ Ext.onReady(function(){
 		viewConfig: { forceFit:true },
 	  	width: 1220,
 		bbar: new Ext.PagingToolbar({
-			pageSize: pageS,
+			pageSize: absensi_bt_pageS,
 			store: absensi_bt_DataStore,
 			displayInfo: true
 		}),
@@ -1351,7 +1351,7 @@ Ext.onReady(function(){
 	/* End of Function */
   	
 	absensi_btListEditorGrid.addListener('rowcontextmenu', onsr_setup_ListEditGridContextMenu);
-	//absensi_bt_DataStore.load({params: {start: 0, limit: pageS}});
+	//absensi_bt_DataStore.load({params: {start: 0, limit: absensi_bt_pageS}});
 	/*
 	Ext.getCmp('cbo_tahun').on('select', function(){
 		
@@ -1369,7 +1369,7 @@ Ext.onReady(function(){
 			params: {
 				task: 'LIST',
 				start: 0,
-				limit: pageS,
+				limit: absensi_bt_pageS,
 				query: '',
 				tahun: Ext.getCmp('cbo_tahun').getValue(),
 				bulan: Ext.getCmp('cbo_bulan').getValue()
@@ -1399,7 +1399,7 @@ Ext.onReady(function(){
 			params: {
 				task: 'LIST',
 				start: 0,
-				limit: pageS,
+				limit: absensi_bt_pageS,
 				query: '',
 				tahun: Ext.getCmp('cbo_tahun').getValue(),
 				bulan: Ext.getCmp('cbo_bulan').getValue()
