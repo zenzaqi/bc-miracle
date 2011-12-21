@@ -423,6 +423,11 @@ Ext.onReady(function(){
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
 			handler: net_sales_print  
+		},'-',{
+			text: 'Export Excel',
+			tooltip: 'Export to Excel(.xls) Document',
+			iconCls:'icon-xls',
+			handler: net_sales_export_excel
 		}
 		]
 	});
@@ -762,7 +767,9 @@ Ext.onReady(function(){
 		}
 
 	}
-
+	
+	
+	
 	/* Function for print List Grid */
 	function net_sales_print(){
 		//var searchquery = "";
@@ -801,6 +808,70 @@ Ext.onReady(function(){
 		  	switch(result){
 		  	case 1:
 				win = window.open('./print/lap_netsales.html','lap_netsales','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
+				
+				break;
+		  	default:
+				Ext.MessageBox.show({
+					title: 'Warning',
+					msg: 'Tidak bisa mencetak data!',
+					buttons: Ext.MessageBox.OK,
+					animEl: 'save',
+					icon: Ext.MessageBox.WARNING
+				});
+				break;
+		  	}  
+		},
+		failure: function(response){
+		  	var result=response.responseText;
+			Ext.MessageBox.show({
+			   title: 'Error',
+			   msg: 'Tidak bisa terhubung dengan database server',
+			   buttons: Ext.MessageBox.OK,
+			   animEl: 'database',
+			   icon: Ext.MessageBox.ERROR
+			});		
+		} 	                     
+		});
+	}
+	/* Enf Function */
+	
+	/* Function for print Export to Excel Grid */
+	function net_sales_export_excel(){
+		//var searchquery = "";
+		var netsales_tglawal_export_excel="";
+		var netsales_tglakhir_export_excel="";
+		var netsales_bulan_export_excel="";
+		var netsales_tahun_export_excel="";
+		var netsales_periode_export_excel="";
+		var netsales_groupby_export_excel= "";      	
+		// check if we do have some search data...
+		if(net_salesDataStore.baseParams.tgl_awal!==null){netsales_tglawal_export_excel = net_salesDataStore.baseParams.tgl_awal;}
+		if(net_salesDataStore.baseParams.tgl_akhir!==null){netsales_tglakhir_export_excel = net_salesDataStore.baseParams.tgl_akhir;}
+		if(net_salesDataStore.baseParams.bulan!==null){netsales_bulan_export_excel = net_salesDataStore.baseParams.bulan;}
+		if(net_salesDataStore.baseParams.tahun!==null){netsales_tahun_export_excel = net_salesDataStore.baseParams.tahun;}
+		if(net_salesDataStore.baseParams.periode!==null){netsales_periode_export_excel = net_salesDataStore.baseParams.periode;}
+		if(net_salesDataStore.baseParams.groupby!==null){netsales_groupby_export_excel = net_salesDataStore.baseParams.groupby;}
+		
+		Ext.Ajax.request({   
+		waitMsg: 'Please Wait...',
+		url: 'index.php?c=c_lap_netsales&m=get_action',
+		params: {
+			task: "EXCEL",
+			tgl_awal	: netsales_tglawal_export_excel,
+			tgl_akhir	: netsales_tglakhir_export_excel,
+			bulan		: netsales_bulan_export_excel,
+			tahun		: netsales_tahun_export_excel,
+			periode		: netsales_periode_export_excel,
+			groupby		: netsales_groupby_export_excel,
+		  	//query		: searchquery,                    		// if we are doing a quicksearch, use this
+			//if we are doing advanced search, use this
+		  	currentlisting: net_salesDataStore.baseParams.task // this tells us if we are searching or not
+		}, 
+		success: function(response){              
+		  	var result=eval(response.responseText);
+		  	switch(result){
+		  	case 1:
+				win = window.open('./print/Laporan_NetSales.xls','lap_netsales','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				
 				break;
 		  	default:

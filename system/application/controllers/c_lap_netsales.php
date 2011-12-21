@@ -51,7 +51,7 @@ class C_lap_netsales extends Controller {
 				$this->laporan_netsales_print();
 				break;
 			case "EXCEL":
-				$this->tindakan_export_excel();
+				$this->laporan_netsales_export_excel();
 				break;
 			case "CHART":
 				$this->laporan_netsales_chart();
@@ -191,6 +191,81 @@ class C_lap_netsales extends Controller {
 		echo '1';        
 	}
 	/* End Of Function */
+	
+	/* Function to Export Excel document */
+	function laporan_netsales_export_excel(){
+		if(trim(@$_POST["tgl_awal"])!="")
+			$tgl_awal=date('Y-m-d', strtotime(trim(@$_POST["tgl_awal"])));
+		else
+			$tgl_awal="";
+		if(trim(@$_POST["tgl_akhir"])!="")
+			$tgl_akhir=date('Y-m-d', strtotime(trim(@$_POST["tgl_akhir"])));
+		else
+			$tgl_akhir="";
+		
+		$bulan=trim(@$_POST["bulan"]);
+		$tahun=trim(@$_POST["tahun"]);
+		$periode=trim(@$_POST["periode"]);
+		$groupby=trim(@$_POST["groupby"]);
+		
+		if($periode=="bulan"){
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}else if($periode=="tanggal"){
+			$date = substr($tgl_awal,8,2);
+			$month = substr($tgl_awal,5,2);
+			$year = substr($tgl_awal,0,4);
+			$tgl_awal_show = $date.'-'.$month.'-'.$year;
+			
+			$date_akhir = substr($tgl_akhir,8,2);
+			$month_akhir = substr($tgl_akhir,5,2);
+			$year_akhir = substr($tgl_akhir,0,4);
+			$tgl_akhir_show = $date_akhir.'-'.$month_akhir.'-'.$year_akhir;
+
+			$data["periode"]="Periode : ".$tgl_awal_show." s/d ".$tgl_akhir_show." ";
+		}else if ($periode == '' && $groupby == '') {
+			$tahun = date('Y');
+			$bulan = date('m');
+			$tgl_awal=$tahun."-".$bulan;
+			$data["periode"]=get_ina_month_name($bulan,'long')." ".$tahun;
+		}
+		$result = $this->m_lap_netsales->laporan_netsales_print($tgl_awal, $tgl_akhir, $bulan, $tahun, $periode, $groupby);		
+		$rs=$result->row();
+		$jumlah_result=$result->result();
+		
+		$data['tns_tanggal']=$rs->tns_tanggal;
+		$data['tns_medis']=$rs->tns_medis;
+		$data['tns_nonmedis']=$rs->tns_nonmedis;
+		$data['tns_surgery']=$rs->tns_surgery;
+		$data['tns_antiaging']=$rs->tns_antiaging;
+		$data['tns_produk']=$rs->tns_produk;
+		$data['tns_lainlain']=$rs->tns_lainlain;
+		$data['tns_total']=$rs->tns_total;
+		$data['jumlah_result']=$jumlah_result;
+		
+		$viewdata=$this->load->view("main/p_lap_netsales",$data,TRUE);
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$this->load->plugin('to_excel');
+		$print_file=fopen("print/Laporan_NetSales.xls","w+");
+		fwrite($print_file, $viewdata);
+		
+		/*
+		$data["data_print"] = $this->m_trial_balance->trial_balance_print($balance_tgl_awal, $balance_tgl_akhir,$start,$end );
+		$data["type"]="excel";
+		$print_view=$this->load->view("main/p_trial_balance.php",$data,TRUE);
+		
+		if(!file_exists("print")){
+			mkdir("print");
+		}
+		$this->load->plugin('to_excel');
+		$print_file=fopen("print/trial_balance_printlist.xls","w+");
+		fwrite($print_file, $print_view);
+		*/
+		echo '1'; 
+			
+	}
 
 	function laporan_netsales_chart($search=false)
 	{	

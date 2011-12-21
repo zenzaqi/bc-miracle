@@ -243,23 +243,23 @@ Ext.onReady(function(){
 		}, 
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Jumlah' + '</div>',
+			header: '<div align="center">' + 'Jml' + '</div>',
 			dataIndex: 'dtrawat_edit',
-			width: 80,	//55,
+			width: 60,	//55,
 			sortable: false
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Kredit (Satuan)' + '</div>',
+			header: '<div align="center">' + 'Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_skredit',
-			width: 80,	//55,
+			width: 120,	//55,
 			sortable: false
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit' + '</div>',
+			header: '<div align="center">' + 'Tot Kredit (Poin)' + '</div>',
 			dataIndex: 'dtrawat_jkredit',
-			width: 80,	//55,
+			width: 120,
 			sortable: true
 		},
 	]);
@@ -282,7 +282,7 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Grand Total Kredit' + '</div>',
+			header: '<div align="right">' + 'Grand Tot Kredit (Rp)' + '</div>',
 			dataIndex: 'dtrawat_kredit',
 			width: 80,	//55,
 			sortable: false
@@ -319,7 +319,7 @@ Ext.onReady(function(){
 		},
 		lap_jum_tindakan_terapis_dokterField,
 		{
-			text: 'Adv Search',
+			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -731,7 +731,7 @@ Ext.onReady(function(){
 		}]
 		,
 		buttons: [{
-				text: 'Adv Search',
+				text: 'Search',
 				handler: lap_jum_tindakan_terapis_search
 			},{
 				text: 'Close',
