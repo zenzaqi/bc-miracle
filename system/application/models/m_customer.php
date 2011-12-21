@@ -251,7 +251,7 @@ class M_customer extends Model{
 				$query .= " AND cust_aktif = 'Aktif'";
 			} 
 			else if($option=='SEARCH'){
-					/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+				/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
 			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
 			{
 			$sql = "SELECT distinct(cust_id)
@@ -1509,370 +1509,375 @@ class M_customer extends Model{
 		
 		//function for search label
 		function customer_print_label($cust_id,$cust_no,$cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_tgllahirend,$cust_referensi,$cust_referensilain,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_tglEnd, $cust_bulanEnd,$cust_bb,$option,$filter){
-			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
-			if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string = $string.','.$string_cust;
+		$query =   "SELECT 
+							v.*
+						FROM vu_customer v
+						WHERE cust_aktif = 'Aktif' ";
+						
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' )";
+				$query .= " AND cust_aktif = 'Aktif'";
+			} 
+			else if($option=='SEARCH'){
+				/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+				if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string = $string.','.$string_cust;
+					}
 				}
-			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string_not = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string_not = $string_not.','.$string_cust;
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string_not = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string_not = $string_not.','.$string_cust;
+					}
 				}
-			}
-	
-			if ($cust_aktif=="")
-				$cust_aktif = "Aktif";
 
-			$query = "SELECT v.*
-						FROM vu_customer v";
-
-			if($cust_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id LIKE '%".$cust_id."%'";
-			};
-			if($cust_no!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_no LIKE '%".$cust_no."%'";
-			};
-			if($cust_no_awal!=''){
+				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					$query.= " cust_id LIKE '%".$cust_id."%'";
 				};
-			if($cust_nama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$cust_nama."%'";
-			};
-			if($cust_kelamin!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
-			};
-			if($cust_alamat!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
-			};
-			if($cust_kota!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kota LIKE '%".$cust_kota."%'";
-			};
-			if($cust_kodepos!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
-			};
-			if($cust_propinsi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
-			};
-			if($cust_negara!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_negara LIKE '%".$cust_negara."%'";
-			};
-			if($cust_telprumah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
-			};
-			if($cust_bb!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_bb LIKE '%".$cust_bb."%'";
-			};
-			if($cust_email!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
-			};
-			if($cust_agama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_agama LIKE '%".$cust_agama."%'";
-			};
-			if($cust_pendidikan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
-			};
-			if($cust_profesi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
-			};							
-			if($cust_hobi_baca == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
-			};		
-			if($cust_hobi_olah == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
-			};		
-			if($cust_hobi_masak == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
-			};		
-			if($cust_hobi_travel == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
-			};		
-			if($cust_hobi_foto == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
-			};		
-			if($cust_hobi_lukis == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
-			};		
-			if($cust_hobi_nari == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
-			};		
-			if($cust_hobi_lain == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
-			};		
-			if($cust_referensi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
-			};
-			if($cust_referensilain!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
-			};
-			if($cust_keterangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
-			};
-			if($cust_member!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_member LIKE '%".$cust_member."%'";
-			};
-			if($cust_member2!=''){
-				$date_now = date('Y-m-d');
-				if($cust_member2=='Semua'){
+				if($cust_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member <> ''";
-				} 
-				else if($cust_member2=='Aktif'){
+					$query.= " cust_no LIKE '%".$cust_no."%'";
+				};
+				if($cust_no_awal!=''){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					};
+				if($cust_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid > '".$date_now."'";
-				}
-				else if($cust_member2=='Tidak Aktif'){
+					$query.= " cust_nama LIKE '%".$cust_nama."%'";
+				};
+				if($cust_kelamin!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid < '".$date_now."'";
-				}
-				else if($cust_member2=='Non Member'){
+					$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
+				};
+				if($cust_alamat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member = ''";
-				}				
-			};			
-			if($cust_statusnikah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_statusnikah='".$cust_statusnikah."'";
-			};
-			if($cust_priority!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_priority='".$cust_priority."'";
-			};
-			if($cust_jmlanak!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
-			};
-			if($cust_unit!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_unit LIKE '%".$cust_unit."%'";
-			};
-			if($cust_aktif!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif = '".$cust_aktif."'";
-			};
-			if($cust_fretfulness!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
-			};
-			if($sortby=='Nama'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_nama";
-			};
-			if($sortby=='No Cust'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_no";
-			};
-			if($sortby=='Alamat'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_alamat";
-			};
-			if($sortby=='Tgl Lahir'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_tgllahir";
-			};
-			if($sortby=='Telp Rmh'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_telprumah";
-			};
-			if($sortby=='Handphone'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_hp";
-			};
-			if($cust_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_creator LIKE '%".$cust_creator."%'";
-			};
-			if($cust_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
-			};
-			if($cust_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_update LIKE '%".$cust_update."%'";
-			};
-			if($cust_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
-			};
-			if($cust_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_revised LIKE '%".$cust_revised."%'";
-			};
-			/*search berdasarkan tgl lahir */
-			if($cust_tgllahir!='' or $cust_tgllahirend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
-				if($cust_tgllahir!='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
-				}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
-				}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
+				};
+				if($cust_kota!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kota LIKE '%".$cust_kota."%'";
+				};
+				if($cust_kodepos!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
+				};
+				if($cust_propinsi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
+				};
+				if($cust_negara!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_negara LIKE '%".$cust_negara."%'";
+				};
+				if($cust_telprumah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
+				};
+				if($cust_bb!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_bb LIKE '%".$cust_bb."%'";
+				};
+				if($cust_email!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
+				};
+				if($cust_agama!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_agama LIKE '%".$cust_agama."%'";
+				};
+				if($cust_pendidikan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
+				};
+				if($cust_profesi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
+				};							
+				if($cust_hobi_baca == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
+				};		
+				if($cust_hobi_olah == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
+				};		
+				if($cust_hobi_masak == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
+				};		
+				if($cust_hobi_travel == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
+				};		
+				if($cust_hobi_foto == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
+				};		
+				if($cust_hobi_lukis == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
+				};		
+				if($cust_hobi_nari == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
+				};		
+				if($cust_hobi_lain == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
+				};		
+				if($cust_referensi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
+				};
+				if($cust_referensilain!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
+				};
+				if($cust_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
+				};
+				if($cust_member!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member LIKE '%".$cust_member."%'";
+				};
+				if($cust_member2!=''){
+					$date_now = date('Y-m-d');
+					if($cust_member2=='Semua'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member <> ''";
+					} 
+					else if($cust_member2=='Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid > '".$date_now."'";
+					}
+					else if($cust_member2=='Tidak Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid < '".$date_now."'";
+					}
+					else if($cust_member2=='Non Member'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member = ''";
+					}				
+				};			
+				if($cust_statusnikah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_statusnikah='".$cust_statusnikah."'";
+				};
+				if($cust_priority!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_priority='".$cust_priority."'";
+				};
+				if($cust_jmlanak!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
+				};
+				if($cust_unit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_unit LIKE '%".$cust_unit."%'";
+				};
+				if($cust_aktif!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_aktif = '".$cust_aktif."'";
+				};
+				if($cust_fretfulness!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
+				};
+				if($sortby=='Nama'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_nama";
+				};
+				if($sortby=='No Cust'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_no";
+				};
+				if($sortby=='Alamat'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_alamat";
+				};
+				if($sortby=='Tgl Lahir'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_tgllahir";
+				};
+				if($sortby=='Telp Rmh'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_telprumah";
+				};
+				if($sortby=='Handphone'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_hp";
+				};
+				if($cust_creator!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_creator LIKE '%".$cust_creator."%'";
+				};
+				if($cust_date_create!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
+				};
+				if($cust_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_update LIKE '%".$cust_update."%'";
+				};
+				if($cust_date_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
+				};
+				if($cust_revised!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_revised LIKE '%".$cust_revised."%'";
+				};
+				/*search berdasarkan tgl lahir */
+				if($cust_tgllahir!='' or $cust_tgllahirend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
+					if($cust_tgllahir!='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+					}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
+					}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					}
+				};	
+				/*search berdasarkan tgl dan bulan lahir */			
+				if($cust_tgl!='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
+						$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
+					}else{
+						$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+					}
+				}else if($cust_tgl=='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " month(cust_tgllahir)='".$cust_bulan."'";
+				};	
+				/*search berdasarkan umur*/			
+				if($cust_umurstart!='' or $cust_umurend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if($cust_umurstart!='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
+					}else if ($cust_umurstart!='' and $cust_umurend==''){
+						$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
+					}else if ($cust_umurstart=='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
+					}
+				};			
+				/*search berdasarkan transaksi customer*/			
+				if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id IN($string)";
 				}
-			};	
-			/*search berdasarkan tgl dan bulan lahir */			
-			if($cust_tgl!='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
-					$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
-				}else{
-					$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id NOT IN($string_not)";
 				}
-			}else if($cust_tgl=='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " month(cust_tgllahir)='".$cust_bulan."'";
-			};	
-			/*search berdasarkan umur*/			
-			if($cust_umurstart!='' or $cust_umurend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if($cust_umurstart!='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
-				}else if ($cust_umurstart!='' and $cust_umurend==''){
-					$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
-				}else if ($cust_umurstart=='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
-				}
-			};			
-			/*search berdasarkan transaksi customer*/			
-			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id IN($string)";
+							if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					
+					if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
+					}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
+					}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
+					}	
+				};
+				/*search berdasarkan tgl transaksi */
+				if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
+					}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
+					}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
+					}	
+				};
+				/*search berdasarkan Member Register */
+				if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+					}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+					}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+						$query.= " member_register < '".$member_terdaftarend."'";
+					}				
+				};		
 			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id NOT IN($string_not)";
-			}
-						if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				
-				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
-				}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
-				}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
-				}	
-			};
-			/*search berdasarkan tgl transaksi */
-			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
-				}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
-				}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
-				}	
-			};
-			/*search berdasarkan Member Register */
-			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
-				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
-				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
-					$query.= " member_register < '".$member_terdaftarend."'";
-				}				
-			};		
-			
 			
 			$query.= " order by cust_id desc ";
 			$result = $this->db->query($query);
@@ -1886,370 +1891,374 @@ class M_customer extends Model{
 		
 	/*	($cust_id ,$cust_no ,$cust_no_awal ,$cust_no_akhir, $cust_nama ,$cust_kelamin ,$cust_alamat ,$cust_kota ,$cust_kodepos ,$cust_propinsi ,$cust_negara ,$cust_telprumah ,$cust_email ,$cust_agama ,$cust_pendidikan ,$cust_profesi ,$cust_tgllahir, $cust_tgllahirend,$cust_referensi ,$cust_referensilain ,$cust_keterangan ,$cust_member ,$cust_member2 ,$cust_terdaftar , $cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans, $cust_tglawaltransend, $cust_statusnikah , $cust_priority , $cust_jmlanak ,$cust_unit ,$cust_aktif , $sortby, $cust_fretfulness, $cust_creator ,$cust_date_create ,$cust_update ,$cust_date_update ,$cust_revised ,$start,$end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_tglEnd, $cust_bulanEnd,$cust_bb, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end)*/
 		{
-			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
-			if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string = $string.','.$string_cust;
+			$query =   "SELECT v.*
+						FROM vu_customer v
+						WHERE cust_aktif = 'Aktif' ";
+						
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' )";
+				$query .= " AND cust_aktif = 'Aktif'";
+			} 
+			else if($option=='SEARCH'){
+				/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+				if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string = $string.','.$string_cust;
+					}
 				}
-			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string_not = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string_not = $string_not.','.$string_cust;
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string_not = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string_not = $string_not.','.$string_cust;
+					}
 				}
-			}
-	
-			if ($cust_aktif=="")
-				$cust_aktif = "Aktif";
-
-			$query = "SELECT v.*
-						FROM vu_customer v";
-
-			if($cust_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id LIKE '%".$cust_id."%'";
-			};
-			if($cust_no!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_no LIKE '%".$cust_no."%'";
-			};
-			if($cust_no_awal!=''){
+		
+				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					$query.= " cust_id LIKE '%".$cust_id."%'";
 				};
-			if($cust_nama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$cust_nama."%'";
-			};
-			if($cust_kelamin!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
-			};
-			if($cust_alamat!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
-			};
-			if($cust_kota!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kota LIKE '%".$cust_kota."%'";
-			};
-			if($cust_kodepos!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
-			};
-			if($cust_propinsi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
-			};
-			if($cust_negara!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_negara LIKE '%".$cust_negara."%'";
-			};
-			if($cust_telprumah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
-			};
-			if($cust_bb!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_bb LIKE '%".$cust_bb."%'";
-			};
-			if($cust_email!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
-			};
-			if($cust_agama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_agama LIKE '%".$cust_agama."%'";
-			};
-			if($cust_pendidikan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
-			};
-			if($cust_profesi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
-			};							
-			if($cust_hobi_baca == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
-			};		
-			if($cust_hobi_olah == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
-			};		
-			if($cust_hobi_masak == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
-			};		
-			if($cust_hobi_travel == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
-			};		
-			if($cust_hobi_foto == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
-			};		
-			if($cust_hobi_lukis == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
-			};		
-			if($cust_hobi_nari == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
-			};		
-			if($cust_hobi_lain == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
-			};		
-			if($cust_referensi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
-			};
-			if($cust_referensilain!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
-			};
-			if($cust_keterangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
-			};
-			if($cust_member!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_member LIKE '%".$cust_member."%'";
-			};
-			if($cust_member2!=''){
-				$date_now = date('Y-m-d');
-				if($cust_member2=='Semua'){
+				if($cust_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member <> ''";
-				} 
-				else if($cust_member2=='Aktif'){
+					$query.= " cust_no LIKE '%".$cust_no."%'";
+				};
+				if($cust_no_awal!=''){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					};
+				if($cust_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid > '".$date_now."'";
-				}
-				else if($cust_member2=='Tidak Aktif'){
+					$query.= " cust_nama LIKE '%".$cust_nama."%'";
+				};
+				if($cust_kelamin!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid < '".$date_now."'";
-				}
-				else if($cust_member2=='Non Member'){
+					$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
+				};
+				if($cust_alamat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member = ''";
-				}				
-			};			
-			if($cust_statusnikah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_statusnikah='".$cust_statusnikah."'";
-			};
-			if($cust_priority!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_priority='".$cust_priority."'";
-			};
-			if($cust_jmlanak!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
-			};
-			if($cust_unit!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_unit LIKE '%".$cust_unit."%'";
-			};
-			if($cust_aktif!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif = '".$cust_aktif."'";
-			};
-			if($cust_fretfulness!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
-			};
-			if($sortby=='Nama'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_nama";
-			};
-			if($sortby=='No Cust'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_no";
-			};
-			if($sortby=='Alamat'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_alamat";
-			};
-			if($sortby=='Tgl Lahir'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_tgllahir";
-			};
-			if($sortby=='Telp Rmh'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_telprumah";
-			};
-			if($sortby=='Handphone'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_hp";
-			};
-			if($cust_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_creator LIKE '%".$cust_creator."%'";
-			};
-			if($cust_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
-			};
-			if($cust_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_update LIKE '%".$cust_update."%'";
-			};
-			if($cust_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
-			};
-			if($cust_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_revised LIKE '%".$cust_revised."%'";
-			};
-			/*search berdasarkan tgl lahir */
-			if($cust_tgllahir!='' or $cust_tgllahirend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
-				if($cust_tgllahir!='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
-				}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
-				}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
+				};
+				if($cust_kota!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kota LIKE '%".$cust_kota."%'";
+				};
+				if($cust_kodepos!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
+				};
+				if($cust_propinsi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
+				};
+				if($cust_negara!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_negara LIKE '%".$cust_negara."%'";
+				};
+				if($cust_telprumah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
+				};
+				if($cust_bb!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_bb LIKE '%".$cust_bb."%'";
+				};
+				if($cust_email!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
+				};
+				if($cust_agama!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_agama LIKE '%".$cust_agama."%'";
+				};
+				if($cust_pendidikan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
+				};
+				if($cust_profesi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
+				};							
+				if($cust_hobi_baca == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
+				};		
+				if($cust_hobi_olah == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
+				};		
+				if($cust_hobi_masak == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
+				};		
+				if($cust_hobi_travel == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
+				};		
+				if($cust_hobi_foto == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
+				};		
+				if($cust_hobi_lukis == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
+				};		
+				if($cust_hobi_nari == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
+				};		
+				if($cust_hobi_lain == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
+				};		
+				if($cust_referensi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
+				};
+				if($cust_referensilain!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
+				};
+				if($cust_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
+				};
+				if($cust_member!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member LIKE '%".$cust_member."%'";
+				};
+				if($cust_member2!=''){
+					$date_now = date('Y-m-d');
+					if($cust_member2=='Semua'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member <> ''";
+					} 
+					else if($cust_member2=='Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid > '".$date_now."'";
+					}
+					else if($cust_member2=='Tidak Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid < '".$date_now."'";
+					}
+					else if($cust_member2=='Non Member'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member = ''";
+					}				
+				};			
+				if($cust_statusnikah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_statusnikah='".$cust_statusnikah."'";
+				};
+				if($cust_priority!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_priority='".$cust_priority."'";
+				};
+				if($cust_jmlanak!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
+				};
+				if($cust_unit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_unit LIKE '%".$cust_unit."%'";
+				};
+				if($cust_aktif!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_aktif = '".$cust_aktif."'";
+				};
+				if($cust_fretfulness!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
+				};
+				if($sortby=='Nama'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_nama";
+				};
+				if($sortby=='No Cust'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_no";
+				};
+				if($sortby=='Alamat'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_alamat";
+				};
+				if($sortby=='Tgl Lahir'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_tgllahir";
+				};
+				if($sortby=='Telp Rmh'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_telprumah";
+				};
+				if($sortby=='Handphone'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_hp";
+				};
+				if($cust_creator!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_creator LIKE '%".$cust_creator."%'";
+				};
+				if($cust_date_create!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
+				};
+				if($cust_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_update LIKE '%".$cust_update."%'";
+				};
+				if($cust_date_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
+				};
+				if($cust_revised!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_revised LIKE '%".$cust_revised."%'";
+				};
+				/*search berdasarkan tgl lahir */
+				if($cust_tgllahir!='' or $cust_tgllahirend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
+					if($cust_tgllahir!='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+					}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
+					}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					}
+				};	
+				/*search berdasarkan tgl dan bulan lahir */			
+				if($cust_tgl!='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
+						$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
+					}else{
+						$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+					}
+				}else if($cust_tgl=='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " month(cust_tgllahir)='".$cust_bulan."'";
+				};	
+				/*search berdasarkan umur*/			
+				if($cust_umurstart!='' or $cust_umurend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if($cust_umurstart!='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
+					}else if ($cust_umurstart!='' and $cust_umurend==''){
+						$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
+					}else if ($cust_umurstart=='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
+					}
+				};			
+				/*search berdasarkan transaksi customer*/			
+				if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id IN($string)";
 				}
-			};	
-			/*search berdasarkan tgl dan bulan lahir */			
-			if($cust_tgl!='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
-					$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
-				}else{
-					$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id NOT IN($string_not)";
 				}
-			}else if($cust_tgl=='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " month(cust_tgllahir)='".$cust_bulan."'";
-			};	
-			/*search berdasarkan umur*/			
-			if($cust_umurstart!='' or $cust_umurend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if($cust_umurstart!='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
-				}else if ($cust_umurstart!='' and $cust_umurend==''){
-					$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
-				}else if ($cust_umurstart=='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
-				}
-			};			
-			/*search berdasarkan transaksi customer*/			
-			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id IN($string)";
+							if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					
+					if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
+					}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
+					}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
+					}	
+				};
+				/*search berdasarkan tgl transaksi */
+				if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
+					}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
+					}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
+					}	
+				};
+				/*search berdasarkan Member Register */
+				if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+					}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+					}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+						$query.= " member_register < '".$member_terdaftarend."'";
+					}				
+				};		
 			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id NOT IN($string_not)";
-			}
-						if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				
-				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
-				}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
-				}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
-				}	
-			};
-			/*search berdasarkan tgl transaksi */
-			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
-				}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
-				}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
-				}	
-			};
-			/*search berdasarkan Member Register */
-			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
-				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
-				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
-					$query.= " member_register < '".$member_terdaftarend."'";
-				}				
-			};		
-
 			$query.= " order by cust_id desc ";
 			$result = $this->db->query($query);
 			return $result;
@@ -2257,92 +2266,7 @@ class M_customer extends Model{
 		
 		//function  for export to excel
 		function customer_export_excel($cust_id,$cust_no,$cust_no_awal ,$cust_no_akhir,$cust_nama,$cust_kelamin,$cust_alamat,$cust_kota,$cust_kodepos,$cust_propinsi,$cust_negara,$cust_telprumah,$cust_telprumah2,$cust_telpkantor,$cust_hp,$cust_hp2,$cust_hp3,$cust_email,$cust_agama,$cust_pendidikan,$cust_profesi,$cust_tgllahir,$cust_tgllahirend,$cust_referensi,$cust_referensilain,$cust_keterangan,$cust_member, $cust_member2, $cust_terdaftar,$cust_tgldaftarend, $member_terdaftarstart, $member_terdaftarend, $cust_tglawaltrans,$cust_tglawaltransend,$cust_statusnikah,$cust_priority,$cust_jmlanak,$cust_unit,$cust_aktif, $sortby, $cust_fretfulness,$cust_creator,$cust_date_create,$cust_update,$cust_date_update,$cust_revised, $cust_transaksi_start, $cust_transaksi_end, $cust_tidak_transaksi_start, $cust_tidak_transaksi_end, $cust_hobi_baca, $cust_hobi_olah, $cust_hobi_masak, $cust_hobi_travel, $cust_hobi_foto, $cust_hobi_lukis, $cust_hobi_nari, $cust_hobi_lain, $cust_umurstart, $cust_umurend, $cust_umur,$cust_tgl, $cust_bulan, $cust_tglEnd, $cust_bulanEnd,$cust_bb,$option,$filter){
-			
-			/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
-			if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string = $string.','.$string_cust;
-				}
-			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
-				$sql = "SELECT distinct(cust_id)
-						FROM
-						((((
-							SELECT distinct(jrawat_cust) as cust_id,
-							'rawat' as status
-							FROM master_jual_rawat
-							WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
-						)
-						union
-						(
-							SELECT distinct(jpaket_cust) as cust_id,
-							'paket' as status
-							FROM master_jual_paket
-							WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(jproduk_cust) as cust_id,
-							'produk' as status
-							FROM master_jual_produk
-							WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						)
-						union
-						(
-							SELECT distinct(dapaket_cust) as cust_id,
-							'ambil_paket' as status
-							FROM detail_ambil_paket
-							WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
-						))))
-						as table_union
-						order by cust_id";
-				$result_sql = $this->db->query($sql);
-				$string_not = '0';
-				foreach($result_sql->result() as $row){
-					$string_cust=$row->cust_id;
-					$string_not = $string_not.','.$string_cust;
-				}
-			}
-	
-			if ($cust_aktif=="")
-				$cust_aktif = "Aktif";
-
-			//isi query di bawah ini TIDAK BOLEH DIGANTI sembarangan, karena ada field2 yg tidak boleh diambil oleh user
-			$query="select
+			$query =   "select
 						if(cust_no='','-',ifnull(cust_no,'-')) AS no_cust,
 						if(cust_nama='','-',ifnull(cust_nama,'-')) AS nama_lengkap,
 						if(member_no='','-',ifnull(member_no,'-')) AS no_member,
@@ -2358,285 +2282,372 @@ class M_customer extends Model{
 						/*if(cust_priority='','-',ifnull(cust_priority,'-')) AS priority,*/
 						cust_aktif AS status
 					from vu_customer";
-
-			if($cust_id!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id LIKE '%".$cust_id."%'";
-			};
-			if($cust_no!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_no LIKE '%".$cust_no."%'";
-			};
-			if($cust_no_awal!=''){
+						
+			if($option=='LIST'){
+				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
+				$query .= " (cust_no LIKE '%".addslashes($filter)."%' OR cust_nama LIKE '%".addslashes($filter)."%' OR cust_alamat LIKE '%".addslashes($filter)."%' OR cust_alamat2 LIKE '%".addslashes($filter)."%' OR cust_telprumah LIKE '%".addslashes($filter)."%' OR cust_telprumah2 LIKE '%".addslashes($filter)."%' OR cust_telpkantor LIKE '%".addslashes($filter)."%' OR cust_hp LIKE '%".addslashes($filter)."%' OR cust_hp2 LIKE '%".addslashes($filter)."%' OR cust_hp3 LIKE '%".addslashes($filter)."%' OR cust_member LIKE '%".addslashes($filter)."%' )";
+				$query .= " AND cust_aktif = 'Aktif'";
+			} 
+			else if($option=='SEARCH'){
+				/*Utk mengambil cust_id yang melakukan transaksi / yang tidak melakukan transaksi lalu disimpan ke sebuah string */
+				if($cust_transaksi_start!='' and $cust_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_transaksi_start."' and '".$cust_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string = $string.','.$string_cust;
+					}
+				}
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!=''){
+					$sql = "SELECT distinct(cust_id)
+							FROM
+							((((
+								SELECT distinct(jrawat_cust) as cust_id,
+								'rawat' as status
+								FROM master_jual_rawat
+								WHERE master_jual_rawat.jrawat_stat_dok = 'Tertutup' AND (master_jual_rawat.jrawat_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."') order by cust_id
+							)
+							union
+							(
+								SELECT distinct(jpaket_cust) as cust_id,
+								'paket' as status
+								FROM master_jual_paket
+								WHERE master_jual_paket.jpaket_stat_dok = 'Tertutup' AND (master_jual_paket.jpaket_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(jproduk_cust) as cust_id,
+								'produk' as status
+								FROM master_jual_produk
+								WHERE master_jual_produk.jproduk_stat_dok = 'Tertutup' AND (master_jual_produk.jproduk_tanggal between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							)
+							union
+							(
+								SELECT distinct(dapaket_cust) as cust_id,
+								'ambil_paket' as status
+								FROM detail_ambil_paket
+								WHERE detail_ambil_paket.dapaket_stat_dok = 'Tertutup' AND (detail_ambil_paket.dapaket_tgl_ambil between '".$cust_tidak_transaksi_start."' and '".$cust_tidak_transaksi_end."')
+							))))
+							as table_union
+							order by cust_id";
+					$result_sql = $this->db->query($sql);
+					$string_not = '0';
+					foreach($result_sql->result() as $row){
+						$string_cust=$row->cust_id;
+						$string_not = $string_not.','.$string_cust;
+					}
+				}
+		
+				if($cust_id!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					$query.= " cust_id LIKE '%".$cust_id."%'";
 				};
-			if($cust_nama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$cust_nama."%'";
-			};
-			if($cust_kelamin!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
-			};
-			if($cust_alamat!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
-			};
-			if($cust_kota!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kota LIKE '%".$cust_kota."%'";
-			};
-			if($cust_kodepos!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
-			};
-			if($cust_propinsi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
-			};
-			if($cust_negara!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_negara LIKE '%".$cust_negara."%'";
-			};
-			if($cust_telprumah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
-			};
-			if($cust_bb!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_bb LIKE '%".$cust_bb."%'";
-			};
-			if($cust_email!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
-			};
-			if($cust_agama!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_agama LIKE '%".$cust_agama."%'";
-			};
-			if($cust_pendidikan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
-			};
-			if($cust_profesi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
-			};							
-			if($cust_hobi_baca == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
-			};		
-			if($cust_hobi_olah == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
-			};		
-			if($cust_hobi_masak == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
-			};		
-			if($cust_hobi_travel == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
-			};		
-			if($cust_hobi_foto == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
-			};		
-			if($cust_hobi_lukis == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
-			};		
-			if($cust_hobi_nari == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
-			};		
-			if($cust_hobi_lain == 'true'){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
-			};		
-			if($cust_referensi!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
-			};
-			if($cust_referensilain!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
-			};
-			if($cust_keterangan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
-			};
-			if($cust_member!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_member LIKE '%".$cust_member."%'";
-			};
-			if($cust_member2!=''){
-				$date_now = date('Y-m-d');
-				if($cust_member2=='Semua'){
+				if($cust_no!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member <> ''";
-				} 
-				else if($cust_member2=='Aktif'){
+					$query.= " cust_no LIKE '%".$cust_no."%'";
+				};
+				if($cust_no_awal!=''){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " right(cust_no,6) BETWEEN '".$cust_no_awal."' AND '".$cust_no_akhir."'";
+					};
+				if($cust_nama!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid > '".$date_now."'";
-				}
-				else if($cust_member2=='Tidak Aktif'){
+					$query.= " cust_nama LIKE '%".$cust_nama."%'";
+				};
+				if($cust_kelamin!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " member_valid < '".$date_now."'";
-				}
-				else if($cust_member2=='Non Member'){
+					$query.= " cust_kelamin LIKE '%".$cust_kelamin."%'";
+				};
+				if($cust_alamat!=''){
 					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-					$query.= " cust_member = ''";
-				}				
-			};			
-			if($cust_statusnikah!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_statusnikah='".$cust_statusnikah."'";
-			};
-			if($cust_priority!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_priority='".$cust_priority."'";
-			};
-			if($cust_jmlanak!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
-			};
-			if($cust_unit!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_unit LIKE '%".$cust_unit."%'";
-			};
-			if($cust_aktif!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_aktif = '".$cust_aktif."'";
-			};
-			if($cust_fretfulness!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
-			};
-			if($sortby=='Nama'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_nama";
-			};
-			if($sortby=='No Cust'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_no";
-			};
-			if($sortby=='Alamat'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_alamat";
-			};
-			if($sortby=='Tgl Lahir'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_tgllahir";
-			};
-			if($sortby=='Telp Rmh'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_telprumah";
-			};
-			if($sortby=='Handphone'){
-				$query.=eregi("WHERE",$query)?" ":" WHERE ";
-				$query.= " ORDER BY cust_hp";
-			};
-			if($cust_creator!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_creator LIKE '%".$cust_creator."%'";
-			};
-			if($cust_date_create!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
-			};
-			if($cust_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_update LIKE '%".$cust_update."%'";
-			};
-			if($cust_date_update!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
-			};
-			if($cust_revised!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_revised LIKE '%".$cust_revised."%'";
-			};
-			/*search berdasarkan tgl lahir */
-			if($cust_tgllahir!='' or $cust_tgllahirend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
-				if($cust_tgllahir!='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
-				}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
-					$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
-				}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
-					$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					$query.= " cust_alamat LIKE '%".$cust_alamat."%' OR cust_alamat2 LIKE '%".$cust_alamat."%'";
+				};
+				if($cust_kota!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kota LIKE '%".$cust_kota."%'";
+				};
+				if($cust_kodepos!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_kodepos LIKE '%".$cust_kodepos."%'";
+				};
+				if($cust_propinsi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_propinsi LIKE '%".$cust_propinsi."%'";
+				};
+				if($cust_negara!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_negara LIKE '%".$cust_negara."%'";
+				};
+				if($cust_telprumah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_telprumah LIKE '%".$cust_telprumah."%' OR cust_telprumah2 LIKE '%".$cust_telprumah."%' OR cust_telpkantor LIKE '%".$cust_telprumah."%' ";
+				};
+				if($cust_bb!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_bb LIKE '%".$cust_bb."%'";
+				};
+				if($cust_email!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_email LIKE '%".$cust_email."%'  OR cust_email2 LIKE '%".$cust_email."%'   ";
+				};
+				if($cust_agama!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_agama LIKE '%".$cust_agama."%'";
+				};
+				if($cust_pendidikan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_pendidikan LIKE '%".$cust_pendidikan."%'";
+				};
+				if($cust_profesi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_profesi LIKE '%".$cust_profesi."%'";
+				};							
+				if($cust_hobi_baca == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,1,1)) = '1'";
+				};		
+				if($cust_hobi_olah == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,2,1)) = '1'";
+				};		
+				if($cust_hobi_masak == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,3,1)) = '1'";
+				};		
+				if($cust_hobi_travel == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,4,1)) = '1'";
+				};		
+				if($cust_hobi_foto == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,5,1)) = '1'";
+				};		
+				if($cust_hobi_lukis == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,6,1)) = '1'";
+				};		
+				if($cust_hobi_nari == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,7,1)) = '1'";
+				};		
+				if($cust_hobi_lain == 'true'){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " (SELECT SUBSTRING(cust_hobi,8,1)) = '1'";
+				};		
+				if($cust_referensi!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensi LIKE '%".$cust_referensi."%'";
+				};
+				if($cust_referensilain!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_referensilain LIKE '%".$cust_referensilain."%'";
+				};
+				if($cust_keterangan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_keterangan LIKE '%".$cust_keterangan."%'";
+				};
+				if($cust_member!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_member LIKE '%".$cust_member."%'";
+				};
+				if($cust_member2!=''){
+					$date_now = date('Y-m-d');
+					if($cust_member2=='Semua'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member <> ''";
+					} 
+					else if($cust_member2=='Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid > '".$date_now."'";
+					}
+					else if($cust_member2=='Tidak Aktif'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " member_valid < '".$date_now."'";
+					}
+					else if($cust_member2=='Non Member'){
+						$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+						$query.= " cust_member = ''";
+					}				
+				};			
+				if($cust_statusnikah!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_statusnikah='".$cust_statusnikah."'";
+				};
+				if($cust_priority!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_priority='".$cust_priority."'";
+				};
+				if($cust_jmlanak!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_jmlanak LIKE '%".$cust_jmlanak."%'";
+				};
+				if($cust_unit!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_unit LIKE '%".$cust_unit."%'";
+				};
+				if($cust_aktif!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_aktif = '".$cust_aktif."'";
+				};
+				if($cust_fretfulness!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_fretfulness LIKE '%".$cust_fretfulness."%'";
+				};
+				if($sortby=='Nama'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_nama";
+				};
+				if($sortby=='No Cust'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_no";
+				};
+				if($sortby=='Alamat'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_alamat";
+				};
+				if($sortby=='Tgl Lahir'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_tgllahir";
+				};
+				if($sortby=='Telp Rmh'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_telprumah";
+				};
+				if($sortby=='Handphone'){
+					$query.=eregi("WHERE",$query)?" ":" WHERE ";
+					$query.= " ORDER BY cust_hp";
+				};
+				if($cust_creator!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_creator LIKE '%".$cust_creator."%'";
+				};
+				if($cust_date_create!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_create LIKE '%".$cust_date_create."%'";
+				};
+				if($cust_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_update LIKE '%".$cust_update."%'";
+				};
+				if($cust_date_update!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_date_update LIKE '%".$cust_date_update."%'";
+				};
+				if($cust_revised!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_revised LIKE '%".$cust_revised."%'";
+				};
+				/*search berdasarkan tgl lahir */
+				if($cust_tgllahir!='' or $cust_tgllahirend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";				
+					if($cust_tgllahir!='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND '".$cust_tgllahirend."'";
+					}else if ($cust_tgllahir!='' and $cust_tgllahirend==''){
+						$query.= " cust_tgllahir BETWEEN '".$cust_tgllahir."' AND now()";
+					}else if ($cust_tgllahir=='' and $cust_tgllahirend!=''){
+						$query.= " cust_tgllahir < '".$cust_tgllahirend."'";
+					}
+				};	
+				/*search berdasarkan tgl dan bulan lahir */			
+				if($cust_tgl!='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
+						$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
+					}else{
+						$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+					}
+				}else if($cust_tgl=='' and $cust_bulan!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " month(cust_tgllahir)='".$cust_bulan."'";
+				};	
+				/*search berdasarkan umur*/			
+				if($cust_umurstart!='' or $cust_umurend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					if($cust_umurstart!='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
+					}else if ($cust_umurstart!='' and $cust_umurend==''){
+						$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
+					}else if ($cust_umurstart=='' and $cust_umurend!=''){
+						$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
+					}
+				};			
+				/*search berdasarkan transaksi customer*/			
+				if($cust_transaksi_start!='' and $cust_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id IN($string)";
 				}
-			};	
-			/*search berdasarkan tgl dan bulan lahir */			
-			if($cust_tgl!='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if ($cust_tglEnd!='' and $cust_bulanEnd!=''){
-					$query.= " (day(cust_tgllahir) BETWEEN '".$cust_tgl."' AND '".$cust_tglEnd."') AND (month(cust_tgllahir) BETWEEN '".$cust_bulan."' AND '".$cust_bulanEnd."') ";
-				}else{
-					$query.= " day(cust_tgllahir)='".$cust_tgl."' AND month(cust_tgllahir)='".$cust_bulan."' ";
+				if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
+				{
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					$query.= " cust_id NOT IN($string_not)";
 				}
-			}else if($cust_tgl=='' and $cust_bulan!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " month(cust_tgllahir)='".$cust_bulan."'";
-			};	
-			/*search berdasarkan umur*/			
-			if($cust_umurstart!='' or $cust_umurend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				if($cust_umurstart!='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) BETWEEN '".$cust_umurstart."' AND '".$cust_umurend."'";
-				}else if ($cust_umurstart!='' and $cust_umurend==''){
-					$query.= " (year(now())-year(cust_tgllahir)) > '".$cust_umurstart."'";
-				}else if ($cust_umurstart=='' and $cust_umurend!=''){
-					$query.= " (year(now())-year(cust_tgllahir)) < '".$cust_umurend."'";
-				}
-			};			
-			/*search berdasarkan transaksi customer*/			
-			if($cust_transaksi_start!='' and $cust_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id IN($string)";
+							if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
+					
+					if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
+					}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
+						$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
+					}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
+						$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
+					}	
+				};
+				/*search berdasarkan tgl transaksi */
+				if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
+					}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
+						$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
+					}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
+						$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
+					}	
+				};
+				/*search berdasarkan Member Register */
+				if($member_terdaftarstart!='' or $member_terdaftarend!=''){
+					$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
+					if($member_terdaftarstart!='' and $member_terdaftarend!=''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
+					}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
+						$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
+					}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
+						$query.= " member_register < '".$member_terdaftarend."'";
+					}				
+				};		
 			}
-			if($cust_tidak_transaksi_start!='' and $cust_tidak_transaksi_end!='')
-			{
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_id NOT IN($string_not)";
-			}
-						if($cust_terdaftar!='' or $cust_tgldaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				
-				if($cust_terdaftar!='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND '".$cust_tgldaftarend."'";
-				}else if ($cust_terdaftar!='' and $cust_tgldaftarend==''){
-					$query.= " cust_terdaftar BETWEEN '".$cust_terdaftar."' AND now()";
-				}else if ($cust_terdaftar=='' and $cust_tgldaftarend!=''){
-					$query.= " cust_terdaftar < '".$cust_tgldaftarend."'";
-				}	
-			};
-			/*search berdasarkan tgl transaksi */
-			if($cust_tglawaltrans!='' or $cust_tglawaltransend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($cust_tglawaltrans!='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND '".$cust_tglawaltransend."'";
-				}else if ($cust_tglawaltrans!='' and $cust_tglawaltrans==''){
-					$query.= " cust_tglawaltrans BETWEEN '".$cust_tglawaltrans."' AND now()";
-				}else if ($cust_tglawaltrans=='' and $cust_tglawaltrans!=''){
-					$query.= " cust_tglawaltrans < '".$cust_tglawaltrans."'";
-				}	
-			};
-			/*search berdasarkan Member Register */
-			if($member_terdaftarstart!='' or $member_terdaftarend!=''){
-				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";	
-				if($member_terdaftarstart!='' and $member_terdaftarend!=''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND '".$member_terdaftarend."'";
-				}else if ($member_terdaftarstart!='' and $member_terdaftarend==''){
-					$query.= " member_register BETWEEN '".$member_terdaftarstart."' AND now()";
-				}else if ($member_terdaftarstart=='' and $member_terdaftarend!=''){
-					$query.= " member_register < '".$member_terdaftarend."'";
-				}				
-			};		
-
+			
 			$query.= " order by cust_id desc ";
 			$result = $this->db->query($query);
 			return $result;
