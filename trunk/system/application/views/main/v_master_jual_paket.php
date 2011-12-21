@@ -82,6 +82,7 @@ var jpaket_cara2Field;
 var jpaket_cara3Field;
 var jpaket_keteranganField;
 var jpaket_ket_diskField;
+var jpaket_ket_disk_medisField;
 //tunai
 var jpaket_tunai_nilaiField;
 //tunai-2
@@ -99,6 +100,9 @@ var jpaket_voucher_no3Field;
 var jpaket_voucher_cashback3Field;
 var jpaket_cashbackField;
 var is_member=false;
+
+var jpaket_cashback_num;
+var jpaket_cashback_medis_num;
 //kwitansi
 var jpaket_kwitansi_namaField;
 var jpaket_kwitansi_nilaiField;
@@ -269,14 +273,6 @@ Ext.override(Ext.form.Field, {
 	function pengecekan_dokumen(){
 		var jpaket_tanggal_create_date = "";
 		if(jpaket_tanggalField.getValue()!== ""){jpaket_tanggal_create_date = jpaket_tanggalField.getValue().format('Y-m-d');} 
-		
-		Ext.MessageBox.show({
-		   msg: 'Sedang memproses data, mohon tunggu...',
-		   progressText: 'proses...',
-		   width:350,
-		   wait:true
-		});	
-		
 		Ext.Ajax.request({  
 			waitMsg: 'Please wait...',
 			url: 'index.php?c=c_master_jual_paket&m=get_action',
@@ -288,7 +284,7 @@ Ext.override(Ext.form.Field, {
 				var result=eval(response.responseText);
 				switch(result){
 					case 1:
-						if (jpaket_diskonField.getValue()!=0 && jpaket_cashback_cfField.getValue()!=0){
+						/*if (jpaket_diskonField.getValue()!=0 && jpaket_cashback_cfField.getValue()!=0){
 							Ext.MessageBox.show({
 							title: 'Warning',
 							msg: 'Diskon tambahan dan Voucher hanya bisa diisi salah satu',
@@ -298,8 +294,9 @@ Ext.override(Ext.form.Field, {
 						});
 						} 
 						else
-						{master_jual_paket_create();
-						}
+						{*/
+							master_jual_paket_create();
+						//}
 						break;
 					default:
 						Ext.MessageBox.show({
@@ -406,6 +403,7 @@ Ext.override(Ext.form.Field, {
 				var jpaket_cara3_create=null; 
 				var jpaket_keterangan_create=null;
 				var jpaket_ket_disk_create=null;
+				var jpaket_ket_disk_medis_create=null;
 				var jpaket_statdok_create=null;
 				//tunai
 				var jpaket_tunai_nilai_create=null;
@@ -422,7 +420,8 @@ Ext.override(Ext.form.Field, {
 				//voucher-3
 				var jpaket_voucher_no3_create=null;
 				var jpaket_voucher_cashback3_create=null;
-				var jpaket_cashback_create=null;
+				var jpaket_cashback_create=null;				
+				var jpaket_cashback_medis_create=null;
 				//bayar
 				var jpaket_subtotal_create=null;
 				var jpaket_total_create=null;
@@ -493,12 +492,14 @@ Ext.override(Ext.form.Field, {
 					jpaket_cust_create = jpaket_cust_idField.getValue();
 				}
 				if(jpaket_tanggalField.getValue()!== ""){jpaket_tanggal_create_date = jpaket_tanggalField.getValue().format('Y-m-d');} 
-				if(jpaket_diskonField.getValue()!== null){jpaket_diskon_create = jpaket_diskonField.getValue();} 
+				//if(jpaket_diskonField.getValue()!== null){jpaket_diskon_create = jpaket_diskonField.getValue();} 
 				if(jpaket_caraField.getValue()!== null){jpaket_cara_create = jpaket_caraField.getValue();} 
 				if(jpaket_cara2Field.getValue()!== null){jpaket_cara2_create = jpaket_cara2Field.getValue();} 
 				if(jpaket_cara3Field.getValue()!== null){jpaket_cara3_create = jpaket_cara3Field.getValue();} 
 				if(jpaket_keteranganField.getValue()!== null){jpaket_keterangan_create = jpaket_keteranganField.getValue();}
 				if(jpaket_ket_diskField.getValue()!== null){jpaket_ket_disk_create = jpaket_ket_diskField.getValue();}
+				if(jpaket_ket_disk_medisField.getValue()!== null){jpaket_ket_disk_medis_create = jpaket_ket_disk_medisField.getValue();}
+				
 				if(jpaket_stat_dokField.getValue()!== null){jpaket_statdok_create = jpaket_stat_dokField.getValue();} 
 				//tunai
 				if(jpaket_tunai_nilaiField.getValue()!== null){jpaket_tunai_nilai_create = jpaket_tunai_nilaiField.getValue();}
@@ -513,9 +514,14 @@ Ext.override(Ext.form.Field, {
 				if(jpaket_voucher_no2Field.getValue()!== null){jpaket_voucher_no2_create = jpaket_voucher_no2Field.getValue();} 
 				if(jpaket_voucher_cashback2Field.getValue()!== null){jpaket_voucher_cashback2_create = jpaket_voucher_cashback2Field.getValue();} 
 				//voucher-3
-				if(jpaket_voucher_no3Field.getValue()!== null){jpaket_voucher_no3_create = jpaket_voucher_no3Field.getValue();} 
+				if(jpaket_voucher_no3Field.getValue()!== null){jpaket_voucher_no3_create = jpaket_voucher_no3Field.getValue();} 				
 				if(jpaket_voucher_cashback3Field.getValue()!== null){jpaket_voucher_cashback3_create = jpaket_voucher_cashback3Field.getValue();} 
-				if(jpaket_cashbackField.getValue()!== null){jpaket_cashback_create = jpaket_cashbackField.getValue();} 
+				
+				//if(jpaket_cashbackField.getValue()!== null){jpaket_cashback_create = jpaket_cashbackField.getValue();} 
+				
+				if(jpaket_cashback_num.getValue()!== null){jpaket_cashback_create = jpaket_cashback_num.getValue();} 
+				if(jpaket_cashback_medis_num.getValue()!== null){jpaket_cashback_medis_create = jpaket_cashback_medis_num.getValue();}
+				
 				//bayar
 				if(jpaket_bayarField.getValue()!== null){jpaket_bayar_create = jpaket_bayarField.getValue();}
 				if(jpaket_subTotalField.getValue()!== null){jpaket_subtotal_create = jpaket_subTotalField.getValue();} 
@@ -602,14 +608,16 @@ Ext.override(Ext.form.Field, {
 						jpaket_nobukti		: 	jpaket_nobukti_create, 
 						jpaket_cust		: 	jpaket_cust_create, 
 						jpaket_tanggal		: 	jpaket_tanggal_create_date, 
-						jpaket_diskon		: 	jpaket_diskon_create, 
+						//jpaket_diskon		: 	jpaket_diskon_create, 
 						jpaket_cara		: 	jpaket_cara_create, 
 						jpaket_cara2		: 	jpaket_cara2_create, 
 						jpaket_cara3		: 	jpaket_cara3_create, 
 						jpaket_keterangan	: 	jpaket_keterangan_create,
 						jpaket_ket_disk		: 	jpaket_ket_disk_create,
+						jpaket_ket_disk_medis : jpaket_ket_disk_medis_create,
 						jpaket_stat_dok		:	jpaket_statdok_create,
 						jpaket_cashback	: 	jpaket_cashback_create,
+						jpaket_cashback_medis	: 	jpaket_cashback_medis_create,
 						//tunai
 						jpaket_tunai_nilai	:	jpaket_tunai_nilai_create,
 						//tunai-2
@@ -689,8 +697,7 @@ Ext.override(Ext.form.Field, {
 						jpaket_transfer_nama3	:	jpaket_transfer_nama3_create,
 						jpaket_transfer_nilai3	:	jpaket_transfer_nilai3_create
 					}, 
-					success: function(response){ 
-						Ext.MessageBox.hide();
+					success: function(response){             
 						var result=eval(response.responseText);
 						switch(result){
 							case 1:
@@ -1069,22 +1076,31 @@ Ext.override(Ext.form.Field, {
 		jpaket_cust_nomemberField.setValue(null);
 		jpaket_valid_memberField.setValue("");
 		jpaket_tanggalField.setValue(dt.format('Y-m-d'));
-		jpaket_diskonField.reset();
-		jpaket_diskonField.setValue(null);
+		//jpaket_diskonField.reset();
+		//jpaket_diskonField.setValue(null);
 		jpaket_caraField.reset();
 		jpaket_caraField.setValue(null);
 		jpaket_cara2Field.reset();
 		jpaket_cara2Field.setValue(null);
 		jpaket_cara3Field.reset();
 		jpaket_cara3Field.setValue(null);
-		jpaket_cashbackField.reset();
-		jpaket_cashbackField.setValue(null);
+		//jpaket_cashbackField.reset();
+		//jpaket_cashbackField.setValue(null);
 		jpaket_cashback_cfField.reset();
 		jpaket_cashback_cfField.setValue(null);
+		jpaket_cashback_medis_num.reset();
+		jpaket_cashback_medis_num.setValue(null);
+		jpaket_cashback_cf_medisField.reset();
+		jpaket_cashback_cf_medisField.setValue(null);
+		jpaket_ket_diskField.setDisabled(false);
+		jpaket_ket_disk_medisField.setDisabled(false);
+		
 		jpaket_keteranganField.reset();
 		jpaket_keteranganField.setValue(null);
 		jpaket_ket_diskField.reset();
 		jpaket_ket_diskField.setValue(null);
+		jpaket_ket_disk_medisField.reset();
+		jpaket_ket_disk_medisField.setValue(null);
 		jpaket_stat_dokField.reset();
 		jpaket_stat_dokField.setValue('Terbuka');
 		jpaket_subTotalField.reset();
@@ -1135,6 +1151,7 @@ Ext.override(Ext.form.Field, {
 		jpaket_tanggalField.setDisabled(false);
 		jpaket_keteranganField.setDisabled(false);
 		jpaket_ket_diskField.setDisabled(false);
+		jpaket_ket_disk_medisField.setDisabled(false);
 		master_cara_bayarTabPanel.setDisabled(false);
 		jpaket_stat_dokField.setDisabled(false);
 		
@@ -1164,8 +1181,9 @@ Ext.override(Ext.form.Field, {
 			
 		detail_jual_paketListEditorGrid.setDisabled(false);
 		detail_pengguna_paketListEditorGrid.setDisabled(false);
-		jpaket_diskonField.setDisabled(false);
+		//jpaket_diskonField.setDisabled(false);
 		jpaket_cashback_cfField.setDisabled(false);
+		jpaket_cashback_cf_medisField.setDisabled(false);
 		<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 		detail_jual_paketListEditorGrid.djpaket_add.enable();
         detail_jual_paketListEditorGrid.djpaket_delete.enable();
@@ -1191,33 +1209,41 @@ Ext.override(Ext.form.Field, {
 		var hutang_field=0;
 		var diskon_field=0;
 		var cashback_field=0;
+		var cashback_field_medis=0;
 		jpaket_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_id'));
 		jpaket_nobuktiField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'));
 		jpaket_cust_idField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust_id'));
 		jpaket_custField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cust_edit'));
 		jpaket_tanggalField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'));
-		jpaket_diskonField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_diskon'));
-		jpaket_cashbackField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback'));
+		//jpaket_diskonField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_diskon'));
+		jpaket_cashback_num.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback'));
 		jpaket_cashback_cfField.setValue(CurrencyFormatted(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback')));
+		jpaket_cashback_medis_num.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback_medis'));
+		jpaket_cashback_cf_medisField.setValue(CurrencyFormatted(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cashback_medis')));
+		jpaket_ket_diskField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_ket_disk'));
+		jpaket_ket_disk_medisField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_ket_disk_medis'));
+		
 		jpaket_caraField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cara'));
 		jpaket_cara2Field.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cara2'));
 		jpaket_cara3Field.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_cara3'));
 		jpaket_bayarField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar'));
 		jpaket_bayar_cfField.setValue(CurrencyFormatted(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_bayar')));
 		jpaket_keteranganField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_keterangan'));
-		jpaket_ket_diskField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_ket_disk'));
 		jpaket_stat_dokField.setValue(master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok'));
 		for(i=0;i<detail_jual_paket_DataStore.getCount();i++){
 			subtotal_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_subtotal_net;
 			dpaket_jumlah_field+=detail_jual_paket_DataStore.getAt(i).data.dpaket_jumlah;
 		}
-		if(jpaket_diskonField.getValue()!==""){
+		/*if(jpaket_diskonField.getValue()!==""){
 			diskon_field=jpaket_diskonField.getValue();
+		}*/
+		if(jpaket_cashback_num.getValue()!==""){
+			cashback_field=jpaket_cashback_num.getValue();
 		}
-		if(jpaket_cashbackField.getValue()!==""){
-			cashback_field=jpaket_cashbackField.getValue();
+		if(jpaket_cashback_medis_num.getValue()!==""){
+			cashback_field_medis=jpaket_cashback_medis_num.getValue();
 		}
-		total_field=subtotal_field*(100-diskon_field)/100-cashback_field;
+		total_field=subtotal_field-cashback_field_medis-cashback_field;
 		jpaket_jumlahField.setValue(dpaket_jumlah_field);
 		jpaket_subTotalField.setValue(subtotal_field);
 		jpaket_subTotal_cfField.setValue(CurrencyFormatted(subtotal_field));
@@ -1647,6 +1673,7 @@ Ext.override(Ext.form.Field, {
 			jpaket_tanggalField.setDisabled(false);
 			jpaket_keteranganField.setDisabled(false);
 			jpaket_ket_diskField.setDisabled(false);
+			jpaket_ket_disk_medisField.setDisabled(false);
 			
 			jpaket_caraField.setDisabled(false);
 			master_jual_paket_tunaiGroup.setDisabled(false);
@@ -1686,14 +1713,16 @@ Ext.override(Ext.form.Field, {
 			dpaket_subtotalnetField.setDisabled(false);
 			combo_reveral_paket.setDisabled(false);
 			detail_pengguna_paketListEditorGrid.setDisabled(false);
-			jpaket_diskonField.setDisabled(false);
+			//jpaket_diskonField.setDisabled(false);
 			jpaket_cashback_cfField.setDisabled(false);
+			jpaket_cashback_cf_medisField.setDisabled(false);
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Tertutup"){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
 			jpaket_ket_diskField.setDisabled(true);
+			jpaket_ket_disk_medisField.setDisabled(true);
 			
 			jpaket_caraField.setDisabled(true);
 			master_jual_paket_tunaiGroup.setDisabled(true);
@@ -1732,14 +1761,16 @@ Ext.override(Ext.form.Field, {
 			dpaket_jumlahdiskonField.setDisabled(true);
 			dpaket_subtotalnetField.setDisabled(true);
 			combo_reveral_paket.setDisabled(true);
-			jpaket_diskonField.setDisabled(true);
+			//jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
+			jpaket_cashback_cf_medisField.setDisabled(true);
 		}
 		if(jpaket_post2db=="UPDATE" && master_jual_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_stat_dok')=="Batal"){
 			jpaket_custField.setDisabled(true);
 			jpaket_tanggalField.setDisabled(true);
 			jpaket_keteranganField.setDisabled(true);
 			jpaket_ket_diskField.setDisabled(true);
+			jpaket_ket_disk_medisField.setDisabled(true);
 			
 			jpaket_caraField.setDisabled(true);
 			master_jual_paket_tunaiGroup.setDisabled(true);
@@ -1778,8 +1809,9 @@ Ext.override(Ext.form.Field, {
 			dpaket_subtotalnetField.setDisabled(true);
 			combo_reveral_paket.setDisabled(true);
 			detail_pengguna_paketListEditorGrid.setDisabled(true);
-			jpaket_diskonField.setDisabled(true);
+			//jpaket_diskonField.setDisabled(true);
 			jpaket_cashback_cfField.setDisabled(true);
+			jpaket_cashback_cf_medisField.setDisabled(true);
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPAKET'))){ ?>
 			master_jual_paket_createForm.jpaketSavePrintButton.disable();
 			<?php } ?>
@@ -1807,6 +1839,29 @@ Ext.override(Ext.form.Field, {
 			}); 
 		}
 	}
+	
+	
+	/* Function for Displaying  create Window Form */
+	function display_form_window(){
+
+		master_jual_paket_reset_form();
+		jpaket_caraField.setValue("card");
+		master_jual_paket_cardGroup.setVisible(true);
+		master_cara_bayarTabPanel.setActiveTab(0);
+		//jpaket_diskonField.setValue(0);
+		//jpaket_cashbackField.setValue(0);
+		jpaket_pesanLabel.setText('');
+		jpaket_lunasLabel.setText('');
+			//master_jual_paket_createForm.show();
+		//master_jual_paket_createForm.render();
+		master_jual_paket_createWindow.hide();
+		//master_jual_paket_createForm.activate;
+		//alert('nang kene ga');
+		
+	}
+  	/* End of Function */
+	
+	
 	/* Function for Check if the form is valid */
 	function is_master_jual_paket_form_valid(){
 		return (true);
@@ -1881,6 +1936,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'jpaket_tanggal', type: 'date', dateFormat: 'Y-m-d', mapping: 'jpaket_tanggal'}, 
 			{name: 'jpaket_diskon', type: 'int', mapping: 'jpaket_diskon'}, 
 			{name: 'jpaket_cashback', type: 'float', mapping: 'jpaket_cashback'},
+			{name: 'jpaket_cashback_medis', type: 'float', mapping: 'jpaket_cashback_medis'},
 			{name: 'jpaket_cara', type: 'string', mapping: 'jpaket_cara'}, 
 			{name: 'jpaket_cara2', type: 'string', mapping: 'jpaket_cara2'}, 
 			{name: 'jpaket_cara3', type: 'string', mapping: 'jpaket_cara3'}, 
@@ -1888,6 +1944,7 @@ Ext.override(Ext.form.Field, {
 			{name: 'jpaket_bayar', type: 'float', mapping: 'jpaket_bayar'}, 
 			{name: 'jpaket_keterangan', type: 'string', mapping: 'jpaket_keterangan'},
 			{name: 'jpaket_ket_disk', type: 'string', mapping: 'jpaket_ket_disk'},	//additional by isaac
+			{name: 'jpaket_ket_disk_medis', type: 'string', mapping: 'jpaket_ket_disk_medis'},
 			{name: 'jpaket_stat_dok', type: 'string', mapping: 'jpaket_stat_dok'}, 			
 			{name: 'jpaket_creator', type: 'string', mapping: 'jpaket_creator'}, 
 			{name: 'jpaket_date_create', type: 'date', dateFormat: 'Y-m-d H:i:s', mapping: 'jpaket_date_create'}, 
@@ -2225,6 +2282,16 @@ Ext.override(Ext.form.Field, {
 			editor: new Ext.form.TextField({
 				maxLength: 250
           	})
+		}, 
+		{
+			header: '<div align="center">' + 'No Voucher Medis' + '</div>',
+			dataIndex: 'jpaket_ket_disk_medis',
+			width: 130,
+			hidden: true,
+			sortable: true,
+			editor: new Ext.form.TextField({
+				maxLength: 250
+          	})
 		},
 		{
 			header: '<div align="center">' + 'Stat Dok' + '</div>',
@@ -2295,6 +2362,13 @@ Ext.override(Ext.form.Field, {
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
+		{
+			text: 'Add',
+			tooltip: 'Add new record',
+			iconCls:'icon-adds',    				// this is defined in our styles.css
+			handler: display_form_window
+		}, '-',
+		
 		{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
@@ -2471,7 +2545,7 @@ Ext.override(Ext.form.Field, {
 		format : 'd-m-Y'
 	});
 	/* Identify  jpaket_diskon Field */
-	jpaket_diskonField= new Ext.form.NumberField({
+	/*jpaket_diskonField= new Ext.form.NumberField({
 		id: 'jpaket_diskonField',
 		fieldLabel: 'Disk Tambahan (%)',
 		allowNegatife : false,
@@ -2481,16 +2555,6 @@ Ext.override(Ext.form.Field, {
 		enableKeyEvents: true,
 		width: 120,
 		maxLength: 3,
-		maskRe: /([0-9]+)$/
-	});
-	jpaket_cashback_cfField= new Ext.form.TextField({
-		id: 'jpaket_cashback_cfField',
-		fieldLabel: 'Voucher (Rp)',
-		allowNegatife : false,
-		enableKeyEvents: true,
-		readOnly : false,
-		itemCls: 'rmoney',
-		width: 120,
 		maskRe: /([0-9]+)$/
 	});
 	jpaket_cashbackField= new Ext.form.NumberField({
@@ -2505,6 +2569,138 @@ Ext.override(Ext.form.Field, {
 		width: 100,
 		maskRe: /([0-9]+)$/
 	});
+	*/
+		///////////SPLIT VOUCHER//////////
+	/*untuk nommor voucher nonmedis*/
+	jpaket_ket_diskField= new Ext.form.TextField({
+		id: 'jpaket_ket_diskField',
+		fieldLabel: 'No Voucher',
+		//fieldLabel: 'No Voucher Non',
+		width: 120,
+	});
+	/*untuk rupiah voucher nonmedis*/
+	jpaket_cashback_cfField= new Ext.form.TextField({
+		id: 'jpaket_cashback_cfField',
+		//fieldLabel: '(Rp)', --> Nanti di comment semua aja fieldLabelnya.. 
+		fieldLabel : 'Voucher (Rp)',
+		allowNegatife : false,
+		readOnly : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jpaket_cashback_num.setValue(cf_tonumber);
+				load_total_biaya();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/
+	});
+	
+	jpaket_cashback_num= new Ext.form.NumberField({
+		id: 'jpaket_cashback_num',
+		allowNegatife : false,
+		readOnly : true,
+		blankText: '0',
+		emptyText: '0',
+		enableKeyEvents: true,
+		allowDecimals: false,
+		width: 100,
+		maskRe: /([0-9]+)$/
+	});
+	
+	/*untuk nommor voucher medis*/
+	jpaket_ket_disk_medisField= new Ext.form.TextField({
+		id: 'jpaket_ket_disk_medis',
+		//fieldLabel: 'No Voucher Medis',
+		width: 120,
+	});
+	/*untuk rupiah voucher medis*/
+	jpaket_cashback_cf_medisField= new Ext.form.TextField({
+		id: 'jpaket_cashback_cf_medisField',
+		//fieldLabel: '(Rp)',
+		allowNegatife : false,
+		readOnly : false,
+		enableKeyEvents: true,
+		itemCls: 'rmoney',
+		width: 120,
+		listeners: {
+			'keyup': function(){
+				var cf_tonumber = convertToNumber(this.getValue());
+				jpaket_cashback_medis_num.setValue(cf_tonumber);
+				load_total_biaya();
+				
+				var number_tocf = CurrencyFormatted(this.getValue());
+				this.setRawValue(number_tocf);
+			}
+		},
+		maskRe: /([0-9]+)$/
+	});
+	
+	jpaket_cashback_medis_num= new Ext.form.NumberField({
+		id: 'jpaket_cashback_medis_num',
+		allowNegatife : false,
+		readOnly : true,
+		blankText: '0',
+		emptyText: '0',
+		enableKeyEvents: true,
+		allowDecimals: false,
+		width: 100,
+		maskRe: /([0-9]+)$/
+	});
+	
+	label_medis=new Ext.form.Label({ html:  ' No Voucher Medis &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; '});
+	label_nonmedis=new Ext.form.Label({ html:  ' No Voucher Non Medis &nbsp; '});
+	
+	label_rp1=new Ext.form.Label({ html:  ' &nbsp; (Rp) &nbsp; '});
+	label_rp2=new Ext.form.Label({ html:  ' &nbsp; (Rp) &nbsp; '});
+	label_enter1=new Ext.form.Label({ html: '&nbsp;<br> <br>'});
+	
+	master_jual_paket_voucher_group = new Ext.form.FieldSet({
+		title: 'Voucher',
+		autoHeight: true,
+		collapsible: false,
+		layout:'form',
+		anchor: '97%',
+		items:[
+			{
+			//	columnWidth:0.5,
+				layout: 'column',
+				border:false,
+				items: [label_medis,jpaket_ket_disk_medisField,label_rp1,jpaket_cashback_cf_medisField,label_enter1]			
+			},
+			{
+			//	columnWidth:0.5,
+				layout: 'column',
+				border:false,
+				items: [ label_nonmedis,jpaket_ket_diskField,label_rp2,jpaket_cashback_cfField] 
+			}
+			]
+	
+	});
+	///////////EndOff SPLIT VOUCHER//////////
+	
+/*jpaket_ket_diskField= new Ext.form.TextField({
+		id: 'jpaket_ket_diskField',
+		fieldLabel: 'No Voucher',
+		maxLength: 250,
+		width: 120,
+	});
+	jpaket_cashback_cfField= new Ext.form.TextField({
+		id: 'jpaket_cashback_cfField',
+		fieldLabel: 'Voucher (Rp)',
+		allowNegatife : false,
+		enableKeyEvents: true,
+		readOnly : false,
+		itemCls: 'rmoney',
+		width: 120,
+		maskRe: /([0-9]+)$/
+	});*/
+
 	/* Identify  jpaket_cara Field */
 	jpaket_caraField= new Ext.form.ComboBox({
 		id: 'jpaket_caraField',
@@ -2571,12 +2767,7 @@ Ext.override(Ext.form.Field, {
 		maxLength: 250,
 		anchor: '95%'
 	});
-	jpaket_ket_diskField= new Ext.form.TextField({
-		id: 'jpaket_ket_diskField',
-		fieldLabel: 'No Voucher',
-		maxLength: 250,
-		width: 120,
-	});
+
 	jpaket_voucher_noField= new Ext.form.TextField({
 		id: 'jpaket_voucher_noField',
 		fieldLabel: 'Nomor Voucher',
@@ -3781,12 +3972,14 @@ Ext.override(Ext.form.Field, {
 		frame: true,
 		items:[
 			   {
+				//columnWidth:0.5,
 				columnWidth:0.7,
 				layout: 'form',
 				border:false,
 				items: [master_cara_bayarTabPanel] 
 			}
 			,{
+				//columnWidth:0.5,
 				columnWidth:0.3,
 				labelWidth: 140,
 				layout: 'form',
@@ -3794,7 +3987,7 @@ Ext.override(Ext.form.Field, {
 				baseCls: 'x-plain',
 				border:false,
 				labelAlign: 'left',
-				items: [jpaket_jumlahField, jpaket_subTotal_cfField, jpaket_cashback_cfField, jpaket_ket_diskField, {xtype: 'spacer',height:10},jpaket_total_cfField, jpaket_bayar_cfField,jpaket_hutang_cfField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
+				items: [jpaket_jumlahField, jpaket_subTotal_cfField, jpaket_cashback_cfField, jpaket_ket_diskField, /*master_jual_paket_voucher_group,*/ {xtype: 'spacer',height:10},jpaket_total_cfField, jpaket_bayar_cfField,jpaket_hutang_cfField ,jpaket_pesanLabel ,jpaket_lunasLabel] 
 			}
 			]
 	});
@@ -5008,7 +5201,7 @@ Ext.override(Ext.form.Field, {
 		else
 			tunai_nilai3=0;
 		total_bayar=transfer_nilai+transfer_nilai2+transfer_nilai3+kwitansi_nilai+kwitansi_nilai2+kwitansi_nilai3+card_nilai+card_nilai2+card_nilai3+cek_nilai+cek_nilai2+cek_nilai3+voucher_nilai+voucher_nilai2+voucher_nilai3+tunai_nilai+tunai_nilai2+tunai_nilai3;
-		update_total_field=jpaket_subTotalField.getValue()*((100-jpaket_diskonField.getValue())/100)-jpaket_cashbackField.getValue();
+		update_total_field=jpaket_subTotalField.getValue()-jpaket_cashback_num_medis.getValue()-jpaket_cashback_num.getValue();
 		jpaket_totalField.setValue(update_total_field);
 		jpaket_total_cfField.setValue(CurrencyFormatted(update_total_field));
 
@@ -5020,8 +5213,8 @@ Ext.override(Ext.form.Field, {
 		jpaket_hutang_cfField.setValue(CurrencyFormatted(update_hutang_field));
 		
 		jpaket_diskonField.setValue(jpaket_diskonField.getValue());
-		jpaket_cashbackField.setValue(jpaket_cashbackField.getValue());
-		jpaket_cashback_cfField.setValue(CurrencyFormatted(jpaket_cashbackField.getValue()));
+		jpaket_cashbackField.setValue(jpaket_cashback_num.getValue());
+		jpaket_cashback_cfField.setValue(CurrencyFormatted(jpaket_cashback_num.getValue()));
 		if(total_bayar>update_total_field){
 			jpaket_pesanLabel.setText("Kelebihan Jumlah Bayar");
 		}else if(total_bayar<update_total_field || total_bayar==update_total_field){
@@ -5045,14 +5238,19 @@ Ext.override(Ext.form.Field, {
 		 * 6. Total Bayar
 		 * 7. Total Hutang
 		*/
-		var disk_tambahan_field = jpaket_diskonField.getValue();
+		/*var disk_tambahan_field = jpaket_diskonField.getValue();
 		if(disk_tambahan_field==''){
 			disk_tambahan_field = 0;
-		}
-		var voucher_rp_field = jpaket_cashbackField.getValue();
+		}*/
+		var voucher_rp_field = jpaket_cashback_num.getValue();
 		if(voucher_rp_field==''){
 			voucher_rp_field = 0;
 		}
+		var voucher_rp_medis_field = jpaket_cashback_medis_num.getValue();
+		if(voucher_rp_medis_field==''){
+			voucher_rp_medis_field = 0;
+		}
+		
 		var total_bayar_field = jpaket_bayarField.getValue();
 		var jumlah_item = 0;
 		var sub_total_field = 0;
@@ -5065,7 +5263,7 @@ Ext.override(Ext.form.Field, {
 		jpaket_jumlahField.setValue(jumlah_item);
 		jpaket_subTotalField.setValue(sub_total_field);
 		jpaket_subTotal_cfField.setValue(CurrencyFormatted(sub_total_field));
-		total_biaya_field = sub_total_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
+		total_biaya_field = sub_total_field - voucher_rp_medis_field - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jpaket_totalField.setValue(total_biaya_field);
 		jpaket_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
@@ -5086,18 +5284,22 @@ Ext.override(Ext.form.Field, {
 		 * 7. Notifikasi Kelebihan Bayar
 		*/
 		var sub_total_biaya_field = jpaket_subTotalField.getValue();
-		var disk_tambahan_field = jpaket_diskonField.getValue();
-		var voucher_rp_field = jpaket_cashbackField.getValue();
+		//var disk_tambahan_field = jpaket_diskonField.getValue();
 		var total_bayar_field = jpaket_bayarField.getValue();
-		if(disk_tambahan_field==''){
+		/*if(disk_tambahan_field==''){
 			disk_tambahan_field = 0;
-		}
+		}*/
+		var voucher_rp_field = jpaket_cashback_num.getValue();
+		var voucher_rp_medis_field = jpaket_cashback_medis_num.getValue();
 		if(voucher_rp_field==''){
 			voucher_rp_field = 0;
 		}
+		if(voucher_rp_medis_field==''){
+			voucher_rp_medis_field = 0;
+		}
 		var total_biaya_field = 0;
 		var total_hutang_field = 0;
-		total_biaya_field += sub_total_biaya_field * ((100 - disk_tambahan_field)/100) - voucher_rp_field;
+		total_biaya_field += sub_total_biaya_field - voucher_rp_medis_field - voucher_rp_field;
 		total_biaya_field = (total_biaya_field>0?Math.round(total_biaya_field):0);
 		jpaket_totalField.setValue(total_biaya_field);
 		jpaket_total_cfField.setValue(CurrencyFormatted(total_biaya_field));
@@ -5259,16 +5461,16 @@ Ext.override(Ext.form.Field, {
 			}
 		}
 	});
-	jpaket_diskonField.on("keyup",function(){
+	/*jpaket_diskonField.on("keyup",function(){
 		if(this.getRawValue()>100){
 			this.setRawValue(100);
 		}
 		load_total_biaya();
-	});
+	});*/
 	jpaket_cashback_cfField.on("keyup",function(){
 		var cf_value = jpaket_cashback_cfField.getValue();
 		var cf_tonumber = convertToNumber(cf_value);
-		jpaket_cashbackField.setValue(cf_tonumber);
+		//jpaket_cashbackField.setValue(cf_tonumber);
 		load_total_biaya();
 		var number_tocf = CurrencyFormatted(cf_value);
 		this.setRawValue(number_tocf);
@@ -5948,8 +6150,8 @@ Ext.override(Ext.form.Field, {
 		jpaket_caraField.setValue("card");
 		master_jual_paket_cardGroup.setVisible(true);
 		master_cara_bayarTabPanel.setActiveTab(0);
-		jpaket_diskonField.setValue(0);
-		jpaket_cashbackField.setValue(0);
+		//jpaket_diskonField.setValue(0);
+		//jpaket_cashbackField.setValue(0);
 		jpaket_pesanLabel.setText('');
 		jpaket_lunasLabel.setText('');
 	}
@@ -5968,8 +6170,8 @@ Ext.override(Ext.form.Field, {
 <div>
 	<div class="col">
         <div id="fp_master_jual_paket"></div>
-         <div id="fp_detail_jual_paket"></div>
-		 <div id="fp_detail_pengguna_paket"></div>
+        <div id="fp_detail_jual_paket"></div>
+		<div id="fp_detail_pengguna_paket"></div>
 		<div id="elwindow_master_jual_paket_create"></div>
         <div id="elwindow_master_jual_paket_search"></div>
         <div id="form_paket_addEdit"></div>

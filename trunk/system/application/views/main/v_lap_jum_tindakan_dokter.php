@@ -236,7 +236,8 @@ Ext.onReady(function(){
 			align : 'right',
 			header: '<div align="center">' + 'No' + '</div>',
 			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
-			width: 10
+			//width: 80
+			autoWidth: true
 		},{
 			header: '<div align="center">' + 'Kode' + '</div>',
 			dataIndex: 'rawat_kode',
@@ -556,7 +557,7 @@ Ext.onReady(function(){
 		fieldLabel: 'Group By',
 		store:new Ext.data.SimpleStore({
 			fields:['group_value', 'group_display'],
-			data:[['Perawatan','Penjualan Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Semua','Semua']]
+			data:[['Perawatan','Perawatan Satuan'],['Pengambilan_Paket','Pengambilan Paket'],['Semua','Semua']]
 		}),
 		mode: 'local',
 		editable:false,

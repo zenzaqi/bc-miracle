@@ -231,32 +231,24 @@ Ext.onReady(function(){
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Kredit Satuan(Rp)' + '</div>',
+			header: '<div align="center">' + 'Jml' + '</div>',
+			dataIndex: 'jumlah_produk',
+			width: 60,
+			sortable: false
+		},
+		{	
+			align : 'Right',
+			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
 			dataIndex: 'komisi_satuan',
-			width: 80,	//55,
+			width: 120,
 			sortable: false,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		{	
 			align : 'Right',
-			header: '<div align="center">' + 'Jumlah' + '</div>',
-			dataIndex: 'jumlah_produk',
-			width: 80,	//55,
-			sortable: false
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Total Kredit' + '</div>',
-			dataIndex: 'dtrawat_jkredit',
-			width: 80,	//55,
-			hidden : true,
-			sortable: true
-		},
-		{	
-			align : 'Right',
-			header: '<div align="center">' + 'Kredit (Rp)' + '</div>',
+			header: '<div align="center">' + 'Tot Kredit (Rp)' + '</div>',
 			dataIndex: 'komisi',
-			width: 80,	//55,
+			width: 120,
 			sortable: true,
 			renderer: Ext.util.Format.numberRenderer('0,000')
 		}
@@ -270,7 +262,7 @@ Ext.onReady(function(){
 		id: 'lap_jum_penj_produk_karyawanField',
 		name: 'lap_jum_penj_produk_karyawanField',
 		//dataIndex : 'karyawan_username',
-		fieldLabel: '<b>Nama</b>',
+		fieldLabel: '<b>Karyawan</b>',
 		width: 100,
 		readOnly: true
 	});
@@ -279,7 +271,7 @@ Ext.onReady(function(){
 		[
 		{	
 			align : 'Right',
-			header: '<div align="right">' + 'Total Jumlah' + '</div>',
+			header: '<div align="right">' + 'Grand Tot Kredit (Rp)' + '</div>',
 			dataIndex: 'total_jumlah',
 			width: 80,	//55,
 			sortable: false
@@ -312,11 +304,11 @@ Ext.onReady(function(){
 		/* Add Control on ToolBar */
 		tbar: [
 		{
-			'text':'Nama : '
+			'text':'Karyawan : '
 		},
 		lap_jum_penj_produk_karyawanField,
 		{
-			text: 'Adv Search',
+			text: 'Search',
 			tooltip: 'Advanced Search',
 			iconCls:'icon-search',
 			handler: display_form_search_window 
@@ -566,7 +558,7 @@ Ext.onReady(function(){
 		}]
 		,
 		buttons: [{
-				text: 'Adv Search',
+				text: 'Search',
 				handler: lap_jum_penj_produk_search
 			},{
 				text: 'Close',

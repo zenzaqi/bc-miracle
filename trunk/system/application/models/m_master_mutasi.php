@@ -1315,7 +1315,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 		}
 		
 		//function for update record
-		function master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_spb, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_status_terima, $mutasi_barang_keluar, $mutasi_racikan, $mutasi_kategori_barang_keluar, $cetak){
+		function master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_spb, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_status_terima, $mutasi_barang_keluar, $mutasi_racikan, $mutasi_kategori_barang_keluar, $cetak, $printonly){
 			
 			if($mutasi_barang_keluar=='true')
 			{
@@ -1351,13 +1351,17 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 				
 			if ($cetak==1)
 			{
-				if($barang_keluar!=1 && $mutasi_racikan=='false'){
+				if($barang_keluar!=1 && $mutasi_racikan=='false' && $printonly==0){
 					$data['mutasi_status'] = 'Tunggu'; //ini mestie nanti Tunggu
 					$data['mutasi_status_terima'] = 'Tunggu';
 				}
-				else if($barang_keluar==1 || $mutasi_racikan=='true')
+				else if(($barang_keluar==1 || $mutasi_racikan=='true') && $printonly==0)
 				{
 					$data['mutasi_status'] = 'Tertutup';
+				}
+				else if($printonly==1)
+				{
+					$data['mutasi_status'] = $mutasi_status;
 				}
 			}
 			//else{
@@ -1389,7 +1393,7 @@ where dmracikan_mutasi_id = '".$master_id."' order by dmracikan_id DESC
 		}
 		
 		//function for create new record
-		function master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_spb, $mutasi_racikan, $racikan_keluar, $racikan_masuk, $racikan_produk, $racikan_jumlah, $racikan_satuan, $racikan_dmracikan_id, $mutasi_barang_keluar, $mutasi_status_terima, $mutasi_kategori_barang_keluar, $cetak , $array_dmracikan_id, $array_dmracikan_produk, $array_dmracikan_satuan, $array_dmracikan_jumlah){
+		function master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_spb, $mutasi_racikan, $racikan_keluar, $racikan_masuk, $racikan_produk, $racikan_jumlah, $racikan_satuan, $racikan_dmracikan_id, $mutasi_barang_keluar, $mutasi_status_terima, $mutasi_kategori_barang_keluar, $cetak , $printonly, $array_dmracikan_id, $array_dmracikan_produk, $array_dmracikan_satuan, $array_dmracikan_jumlah){
 		
 			$racikan = 0;
 			$temp_kode_gudang = "";

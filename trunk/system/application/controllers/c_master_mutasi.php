@@ -388,7 +388,8 @@ class C_master_mutasi extends Controller {
 		$mutasi_status_terima=str_replace("'", '"',$mutasi_status_terima);
 		$mutasi_barang_keluar=trim(@$_POST["mutasi_barang_keluar"]);
 		$cetak=trim(@$_POST["cetak"]);
-		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_spb, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_status_terima, $mutasi_barang_keluar, $mutasi_racikan, $mutasi_kategori_barang_keluar, $cetak);
+		$printonly=trim(@$_POST["printonly"]);
+		$result = $this->m_master_mutasi->master_mutasi_update($mutasi_id ,$mutasi_no, $mutasi_spb, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_status_terima, $mutasi_barang_keluar, $mutasi_racikan, $mutasi_kategori_barang_keluar, $cetak, $printonly);
 		echo $result;
 	}
 	
@@ -429,6 +430,7 @@ class C_master_mutasi extends Controller {
 		$racikan_dmracikan_id=trim(@$_POST["racikan_dmracikan_id"]);
 		$mutasi_barang_keluar=trim(@$_POST["mutasi_barang_keluar"]);
 		$cetak=trim(@$_POST["cetak"]);
+		$printonly=trim(@$_POST["printonly"]);
 		
 		//Data Detail Produk Jadi
 		$dmracikan_id = $_POST['dmracikan_id']; // Get our array back and translate it :
@@ -444,7 +446,7 @@ class C_master_mutasi extends Controller {
 		$array_dmracikan_jumlah = json_decode(stripslashes($dmracikan_jumlah));
 				
 				
-		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_spb, $mutasi_racikan, $racikan_keluar, $racikan_masuk, $racikan_produk, $racikan_jumlah, $racikan_satuan, $racikan_dmracikan_id,$mutasi_barang_keluar,$mutasi_status_terima, $mutasi_kategori_barang_keluar, $cetak,
+		$result=$this->m_master_mutasi->master_mutasi_create($mutasi_no, $mutasi_asal ,$mutasi_tujuan ,$mutasi_tanggal ,$mutasi_keterangan, $mutasi_status, $mutasi_spb, $mutasi_racikan, $racikan_keluar, $racikan_masuk, $racikan_produk, $racikan_jumlah, $racikan_satuan, $racikan_dmracikan_id,$mutasi_barang_keluar,$mutasi_status_terima, $mutasi_kategori_barang_keluar, $cetak, $printonly,
 		$array_dmracikan_id, $array_dmracikan_produk, $array_dmracikan_satuan, $array_dmracikan_jumlah);
 		echo $result;
 	}

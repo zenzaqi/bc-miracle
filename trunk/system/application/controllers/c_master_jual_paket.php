@@ -367,11 +367,16 @@ class C_master_jual_paket extends Controller {
 		$jpaket_ket_disk=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_ket_disk);
 		$jpaket_ket_disk=str_replace("'", '"',$jpaket_ket_disk);
 		
+		$jpaket_ket_disk_medis=trim(@$_POST["jpaket_ket_disk_medis"]);
+		$jpaket_ket_disk_medis=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_ket_disk_medis);
+		$jpaket_ket_disk_medis=str_replace("'", '"',$jpaket_ket_disk_medis);
+		
 		$jpaket_stat_dok=trim(@$_POST["jpaket_stat_dok"]);
 		$jpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_stat_dok);
 		$jpaket_stat_dok=str_replace("'", '"',$jpaket_stat_dok);
 		
 		$jpaket_cashback=trim($_POST["jpaket_cashback"]);
+		$jpaket_cashback_medis=trim($_POST["jpaket_cashback_medis"]);
 		
 		//tunai
 		$jpaket_tunai_nilai=trim($_POST["jpaket_tunai_nilai"]);
@@ -461,7 +466,7 @@ class C_master_jual_paket extends Controller {
 		$jpaket_transfer_nilai3=trim($_POST["jpaket_transfer_nilai3"]);
 		
 		
-		$result = $this->m_master_jual_paket->master_jual_paket_update($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_stat_dok, $jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal ,$jpaket_total ,$jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak, $jpaket_ket_disk);
+		$result = $this->m_master_jual_paket->master_jual_paket_update($jpaket_id ,$jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_stat_dok, $jpaket_diskon ,$jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback,$jpaket_cashback_medis, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal ,$jpaket_total ,$jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak, $jpaket_ket_disk,$jpaket_ket_disk_medis);
 		echo $result;
 	}
 	
@@ -496,11 +501,16 @@ class C_master_jual_paket extends Controller {
 		$jpaket_ket_disk=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_ket_disk);
 		$jpaket_ket_disk=str_replace("'", '"',$jpaket_ket_disk);
 		
+		$jpaket_ket_disk_medis=trim(@$_POST["jpaket_ket_disk_medis"]);
+		$jpaket_ket_disk_medis=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_ket_disk_medis);
+		$jpaket_ket_disk_medis=str_replace("'", '"',$jpaket_ket_disk_medis);
+		
 		$jpaket_stat_dok=trim(@$_POST["jpaket_stat_dok"]);
 		$jpaket_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_stat_dok);
 		$jpaket_stat_dok=str_replace("'", '"',$jpaket_stat_dok);
 		
 		$jpaket_cashback=trim($_POST["jpaket_cashback"]);
+		$jpaket_cashback_medis=trim($_POST["jpaket_cashback_medis"]);
 		//$jpaket_voucher=trim($_POST["jpaket_voucher"]);
 		//tunai
 		$jpaket_tunai_nilai=trim($_POST["jpaket_tunai_nilai"]);
@@ -588,7 +598,7 @@ class C_master_jual_paket extends Controller {
 		$jpaket_transfer_nama3=trim($_POST["jpaket_transfer_nama3"]);
 		$jpaket_transfer_nilai3=trim($_POST["jpaket_transfer_nilai3"]);
 				
-		$result=$this->m_master_jual_paket->master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak, $jpaket_ket_disk);
+		$result=$this->m_master_jual_paket->master_jual_paket_create($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal ,$jpaket_diskon ,$jpaket_stat_dok, $jpaket_cara ,$jpaket_cara2 ,$jpaket_cara3 ,$jpaket_keterangan , $jpaket_cashback,$jpaket_cashback_medis, $jpaket_tunai_nilai, $jpaket_tunai_nilai2, $jpaket_tunai_nilai3, $jpaket_voucher_no, $jpaket_voucher_cashback, $jpaket_voucher_no2, $jpaket_voucher_cashback2, $jpaket_voucher_no3, $jpaket_voucher_cashback3, $jpaket_bayar, $jpaket_subtotal, $jpaket_total, $jpaket_hutang, $jpaket_kwitansi_no, $jpaket_kwitansi_nama, $jpaket_kwitansi_nilai, $jpaket_kwitansi_no2, $jpaket_kwitansi_nama2, $jpaket_kwitansi_nilai2, $jpaket_kwitansi_no3, $jpaket_kwitansi_nama3, $jpaket_kwitansi_nilai3, $jpaket_card_nama, $jpaket_card_edc, $jpaket_card_no, $jpaket_card_nilai, $jpaket_card_nama2, $jpaket_card_edc2, $jpaket_card_no2, $jpaket_card_nilai2, $jpaket_card_nama3, $jpaket_card_edc3, $jpaket_card_no3, $jpaket_card_nilai3, $jpaket_cek_nama, $jpaket_cek_no, $jpaket_cek_valid, $jpaket_cek_bank, $jpaket_cek_nilai, $jpaket_cek_nama2, $jpaket_cek_no2, $jpaket_cek_valid2, $jpaket_cek_bank2, $jpaket_cek_nilai2, $jpaket_cek_nama3, $jpaket_cek_no3, $jpaket_cek_valid3, $jpaket_cek_bank3, $jpaket_cek_nilai3, $jpaket_transfer_bank, $jpaket_transfer_nama, $jpaket_transfer_nilai, $jpaket_transfer_bank2, $jpaket_transfer_nama2, $jpaket_transfer_nilai2, $jpaket_transfer_bank3, $jpaket_transfer_nama3, $jpaket_transfer_nilai3, $cetak, $jpaket_ket_disk,$jpaket_ket_disk_medis);
 		echo $result;
 	}
 	
@@ -623,6 +633,7 @@ class C_master_jual_paket extends Controller {
 		$jpaket_tanggal_akhir=trim(@$_POST["jpaket_tanggal_akhir"]);
 		$jpaket_diskon=trim(@$_POST["jpaket_diskon"]);
 		$jpaket_cashback=trim(@$_POST["jpaket_cashback"]);
+		$jpaket_cashback_medis=trim(@$_POST["jpaket_cashback_medis"]);
 		$jpaket_voucher=trim(@$_POST["jpaket_voucher"]);
 		$jpaket_voucher=str_replace("/(<\/?)(p)([^>]*>)", "",$jpaket_voucher);
 		$jpaket_voucher=str_replace("'", '"',$jpaket_voucher);
@@ -639,7 +650,7 @@ class C_master_jual_paket extends Controller {
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end);
+		$result = $this->m_master_jual_paket->master_jual_paket_search($jpaket_nobukti ,$jpaket_cust ,$jpaket_tanggal, $jpaket_tanggal_akhir, $jpaket_diskon ,$jpaket_cashback ,$jpaket_cashback_medis,$jpaket_voucher ,$jpaket_cara ,$jpaket_bayar , $jpaket_keterangan, $jpaket_stat_dok, $start, $end);
 		echo $result;
 	}
 

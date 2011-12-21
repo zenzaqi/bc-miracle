@@ -2048,6 +2048,26 @@ Ext.override(Ext.form.Field, {
   
   	/* Function for Displaying  create Window Form */
 	function display_form_window(){
+	
+	master_jual_produk_reset_form();
+		detail_jual_produk_DataStore.load({params: {master_id:-1}});
+		jproduk_caraField.setValue("card");
+		master_jual_produk_cardGroup.setVisible(true);
+		master_cara_bayarTabPanel.setActiveTab(0);
+		jproduk_post2db="CREATE";
+		jproduk_diskonField.setValue(0);
+		jproduk_cashbackField.setValue(0);
+		//jproduk_diskonField.setDisabled(true);
+		jproduk_diskonField.allowBlank=true;
+		//jproduk_rupiahRadio.setValue(true);
+		//jproduk_persenRadio.setValue(false);
+		jproduk_pesanLabel.setText('');
+		jproduk_lunasLabel.setText('');
+		//jproduk_persenRadio.setDisabled(false);
+		//jproduk_rupiahRadio.setDisabled(false);
+		master_jual_produk_createWindow.hide();
+	
+	/*
 		if(!master_jual_produk_createWindow.isVisible()){
 			master_jual_produk_reset_form();
 			detail_jual_produk_DataStore.load({params: {master_id:-1}});
@@ -2058,6 +2078,7 @@ Ext.override(Ext.form.Field, {
 		} else {
 			master_jual_produk_createWindow.toFront();
 		}
+		*/
 	}
   	/* End of Function */
  
@@ -2664,14 +2685,14 @@ Ext.override(Ext.form.Field, {
 		}),
 		/* Add Control on ToolBar */
 		tbar: [
-		/*{
+		{
 			text: 'Add',
 			tooltip: 'Add new record',
 			id : 'Add_detail',
 			iconCls:'icon-adds',    				// this is defined in our styles.css
-			disabled: true,
+			//disabled: true,
 			handler: display_form_window
-		}, '-',*/{
+		}, '-',{
 			text: 'Edit',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',

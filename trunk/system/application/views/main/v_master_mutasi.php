@@ -73,6 +73,7 @@ var msg = '';
 var pageS=15;
 var today=new Date().format('Y-m-d');
 var cetak=0;
+var printonly=0;
 var group_id=<?=$_SESSION[SESSION_GROUPID];?>;
 
 /* declare variable here for Field*/
@@ -365,7 +366,8 @@ Ext.onReady(function(){
 				//racikan_jumlah		: racikan_jumlah_create,
 				//racikan_satuan		: racikan_satuan_create,
 				racikan_dmracikan_id: racikan_dmracikan_id_create,
-				cetak				: cetak
+				cetak				: cetak,
+				printonly			: printonly
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -942,6 +944,7 @@ Ext.onReady(function(){
 		}
 		else{
 			cetak=1;
+			printonly=1;
 			master_mutasi_create('print');
 		}
 
