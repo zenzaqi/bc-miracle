@@ -105,7 +105,7 @@ class M_cetak_kwitansi extends Model{
 					LEFT JOIN master_jual_produk on(jkwitansi_ref=jproduk_nobukti)
 					LEFT JOIN master_jual_rawat on(jkwitansi_ref=jrawat_nobukti)
 					LEFT JOIN master_jual_paket ON(jkwitansi_ref=jpaket_nobukti)
-					WHERE jkwitansi_stat_dok<>'Batal') as vu_catatan_kwitansi
+					WHERE jkwitansi_stat_dok = 'Tertutup') as vu_catatan_kwitansi
 				LEFT JOIN customer ON(vu_catatan_kwitansi.customer_id=customer.cust_id)
 				WHERE jkwitansi_master='$master_id'";
 			$result = $this->db->query($query);

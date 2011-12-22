@@ -562,21 +562,22 @@ class M_hpp extends Model{
 					$data[$i]["hpp"]=0;
 					$data[$i]["harga_satuan"]=0;*/
 					
-					$data[$i]["produk_id"]=$row->produk_id;
-					$data[$i]["produk_kode"]=$row->produk_kode;
-					$data[$i]["produk_nama"]=$row->produk_nama;
-					$data[$i]["satuan_id"]=$row->satuan_id;
-					$data[$i]["satuan_kode"]=$row->satuan_kode;
-					$data[$i]["satuan_nama"]=$row->satuan_nama;
-					$data[$i]["stok_awal"]=$stok_sebelum;
-					$data[$i]["persediaan_awal"]=$persediaan_sebelum;
-					$data[$i]["stok_saldo"]=$stok_sekarang;
-					$data[$i]["persediaan_akhir"]=$persediaan_sekarang;
-					$data[$i]["jumlah_beli"]=$jumlah_beli;
-					$data[$i]["pembelian"]=$harga_beli_sekarang*$jumlah_beli;
-					$data[$i]["barang_jual"]=($stok_sebelum+$jumlah_beli)-$stok_sekarang;
-					$data[$i]["hpp"]=$data[$i]["persediaan_awal"]+$data[$i]["pembelian"]-$data[$i]["barang_jual"]*$harga_beli_sekarang-$data[$i]["persediaan_akhir"];
-					$data[$i]["harga_satuan"]=$harga_beli_sekarang;
+					$data[$i]["produk_id"]		= $row->produk_id;
+					$data[$i]["produk_kode"]	= $row->produk_kode;
+					$data[$i]["produk_nama"]	= $row->produk_nama;
+					$data[$i]["satuan_id"]		= $row->satuan_id;
+					$data[$i]["satuan_kode"]	= $row->satuan_kode;
+					$data[$i]["satuan_nama"]	= $row->satuan_nama;
+					$data[$i]["stok_awal"]		= $stok_sebelum;
+					$data[$i]["persediaan_awal"]= $persediaan_sebelum;
+					$data[$i]["stok_saldo"]		= $stok_sekarang;
+					$data[$i]["persediaan_akhir"]= $persediaan_sekarang;
+					$data[$i]["jumlah_beli"]	= $jumlah_beli;
+					$data[$i]["pembelian"]		= $harga_beli_sekarang*$jumlah_beli;
+					$data[$i]["barang_jual"]	= ($stok_sebelum+$jumlah_beli)-$stok_sekarang;
+					$data[$i]["hpp"]			= $data[$i]["persediaan_awal"] + $data[$i]["pembelian"] - 
+												  $data[$i]["barang_jual"] * $harga_beli_sekarang - $data[$i]["persediaan_akhir"];
+					$data[$i]["harga_satuan"]	= $harga_beli_sekarang;
 					$i++;
 				}
 			}
