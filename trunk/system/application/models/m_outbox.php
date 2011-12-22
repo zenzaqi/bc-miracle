@@ -54,9 +54,9 @@ class M_outbox extends Model{
 		//function for get list record
 		function outbox_status_sent($filter,$start,$end){
 			$query =   "SELECT 
-							count(outbox_status) as status_sent
-						FROM outbox 
-						WHERE outbox_status = 'sent'";
+							count(status) as status_sent
+						FROM sentitems 
+						WHERE  status like '%OK%' or status = 'DeliveryPending'";
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
@@ -114,9 +114,9 @@ class M_outbox extends Model{
 		//function for get list record
 		function outbox_status_failed($filter,$start,$end){
 			$query =   "SELECT 
-							count(outbox_status) as status_failed
-						FROM outbox 
-						WHERE outbox_status = 'failed'";
+							count(status) as status_failed
+						FROM sentitems 
+						WHERE id not in (select id from sentitems WHERE status like '%OK%' or status = 'DeliveryPending')";
 			
 			if ($filter<>""){
 				$query .=eregi("WHERE",$query)? " AND ":" WHERE ";
