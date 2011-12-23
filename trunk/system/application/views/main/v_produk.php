@@ -2212,7 +2212,8 @@ Ext.onReady(function(){
 		itemCls: 'rmoney',
 		allowBlank: true,
 		width: 150,
-		maskRe: /([0-9]+)$/
+		maskRe: /([0-9]+)$/,
+		hidden: true
 	});
 	
 	produk_awal_nilaiField= new Ext.form.TextField({
