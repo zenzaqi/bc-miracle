@@ -20,7 +20,7 @@
 </head>
 <body onload="window.print();">
 <table summary='Inbox List'>
-	<caption>Daftar Pengambilan Paket</caption>
+	<caption>Daftar Pengambilan Paket <br><?php echo $tgl_ambil;?>[<?php echo $paket_nobukti; ?>]<br><?php echo $cust_nama;?>-<?php echo $cust_no; ?><br><?php echo $paket_nama;?></caption>
 	<thead><tr><th scope='col'>No</th>
 	<th scope='col'>Tgl Ambil</th>
 	<th scope='col'>Perawatan</th>

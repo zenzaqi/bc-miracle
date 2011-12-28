@@ -479,11 +479,21 @@ class C_master_ambil_paket extends Controller {
 		$dapaket_jumlah=trim(@$_POST["dapaket_jumlah"]);
 		$cust_nama=trim(@$_POST["cust_nama"]);
 		$tgl_ambil=trim(@$_POST["tgl_ambil"]);
+		$tgl_ambil=date('Y-m-d', strtotime(trim(@$_POST["tgl_ambil"])));
 		$referal=trim(@$_POST["referal"]);
 		$keterangan=trim(@$_POST["keterangan"]);
 		$dapaket_stat_dok=trim(@$_POST["dapaket_stat_dok"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
+		$paket_nobukti=trim(@$_POST["paket_nobukti"]);
+		$cust_no=trim(@$_POST["cust_no"]);
+		$paket_nama=trim(@$_POST["paket_nama"]);
+		
+		//$data["rawat_nama"]=" ".$rawat_nama." ";
+		/*$data["rawat_nama"]=" ".$rawat_nama." ";*/
+		
+		
+		
 		
 		$data["data_print"] = $this->m_master_ambil_paket->daftar_ambil_paket_print($rawat_nama
 																	   ,$dapaket_jumlah
@@ -494,6 +504,13 @@ class C_master_ambil_paket extends Controller {
 																	   ,$cust_nama
 																	   ,$option
 																	   ,$filter,$dapaket_dpaket);
+		$data["paket_nobukti"]=" ".$paket_nobukti." ";
+		$data["cust_no"]=" ".$cust_no." ";
+		$data["paket_nama"]=" ".$paket_nama." ";
+		$data["cust_nama"]=" ".$cust_nama." ";
+		$data["tgl_ambil"]=" ".$tgl_ambil." ";
+		
+		
 		$print_view=$this->load->view("main/p_daftar_ambil_paket.php",$data,TRUE);
 		if(!file_exists("print")){
 			mkdir("print");

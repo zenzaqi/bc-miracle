@@ -1206,7 +1206,7 @@ class M_master_ambil_paket extends Model{
 		function daftar_ambil_paket_print($rawat_nama ,$dapaket_jumlah,$tgl_ambil,$referal,$keterangan,$dapaket_stat_dok,$cust_nama,$option,$filter,$dapaket_dpaket){
 		
 			//full query
-			$query = "SELECT date_format(dapaket_tgl_ambil,'%d-%m-%Y') AS tanggal_ambil
+			$query = "SELECT apaket_faktur,apaket_faktur_tanggal,apaket_cust_no,apaket_paket_nama,date_format(dapaket_tgl_ambil,'%d-%m-%Y') AS tanggal_ambil
 					,cust_no as client_card
 					,cust_nama as customer
 					,rawat_nama as perawatan
@@ -1221,6 +1221,7 @@ class M_master_ambil_paket extends Model{
 				LEFT JOIN vu_karyawan AS dokter ON(dtrawat_petugas1=dokter.karyawan_id)
                 LEFT JOIN vu_karyawan AS terapis ON(dtrawat_petugas2=terapis.karyawan_id)
 				LEFT JOIN vu_karyawan AS referal ON(dapaket_referal=referal.karyawan_id)
+				LEFT JOIN master_ambil_paket on (dapaket_paket=apaket_id)
 				WHERE dapaket_dpaket='$dapaket_dpaket'
 				ORDER BY dapaket_tgl_ambil DESC";
 				
