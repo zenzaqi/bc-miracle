@@ -1132,8 +1132,8 @@ class M_master_jual_rawat extends Model{
 		}
 	}
     
-    function jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
-                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+    function jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_cashback_medis,$jrawat_bayar ,$jrawat_total
+                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$jrawat_ket_disk_medis, $datetime_now
                                 ,$jrawat_cara
                                 ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
                                 ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
@@ -1171,10 +1171,12 @@ class M_master_jual_rawat extends Model{
             "jrawat_tanggal"=>$jrawat_tanggal, 
             "jrawat_diskon"=>$jrawat_diskon,
             "jrawat_cashback"=>$jrawat_cashback,
+			"jrawat_cashback_medis"=>$jrawat_cashback_medis,
             "jrawat_bayar"=>$jrawat_bayar,
             "jrawat_totalbiaya"=>$jrawat_total,
             "jrawat_keterangan"=>$jrawat_keterangan,
             "jrawat_ket_disk"=>$jrawat_ket_disk,
+			"jrawat_ket_disk_medis"=>$jrawat_ket_disk_medis,
             "jrawat_update"=>$_SESSION[SESSION_USERID],
             "jrawat_date_update"=>$datetime_now,
             "jrawat_revised"=>$jrawat_revised+1
@@ -1301,6 +1303,7 @@ class M_master_jual_rawat extends Model{
 				jrawat_tanggal,
 				jrawat_diskon,
 				jrawat_cashback,
+				jrawat_cashback_medis,
 				jrawat_cara,
 				jrawat_cara2,
 				jrawat_cara3,
@@ -1309,6 +1312,7 @@ class M_master_jual_rawat extends Model{
 				jrawat_bayar,
 				jrawat_keterangan,
 				jrawat_ket_disk,
+				jrawat_ket_disk_medis,
 				jrawat_stat_dok,
 				jrawat_creator,
 				jrawat_date_create,
@@ -1406,7 +1410,7 @@ class M_master_jual_rawat extends Model{
 	
 	//function for update record
 	function master_jual_rawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_stat_dok, $jrawat_diskon
-									  ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai
+									  ,$jrawat_cara ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_cashback_medis,$jrawat_tunai_nilai
 									  ,$jrawat_tunai_nilai2, $jrawat_tunai_nilai3, $jrawat_voucher_no, $jrawat_voucher_cashback
 									  ,$jrawat_voucher_no2, $jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3
 									  ,$jrawat_total, $jrawat_bayar, $jrawat_subtotal, $jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama
@@ -1419,7 +1423,7 @@ class M_master_jual_rawat extends Model{
 									  ,$jrawat_cek_no3, $jrawat_cek_valid3, $jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank
 									  ,$jrawat_transfer_nama, $jrawat_transfer_nilai, $jrawat_transfer_bank2, $jrawat_transfer_nama2
 									  ,$jrawat_transfer_nilai2, $jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3
-									  ,$cetak, $jrawat_ket_disk, $drawat_count, $dcount_drawat_id
+									  ,$cetak, $jrawat_ket_disk, $jrawat_ket_disk_medis,$drawat_count, $dcount_drawat_id
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 									  ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
 									  ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming){
@@ -1480,7 +1484,7 @@ class M_master_jual_rawat extends Model{
 				}else{
 					//Customer TIDAK MEMILIKI Faktur Perawatan yang masih terbuka
 					$rs_jrawat = $this->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,'Terbuka' , $jrawat_cara2 ,$jrawat_cara3
-													,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
+													,$jrawat_keterangan , $jrawat_cashback,$jrawat_cashback_medis, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
 													,$jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2
 													,$jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal
 													,$jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2
@@ -1492,7 +1496,7 @@ class M_master_jual_rawat extends Model{
 													,$jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3
 													,$jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai
 													,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
-													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk
+													,$jrawat_transfer_nama3, $jrawat_transfer_nilai3 ,0 ,$jrawat_ket_disk, $jrawat_ket_disk_medis
 													,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
 													,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan,$jrawat_grooming);
 					if($rs_jrawat=='0'){
@@ -1527,8 +1531,8 @@ class M_master_jual_rawat extends Model{
 				 * ==> JIKA tidak sama, maka langsung dilanjutkan ke proses selanjutnya
 				*/
                 
-                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
-                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_cashback_medis,$jrawat_bayar ,$jrawat_total
+                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$jrawat_ket_disk_medis,$datetime_now
                                                             ,$jrawat_cara
                                                             ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
                                                             ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
@@ -1593,8 +1597,8 @@ class M_master_jual_rawat extends Model{
 				 * maka keluarkan peringatan "untuk mengcancel terlebih dahulu, kemudian dibuka lagi"
 				*/
                 $cetak = 0;
-                $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
-                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_cashback_medis,$jrawat_bayar ,$jrawat_total
+                                ,$jrawat_keterangan ,$jrawat_ket_disk ,$jrawat_ket_disk_medis,$datetime_now
                                 ,$jrawat_cara
                                 ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
                                 ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
@@ -1645,8 +1649,8 @@ class M_master_jual_rawat extends Model{
 				/*
 				 * di View Kasir Penjualan Perawatan ada penambahan detail baru
 				*/
-                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_bayar ,$jrawat_total
-                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$datetime_now
+                $jrawat_drawat_u = $this->jrawat_drawat_update($jrawat_id ,$jrawat_nobukti ,$jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cashback ,$jrawat_cashback_medis, $jrawat_bayar ,$jrawat_total
+                                                            ,$jrawat_keterangan ,$jrawat_ket_disk ,$jrawat_ket_disk_medis,$datetime_now
                                                             ,$jrawat_cara
                                                             ,$jrawat_kwitansi_no ,$jrawat_kwitansi_nilai
                                                             ,$jrawat_card_nama ,$jrawat_card_edc ,$jrawat_card_no ,$jrawat_card_nilai
@@ -1703,7 +1707,7 @@ class M_master_jual_rawat extends Model{
 	
 	//function for create new record
 	function master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok, $jrawat_cara2 ,$jrawat_cara3
-									  ,$jrawat_keterangan , $jrawat_cashback, $jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
+									  ,$jrawat_keterangan , $jrawat_cashback, $jrawat_cashback_medis,$jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
 									  ,$jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2, $jrawat_voucher_cashback2
 									  ,$jrawat_voucher_no3, $jrawat_voucher_cashback3, $jrawat_total, $jrawat_bayar, $jrawat_subtotal
 									  ,$jrawat_hutang, $jrawat_kwitansi_no, $jrawat_kwitansi_nama, $jrawat_kwitansi_nilai, $jrawat_kwitansi_no2
@@ -1715,7 +1719,7 @@ class M_master_jual_rawat extends Model{
 									  ,$jrawat_cek_bank2, $jrawat_cek_nilai2, $jrawat_cek_nama3, $jrawat_cek_no3, $jrawat_cek_valid3
 									  ,$jrawat_cek_bank3, $jrawat_cek_nilai3, $jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai
 									  ,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2, $jrawat_transfer_bank3
-									  ,$jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk
+									  ,$jrawat_transfer_nama3, $jrawat_transfer_nilai3, $cetak, $jrawat_ket_disk, $jrawat_ket_disk_medis
 									  ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat ,$array_drawat_jumlah ,$array_drawat_harga
 									  ,$array_drawat_diskon ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming){
 		$date_now = date('Y-m-d');
@@ -1738,10 +1742,12 @@ class M_master_jual_rawat extends Model{
 			"jrawat_grooming"=>$jrawat_grooming,
 			"jrawat_diskon"=>$jrawat_diskon, 
 			"jrawat_cashback"=>$jrawat_cashback,
+			"jrawat_cashback_medis"=>$jrawat_cashback_medis,
 			"jrawat_totalbiaya"=>$jrawat_total,
 			"jrawat_bayar"=>$jrawat_bayar,
 			"jrawat_keterangan"=>$jrawat_keterangan,
 			"jrawat_ket_disk"=>$jrawat_ket_disk,
+			"jrawat_ket_disk_medis"=>$jrawat_ket_disk_medis,
 			"jrawat_stat_dok"=>$jrawat_stat_dok,
 			"jrawat_creator"=>$_SESSION[SESSION_USERID]
 		);
@@ -1913,6 +1919,7 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pr.jrawat_tanggal,
 				vu_jrawat_pr.jrawat_diskon,
 				vu_jrawat_pr.jrawat_cashback,
+				vu_jrawat_pr.jrawat_cashback_medis,
 				vu_jrawat_pr.jrawat_cara,
 				vu_jrawat_pr.jrawat_cara2,
 				vu_jrawat_pr.jrawat_cara3,
@@ -1920,6 +1927,8 @@ class M_master_jual_rawat extends Model{
                 vu_jrawat_totalbiaya.jrawat_totalbiaya AS jrawat_totalbiaya,
 				vu_jrawat_pr.jrawat_bayar,
 				vu_jrawat_pr.jrawat_keterangan,
+				vu_jrawat_pr.jrawat_ket_disk,
+				vu_jrawat_pr.jrawat_ket_disk_medis,
 				vu_jrawat_pr.jrawat_stat_dok,
 				vu_jrawat_pr.jrawat_creator,
 				vu_jrawat_pr.jrawat_date_create,
@@ -1977,12 +1986,15 @@ class M_master_jual_rawat extends Model{
 				vu_jrawat_pk.jrawat_tanggal,
 				vu_jrawat_pk.jrawat_diskon,
 				vu_jrawat_pk.jrawat_cashback,
+				vu_jrawat_pk.jrawat_cashback_medis,
 				vu_jrawat_pk.jrawat_cara,
 				vu_jrawat_pk.jrawat_cara2,
 				vu_jrawat_pk.jrawat_cara3,
 				vu_jrawat_pk.jrawat_totalbiaya,
 				vu_jrawat_pk.jrawat_bayar,
 				vu_jrawat_pk.jrawat_keterangan,
+				vu_jrawat_pk.jrawat_ket_disk,
+				vu_jrawat_pk.jrawat_ket_disk_medis,
 				vu_jrawat_pk.dapaket_stat_dok AS jrawat_stat_dok,
 				vu_jrawat_pk.jrawat_creator,
 				vu_jrawat_pk.jrawat_date_create,
