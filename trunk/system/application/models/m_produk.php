@@ -265,7 +265,7 @@ class M_produk extends Model{
 		//function for update record
 		function produk_update($produk_id ,$produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi, $produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,$produk_dpromo,
-								$produk_point,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp ){
+								$produk_point,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai,$produk_tgl_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr, $produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp ){
 		
 		if ($produk_aktif=="")
 			$produk_aktif = "Aktif";
@@ -399,7 +399,8 @@ class M_produk extends Model{
 				"produk_aktif_cabang"=>$temp_aktif,
 				"produk_aktif"=>$produk_aktif,
 				"produk_saldo_awal"=>$produk_awal_jumlah,
-				"produk_nilai_saldo_awal"=>$produk_awal_nilai
+				"produk_nilai_saldo_awal"=>$produk_awal_nilai,
+				"produk_tgl_nilai_saldo_awal"=>$produk_tgl_awal_nilai
 			);
 			
 			if($produk_racikan=='true')
@@ -488,7 +489,7 @@ class M_produk extends Model{
 		//function for create new record
 		function produk_create($produk_kode ,$produk_kodelama ,$produk_group ,$produk_kategori , $produk_racikan, $produk_kontribusi ,$produk_jenis ,$produk_nama ,$produk_satuan ,
 								$produk_du ,$produk_dm , $produk_dultah, $produk_dcard, $produk_dkolega, $produk_dkeluarga, $produk_downer, $produk_dgrooming, $produk_dwartawan, $produk_dstaffdokter, $produk_dstaffnondokter,$produk_dpromo,
-								$produk_point ,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr,$produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp){
+								$produk_point ,$produk_kredit ,$produk_volume ,$produk_harga ,$produk_keterangan ,$produk_aktif,$produk_aktif_th ,$produk_aktif_ki ,$produk_aktif_hr ,$produk_aktif_tp ,$produk_aktif_dps ,$produk_aktif_jkt ,$produk_aktif_mta ,$produk_aktif_blpn ,$produk_aktif_kuta ,$produk_aktif_btm ,$produk_aktif_mks ,$produk_aktif_mdn ,$produk_aktif_lbk ,$produk_aktif_mnd ,$produk_aktif_ygk,$produk_aktif_corp,$produk_aktif_mlg, $produk_awal_jumlah, $produk_awal_nilai , $produk_tgl_awal_nilai, $produk_harga_ki,$produk_harga_mdn,$produk_harga_mnd,$produk_harga_ygk,$produk_harga_mta, $produk_harga_lbk, $produk_harga_hr,$produk_harga_tp, $produk_harga_dps, $produk_harga_blpn, $produk_harga_kuta, $produk_harga_corp){
 		/*if ($produk_aktif=="")
 			$produk_aktif = "Aktif";*/
 		if($produk_harga=="")
@@ -631,7 +632,8 @@ class M_produk extends Model{
 				"produk_aktif_cabang"=>$temp_aktif,
 				"produk_aktif"=>$produk_aktif,
 				"produk_saldo_awal"=>$produk_awal_jumlah,
-				"produk_nilai_saldo_awal"=>$produk_awal_nilai
+				"produk_nilai_saldo_awal"=>$produk_awal_nilai,
+				"produk_tgl_nilai_saldo_awal"=>$produk_tgl_awal_nilai
 			);
 			
 			if($produk_racikan=='true')

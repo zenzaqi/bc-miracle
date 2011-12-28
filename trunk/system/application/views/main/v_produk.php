@@ -73,6 +73,7 @@ var post2db = '';
 var msg = '';
 var pageS=15;
 var temp_satuan_add=0;
+var dt = new Date(); 
 
 /* declare variable here for Field*/
 var produk_idField;
@@ -119,6 +120,7 @@ var produk_hargaGroup;
 
 var produk_awal_jumlahField;
 var produk_awal_nilaiField;
+var produk_tanggal_awal_nilaiField;
 
 var produk_idSearchField;
 var produk_kodeSearchField;
@@ -328,6 +330,8 @@ Ext.onReady(function(){
 		if(produk_aktifField.getValue()!== null){produk_aktif_create = produk_aktifField.getValue();} 
 		if(produk_awal_jumlahField.getValue()!== null){produk_awal_jumlah_create = convertToNumber(produk_awal_jumlahField.getValue());} 
 		if(produk_awal_nilaiField.getValue()!== null){produk_awal_nilai_create = convertToNumber(produk_awal_nilaiField.getValue());} 
+		if(produk_tanggal_awal_nilaiField.getValue()!== ""){produk_tgl_awal_nilai_create = produk_tanggal_awal_nilaiField.getValue().format('Y-m-d');} 
+		
 		
 		Ext.Ajax.request({  
 			waitMsg: 'Mohon tunggu...',
@@ -393,7 +397,8 @@ Ext.onReady(function(){
 				produk_aktif_corp : produk_aktif_corpField.getValue(),
 				produk_aktif_mlg : produk_aktif_mlgField.getValue(),
 				produk_awal_jumlah : produk_awal_jumlah_create,
-				produk_awal_nilai : produk_awal_nilai_create
+				produk_awal_nilai : produk_awal_nilai_create,
+				produk_tgl_awal_nilai : produk_tgl_awal_nilai_create
 			}, 
 			success: function(response){             
 				var result=eval(response.responseText);
@@ -623,6 +628,8 @@ Ext.onReady(function(){
 		produk_awal_jumlahField.setValue('0');
 		produk_awal_nilaiField.reset();
 		produk_awal_nilaiField.setValue('0');
+		produk_tanggal_awal_nilaiField.setValue(null);
+		produk_tanggal_awal_nilaiField.setDisabled(false);
 	}
  	/* End of Function */
   
@@ -758,6 +765,7 @@ Ext.onReady(function(){
 			
 		produk_awal_jumlahField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_saldo_awal')));
 		produk_awal_nilaiField.setValue(CurrencyFormatted(produkListEditorGrid.getSelectionModel().getSelected().get('produk_nilai_saldo_awal')));
+		produk_tanggal_awal_nilaiField.setValue(produkListEditorGrid.getSelectionModel().getSelected().get('produk_tgl_nilai_saldo_awal'));
 		
 	}
 	/* End setValue to EDIT*/
@@ -767,6 +775,7 @@ Ext.onReady(function(){
 		if(post2db=="UPDATE"){
 			combo_produk_satuan.setDisabled(true);
 			combo_produk_nilai.setDisabled(true);
+			//produk_tanggal_awal_nilaiField.setDisabled(true);
 		}
 	}
     
@@ -950,6 +959,7 @@ Ext.onReady(function(){
 			{name: 'produk_aktif_cabang', type: 'string', mapping: 'produk_aktif_cabang'},
 			{name: 'produk_saldo_awal', type: 'float', mapping: 'produk_saldo_awal'},
 			{name: 'produk_nilai_saldo_awal', type: 'float', mapping: 'produk_nilai_saldo_awal'},
+			{name: 'produk_tgl_nilai_saldo_awal', type: 'date', dateFormat: 'Y-m-d', mapping: 'produk_tgl_nilai_saldo_awal'}, 			
 			{name: 'produk_harga_ki', type: 'float', mapping: 'produk_harga_ki'},
 			{name: 'produk_harga_mnd', type: 'float', mapping: 'produk_harga_mnd'},
 			{name: 'produk_harga_mdn', type: 'float', mapping: 'produk_harga_mdn'},
@@ -2227,6 +2237,12 @@ Ext.onReady(function(){
 		maskRe: /([0-9]+)$/
 	});
 	
+	/* Identify  produk_tanggal Field */
+	produk_tanggal_awal_nilaiField= new Ext.form.DateField({
+		id: 'produk_tanggal_awal_nilaiField',
+		fieldLabel: 'Tanggal Nilai Saldo Awal',
+		format : 'd-m-Y'
+	});
 	
 	/* Identify  produk_keterangan Field */
 	produk_keteranganField= new Ext.form.TextArea({
@@ -2526,7 +2542,7 @@ Ext.onReady(function(){
 				columnWidth:0.5,
 				layout: 'form',
 				border:false,
-				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_pointField, produk_kreditField,produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_idField, produk_aktifGroup] 
+				items: [produk_awal_jumlahField, produk_awal_nilaiField, produk_tanggal_awal_nilaiField, produk_pointField, produk_kreditField,produk_volumeField, produk_kontribusiField, produk_keteranganField, produk_idField, produk_aktifGroup] 
 			}
 			]
 	
@@ -3348,6 +3364,7 @@ Ext.onReady(function(){
 		produk_keteranganSearchField.setValue(null);
 		produk_aktifSearchField.reset();
 		produk_aktifSearchField.setValue('Aktif');
+		
 	}
 	
 	/* Field for search */
