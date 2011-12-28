@@ -5347,6 +5347,35 @@ Ext.override(Ext.form.Field, {
 	function detail_jual_produk_add(){
 		//djumlah_diskonField.setReadOnly(true);
 		djumlah_diskonField.setDisabled(true);
+	
+		//jika detail sudah ada 1, maka referal akan mengikuti row sebelumnya
+		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1)
+		{
+		// temp ini berfungsi utk menyimpan ID dari referal yang terakhir kali diinput. Jika program di Refresh / Cancel, maka akan kembali ke kondisi semula
+		var temp_produk = combo_reveral.getValue(1);
+		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
+			dproduk_id	:0,
+			dproduk_produk	:'',
+			dproduk_satuan	:'',
+			dproduk_jumlah	:1,
+			dproduk_harga	:0,
+			dproduk_subtotal:0,
+			dproduk_diskon_jenis: '',
+			dproduk_diskon	:0,
+			dproduk_subtotal_net:0,
+			dproduk_karyawan:temp_produk,
+			produk_harga_default:0
+		});
+		
+		editor_detail_jual_produk.stopEditing();
+		detail_jual_produk_DataStore.insert(0, edit_detail_jual_produk);
+		//detail_jual_produkListEditorGrid.getView().refresh();
+		detail_jual_produkListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_jual_produk.startEditing(0);
+		}
+		else
+		{
+		
 		var edit_detail_jual_produk= new detail_jual_produkListEditorGrid.store.recordType({
 			dproduk_id	:0,
 			dproduk_produk	:'',
@@ -5360,11 +5389,13 @@ Ext.override(Ext.form.Field, {
 			dproduk_karyawan:'',
 			produk_harga_default:0
 		});
+		
 		editor_detail_jual_produk.stopEditing();
 		detail_jual_produk_DataStore.insert(0, edit_detail_jual_produk);
 		//detail_jual_produkListEditorGrid.getView().refresh();
 		detail_jual_produkListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_produk.startEditing(0);
+		}
 	}
 	
 	//function for refresh detail

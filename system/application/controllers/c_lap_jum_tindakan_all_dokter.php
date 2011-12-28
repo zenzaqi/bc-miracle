@@ -196,13 +196,15 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		$tgl_awal=$tahun."-".$bulan;
 		
-		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_print($tgl_awal,$periode,$report_groupby,$trawat_dokter,$trawat_tglapp_start,$trawat_tglapp_end,$option,$filter);
+		
+		$result = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_print($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $cabang);
 		$nbrows=$result->num_rows();
 		
-		$result2 = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_print2($tgl_awal,$periode ,$trawat_tglapp_start ,$trawat_tglapp_end ,$trawat_dokter, $report_groupby);	
+		$result2 = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_print2($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $cabang);	
 		$nbrows2 = $result->num_rows();
 		if($nbrows>0){
 			foreach($result2->result_array() as $data2);
@@ -213,31 +215,34 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
    		/* We now have our array, let's build our HTML file */
 		$file = fopen("tindakanlist.html",'w');
 		fwrite($file, "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' /><title>Printing the Tindakan Grid</title><link rel='stylesheet' type='text/css' href='assets/modules/main/css/printstyle.css'/></head>");
-		fwrite($file, "<body onload='window.print()'><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER</caption><thead><tr><th scope='col'>Karyawan</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Jumlah Rawat</th><th scope='col'>Rawat Kredit</th><th scope='col'>Rawat Kredit(Rp)</th><th scope='col'>Total Kredit(Poin)</th><th scope='col'>Total Kredit(Rp)</th></tr></thead>
-		<tfoot>
-			<tr>		
-				<th>Grand Tot Kredit(Poin)</th>
-				<td colspan='$totcolumn'>");
-					fwrite($file,  $data2['grand_total']);
-					fwrite($file, " 
-				</td>
-			</tr>
-			<tr>
-				<th>Grand Tot Kredit(Rp)</th>
-				<td colspan='$totcolumn'>");
-					fwrite($file,  number_format($data2['grand_total_rp'],0,',',','));
-					fwrite($file, " 
-				</td>
-			</tr>
-			<tr>		
-				<th scope='row'>Total</th>
-				<td colspan='$totcolumn'>");
-					fwrite($file, $nbrows);
-					fwrite($file, " Tindakan
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>");
+		fwrite($file, "<body onload='window.print()'><table summary='Tindakan List'><caption>LAPORAN JUMLAH TINDAKAN DOKTER</caption><thead><tr><th scope='col'>No</th><th scope='col'>Kode</th><th scope='col'>Perawatan</th><th scope='col'>Dr.Chandra</th><th scope='col'>Prof.David</th><th scope='col'>Dr.Fanny</th><th scope='col'>Dr.Lanny</th><th scope='col'>Dr.Leni</th><th scope='col'>Dr.Novita</th><th scope='col'>Dr.Nunin</th><th scope='col'>Dr.Lince</th><th scope='col'>Dr.Sandra</th><th scope='col'>Dr.Vera</th><th scope='col'>Dr.Yurika</th></tr></thead>
+		<tfoot><tr><th>Total</th><td colspan='2'>");
+		fwrite($file, $nbrows);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref0']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref1']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref2']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref3']);
+		fwrite($file, "</td><td align='right' class='numeric'> ");
+		fwrite($file, $data2['tjt_total_ref4']);
+		fwrite($file, " </td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref5']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref6']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref7']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref8']);
+		fwrite($file, "</td><td align='right' class='numeric'>");
+		fwrite($file, $data2['tjt_total_ref9']);
+		fwrite($file, "</td><td align='right' class='numeric'> ");
+		fwrite($file, $data2['tjt_total_ref10']);
+		fwrite($file, "</td></tr></tfoot><tbody>");
+		
+		
 		$i=0;
 		if($nbrows>0){
 			foreach($result->result_array() as $data){
@@ -245,23 +250,35 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 				/*if($i%1==0){
 					fwrite($file," class='odd'");
 				}*/
-			
+				$i=$i+1;
 				fwrite($file, "><td >");
-				fwrite($file, $data['karyawan_username']);
+				fwrite($file, $i);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_kode']);
 				fwrite($file,"</td><td>");
 				fwrite($file, $data['rawat_nama']);
 				fwrite($file, "</td><td align='right' class='numeric'>");
-				fwrite($file, $data['Jumlah_rawat']);
+				fwrite($file, $data['tjt_ref0']);
 				fwrite($file, "</td><td align='right' class='numeric'>");
-				fwrite($file, $data['rawat_kredit']);
+				fwrite($file, $data['tjt_ref1']);
+				fwrite($file, "</td><td align='right' class='numeric'>");
+				fwrite($file, $data['tjt_ref2']);
+				fwrite($file, "</td><td align='right' class='numeric'>");
+				fwrite($file, $data['tjt_ref3']);
 				fwrite($file, "</td><td align='right' class='numeric'> ");
-				fwrite($file, number_format($data['rawat_kreditrp'],0,',',','));
+				fwrite($file, $data['tjt_ref4']);
 				fwrite($file, " </td><td align='right' class='numeric'>");
-				fwrite($file, $data['Total_kredit']);
+				fwrite($file, $data['tjt_ref5']);
 				fwrite($file, "</td><td align='right' class='numeric'>");
-				fwrite($file, number_format($data['Total_kreditrp'],0,',',','));
+				fwrite($file, $data['tjt_ref6']);
+				fwrite($file, "</td><td align='right' class='numeric'>");
+				fwrite($file, $data['tjt_ref7']);
+				fwrite($file, "</td><td align='right' class='numeric'>");
+				fwrite($file, $data['tjt_ref8']);
+				fwrite($file, "</td><td align='right' class='numeric'>");
+				fwrite($file, $data['tjt_ref9']);
+				fwrite($file, "</td><td align='right' class='numeric'> ");
+				fwrite($file, $data['tjt_ref10']);
 				fwrite($file, "</td></tr>");
 			}
 		}
@@ -274,29 +291,25 @@ class c_lap_jum_tindakan_all_dokter extends Controller {
 	/* Function to Export Excel document */
 	function report_tindakan_export_excel(){
 		//POST varibale here
-		$trawat_id=trim(@$_POST["trawat_id"]);
 		if(trim(@$_POST["trawat_tglapp_start"])!="")
 			$trawat_tglapp_start=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_start"])));
 		else
 			$trawat_tglapp_start="";
+			
 		if(trim(@$_POST["trawat_tglapp_end"])!="")
 			$trawat_tglapp_end=date('Y-m-d', strtotime(trim(@$_POST["trawat_tglapp_end"])));
 		else
 			$trawat_tglapp_end="";
 
-		$trawat_dokter=trim(@$_POST["trawat_dokter"]);
 		$report_groupby=trim(@$_POST["report_groupby"]);
-		$option=$_POST['currentlisting'];
 		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
 		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
 		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		$cabang=(isset($_POST['cabang']) ? @$_POST['cabang'] : @$_GET['cabang']);
 		
 		$tgl_awal=$tahun."-".$bulan;
-
-		$filter=$_POST["query"];
 		
-		$query = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_export_excel($tgl_awal,$periode,$trawat_id ,$trawat_tglapp_start , $trawat_tglapp_end, $trawat_dokter,
-																				$report_groupby, $option, $filter);
+		$query = $this->m_lap_jum_tindakan_all_dokter->report_tindakan_export_excel($tgl_awal,$periode, $trawat_tglapp_start ,$trawat_tglapp_end, $report_groupby, $cabang);
 		$this->load->plugin('to_excel');
 		to_excel($query,"Report_Tindakan_Dokter"); 
 		echo '1';

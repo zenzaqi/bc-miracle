@@ -4506,6 +4506,32 @@ Ext.override(Ext.form.Field, {
 	//function of detail add
 	function detail_jual_paket_add(){
 		dpaket_jumlahdiskonField.setReadOnly(true);
+	
+		//jika detail sudah ada 1, maka referal akan mengikuti row sebelumnya
+		if(detail_jual_paketListEditorGrid.selModel.getCount() == 1)
+		{
+		// temp ini berfungsi utk menyimpan ID dari referal yang terakhir kali diinput. Jika program di Refresh / Cancel, maka akan kembali ke kondisi semula
+		var temp_paket = combo_reveral_paket.getValue(1);
+		var edit_detail_jual_paket= new detail_jual_paketListEditorGrid.store.recordType({
+			dpaket_id	:0,		
+			dpaket_paket	:'',
+			dpaket_jumlah	:1,
+			dpaket_kadaluarsa	:null,
+			dpaket_harga	:0,
+			dpaket_subtotal	:0,
+			dpaket_diskon_jenis:'',
+			dpaket_diskon	:0,
+			dpaket_subtotal_net	:0,
+			dpaket_karyawan :temp_paket
+		});
+		editor_detail_jual_paket.stopEditing();
+		detail_jual_paket_DataStore.insert(0, edit_detail_jual_paket);
+		detail_jual_paketListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_jual_paket.startEditing(0);
+		}
+		else
+		{
+		
 		var edit_detail_jual_paket= new detail_jual_paketListEditorGrid.store.recordType({
 			dpaket_id	:0,		
 			dpaket_paket	:'',
@@ -4522,6 +4548,10 @@ Ext.override(Ext.form.Field, {
 		detail_jual_paket_DataStore.insert(0, edit_detail_jual_paket);
 		detail_jual_paketListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_paket.startEditing(0);
+		
+		}
+		
+		
 	}
 	//function for insert detail
 	function detail_jual_paket_insert(){
