@@ -575,9 +575,11 @@ class M_hpp extends Model{
 					$data[$i]["jumlah_beli"]	= $jumlah_beli;
 					$data[$i]["pembelian"]		= $harga_beli_sekarang*$jumlah_beli;
 					$data[$i]["barang_jual"]	= ($stok_sebelum+$jumlah_beli)-$stok_sekarang;
-					$data[$i]["hpp"]			= $data[$i]["persediaan_awal"] + $data[$i]["pembelian"] - 
+					$data[$i]["hpp"]			= $data[$i]["persediaan_awal"] + $data[$i]["pembelian"] - $data[$i]["persediaan_akhir"];
+
+/*					$data[$i]["hpp"]			= $data[$i]["persediaan_awal"] + $data[$i]["pembelian"] - 
 												  $data[$i]["barang_jual"] * $harga_beli_sekarang - $data[$i]["persediaan_akhir"];
-					$data[$i]["harga_satuan"]	= $harga_beli_sekarang;
+*/					$data[$i]["harga_satuan"]	= $harga_beli_sekarang;
 					$i++;
 				}
 			}
