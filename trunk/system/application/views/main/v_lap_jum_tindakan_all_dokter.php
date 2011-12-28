@@ -628,13 +628,13 @@ Ext.onReady(function(){
 			text: 'Export Excel',
 			tooltip: 'Export to Excel(.xls) Document',
 			iconCls:'icon-xls',
-			disabled: true,
+			disabled: false,
 			handler: report_tindakan_all_export_excel
 		}, '-',{
 			text: 'Print',
 			tooltip: 'Print Document',
 			iconCls:'icon-print',
-			disabled: true,
+			disabled: false,
 			handler: report_tindakan_print  
 		}
 		]
@@ -921,13 +921,14 @@ Ext.onReady(function(){
 		var searchquery = "";
 		var trawat_cust_print=null;
 		var win;              
+		var report_tindakan_id_print=null;
 		var report_tindakan_tgl_start_print=null;
 		var report_tindakan_tgl_end_print=null;
-		var report_tindakan_dokter_print=null;
 		var report_tindakan_groupby_print=null;
 		var report_tindakan_tmedis_bulan=null;
 		var report_tindakan_tmedis_tahun=null;
 		var report_tindakan_tmedis_periode=null;
+		var cabang_conn	= '';
 		
 		// check if we do have some search data...
 		if(report_tindakan_allDataStore.baseParams.query!==null){searchquery = report_tindakan_allDataStore.baseParams.query;}
@@ -937,7 +938,11 @@ Ext.onReady(function(){
 		if(report_tindakan_all_groupbyField.getValue()!==null){report_tindakan_groupby_print=report_tindakan_all_groupbyField.getValue();}
 		if(report_tindakan_all_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_all_bulanField.getValue();}
 		if(report_tindakan_all_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_all_tahunField.getValue();}
-		
+		if(report_tindakan_all_cabangField.getValue()=='Miracle Thamrin') {cabang_conn = 'default';}
+		else {
+			cabang_conn=report_tindakan_all_cabangField.getValue(); 
+			if (report_tindakan_all_onlineField.getValue() == true) {cabang_conn = cabang_conn + '2';}
+		}
 		if(report_tindakan_all_tbar_periodeField.getValue()=='Tanggal'){
 			report_tindakan_tmedis_periode='tanggal';
 		}else if(report_tindakan_all_tbar_periodeField.getValue()=='Bulan'){
@@ -953,13 +958,14 @@ Ext.onReady(function(){
 			task: "PRINT",
 		  	query: searchquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
+			report_tindakan_id	: report_tindakan_id_print,
 			trawat_tglapp_start	: 	report_tindakan_tgl_start_print,
 			trawat_tglapp_end	: 	report_tindakan_tgl_end_print,
-			trawat_dokter	:	report_tindakan_dokter_print,
 			report_groupby	:	report_tindakan_groupby_print,
 			bulan		: report_tindakan_tmedis_bulan,
 			tahun		: report_tindakan_tmedis_tahun,
 			periode		: report_tindakan_tmedis_periode,
+			cabang		: cabang_conn,
 		  	currentlisting: report_tindakan_allDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -996,32 +1002,29 @@ Ext.onReady(function(){
 	
 	/* Function for print Export to Excel Grid */
 	function report_tindakan_all_export_excel(){
-		var searchquery = "";
-		var tindakan_dokter_2excel=null;
-		var rawat_kode_2excel=null;
-		var tindakan_perawatan_2excel=null;
-		var dtrawat_edit_2excel=null;
-		var dtrawat_skredit_2excel=null;
-		var dtrawat_jkredit_2excel=null;
-		//var dtrawat_kredit_2excel=null;
-		
-		var report_tindakan_tgl_start_search=null;
-		var report_tindakan_tgl_end_search=null;
-		var report_tindakan_groupby_search=null;
+		var excelquery = "";
+		var report_tindakan_id_excel=null;
+		var report_tindakan_tgl_start_excel=null;
+		var report_tindakan_tgl_end_excel=null;
+		var report_tindakan_groupby_excel=null;
 		var report_tindakan_tmedis_bulan=null;
 		var report_tindakan_tmedis_tahun=null;
 		var report_tindakan_tmedis_periode=null;
+		var cabang_conn	= '';
 		
 		var win;              
 		// check if we do have some search data...
-		if(report_tindakan_allDataStore.baseParams.query!==null){searchquery = report_tindakan_allDataStore.baseParams.query;}
+		if(report_tindakan_allDataStore.baseParams.query!==null){excelquery = report_tindakan_allDataStore.baseParams.query;}
+		if(Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_excel=Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue();}
+		if(Ext.getCmp('report_tindakan_all_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_excel=Ext.getCmp('report_tindakan_all_tglEndSearchField').getValue();}
+		if(report_tindakan_all_groupbyField.getValue()!==null){report_tindakan_groupby_excel=report_tindakan_all_groupbyField.getValue();}
 		if(report_tindakan_all_bulanField.getValue()!==null){report_tindakan_tmedis_bulan=report_tindakan_all_bulanField.getValue();}
 		if(report_tindakan_all_tahunField.getValue()!==null){report_tindakan_tmedis_tahun=report_tindakan_all_tahunField.getValue();}
-		
-		if(Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue()!==null){report_tindakan_tgl_start_search=Ext.getCmp('report_tindakan_all_tglStartSearchField').getValue();}
-		if(Ext.getCmp('report_tindakan_all_tglEndSearchField').getValue()!==null){report_tindakan_tgl_end_search=Ext.getCmp('report_tindakan_all_tglEndSearchField').getValue();}
-		if(report_tindakan_all_groupbyField.getValue()!==null){report_tindakan_groupby_search=report_tindakan_all_groupbyField.getValue();}
-		
+		if(report_tindakan_all_cabangField.getValue()=='Miracle Thamrin') {cabang_conn = 'default';}
+		else {
+			cabang_conn=report_tindakan_all_cabangField.getValue(); 
+			if (report_tindakan_all_onlineField.getValue() == true) {cabang_conn = cabang_conn + '2';}
+		}
 		if(report_tindakan_all_tbar_periodeField.getValue()=='Tanggal'){
 			report_tindakan_tmedis_periode='tanggal';
 		}else if(report_tindakan_all_tbar_periodeField.getValue()=='Bulan'){
@@ -1035,21 +1038,25 @@ Ext.onReady(function(){
 		url: 'index.php?c=c_lap_jum_tindakan_all_dokter&m=get_action',
 		params: {
 			task: "EXCEL",
-		  	query: searchquery,                    		// if we are doing a quicksearch, use this
+		  	query: excelquery,                    		// if we are doing a quicksearch, use this
 			//if we are doing advanced search, use this
-			trawat_tglapp_start	: 	report_tindakan_tgl_start_search,
-			trawat_tglapp_end	: 	report_tindakan_tgl_end_search,
-			report_groupby	:	report_tindakan_groupby_search,
-		  	currentlisting: report_tindakan_allDataStore.baseParams.task, // this tells us if we are searching or not
+			report_tindakan_id	: report_tindakan_id_excel,
+			trawat_tglapp_start	: 	report_tindakan_tgl_start_excel,
+			trawat_tglapp_end	: 	report_tindakan_tgl_end_excel,
+			report_groupby	:	report_tindakan_groupby_excel,
 			bulan		: report_tindakan_tmedis_bulan,
 			tahun		: report_tindakan_tmedis_tahun,
-			periode		: report_tindakan_tmedis_periode
+			periode		: report_tindakan_tmedis_periode,
+			cabang		: cabang_conn,
+			currentlisting: report_tindakan_allDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
 		  	var result=eval(response.responseText);
 		  	switch(result){
 		  	case 1:
 				win = window.location=('./export2excel.php');
+				//Ext.MessageBox.hide();
+				//win = window.open('./print/trial_lap_jum_tind_all_dokter.xls','lap_jum_tind_dokterlist','height=400,width=600,resizable=1,scrollbars=1, menubar=1');
 				break;
 		  	default:
 				Ext.MessageBox.show({

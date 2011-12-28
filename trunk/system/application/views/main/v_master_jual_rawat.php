@@ -5605,6 +5605,33 @@ Ext.override(Ext.form.Field, {
 		drawat_jumlahField.setDisabled(false);
 		drawat_diskonField.setReadOnly(true);
 		master_jual_rawat_createForm.savePrintButton.disable();
+		
+		//jika detail sudah ada 1, maka referal akan mengikuti row sebelumnya
+		if(detail_jual_rawatListEditorGrid.selModel.getCount() == 1)
+		{
+		// temp ini berfungsi utk menyimpan ID dari referal yang terakhir kali diinput. Jika program di Refresh / Cancel, maka akan kembali ke kondisi semula
+		var temp_rawat = combo_referal_kasir.getValue(1);
+		var edit_detail_jual_rawat= new detail_jual_rawatListEditorGrid.store.recordType({
+			drawat_id	:0,
+			drawat_rawat	:'',
+			drawat_jumlah	:1,
+			drawat_harga	:0,
+			drawat_subtotal	:0,
+			drawat_diskon_jenis: '',
+			drawat_diskon	:0,
+			drawat_subtotal_net	:0,
+			drawat_karyawan:'',
+			drawat_sales : temp_rawat
+		});
+		editor_detail_jual_rawat.stopEditing();
+		detail_jual_rawat_DataStore.insert(0, edit_detail_jual_rawat);
+		//detail_jual_rawatListEditorGrid.getView().refresh();
+		detail_jual_rawatListEditorGrid.getSelectionModel().selectRow(0);
+		editor_detail_jual_rawat.startEditing(0);
+			
+		}
+		//jika data masih kosong, maka masuk ke state ini
+		else{
 		var edit_detail_jual_rawat= new detail_jual_rawatListEditorGrid.store.recordType({
 			drawat_id	:0,
 			drawat_rawat	:'',
@@ -5622,6 +5649,7 @@ Ext.override(Ext.form.Field, {
 		//detail_jual_rawatListEditorGrid.getView().refresh();
 		detail_jual_rawatListEditorGrid.getSelectionModel().selectRow(0);
 		editor_detail_jual_rawat.startEditing(0);
+		}
 	}
 	
 	//function for refresh detail

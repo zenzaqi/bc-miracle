@@ -2797,7 +2797,11 @@ Ext.onReady(function(){
 		if(detail_ambil_paketStore.baseParams.referal!==""){referal_2print = detail_ambil_paketStore.baseParams.referal;}
 		if(detail_ambil_paketStore.baseParams.keterangan!==""){keterangan_2print = detail_ambil_paketStore.baseParams.keterangan;}
 		if(detail_ambil_paketStore.baseParams.dapaket_stat_dok!==""){dapaket_stat_dok_2print = detail_ambil_paketStore.baseParams.dapaket_stat_dok;}
-
+		if(detail_ambil_paketStore.baseParams.apaket_paket_nama!==""){paket_nama_2print = detail_ambil_paketStore.baseParams.apaket_paket_nama;}
+		if(detail_ambil_paketStore.baseParams.apaket_faktur!==""){paket_nobukti_2print = detail_ambil_paketStore.baseParams.apaket_faktur;}
+		if(detail_ambil_paketStore.baseParams.apaket_cust_no!==""){cust_no_2print = detail_ambil_paketStore.baseParams.apaket_cust_no;}
+		
+		
 		Ext.Ajax.request({   
 		waitMsg: 'Mohon tunggu...',
 		url: 'index.php?c=c_master_ambil_paket&m=get_action',
@@ -2807,11 +2811,15 @@ Ext.onReady(function(){
 			dapaket_dpaket		: 	eval(get_pk_id()),			
 			rawat_nama			:	rawat_nama_2print, 
 			dapaket_jumlah		:	dapaket_jumlah_2print, 
-			cust_nama			:	cust_nama_2print, 
+			cust_nama			:	ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_nama'), 
 			referal				:	referal_2print,
 			keterangan			:	keterangan_2print,
 			dapaket_stat_dok	:	dapaket_stat_dok_2print,
-			tgl_ambil			:	tgl_ambil_2print,
+			tgl_ambil			:	ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_tanggal'),
+			paket_nama			: 	ambil_paketListEditorGrid.getSelectionModel().getSelected().get('paket_nama'),
+			paket_nobukti		:	ambil_paketListEditorGrid.getSelectionModel().getSelected().get('jpaket_nobukti'),
+			cust_no				: 	ambil_paketListEditorGrid.getSelectionModel().getSelected().get('cust_no'),	
+			
 		  	currentlisting: detail_ambil_paketStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
