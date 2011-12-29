@@ -58,6 +58,7 @@ class C_master_jual_paket extends Controller {
 			switch($group){
 				case "Tanggal": $print_view=$this->load->view("main/p_rekap_jual_tanggal.php",$data,TRUE);break;
 				case "Customer": $print_view=$this->load->view("main/p_rekap_jual_customer.php",$data,TRUE);break;
+				case "Voucher": $print_view=$this->load->view("main/p_rekap_jual_voucher.php",$data,TRUE);break;
 				default: $print_view=$this->load->view("main/p_rekap_jual.php",$data,TRUE);break;
 			}
 		}else{

@@ -1353,7 +1353,7 @@ Ext.override(Ext.form.Field, {
 		var hutang_field=0;
 		var diskon_field=0;
 		var cashback_field=0;
-	
+		
 		jproduk_idField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_id'));
 		jproduk_nobuktiField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_nobukti'));
 		jproduk_karyawanField.setValue(master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('karyawan_nama'));
@@ -1879,10 +1879,10 @@ Ext.override(Ext.form.Field, {
 			combo_jual_produk.setDisabled(false);
 			combo_satuan_produk.setDisabled(false);
 			djumlah_beli_produkField.setDisabled(false);
-			dharga_konversiField.setDisabled(false);
+			//dharga_konversiField.setDisabled(false);
 			dsub_totalField.setDisabled(false);
 			djenis_diskonField.setDisabled(false);
-			djumlah_diskonField.setDisabled(false);
+			//djumlah_diskonField.setDisabled(false);
 			dsub_total_netField.setDisabled(false);
 			combo_reveral.setDisabled(false);
 			dharga_defaultField.setDisabled(false);
@@ -1890,6 +1890,9 @@ Ext.override(Ext.form.Field, {
             jproduk_cashback_cfField.setDisabled(false);
 			jproduk_ket_diskField.setDisabled(false);
             jproduk_stat_dokField.setDisabled(false);
+			
+			djumlah_diskonField.setDisabled(true);
+			dharga_konversiField.setDisabled(true);
 		}
 		if(jproduk_post2db=="UPDATE" && master_jual_produkListEditorGrid.getSelectionModel().getSelected().get('jproduk_stat_dok')=="Tertutup"){
 			jproduk_custField.setDisabled(true);
@@ -1988,6 +1991,7 @@ Ext.override(Ext.form.Field, {
 			jproduk_diskonField.setDisabled(true);
 			jproduk_cashback_cfField.setDisabled(true);
 			jproduk_ket_diskField.setDisabled(true);
+
 			<?php if(eregi('U|C',$this->m_security->get_access_group_by_kode('MENU_JUALPRODUK'))){ ?>
 			master_jual_produk_createForm.jproduk_savePrint.disable();
 			<?php } ?>
@@ -5347,7 +5351,7 @@ Ext.override(Ext.form.Field, {
 	function detail_jual_produk_add(){
 		//djumlah_diskonField.setReadOnly(true);
 		djumlah_diskonField.setDisabled(true);
-	
+		dharga_konversiField.setDisabled(true);
 		//jika detail sudah ada 1, maka referal akan mengikuti row sebelumnya
 		if(detail_jual_produkListEditorGrid.selModel.getCount() == 1)
 		{

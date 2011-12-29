@@ -106,13 +106,13 @@ Ext.onReady(function(){
 	var group_master_Store= new Ext.data.SimpleStore({
 			id: 'group_master_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Voucher']]
 	});
 	
 	var group_detail_Store= new Ext.data.SimpleStore({
 			id: 'group_detail_Store',
 			fields:['group'],
-			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon']]
+			data:[['No Faktur'],['Tanggal'],['Customer'],['Produk'],['Sales'],['Jenis Diskon'],['Group 1']]
 	});
 	
 	var group_grooming_Store= new Ext.data.SimpleStore({

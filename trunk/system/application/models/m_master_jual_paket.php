@@ -872,6 +872,7 @@ class M_master_jual_paket extends Model{
 							"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
 							"dpaket_sales"=>$dpaket_sales,
 							"dpaket_sisa_paket"=>$dpaket_sisa_paket,
+							"dpaket_isi_paket"=>$dpaket_sisa_paket, //dpaket_isi_paket menyimpan total dari jumlah isi paket yg di beli, kondisi awal ketika insert/Create, dpaket_isi_paket akan selalu sama dengan dpaket_sisa_paket
 							"dpaket_update"=>@$_SESSION[SESSION_USERID],
 							"dpaket_date_update"=>$datetime_now,
 							"dpaket_revised"=>$dpaket_revised+1
@@ -898,6 +899,7 @@ class M_master_jual_paket extends Model{
 						"dpaket_diskon_jenis"=>$dpaket_diskon_jenis,
 						"dpaket_sales"=>$dpaket_sales,
 						"dpaket_sisa_paket"=>$dpaket_sisa_paket,
+						"dpaket_isi_paket"=>$dpaket_sisa_paket, //dpaket_isi_paket menyimpan total dari jumlah isi paket yg di beli, kondisi awal ketika insert/Create, dpaket_isi_paket akan selalu sama dengan dpaket_sisa_paket
 						"dpaket_creator"=>@$_SESSION[SESSION_USERID]
 					);
 					$this->db->insert('detail_jual_paket', $data); 
