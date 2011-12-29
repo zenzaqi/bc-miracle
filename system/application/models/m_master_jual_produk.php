@@ -49,6 +49,7 @@ class M_master_jual_produk extends Model{
 			case "Produk": $order_by=" ORDER BY produk_id,satuan_nama ASC";break;
 			case "Sales": $order_by=" ORDER BY sales ASC";break;
 			case "Jenis Diskon": $order_by=" ORDER BY diskon_jenis";break;
+			case "Group 1": $order_by=" ORDER BY group_nama, produk_nama";break;
 			default: $order_by=" ORDER BY no_bukti ASC";break;
 		}
 		
@@ -66,14 +67,18 @@ class M_master_jual_produk extends Model{
 				else if($periode=='bulan')
 					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT vu_detail_jual_produk.*, produk_group.group_nama AS group_nama FROM vu_detail_jual_produk 
+						left join produk_group on produk_group.group_id = vu_detail_jual_produk.produk_group
+					WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			} else if($opsi_status=='tertutup') {
 				if($periode=='all')
 					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' ".$order_by;
 				else if($periode=='bulan')
 					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m')='".$tgl_awal."' ".$order_by;
 				else if($periode=='tanggal')
-					$sql="SELECT * FROM vu_detail_jual_produk WHERE jproduk_stat_dok='Tertutup' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
+					$sql="SELECT vu_detail_jual_produk.*, produk_group.group_nama AS group_nama FROM vu_detail_jual_produk 
+						left join produk_group on produk_group.group_id = vu_detail_jual_produk.produk_group
+					WHERE jproduk_stat_dok<>'Terbuka' AND date_format(tanggal,'%Y-%m-%d')>='".$tgl_awal."' AND date_format(tanggal,'%Y-%m-%d')<='".$tgl_akhir."' ".$order_by;
 			}
 		}
 		else if($opsi=='grooming'){
