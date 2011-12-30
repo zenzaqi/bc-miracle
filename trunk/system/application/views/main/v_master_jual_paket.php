@@ -1705,11 +1705,11 @@ Ext.override(Ext.form.Field, {
 			master_jual_paket_createForm.jpaketSavePrintButton.enable();
 			combo_jual_paket.setDisabled(false);
 			dpaket_jumlahField.setDisabled(false);
-			dpaket_kadaluarsaField.setDisabled(true);
+			dpaket_kadaluarsaField.setDisabled(false);
 			dpaket_hargaField.setDisabled(true);
 			dpaket_subtotalField.setDisabled(false);
 			dpaket_jenisdiskonField.setDisabled(false);
-			dpaket_jumlahdiskonField.setDisabled(true);
+			dpaket_jumlahdiskonField.setDisabled(false);
 			dpaket_subtotalnetField.setDisabled(false);
 			combo_reveral_paket.setDisabled(false);
 			detail_pengguna_paketListEditorGrid.setDisabled(false);
@@ -6208,4 +6208,4 @@ Ext.override(Ext.form.Field, {
         <div id="form_paket_addEdit"></div>
     </div>
 </div>
-</body>
+</body>>
