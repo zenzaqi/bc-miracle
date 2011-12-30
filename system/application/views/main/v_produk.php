@@ -288,6 +288,7 @@ Ext.onReady(function(){
 		var produk_harga_createblpn=null;
 		var produk_harga_createkuta=null;
 		var produk_harga_createcorp=null;
+		var produk_tgl_awal_nilai_create=null;
 		
 		if(produk_idField.getValue()!== null){produk_id_create_pk = produk_idField.getValue();}else{produk_id_create_pk=get_pk_id();} 
 		if(produk_kodeField.getValue()!== null){produk_kode_create = produk_kodeField.getValue();} 
