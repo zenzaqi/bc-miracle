@@ -81,6 +81,15 @@ class C_lap_jum_penj_produk extends Controller {
 		echo $result;
 	}
 	
+	function get_group1_list(){
+		$query = isset($_POST['query']) ? @$_POST['query'] : @$_GET['query'];
+		$start = (integer) (isset($_POST['start']) ? @$_POST['start'] : @$_GET['start']);
+		$end = (integer) (isset($_POST['limit']) ? @$_POST['limit'] : @$_GET['limit']);
+			
+		$result=$this->m_public_function->get_group1_list($query,$start,$end);
+		echo $result;
+	}
+	
 	//function fot list record
 	function lap_jum_penj_produk_list2(){
 		
@@ -104,12 +113,18 @@ class C_lap_jum_penj_produk extends Controller {
 		else
 			$ljpp_tgl_end="";
 
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);	
+		$opsi_jproduk = (isset($_POST['opsi_jproduk']) ? @$_POST['opsi_jproduk'] : @$_GET['opsi_jproduk']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
+		
 		$ljpp_karyawan_id=trim(@$_POST["ljpp_karyawan_id"]);
-		$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
+		//$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_search($ljpp_id ,$ljpp_tgl_start ,$ljpp_tgl_end ,$ljpp_karyawan_id, $ljpp_groupby, $start,$end);
+		$result = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_search($group1_id,$bulan, $tahun, $opsi_jproduk,$periode,$ljpp_id ,$ljpp_tgl_start ,$ljpp_tgl_end ,$ljpp_karyawan_id, /*$ljpp_groupby, */$start,$end);
 		echo $result;
 	}
 
@@ -125,12 +140,18 @@ class C_lap_jum_penj_produk extends Controller {
 		else
 			$ljpp_tgl_end="";
 
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);	
+		$opsi_jproduk = (isset($_POST['opsi_jproduk']) ? @$_POST['opsi_jproduk'] : @$_GET['opsi_jproduk']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
+			
 		$ljpp_karyawan_id=trim(@$_POST["ljpp_karyawan_id"]);
-		$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
+		//$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
 		
 		$start = (integer) (isset($_POST['start']) ? $_POST['start'] : $_GET['start']);
 		$end = (integer) (isset($_POST['limit']) ? $_POST['limit'] : $_GET['limit']);
-		$result = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_search2($ljpp_id ,$ljpp_tgl_start ,$ljpp_tgl_end ,$ljpp_karyawan_id, $ljpp_groupby, $start,$end);
+		$result = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_search2($group1_id,$bulan, $tahun, $opsi_jproduk,$periode,$ljpp_id ,$ljpp_tgl_start ,$ljpp_tgl_end ,$ljpp_karyawan_id, /*$ljpp_groupby,*/ $start,$end);
 		echo $result;
 	}
 	
@@ -144,14 +165,20 @@ class C_lap_jum_penj_produk extends Controller {
 			$ljpp_tgl_end=date('Y-m-d', strtotime(trim(@$_POST["ljpp_tgl_end"])));
 		else
 			$ljpp_tgl_end="";
-
+		
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi_jproduk = (isset($_POST['opsi_jproduk']) ? @$_POST['opsi_jproduk'] : @$_GET['opsi_jproduk']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
 		$ljpp_karyawan_id=trim(@$_POST["ljpp_karyawan_id"]);
-		$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
+		//$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$result = $this->m_lap_jum_penj_produk->report_tindakan_print($ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
-																				$ljpp_groupby, $option, $filter);
+		$result = $this->m_lap_jum_penj_produk->report_tindakan_print($group1_id,$bulan, $tahun, $opsi_jproduk,$periode,$ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
+																				/*$ljpp_groupby,*/ $option, $filter);
 		$nbrows=$result->num_rows();
 		$totcolumn=5;
    		/* We now have our array, let's build our HTML file */
@@ -198,14 +225,20 @@ class C_lap_jum_penj_produk extends Controller {
 			$ljpp_tgl_end=date('Y-m-d', strtotime(trim(@$_POST["ljpp_tgl_end"])));
 		else
 			$ljpp_tgl_end="";
-
+	
+		$bulan=(isset($_POST['bulan']) ? @$_POST['bulan'] : @$_GET['bulan']);
+		$tahun=(isset($_POST['tahun']) ? @$_POST['tahun'] : @$_GET['tahun']);
+		$opsi_jproduk = (isset($_POST['opsi_jproduk']) ? @$_POST['opsi_jproduk'] : @$_GET['opsi_jproduk']);
+		$group1_id = (integer) (isset($_POST['group1_id']) ? @$_POST['group1_id'] : @$_GET['group1_id']);
+		$periode=(isset($_POST['periode']) ? @$_POST['periode'] : @$_GET['periode']);
+		
 		$ljpp_karyawan_id=trim(@$_POST["ljpp_karyawan_id"]);
-		$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
+		//$ljpp_groupby=trim(@$_POST["ljpp_groupby"]);
 		$option=$_POST['currentlisting'];
 		$filter=$_POST["query"];
 		
-		$query = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_exportExcel($ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
-																				$ljpp_groupby, $option, $filter);
+		$query = $this->m_lap_jum_penj_produk->lap_jum_penj_produk_exportExcel($group1_id,$bulan, $tahun, $opsi_jproduk,$periode,$ljpp_tgl_start , $ljpp_tgl_end, $ljpp_karyawan_id,
+																				/*$ljpp_groupby, */$option, $filter);
 		$this->load->plugin('to_excel');
 		to_excel($query,"Report_Jmlh_Penj_Produk"); 
 		echo '1';

@@ -105,7 +105,11 @@ var lap_jum_penj_produk_ContextMenu;
 //var report_tindakan_detail_DataStore;
 //var report_tindakandetailListEditorGrid;
 
-var today=new Date().format('d-m-Y');
+//var today=new Date().format('d-m-Y');
+var today=new Date().format('Y-m-d');
+var yesterday=new Date().add(Date.DAY, -1).format('Y-m-d');
+var thismonth=new Date().format('m');
+var thisyear=new Date().format('Y');
 
 //declare konstant
 var post2db = '';
@@ -160,6 +164,26 @@ Ext.onReady(function(){
 		sortInfo:{field: 'karyawan_username', direction: "DESC"}
 	});
 	/* End of Function */
+	
+	/* Function for Retrieve DataStore */
+	lap_jum_penj_produk_group1_DataStore = new Ext.data.Store({
+		id: 'lap_jum_penj_produk_group1_DataStore',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_lap_jum_penj_produk&m=get_group1_list', 
+			method: 'POST'
+		}),
+		baseParams:{task: "LIST", start: 0, limit:pageS}, // parameter yang di $_POST ke Controller
+		reader: new Ext.data.JsonReader({
+			root: 'results',
+			totalProperty: 'total',
+			id: 'group_id'
+		},[
+			{name: 'group_id', type: 'int', mapping: 'group_id'}, 
+			{name: 'group_kode', type: 'string', mapping: 'group_kode'}, 
+			{name: 'group_nama', type: 'string', mapping: 'group_nama'}
+		]),
+		sortInfo:{field: 'group_id', direction: "DESC"}
+	});
 	
 	/* Function for summary kredit data store */ 
 	sum_penj_produkDataStore = new Ext.data.Store({
@@ -394,6 +418,11 @@ Ext.onReady(function(){
 		var ljpp_tgl_end_search=null;
 		var ljpp_karyawan_search=null;
 		var ljpp_groupby_search=null;
+		var group1_search=null;
+		var jproduk_bulan="";
+		var jproduk_tahun="";
+		var jproduk_periode="";
+		var opsi_jproduk_search=null;
 		
 		cbo_lap_jum_penj_produk_karyawanDataStore.load({
 		 	callback: function(r,opt,success){
@@ -411,7 +440,24 @@ Ext.onReady(function(){
 		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_search=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
 		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_search=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
 		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_search=lap_jum_penj_produk_karyawanSearchField.getValue();}
-		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_search=lap_jum_penj_produk_groupbyField.getValue();}
+		//if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_search=lap_jum_penj_produk_groupbyField.getValue();}
+		if(lap_jum_penj_produk_bulanField.getValue()!==""){jproduk_bulan=lap_jum_penj_produk_bulanField.getValue(); }
+		if(lap_jum_penj_produk_tahunField.getValue()!==""){jproduk_tahun=lap_jum_penj_produk_tahunField.getValue(); }
+		if(lap_jum_penj_produk_group1SearchField.getValue()!==null){group1_search=lap_jum_penj_produk_group1SearchField.getValue();}
+		if(lap_jum_penj_produk_opsitglField.getValue()==true){
+			jproduk_periode='tanggal';
+		}else if(lap_jum_penj_produk_opsiblnField.getValue()==true){
+			jproduk_periode='bulan';
+		}else{
+			jproduk_periode='all';
+		}
+		
+		if(lap_jum_penj_produk_allField.getValue()==true){ 
+			opsi_jproduk_search='all';
+		}else if(lap_jum_penj_produk_group1Field.getValue()==true){
+			opsi_jproduk_search='group1';
+		}
+		
 		// change the store parameters
 		
 		lap_jum_penj_produkDataStore.baseParams = {
@@ -421,7 +467,13 @@ Ext.onReady(function(){
 			ljpp_tgl_start	: 	ljpp_tgl_start_search,
 			ljpp_tgl_end	: 	ljpp_tgl_end_search,
 			ljpp_karyawan_id	:	ljpp_karyawan_search,
-			ljpp_groupby	:	ljpp_groupby_search,
+			//ljpp_groupby	:	ljpp_groupby_search,
+			bulan		: jproduk_bulan,
+			tahun		: jproduk_tahun,
+			periode		: jproduk_periode,
+			opsi_jproduk	: 	opsi_jproduk_search,
+			group1_id		:	group1_search,
+			
 		};
 		sum_penj_produkDataStore.baseParams = {
 			task: 'SEARCH2',
@@ -430,7 +482,12 @@ Ext.onReady(function(){
 			ljpp_tgl_start	: 	ljpp_tgl_start_search,
 			ljpp_tgl_end	: 	ljpp_tgl_end_search,
 			ljpp_karyawan_id	:	ljpp_karyawan_search,
-			ljpp_groupby	:	ljpp_groupby_search,
+			//ljpp_groupby	:	ljpp_groupby_search,
+			bulan		: jproduk_bulan,
+			tahun		: jproduk_tahun,
+			periode		: jproduk_periode,
+			opsi_jproduk	: 	opsi_jproduk_search,
+			group1_id		:	group1_search,
 		};
 		// Cause the datastore to do another query : 
 		lap_jum_penj_produkDataStore.reload({params: {start: 0, limit: pageS}});
@@ -500,6 +557,185 @@ Ext.onReady(function(){
 
 	var dt = new Date(); 
 	
+	lap_jum_penj_produk_bulanField=new Ext.form.ComboBox({
+		id:'lap_jum_penj_produk_bulanField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['value', 'display'],
+			data:[['01','Januari'],['02','Pebruari'],['03','Maret'],['04','April'],['05','Mei'],['06','Juni'],['07','Juli'],['08','Agustus'],['09','September'],['10','Oktober'],['11','Nopember'],['12','Desember']]
+		}),
+		mode: 'local',
+		displayField: 'display',
+		valueField: 'value',
+		value: thismonth,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	lap_jum_penj_produk_tahunField=new Ext.form.ComboBox({
+		id:'lap_jum_penj_produk_tahunField',
+		fieldLabel:' ',
+		store:new Ext.data.SimpleStore({
+			fields:['tahun'],
+			data: <?php echo $tahun; ?>
+		}),
+		mode: 'local',
+		displayField: 'tahun',
+		valueField: 'tahun',
+		value: thisyear,
+		width: 100,
+		triggerAction: 'all'
+	});
+	
+	lap_jum_penj_produk_opsitglField=new Ext.form.Radio({
+		id:'lap_jum_penj_produk_opsitglField',
+		boxLabel:'Tanggal',
+		width:100,
+		name: 'filter_opsi',
+		checked: true
+	});
+	
+	lap_jum_penj_produk_opsiblnField=new Ext.form.Radio({
+		id:'lap_jum_penj_produk_opsiblnField',
+		boxLabel:'Bulan',
+		width:100,
+		name: 'filter_opsi'
+	});
+	
+	lap_jum_penj_produk_tglStartSearchField= new Ext.form.DateField({
+		id: 'lap_jum_penj_produk_tglStartSearchField',
+		fieldLabel: ' ',
+		format : 'Y-m-d',
+		name: 'lap_jum_penj_produk_tglStartSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //endDateField: 'rpt_jproduk_tglakhirField'
+		value: today
+	});
+	
+	lap_jum_penj_produk_tglEndSearchField= new Ext.form.DateField({
+		id: 'lap_jum_penj_produk_tglEndSearchField',
+		fieldLabel: 's/d',
+		format : 'Y-m-d',
+		name: 'lap_jum_penj_produk_tglEndSearchField',
+        //vtype: 'daterange',
+		allowBlank: true,
+		width: 100,
+        //startDateField: 'rpt_jproduk_tglawalField',
+		value: today
+	});
+	
+	var group1_tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '<span><b>{group_nama} ({group_kode})</b></span>',
+        '</div></tpl>'
+    );
+	
+	lap_jum_penj_produk_group1SearchField= new Ext.form.ComboBox({
+		id: 'lap_jum_penj_produk_group1SearchField',
+		fieldLabel: '-',
+		store: lap_jum_penj_produk_group1_DataStore,
+		mode: 'remote',
+		typeAhead: false,
+		displayField: 'group_nama',
+		valueField: 'group_id',
+		triggerAction: 'all',
+		lazyRender: false,
+		pageSize: pageS,
+		enableKeyEvents: true,
+		tpl: group1_tpl,
+		itemSelector: 'div.search-item',
+		triggerAction: 'all',
+		listClass: 'x-combo-list-small',
+		width: 300
+	
+	});
+	
+	var lap_jum_penj_produk_periodeField=new Ext.form.FieldSet({
+		id:'lap_jum_penj_produk_periodeField',
+		title : 'Periode',
+		layout: 'form',
+		bodyStyle:'padding: 0px 0px 0',
+		frame: false,
+		bolder: false,
+		anchor: '98%',
+		items:[/*{
+				layout: 'column',
+				border: false,
+				items:[rpt_jproduk_opsiallField]
+			},*/{
+				layout: 'column',
+				border: false,
+				items:[lap_jum_penj_produk_opsitglField, {
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_jum_penj_produk_tglStartSearchField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_jum_penj_produk_tglEndSearchField]
+					   }]
+			},{
+				layout: 'column',
+				border: false,
+				items:[lap_jum_penj_produk_opsiblnField,{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							items:[lap_jum_penj_produk_bulanField]
+					   },{
+					   		layout: 'form',
+							border: false,
+							labelWidth: 15,
+							bodyStyle:'padding:3px',
+							labelSeparator: ' ', 
+							items:[lap_jum_penj_produk_tahunField]
+					   }]
+			}]
+	});
+	
+	lap_jum_penj_produk_allField=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Semua Produk',
+		width: 100,
+		checked: true
+	});
+	
+	lap_jum_penj_produk_group1Field=new Ext.form.Radio({
+		name:'opsi_produk',
+		boxLabel: 'Group 1',
+		width: 100
+	});
+	
+	lap_jum_penj_produk_opsiSearchField=new Ext.form.FieldSet({
+		id:'lap_jum_penj_produk_opsiSearchField',
+		title: 'Opsi Produk',
+		layout: 'form',
+		frame: false,
+		bodyStyle: 'padding: 5px;',
+		items:[{
+			   		layout	: 'column',
+					bodyStyle: 'padding-bottom: 5px;',
+					border: false,
+					items	: [lap_jum_penj_produk_allField]
+			   },
+				{
+				   layout	: 'column',
+				   bodyStyle: 'padding-bottom: 5px;',
+				   border: false,
+				   items	: [lap_jum_penj_produk_group1Field,lap_jum_penj_produk_group1SearchField]
+			   }
+			
+		]
+	});
+	
 	/* Function for retrieve search Form Panel */
 	lap_jum_penj_produk_searchForm = new Ext.FormPanel({
 		labelAlign: 'left',
@@ -515,7 +751,7 @@ Ext.onReady(function(){
 				layout: 'form',
 				border:false,
 				items: [
-				        {
+				        /*{
 						layout:'column',
 						border:false,
 						items:[
@@ -551,8 +787,7 @@ Ext.onReady(function(){
 									format: 'd-m-Y',
 							        startDateField: 'lap_jum_penj_produk_tglStartSearchField' // id of the end date field
 							    }] 
-						}]},
-						lap_jum_penj_produk_karyawanSearchField, lap_jum_penj_produk_groupbyField] 
+						}]}*/lap_jum_penj_produk_periodeField, lap_jum_penj_produk_opsiSearchField, lap_jum_penj_produk_karyawanSearchField] 
 			}
 			]
 		}]
@@ -575,8 +810,8 @@ Ext.onReady(function(){
 		lap_jum_penj_produk_idSearchField.setValue(null);
 		lap_jum_penj_produk_karyawanSearchField.reset();
 		lap_jum_penj_produk_karyawanSearchField.setValue(null);
-		lap_jum_penj_produk_groupbyField.reset();
-		lap_jum_penj_produk_groupbyField.setValue('Semua');
+		//lap_jum_penj_produk_groupbyField.reset();
+		//lap_jum_penj_produk_groupbyField.setValue('Semua');
 		Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').reset();
 		Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').setValue(null);
 		Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').reset();
@@ -618,13 +853,33 @@ Ext.onReady(function(){
 		var printquery = "";
 		var trawat_cust_print=null;
 		var trawat_keterangan_print=null;
+		var jproduk_bulan="";
+		var jproduk_tahun="";
+		var jproduk_periode="";
+		var group1_print=null;
 		var win;              
 		// check if we do have some search data...
 		if(lap_jum_penj_produkDataStore.baseParams.query!==null){printquery = lap_jum_penj_produkDataStore.baseParams.query;}
 		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_print=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
 		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_print=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
 		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_print=lap_jum_penj_produk_karyawanSearchField.getValue();}
-		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_print=lap_jum_penj_produk_groupbyField.getValue();}
+		//if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_print=lap_jum_penj_produk_groupbyField.getValue();}
+		if(lap_jum_penj_produk_group1SearchField.getValue()!==null){group1_print=lap_jum_penj_produk_group1SearchField.getValue();}
+		if(lap_jum_penj_produk_bulanField.getValue()!==""){jproduk_bulan=lap_jum_penj_produk_bulanField.getValue(); }
+		if(lap_jum_penj_produk_tahunField.getValue()!==""){jproduk_tahun=lap_jum_penj_produk_tahunField.getValue(); }
+		if(lap_jum_penj_produk_opsitglField.getValue()==true){
+			jproduk_periode='tanggal';
+		}else if(lap_jum_penj_produk_opsiblnField.getValue()==true){
+			jproduk_periode='bulan';
+		}else{
+			jproduk_periode='all';
+		}
+		
+		if(lap_jum_penj_produk_allField.getValue()==true){ 
+			opsi_jproduk_print='all';
+		}else if(lap_jum_penj_produk_group1Field.getValue()==true){
+			opsi_jproduk_print='group1';
+		}
 		
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
@@ -636,7 +891,12 @@ Ext.onReady(function(){
 			ljpp_tgl_start	: 	ljpp_tgl_start_print,
 			ljpp_tgl_end	: 	ljpp_tgl_end_print,
 			ljpp_karyawan_id	:	ljpp_karyawan_print,
-			ljpp_groupby	:	ljpp_groupby_print,
+			//ljpp_groupby	:	ljpp_groupby_print,
+			bulan		: jproduk_bulan,
+			tahun		: jproduk_tahun,
+			periode		: jproduk_periode,
+			opsi_jproduk	: 	opsi_jproduk_print,
+			group1_id		:	group1_print,
 		  	currentlisting: lap_jum_penj_produkDataStore.baseParams.task // this tells us if we are searching or not
 		}, 
 		success: function(response){              
@@ -686,6 +946,10 @@ Ext.onReady(function(){
 		var ljpp_tgl_end_excel=null;
 		var ljpp_karyawan_excel=null;
 		var ljpp_groupby_excel=null;
+		var group1_excel=null;
+		var jproduk_bulan="";
+		var jproduk_tahun="";
+		var jproduk_periode="";
 		
 		var win;              
 		// check if we do have some search data...
@@ -696,14 +960,27 @@ Ext.onReady(function(){
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_skredit!==null){dtrawat_skredit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_skredit;}
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_jkredit!==null){dtrawat_jkredit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_jkredit;}
 		//if(lap_jum_penj_produkDataStore.baseParams.dtrawat_kredit!==null){dtrawat_kredit_2excel = lap_jum_penj_produkDataStore.baseParams.dtrawat_kredit;}
-		
+		if(lap_jum_penj_produk_group1SearchField.getValue()!==null){group1_excel=lap_jum_penj_produk_group1SearchField.getValue();}
 		if(Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue()!==null){ljpp_tgl_start_excel=Ext.getCmp('lap_jum_penj_produk_tglStartSearchField').getValue();}
 		if(Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue()!==null){ljpp_tgl_end_excel=Ext.getCmp('lap_jum_penj_produk_tglEndSearchField').getValue();}
 		if(lap_jum_penj_produk_karyawanSearchField.getValue()!==null){ljpp_karyawan_excel=lap_jum_penj_produk_karyawanSearchField.getValue();}
-		if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_excel=lap_jum_penj_produk_groupbyField.getValue();}
+		//if(lap_jum_penj_produk_groupbyField.getValue()!==null){ljpp_groupby_excel=lap_jum_penj_produk_groupbyField.getValue();}
+		if(lap_jum_penj_produk_bulanField.getValue()!==""){jproduk_bulan=lap_jum_penj_produk_bulanField.getValue(); }
+		if(lap_jum_penj_produk_tahunField.getValue()!==""){jproduk_tahun=lap_jum_penj_produk_tahunField.getValue(); }
+		if(lap_jum_penj_produk_opsitglField.getValue()==true){
+			jproduk_periode='tanggal';
+		}else if(lap_jum_penj_produk_opsiblnField.getValue()==true){
+			jproduk_periode='bulan';
+		}else{
+			jproduk_periode='all';
+		}
 		
+		if(lap_jum_penj_produk_allField.getValue()==true){ 
+			opsi_jproduk_excel='all';
+		}else if(lap_jum_penj_produk_group1Field.getValue()==true){
+			opsi_jproduk_excel='group1';
+		}
 		
-
 		Ext.Ajax.request({   
 		waitMsg: 'Please Wait...',
 		url: 'index.php?c=c_lap_jum_penj_produk&m=get_action',
@@ -714,7 +991,12 @@ Ext.onReady(function(){
 			ljpp_tgl_start	: 	ljpp_tgl_start_excel,
 			ljpp_tgl_end	: 	ljpp_tgl_end_excel,
 			ljpp_karyawan_id	:	ljpp_karyawan_excel,
-			ljpp_groupby	:	ljpp_groupby_excel,
+			//ljpp_groupby	:	ljpp_groupby_excel,
+			bulan		: jproduk_bulan,
+			tahun		: jproduk_tahun,
+			periode		: jproduk_periode,
+			opsi_jproduk	: 	opsi_jproduk_excel,
+			group1_id		:	group1_excel,
 		  	currentlisting: lap_jum_penj_produkDataStore.baseParams.task // this tells us if we are searching or not
 		},
 		success: function(response){              
