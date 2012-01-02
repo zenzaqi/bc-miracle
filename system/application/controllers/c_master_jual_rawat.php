@@ -537,11 +537,16 @@ class C_master_jual_rawat extends Controller {
 		$jrawat_ket_disk=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_ket_disk);
 		$jrawat_ket_disk=str_replace("'", '"',$jrawat_ket_disk);
 		
+		$jrawat_ket_disk_medis=trim(@$_POST["jrawat_ket_disk_medis"]);
+		$jrawat_ket_disk_medis=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_ket_disk_medis);
+		$jrawat_ket_disk_medis=str_replace("'", '"',$jrawat_ket_disk_medis);
+		
 		$jrawat_stat_dok=trim(@$_POST["jrawat_stat_dok"]);
 		$jrawat_stat_dok=str_replace("/(<\/?)(p)([^>]*>)", "",$jrawat_stat_dok);
 		$jrawat_stat_dok=str_replace("'", '"',$jrawat_stat_dok);
 		
 		$jrawat_cashback=trim(@$_POST["jrawat_cashback"]);
+		$jrawat_cashback_medis=trim(@$_POST["jrawat_cashback_medis"]);
 		//$jrawat_voucher=trim($_POST["jrawat_voucher"]);
 		//tunai
 		$jrawat_tunai_nilai=trim(@$_POST["jrawat_tunai_nilai"]);
@@ -660,7 +665,7 @@ class C_master_jual_rawat extends Controller {
 		$array_drawat_karyawan = json_decode(stripslashes($drawat_karyawan));
 		
 		$result=$this->m_master_jual_rawat->master_jual_rawat_create($jrawat_cust ,$jrawat_tanggal ,$jrawat_diskon ,$jrawat_cara ,$jrawat_stat_dok
-																	 ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback
+																	 ,$jrawat_cara2 ,$jrawat_cara3 ,$jrawat_keterangan , $jrawat_cashback, $jrawat_cashback_medis
 																	 ,$jrawat_tunai_nilai, $jrawat_tunai_nilai2, $jrawat_tunai_nilai3
 																	 ,$jrawat_voucher_no, $jrawat_voucher_cashback, $jrawat_voucher_no2
 																	 ,$jrawat_voucher_cashback2, $jrawat_voucher_no3, $jrawat_voucher_cashback3
@@ -678,7 +683,7 @@ class C_master_jual_rawat extends Controller {
 																	 ,$jrawat_transfer_bank, $jrawat_transfer_nama, $jrawat_transfer_nilai
 																	 ,$jrawat_transfer_bank2, $jrawat_transfer_nama2, $jrawat_transfer_nilai2
 																	 ,$jrawat_transfer_bank3, $jrawat_transfer_nama3, $jrawat_transfer_nilai3
-																	 ,$cetak_jrawat, $jrawat_ket_disk
+																	 ,$cetak_jrawat, $jrawat_ket_disk, $jrawat_ket_disk_medis
 																	 ,$array_drawat_id ,$array_drawat_dtrawat ,$array_drawat_rawat
 																	 ,$array_drawat_jumlah ,$array_drawat_harga ,$array_drawat_diskon
 																	 ,$array_drawat_diskon_jenis, $array_drawat_sales, $array_drawat_karyawan, $jrawat_grooming);
