@@ -130,7 +130,7 @@ class M_lap_poin_hangus extends Model{
 
 			if($lap_poin_hangus_nmcust!=''){
 				$query.=eregi("WHERE",$query)?" AND ":" WHERE ";
-				$query.= " cust_nama LIKE '%".$lap_poin_hangus_nmcust."%'";
+				$query.= " cust_id = '".$lap_poin_hangus_nmcust."'";
 			};
 
 			if($lap_poin_hangus_tanggal_start!='' && $lap_poin_hangus_tanggal_end!=''){
