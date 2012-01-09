@@ -2715,6 +2715,7 @@ class M_master_jual_rawat extends Model{
 				,jrawat_creator
 				,jrawat_diskon
 				,jrawat_cashback
+				,jrawat_cashback_medis
 				,jrawat_bayar
 				,TIME(jrawat_date_create) AS jrawat_jam
 			FROM detail_jual_rawat

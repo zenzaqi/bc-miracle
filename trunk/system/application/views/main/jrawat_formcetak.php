@@ -13,7 +13,7 @@ html,body,table,tr,td{
 }
 </style>
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <table width="1240px" border="0px" cellpadding="0px" cellspacing="0px">
 	<tr>
 		<td height="110px"><table width="1240px" height="110px" border="0" cellspacing="0" cellpadding="0">
@@ -75,9 +75,9 @@ html,body,table,tr,td{
 		<?php 
 			$subtotal+=(($row->drawat_jumlah)*($row->jumlah_subtotal));
 		}
-		$total=($subtotal*((100-$jrawat_diskon)/100)-$jrawat_cashback);
+		$total=($subtotal*((100-$jrawat_diskon)/100)-$jrawat_cashback-$jrawat_cashback_medis);
 		$total_diskon_tamb=($subtotal*($jrawat_diskon/100));
-		$total_voucher= $jrawat_cashback;
+		$total_voucher= $jrawat_cashback + $jrawat_cashback_medis;
 		?>
       <?php if($detail_jrawat){?>
 	  </table>

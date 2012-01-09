@@ -874,6 +874,7 @@ class C_master_jual_rawat extends Controller {
 		$data['jumlah_bayar']=$rs->jrawat_bayar;
 		$data['jrawat_diskon']=$rs->jrawat_diskon;
 		$data['jrawat_cashback']=$rs->jrawat_cashback;
+		$data['jrawat_cashback_medis']=$rs->jrawat_cashback_medis;
 		//$data['jrawat_creator']=$rs->jrawat_creator;
 		//$data['jrawat_totalbiaya']=$rs->jrawat_totalbiaya;
 		$data['detail_jrawat']=$detail_jrawat;
@@ -940,6 +941,7 @@ class C_master_jual_rawat extends Controller {
 		$data['jumlah_bayar']=$rs->jrawat_bayar;
 		$data['jrawat_diskon']=$rs->jrawat_diskon;
 		$data['jrawat_cashback']=$rs->jrawat_cashback;
+		$data['jrawat_cashback_medis']=$rs->jrawat_cashback_medis;
 		$data['detail_jrawat']=$detail_jrawat;
 		$data['detail_apaket']=$detail_apaket;
 		$data['iklantoday_keterangan']=$rsiklan->iklantoday_keterangan;

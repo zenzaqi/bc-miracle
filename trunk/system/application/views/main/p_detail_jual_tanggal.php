@@ -88,29 +88,29 @@
 	<tr> 
 		<td class="clear">&nbsp;</td> 
 		<th scope='row' nowrap="nowrap">Jumlah data</th> 
-		<td colspan='12'><?php echo count($data_print); ?> data</td> 
+		<td colspan='13'><?php echo count($data_print); ?> data</td> 
 	</tr> 
 	<tr> 
 		<td class="clear">&nbsp;</td> 
-		<th scope='row' colspan="13">Summary</th> 
+		<th scope='row' colspan="14">Summary</th> 
 	</tr> 
 	<tr> 
 		<td class="clear">&nbsp;</td> 
 		<th scope='row' nowrap="nowrap">Tot Item</th> 
 		<td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_item,0,",",","); ?></td> 
-		<td colspan="11" class="clear">&nbsp;</td> 
+		<td colspan="12" class="clear">&nbsp;</td> 
 	</tr> 
 	<tr> 
 		<td class="clear">&nbsp;</td> 
 		<th scope='row' nowrap="nowrap">Total Disk (Rp)</th> 
 		<td class="numeric clear" nowrap="nowrap" ><?php echo number_format($total_diskon,0,",",","); ?></td> 
-		<td colspan="11" class="clear">&nbsp;</td> 
+		<td colspan="12" class="clear">&nbsp;</td> 
 	</tr> 
 	<tr> 
 		<td class="clear">&nbsp;</td> 
 		<th scope='row' nowrap="nowrap">Total (Rp)</th> 
 		<td class="numeric clear" nowrap="nowrap"><?php echo number_format($total_nilai,0,",",","); ?></td> 
-		<td colspan="11" class="clear">&nbsp;</td> 
+		<td colspan="12" class="clear">&nbsp;</td> 
 	</tr>
 </tfoot>
 </table>
