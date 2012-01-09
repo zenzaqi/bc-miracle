@@ -178,8 +178,9 @@ Ext.onReady(function(){
 			{name: 'welcome_tglawal', type: 'date', dateFormat: 'Y-m-d', mapping: 'welcome_tglawal'},
 			{name: 'welcome_tglakhir', type: 'date', dateFormat: 'Y-m-d', mapping: 'welcome_tglakhir'},
 			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'},
+			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'},
 		]),
-		sortInfo:{field: 'welcome_tglawal', direction: "DESC"}
+//		sortInfo:{field: 'welcome_tglawal', direction: "DESC"}
 	});
 	/* End of Function */
 	
@@ -191,12 +192,12 @@ Ext.onReady(function(){
 			align : 'Left',
 			header: '<div align="center">' + 'No' + '</div>',
 			renderer: function(v, p, r, rowIndex, i, ds){return '' + (rowIndex+1)},
-			width: 30,
+			width: 10,
 		},
 		{
-			header: '<div align="center">' + 'Tgl Awal' + '</div>',
+			header: '<div align="center">' + 'Tanggal' + '</div>',
 			dataIndex: 'welcome_tglawal',
-			width: 80,
+			width: 40,
 			sortable: true,
 			readOnly:true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
@@ -208,14 +209,22 @@ Ext.onReady(function(){
 		{
 			header: '<div align="center">' + 'Tgl Akhir' + '</div>',
 			dataIndex: 'welcome_tglakhir',
-			width: 80,//185,	//210,
+			width: 60,//185,	//210,
 			sortable: true,
 			readOnly : true,
+			hidden: true,
 			renderer: Ext.util.Format.dateRenderer('d-m-Y'),
 			editor: new Ext.form.DateField({
 				format: 'd-m-Y'
 			})
 		}, 
+		{
+			header: '<div align="center">' + 'Kategori' + '</div>',
+			dataIndex: 'welcome_title',
+			width: 80,//185,	//210,
+			sortable: true,
+			readOnly : true,
+		},
 		{
 			header: '<div align="center">' + 'Pesan' + '</div>',
 			dataIndex: 'welcome_msg',
@@ -233,7 +242,7 @@ Ext.onReady(function(){
 	welcome_msgListEditorGrid =  new Ext.grid.EditorGridPanel({
 		id: 'welcome_msgListEditorGrid',
 		el: 'fp_welcome_msg',
-		title: 'Laporan Welcome Message',
+		title: 'Laporan Detail Pembaruan MIS',
 		autoHeight: true,
 		store: welcome_msgDataStore, // DataStore
 		cm: welcome_msgColumnModel, // Nama-nama Columns
@@ -254,7 +263,7 @@ Ext.onReady(function(){
 		}
 		*/
 		{
-			text: 'Edit',
+			text: 'Lihat Pesan',
 			tooltip: 'Edit selected record',
 			iconCls:'icon-update',
 			handler: welcome_msg_confirm_update    // Confirm before updating
@@ -276,7 +285,7 @@ Ext.onReady(function(){
 	/* Identify  group_keterangan Field */
 	welcome_msgField= new Ext.form.TextArea({
 		id: 'welcome_msgField',
-		fieldLabel: 'Welcome Message',
+		fieldLabel: 'Pesan',
 		maxLength: 250,
 		readOnly: true,
 		anchor: '90%'
@@ -328,7 +337,7 @@ Ext.onReady(function(){
 	/* Function for retrieve create Window Form */
 	welcome_msg_createWindow= new Ext.Window({
 		id: 'welcome_msg_createWindow',
-		title: 'Welcome Message Detail',
+		title: 'Detail Pembaruan MIS',
 		closable:true,
 		closeAction: 'hide',
 		autoWidth: true,
