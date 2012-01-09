@@ -35,6 +35,7 @@
 	$total_diskon=0;
 	$total_nilai=0;
 	$total_voucher=0;
+	$total_voucher_medis=0;
 	$total_diskon_persen=0;
 	$total_bayar=0;
 	$total_hutang=0;
@@ -56,6 +57,7 @@
 		if($faktur!==$print->no_bukti) {
 			if ($print->status !== 'Batal'){ 
 				$total_voucher+=$print->voucher;
+				$total_voucher_medis+=$print->voucher_medis;
 				$total_bayar+=$print->bayar;
 				$total_hutang+=$print->totalbiaya-$print->bayar;
 				// total cara bayar
@@ -138,10 +140,10 @@
 									</tr>
 								</table>
 							</td>  
-							<td align="right" class="numeric"><b>Disk (%)</b></td> 
-							<td align="right" class="numeric"><?php echo number_format($print->diskon_umum,0,",",","); ?></td> 
-							<td align="right" class="numeric"><b>Voucher (Rp)</b></td> 
+							<td align="right" class="numeric"><b>Voucher Non(Rp)</b></td> 
 							<td align="right" class="numeric"><?php echo number_format($print->voucher,0,",",","); ?></td> 
+							<td align="right" class="numeric"><b>Voucher Medis(Rp)</b></td> 
+							<td align="right" class="numeric"><?php echo number_format($print->voucher_medis,0,",",","); ?></td> 
 							<td align="right" class="numeric"><b>Total (Rp)</b></td> 
 							<? if ($print->status == 'Batal'){ 
 							?>
@@ -284,7 +286,7 @@
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
-	<th scope='row' nowrap="nowrap">Total Voucher (Rp)</th> 
+	<th scope='row' nowrap="nowrap">Total Voucher Non Medis(Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_voucher,0,",",","); ?></td> 
 	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Cek/Giro (Rp)</th> 
@@ -294,12 +296,19 @@
 <tr> 
 	<?//<td></td>?>
 	<td class="foot">&nbsp;</td> 
-	<th scope='row' nowrap="nowrap">Total Bayar (Rp)</th> 
-	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_bayar,0,",",","); ?></td> 
-	<td class="foot">&nbsp;</td>
+	<th scope='row' nowrap="nowrap">Total Voucher Medis(Rp)</th> 
+	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_voucher_medis,0,",",","); ?></td> 
+	<td class="foot">&nbsp;</td> 
 	<th scope='row' nowrap="nowrap">Transfer (Rp)</th> 
 	<td class="numeric foot" nowrap="nowrap" colspan="2"><?php echo number_format($total_transfer,0,",",","); ?></td>
 	<td class="foot" colspan="3">&nbsp;</td>
+</tr> 
+<tr> 
+	<?//<td></td>?>
+	<td class="foot">&nbsp;</td> 
+	<th scope='row' nowrap="nowrap">Total Bayar (Rp)</th> 
+	<td class="numeric foot" nowrap="nowrap" ><?php echo number_format($total_bayar,0,",",","); ?></td> 
+	<td colspan="7" class="foot">&nbsp;</td> 
 </tr> 
 <tr> 
 	<?//<td></td>?>

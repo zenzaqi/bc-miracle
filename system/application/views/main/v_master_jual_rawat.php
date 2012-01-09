@@ -332,6 +332,53 @@ Ext.override(Ext.form.Field, {
     }
 });	
 	
+	
+/*Data Store khusus utk menampung welcome mesage */
+	jrawat_welcome_msgDataStore = new Ext.data.Store({
+		id: 'jrawat_welcome_msgDataStore ',
+		proxy: new Ext.data.HttpProxy({
+			url: 'index.php?c=c_welcome_msg&m=get_welcome_message', 
+			method: 'POST'
+		}),
+			reader: new Ext.data.JsonReader({
+			root: 'results'
+		},[
+			{name: 'welcome_id', type: 'int', mapping: 'welcome_id'},
+			{name: 'welcome_msg', type: 'string', mapping: 'welcome_msg'},
+			{name: 'welcome_title', type: 'string', mapping: 'welcome_title'},
+			{name: 'welcome_icon', type: 'string', mapping: 'welcome_icon'}
+		]),
+		sortInfo:{field: 'welcome_id', direction: "ASC"}
+	});
+
+	jrawat_welcome_msgDataStore.load({
+		params: {task : "LIST", menu_id : 38},
+			callback: function(opts, success, response)  {
+				if (success) {					
+					if(jrawat_welcome_msgDataStore.getCount()){
+						if (jrawat_welcome_msgDataStore.getAt(0).data.welcome_icon == 'INFO') {
+							var jrawat_icon = Ext.MessageBox.INFO;
+						} else if (jrawat_welcome_msgDataStore.getAt(0).data.welcome_icon == 'WARNING'){
+							var jrawat_icon = Ext.MessageBox.WARNING;
+						} else if (jrawat_welcome_msgDataStore.getAt(0).data.welcome_icon == 'QUESTION'){
+							var jrawat_icon = Ext.MessageBox.QUESTION;
+						} else if (jrawat_welcome_msgDataStore.getAt(0).data.welcome_icon == 'ERROR'){
+							var jrawat_icon = Ext.MessageBox.ERROR;
+						}
+					
+						Ext.MessageBox.show({
+							title: jrawat_welcome_msgDataStore.getAt(0).data.welcome_title,
+							msg: jrawat_welcome_msgDataStore.getAt(0).data.welcome_msg,
+							buttons: Ext.MessageBox.OK,
+							animEl: 'save',
+							icon: jrawat_icon
+						});
+					}
+				}
+			}
+	});	
+	
+	
 	/*Function for pengecekan _dokumen */
 	function pengecekan_dokumen(){
 		var jrawat_tanggal_create_date = "";

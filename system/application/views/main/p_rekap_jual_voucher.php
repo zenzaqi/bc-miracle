@@ -19,7 +19,8 @@
 			<th scope='col'>Tot Item</th> 
 			<th scope='col'>Subtotal (Rp)</th> 
 			<? //<th scope='col'>Disk + (%)</th> ?>
-			<th scope='col'>Voucher (Rp)</th> <?php ?> 
+			<th scope='col'>Voucher NonMedis(Rp)</th> <?php ?> 
+			<th scope='col'>Voucher Medis(Rp)</th> <?php ?> 
 			<th scope='col'>Tunai (Rp)</th> 
 			<th scope='col'>Cek/Giro (Rp)</th> 
 			<th scope='col'>Transfer (Rp)</th> 
@@ -35,8 +36,10 @@
 		$tanggal=""; 
 		$total_item=0;
 		$total_diskon=0;
+		$total_diskon_medis=0;
 		$total_diskonp=0;
 		$total_cashback=0;
+		$total_cashback_medis=0;
 		$total_nilai=0;
 		$total_bayar=0;
 		$total_tunai=0;
@@ -50,8 +53,10 @@
 		if ($print->cashback <> 0) {
 			$total_item+=$print->jumlah_barang;
 			$total_diskon+=$print->cashback;
+			$total_diskon_medis+=$print->cashback_medis;
 			$total_diskonp+=($print->diskon*$print->total_nilai)/100;
 			$total_cashback+=$print->cashback;
+			$total_cashback_medis+=$print->cashback_medis;
 			$total_nilai+=$print->total_nilai;
 			$total_bayar+=$print->total_bayar;
 			$total_tunai+=$print->tunai;
@@ -93,6 +98,9 @@
 			<?php echo number_format($print->cashback,0,",",","); ?>
 		</td><?php /*<td align="right" class="numeric"><?php echo number_format($print->total_bayar,0,",",","); ?></td>*/ ?> 
 		<td align="right" class="numeric">
+			<?php echo number_format($print->cashback_medis,0,",",","); ?>
+		</td><?php /*<td align="right" class="numeric"><?php echo number_format($print->total_bayar,0,",",","); ?></td>*/ ?> 
+		<td align="right" class="numeric">
 			<?php echo number_format($print->tunai,0,",",","); ?>
 		</td> 
 		<td align="right" class="numeric">
@@ -130,6 +138,7 @@
 		<td align="right" class="numeric"><b><?php echo number_format($total_nilai,0,",",","); ?></td> <?php ?> 
 		<?/*<td align="right" class="numeric"><b><?php echo number_format($total_diskonp,0,",",","); ?></td> <?php */?> 
 		<td align="right" class="numeric"><b><?php echo number_format($total_cashback,0,",",","); ?></td><?php /*<td align="right" class="numeric"><b><?php echo number_format($total_bayar,0,",",","); ?></td>*/ ?> <?php ?> 
+		<td align="right" class="numeric"><b><?php echo number_format($total_cashback_medis,0,",",","); ?></td><?php /*<td align="right" class="numeric"><b><?php echo number_format($total_bayar,0,",",","); ?></td>*/ ?> <?php ?> 
 		<td align="right" class="numeric"><b><?php echo number_format($total_tunai,0,",",","); ?></td> <?php ?> 
 		<td align="right" class="numeric"><b><?php echo number_format($total_cek,0,",",","); ?></td> <?php ?> 
 		<td align="right" class="numeric"><b><?php echo number_format($total_transfer,0,",",","); ?></td> <?php ?> 

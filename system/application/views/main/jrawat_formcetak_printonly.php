@@ -82,9 +82,9 @@ html,body,table,tr,td{
 		<?php 
 			$subtotal+=(($row->drawat_jumlah)*($row->jumlah_subtotal));
 		}
-		$total=($subtotal*((100-$jrawat_diskon)/100)-$jrawat_cashback);
+		$total=($subtotal*((100-$jrawat_diskon)/100)-$jrawat_cashback-$jrawat_cashback_medis);
 		$total_diskon_tamb=($subtotal*($jrawat_diskon/100));
-		$total_voucher= $jrawat_cashback;
+		$total_voucher= $jrawat_cashback + $jrawat_cashback_medis;
 		?>
       <?php if($detail_jrawat){?>
 	  </table>
