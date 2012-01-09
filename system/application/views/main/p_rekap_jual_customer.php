@@ -13,8 +13,12 @@
 		<th scope='col'>No Faktur</th> 
 		<th scope='col'>Tot Item</th> 
 		<th scope='col'>Total (Rp)</th>
-		<th scope='col'>Voucher NonMedis(Rp)</th>
-		<th scope='col'>Voucher Medis(Rp)</th>
+		<? if ($jenis == 'Perawatan') {?>
+			<th scope='col'>Voucher NonMedis(Rp)</th> <?php ?> 
+			<th scope='col'>Voucher Medis(Rp)</th> <?php ?> 
+		<? } else {?>
+			<th scope='col'>Voucher (Rp)</th> <?php ?> 
+		<? } ?>	
 		<?//<th scope='col'>Disk (%)</th>	<th scope='col'>Disk (Rp)</th>?>
 		<th scope='col'>Tunai (Rp)</th>
 		<th scope='col'>Cek/Giro (Rp)</th>
@@ -92,8 +96,12 @@
 		<td><?php echo $print_list->tanggal; ?></td> <td><?php echo $print_list->no_bukti; ?></td>
 		<td align="right" class="numeric"><?php echo number_format($print_list->jumlah_barang,0,",",","); ?></td> 
 		<td align="right" class="numeric"><?php echo number_format($print_list->total_nilai,0,",",","); ?></td> 
-		<td align="right" class="numeric"><?php echo number_format($print_list->cashback,0,",",","); ?></td> 
-		<td align="right" class="numeric"><?php echo number_format($print_list->cashback_medis,0,",",","); ?></td> 
+		<? if ($jenis == 'Perawatan') {?>
+			<td align="right" class="numeric"><?php echo number_format($print_list->cashback,0,",",","); ?></td> 
+			<td align="right" class="numeric"><?php echo number_format($print_list->cashback_medis,0,",",","); ?></td> 
+		<? } else { ?>
+			<td align="right" class="numeric"><?php echo number_format($print_list->cashback,0,",",","); ?></td> 
+		<? } ?>
 		<td align="right" class="numeric"><?php echo number_format($print_list->tunai,0,",",","); ?></td> 
 		<td align="right" class="numeric"><?php echo number_format($print_list->cek,0,",",","); ?></td> 
 		<td align="right" class="numeric"><?php echo number_format($print_list->transfer,0,",",","); ?></td>
@@ -105,8 +113,12 @@
 		<td colspan="3">&nbsp;</td>
 		<td align="right" class="numeric"><b><?php echo number_format($sub_jumlah_barang,0,",",","); ?></b></td> 
 		<td align="right" class="numeric"><b><?php echo number_format($sub_total,0,",",","); ?></b></td>
-		<td align="right" class="numeric"><b><?php echo number_format($sub_cashback,0,",",","); ?></b></td>
-		<td align="right" class="numeric"><b><?php echo number_format($sub_cashback_medis,0,",",","); ?></b></td>
+		<? if ($jenis == 'Perawatan') {?>
+			<td align="right" class="numeric"><b><?php echo number_format($sub_cashback,0,",",","); ?></b></td>
+			<td align="right" class="numeric"><b><?php echo number_format($sub_cashback_medis,0,",",","); ?></b></td>
+		<? } else { ?>
+			<td align="right" class="numeric"><b><?php echo number_format($sub_cashback,0,",",","); ?></b></td>
+		<? } ?>
 		<td align="right" class="numeric"><b><?php echo number_format($sub_tunai,0,",",","); ?></b></td>
 		<td align="right" class="numeric"><b><?php echo number_format($sub_cek,0,",",","); ?></b></td> 
 		<td align="right" class="numeric"><b><?php echo number_format($sub_transfer,0,",",","); ?></b></td>
@@ -163,18 +175,27 @@
 		<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_card,0,",",","); ?></td>
 		<td colspan='11' class="clear" >&nbsp;</td> 
 	</tr>
-	<tr>
-		<td class="clear">&nbsp;</td> 
-		<th scope='row' nowrap="nowrap">Total Voucher NonMedis(Rp)</th> 
-		<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon,0,",",","); ?></td> 
-		<td colspan='11' class="clear" >&nbsp;</td> 
-	</tr>
-	<tr>
-		<td class="clear">&nbsp;</td> 
-		<th scope='row' nowrap="nowrap">Total Voucher Medis(Rp)</th> 
-		<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon_medis,0,",",","); ?></td> 
-		<td colspan='11' class="clear" >&nbsp;</td> 
-	</tr>
+	<? if ($jenis == 'Perawatan') {?>
+		<tr>
+			<td class="clear">&nbsp;</td> 
+			<th scope='row' nowrap="nowrap">Total Voucher NonMedis(Rp)</th> 
+			<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon,0,",",","); ?></td> 
+			<td colspan='11' class="clear" >&nbsp;</td> 
+		</tr>
+		<tr>
+			<td class="clear">&nbsp;</td> 
+			<th scope='row' nowrap="nowrap">Total Voucher Medis(Rp)</th> 
+			<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon_medis,0,",",","); ?></td> 
+			<td colspan='11' class="clear" >&nbsp;</td> 
+		</tr>
+	<? } else { ?>
+		<tr>
+			<td class="clear">&nbsp;</td> 
+			<th scope='row' nowrap="nowrap">Total Voucher (Rp)</th> 
+			<td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_diskon,0,",",","); ?></td> 
+			<td colspan='11' class="clear" >&nbsp;</td> 
+		</tr>
+	<? } ?>
 	<tr> 
 		<td class="clear">&nbsp;</td> 
 		<th scope='row' nowrap="nowrap">Total Kredit (Rp)</th> <td nowrap="nowrap" align="right" class="numeric clear"><?php echo number_format($total_kredit,0,",",","); ?></td> 
