@@ -458,7 +458,8 @@ Ext.onReady(function(){
   	}
 	/* End of Function */
   	
-	lap_poin_hangusListEditorGrid.addListener('rowcontextmenu', onlap_poin_hangus_ListEditGridContextMenu);
+	//lap_poin_hangusListEditorGrid.addListener('rowcontextmenu', onlap_poin_hangus_ListEditGridContextMenu);
+	//lap_poin_hangusListEditorGrid.addListener('rowcontextmenu', onlap_poin_hangus_ListEditGridContextMenu);
 	lap_poin_hangus_DataStore.load({params: {start: 0, limit: pageS}});	// supaya tidak auto load DataStore
 	
 	/* Function for action list search */
@@ -502,7 +503,7 @@ Ext.onReady(function(){
 		// reset the store parameters
 		lap_poin_hangus_DataStore.baseParams = { task: 'LIST', start: 0, limit: pageS };
 		lap_poin_hangus_DataStore.reload({params: {start: 0, limit: pageS}});
-		lap_poin_hangus_searchWindow.close();
+		//lap_poin_hangus_searchWindow.close();
 	};
 	/* End of Fuction */
 
@@ -565,7 +566,7 @@ Ext.onReady(function(){
 		store: cbo_lap_poin_hangus_transaksi_customerDataStore,
 		mode: 'remote',
 		displayField:'cust_nama',
-		valueField: 'cust_nama',
+		valueField: 'cust_id',
         typeAhead: false,
         loadingText: 'Searching...',
         pageSize:10,
