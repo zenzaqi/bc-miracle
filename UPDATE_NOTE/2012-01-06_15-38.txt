@@ -1,0 +1,11 @@
+LAporan Penjualan Perawatan n Produk, menambah voucher medis
+Rekap : group by semua
+Detail : group by faktur
+
+detail group by : 
+
+tanggal, customer, referal, dan jenis diskon tidak bisa. 
+[karena jika 1 cust membeli 2 perawatan, maka voucher juga akan muncul di masing2 perawatan]
+
+medis, nonmedis tidak bisa.
+[karena 1 item dapat berasal dr lbh dr 1 faktur]
