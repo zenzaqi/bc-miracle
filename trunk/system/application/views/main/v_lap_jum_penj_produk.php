@@ -121,6 +121,16 @@ var pageS=15;
 var lap_jum_penj_produk_idSearchField;
 var lap_jum_penj_produk_groupbyField;
 
+<?
+$tahun="[";
+for($i=(date('Y')-4);$i<=date('Y');$i++){
+	$tahun.="['$i'],";
+}
+$tahun=substr($tahun,0,strlen($tahun)-1);
+$tahun.="]";
+$bulan="";
+?>
+
 /* on ready fuction */
 Ext.onReady(function(){
   	Ext.QuickTips.init();	/* Initiate quick tips icon */
@@ -834,6 +844,7 @@ Ext.onReady(function(){
 		items: lap_jum_penj_produk_searchForm
 	});
     /* End of Function */ 
+	lap_jum_penj_produk_searchWindow.show();
 	 
   	/* Function for Displaying  Search Window Form */
 	function display_form_search_window(){
