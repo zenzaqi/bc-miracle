@@ -254,18 +254,19 @@ class M_lap_jum_penj_produk extends Model{
 			
 			if ($opsi_jproduk == 'all')
 			{
-				$query="select sum(vu_lap_jml_produk.Jumlah_produk) as Total_jumlah
+				$query="select sum(vu_lap_jml_produk.tot_kredit) as Total_kredit
 						from
 						(	
 							select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 								master_jual_produk.jproduk_tanggal as tanggal,
-								sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk
+								sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+								(produk_kredit/100 * produk_harga) * sum(detail_jual_produk.dproduk_jumlah) as tot_kredit
 							from detail_jual_produk
 								left join master_jual_produk on (detail_jual_produk.dproduk_master=master_jual_produk.jproduk_id)
 								left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
 								left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
 							where master_jual_produk.jproduk_stat_dok = 'Tertutup'
-								and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
+								and (master_jual_produk.jproduk_tanggal between '".$tanggal_start."' and '".$tanggal_end."')
 								and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
 								group by vu_karyawan.karyawan_username, produk.produk_nama
 						) as vu_lap_jml_produk
@@ -273,12 +274,13 @@ class M_lap_jum_penj_produk extends Model{
 							
 			}else if ($opsi_jproduk == 'group1')
 			{
-				$query="select sum(vu_lap_jml_produk.Jumlah_produk) as Total_jumlah
+				$query="select sum(vu_lap_jml_produk.tot_kredit) as Total_kredit
 						from
 						(
 							select vu_karyawan.karyawan_username, produk.produk_kode, produk.produk_nama,
 								master_jual_produk.jproduk_tanggal as tanggal,
 								sum(detail_jual_produk.dproduk_jumlah) as Jumlah_produk,
+								(produk_kredit/100 * produk_harga) * sum(detail_jual_produk.dproduk_jumlah) as tot_kredit
 								(produk.produk_kredit/100) * produk.produk_harga as komisi_satuan,
 								((produk.produk_kredit/100) * produk.produk_harga) * (sum(detail_jual_produk.dproduk_jumlah))  as komisi
 							from detail_jual_produk
@@ -405,7 +407,7 @@ class M_lap_jum_penj_produk extends Model{
 							left join vu_karyawan on (detail_jual_produk.dproduk_karyawan=vu_karyawan.karyawan_id)
 							left join produk on (detail_jual_produk.dproduk_produk=produk.produk_id)
 						where master_jual_produk.jproduk_stat_dok = 'Tertutup'
-							and (master_jual_produk.jproduk_tanggal between '".$ljpp_tgl_start."' and '".$ljpp_tgl_end."')
+							and (master_jual_produk.jproduk_tanggal between '".$tanggal_start."' and '".$tanggal_end."')
 							and detail_jual_produk.dproduk_karyawan = '".$ljpp_karyawan_id."'
 							group by vu_karyawan.karyawan_username, produk.produk_nama
 						";				

@@ -217,7 +217,7 @@ Ext.onReady(function(){
 			{name: 'jumlah_produk', type: 'string', mapping: 'Jumlah_produk'},
 			{name: 'dtrawat_skredit', type: 'string', mapping: 'rawat_kredit'},
 			//{name: 'dtrawat_jkredit', type: 'string', mapping: 'Total_jumlah'},
-			{name: 'total_jumlah', type: 'string', mapping: 'Total_jumlah'},
+			{name: 'total_kredit', type: 'string', mapping: 'Total_kredit'},
 		]),
 		sortInfo:{field: 'karyawan_username', direction: "DESC"}
 	});
@@ -306,9 +306,10 @@ Ext.onReady(function(){
 		{	
 			align : 'Right',
 			header: '<div align="right">' + 'Grand Tot Kredit (Rp)' + '</div>',
-			dataIndex: 'total_jumlah',
+			dataIndex: 'total_kredit',
 			width: 80,	//55,
-			sortable: false
+			sortable: false,
+			renderer: Ext.util.Format.numberRenderer('0,000')
 		},
 		]);
 	
